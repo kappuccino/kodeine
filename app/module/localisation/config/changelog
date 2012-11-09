@@ -1,0 +1,8 @@
+Kodeine Change log
++ = Ajout / Nouveaute
+- = Correction
+* = Autre / Divers / Inclassable...
+
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+2012-11-07 (build 5.0.2)
++ tri par ordre alphabetique des labels dans localisationGet

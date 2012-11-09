@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<element>
+
+	<data>
+		<key>shop</key>
+		<version>5.0.1</version>
+		<lastMod>2012-10-21</lastMod>
+
+		<name><![CDATA[Shop]]></name>
+		<description><![CDATA[]]></description>
+		<menu>NO</menu>
+	</data>
+
+</element>

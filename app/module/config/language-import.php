@@ -1,0 +1,113 @@
+<?php
+	function xmlList($app){
+
+		$exist = $app->countryGet();
+		foreach($exist as $e){
+			$yet[] = $e['iso'];
+		}
+		
+		
+		$doc = new DOMDocument();
+		$doc->preserveWhiteSpace = false;
+		$doc->load(KROOT.'/app/module/core/helper/country.xml');
+		$xpath = new DOMXPath($doc);
+
+		foreach($xpath->query('//states/area') as $area){
+			foreach($area->getElementsByTagName('state') as $state){
+				if(!in_array(strtolower($state->getAttributeNode('iso')->nodeValue), $yet)){
+					$list[$area->getAttributeNode('name')->nodeValue][] = array(
+						'iso'		=> $state->getAttributeNode('iso')->nodeValue,
+						'locale'	=> $state->getAttributeNode('locale')->nodeValue,
+						'name'		=> utf8_decode($state->getElementsByTagName('name')->item(0)->nodeValue),
+						'language'	=> utf8_decode($state->getElementsByTagName('language')->item(0)->nodeValue)
+					);
+				}
+			}
+		}
+	
+		return $list;	
+	}
+		
+	if(sizeof($_POST['import']) > 0){
+		$xmlList = xmlList($app);
+		foreach($_POST['import'] as $iso){
+			foreach($xmlList as $zone => $es){
+				foreach($es as $e){
+					if($e['iso'] == $iso){
+						$app->dbQuery(
+							"INSERT INTO k_country (iso, iso_ref, countryLocale, countryZone, countryName, countryLanguage)".
+							"VALUES ('".strtolower($iso)."', '".strtolower($iso)."', '".$e['locale']."', '".$zone."', '".addslashes($e['name'])."', '".addslashes($e['language'])."')"
+						);
+					}
+				}
+			}	
+		}
+
+		# Cache Country
+		$app->configSet('boot', 'jsonCacheCountry', json_encode($app->countryGet(array('is_used' => true))));
+
+		header("Location: config.language.php");
+	}
+
+?><!DOCTYPE html>
+<html lang="fr">
+<head>
+	<title>Kodeine</title>
+	<?php include(COREINC.'/head.php'); ?>
+</head>
+<body>
+
+<header><?php
+	include(COREINC.'/top.php');
+	include(__DIR__.'/ui/menu.php')
+?></header>
+
+<div class="inject-subnav-right hide">
+	<li>
+		<a onclick="$('#data').submit();" class="btn btn-small btn-success">Importer les pays s&eacute;lection&eacute;s</a>
+	</li>
+</div>
+
+<div id="app"><div class="wrapper">
+	<p>Choisissez dans la liste ci-dessous les langues qui seront directement importées dans votre configuration</p>
+
+	<form method="post" action="language-import" id="data">
+	<table width="100%" border="0" cellpadding="0" cellspacing="0" class="listing">
+		<thead>
+			<tr>
+				<th width="30"></th>
+				<th width="100">ISO</th>
+				<th width="300">Pays</th>
+				<th width="100">Locale</th>
+				<th>Langue</th>
+				<th width="150" class="filter">
+					<input type="text" class="input-small" id="filter" size="15" />
+				</th>
+			</tr>
+		</thead>
+		<tbody>
+			<?php foreach(xmlList($app) as $zone => $es){ ?>
+			<tr class="separator">
+				<td width="30">&nbsp;</td>
+				<td colspan="5" style="font-weight: bold;"><?php echo $zone ?></td>
+			</tr>
+			<?php foreach($es as $e){ ?>
+			<tr>
+				<td><input type="checkbox" name="import[]" value="<?php echo $e['iso'] ?>" /></td>
+				<td><?php echo $e['iso'] ?></td>
+				<td><?php echo $e['name'] ?></td>
+				<td><?php echo $e['locale'] ?></td>
+				<td colspan="2"><?php echo $e['language'] ?></td>
+			</tr>
+			<?php } ?>
+		<?php } ?>
+		<tbody>
+	</table>
+	</form>
+
+</div></div>
+
+<?php include(COREINC.'/end.php'); ?>
+
+</body>
+</html>

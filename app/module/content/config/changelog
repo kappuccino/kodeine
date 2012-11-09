@@ -1,0 +1,17 @@
+Kodeine Change log
++ = Ajout / Nouveaute
+- = Correction
+* = Autre / Divers / Inclassable...
+
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+2012-11-07 (build 5.0.7)
+- /content/ui/js/content.js : setUrlBehaviour ne prends pas en compte touche tabulation et shift
+
+2012-11-07 (build 5.0.6)
+- /content/type > correction bug qui rendait impossible la selection du type business et galerie a la creation d'un type
+
+2012-11-06 (build 5.0.5)
+- ajout du datepicker sur champs de type datepicker
+
+2012-11-05 (build 5.0.4)
+- pb url sur lien langue dans content/index

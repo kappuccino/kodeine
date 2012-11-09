@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<install>
+
+	<sql><![CDATA[
+		CREATE TABLE IF NOT EXISTS `k_category` (
+		  `id_category` mediumint(64) NOT NULL auto_increment,
+		  `mid_category` mediumint(64) NOT NULL,
+		  `pos_category` mediumint(64) NOT NULL,
+		  `categoryParent` mediumtext collate utf8_unicode_ci NOT NULL,
+		  `categoryChildren` mediumtext collate utf8_unicode_ci NOT NULL,
+		  `categoryHasChildren` tinyint(1) NOT NULL,
+		  `categoryTemplate` varchar(255) collate utf8_unicode_ci NOT NULL,
+		  PRIMARY KEY  (`id_category`),
+		  KEY `mid_category` (`mid_category`)
+		) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=6 ;
+
+
+		CREATE TABLE IF NOT EXISTS `k_categorydata` (
+		  `id_category` mediumint(64) NOT NULL,
+		  `is_copy` tinyint(1) NOT NULL default '0',
+		  `language` char(2) collate utf8_unicode_ci NOT NULL,
+		  `categoryUrl` varchar(255) collate utf8_unicode_ci NOT NULL,
+		  `categoryName` varchar(255) collate utf8_unicode_ci NOT NULL,
+		  `categoryMedia` varchar(255) collate utf8_unicode_ci NOT NULL,
+		  `categoryDescription` mediumtext collate utf8_unicode_ci NOT NULL,
+		  `categoryCache` mediumtext collate utf8_unicode_ci NOT NULL,
+		  `field72` varchar(255) collate utf8_unicode_ci NOT NULL,
+		  PRIMARY KEY  (`id_category`,`language`),
+		  KEY `url` (`categoryUrl`),
+		  KEY `language` (`language`)
+		) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+	]]></sql>
+
+	<preSript></preSript>
+	<postScript></postScript>
+
+</install>

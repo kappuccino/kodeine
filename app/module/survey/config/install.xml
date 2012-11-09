@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<install>
+
+	<sql><![CDATA[
+		CREATE TABLE IF NOT EXISTS `k_survey` (
+		  `id_survey` mediumint(64) unsigned NOT NULL auto_increment,
+		  `surveyName` varchar(255) collate utf8_unicode_ci NOT NULL,
+		  `surveyDescription` mediumtext collate utf8_unicode_ci NOT NULL,
+		  `surveyDateCreate` datetime NOT NULL,
+		  `surveyDateUpdate` datetime NOT NULL,
+		  PRIMARY KEY  (`id_survey`)
+		) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+
+		CREATE TABLE IF NOT EXISTS `k_surveygroup` (
+		  `id_surveygroup` mediumint(64) NOT NULL auto_increment,
+		  `id_survey` mediumint(64) NOT NULL,
+		  `surveyGroupOrder` int(11) NOT NULL,
+		  `surveyGroupName` varchar(255) collate utf8_unicode_ci NOT NULL,
+		  `surveyGroupDescription` mediumtext collate utf8_unicode_ci,
+		  PRIMARY KEY  (`id_surveygroup`)
+		) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+
+		CREATE TABLE IF NOT EXISTS `k_surveyquery` (
+		  `id_surveyquery` mediumint(64) NOT NULL auto_increment,
+		  `id_survey` mediumint(64) NOT NULL,
+		  `id_surveygroup` mediumint(64) NOT NULL,
+		  `allow_other` tinyint(1) NOT NULL,
+		  `allow_empty` tinyint(1) NOT NULL,
+		  `surveyQueryOrder` int(11) NOT NULL,
+		  `surveyQueryName` varchar(255) collate utf8_unicode_ci NOT NULL,
+		  `surveyQueryType` varchar(30) collate utf8_unicode_ci NOT NULL,
+		  PRIMARY KEY  (`id_surveyquery`),
+		  KEY `id_survey` (`id_survey`)
+		) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+
+		CREATE TABLE IF NOT EXISTS `k_surveyqueryitem` (
+		  `id_surveyqueryitem` mediumint(64) NOT NULL auto_increment,
+		  `id_surveyquery` mediumint(64) NOT NULL,
+		  `surveyrQueryItemOrder` int(11) NOT NULL,
+		  `surveyQueryItemName` varchar(255) collate utf8_unicode_ci NOT NULL,
+		  `surveyQueryItemIsTrue` tinyint(4) NOT NULL,
+		  PRIMARY KEY  (`id_surveyqueryitem`),
+		  KEY `id_query` (`id_surveyquery`)
+		) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+
+		CREATE TABLE IF NOT EXISTS `k_surveyslot` (
+		  `id_surveyslot` mediumint(64) unsigned NOT NULL auto_increment,
+		  `id_survey` mediumint(64) NOT NULL,
+		  `id_user` mediumint(64) default NULL,
+		  `id_content` mediumint(64) default NULL,
+		  `is_finished` tinyint(1) NOT NULL,
+		  `surveySlotEmail` varchar(255) collate utf8_unicode_ci NOT NULL,
+		  `surveySlotGroup` mediumint(64) default NULL,
+		  PRIMARY KEY  (`id_surveyslot`)
+		) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+
+		CREATE TABLE IF NOT EXISTS `k_surveyslotitem` (
+		  `id_surveyslotitem` mediumint(8) unsigned NOT NULL auto_increment,
+		  `id_surveyslot` mediumint(9) unsigned NOT NULL,
+		  `id_surveyquery` int(11) unsigned NOT NULL,
+		  `id_surveyqueryitem` int(11) unsigned default NULL,
+		  `surveySlotItemText` mediumtext collate utf8_unicode_ci,
+		  `surveySlotItemRate` int(11) default NULL,
+		  PRIMARY KEY  (`id_surveyslotitem`)
+		) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+	]]></sql>
+
+	<preSript></preSript>
+	<postScript></postScript>
+
+</install>

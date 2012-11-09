@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<install>
+
+	<sql><![CDATA[
+		CREATE TABLE IF NOT EXISTS `k_contentrate` (
+		  `id_rate` mediumint(64) NOT NULL auto_increment,
+		  `id_content` mediumint(64) NOT NULL,
+		  `id_user` mediumint(64) default NULL,
+		  `rateDate` datetime NOT NULL,
+		  `rateValue` int(2) NOT NULL,
+		  PRIMARY KEY  (`id_rate`),
+		  KEY `id_content` (`id_content`),
+		  KEY `id_user` (`id_user`)
+		) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+	]]></sql>
+
+	<preSript></preSript>
+	<postScript></postScript>
+
+</install>

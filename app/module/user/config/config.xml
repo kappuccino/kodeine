@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<element>
+
+	<data>
+		<key>user</key>
+		<version>5.0.6</version>
+		<lastMod>2012-11-09</lastMod>
+
+		<name><![CDATA[Utilisateur]]></name>
+		<description><![CDATA[Gérer votre communauté de membres]]></description>
+		<panelIcon>ressource/img/module-user.png</panelIcon>
+	</data>
+
+	<profile>
+		<item code="index" 		type="ALLOW_DENY" name="Accessible" />
+		<item code="profile"	type="ALLOW_DENY" name="Profil" />
+		<item code="group" 		type="ALLOW_DENY" name="Groupe" />
+		<item code="field" 		type="ALLOW_DENY" name="Champ" />
+		<item code="search"		type="ALLOW_DENY" name="Search" />
+	</profile>
+
+	<less>
+		<file>/ui/css/group.less</file>
+	</less>
+
+</element>

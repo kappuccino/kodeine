@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<install>
+
+	<sql><![CDATA[
+		CREATE TABLE IF NOT EXISTS `k_cachemedia` (
+		  `id_cache` mediumint(64) NOT NULL auto_increment,
+		  `cacheLastMod` bigint(64) NOT NULL,
+		  `cacheOpt` mediumtext collate utf8_unicode_ci NOT NULL,
+		  `cacheSource` varchar(255) collate utf8_unicode_ci NOT NULL,
+		  `cacheUrl` varchar(255) collate utf8_unicode_ci NOT NULL,
+		  PRIMARY KEY  (`id_cache`),
+		  KEY `cacheSource` (`cacheSource`)
+		) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+
+		CREATE TABLE IF NOT EXISTS `k_media` (
+		  `mediaUrl` varchar(255) collate utf8_unicode_ci NOT NULL,
+		  `mediaTitle` mediumtext collate utf8_unicode_ci NOT NULL,
+		  `mediaCaption` mediumtext collate utf8_unicode_ci NOT NULL,
+		  PRIMARY KEY  (`mediaUrl`)
+		) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+	]]></sql>
+
+	<preSript></preSript>
+	<postScript></postScript>
+
+</install>

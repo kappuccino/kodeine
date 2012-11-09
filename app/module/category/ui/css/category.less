@@ -1,0 +1,74 @@
+@import "/app/module/core/ui/css/0-mixins.less";
+
+#category{
+	margin: 1px 0 5px 0;
+
+	ul{
+		margin: 0px; padding: 0px;
+	
+		.holder{
+			background: @sub_nav-background;
+			margin-bottom: 1px;
+		}
+
+		li{
+			list-style-type: none;
+			margin: 0px; padding: 0px;
+		}
+	}
+
+	a{
+		color: #515151;
+		text-decoration: none;
+		cursor: pointer;
+
+		&:hover{
+			text-decoration: underline;
+		}
+	}
+		
+	.toggle, .check, .handle, .data{
+		float: left;
+	}
+		
+	.toggle{
+		width: 13px; height: 13px;
+		margin: 5px 0 0 2px;
+		background: url('/@{corepath}/img/common/chevron.png') no-repeat top left;
+		cursor: pointer;
+
+		&.opened{
+			background-position: bottom left;
+		}
+	}
+	
+	.check{
+		padding: 2px 3px 0px 3px;
+	}
+	
+	.handle{
+		margin-top: 5px;
+		width: 11px; height: 11px;
+		cursor: pointer;
+		background: url('/@{corepath}/img/common/handle.png') no-repeat top left;
+
+		&:hover{
+			background-position: bottom left;
+		}
+	}
+
+	.data{
+		padding: 4px 0 0 10px;
+	}
+	
+	.browse{
+		float: right;
+		width: 50px;
+		padding: 4px 4px 0px 0px;
+	}
+}
+
+.view-same{
+	background-color: rgb(250,250,250);
+}
+

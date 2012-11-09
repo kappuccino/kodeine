@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<patch>
+
+	<job action="sql"><![CDATA[
+		CREATE TABLE IF NOT EXISTS `k_businesscouponshop` (
+			`id_coupon` mediumint(64) NOT NULL,
+			`id_shop` mediumint(64) NOT NULL,
+		UNIQUE KEY `id_coupon` (`id_coupon`, `id_shop`)
+		) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+	]]></job>
+
+	<job action = "createField" 	table = "k_businesscart" 		field = "id_shop" 				type = "MEDIUMINT(64)" 	null = "YES" 	after = "id_billing" />
+	<job action = "createField" 	table = "k_businesscart" 		field = "is_admin" 				type = "TINYINT(1)" 	null = "NO" 	after = "is_locked" />
+	<job action = "createField" 	table = "k_businesscart" 		field = "cartDatePosted" 		type = "DATETIME" 		null = "NO" 	after = "cartDateUpdate" />
+	<job action = "createField" 	table = "k_businesscart" 		field = "cartName" 				type = "VARCHAR(255)" 	null = "NO" 	after = "cartDatePosted" />
+	<job action = "createField" 	table = "k_businesscart" 		field = "cartDatePayment" 		type = "TIMESTAMP" 		null = "NO" 	after = "cartName" />
+	<job action = "createField" 	table = "k_businesscart" 		field = "cartCmdNumber"			type = "MEDIUMINT(64)" 	null = "YES" 	after = "cartDateCmd" />
+	<job action = "createField" 	table = "k_businesscart" 		field = "cartCarriageTax"		type = "FLOAT(8,2)" 	null = "NO" 	after = "cartCarriage" />
+	<job action = "createField" 	table = "k_businesscart" 		field = "cartCarriageTotalTax"	type = "FLOAT(8,2)" 	null = "NO" 	after = "cartCarriageTax" />
+	<job action = "createField" 	table = "k_businesscart" 		field = "cartCarriageAccountNumber"	type = "VARCHAR(255)" null = "NO" 	after = "cartCarriageTotalTax" />
+	<job action = "createField" 	table = "k_businesscart" 		field = "cartTaxJSON"			type = "MEDIUMTEXT" 	null = "NO" 	after = "cartCouponName" />
+	<job action = "createField" 	table = "k_businesscart" 		field = "cartDeliveryStatus"	type = "VARCHAR(255)" 	null = "NO" 	after = "cartDeliveryAddress" />
+	<job action = "createField" 	table = "k_businesscart" 		field = "cartToken"				type = "CHAR(32)"		null = "YES" 	after = "cartSerial" />
+	<job action = "createField" 	table = "k_businesscart" 		field = "cartBillingTVAIntra"	type = "VARCHAR(255)" 	null = "NO" 	after = "cartBillingAddress" />
+		
+	<job action = "createField" 	table = "k_businesscartline" 	field = "mid_cartline"			type = "INT(11)" 		null = "NO" 	after = "id_cartline" />
+	<job action = "createField" 	table = "k_businesscartline" 	field = "contentTax"			type = "FLOAT(8,2)" 	null = "NO" 	after = "contentPriceTaxQuantity" />
+	<job action = "createField" 	table = "k_businesscartline" 	field = "contentPriceDiscount"	type = "FLOAT(8,2)" 	null = "NO" 	after = "contentTax" />
+	<job action = "createField" 	table = "k_businesscartline" 	field = "contentPriceDiscountMode"	type = "VARCHAR(10)" null = "NO" 	after = "contentPriceDiscount" />
+	<job action = "createField" 	table = "k_businesscartline" 	field = "accountNumber"			type = "VARCHAR(255)" 	null = "NO" 	after = "contentWeight" />
+
+	<job action = "createField" 	table = "k_shop" 				field = "shopApiFolder" 		type = "VARCHAR(255)" 	null = "NO" 	after = "shopName" />
+	<job action = "createField" 	table = "k_shop" 				field = "shopMailTo" 			type = "VARCHAR(255)" 	null = "NO" 	after = "shopApiFolder" />
+	<job action = "createField" 	table = "k_shop" 				field = "shopMailCc" 			type = "VARCHAR(255)" 	null = "NO" 	after = "shopMailTo" />
+	<job action = "createField" 	table = "k_shop" 				field = "shopMailBcc" 			type = "VARCHAR(255)" 	null = "NO" 	after = "shopMailCc" />
+
+	<job action = "createField" 	table = "k_shop" 				field = "shopMailTemplate" 		type = "VARCHAR(255)" 	null = "NO" 	after = "shopMailBcc" />
+	<job action = "createField" 	table = "k_shop" 				field = "shopMailTitle" 		type = "VARCHAR(255)" 	null = "NO" 	after = "shopMailTemplate" />
+
+	<job action = "createField" 	table = "k_shop" 				field = "allow_card" 			type = "TINYINT(1)" 	null = "NO" 	after = "id_shop" />
+	<job action = "createField" 	table = "k_shop" 				field = "allow_cheque" 			type = "TINYINT(1)" 	null = "NO" 	after = "allow_card" />
+	<job action = "createField" 	table = "k_shop" 				field = "allow_coupon" 			type = "TINYINT(1)" 	null = "NO" 	after = "allow_cheque" />
+
+	<job action = "createField" 	table = "k_shop" 				field = "shopChequeOrder" 		type = "VARCHAR(255)" 	null = "NO" 	after = "shopMailTitle" />
+	<job action = "createField" 	table = "k_shop" 				field = "shopChequeAddress" 	type = "MEDIUMTEXT" 	null = "NO" 	after = "shopChequeOrder" />
+
+</patch>

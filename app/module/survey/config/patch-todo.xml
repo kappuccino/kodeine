@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<patch>
+	<job action = "createField"		table = "k_surveyqueryitem"		field = "surveyQueryItemIsTrue" 					type = "TINYINT"	null = "NO" after="surveyQueryItemName" />
+	<job action = "changeField" 	table = "k_surveyslotitem" 		field = "surveySlotItemGrade,surveySlotItemRate"	type = "INT(11)"	null = "NO" />
+	<job action = "changeField" 	table = "k_surveyslotitem" 		field = "surveySlotItemRate,surveySlotItemRate"		type = "INT(11)"	null = "YES" />
+</patch>

@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<install>
+
+	<sql><![CDATA[
+		CREATE TABLE IF NOT EXISTS `k_contentcomment` (
+		  `id_comment` mediumint(64) NOT NULL auto_increment,
+		  `id_content` mediumint(64) NOT NULL,
+		  `id_user` mediumint(64) default NULL,
+		  `is_moderate` tinyint(1) NOT NULL default '0',
+		  `commentUsername` varchar(255) collate utf8_unicode_ci NOT NULL,
+		  `commentDate` datetime NOT NULL,
+		  `commentData` mediumtext collate utf8_unicode_ci NOT NULL,
+		  `commentGood` mediumint(64) NOT NULL,
+		  `commentBad` mediumint(64) NOT NULL,
+		  `commentAvg` mediumint(64) NOT NULL,
+		  PRIMARY KEY  (`id_comment`),
+		  KEY `id_content` (`id_content`)
+		) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+
+		CREATE TABLE IF NOT EXISTS `k_contentcommentrate` (
+		  `id_content` mediumint(64) NOT NULL,
+		  `id_comment` mediumint(64) NOT NULL,
+		  `id_user` mediumint(64) NOT NULL,
+		  `commentRateDate` datetime NOT NULL,
+		  `commentRateValue` int(1) NOT NULL,
+		  UNIQUE KEY `id_comment_2` (`id_comment`,`id_user`),
+		  KEY `id_comment` (`id_comment`),
+		  KEY `id_user` (`id_user`),
+		  KEY `id_content` (`id_content`)
+		) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+	]]></sql>
+
+	<preSript></preSript>
+	<postScript></postScript>
+
+</install>

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<element>
+
+	<data>
+		<key>comment</key>
+		<version>5.0.2</version>
+		<lastMod>2012-10-22</lastMod>
+
+		<name><![CDATA[Commentaire]]></name>
+		<description><![CDATA[]]></description>
+		<menu>NO</menu>
+		<install>YES</install>
+	</data>
+
+</element>

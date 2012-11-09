@@ -1,0 +1,21 @@
+
+.myList{
+	padding: 5px 0px 0px 5px;
+	margin: 0px;
+	border: 1px solid rgb(150,150,150);
+	min-height: 57px;
+	width: 495px;
+}
+	.myList li{
+		list-style-type: none;
+		float: left;
+		background-color: #c4caca;
+		padding:5px;
+		margin: 0px 5px 5px 0px;
+		width: 106px;
+		height: 40px;
+		border:1px solid #515151;
+	}
+.t{
+	margin-top: 50px;	
+}

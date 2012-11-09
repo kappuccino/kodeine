@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<element>
+
+	<data>
+		<key>pdf</key>
+		<version>5.0.0</version>
+		<lastMod>2012-11-08</lastMod>
+
+		<name><![CDATA[PDF]]></name>
+		<description><![CDATA[]]></description>
+		<hidden>YES</hidden>
+	</data>
+
+</element>

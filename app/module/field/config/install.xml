@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<install>
+
+	<sql><![CDATA[
+		CREATE TABLE IF NOT EXISTS `k_field` (
+		  `id_field` mediumint(64) NOT NULL auto_increment,
+		  `is_search` tinyint(1) NOT NULL,
+		  `is_needed` tinyint(1) NOT NULL,
+		  `is_editor` tinyint(1) NOT NULL default '0',
+		  `fieldType` varchar(20) collate utf8_unicode_ci NOT NULL,
+		  `fieldKey` varchar(255) collate utf8_unicode_ci NOT NULL,
+		  `fieldName` varchar(255) collate utf8_unicode_ci NOT NULL,
+		  `fieldInstruction` varchar(255) collate utf8_unicode_ci NOT NULL,
+		  `fieldContentType` mediumint(64) NOT NULL,
+		  `fieldUserField` mediumint(64) NOT NULL,
+		  `fieldShowForm` tinyint(1) NOT NULL,
+		  `fieldParam` mediumtext collate utf8_unicode_ci NOT NULL,
+		  `fieldStyle` mediumtext collate utf8_unicode_ci NOT NULL,
+		  PRIMARY KEY  (`id_field`)
+		) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+
+		CREATE TABLE IF NOT EXISTS `k_fieldaffect` (
+		  `map` varchar(255) collate utf8_unicode_ci NOT NULL,
+		  `id` mediumint(64) NOT NULL default '0',
+		  `fields` text collate utf8_unicode_ci NOT NULL,
+		  PRIMARY KEY  (`map`,`id`)
+		) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+
+		CREATE TABLE IF NOT EXISTS `k_fieldchoice` (
+		  `id_fieldchoice` mediumint(64) NOT NULL auto_increment,
+		  `id_field` mediumint(64) NOT NULL,
+		  `choiceOrder` mediumint(64) NOT NULL,
+		  `choiceValue` mediumtext collate utf8_unicode_ci NOT NULL,
+		  PRIMARY KEY  (`id_fieldchoice`),
+		  KEY `id_field` (`id_field`)
+		) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+	]]></sql>
+
+	<preSript></preSript>
+	<postScript></postScript>
+
+</install>

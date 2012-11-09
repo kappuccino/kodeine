@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<element>
+
+	<data>
+		<key>survey</key>
+		<version>5.0.1</version>
+		<lastMod>2012-10-21</lastMod>
+
+		<name><![CDATA[Enquête]]></name>
+		<description><![CDATA[Géer vos questionnaire]]></description>
+		<panelIcon>ressource/img/module-survey.png</panelIcon>
+		<install>YES</install>
+	</data>
+
+	<profile>
+		<item code="index"	type="ALLOW_DENY" name="Accessible" />
+	</profile>
+
+</element>

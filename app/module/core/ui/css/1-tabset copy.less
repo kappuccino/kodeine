@@ -1,0 +1,114 @@
+.tabset{
+	margin: 20px 0px 20px 0px;
+
+	.tab{
+		margin: 0px; padding: 0px;
+
+		li{
+			list-style-type: none;
+			padding: 7px 10px 5px 10px;  margin: 0px 0px 0px 10px;
+			float: left;
+			cursor: pointer;
+		
+			&.right-select{
+				margin: 0px 10px 0px 0px;
+				padding: 0px;
+			}
+
+			&.is-tab{
+				background-color: #666;
+				color: #E1E1E1;
+
+				&.is-selected{
+					background-color: #333;
+					color: #E1E1E1;
+				}
+				&.needToBeFilledInside{
+					background: red
+					color: black;
+				}
+			}
+
+			&.light{
+				background-color: #CCC;
+				border : 1px solid #444;
+				color: black;
+			}
+		}
+
+		a{
+			text-decoration: none;
+			color:#000;
+		}
+
+		span.txt{
+			float: left;
+		}
+
+		span.handle,
+		span.edit,
+		span.remove{
+			opacity: 0.5;
+			display: none;
+			float: right;
+			text-indent: -5000px;
+		}
+
+		span.handle:hover,
+		span.edit:hover,
+		span.remove:hover{
+			opacity: 1
+		}
+
+		span.handle{
+			width: 11px; height: 11px;
+			margin-left: 10px;
+			background: url(../img/item-handle.png) no-repeat 0px -11px;
+		}
+
+		span.edit{
+			width: 12px; height: 12px;
+			margin-left: 5px;
+			background: url(../img/tab-edit.png) no-repeat 0px 0px;
+		}
+
+		span.remove{
+			width: 12px; height: 12px;
+			margin-left: 5px;
+			background: url(../img/tab-remove.png) no-repeat 0px 0px;
+		}
+
+		.do-viewer{
+			padding:0px; margin: 0px;
+		}
+	}
+
+	.view{
+		margin: 0px;
+		background-color: #f0f4f5;
+		
+		.view-label{
+			background: #a6b5be;
+			color:#FFF; font-weight: bold;
+			padding: 5px;
+		}
+		
+		.view-label-colored{
+			border: 1px solid #a6b5be; border-bottom: none;
+			color:#515151;
+			background: #d9f7a5;
+		}
+		
+		.view-split{
+			background:#444;
+			color:white;
+			padding:5px;
+		}
+		
+		table.form{
+			td{
+				padding:5px;
+			}
+		}
+	}
+}

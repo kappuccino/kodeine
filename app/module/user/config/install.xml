@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<install>
+
+	<sql><![CDATA[
+		CREATE TABLE IF NOT EXISTS `k_group` (
+		  `id_group` mediumint(64) NOT NULL auto_increment,
+		  `mid_group` mediumint(64) NOT NULL,
+		  `pos_group` mediumint(10) NOT NULL,
+		  `groupParent` mediumtext collate utf8_unicode_ci NOT NULL,
+		  `groupChildren` mediumtext collate utf8_unicode_ci NOT NULL,
+		  `groupName` varchar(90) collate utf8_unicode_ci NOT NULL,
+		  `groupFormLayout` mediumtext collate utf8_unicode_ci NOT NULL,
+		  PRIMARY KEY  (`id_group`)
+		) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+
+		CREATE TABLE IF NOT EXISTS `k_user` (
+		  `id_user` mediumint(64) unsigned NOT NULL auto_increment,
+		  `id_group` mediumint(64) NOT NULL,
+		  `id_profile` mediumint(64) NOT NULL,
+		  `is_admin` tinyint(1) NOT NULL default '0',
+		  `is_trusted` tinyint(1) NOT NULL default '0',
+		  `is_active` tinyint(1) NOT NULL,
+		  `is_deleted` tinyint(1) NOT NULL,
+		  `userDateCreate` date NOT NULL,
+		  `userDateUpdate` date NOT NULL,
+		  `userDateExpire` date default NULL,
+		  `userMail` varchar(255) collate utf8_unicode_ci NOT NULL,
+		  `userPasswd` varchar(255) collate utf8_unicode_ci NOT NULL,
+		  `userNewsletter` tinyint(1) NOT NULL,
+		  `userToken` varchar(255) collate utf8_unicode_ci NOT NULL,
+		  `userMedia` mediumtext collate utf8_unicode_ci NOT NULL,
+		  `userSearchCache` mediumtext collate utf8_unicode_ci NOT NULL,
+		  PRIMARY KEY  (`id_user`),
+		  KEY `is_active` (`is_active`),
+		  KEY `userMail` (`userMail`),
+		  KEY `userPasswd` (`userPasswd`),
+		  KEY `id_group` (`id_group`)
+		) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+
+		CREATE TABLE IF NOT EXISTS `k_useraddressbook` (
+		  `id_addressbook` int(10) unsigned NOT NULL auto_increment,
+		  `id_user` int(10) unsigned NOT NULL,
+		  `addressbookIsDisabled` int(1) NOT NULL,
+		  `addressbookIsProtected` tinyint(1) NOT NULL,
+		  `addressbookIsMain` int(1) NOT NULL,
+		  `addressbookIsDelivery` int(1) NOT NULL,
+		  `addressbookIsBilling` int(1) NOT NULL,
+		  `addressbookTitle` varchar(255) collate utf8_unicode_ci NOT NULL,
+		  `addressbookCivility` varchar(255) collate utf8_unicode_ci NOT NULL,
+		  `addressbookLastName` varchar(255) collate utf8_unicode_ci NOT NULL,
+		  `addressbookFirstName` varchar(255) collate utf8_unicode_ci NOT NULL,
+		  `addressbookEmail` varchar(255) collate utf8_unicode_ci NOT NULL,
+		  `addressbookCompanyName` varchar(255) collate utf8_unicode_ci NOT NULL,
+		  `addressbookCompanyFonction` varchar(255) collate utf8_unicode_ci NOT NULL,
+		  `addressbookAddresse1` varchar(255) collate utf8_unicode_ci NOT NULL,
+		  `addressbookAddresse2` varchar(255) collate utf8_unicode_ci NOT NULL,
+		  `addressbookAddresse3` varchar(255) collate utf8_unicode_ci NOT NULL,
+		  `addressbookCityCode` varchar(20) collate utf8_unicode_ci NOT NULL,
+		  `addressbookCityName` varchar(255) collate utf8_unicode_ci NOT NULL,
+		  `addressbookCountryCode` varchar(2) collate utf8_unicode_ci NOT NULL,
+		  `addressbookStateName` varchar(255) collate utf8_unicode_ci NOT NULL,
+		  `addressbookPhone1` varchar(60) collate utf8_unicode_ci NOT NULL,
+		  `addressbookPhone2` varchar(60) collate utf8_unicode_ci NOT NULL,
+		  PRIMARY KEY  (`id_addressbook`)
+		) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+
+		CREATE TABLE IF NOT EXISTS `k_userasso` (
+		  `id_user` mediumint(64) NOT NULL,
+		  `id_field` mediumint(64) NOT NULL,
+		  `id_type` mediumint(64) default NULL,
+		  `id_content` mediumint(64) default NULL,
+		  `id_userb` mediumint(64) default NULL,
+		  KEY `atype` (`id_field`,`id_type`,`id_content`),
+		  KEY `bType` (`id_type`)
+		) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+
+		CREATE TABLE IF NOT EXISTS `k_userauth` (
+		  `id_user` mediumint(64) NOT NULL,
+		  `authToken` varchar(255) collate utf8_unicode_ci NOT NULL,
+		  `authExpire` int(11) NOT NULL,
+		  PRIMARY KEY  (`authToken`)
+		) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+
+		CREATE TABLE IF NOT EXISTS `k_usercoupon` (
+		  `id_user` mediumint(64) NOT NULL,
+		  `id_coupon` mediumint(64) NOT NULL,
+		  `is_used` tinyint(1) NOT NULL default '0',
+		  `couponAdded` timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP,
+		  UNIQUE KEY `id_user` (`id_user`,`id_coupon`)
+		) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+
+		CREATE TABLE IF NOT EXISTS `k_userdata` (
+		  `id_user` mediumint(64) NOT NULL,
+		  `field53` varchar(255) collate utf8_unicode_ci NOT NULL,
+		  PRIMARY KEY  (`id_user`)
+		) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+
+		CREATE TABLE IF NOT EXISTS `k_userprofile` (
+		  `id_profile` mediumint(64) NOT NULL auto_increment,
+		  `profileName` varchar(255) collate utf8_unicode_ci NOT NULL,
+		  `profileRule` mediumtext collate utf8_unicode_ci NOT NULL,
+		  PRIMARY KEY  (`id_profile`)
+		) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+	]]></sql>
+
+	<preSript></preSript>
+	<postScript></postScript>
+
+</install>

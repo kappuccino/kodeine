@@ -1,0 +1,77 @@
+body {
+	margin: 0; padding: 0;
+}
+
+li{
+	list-style: none;
+}
+
+.wrapper{
+	width: 1200px;
+	margin: 0 auto;
+}
+
+input.nomargin {
+	margin: 0;
+}
+
+input.input-small {
+	border: 1px solid #404E5B;
+	outline-width: 0;
+	outline: none;
+}
+
+.left {
+	float: left;
+}
+
+.right {
+	float: right;
+}
+
+.message{
+	padding: 5px 5px 5px 10px; margin-bottom: 15px;
+	-moz-border-radius:2px; -webkit-border-radius:2px;
+
+	a{
+		color:#000000;
+	}
+}
+	.messageValid{		background-color: #d9f7a5; border:1px solid #c2dd94; }
+	.messageError{		background-color: #f0be9d; border:1px solid #d7aa8c; }
+	.messageWarning{	background-color: #f5d995; border:1px solid #dcc285; }
+	.messageNotFound{	background-color: #e6ecec; border:1px solid #a6b5be; padding:15px; }
+
+
+.alertNeedToCheck{
+	color: #cf0400;
+}
+
+.quickForm{
+	background: #e1e1e1;
+	padding: 3px;
+}
+
+.toggleslider-small {
+	
+	display: block;
+	float: left; 
+	height: 30px; width: 80px;
+	overflow: hidden;
+		
+	background: url('/admin/core/ui/img/common/onoff.png');
+	
+	-webkit-transition: all 0.2s ease;
+	-moz-transition: background 0.2s ease;
+	-ms-transition: background 0.2s ease;
+	transition: background 0.2s ease;
+	
+	&.on {
+		background-position: -41px center; 
+		background-repeat: no-repeat;
+	}
+	&.off {
+		background-position: 0px center; 
+		background-repeat: no-repeat;
+	}
+}

@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<element>
+
+	<data>
+		<key>core</key>
+		<version>5.0.1</version>
+		<lastMod>2012-10-17</lastMod>
+
+		<name><![CDATA[Core]]></name>
+		<description><![CDATA[]]></description>
+		<hidden>YES</hidden>
+	</data>
+
+	<dependencies>
+		<module>user</module>
+		<module>field</module>
+	</dependencies>
+	
+	<less>
+		<file>/ui/css/_style.less</file>
+	</less>
+
+	<profile>
+		<item code="index"	 	type="ALLOW_DENY" name="Accessible" />
+		<item code="config" 	type="ALLOW_DENY" name="Config" />
+		<item code="language"	type="ALLOW_DENY" name="Langues" />
+	</profile>
+
+</element>

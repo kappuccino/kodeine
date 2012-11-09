@@ -1,0 +1,83 @@
+.tabset{
+	margin: 20px 0px 20px 0px;
+
+	.tab{
+		margin: 0px; padding: 0px;
+
+		li{
+			list-style-type: none;
+			padding: 7px 0 5px 0;  margin: 0px 0px 0px 10px;
+			float: left;
+			cursor: pointer;
+		
+			border: 1px solid transparent;
+			border-bottom: none;
+
+			&.is-tab{
+				padding-left:10px; padding-right: 10px;  
+				background: @sub_nav-background;
+				color: #777;
+				border-color: @sub_nav-border;
+
+				&.is-selected{
+					background: @nav-background;
+					border-color: @nav-background;
+
+					*{
+						color: @top-a-color !important;
+					}
+				}
+
+				&.needToBeFilledInside{
+					background: red;
+					color: black;
+				}
+			}
+
+			&.light{
+				background: lighten(@sub_nav-background, 4%);
+			//	color: black;
+			}
+		}
+
+		.do-viewer{
+			padding:0px; margin: 0px;
+		}
+	}
+
+	.view{
+		margin: 0px;
+		background: @sub_nav-background; //#f0f4f5;
+		
+		/*.view-label{
+			background: #a6b5be;
+			color:#FFF; font-weight: bold;
+			padding: 5px;
+		}*/
+
+		.view-label-colored{
+			border: 1px solid #a6b5be; border-bottom: none;
+			color:#515151;
+			background: #d9f7a5;
+		}
+		
+		.view-split{
+			background:#444;
+			color:white;
+			padding:5px;
+		}
+		
+		table.form{
+			td{
+				padding:5px;
+			}
+		}
+	}
+
+
+	.view-label{
+		background: @listing-head-background;
+		color:@listing-head-color;
+		padding: 5px;
+	}
+}

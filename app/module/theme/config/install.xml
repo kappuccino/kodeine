@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<install>
+
+	<sql><![CDATA[
+		CREATE TABLE IF NOT EXISTS `k_theme` (
+		  `id_theme` mediumint(64) NOT NULL auto_increment,
+		  `themeName` varchar(255) collate utf8_unicode_ci NOT NULL,
+		  `themeFolder` varchar(255) collate utf8_unicode_ci NOT NULL,
+		  `themeVar` mediumtext collate utf8_unicode_ci NOT NULL,
+		  PRIMARY KEY  (`id_theme`)
+		) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+	]]></sql>
+
+	<preSript></preSript>
+	<postScript></postScript>
+
+</install>

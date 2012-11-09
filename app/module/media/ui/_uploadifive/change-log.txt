@@ -1,0 +1,10 @@
+UploadiFive Change Log
+
+v1.0
+Initial creation of UploadiFive plugin
+
+v1.0.1
+Fixed bug with onQueueComplete event
+
+v1.0.2
+Changed $data.uploadFile method to use boundary for uploads

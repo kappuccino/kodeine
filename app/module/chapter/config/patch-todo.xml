@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<patch>
+
+	<job action = "createField" table = "k_chapter"			field = "id_theme"				type = "MEDIUMINT(64)" 	null = "YES"	after = "id_chapter" />
+
+	<job action = "createField" table = "k_chapterdata"		field = "is_copy" 				type = "TINYINT(1)"		null = "NO"		after = "id_chapter" />
+	<job action = "createField" table = "k_chapterdata" 	field = "chapterMedia" 			type = "VARCHAR(255)"	null = "NO" />
+	<job action = "createField" table = "k_chapterdata" 	field = "chapterDescription" 	type = "MEDIUMTEXT"		null = "NO" />
+	
+</patch>

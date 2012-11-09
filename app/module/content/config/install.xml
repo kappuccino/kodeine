@@ -1,0 +1,239 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<install>
+
+	<sql><![CDATA[
+		CREATE TABLE IF NOT EXISTS `k_content` (
+		  `id_content` mediumint(64) NOT NULL auto_increment,
+		  `id_type` mediumint(64) NOT NULL,
+		  `id_carriage` mediumint(64) NOT NULL,
+		  `id_user` mediumint(64) NOT NULL,
+		  `id_parent` mediumint(64) NOT NULL,
+		  `is_version` tinyint(1) NOT NULL default '0',
+		  `is_social` tinyint(1) NOT NULL default '0',
+		  `is_album` tinyint(1) NOT NULL default '0',
+		  `is_item` tinyint(1) NOT NULL default '0',
+		  `is_pack` tinyint(1) NOT NULL,
+		  `pos_content` mediumint(64) NOT NULL,
+		  `pos_parent` mediumint(64) NOT NULL,
+		  `contentSee` tinyint(1) NOT NULL default '0',
+		  `contentMedia` mediumtext collate utf8_unicode_ci NOT NULL,
+		  `contentTemplate` varchar(255) collate utf8_unicode_ci NOT NULL,
+		  `contentTemplateEnv` mediumtext collate utf8_unicode_ci NOT NULL,
+		  `contentRef` varchar(255) collate utf8_unicode_ci default NULL,
+		  `contentWeight` bigint(64) default NULL,
+		  `contentStock` mediumint(9) NOT NULL,
+		  `contentStockNeg` tinyint(1) NOT NULL,
+		  `contentComment` varchar(15) collate utf8_unicode_ci NOT NULL,
+		  `contentCommentCount` mediumint(9) unsigned NOT NULL,
+		  `contentRate` varchar(15) collate utf8_unicode_ci NOT NULL,
+		  `contentRateCount` mediumint(4) unsigned NOT NULL,
+		  `contentRateAvg` tinyint(4) NOT NULL,
+		  `contentView` bigint(64) NOT NULL,
+		  `contentDateCreation` datetime NOT NULL,
+		  `contentDateUpdate` datetime NOT NULL,
+		  `contentDateStart` datetime default NULL,
+		  `contentDateEnd` datetime default NULL,
+		  `contentCache` mediumtext collate utf8_unicode_ci NOT NULL,
+		  PRIMARY KEY  (`id_content`)
+		) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+
+		CREATE TABLE IF NOT EXISTS `k_contentalbum` (
+		  `id_content` mediumint(64) NOT NULL,
+		  `id_album` mediumint(64) NOT NULL,
+		  `id_poster` mediumint(64) NOT NULL,
+		  `contentAlbumPos` varchar(64) collate utf8_unicode_ci NOT NULL,
+		  `contentAlbumSyncFolder` varchar(255) collate utf8_unicode_ci NOT NULL,
+		  `contentAlbumParent` mediumtext collate utf8_unicode_ci NOT NULL,
+		  `contentAlbumChildren` mediumtext collate utf8_unicode_ci NOT NULL,
+		  PRIMARY KEY  (`id_content`)
+		) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+
+		CREATE TABLE IF NOT EXISTS `k_contentasso` (
+		  `aContent` mediumint(64) NOT NULL,
+		  `aType` mediumint(64) NOT NULL,
+		  `aField` mediumint(64) NOT NULL,
+		  `bType` mediumint(64) default NULL,
+		  `bContent` mediumint(64) default NULL,
+		  `bUser` mediumint(64) default NULL,
+		  `assoOrder` mediumint(64) NOT NULL,
+		  KEY `atype` (`aType`,`aField`,`bType`,`bContent`),
+		  KEY `bType` (`bType`)
+		) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+
+		CREATE TABLE IF NOT EXISTS `k_contentcategory` (
+		  `id_content` mediumint(64) NOT NULL,
+		  `id_category` mediumint(64) NOT NULL,
+		  `is_selected` tinyint(1) NOT NULL default '0',
+		  PRIMARY KEY  (`id_content`,`id_category`),
+		  KEY `id_content` (`id_content`),
+		  KEY `id_category` (`id_category`)
+		) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+
+		CREATE TABLE IF NOT EXISTS `k_contentchapter` (
+		  `id_content` mediumint(64) NOT NULL,
+		  `id_chapter` mediumint(64) NOT NULL,
+		  `is_selected` tinyint(1) NOT NULL,
+		  PRIMARY KEY  (`id_content`,`id_chapter`),
+		  KEY `id_content` (`id_content`),
+		  KEY `id_chapter` (`id_chapter`)
+		) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+
+		CREATE TABLE IF NOT EXISTS `k_contentdata` (
+		  `id_content` mediumint(64) NOT NULL,
+		  `language` char(2) collate utf8_unicode_ci NOT NULL,
+		  `contentUrl` varchar(255) collate utf8_unicode_ci NOT NULL,
+		  `contentName` varchar(255) collate utf8_unicode_ci NOT NULL,
+		  `contentHeadTitle` varchar(255) collate utf8_unicode_ci default NULL,
+		  `contentMetaKeywords` varchar(255) collate utf8_unicode_ci default NULL,
+		  `contentMetaDescription` mediumtext collate utf8_unicode_ci,
+		  PRIMARY KEY  (`id_content`,`language`),
+		  KEY `language` (`language`)
+		) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+
+		CREATE TABLE IF NOT EXISTS `k_contentgroup` (
+		  `id_group` mediumint(64) NOT NULL,
+		  `id_content` mediumint(64) NOT NULL,
+		  `is_selected` tinyint(1) NOT NULL default '0',
+		  PRIMARY KEY  (`id_group`,`id_content`),
+		  KEY `id_group` (`id_group`),
+		  KEY `id_content` (`id_content`)
+		) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+
+		CREATE TABLE IF NOT EXISTS `k_contentgroupbusiness` (
+		  `id_group` mediumint(64) NOT NULL,
+		  `id_content` mediumint(64) NOT NULL,
+		  `is_view` tinyint(1) NOT NULL,
+		  `is_buy` tinyint(1) NOT NULL,
+		  `contentPrice` float(10,2) default NULL,
+		  `contentPriceTax` float(10,2) default NULL,
+		  `contentPriceNormal` float(10,2) default NULL,
+		  `contentPriceComment` varchar(255) collate utf8_unicode_ci default NULL,
+		  PRIMARY KEY  (`id_group`,`id_content`),
+		  KEY `id_group` (`id_group`),
+		  KEY `id_content` (`id_content`)
+		) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+
+		CREATE TABLE IF NOT EXISTS `k_contentitem` (
+		  `id_content` mediumint(64) NOT NULL,
+		  `id_album` mediumint(64) NOT NULL,
+		  `contentItemPos` mediumint(64) NOT NULL,
+		  `contentItemUrl` varchar(255) collate utf8_unicode_ci NOT NULL,
+		  `contentItemType` varchar(15) collate utf8_unicode_ci NOT NULL,
+		  `contentItemMime` varchar(15) collate utf8_unicode_ci NOT NULL,
+		  `contentItemHeight` mediumint(6) default NULL,
+		  `contentItemWidth` mediumint(6) default NULL,
+		  `contentItemWeight` mediumint(64) default NULL,
+		  `contentItemExternal` tinyint(1) NOT NULL,
+		  `contentItemProxyKey` varchar(255) collate utf8_unicode_ci default NULL,
+		  PRIMARY KEY  (`id_content`)
+		) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+
+		CREATE TABLE IF NOT EXISTS `k_contentpack` (
+		  `id_contentpack` int(11) NOT NULL,
+		  `id_content` int(11) NOT NULL,
+		  `contentPackQuantity` int(11) NOT NULL default '1',
+		  `pos_contentpack` smallint(6) NOT NULL,
+		  PRIMARY KEY  (`id_contentpack`,`id_content`),
+		  KEY `id_content` (`id_content`)
+		) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+
+		CREATE TABLE IF NOT EXISTS `k_contentsearch` (
+		  `id_content` mediumint(64) NOT NULL,
+		  `id_search` mediumint(64) NOT NULL,
+		  PRIMARY KEY  (`id_content`,`id_search`)
+		) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+
+		CREATE TABLE IF NOT EXISTS `k_contentshop` (
+		  `id_content` mediumint(64) NOT NULL,
+		  `id_shop` mediumint(64) NOT NULL,
+		  UNIQUE KEY `id_content` (`id_content`,`id_shop`)
+		) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+
+		CREATE TABLE IF NOT EXISTS `k_contentsocialforum` (
+		  `id_content` mediumint(64) NOT NULL,
+		  `id_socialforum` mediumint(64) NOT NULL,
+		  `is_selected` tinyint(1) NOT NULL default '0',
+		  PRIMARY KEY  (`id_content`,`id_socialforum`),
+		  KEY `id_content` (`id_content`),
+		  KEY `id_socialforum` (`id_socialforum`)
+		) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+
+		CREATE TABLE IF NOT EXISTS `k_contentversion` (
+		  `id_version` mediumint(64) NOT NULL auto_increment,
+		  `id_content` mediumint(64) NOT NULL,
+		  `language` varchar(2) collate utf8_unicode_ci NOT NULL,
+		  `versionDate` datetime NOT NULL,
+		  `versionRaw` longtext collate utf8_unicode_ci NOT NULL,
+		  PRIMARY KEY  (`id_version`)
+		) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+
+		CREATE TABLE IF NOT EXISTS `k_search` (
+		  `id_search` mediumint(64) NOT NULL auto_increment,
+		  `searchType` varchar(20) collate utf8_unicode_ci NOT NULL,
+		  `searchName` varchar(255) collate utf8_unicode_ci NOT NULL,
+		  `searchChain` varchar(3) collate utf8_unicode_ci NOT NULL,
+		  `searchParam` mediumtext collate utf8_unicode_ci NOT NULL,
+		  PRIMARY KEY  (`id_search`)
+		) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci ;
+
+
+		CREATE TABLE IF NOT EXISTS `k_type` (
+		  `id_type` mediumint(64) NOT NULL auto_increment,
+		  `is_business` tinyint(1) NOT NULL,
+		  `is_gallery` tinyint(1) NOT NULL default '0',
+		  `is_ad` tinyint(1) NOT NULL,
+		  `is_cp` tinyint(1) NOT NULL,
+		  `use_group` tinyint(1) NOT NULL,
+		  `use_search` tinyint(1) NOT NULL,
+		  `use_chapter` tinyint(1) NOT NULL,
+		  `use_category` tinyint(1) NOT NULL,
+		  `use_socialforum` tinyint(1) NOT NULL,
+		  `typePos` mediumint(64) NOT NULL,
+		  `typeKey` varchar(255) collate utf8_unicode_ci NOT NULL,
+		  `typeName` varchar(255) collate utf8_unicode_ci NOT NULL,
+		  `typeFormLayout` mediumtext collate utf8_unicode_ci NOT NULL,
+		  `typeTemplate` varchar(255) collate utf8_unicode_ci NOT NULL,
+		  PRIMARY KEY  (`id_type`),
+		  KEY `typeKey` (`typeKey`)
+		) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+
+		CREATE TABLE IF NOT EXISTS `k_country` (
+		  `iso` varchar(2) collate utf8_unicode_ci NOT NULL,
+		  `iso_ref` varchar(2) collate utf8_unicode_ci NOT NULL,
+		  `is_used` tinyint(1) NOT NULL default '0',
+		  `is_delivered` tinyint(1) NOT NULL default '0',
+		  `countryZone` varchar(255) collate utf8_unicode_ci NOT NULL,
+		  `countryName` varchar(255) collate utf8_unicode_ci NOT NULL,
+		  `countryLanguage` varchar(255) collate utf8_unicode_ci NOT NULL,
+		  `countryLocale` varchar(6) collate utf8_unicode_ci NOT NULL,
+		  PRIMARY KEY  (`iso`)
+		) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+
+		CREATE TABLE IF NOT EXISTS `k_localisation` (
+		  `language` varchar(2) collate utf8_unicode_ci NOT NULL,
+		  `label` varchar(255) collate utf8_unicode_ci NOT NULL,
+		  `translation` mediumtext collate utf8_unicode_ci NOT NULL,
+		  UNIQUE KEY `language` (`language`,`label`)
+		) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+	]]></sql>
+
+	<preSript></preSript>
+	<postScript></postScript>
+
+</install>

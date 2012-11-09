@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<patch>
+
+	<job action = "createField" 	table = "k_ad" 		field = "id_adzone" 	type = "INT(64)"	 	null = "NO"		unsigned = "NO"		after="id_ad" />
+	<job action = "createField" 	table = "k_ad" 		field = "is_active" 	type = "TINYINT(1)" 	null = "NO" 	unsigned = "YES"	after="id_adzone" />
+	<job action = "createField" 	table = "k_ad" 		field = "adClick" 		type = "BIGINT(64)" 	null = "YES" 	unsigned = "NO"		after="adName" />
+	<job action = "createField" 	table = "k_ad" 		field = "adView" 		type = "BIGINT(64)" 	null = "YES" 	unsigned = "NO"		after="adClick" />
+	<job action = "createField" 	table = "k_ad" 		field = "adCode" 		type = "MEDIUMTEXT" 	null = "YES" 						after="adEnd" />
+	<job action = "createField" 	table = "k_ad" 		field = "adMedia" 		type = "MEDIUMTEXT" 	null = "YES" 						after="adCode" />
+
+	<job action = "createIndex" 	table = "k_adzone" 	index = "zoneCode"		field = "zoneCode" />
+
+</patch>

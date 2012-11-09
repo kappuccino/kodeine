@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<install>
+
+	<sql><![CDATA[
+		CREATE TABLE IF NOT EXISTS `k_cache` (
+		  `cacheFlagRemovable` tinyint(1) NOT NULL,
+		  `cacheKey` varchar(255) collate utf8_unicode_ci NOT NULL,
+		  `cacheTTL` bigint(20) NOT NULL,
+		  `cacheValue` longblob NOT NULL,
+		  PRIMARY KEY  (`cacheKey`),
+		  KEY `cacheTTL` (`cacheTTL`),
+		  KEY `cacheFlagRemovable` (`cacheFlagRemovable`)
+		) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+
+		CREATE TABLE IF NOT EXISTS `k_log` (
+		  `id_log` mediumint(64) NOT NULL auto_increment,
+		  `logDate` timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP,
+		  `logName` varchar(255) collate utf8_unicode_ci NOT NULL,
+		  `logValue` mediumtext collate utf8_unicode_ci NOT NULL,
+		  PRIMARY KEY  (`id_log`)
+		) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+	]]></sql>
+
+	<preSript></preSript>
+	<postScript></postScript>
+
+</install>

@@ -1,0 +1,13 @@
++ = Ajout / Nouveaute
+- = Correction
+* = Autre / Divers / Inclassable...
+
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+2012-10-17 (51)
++ Refonte du patch pour la compilation des LESS, le passage des LESS/CSS se fait depuis la homepage
++ Refonte du proxy PHP pour la gestiond des fichier de ressource pour le backoffice
++ Utilisation d'un cookie pour gerer les icones dans les sous-menu
++ Ajout du lien pour l'ouverture du site, suppression de "Mon Compte"
++ Ameliioration de la fonction core:mediaMimeType() pour mieux gerer les CSS/JS/WOFF (ne renvoit plus text/plain)
++ Possibilité de changer le brandName sur le back office

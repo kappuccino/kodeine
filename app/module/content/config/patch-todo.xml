@@ -1,0 +1,198 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<patch>
+
+	<job action="sql"><![CDATA[
+		CREATE TABLE IF NOT EXISTS `k_contentcomment` (
+			`id_comment` mediumint(64) NOT NULL auto_increment,
+			`id_content` mediumint(64) NOT NULL,
+			`id_user` mediumint(64) default NULL,
+			`is_moderate` tinyint(1) NOT NULL default '0',
+			`commentDate` datetime NOT NULL,
+			`commentData` mediumtext collate utf8_unicode_ci NOT NULL,
+			`commentGood` mediumint(64) NOT NULL,
+			`commentBad` mediumint(64) NOT NULL,
+			`commentAvg` mediumint(64) NOT NULL,
+		PRIMARY KEY  (`id_comment`),
+		KEY `id_content` (`id_content`)
+		) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci
+	]]></job>
+
+	<job action="sql"><![CDATA[
+		CREATE TABLE IF NOT EXISTS `k_contentrate` (
+			`id_rate` mediumint(64) NOT NULL auto_increment,
+			`id_content` mediumint(64) NOT NULL,
+			`id_user` mediumint(64) default NULL,
+			`rateDate` datetime NOT NULL,
+			`rateValue` int(2) NOT NULL,
+		PRIMARY KEY  (`id_rate`),
+		KEY `id_content` (`id_content`)
+		) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+	]]></job>
+
+	<job action="sql"><![CDATA[
+		CREATE TABLE IF NOT EXISTS `k_contentitem` (
+			`id_content` mediumint(64) NOT NULL,
+			`contentItemUrl` varchar(255) collate utf8_unicode_ci NOT NULL,
+			`contentItemType` varchar(15) collate utf8_unicode_ci NOT NULL,
+			`contentItemMime` varchar(15) collate utf8_unicode_ci NOT NULL,
+			`contentItemHeight` mediumint(6) default NULL,
+			`contentItemWidth` mediumint(6) default NULL,
+			`contentItemWeight` mediumint(64) default NULL,
+		PRIMARY KEY  (`id_content`)
+		) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+	]]></job>
+
+	<job action="sql"><![CDATA[
+		CREATE TABLE IF NOT EXISTS `k_contentcommentrate` (
+			`id_content` mediumint(64) NOT NULL,
+			`id_comment` mediumint(64) NOT NULL,
+			`id_user` mediumint(64) NOT NULL,
+			`commentRateDate` datetime NOT NULL,
+			`commentRateValue` int(1) NOT NULL,
+		UNIQUE KEY `id_comment_2` (`id_comment`,`id_user`),
+		KEY `id_comment` (`id_comment`),
+		KEY `id_user` (`id_user`),
+		KEY `id_content` (`id_content`)
+		) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+	]]></job>
+
+	<job action="sql"><![CDATA[
+		CREATE TABLE IF NOT EXISTS `k_contentalbum` (
+			`id_album` mediumint(64) NOT NULL,
+			`id_content` mediumint(64) NOT NULL,
+			`pos_album` mediumint(64) NOT NULL,
+		UNIQUE KEY `same` (`id_album`,`id_content`),
+		KEY `id_album` (`id_album`),
+		KEY `id_content` (`id_content`)
+		) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+	]]></job>
+
+	<job action="sql"><![CDATA[
+		CREATE TABLE IF NOT EXISTS `k_contentcommentrate` (
+			`id_content` mediumint(64) NOT NULL,
+			`id_comment` mediumint(64) NOT NULL,
+			`id_user` mediumint(64) NOT NULL,
+			`commentRateDate` datetime NOT NULL,
+			`commentRateValue` int(1) NOT NULL,
+		UNIQUE KEY `id_comment_2` (`id_comment`,`id_user`),
+		KEY `id_comment` (`id_comment`),
+		KEY `id_user` (`id_user`),
+		KEY `id_content` (`id_content`)
+		) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+	]]></job>
+
+	<job action="sql"><![CDATA[
+		CREATE TABLE IF NOT EXISTS `k_contentshop` (
+			`id_content` mediumint(64) NOT NULL,
+			`id_shop` mediumint(64) NOT NULL,
+		UNIQUE KEY `id_content` (`id_content`,`id_shop`)
+		) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+	]]></job>
+
+	<job action="sql"><![CDATA[
+		CREATE TABLE IF NOT EXISTS `k_shop` (
+			`id_shop` mediumint(64) NOT NULL auto_increment,
+			`shopName` varchar(255) collate utf8_unicode_ci NOT NULL,
+		PRIMARY KEY  (`id_shop`)
+		) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+	]]></job>
+
+	<job action="sql"><![CDATA[
+		CREATE TABLE IF NOT EXISTS `k_contentkeyword` (
+			`id_content` mediumint(64) NOT NULL,
+			`language` char(2) collate utf8_unicode_ci NOT NULL,
+			`id_field` mediumint(64) NOT NULL,
+			`keyword` varchar(255) collate utf8_unicode_ci NOT NULL,
+		KEY `id_content` (`id_content`,`language`),
+		KEY `id_field` (`id_field`),
+		KEY `keyword` (`keyword`)
+		) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+	]]></job>
+
+<!--
+	<job action="sql"><![CDATA[
+		CREATE TABLE IF NOT EXISTS `k_typealbumfield` (
+			`id_type` mediumint(64) NOT NULL,
+			`id_field` mediumint(64) NOT NULL,
+			`order` mediumint(64) NOT NULL,
+		PRIMARY KEY  (`id_type`,`id_field`),
+		KEY `id_type` (`id_type`),
+		KEY `id_field` (`id_field`)
+		) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci
+	]]></job>
+-->
+	<job action="sql"><![CDATA[
+		CREATE TABLE IF NOT EXISTS `k_contentsocialforum` (
+			`id_content` mediumint(64) NOT NULL,
+			`id_socialforum` mediumint(64) NOT NULL,
+			`is_selected` tinyint(1) NOT NULL default '0',
+		PRIMARY KEY  (`id_content`,`id_socialforum`),
+		KEY `id_content` (`id_content`),
+		KEY `id_socialforum` (`id_socialforum`)
+		) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+	]]></job>
+
+	<job action = "createField" 	table = "k_content" 		field = "id_user" 					type = "MEDIUMINT(64)" 	null = "NO" 	after = "id_carriage" />
+	<job action = "createField" 	table = "k_content" 		field = "is_social" 				type = "TINYINT(1)" 	null = "NO" 	after = "is_version"		default = "0" />
+	<job action = "createField" 	table = "k_content"			field = "is_album"					type = "TINYINT(1)" 	null = "NO"		after = "is_social"			default = "0" />
+	<job action = "createField" 	table = "k_content"			field = "is_item"					type = "TINYINT(1)" 	null = "NO"		after = "is_album"			default = "0" />
+	<job action = "createField" 	table = "k_content" 		field = "contentRateAvg" 			type = "TINYINT(4)" 	null = "NO" 	after = "contentRate"		default = "0" />
+	<job action = "createField"		table = "k_content"			field = "contentSee"				type = "TINYINT(1)"		null = "NO"		after = "pos_content"		default = "0" />
+	<job action = "createField"		table = "k_content"			field = "id_parent" 				type = "MEDIUMINT(64)"	null = "NO" 	after = "id_user" />
+	<job action = "createField"		table = "k_content" 		field = "pos_parent" 				type = "MEDIUMINT(64)"	null = "NO" 	after = "pos_content" />
+	<job action = "createField" 	table = "k_content" 		field = "id_parent"					type = "MEDIUMINT(64)" 	null = "NO"		after = "id_user" />
+	<job action = "createField" 	table = "k_content"			field = "contentView"				type = "BIGINT(64)" 	null = "NO"		after = "contentRateAvg" />
+	<job action = "createField" 	table = "k_content"			field = "contentCommentCount"		type = "MEDIUMINT(9)" 	null = "NO"		after = "contentComment"	unsigned="YES" />
+	<job action = "createField" 	table = "k_content"			field = "contentRateCount"			type = "MEDIUMINT(4)" 	null = "NO"		after = "contentRate"		unsigned="YES" />
+	<job action = "createField" 	table = "k_content"			field = "contentCache"				type = "MEDIUMTEXT" 	null = "NO"		after = "contentDateEnd" />
+
+	<job action = "createField" 	table = "k_contentdata"		field = "contentHeadTitle"			type = "VARCHAR(255)" 	null = "NO"		after = "contentName" />
+	<job action = "createField" 	table = "k_contentdata"		field = "contentMetaKeywords"		type = "VARCHAR(255)" 	null = "NO"		after = "contentHeadTitle" />
+	<job action = "createField" 	table = "k_contentdata"		field = "contentMetaDescription"	type = "MEDIUMTEXT" 	null = "NO"		after = "contentMetaKeywords" />
+
+	<job action = "createField"		table = "k_contentcomment" 	field = "commentUsername"			type = "VARCHAR(255)"	null = "NO" 	after = "is_moderate" />
+	<job action = "changeField" 	table = "k_contentcomment" 	field = "commentGood,commentGood" 	type = "MEDIUMINT(64)" 	null = "NO" 	default = "0" 				unsigned="YES" />
+	<job action = "changeField" 	table = "k_contentcomment" 	field = "commentBad,commentBad" 	type = "MEDIUMINT(64)" 	null = "NO" 	default = "0" 				unsigned="YES" />
+	<job action = "changeField" 	table = "k_contentcomment" 	field = "commentAvg,commentAvg" 	type = "MEDIUMINT(64)" 	null = "NO" 	default = "0" 				unsigned="YES" />
+
+	<job action = "changeField" 	table = "k_contentchapter" 	field = "is_parent,is_selected" 	type = "TINYINT(1)" 	null = "NO" 	default = "0" />
+
+	<job action = "changeField" 	table = "k_contentcategory" field = "is_parent,is_selected" 	type = "TINYINT(1)" 	null = "NO" 	default = "0" />
+
+	<job action = "changeField" 	table = "k_contentgroup" 	field = "is_parent,is_selected"		type = "TINYINT(1)" 	null = "NO" 	default = "0" />
+
+	<job action = "changeField" 	table = "k_contentalbum" 	field = "pos_album,contentAlbumPos"	type = "MEDIUMINT(64)" 	null = "NO"  />
+	<job action = "createField" 	table = "k_contentalbum" 	field = "contentAlbumSyncFolder"	type = "VARCHAR(255)" 	null = "NO" 	after = "contentAlbumPos" />
+	<job action = "createField" 	table = "k_contentalbum" 	field = "contentAlbumParent"		type = "MEDIUMTEXT" 	null = "NO" 	after = "contentAlbumSyncFolder" />
+	<job action = "createField" 	table = "k_contentalbum" 	field = "contentAlbumChildren"		type = "MEDIUMTEXT" 	null = "NO" 	after = "contentAlbumParent" />
+	<job action = "createField" 	table = "k_contentalbum" 	field = "id_poster"					type = "MEDIUMINT(64)" 	null = "NO" 	after = "id_album" />
+
+	<job action = "createField" 	table = "k_contentitem" 	field = "id_album"					type = "MEDIUMINT(64)" 	null = "NO" 	after = "id_content" />
+	<job action = "createField" 	table = "k_contentitem" 	field = "contentItemPos"			type = "MEDIUMINT(64)" 	null = "NO" 	after = "id_album" />
+	<job action = "createField" 	table = "k_contentitem" 	field = "contentItemExternal"		type = "TINYINT(1)" 	null = "NO" 	after = "contentItemWeight" />
+
+	<job action = "createField" 	table = "k_contentasso" 	field = "bUser"						type = "MEDIUMINT(64)" 	null = "YES" 	after = "bContent" />
+	<job action = "createField" 	table = "k_contentasso" 	field = "assoOrder"					type = "MEDIUMINT(64)" 	null = "NO" 	after = "bUser" />
+
+
+
+
+
+	<job action = "createIndex" 	table = "k_contentasso" 	index = "bType"		field = "bType" />
+	<job action = "createIndex" 	table = "k_contentrate" 	index = "id_user"	field = "id_user" />
+	<job action = "createIndex" 	table = "k_categorydata" 	index = "language"	field = "language" />
+	<job action = "createIndex" 	table = "k_contentdata" 	index = "language"	field = "language" />
+
+
+	<job action = "createField"		table = "k_type" 			field = "typePos" 					type = "MEDIUMINT(64)" 	null = "NO"		after = "is_cp" />
+	<job action = "createField"		table = "k_type" 			field = "is_gallery"				type = "TINYINT(1)" 	null = "NO"		after = "is_album" />
+	<job action = "createField"		table = "k_type" 			field = "is_ad"						type = "TINYINT(1)" 	null = "NO"		after = "is_gallery" />
+	<job action = "createField"		table = "k_type" 			field = "use_group"					type = "TINYINT(1)" 	null = "NO"		after = "is_ad" />
+	<job action = "createField"		table = "k_type" 			field = "use_search"				type = "TINYINT(1)" 	null = "NO"		after = "use_group" />
+	<job action = "createField"		table = "k_type" 			field = "use_chapter"				type = "TINYINT(1)" 	null = "NO"		after = "use_search" />
+	<job action = "createField"		table = "k_type" 			field = "use_category"				type = "TINYINT(1)" 	null = "NO"		after = "use_chapter" />
+	<job action = "createField"		table = "k_type" 			field = "use_socialforum"			type = "TINYINT(1)" 	null = "NO"		after = "use_category" />
+
+	<job action = "dropfield"		table = "k_type" 			field = "is_album" />	
+
+</patch>

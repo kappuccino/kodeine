@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<element>
+
+	<data>
+		<key>config</key>
+		<version>5.0.4</version>
+		<lastMod>2012-11-08</lastMod>
+
+		<name><![CDATA[Configuration]]></name>
+		<description><![CDATA[Régler les différentes options de votre site internet]]></description>
+		<panelIcon>ressource/img/module-config.png</panelIcon>
+		<install>YES</install>
+	</data>
+
+	<dependencies>
+		<module>theme</module>
+	</dependencies>
+
+	<less>
+		<file>/ui/css/field.less</file>
+	</less>
+
+	<profile>
+		<item code="index"		type="ALLOW_DENY" name="Accessible" />
+		<item code="backoffice"	type="ALLOW_DENY" name="Back office" />
+		<item code="theme"		type="ALLOW_DENY" name="Theme" />
+		<item code="field"		type="ALLOW_DENY" name="Champs" />
+		<item code="robot"		type="ALLOW_DENY" name="Robots" />
+	</profile>
+
+</element>

@@ -1,0 +1,99 @@
+// Table utilisee pour une liste d'element
+table.listing{
+	width: 100%;
+	color: rgb(51, 51, 51);
+
+	thead{
+		th{
+			background: @listing-head-background;
+			padding: 7px 5px 7px 5px;
+			font-weight: bold; font-size: 13px; color: @listing-head-color; text-align: left;
+
+			&.filter{
+				padding: 0px; margin: 0px;
+				span{
+					display: block;
+					margin-top: 5px;
+					float: left;
+				}
+			}
+
+			#filter{
+				float: right;
+				width: 50%;
+				margin-right: 3px;
+				background: #666; color: #e1e1e1;
+			}
+		}
+	}
+
+	tbody{
+		tr:nth-child(even){
+			background: @listing-odd-color;
+		}
+		tr:nth-child(odd) td{
+			background: #FFF;
+		}
+
+		td{
+			padding: 5px;
+			border-bottom: 1px solid @listing-body-border;
+			color: @listing-body-color;
+		}
+
+		tr:hover td{
+			background: @listing-hover-color;
+		}
+
+		a{
+			color: @listing-link-color;
+			&:hover {color : @listing-link-color-hover;}
+		}
+
+		.noData{
+			text-align: center;
+			padding: 30px 0 30px 0;
+		}
+	}
+
+	tfoot{
+		td{
+			padding: 5px;			
+		}
+	}
+
+	&.bordered{
+		border:1px solid @listing-head-background;
+	}
+
+	&.table-striped {
+		-webkit-box-shadow: 0px 0px 5px 0.5px #CCC;
+		box-shadow: 0px 0px 5px 0.5px #CCC;
+	}
+}
+
+// Table utilisee pour faire une liste de champ, un formulaire classic, peut etre dans un ".tabset > .view"
+table.form{	
+	width: 100%;
+
+	td{
+		padding: 0 0 10px 0;
+	}
+}
+
+.dataTables_empty{
+	text-align: center;
+	padding: 30px 0 30px 0;
+}
+
+
+// Formulaire de recherche
+#filter{
+	background: lighten(@listing-head-background, 25%);
+	padding: 3px;
+	margin-bottom: 1px;
+
+	input[type="text"]{
+		border: none;
+	}
+}

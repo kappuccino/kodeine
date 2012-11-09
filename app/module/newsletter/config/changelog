@@ -1,0 +1,13 @@
+Kodeine Change log
++ = Ajout / Nouveaute
+- = Correction
+* = Autre / Divers / Inclassable...
+
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+2012-11-09 (build 5.0.7)
+- Standardisation des boutons et ajout du bouton "ajouter (type contenu)"
+
+2012-11-06 (build 5.0.6)
+- Correction bug dans connector/cloudapp/data-list > fonction getSelected (restes de Mootools)
+- Correction du fichier de calcul du total des abonnes dans helper/total.php > prise en compte des recherches predefinies
+- Correction probleme suppression mail dans liste /module/newsletter/list.php fonction JS kill()

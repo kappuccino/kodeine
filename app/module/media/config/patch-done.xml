@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<patch>
+
+	<job action="sql"><![CDATA[
+		CREATE TABLE IF NOT EXISTS `k_cachemedia` (
+			`id_cache` mediumint(64) NOT NULL auto_increment,
+			`cacheLastMod` bigint(64) NOT NULL,
+			`cacheOpt` mediumtext collate utf8_unicode_ci NOT NULL,
+			`cacheSource` varchar(255) collate utf8_unicode_ci NOT NULL,
+			`cacheUrl` varchar(255) collate utf8_unicode_ci NOT NULL,
+		PRIMARY KEY  (`id_cache`),
+		KEY `cacheSource` (`cacheSource`)
+		) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci
+	]]></job>
+
+	<job action = "createField" 	table = "k_cachemedia"		field = "cacheOpt"			type = "MEDIUMTEXT" 	null = "NO"		after = "cacheTTL" />
+	<job action = "createField" 	table = "k_cachemedia"		field = "cacheLastMod"		type = "BIGINT(64)" 	null = "NO"		after = "cacheTTL" />
+	<job action = "dropfield"		table = "k_cachemedia" 		field = "cacheTTL" />
+
+	<job action = "createIndex" 	table = "k_cachemedia" 		field = "cacheSource"		index = "cacheSource" />
+
+</patch>

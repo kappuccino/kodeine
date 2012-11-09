@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<patch>
+
+	<job action = "createField" table = "k_theme" field = "themeVar" type = "MEDIUMTEXT" null = "NO" />
+
+</patch>

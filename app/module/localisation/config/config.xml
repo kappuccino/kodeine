@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<element>
+
+	<data>
+		<key>localisation</key>
+		<version>5.0.2</version>
+		<lastMod>2012-11-07</lastMod>
+
+		<name><![CDATA[Traduction]]></name>
+		<description><![CDATA[]]></description>
+		<menu>NO</menu>
+	</data>
+
+	<less>
+		<file>/ui/css/localisation.less</file>
+	</less>
+
+</element>

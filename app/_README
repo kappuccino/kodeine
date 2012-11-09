@@ -1,0 +1,46 @@
+Installation de Kodeine
+========================================================
+
+* Configuration logiciel
+- Apache 2, Lighttp ou Nginx
+- PHP 5
+- MySQL 5
+
+* Instruction pour Lighttpd
+Cette ligne correspond aux regles de reecriture Apache standard
+
+(...)
+	url.rewrite-if-not-file = (
+		"^([^?]*)?(?:\?(.*))?"  => "/app/index.php?rewrite=$1&$2"
+	)
+(...)
+
+* Instruction pour Apache2
+Ces ligne sont un exemple simple pour les regles de reecritures
+(...)
+	Options None
+	Options +FollowSymLinks
+	<Files .[lo*|sql|ht*]>
+		order allow,deny
+		deny from all
+	</Files>	
+	<IfModule mod_rewrite.c>
+		RewriteEngine On
+		RewriteBase /
+	
+		RewriteCond %{REQUEST_FILENAME} !-d
+		RewriteCond %{REQUEST_FILENAME} !-s
+		RewriteRule ^(.*)?$ 	app/index.php?rewrite=$1		[QSA,L]
+		RewriteRule ^$ 			app/index.php					[QSA,L]
+	
+		# Protection contre le pillage des images sources (appel direct de l'image source via l'URL)
+		#
+		RewriteCond %{REQUEST_FILENAME} -s
+		RewriteCond %{HTTP_REFERER} !.*/app/admin/	[NC]
+		RewriteRule media/private/.*(\.jpg) - [F,L]
+	</IfModule>
+(...)
+
+* Installation
+
+

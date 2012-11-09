@@ -1,0 +1,60 @@
+/* all * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+@corepath : "app/module/core/ui";
+
+/* top * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+@top-background: #404e5b; //#000;
+@top-border-color: darken(@top-background, 5%); //#666;
+@top-color: #f1f1f1;
+@top-logo-color: #e1e1e1;
+@top-a-color: #e1e1e1;
+
+@nav-background: #444444;
+@nav-a-color: #fff;
+
+@sub_nav-background: #f1f1f1;
+@sub_nav-border: #ddd;
+@sub_nav-split: #444;
+
+/* colors * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+
+@bg-blue: #4D90FE;
+@border-blue: #3079ED;
+
+@bg-red: #D14836;
+@border-red: #992A1B;
+
+@bg-green: #19A563;
+@border-green: #158550;
+
+// TABLE
+@listing-head-background: 	@nav-background; //#808080; //#f5f5f5;
+@listing-head-color: 		#E1E1E1; //#999999;
+
+@listing-body-border: 		#f5f5f5; //rgb(238, 238, 238);
+@listing-body-color: 		#515151;
+@listing-body-a-color: 		#000000;
+
+@listing-odd-color: 		rgb(240, 240, 240);
+@listing-hover-color: 		rgb(230, 230, 230);
+
+@listing-link-color: 		#808080;
+@listing-link-color-hover : #000000;
+
+/* clearfix * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+
+.clearfix:after{ content:"."; display:block; clear:both; visibility:hidden; line-height:0; height:0; }
+.clearfix{ display:inline-block; }
+html .clearfix{ display: block; }
+* html .clearfix{ height: 1%; }
+
+
+
+
+
+.border-radius(@radius){
+	border-radius: @radius;
+	-moz-border-radius: @radius;
+	-webkit-border-radius: @radius;
+	-khtml-border-radius: @radius;
+	border-radius: @radius;
+}

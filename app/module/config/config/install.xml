@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<install>
+
+	<sql><![CDATA[
+		CREATE TABLE IF NOT EXISTS `k_config` (
+		  `configModule` varchar(60) collate utf8_unicode_ci NOT NULL,
+		  `configName` varchar(255) collate utf8_unicode_ci NOT NULL,
+		  `configValue` mediumtext collate utf8_unicode_ci NOT NULL,
+		  KEY `configModule` (`configModule`)
+		) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+	]]></sql>
+
+	<preSript></preSript>
+	<postScript></postScript>
+
+</install>

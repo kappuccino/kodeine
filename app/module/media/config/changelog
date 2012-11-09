@@ -1,0 +1,11 @@
+Kodeine Change log
++ = Ajout / Nouveaute
+- = Correction
+* = Autre / Divers / Inclassable...
+
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+2012-11-07
++ Gestion du .ignore pour ne pas afficher des dossier/fichiers
+
+2012-10-24
++ Si une image est uploade en portrait, une rotation est effectué pour la voir correctement (EXIF Orientation: 6=90deg, 8=-90deg

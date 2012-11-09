@@ -1,0 +1,97 @@
+h3.campaignName{
+	font-weight:bold; font-size:18px; color:rgb(80,80,80);
+	margin-top:20px;
+	margin-bottom: 5px
+}
+
+p.campaignNameCaption{
+	padding-top: 0px;
+	margin-top:0px;
+	color: #666;
+}
+
+.alert{
+	background: #f4b334;
+	border: 1px solid #e89843;
+	padding: 10px;
+}
+
+.legend{
+	margin: 20px 0px 5px 0px;
+	font-size: 11px;
+}
+	.legend .open{
+		float: left
+	}	
+	.legend .click{
+		float: right;
+	}
+
+#placeholder{
+}
+
+#tooltip{
+	position: absolute;
+	display: none;
+	border: 1px solid #000;
+	-moz-border-radius:4px; -webkit-border-radius: 4px;
+	padding: 5px 10px 5px 10px;
+	background: #FFF;
+}
+	#tooltip .d{
+		color:#808080;
+	}
+
+	#tooltip .t{
+	}
+		#tooltip .t span{
+			font-weight: bold;
+			font-size: 13px;
+		}
+
+		#tooltip .open span{
+			color: rgb(80, 180, 50);
+		}
+		#tooltip .click span{
+			color: rgb(5, 141, 199);
+		}
+
+.small-caption{
+	color: #666;
+}
+
+span.big{
+	font-size: 20px;
+	vertical-align: bottom;
+}
+
+span.medium{
+	font-size: 16px;
+}
+	span.medium a{
+		color: inherit;
+	}
+
+span.bold{
+	font-weight: bold;
+}
+
+span.grey{
+	color: #666;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

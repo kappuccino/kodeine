@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<element>
+
+	<data>
+		<key>newsletter</key>
+		<version>5.0.8</version>
+		<lastMod>2012-11-09</lastMod>
+
+		<name><![CDATA[Newsletter]]></name>
+		<description><![CDATA[R&eacute;diger vos newsletters et analyser leur traffic]]></description>
+		<panelIcon>ressource/img/module-newsletter.png</panelIcon>
+		<install>YES</install>
+	</data>
+
+	<profile>
+		<item code="index"	 		type="ALLOW_DENY" name="Accessible" />
+		<item code="designer"	 	type="ALLOW_DENY" name="Designer" />
+	</profile>
+
+</element>

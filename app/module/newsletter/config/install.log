@@ -1,0 +1,89 @@
+2012-09-19 17:18:29
+CREATE TABLE IF NOT EXISTS `k_newsletterclick` (
+		  `id_newsletterclick` mediumint(64) unsigned NOT NULL auto_increment,
+		  `id_newsletter` mediumint(64) unsigned NOT NULL,
+		  `id_user` mediumint(64) unsigned default NULL,
+		  `clickMail` varchar(255) collate utf8_unicode_ci NOT NULL,
+		  `clickDate` datetime NOT NULL,
+		  `clickUrl` varchar(255) collate utf8_unicode_ci NOT NULL,
+		  PRIMARY KEY  (`id_newsletterclick`)
+		) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+		
+		CREATE TABLE IF NOT EXISTS `k_newsletterlist` (
+		  `id_newsletterlist` mediumint(64) NOT NULL auto_increment,
+		  `listName` varchar(255) collate utf8_unicode_ci NOT NULL,
+		  `listExternalUrl` varchar(255) collate utf8_unicode_ci NOT NULL,
+		  `listDateCreation` datetime NOT NULL,
+		  `listDateUpdate` datetime NOT NULL,
+		  PRIMARY KEY  (`id_newsletterlist`)
+		) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci
+You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near ';
+		
+		CREATE TABLE IF NOT EXISTS `k_newsletterlist` (
+		  `id_newsletterlist` m' at line 92012-09-19 17:18:35
+CREATE TABLE IF NOT EXISTS `k_newsletterclick` (
+		  `id_newsletterclick` mediumint(64) unsigned NOT NULL auto_increment,
+		  `id_newsletter` mediumint(64) unsigned NOT NULL,
+		  `id_user` mediumint(64) unsigned default NULL,
+		  `clickMail` varchar(255) collate utf8_unicode_ci NOT NULL,
+		  `clickDate` datetime NOT NULL,
+		  `clickUrl` varchar(255) collate utf8_unicode_ci NOT NULL,
+		  PRIMARY KEY  (`id_newsletterclick`)
+		) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+		
+		CREATE TABLE IF NOT EXISTS `k_newsletterlist` (
+		  `id_newsletterlist` mediumint(64) NOT NULL auto_increment,
+		  `listName` varchar(255) collate utf8_unicode_ci NOT NULL,
+		  `listExternalUrl` varchar(255) collate utf8_unicode_ci NOT NULL,
+		  `listDateCreation` datetime NOT NULL,
+		  `listDateUpdate` datetime NOT NULL,
+		  PRIMARY KEY  (`id_newsletterlist`)
+		) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci
+You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near ';
+		
+		CREATE TABLE IF NOT EXISTS `k_newsletterlist` (
+		  `id_newsletterlist` m' at line 92012-09-19 17:21:54
+CREATE TABLE IF NOT EXISTS `k_newsletterclick` (
+		  `id_newsletterclick` mediumint(64) unsigned NOT NULL auto_increment,
+		  `id_newsletter` mediumint(64) unsigned NOT NULL,
+		  `id_user` mediumint(64) unsigned default NULL,
+		  `clickMail` varchar(255) collate utf8_unicode_ci NOT NULL,
+		  `clickDate` datetime NOT NULL,
+		  `clickUrl` varchar(255) collate utf8_unicode_ci NOT NULL,
+		  PRIMARY KEY  (`id_newsletterclick`)
+		) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+		
+		CREATE TABLE IF NOT EXISTS `k_newsletterlist` (
+		  `id_newsletterlist` mediumint(64) NOT NULL auto_increment,
+		  `listName` varchar(255) collate utf8_unicode_ci NOT NULL,
+		  `listExternalUrl` varchar(255) collate utf8_unicode_ci NOT NULL,
+		  `listDateCreation` datetime NOT NULL,
+		  `listDateUpdate` datetime NOT NULL,
+		  PRIMARY KEY  (`id_newsletterlist`)
+		) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci
+You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near ';
+		
+		CREATE TABLE IF NOT EXISTS `k_newsletterlist` (
+		  `id_newsletterlist` m' at line 92012-09-19 17:22:02
+CREATE TABLE IF NOT EXISTS `k_newsletterclick` (
+		  `id_newsletterclick` mediumint(64) unsigned NOT NULL auto_increment,
+		  `id_newsletter` mediumint(64) unsigned NOT NULL,
+		  `id_user` mediumint(64) unsigned default NULL,
+		  `clickMail` varchar(255) collate utf8_unicode_ci NOT NULL,
+		  `clickDate` datetime NOT NULL,
+		  `clickUrl` varchar(255) collate utf8_unicode_ci NOT NULL,
+		  PRIMARY KEY  (`id_newsletterclick`)
+		) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+		
+		CREATE TABLE IF NOT EXISTS `k_newsletterlist` (
+		  `id_newsletterlist` mediumint(64) NOT NULL auto_increment,
+		  `listName` varchar(255) collate utf8_unicode_ci NOT NULL,
+		  `listExternalUrl` varchar(255) collate utf8_unicode_ci NOT NULL,
+		  `listDateCreation` datetime NOT NULL,
+		  `listDateUpdate` datetime NOT NULL,
+		  PRIMARY KEY  (`id_newsletterlist`)
+		) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci
+You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near ';
+		
+		CREATE TABLE IF NOT EXISTS `k_newsletterlist` (
+		  `id_newsletterlist` m' at line 9

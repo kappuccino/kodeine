@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<element>
+
+	<data>
+		<key>media</key>
+		<version>5.0.5</version>
+		<lastMod>2012-11-08</lastMod>
+
+		<name><![CDATA[Gestionnaire de fichiers]]></name>
+		<description><![CDATA[Géer vos fichiers, et envoyer de nouveaux documents en ligne]]></description>
+		<panelIcon>ressource/img/module-media.png</panelIcon>
+		<install>YES</install>
+	</data>
+
+	<less>
+		<file>/ui/css/media.less</file>
+	</less>
+
+	<profile>
+		<item code="index"	type="ALLOW_DENY" name="Accessible" />
+		<item code="use" 	type="ALLOW_DENY" name="Utiliser" />
+		<item code="remove" type="ALLOW_DENY" name="Supprimer" />
+		<item code="create" type="ALLOW_DENY" name="Nouveau dossier" />
+		<item code="rename" type="ALLOW_DENY" name="Renommer" />
+		<item code="move" 	type="ALLOW_DENY" name="Deplacer" />
+		<item code="upload" type="ALLOW_DENY" name="Mettre en ligne" />
+		<item code="thumbs" type="ALLOW_DENY" name="Vignette" />
+		<item code="root"	type="FREE" 	  name="Dossier de depart" />
+	</profile>
+
+</element>

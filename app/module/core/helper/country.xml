@@ -1,0 +1,985 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<states>
+	<area name="LOCAL">
+		<state iso="FR" locale="fr_FR">
+			<language><![CDATA[FRANÇAIS]]></language>
+			<name><![CDATA[FRANCE]]></name>
+		</state>
+	</area>
+	<area name="EUROPE">
+		<state iso="DE" locale="fr_FR">
+			<language><![CDATA[---]]></language>
+			<name><![CDATA[GERMANY]]></name>
+		</state>
+		<state iso="AT" locale="fr_FR">
+			<language><![CDATA[---]]></language>
+			<name><![CDATA[AUSTRIA]]></name>
+		</state>
+		<state iso="BE" locale="fr_FR">
+			<language><![CDATA[---]]></language>
+			<name><![CDATA[BELGIUM]]></name>
+		</state>
+		<state iso="BG" locale="fr_FR">
+			<language><![CDATA[---]]></language>
+			<name><![CDATA[BULGARIA]]></name>
+		</state>
+		<state iso="ES" locale="fr_FR">
+			<language><![CDATA[---]]></language>
+			<name><![CDATA[SPAIN]]></name>
+		</state>
+		<state iso="CY" locale="fr_FR">
+			<language><![CDATA[---]]></language>
+			<name><![CDATA[CYPRUS]]></name>
+		</state>
+		<state iso="CZ" locale="fr_FR">
+			<language><![CDATA[---]]></language>
+			<name><![CDATA[CZECH REPUBLIC]]></name>
+		</state>
+		<state iso="DK" locale="fr_FR">
+			<language><![CDATA[---]]></language>
+			<name><![CDATA[DENMARK]]></name>
+		</state>
+		<state iso="EE" locale="fr_FR">
+			<language><![CDATA[---]]></language>
+			<name><![CDATA[ESTONIA]]></name>
+		</state>
+		<state iso="FI" locale="fr_FR">
+			<language><![CDATA[---]]></language>
+			<name><![CDATA[FINLAND]]></name>
+		</state>
+		<state iso="GR" locale="fr_FR">
+			<language><![CDATA[---]]></language>
+			<name><![CDATA[GREECE]]></name>
+		</state>
+		<state iso="HU" locale="fr_FR">
+			<language><![CDATA[---]]></language>
+			<name><![CDATA[HUNGARY]]></name>
+		</state>
+		<state iso="IE" locale="fr_FR">
+			<language><![CDATA[---]]></language>
+			<name><![CDATA[IRELAND]]></name>
+		</state>
+		<state iso="IT" locale="fr_FR">
+			<language><![CDATA[---]]></language>
+			<name><![CDATA[ITALY]]></name>
+		</state>
+		<state iso="LT" locale="fr_FR">
+			<language><![CDATA[---]]></language>
+			<name><![CDATA[LITHUANIA]]></name>
+		</state>
+		<state iso="LU" locale="fr_FR">
+			<language><![CDATA[---]]></language>
+			<name><![CDATA[LUXEMBOURG]]></name>
+		</state>
+		<state iso="MT" locale="fr_FR">
+			<language><![CDATA[---]]></language>
+			<name><![CDATA[MALTA]]></name>
+		</state>
+		<state iso="NL" locale="fr_FR">
+			<language><![CDATA[---]]></language>
+			<name><![CDATA[NETHERLANDS]]></name>
+		</state>
+		<state iso="NO" locale="fr_FR">
+			<language><![CDATA[---]]></language>
+			<name><![CDATA[NORWAY]]></name>
+		</state>
+		<state iso="PL" locale="fr_FR">
+			<language><![CDATA[---]]></language>
+			<name><![CDATA[POLAND]]></name>
+		</state>
+		<state iso="PT" locale="fr_FR">
+			<language><![CDATA[---]]></language>
+			<name><![CDATA[PORTUGAL]]></name>
+		</state>
+		<state iso="RO" locale="fr_FR">
+			<language><![CDATA[---]]></language>
+			<name><![CDATA[ROMANIA]]></name>
+		</state>
+		<state iso="SK" locale="fr_FR">
+			<language><![CDATA[---]]></language>
+			<name><![CDATA[SLOVAKIA]]></name>
+		</state>
+		<state iso="SI" locale="fr_FR">
+			<language><![CDATA[---]]></language>
+			<name><![CDATA[SLOVENIA]]></name>
+		</state>
+		<state iso="SE" locale="fr_FR">
+			<language><![CDATA[---]]></language>
+			<name><![CDATA[SWEDEN]]></name>
+		</state>
+		<state iso="GB" locale="fr_FR">
+			<language><![CDATA[---]]></language>
+			<name><![CDATA[UNITED KINGDOM]]></name>
+		</state>
+	</area>
+	<area name="WORLD">
+		<state iso="AF" locale="fr_FR">
+			<language><![CDATA[---]]></language>
+			<name><![CDATA[AFGHANISTAN]]></name>
+		</state>
+		<state iso="AX" locale="fr_FR">
+			<language><![CDATA[---]]></language>
+			<name><![CDATA[ALAND ISLANDS]]></name>
+		</state>
+		<state iso="AL" locale="fr_FR">
+			<language><![CDATA[---]]></language>
+			<name><![CDATA[ALBANIA]]></name>
+		</state>
+		<state iso="DZ" locale="fr_FR">
+			<language><![CDATA[---]]></language>
+			<name><![CDATA[ALGERIA]]></name>
+		</state>
+		<state iso="AS" locale="fr_FR">
+			<language><![CDATA[---]]></language>
+			<name><![CDATA[AMERICAN SAMOA]]></name>
+		</state>
+		<state iso="AD" locale="fr_FR">
+			<language><![CDATA[---]]></language>
+			<name><![CDATA[ANDORRA]]></name>
+		</state>
+		<state iso="AO" locale="fr_FR">
+			<language><![CDATA[---]]></language>
+			<name><![CDATA[ANGOLA]]></name>
+		</state>
+		<state iso="AI" locale="fr_FR">
+			<language><![CDATA[---]]></language>
+			<name><![CDATA[ANGUILLA]]></name>
+		</state>
+		<state iso="AQ" locale="fr_FR">
+			<language><![CDATA[---]]></language>
+			<name><![CDATA[ANTARCTICA]]></name>
+		</state>
+		<state iso="AG" locale="fr_FR">
+			<language><![CDATA[---]]></language>
+			<name><![CDATA[ANTIGUA AND BARBUDA]]></name>
+		</state>
+		<state iso="AR" locale="fr_FR">
+			<language><![CDATA[---]]></language>
+			<name><![CDATA[ARGENTINA]]></name>
+		</state>
+		<state iso="AM" locale="fr_FR">
+			<language><![CDATA[---]]></language>
+			<name><![CDATA[ARMENIA]]></name>
+		</state>
+		<state iso="AW" locale="fr_FR">
+			<language><![CDATA[---]]></language>
+			<name><![CDATA[ARUBA]]></name>
+		</state>
+		<state iso="AU" locale="fr_FR">
+			<language><![CDATA[---]]></language>
+			<name><![CDATA[AUSTRALIA]]></name>
+		</state>
+		<state iso="AZ" locale="fr_FR">
+			<language><![CDATA[---]]></language>
+			<name><![CDATA[AZERBAIJAN]]></name>
+		</state>
+		<state iso="BS" locale="fr_FR">
+			<language><![CDATA[---]]></language>
+			<name><![CDATA[BAHAMAS]]></name>
+		</state>
+		<state iso="BH" locale="fr_FR">
+			<language><![CDATA[---]]></language>
+			<name><![CDATA[BAHRAIN]]></name>
+		</state>
+		<state iso="BD" locale="fr_FR">
+			<language><![CDATA[---]]></language>
+			<name><![CDATA[BANGLADESH]]></name>
+		</state>
+		<state iso="BB" locale="fr_FR">
+			<language><![CDATA[---]]></language>
+			<name><![CDATA[BARBADOS]]></name>
+		</state>
+		<state iso="BY" locale="fr_FR">
+			<language><![CDATA[---]]></language>
+			<name><![CDATA[BELARUS]]></name>
+		</state>
+		<state iso="BZ" locale="fr_FR">
+			<language><![CDATA[---]]></language>
+			<name><![CDATA[BELIZE]]></name>
+		</state>
+		<state iso="BJ" locale="fr_FR">
+			<language><![CDATA[---]]></language>
+			<name><![CDATA[BENIN]]></name>
+		</state>
+		<state iso="BM" locale="fr_FR">
+			<language><![CDATA[---]]></language>
+			<name><![CDATA[BERMUDA]]></name>
+		</state>
+		<state iso="BT" locale="fr_FR">
+			<language><![CDATA[---]]></language>
+			<name><![CDATA[BHUTAN]]></name>
+		</state>
+		<state iso="BO" locale="fr_FR">
+			<language><![CDATA[---]]></language>
+			<name><![CDATA[BOLIVIA]]></name>
+		</state>
+		<state iso="BA" locale="fr_FR">
+			<language><![CDATA[---]]></language>
+			<name><![CDATA[BOSNIA AND HERZEGOVINA]]></name>
+		</state>
+		<state iso="BW" locale="fr_FR">
+			<language><![CDATA[---]]></language>
+			<name><![CDATA[BOTSWANA]]></name>
+		</state>
+		<state iso="BV" locale="fr_FR">
+			<language><![CDATA[---]]></language>
+			<name><![CDATA[BOUVET ISLAND]]></name>
+		</state>
+		<state iso="BR" locale="fr_FR">
+			<language><![CDATA[---]]></language>
+			<name><![CDATA[BRAZIL]]></name>
+		</state>
+		<state iso="IO" locale="fr_FR">
+			<language><![CDATA[---]]></language>
+			<name><![CDATA[BRITISH INDIAN OCEAN TERRITORY]]></name>
+		</state>
+		<state iso="BN" locale="fr_FR">
+			<language><![CDATA[---]]></language>
+			<name><![CDATA[BRUNEI DARUSSALAM]]></name>
+		</state>
+		<state iso="BF" locale="fr_FR">
+			<language><![CDATA[---]]></language>
+			<name><![CDATA[BURKINA FASO]]></name>
+		</state>
+		<state iso="BI" locale="fr_FR">
+			<language><![CDATA[---]]></language>
+			<name><![CDATA[BURUNDI]]></name>
+		</state>
+		<state iso="KH" locale="fr_FR">
+			<language><![CDATA[---]]></language>
+			<name><![CDATA[CAMBODIA]]></name>
+		</state>
+		<state iso="CM" locale="fr_FR">
+			<language><![CDATA[---]]></language>
+			<name><![CDATA[CAMEROON]]></name>
+		</state>
+		<state iso="CA" locale="fr_FR">
+			<language><![CDATA[---]]></language>
+			<name><![CDATA[CANADA]]></name>
+		</state>
+		<state iso="CV" locale="fr_FR">
+			<language><![CDATA[---]]></language>
+			<name><![CDATA[CAPE VERDE]]></name>
+		</state>
+		<state iso="KY" locale="fr_FR">
+			<language><![CDATA[---]]></language>
+			<name><![CDATA[CAYMAN ISLANDS]]></name>
+		</state>
+		<state iso="CF" locale="fr_FR">
+			<language><![CDATA[---]]></language>
+			<name><![CDATA[CENTRAL AFRICAN REPUBLIC]]></name>
+		</state>
+		<state iso="TD" locale="fr_FR">
+			<language><![CDATA[---]]></language>
+			<name><![CDATA[CHAD]]></name>
+		</state>
+		<state iso="CL" locale="fr_FR">
+			<language><![CDATA[---]]></language>
+			<name><![CDATA[CHILE]]></name>
+		</state>
+		<state iso="CN" locale="fr_FR">
+			<language><![CDATA[---]]></language>
+			<name><![CDATA[CHINA]]></name>
+		</state>
+		<state iso="CX" locale="fr_FR">
+			<language><![CDATA[---]]></language>
+			<name><![CDATA[CHRISTMAS ISLAND]]></name>
+		</state>
+		<state iso="CC" locale="fr_FR">
+			<language><![CDATA[---]]></language>
+			<name><![CDATA[COCOS (KEELING) ISLANDS]]></name>
+		</state>
+		<state iso="CO" locale="fr_FR">
+			<language><![CDATA[---]]></language>
+			<name><![CDATA[COLOMBIA]]></name>
+		</state>
+		<state iso="KM" locale="fr_FR">
+			<language><![CDATA[---]]></language>
+			<name><![CDATA[COMOROS]]></name>
+		</state>
+		<state iso="CG" locale="fr_FR">
+			<language><![CDATA[---]]></language>
+			<name><![CDATA[CONGO]]></name>
+		</state>
+		<state iso="CD" locale="fr_FR">
+			<language><![CDATA[---]]></language>
+			<name><![CDATA[CONGO, THE DEMOCRATIC REPUBLIC OF THE]]></name>
+		</state>
+		<state iso="CK" locale="fr_FR">
+			<language><![CDATA[---]]></language>
+			<name><![CDATA[COOK ISLANDS]]></name>
+		</state>
+		<state iso="CR" locale="fr_FR">
+			<language><![CDATA[---]]></language>
+			<name><![CDATA[COSTA RICA]]></name>
+		</state>
+		<state iso="CI" locale="fr_FR">
+			<language><![CDATA[---]]></language>
+			<name><![CDATA[COTE D-IVOIRE]]></name>
+		</state>
+		<state iso="HR" locale="fr_FR">
+			<language><![CDATA[---]]></language>
+			<name><![CDATA[CROATIA]]></name>
+		</state>
+		<state iso="CU" locale="fr_FR">
+			<language><![CDATA[---]]></language>
+			<name><![CDATA[CUBA]]></name>
+		</state>
+		<state iso="DJ" locale="fr_FR">
+			<language><![CDATA[---]]></language>
+			<name><![CDATA[DJIBOUTI]]></name>
+		</state>
+		<state iso="DM" locale="fr_FR">
+			<language><![CDATA[---]]></language>
+			<name><![CDATA[DOMINICA]]></name>
+		</state>
+		<state iso="DO" locale="fr_FR">
+			<language><![CDATA[---]]></language>
+			<name><![CDATA[DOMINICAN REPUBLIC]]></name>
+		</state>
+		<state iso="TL" locale="fr_FR">
+			<language><![CDATA[---]]></language>
+			<name><![CDATA[EAST TIMOR]]></name>
+		</state>
+		<state iso="EC" locale="fr_FR">
+			<language><![CDATA[---]]></language>
+			<name><![CDATA[ECUADOR]]></name>
+		</state>
+		<state iso="EG" locale="fr_FR">
+			<language><![CDATA[---]]></language>
+			<name><![CDATA[EGYPT]]></name>
+		</state>
+		<state iso="SV" locale="fr_FR">
+			<language><![CDATA[---]]></language>
+			<name><![CDATA[EL SALVADOR]]></name>
+		</state>
+		<state iso="GQ" locale="fr_FR">
+			<language><![CDATA[---]]></language>
+			<name><![CDATA[EQUATORIAL GUINEA]]></name>
+		</state>
+		<state iso="ER" locale="fr_FR">
+			<language><![CDATA[---]]></language>
+			<name><![CDATA[ERITREA]]></name>
+		</state>
+		<state iso="ET" locale="fr_FR">
+			<language><![CDATA[---]]></language>
+			<name><![CDATA[ETHIOPIA]]></name>
+		</state>
+		<state iso="FK" locale="fr_FR">
+			<language><![CDATA[---]]></language>
+			<name><![CDATA[FALKLAND ISLANDS (MALVINAS)]]></name>
+		</state>
+		<state iso="FO" locale="fr_FR">
+			<language><![CDATA[---]]></language>
+			<name><![CDATA[FAROE ISLANDS]]></name>
+		</state>
+		<state iso="FJ" locale="fr_FR">
+			<language><![CDATA[---]]></language>
+			<name><![CDATA[FIJI]]></name>
+		</state>
+		<state iso="GF" locale="fr_FR">
+			<language><![CDATA[---]]></language>
+			<name><![CDATA[FRENCH GUIANA]]></name>
+		</state>
+		<state iso="PF" locale="fr_FR">
+			<language><![CDATA[---]]></language>
+			<name><![CDATA[FRENCH POLYNESIA]]></name>
+		</state>
+		<state iso="TF" locale="fr_FR">
+			<language><![CDATA[---]]></language>
+			<name><![CDATA[FRENCH SOUTHERN TERRITORIES]]></name>
+		</state>
+		<state iso="GA" locale="fr_FR">
+			<language><![CDATA[---]]></language>
+			<name><![CDATA[GABON]]></name>
+		</state>
+		<state iso="GM" locale="fr_FR">
+			<language><![CDATA[---]]></language>
+			<name><![CDATA[GAMBIA]]></name>
+		</state>
+		<state iso="GE" locale="fr_FR">
+			<language><![CDATA[---]]></language>
+			<name><![CDATA[GEORGIA]]></name>
+		</state>
+		<state iso="GH" locale="fr_FR">
+			<language><![CDATA[---]]></language>
+			<name><![CDATA[GHANA]]></name>
+		</state>
+		<state iso="GI" locale="fr_FR">
+			<language><![CDATA[---]]></language>
+			<name><![CDATA[GIBRALTAR]]></name>
+		</state>
+		<state iso="GL" locale="fr_FR">
+			<language><![CDATA[---]]></language>
+			<name><![CDATA[GREENLAND]]></name>
+		</state>
+		<state iso="GD" locale="fr_FR">
+			<language><![CDATA[---]]></language>
+			<name><![CDATA[GRENADA]]></name>
+		</state>
+		<state iso="GP" locale="fr_FR">
+			<language><![CDATA[---]]></language>
+			<name><![CDATA[GUADELOUPE]]></name>
+		</state>
+		<state iso="GU" locale="fr_FR">
+			<language><![CDATA[---]]></language>
+			<name><![CDATA[GUAM]]></name>
+		</state>
+		<state iso="GT" locale="fr_FR">
+			<language><![CDATA[---]]></language>
+			<name><![CDATA[GUATEMALA]]></name>
+		</state>
+		<state iso="GG" locale="fr_FR">
+			<language><![CDATA[---]]></language>
+			<name><![CDATA[GUERNSEY]]></name>
+		</state>
+		<state iso="GN" locale="fr_FR">
+			<language><![CDATA[---]]></language>
+			<name><![CDATA[GUINEA]]></name>
+		</state>
+		<state iso="GW" locale="fr_FR">
+			<language><![CDATA[---]]></language>
+			<name><![CDATA[GUINEA-BISSAU]]></name>
+		</state>
+		<state iso="GY" locale="fr_FR">
+			<language><![CDATA[---]]></language>
+			<name><![CDATA[GUYANA]]></name>
+		</state>
+		<state iso="HT" locale="fr_FR">
+			<language><![CDATA[---]]></language>
+			<name><![CDATA[HAITI]]></name>
+		</state>
+		<state iso="HM" locale="fr_FR">
+			<language><![CDATA[---]]></language>
+			<name><![CDATA[HEARD AND MC DONALD ISLANDS]]></name>
+		</state>
+		<state iso="HN" locale="fr_FR">
+			<language><![CDATA[---]]></language>
+			<name><![CDATA[HONDURAS]]></name>
+		</state>
+		<state iso="HK" locale="fr_FR">
+			<language><![CDATA[---]]></language>
+			<name><![CDATA[HONG KONG]]></name>
+		</state>
+		<state iso="IS" locale="fr_FR">
+			<language><![CDATA[---]]></language>
+			<name><![CDATA[ICELAND]]></name>
+		</state>
+		<state iso="IN" locale="fr_FR">
+			<language><![CDATA[---]]></language>
+			<name><![CDATA[INDIA]]></name>
+		</state>
+		<state iso="ID" locale="fr_FR">
+			<language><![CDATA[---]]></language>
+			<name><![CDATA[INDONESIA]]></name>
+		</state>
+		<state iso="IR" locale="fr_FR">
+			<language><![CDATA[---]]></language>
+			<name><![CDATA[IRAN (ISLAMIC REPUBLIC OF)]]></name>
+		</state>
+		<state iso="IQ" locale="fr_FR">
+			<language><![CDATA[---]]></language>
+			<name><![CDATA[IRAQ]]></name>
+		</state>
+		<state iso="IM" locale="fr_FR">
+			<language><![CDATA[---]]></language>
+			<name><![CDATA[ISLE OF MAN]]></name>
+		</state>
+		<state iso="IL" locale="fr_FR">
+			<language><![CDATA[---]]></language>
+			<name><![CDATA[ISRAEL]]></name>
+		</state>
+		<state iso="JM" locale="fr_FR">
+			<language><![CDATA[---]]></language>
+			<name><![CDATA[JAMAICA]]></name>
+		</state>
+		<state iso="JP" locale="fr_FR">
+			<language><![CDATA[---]]></language>
+			<name><![CDATA[JAPAN]]></name>
+		</state>
+		<state iso="JE" locale="fr_FR">
+			<language><![CDATA[---]]></language>
+			<name><![CDATA[JERSEY]]></name>
+		</state>
+		<state iso="JO" locale="fr_FR">
+			<language><![CDATA[---]]></language>
+			<name><![CDATA[JORDAN]]></name>
+		</state>
+		<state iso="KZ" locale="fr_FR">
+			<language><![CDATA[---]]></language>
+			<name><![CDATA[KAZAKHSTAN]]></name>
+		</state>
+		<state iso="KE" locale="fr_FR">
+			<language><![CDATA[---]]></language>
+			<name><![CDATA[KENYA]]></name>
+		</state>
+		<state iso="KI" locale="fr_FR">
+			<language><![CDATA[---]]></language>
+			<name><![CDATA[KIRIBATI]]></name>
+		</state>
+		<state iso="KP" locale="fr_FR">
+			<language><![CDATA[---]]></language>
+			<name><![CDATA[KOREA, DEMOCRATIC PEOPLE-S REPUBLIC OF]]></name>
+		</state>
+		<state iso="KR" locale="fr_FR">
+			<language><![CDATA[---]]></language>
+			<name><![CDATA[KOREA, REPUBLIC OF]]></name>
+		</state>
+		<state iso="KW" locale="fr_FR">
+			<language><![CDATA[---]]></language>
+			<name><![CDATA[KUWAIT]]></name>
+		</state>
+		<state iso="KG" locale="fr_FR">
+			<language><![CDATA[---]]></language>
+			<name><![CDATA[KYRGYZSTAN]]></name>
+		</state>
+		<state iso="LA" locale="fr_FR">
+			<language><![CDATA[---]]></language>
+			<name><![CDATA[LAO PEOPLE-S DEMOCRATIC REPUBLIC]]></name>
+		</state>
+		<state iso="LV" locale="fr_FR">
+			<language><![CDATA[---]]></language>
+			<name><![CDATA[LATVIA]]></name>
+		</state>
+		<state iso="LB" locale="fr_FR">
+			<language><![CDATA[---]]></language>
+			<name><![CDATA[LEBANON]]></name>
+		</state>
+		<state iso="LS" locale="fr_FR">
+			<language><![CDATA[---]]></language>
+			<name><![CDATA[LESOTHO]]></name>
+		</state>
+		<state iso="LR" locale="fr_FR">
+			<language><![CDATA[---]]></language>
+			<name><![CDATA[LIBERIA]]></name>
+		</state>
+		<state iso="LY" locale="fr_FR">
+			<language><![CDATA[---]]></language>
+			<name><![CDATA[LIBYAN ARAB JAMAHIRIYA]]></name>
+		</state>
+		<state iso="LI" locale="fr_FR">
+			<language><![CDATA[---]]></language>
+			<name><![CDATA[LIECHTENSTEIN]]></name>
+		</state>
+		<state iso="MO" locale="fr_FR">
+			<language><![CDATA[---]]></language>
+			<name><![CDATA[MACAO]]></name>
+		</state>
+		<state iso="MK" locale="fr_FR">
+			<language><![CDATA[---]]></language>
+			<name><![CDATA[MACEDONIA, THE FORMER YUGOSLAV REPUBLIC OF]]></name>
+		</state>
+		<state iso="MG" locale="fr_FR">
+			<language><![CDATA[---]]></language>
+			<name><![CDATA[MADAGASCAR]]></name>
+		</state>
+		<state iso="MW" locale="fr_FR">
+			<language><![CDATA[---]]></language>
+			<name><![CDATA[MALAWI]]></name>
+		</state>
+		<state iso="MY" locale="fr_FR">
+			<language><![CDATA[---]]></language>
+			<name><![CDATA[MALAYSIA]]></name>
+		</state>
+		<state iso="MV" locale="fr_FR">
+			<language><![CDATA[---]]></language>
+			<name><![CDATA[MALDIVES]]></name>
+		</state>
+		<state iso="ML" locale="fr_FR">
+			<language><![CDATA[---]]></language>
+			<name><![CDATA[MALI]]></name>
+		</state>
+		<state iso="MH" locale="fr_FR">
+			<language><![CDATA[---]]></language>
+			<name><![CDATA[MARSHALL ISLANDS]]></name>
+		</state>
+		<state iso="MQ" locale="fr_FR">
+			<language><![CDATA[---]]></language>
+			<name><![CDATA[MARTINIQUE]]></name>
+		</state>
+		<state iso="MR" locale="fr_FR">
+			<language><![CDATA[---]]></language>
+			<name><![CDATA[MAURITANIA]]></name>
+		</state>
+		<state iso="MU" locale="fr_FR">
+			<language><![CDATA[---]]></language>
+			<name><![CDATA[MAURITIUS]]></name>
+		</state>
+		<state iso="YT" locale="fr_FR">
+			<language><![CDATA[---]]></language>
+			<name><![CDATA[MAYOTTE]]></name>
+		</state>
+		<state iso="MX" locale="fr_FR">
+			<language><![CDATA[---]]></language>
+			<name><![CDATA[MEXICO]]></name>
+		</state>
+		<state iso="FM" locale="fr_FR">
+			<language><![CDATA[---]]></language>
+			<name><![CDATA[MICRONESIA, FEDERATED STATES OF]]></name>
+		</state>
+		<state iso="MD" locale="fr_FR">
+			<language><![CDATA[---]]></language>
+			<name><![CDATA[MOLDOVA, REPUBLIC OF]]></name>
+		</state>
+		<state iso="MC" locale="fr_FR">
+			<language><![CDATA[---]]></language>
+			<name><![CDATA[MONACO]]></name>
+		</state>
+		<state iso="MN" locale="fr_FR">
+			<language><![CDATA[---]]></language>
+			<name><![CDATA[MONGOLIA]]></name>
+		</state>
+		<state iso="ME" locale="fr_FR">
+			<language><![CDATA[---]]></language>
+			<name><![CDATA[MONTENEGRO]]></name>
+		</state>
+		<state iso="MS" locale="fr_FR">
+			<language><![CDATA[---]]></language>
+			<name><![CDATA[MONTSERRAT]]></name>
+		</state>
+		<state iso="MA" locale="fr_FR">
+			<language><![CDATA[---]]></language>
+			<name><![CDATA[MOROCCO]]></name>
+		</state>
+		<state iso="MZ" locale="fr_FR">
+			<language><![CDATA[---]]></language>
+			<name><![CDATA[MOZAMBIQUE]]></name>
+		</state>
+		<state iso="MM" locale="fr_FR">
+			<language><![CDATA[---]]></language>
+			<name><![CDATA[MYANMAR]]></name>
+		</state>
+		<state iso="NA" locale="fr_FR">
+			<language><![CDATA[---]]></language>
+			<name><![CDATA[NAMIBIA]]></name>
+		</state>
+		<state iso="NR" locale="fr_FR">
+			<language><![CDATA[---]]></language>
+			<name><![CDATA[NAURU]]></name>
+		</state>
+		<state iso="NP" locale="fr_FR">
+			<language><![CDATA[---]]></language>
+			<name><![CDATA[NEPAL]]></name>
+		</state>
+		<state iso="AN" locale="fr_FR">
+			<language><![CDATA[---]]></language>
+			<name><![CDATA[NETHERLANDS ANTILLES]]></name>
+		</state>
+		<state iso="NC" locale="fr_FR">
+			<language><![CDATA[---]]></language>
+			<name><![CDATA[NEW CALEDONIA]]></name>
+		</state>
+		<state iso="NZ" locale="fr_FR">
+			<language><![CDATA[---]]></language>
+			<name><![CDATA[NEW ZEALAND]]></name>
+		</state>
+		<state iso="NI" locale="fr_FR">
+			<language><![CDATA[---]]></language>
+			<name><![CDATA[NICARAGUA]]></name>
+		</state>
+		<state iso="NE" locale="fr_FR">
+			<language><![CDATA[---]]></language>
+			<name><![CDATA[NIGER]]></name>
+		</state>
+		<state iso="NG" locale="fr_FR">
+			<language><![CDATA[---]]></language>
+			<name><![CDATA[NIGERIA]]></name>
+		</state>
+		<state iso="NU" locale="fr_FR">
+			<language><![CDATA[---]]></language>
+			<name><![CDATA[NIUE]]></name>
+		</state>
+		<state iso="NF" locale="fr_FR">
+			<language><![CDATA[---]]></language>
+			<name><![CDATA[NORFOLK ISLAND]]></name>
+		</state>
+		<state iso="MP" locale="fr_FR">
+			<language><![CDATA[---]]></language>
+			<name><![CDATA[NORTHERN MARIANA ISLANDS]]></name>
+		</state>
+		<state iso="OM" locale="fr_FR">
+			<language><![CDATA[---]]></language>
+			<name><![CDATA[OMAN]]></name>
+		</state>
+		<state iso="PK" locale="fr_FR">
+			<language><![CDATA[---]]></language>
+			<name><![CDATA[PAKISTAN]]></name>
+		</state>
+		<state iso="PW" locale="fr_FR">
+			<language><![CDATA[---]]></language>
+			<name><![CDATA[PALAU]]></name>
+		</state>
+		<state iso="PS" locale="fr_FR">
+			<language><![CDATA[---]]></language>
+			<name><![CDATA[PALESTINIAN AUTHORITY]]></name>
+		</state>
+		<state iso="PA" locale="fr_FR">
+			<language><![CDATA[---]]></language>
+			<name><![CDATA[PANAMA]]></name>
+		</state>
+		<state iso="PG" locale="fr_FR">
+			<language><![CDATA[---]]></language>
+			<name><![CDATA[PAPUA NEW GUINEA]]></name>
+		</state>
+		<state iso="PY" locale="fr_FR">
+			<language><![CDATA[---]]></language>
+			<name><![CDATA[PARAGUAY]]></name>
+		</state>
+		<state iso="PE" locale="fr_FR">
+			<language><![CDATA[---]]></language>
+			<name><![CDATA[PERU]]></name>
+		</state>
+		<state iso="PH" locale="fr_FR">
+			<language><![CDATA[---]]></language>
+			<name><![CDATA[PHILIPPINES]]></name>
+		</state>
+		<state iso="PN" locale="fr_FR">
+			<language><![CDATA[---]]></language>
+			<name><![CDATA[PITCAIRN]]></name>
+		</state>
+		<state iso="PR" locale="fr_FR">
+			<language><![CDATA[---]]></language>
+			<name><![CDATA[PUERTO RICO]]></name>
+		</state>
+		<state iso="QA" locale="fr_FR">
+			<language><![CDATA[---]]></language>
+			<name><![CDATA[QATAR]]></name>
+		</state>
+		<state iso="RE" locale="fr_FR">
+			<language><![CDATA[---]]></language>
+			<name><![CDATA[REUNION]]></name>
+		</state>
+		<state iso="RU" locale="fr_FR">
+			<language><![CDATA[---]]></language>
+			<name><![CDATA[RUSSIAN FEDERATION]]></name>
+		</state>
+		<state iso="RW" locale="fr_FR">
+			<language><![CDATA[---]]></language>
+			<name><![CDATA[RWANDA]]></name>
+		</state>
+		<state iso="WS" locale="fr_FR">
+			<language><![CDATA[---]]></language>
+			<name><![CDATA[SAMOA]]></name>
+		</state>
+		<state iso="SM" locale="fr_FR">
+			<language><![CDATA[---]]></language>
+			<name><![CDATA[SAN MARINO]]></name>
+		</state>
+		<state iso="ST" locale="fr_FR">
+			<language><![CDATA[---]]></language>
+			<name><![CDATA[SAO TOME AND PRINCIPE]]></name>
+		</state>
+		<state iso="SA" locale="fr_FR">
+			<language><![CDATA[---]]></language>
+			<name><![CDATA[SAUDI ARABIA]]></name>
+		</state>
+		<state iso="SN" locale="fr_FR">
+			<language><![CDATA[---]]></language>
+			<name><![CDATA[SENEGAL]]></name>
+		</state>
+		<state iso="RS" locale="fr_FR">
+			<language><![CDATA[---]]></language>
+			<name><![CDATA[SERBIA]]></name>
+		</state>
+		<state iso="SC" locale="fr_FR">
+			<language><![CDATA[---]]></language>
+			<name><![CDATA[SEYCHELLES]]></name>
+		</state>
+		<state iso="SL" locale="fr_FR">
+			<language><![CDATA[---]]></language>
+			<name><![CDATA[SIERRA LEONE]]></name>
+		</state>
+		<state iso="SG" locale="fr_FR">
+			<language><![CDATA[---]]></language>
+			<name><![CDATA[SINGAPORE]]></name>
+		</state>
+		<state iso="SB" locale="fr_FR">
+			<language><![CDATA[---]]></language>
+			<name><![CDATA[SOLOMON ISLANDS]]></name>
+		</state>
+		<state iso="SO" locale="fr_FR">
+			<language><![CDATA[---]]></language>
+			<name><![CDATA[SOMALIA]]></name>
+		</state>
+		<state iso="ZA" locale="fr_FR">
+			<language><![CDATA[---]]></language>
+			<name><![CDATA[SOUTH AFRICA]]></name>
+		</state>
+		<state iso="GS" locale="fr_FR">
+			<language><![CDATA[---]]></language>
+			<name><![CDATA[SOUTH GEORGIA AND THE SOUTH SANDWICH ISLANDS]]></name>
+		</state>
+		<state iso="LK" locale="fr_FR">
+			<language><![CDATA[---]]></language>
+			<name><![CDATA[SRI LANKA]]></name>
+		</state>
+		<state iso="SH" locale="fr_FR">
+			<language><![CDATA[---]]></language>
+			<name><![CDATA[ST. HELENA]]></name>
+		</state>
+		<state iso="KN" locale="fr_FR">
+			<language><![CDATA[---]]></language>
+			<name><![CDATA[ST. KITTS AND NEVIS]]></name>
+		</state>
+		<state iso="LC" locale="fr_FR">
+			<language><![CDATA[---]]></language>
+			<name><![CDATA[ST. LUCIA]]></name>
+		</state>
+		<state iso="PM" locale="fr_FR">
+			<language><![CDATA[---]]></language>
+			<name><![CDATA[ST. PIERRE AND MIQUELON]]></name>
+		</state>
+		<state iso="VC" locale="fr_FR">
+			<language><![CDATA[---]]></language>
+			<name><![CDATA[ST. VINCENT AND THE GRENADINES]]></name>
+		</state>
+		<state iso="SD" locale="fr_FR">
+			<language><![CDATA[---]]></language>
+			<name><![CDATA[SUDAN]]></name>
+		</state>
+		<state iso="SR" locale="fr_FR">
+			<language><![CDATA[---]]></language>
+			<name><![CDATA[SURINAME]]></name>
+		</state>
+		<state iso="SJ" locale="fr_FR">
+			<language><![CDATA[---]]></language>
+			<name><![CDATA[SVALBARD AND JAN MAYEN ISLANDS]]></name>
+		</state>
+		<state iso="SZ" locale="fr_FR">
+			<language><![CDATA[---]]></language>
+			<name><![CDATA[SWAZILAND]]></name>
+		</state>
+		<state iso="CH" locale="fr_FR">
+			<language><![CDATA[---]]></language>
+			<name><![CDATA[SWITZERLAND]]></name>
+		</state>
+		<state iso="SY" locale="fr_FR">
+			<language><![CDATA[---]]></language>
+			<name><![CDATA[SYRIAN ARAB REPUBLIC]]></name>
+		</state>
+		<state iso="TW" locale="fr_FR">
+			<language><![CDATA[---]]></language>
+			<name><![CDATA[TAIWAN, REPUBLIC OF CHINA]]></name>
+		</state>
+		<state iso="TJ" locale="fr_FR">
+			<language><![CDATA[---]]></language>
+			<name><![CDATA[TAJIKISTAN]]></name>
+		</state>
+		<state iso="TZ" locale="fr_FR">
+			<language><![CDATA[---]]></language>
+			<name><![CDATA[TANZANIA, UNITED REPUBLIC OF]]></name>
+		</state>
+		<state iso="TH" locale="fr_FR">
+			<language><![CDATA[---]]></language>
+			<name><![CDATA[THAILAND]]></name>
+		</state>
+		<state iso="TG" locale="fr_FR">
+			<language><![CDATA[---]]></language>
+			<name><![CDATA[TOGO]]></name>
+		</state>
+		<state iso="TK" locale="fr_FR">
+			<language><![CDATA[---]]></language>
+			<name><![CDATA[TOKELAU]]></name>
+		</state>
+		<state iso="TO" locale="fr_FR">
+			<language><![CDATA[---]]></language>
+			<name><![CDATA[TONGA]]></name>
+		</state>
+		<state iso="TT" locale="fr_FR">
+			<language><![CDATA[---]]></language>
+			<name><![CDATA[TRINIDAD AND TOBAGO]]></name>
+		</state>
+		<state iso="TN" locale="fr_FR">
+			<language><![CDATA[---]]></language>
+			<name><![CDATA[TUNISIA]]></name>
+		</state>
+		<state iso="TR" locale="fr_FR">
+			<language><![CDATA[---]]></language>
+			<name><![CDATA[TURKEY]]></name>
+		</state>
+		<state iso="TM" locale="fr_FR">
+			<language><![CDATA[---]]></language>
+			<name><![CDATA[TURKMENISTAN]]></name>
+		</state>
+		<state iso="TC" locale="fr_FR">
+			<language><![CDATA[---]]></language>
+			<name><![CDATA[TURKS AND CAICOS ISLANDS]]></name>
+		</state>
+		<state iso="TV" locale="fr_FR">
+			<language><![CDATA[---]]></language>
+			<name><![CDATA[TUVALU]]></name>
+		</state>
+		<state iso="UG" locale="fr_FR">
+			<language><![CDATA[---]]></language>
+			<name><![CDATA[UGANDA]]></name>
+		</state>
+		<state iso="UA" locale="fr_FR">
+			<language><![CDATA[---]]></language>
+			<name><![CDATA[UKRAINE]]></name>
+		</state>
+		<state iso="AE" locale="fr_FR">
+			<language><![CDATA[---]]></language>
+			<name><![CDATA[UNITED ARAB EMIRATES]]></name>
+		</state>
+		<state iso="US" locale="fr_FR">
+			<language><![CDATA[---]]></language>
+			<name><![CDATA[UNITED STATES]]></name>
+		</state>
+		<state iso="UM" locale="fr_FR">
+			<language><![CDATA[---]]></language>
+			<name><![CDATA[UNITED STATES MINOR OUTLYING ISLANDS]]></name>
+		</state>
+		<state iso="UY" locale="fr_FR">
+			<language><![CDATA[---]]></language>
+			<name><![CDATA[URUGUAY]]></name>
+		</state>
+		<state iso="UZ" locale="fr_FR">
+			<language><![CDATA[---]]></language>
+			<name><![CDATA[UZBEKISTAN]]></name>
+		</state>
+		<state iso="VU" locale="fr_FR">
+			<language><![CDATA[---]]></language>
+			<name><![CDATA[VANUATU]]></name>
+		</state>
+		<state iso="VA" locale="fr_FR">
+			<language><![CDATA[---]]></language>
+			<name><![CDATA[VATICAN CITY STATE]]></name>
+		</state>
+		<state iso="VE" locale="fr_FR">
+			<language><![CDATA[---]]></language>
+			<name><![CDATA[VENEZUELA]]></name>
+		</state>
+		<state iso="VN" locale="fr_FR">
+			<language><![CDATA[---]]></language>
+			<name><![CDATA[VIET NAM]]></name>
+		</state>
+		<state iso="VG" locale="fr_FR">
+			<language><![CDATA[---]]></language>
+			<name><![CDATA[VIRGIN ISLANDS (BRITISH)]]></name>
+		</state>
+		<state iso="VI" locale="fr_FR">
+			<language><![CDATA[---]]></language>
+			<name><![CDATA[VIRGIN ISLANDS (U.S.)]]></name>
+		</state>
+		<state iso="WF" locale="fr_FR">
+			<language><![CDATA[---]]></language>
+			<name><![CDATA[WALLIS AND FUTUNA ISLANDS]]></name>
+		</state>
+		<state iso="EH" locale="fr_FR">
+			<language><![CDATA[---]]></language>
+			<name><![CDATA[WESTERN SAHARA]]></name>
+		</state>
+		<state iso="YE" locale="fr_FR">
+			<language><![CDATA[---]]></language>
+			<name><![CDATA[YEMEN]]></name>
+		</state>
+		<state iso="ZM" locale="fr_FR">
+			<language><![CDATA[---]]></language>
+			<name><![CDATA[ZAMBIA]]></name>
+		</state>
+		<state iso="ZW" locale="fr_FR">
+			<language><![CDATA[---]]></language>
+			<name><![CDATA[ZIMBABWE]]></name>
+		</state>
+	</area>
+</states>

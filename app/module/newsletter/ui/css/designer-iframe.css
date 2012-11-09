@@ -1,0 +1,124 @@
+body {
+    padding-top: 40px;
+}
+#edit, #add {
+    position: fixed;
+    top: 0;
+    width: 350px;
+    padding: 5px;
+    background: #eee; 
+    border: 1px solid #999;
+    color: #333;
+    z-index: 9999;
+}
+#add {
+    left: 50%;
+    margin: 0 0 0 -175px;
+}
+#edit {
+    display: none;
+    left:0;
+}
+
+    #edit .editHeader {
+        width: 340px;
+        background: #eee; 
+    }
+    #edit input {
+        width: 340px;
+    }
+    #edit textarea {
+        width: 340px;
+        height: 150px;
+    }
+#previewContainer {
+    float: left;
+    width: 800px;
+    border: 1px solid #ccc;
+}
+#preview {
+    width: 100%;
+    height: 800px;
+}
+repeater {
+    position: relative !important;
+    display: inline-block;
+    border: 1px dashed #009 !important;
+}
+repeater:hover, repeater.active {
+    border: 1px dashed #999 !important;
+    cursor: pointer !important;
+}
+div.repeaterEdit {
+    position: absolute;
+    display: block;
+    z-index: 997;
+    top: 0;
+    right: 0;
+    width: 100% !important;
+    height: 100% !important;
+    background: #eee !important;
+}
+div.repeaterBTEdit {
+    position: absolute;
+    display: block;   
+    top: 0;
+    right: 0; 
+    z-index: 998;
+}
+a.repeaterEdit, a.repeaterDuplicate {
+    display: inline-block;
+    z-index: 999;
+    font-family: 'Droid Sans', sans-serif;
+    border: 1px solid #999 !important;
+    letter-spacing: 0 !important;
+    text-decoration: none !important;
+    font-weight: normal !important;
+    color: black !important;
+    padding: 2px 4px !important;
+    margin: 2px !important;
+    font-size: 11px !important;
+    line-height: 14px;
+    background: url(/release/7.6.28/css/../images/alpha-white-75pct.png);
+    border-radius: 2px !important;
+    cursor: pointer;
+    background: #dedede !important;
+    display: none;
+}
+.repeaterUpdate, .repeaterSelect, .repeaterRemove, .repeaterUp, .repeaterDown {
+    float: left;
+    margin: 0 2px;
+    padding: 2px;
+    font-family: 'Droid Sans', sans-serif;
+    font-size: 12px;
+    border: 1px solid #999;
+    border-radius: 2px;
+    cursor: pointer;
+    background: #dedede;
+}
+.repeaterEdit {
+}
+.repeaterRemove {    
+    color: #cc0000;
+}
+.btApply, .btClose {
+    padding: 5px;
+    margin: 5px 0;
+    border-radius: 2px;
+    font-family: 'Droid Sans', sans-serif;
+    font-size: 12px;
+    cursor: pointer;
+    background: #eee;
+}
+#btSave, #btReset {
+    padding: 5px;
+    border-radius: 2px;
+    font-family: 'Droid Sans', sans-serif;
+    font-size: 12px;
+    cursor: pointer;
+    background: #ddd;
+    text-align:center;
+    width: 150px;
+    margin: 10px auto;
+}
+#btReset { color: red; }

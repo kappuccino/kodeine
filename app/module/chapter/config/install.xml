@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<install>
+
+	<sql><![CDATA[
+		CREATE TABLE IF NOT EXISTS `k_chapter` (
+		  `id_chapter` mediumint(64) NOT NULL auto_increment,
+		  `id_theme` mediumint(64) default NULL,
+		  `mid_chapter` mediumint(64) NOT NULL,
+		  `pos_chapter` mediumint(9) NOT NULL,
+		  `chapterParent` mediumtext collate utf8_unicode_ci NOT NULL,
+		  `chapterChildren` mediumtext collate utf8_unicode_ci NOT NULL,
+		  PRIMARY KEY  (`id_chapter`)
+		) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=2 ;
+
+
+		CREATE TABLE IF NOT EXISTS `k_chapterdata` (
+		  `id_chapter` mediumint(64) NOT NULL,
+		  `is_copy` tinyint(1) NOT NULL default '0',
+		  `language` varchar(2) collate utf8_unicode_ci NOT NULL,
+		  `chapterName` varchar(255) collate utf8_unicode_ci NOT NULL,
+		  `chapterUrl` varchar(255) collate utf8_unicode_ci NOT NULL,
+		  `chapterModule` varchar(255) collate utf8_unicode_ci NOT NULL,
+		  `chapterMedia` varchar(255) collate utf8_unicode_ci NOT NULL,
+		  `chapterDescription` mediumtext collate utf8_unicode_ci NOT NULL,
+		  PRIMARY KEY  (`id_chapter`,`language`)
+		) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+	]]></sql>
+
+	<preSript></preSript>
+	<postScript></postScript>
+
+</install>

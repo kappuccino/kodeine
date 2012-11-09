@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<element>
+
+	<data>
+		<key>content</key>
+		<version>5.0.8</version>
+		<lastMod>2012-11-09</lastMod>
+
+		<name><![CDATA[Contenu]]></name>
+		<description><![CDATA[Gérer les pages de votre site internet, les catégories.]]></description>
+		<panelIcon>ressource/img/module-content.png</panelIcon>
+		<install>YES</install>
+	</data>
+
+	<dependencies>
+		<module>field</module>
+		<module>category</module>
+		<module>chapter</module>
+		<module>localisation</module>
+		<module>comment</module>
+		<module>ad</module>
+		<module>rate</module>
+		<module>template</module>
+	</dependencies>
+
+	<less>
+		<file>/ui/css/browse.less</file>
+		<file>/ui/css/content.less</file>
+		<file>/ui/css/data.less</file>
+		<file>/ui/css/form.less</file>
+		<file>/ui/css/gallery.less</file>
+		<file>/ui/css/safe.less</file>
+		<file>/ui/css/search.less</file>
+		<file>/ui/css/type.less</file>
+	</less>
+
+	<profile>
+		<item code="index"		type="ALLOW_DENY" name="Accessible" />
+
+		<item code="chapter"	type="ALLOW_DENY" name="Arborescence" />
+		<item code="type"		type="ALLOW_DENY" name="Type" />
+		<item code="field"		type="ALLOW_DENY" name="Champs" />
+
+		<item code="search"		type="ALLOW_DENY" name="Recherche" />
+
+	</profile>
+	
+</element>

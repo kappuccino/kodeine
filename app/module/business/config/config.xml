@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<element>
+
+	<data>
+		<key>business</key>
+		<version>5.0.5</version>
+		<lastMod>2012-11-09</lastMod>
+
+		<name><![CDATA[Business]]></name>
+		<description><![CDATA[Valider les dernières commandes et régler votre boutique en ligne]]></description>
+		<panelIcon>ressource/img/module-business.png</panelIcon>
+		<install>YES</install>
+	</data>
+
+	<dependencies>
+		<module>shop</module>
+	</dependencies>
+
+	<less>
+		<file>/ui/css/business.less</file>
+	</less>
+
+	<profile>
+		<item code="index"		type="ALLOW_DENY" name="Accessible" />
+
+		<item code="coupon"		type="ALLOW_DENY" name="Coupon" />
+		<item code="account"	type="ALLOW_DENY" name="Comptes" />
+		<item code="tva"		type="ALLOW_DENY" name="TVA" />
+		<item code="config" 	type="ALLOW_DENY" name="Config" />
+		<item code="manual" 	type="ALLOW_DENY" name="Commande manuelle" />
+	</profile>
+
+</element>

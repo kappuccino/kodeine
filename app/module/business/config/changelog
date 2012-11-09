@@ -1,0 +1,13 @@
+Kodeine Change log
++ = Ajout / Nouveaute
+- = Correction
+* = Autre / Divers / Inclassable...
+
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+2012-10-31 (5.0.4)
++ Ajout du champ cartBillingTVAIntra dans business_cart pour le stocker le num TVA Intracommuncautaire
++ Gestion champ cartBillingTVAIntra dans la fonction businessCartUserSet api.business
+
+2012-10-22 (5.0.3)
+- Ajout (ln 450) de 'contentSee'    => 'ALL', dans la fonction businessCartLineSet

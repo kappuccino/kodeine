@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<element>
+
+	<data>
+		<key>ad</key>
+		<version>5.0.2</version>
+		<lastMod>2012-10-22</lastMod>
+
+		<name><![CDATA[Publicit&eacute;]]></name>
+		<description><![CDATA[Administrer les campagnes de publicité que vous afficher sur votre site]]></description>
+		<panelIcon>ressource/img/module-ad.png</panelIcon>
+		<menu>NO</menu>
+	</data>
+
+	<profile>
+		<item code="index"	 	type="ALLOW_DENY" name="Accessible" />
+	</profile>
+
+</element>

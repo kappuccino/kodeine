@@ -1,0 +1,17 @@
+Kodeine Change log
++ = Ajout / Nouveaute
+- = Correction
+* = Autre / Divers / Inclassable...
+
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+2012-11-09 (build 5.0.7)
+- Standardisation des boutons
+- Correction pb modification onglets dans user/data
+
+2012-10-31 (5.0.4)
++ Ajout champ addressbookTVAIntra dans import-book.php - picker.addressbook.php - picker.create.php
+- Correction bug JS /ui/js/addressbook.js au niveau de l'import (ln 46 > 65)
+
+
+2012-10-29
++ Ajout du champ pour le userid de facebook

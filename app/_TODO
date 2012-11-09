@@ -1,0 +1,38 @@
+newsletter editor
+
+ajouter un JSON:{}/[] pour controler le document :
+- un bout qui contient la liste ordonner des elements contenu dans le doc final,
+- un bout qui contient la liste des definition que propose la template
+
+le bout de HTMl custom doit etre une copie de la template + les valeurs personnalise, ce 
+qui permet de modifier le bout de template sans perder le lien avec ce qui existe deja,
+a l'edition on ne recupere QUE les infos qui sont contenu dans HTML, pour une ajout on se
+base sur TEMPLATE
+
+data = {
+	'html' : [
+		{
+			'param': customValue,
+			label: 'layout A',
+			forms: [
+				{type: 'singleline', label: 'titre', 		value: 'Mon super titre', link: 'http://www.kappuccino.org/},
+				{type: 'multiline',  label: 'description' 	value: 'Bla bla bla...'}
+			]
+		}
+	],
+	
+	'template: [
+		{
+			label: 'layout A',
+			forms: [
+				{type: 'singleline', label: 'titre'},
+				{type: 'multiline',  label: 'description'}
+			]
+		}
+	]
+}
+
+
+
+
+

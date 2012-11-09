@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<patch>
+
+	<job action="sql"><![CDATA[
+		CREATE TABLE IF NOT EXISTS `k_fieldaffect` (
+			`map` varchar(255) collate utf8_unicode_ci NOT NULL,
+			`id` mediumint(64) NOT NULL default '0',
+			`fields` text collate utf8_unicode_ci NOT NULL,
+		  PRIMARY KEY  (`map`,`id`)
+		) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+	]]></job>
+
+	<job file = "{thisFolder}/patch-drop-field.php" />
+
+	<job action = "createField" table = "k_field"	field = "fieldStyle"	type = "MEDIUMTEXT"	null = "NO" />
+	<job action = "createField" table = "k_field" 	field = "fieldShowForm"	type = "TINYINT(1)"	null = "NO" after = "fieldUserField" />
+
+</patch>

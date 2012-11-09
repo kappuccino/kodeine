@@ -1,0 +1,61 @@
+2012-09-19 17:39:59
+CREATE TABLE IF NOT EXISTS `k_contentad` (
+		  `id_content` mediumint(64) NOT NULL,
+		  `language` varchar(2) collate utf8_unicode_ci NOT NULL,
+		  `id_adzone` mediumint(64) NOT NULL,
+		  `contentAdUrl` varchar(255) collate utf8_unicode_ci NOT NULL,
+		  `contentAdCode` mediumtext collate utf8_unicode_ci NOT NULL,
+		  `contentAdPriority` tinyint(2) NOT NULL,
+		  `contentAdStockView` mediumint(64) NOT NULL,
+		  `contentAdStockClick` mediumint(64) NOT NULL,
+		  `contentAdCacheView` mediumint(64) NOT NULL,
+		  `contentAdCacheClick` mediumint(64) NOT NULL,
+		  PRIMARY KEY  (`id_content`,`language`),
+		  KEY `id_content` (`id_content`),
+		  KEY `id_adzone` (`id_adzone`)
+		) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+		
+		CREATE TABLE IF NOT EXISTS `k_contentadstats` (
+		  `id_content` mediumint(64) unsigned NOT NULL,
+		  `language` varchar(2) collate utf8_unicode_ci NOT NULL,
+		  `year` smallint(5) unsigned NOT NULL,
+		  `month` tinyint(4) unsigned NOT NULL,
+		  `day` int(1) unsigned NOT NULL,
+		  `view` mediumint(64) unsigned NOT NULL,
+		  `click` mediumint(64) unsigned NOT NULL,
+		  UNIQUE KEY `id_content` (`id_content`,`language`,`year`,`month`,`day`)
+		) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci
+You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near ';
+		
+		CREATE TABLE IF NOT EXISTS `k_contentadstats` (
+		  `id_content` mediumin' at line 152012-09-19 17:40:08
+CREATE TABLE IF NOT EXISTS `k_contentad` (
+		  `id_content` mediumint(64) NOT NULL,
+		  `language` varchar(2) collate utf8_unicode_ci NOT NULL,
+		  `id_adzone` mediumint(64) NOT NULL,
+		  `contentAdUrl` varchar(255) collate utf8_unicode_ci NOT NULL,
+		  `contentAdCode` mediumtext collate utf8_unicode_ci NOT NULL,
+		  `contentAdPriority` tinyint(2) NOT NULL,
+		  `contentAdStockView` mediumint(64) NOT NULL,
+		  `contentAdStockClick` mediumint(64) NOT NULL,
+		  `contentAdCacheView` mediumint(64) NOT NULL,
+		  `contentAdCacheClick` mediumint(64) NOT NULL,
+		  PRIMARY KEY  (`id_content`,`language`),
+		  KEY `id_content` (`id_content`),
+		  KEY `id_adzone` (`id_adzone`)
+		) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+		
+		CREATE TABLE IF NOT EXISTS `k_contentadstats` (
+		  `id_content` mediumint(64) unsigned NOT NULL,
+		  `language` varchar(2) collate utf8_unicode_ci NOT NULL,
+		  `year` smallint(5) unsigned NOT NULL,
+		  `month` tinyint(4) unsigned NOT NULL,
+		  `day` int(1) unsigned NOT NULL,
+		  `view` mediumint(64) unsigned NOT NULL,
+		  `click` mediumint(64) unsigned NOT NULL,
+		  UNIQUE KEY `id_content` (`id_content`,`language`,`year`,`month`,`day`)
+		) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci
+You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near ';
+		
+		CREATE TABLE IF NOT EXISTS `k_contentadstats` (
+		  `id_content` mediumin' at line 15

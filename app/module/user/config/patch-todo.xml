@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<patch>
+
+	<job action="sql"><![CDATA[
+		CREATE TABLE IF NOT EXISTS `k_usersocial` (
+			`id_user` mediumint(64) NOT NULL,
+			`userSocialPostOwnerCount` mediumint(9) NOT NULL,
+			`userSocialPostOwner` mediumtext COLLATE utf8_unicode_ci NOT NULL,
+			`userSocialPostReplyCount` mediumint(9) NOT NULL,
+			`userSocialPostReply` mediumtext COLLATE utf8_unicode_ci NOT NULL,
+			`userSocialPostRatePlus` mediumtext COLLATE utf8_unicode_ci NOT NULL,
+			`userSocialPostRateMinus` mediumtext COLLATE utf8_unicode_ci NOT NULL,
+			`userSocialFollowerUser` mediumtext COLLATE utf8_unicode_ci NOT NULL,
+			`userSocialFollowerCount` mediumint(9) NOT NULL,
+			`userSocialFollowedUser` mediumtext COLLATE utf8_unicode_ci NOT NULL,
+			`userSocialFollowedCount` mediumint(9) NOT NULL,
+			`userSocialCircleOwner` mediumtext COLLATE utf8_unicode_ci NOT NULL,
+			`userSocialCircleMember` mediumtext COLLATE utf8_unicode_ci NOT NULL,
+			`userSocialCirclePending` mediumtext COLLATE utf8_unicode_ci NOT NULL,
+			`userSocialForumWatcher` mediumtext COLLATE utf8_unicode_ci NOT NULL,
+			`userSocialEventOwner` mediumtext COLLATE utf8_unicode_ci NOT NULL,
+			`userSocialEventMember` mediumtext COLLATE utf8_unicode_ci NOT NULL,
+			`userSocialEventPending` mediumtext COLLATE utf8_unicode_ci NOT NULL,
+		PRIMARY KEY (`id_user`)
+		) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+	]]></job>
+
+
+
+	<job action = "createField" 	table = "k_user" 				field = "is_trusted"				type = "TINYINT(1)"		null = "NO"		after = "is_admin"			default = "0" />
+	<job action = "createField" 	table = "k_user"				field = "is_active"					type = "TINYINT(1)" 	null = "NO"		after = "is_trusted" />
+	<job action = "createField" 	table = "k_user" 				field = "userNewsletter" 			type = "TINYINT(1)" 	null = "NO" 	after = "userPasswd" />
+	<job action = "createField" 	table = "k_user"				field = "userToken"					type = "VARCHAR(255)" 	null = "NO"		after = "userNewsletter" />
+	<job action = "createField" 	table = "k_user"				field = "userToken"					type = "VARCHAR(255)" 	null = "NO"		after = "userNewsletter" />
+	<job action = "createField" 	table = "k_user"				field = "userMedia"					type = "MEDIUMTEXT" 	null = "NO"		after = "userToken" />
+	<job action = "createField" 	table = "k_user"				field = "is_deleted"				type = "TINYINT(1)" 	null = "NO"		after = "is_active" />
+	<job action = "createField" 	table = "k_user"				field = "userSearchCache"			type = "MEDIUMTEXT" 	null = "NO"		after = "userMedia" />
+	<job action = "createField" 	table = "k_user"				field = "fb_userid"					type = "VARCHAR(255)" 	null = "NO"		after = "is_deleted" />
+
+	<job action = "createField" 	table = "k_userasso"			field = "id_userb"					type = "MEDIUMINT(64)" 	null = "YES"	after = "id_content" />
+	<job action = "changeField" 	table = "k_userasso"			field = "id_type,id_type"			type = "MEDIUMINT(64)" 	null = "YES" />
+	<job action = "changeField" 	table = "k_userasso" 			field = "id_content,id_content"		type = "MEDIUMINT(64)" 	null = "YES" />
+
+	<job action = "createField" 	table = "k_useraddressbook"		field = "addressbookCivility"		type = "VARCHAR(255)" 	null = "YES"	after = "addressbookTitle" />
+	<job action = "createField" 	table = "k_useraddressbook"		field = "addressbookTVAIntra"		type = "VARCHAR(255)" 	null = "NO"		after = "addressbookPhone2" />
+
+	<job action = "createIndex" 	table = "k_user" 	index = "is_active" 	field = "is_active" />
+	<job action = "createIndex" 	table = "k_user" 	index = "id_group"		field = "id_group" />
+	<job action = "createIndex" 	table = "k_user"	index = "userMail"		field = "userMail" />
+	<job action = "createIndex" 	table = "k_user"	index = "userPasswd"	field = "userPasswd" />
+
+</patch>
+

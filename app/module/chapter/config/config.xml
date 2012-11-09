@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<element>
+
+	<data>
+		<key>chapter</key>
+		<version>5.0.2</version>
+		<lastMod>2012-10-22</lastMod>
+
+		<name><![CDATA[Arborescence]]></name>
+		<description><![CDATA[]]></description>
+		<menu>NO</menu>
+	</data>
+
+	<less>
+		<file>/ui/css/chapter.less</file>
+	</less>
+
+</element>
