@@ -1,0 +1,64 @@
+code : 0
+merchant_id : 082584341411111
+merchant_country : fr
+amount : 1500
+transaction_id : 084916
+transmission_date: 20110811064916
+payment_means: MASTERCARD
+payment_time : 084945
+payment_date : 20110811
+response_code : 00
+payment_certificate : 1313045385
+authorisation_id : 045385
+currency_code : 978
+card_number : 4974.00
+cvv_flag: 1
+cvv_response_code: 4D
+bank_response_code: 00
+complementary_code: 
+complementary_info: 
+return_context: 
+caddie : 5
+receipt_complement: 
+merchant_language: fr
+language: fr
+customer_id: 1
+order_id: 
+customer_email: 
+customer_ip_address: 212.51.179.242
+capture_day: 0
+capture_mode: AUTHOR_CAPTURE
+data: 
+-------------------------------------------
+code : 0
+merchant_id : 082584341411111
+merchant_country : fr
+amount : 2000
+transaction_id : 093229
+transmission_date: 20110811073229
+payment_means: MASTERCARD
+payment_time : 093250
+payment_date : 20110811
+response_code : 00
+payment_certificate : 1313047970
+authorisation_id : 047970
+currency_code : 978
+card_number : 4974.00
+cvv_flag: 1
+cvv_response_code: 4D
+bank_response_code: 00
+complementary_code: 
+complementary_info: 
+return_context: 
+caddie : 1
+receipt_complement: 
+merchant_language: fr
+language: fr
+customer_id: 1
+order_id: 
+customer_email: 
+customer_ip_address: 212.51.179.242
+capture_day: 0
+capture_mode: AUTHOR_CAPTURE
+data: 
+-------------------------------------------

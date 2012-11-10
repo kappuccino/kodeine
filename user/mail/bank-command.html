@@ -1,0 +1,67 @@
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="fr">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+</head>
+<body>
+
+	<h1>Commande {id_cart}</h1>
+
+	<table border="1" width="600" cellpadding="5" cellspacing="0">
+		<tr>
+			<td width="50%">Adresse facturation</td>
+			<td width="50%">Adresse livraions</td>
+		</tr>
+		<tr valign="top">
+			<td>{cartDeliveryName}<br />{cartDeliveryAddress}</td>
+			<td>{cartBillingName}<br />	{cartBillingAddress}</td>
+		</tr>
+	</table>
+
+	<table border="1" width="600" cellpadding="5" cellspacing="0" style="margin-top:20px;">
+		<tr valign="top">
+			<td><b>Produit</b></td>
+			<td width="100" align="right"><b>Quantit&eacute;</b></td>
+			<td width="70" align="right"><b>Prix</b></td>
+		</tr>
+		{lines}
+		<tr valign="top">
+			<td>{contentName} ({contentRef})</td>
+			<td align="right">{contentQuantity}</td>
+			<td align="right">{contentPriceTaxQuantity} &euro;</td>
+		</tr>
+		{lines}
+		<tr align="right">
+			<td></td>
+			<td>Total HT</td>
+			<td>{cartTotal} &euro;</td>
+		</tr>
+		<tr align="right">
+			<td></td>
+			<td>Total TTC</td>
+			<td>{cartTotalTax} &euro;</td>
+		</tr>
+		<tr align="right">
+			<td></td>
+			<td>Frais de port</td>
+			<td>{cartCarriage} &euro;</td>
+		</tr>
+		{ifCoupon}
+		<tr align="right">
+			<td></td>
+			<td>R&eacute;duction</td>
+			<td>{cartCoupon} &euro;</td>
+		</tr>
+		{ifCoupon}
+		<tr>
+			<td></td>
+			<td colspan="2"><hr /></td>
+		</tr>
+		<tr align="right">
+			<td></td>
+			<td>Total a régler</td>
+			<td>{cartTotalFinal} &euro;</td>
+		</tr>
+	</table>
+
+</body>
+</html>
