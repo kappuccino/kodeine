@@ -18,6 +18,4 @@ Installation de Kodeine
 
 
 
-
-
-//http://www.silecs.info/tuto/html/markdown.html
+http://daringfireball.net/projects/markdown/syntax
