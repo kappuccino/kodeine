@@ -1,4 +1,5 @@
 <?php
+
 	if($_POST['copy']){
 		$app->apiLoad('content')->contentDuplicateLanguage($_POST['id_content'], $_POST['from'], $_POST['copy']);
 		header("Location: data-language?id_content=".$_POST['id_content'].'&language='.$_POST['copy']);
@@ -168,7 +169,7 @@
 				<input type="hidden" name="id_content"	value="<?php echo $_REQUEST['id_content'] ?>" />
 				<input type="hidden" name="from" 		value="<?php echo $_REQUEST['language'] ?>" />
 		
-				Recopier les données de cette langue vers 
+				Recopier les données de cette langue vers
 				<select name="copy" class="select-small nomargin"><?php
 					foreach($unset as $e){
 						echo "<option value=\"".$e['iso']."\">".$e['countryLanguage']."</option>";
@@ -178,7 +179,7 @@
 				(Pensez à enregistrer cette langue avant de la recopier)
 			</form>
 		</div>
-	<?php } ?>
+	<?php } ?>
 
 
 	<div class="inject-subnav-right hide">
@@ -339,7 +340,7 @@
 			$('#urlField').val(url);
 
 			var get = $.ajax({
-				url: 'helper/url?id_content='+$('#id_content').val()+'&url='+url+'&language='+language,
+				url: 'helper/url?id_content='+$('#id_content').val()+'&url='+url+'&language='+language
 			});
 
 			get.done(function(obj) {
@@ -374,7 +375,7 @@
 	}
 
 </script>	
-<?php } ?>
+<?php } ?>
 
 
 </body>

@@ -1,4 +1,4 @@
 .DS_Store
-media/*
-user/*
-temp
+/media/*
+/user/*
+/.idea/*

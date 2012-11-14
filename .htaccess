@@ -16,15 +16,14 @@ Options +FollowSymLinks
 	RewriteEngine On
 	RewriteBase /
 
-	RedirectPermanent /app/admin/index.php /admin/
-	
+#	RedirectPermanent /app/admin/index.php /admin/
+
 	RewriteCond %{REQUEST_FILENAME} !-d
 	RewriteCond %{REQUEST_FILENAME} !-s
-	
-	RewriteRule ^(.*)?$ 			app/index.php?rewrite=$1		[NC,QSA,L]
-	RewriteRule ^$ 					app/index.php					[NC,QSA,L]
+	RewriteRule ^(.*)?$ 		app/index.php?rewrite=$1		[NC,QSA,L]
+	RewriteRule ^$ 				app/index.php					[NC,QSA,L]
+	RewriteRule ^.git*			-								[F,L]
 
-	
 	# Protection contre le pillage des images sources (appel direct de l'image source via l'URL)
 	#
 	#RewriteCond %{REQUEST_FILENAME} -s
