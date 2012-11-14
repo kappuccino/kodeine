@@ -56,6 +56,18 @@ public function userGet($opt=array()){
 		}
 	}
 
+	# GET userToken
+	#
+	if(array_key_exists('userToken', $opt)){
+		if($opt['userToken'] != ''){
+			$dbMode = 'dbOne';
+			$cond[] = "k_user.userToken='".$opt['userToken']."'";
+		}else{
+			if($opt['debug']) $this->pre("ERROR: ID_USER (STRING)", "GIVEN", var_export($opt['userToken'], true));
+			return array();
+		}
+	}
+
 	# Gerer les USER FIELD
 	#
 	$field = $this->apiLoad('field')->fieldGet(array('user' => true));

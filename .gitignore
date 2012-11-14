@@ -1,4 +1,10 @@
 .DS_Store
+<<<<<<< HEAD
 /media/*
 /user/*
 /.idea/*
+=======
+/user/
+/media/
+/.idea/
+>>>>>>> 8d9a27f33399edd475190c24d85f93523d094352

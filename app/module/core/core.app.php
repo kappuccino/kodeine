@@ -1037,6 +1037,7 @@ public function kodeineInit($get){
 	#
 	if(!empty($domainConfig)){
 		if($domainConfig['id_chapter'] != NULL)	$this->kodeine['defaultIdChapter']	= $domainConfig['id_chapter'];
+		if($domainConfig['id_theme']   != NULL)	$this->kodeine['defaultIdTheme']	= $domainConfig['id_theme'];
 		if($domainConfig['language']   != NULL)	$this->kodeine['defaultLanguage']	= $domainConfig['language'];
 	}
 
