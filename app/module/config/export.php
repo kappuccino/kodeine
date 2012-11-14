@@ -17,7 +17,7 @@
 	if(isset($_GET['dump'])){
 		$sql = DUMPDIR.'/export-'.time().'.sql';
 	
-		require(USER.'/config/db.php');
+		require(USER.'/config/config.php');
 
 		system(DUMPBIN." --host=".$host." --user=".$login." --password=".$passwd." ".$database." --comments=0 > ".$sql, $r);
 	}else
@@ -37,7 +37,7 @@
 		$sql = str_replace("`k_", "`x_", $sql);
 		file_put_contents($tmp, $sql);
 
-		require(USER.'/config/db.php');
+		require(USER.'/config/config.php');
 		#echo "<pre>";
 		system("mysql --host=".$host." --user=".$login." --password=".$passwd." ".$database." < ".$tmp);
 		#echo "</pre>";
