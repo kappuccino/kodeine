@@ -169,14 +169,14 @@
 				<input type="hidden" name="id_content"	value="<?php echo $_REQUEST['id_content'] ?>" />
 				<input type="hidden" name="from" 		value="<?php echo $_REQUEST['language'] ?>" />
 		
-				Recopier les donnÃ©ees de cette langue vers
+				Recopier les données de cette langue vers
 				<select name="copy" class="select-small nomargin"><?php
 					foreach($unset as $e){
 						echo "<option value=\"".$e['iso']."\">".$e['countryLanguage']."</option>";
 					}
 				?></select>
 				<button type="submit" name="valider" class="button button-green" style="float: none;">Valider</button>
-				(Pensez Ã  enregistrer cette langue avant de la recopier)
+				(Pensez à enregistrer cette langue avant de la recopier)
 			</form>
 		</div>
 	<?php } ?>
@@ -284,7 +284,7 @@
 					</span>
 					<div class="spacer">&nbsp;</div>
 					<span>
-						<label class="off">Mots-clï¿½s</label>
+						<label class="off">Mots-clés</label>
 						<div class="form"><input type="text" name="contentMetaKeywords" value="<?php echo $app->formValue($data['contentMetaKeywords'], $_POST['contentMetaKeywords']); ?>" size="100" style="width:99%;" /></div>
 					</span>
 					<br style="clear:both" /> 
