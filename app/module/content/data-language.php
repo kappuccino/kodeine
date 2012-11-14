@@ -1,4 +1,5 @@
 <?php
+
 	if($_POST['copy']){
 		$app->apiLoad('content')->contentDuplicateLanguage($_POST['id_content'], $_POST['from'], $_POST['copy']);
 		header("Location: data-language?id_content=".$_POST['id_content'].'&language='.$_POST['copy']);
@@ -168,7 +169,11 @@
 				<input type="hidden" name="id_content"	value="<?php echo $_REQUEST['id_content'] ?>" />
 				<input type="hidden" name="from" 		value="<?php echo $_REQUEST['language'] ?>" />
 		
+<<<<<<< HEAD
+				Recopier les données de cette langue vers
+=======
 				Recopier les donnï¿½es de cette langue vers 
+>>>>>>> 8d9a27f33399edd475190c24d85f93523d094352
 				<select name="copy" class="select-small nomargin"><?php
 					foreach($unset as $e){
 						echo "<option value=\"".$e['iso']."\">".$e['countryLanguage']."</option>";
