@@ -6,6 +6,7 @@
 <head>
 	<title>Kodeine</title>
 	<link rel="stylesheet" type="text/css" href="/admin/core/ui/_jqueryui/jqui.slider.css" />
+	<link rel="stylesheet" type="text/css" href="/admin/core/ui/_flowplayer5/skin/functional.css" />
 <!--<link rel="stylesheet" type="text/css" href="/admin/media/ui/_uploadifive/uploadifive.css">-->
 	<?php
 		echo $app->less('/admin/media/ui/css/media.less');
