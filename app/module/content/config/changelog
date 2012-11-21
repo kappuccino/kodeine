@@ -5,6 +5,8 @@ Kodeine Change log
 
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 2012-11-21 (build 5.0.10)
+- api.content : contentRemove > si pas de langue definie alors on supprime le contenu et toutes ses langues + verification des parametres id_type et id_content
+- /content/data : ajout bouton supprimer le contenu
 - /content/index : correction lien sur les langues > pointent maintenant vers data-language?id_content=...&language=...
 
 2012-11-07 (build 5.0.7)

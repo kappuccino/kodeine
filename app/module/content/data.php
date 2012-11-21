@@ -110,6 +110,18 @@
 		}
 	}
 
+    if($_GET['remove'] == 1 && $_GET['id_content'] > 0) {
+        $data = $app->apiLoad('content')->contentGet(array(
+            'id_content' 	=> $_GET['id_content'],
+            'debug'	 		=> false,
+            'raw'			=> true
+        ));
+        if($data['id_content'] > 0) {
+            $app->apiLoad('content')->contentRemove($data['id_type'], $data['id_content'], '');
+            header('Location: index?id_type='.$data['id_type']);
+        }
+    }
+
 	if($_REQUEST['id_content'] != NULL){
 	
 		if($_REQUEST['reloadFromVersion'] != NULL){
@@ -223,6 +235,9 @@
 	<li>
 		<a href="/admin/content/?id_type=<?php echo $type['id_type'] ?>" class="btn btn-small">Retour à la liste</a>
 	</li>
+    <li>
+        <a onclick="removeThis(<?php echo $_REQUEST['id_content'] ?>)" class="btn btn-small btn-danger">Supprimer</a>
+    </li>
 	<li>
 		<a onclick="$('#data').submit()" class="btn btn-small btn-success">Enregistrer</a>
 	</li>
@@ -887,6 +902,11 @@
 			if(hauteur + add >= min) $(e).css('height', hauteur+add);
 		}
 	}
+    function removeThis(id_content){
+        if(confirm('SUPPRIMER CE CONTENU ?')){
+            document.location = 'data?id_content='+id_content+'&remove=1';
+        }
+    }
 
 	function toggleLine(id,trigger){
 		list = $('#line-'+id).find('.is-toggle');
