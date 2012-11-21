@@ -908,8 +908,8 @@ public function businessCmdMail($opt){
 		if($opt['mailCc'] != '')		$mailCc[] = $opt['mailCc'];
 		if(is_array($opt['mailBcc']))	$mailBcc  = array_merge($mailBcc, $opt['mailBcc']);
 
-		$mailTitle 	= ($opt['mailTitle'] != '') ? $opt['mailTitle'] : $shop['shopMailTitle'];
-		$template	= USER.'/mail/'.$shop['shopMailTemplate'];
+        $mailTitle 	= ($opt['mailTitle'] != '') ? $opt['mailTitle'] : $shop['shopMailTitle'];
+        $template 	= ($opt['mailTemplate'] != '') ? USER.'/mail/'.$opt['mailTemplate'] : USER.'/mail/'.$shop['shopMailTemplate'];
 	}else{
 		/*$mailTo		= array($opt['mailTo']);
 		$mailCc		= array($opt['mailCc']);

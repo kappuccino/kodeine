@@ -5,6 +5,10 @@ Kodeine Change log
 
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
+2012-11-21 (5.0.7)
+- business/edit : porte sur Next car ancienne version backoffice
+- api.business : fonction businessCmdMail() si un template est defini dans les parametres $opt alors il est prioritaire sur le template par defaut du shop
+
 2012-10-31 (5.0.4)
 + Ajout du champ cartBillingTVAIntra dans business_cart pour le stocker le num TVA Intracommuncautaire
 + Gestion champ cartBillingTVAIntra dans la fonction businessCartUserSet api.business
