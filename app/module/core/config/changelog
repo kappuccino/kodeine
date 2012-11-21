@@ -4,6 +4,9 @@
 
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
+2012-11-21
++ Correction du patcher/installer
+
 2012-10-17 (51)
 + Refonte du patch pour la compilation des LESS, le passage des LESS/CSS se fait depuis la homepage
 + Refonte du proxy PHP pour la gestiond des fichier de ressource pour le backoffice

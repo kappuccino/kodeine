@@ -18,9 +18,9 @@
 	# On sauve les AFFECTATION des CHAMPS et on RENOMME les @TABLES
 	#
 	foreach($tables_ as $table_ => $opt){
-		if(patchTableExists(array('table' => $table_))){
+		if($this->tableExists(array('table' => $table_))){
 
-			$raw = $app->dbMulti("SELECT * FROM ".$table_." ORDER by `order` ASC ");
+			$raw = $this->dbMulti("SELECT * FROM ".$table_." ORDER by `order` ASC ");
 			$tmp = array();
 
 			if($opt['id'] != ''){
@@ -30,7 +30,7 @@
 				
 				if(sizeof($tmp) > 0){
 					foreach($tmp as $id => $ids){
-						$app->apiLoad('field')->fieldAffectSet($opt['key'], $ids, $id);
+						$this->apiLoad('field')->fieldAffectSet($opt['key'], $ids, $id);
 					}
 				}
 
@@ -39,10 +39,10 @@
 					$tmp[] = intval($e['id_field']);
 				}
 
-				$app->apiLoad('field')->fieldAffectSet($opt['key'], $tmp);
+				$this->apiLoad('field')->fieldAffectSet($opt['key'], $tmp);
 			}
 
-			$app->dbQuery("RENAME TABLE ".$table_." TO  `@".$table_."`");
+			$this->dbQuery("RENAME TABLE ".$table_." TO  `@".$table_."`");
 		}
 	}
 

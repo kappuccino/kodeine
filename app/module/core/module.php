@@ -100,7 +100,10 @@
 				?></td>
 				<td><?php
 					if($d['needPatch'] == 'YES'){
-						echo '<a onclick="patch(this, \''.$b['key'].'\', '.$core.')" class="btn btn-small btn-patch">Patch</a>';
+						echo '<a onclick="patch(this, \''.$d['key'].'\', false, '.$core.')" class="btn btn-small btn-patch">Patch</a>';
+					}else
+					if($e['rePatch']){
+						echo '<a onclick="patch(this, \''.$d['key'].'\', true, '.$core.')" class="btn btn-small btn-patch">rePatch</a>';
 					}
 				?></td>
 

@@ -97,7 +97,7 @@ function alterTable($d){
 	if(strtolower($d['action']) == 'createindex' && $exists){
 		if(!$this->indexExists($d)){
 			foreach(explode(',', $d['field']) as $i){
-				if(preg_match("#([a-zA-Z]*)" . "(\(([0-9])\))?#", $i, $m)){
+				if(preg_match("#([a-zA-Z\_]*)" . "(\(([0-9])\))?#", $i, $m)){
 					$tmp[] = ($m[3] != NULL) ? '`'.$m[1].'` ('.$m[3].')' : '`'.$m[1].'`';
 				}
 			}
@@ -165,7 +165,8 @@ function patchIt($file){
 			);
 			
 			if($def['file'] != ''){
-			
+				define('ALLOW_PATCH', true); // Autoriser l'execution du patch
+
 				$def['file'] = str_replace('{thisFolder}', str_replace(KROOT, '', dirname($file)), $def['file']);
 				$def['file'] = KROOT.$def['file'];
 
