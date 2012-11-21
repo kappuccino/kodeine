@@ -4,6 +4,9 @@ Kodeine Change log
 * = Autre / Divers / Inclassable...
 
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+2012-11-21 (build 5.0.10)
+- /content/index : correction lien sur les langues > pointent maintenant vers data-language?id_content=...&language=...
+
 2012-11-07 (build 5.0.7)
 - /content/ui/js/content.js : setUrlBehaviour ne prends pas en compte touche tabulation et shift
 
