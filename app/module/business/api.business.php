@@ -1,6 +1,6 @@
 <?php
 /* + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - 
-	Last release		2010.10.18-e
+	Last release		2010.10.18-f
 + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - */
 
 class business extends coreApp {
