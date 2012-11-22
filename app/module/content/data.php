@@ -918,12 +918,12 @@
 		})
 	}
 
-	function dupli(id){
-		lst = $('.fl-'+id); 
-		lst.each(function(me, i){
-			if(me.value == '') me.value = lst[0].value;
-		});
-	}
+    function dupli(id){
+        lst = $('.fl-'+id);
+        lst.each(function(me, i){
+            if($(this).val() == '') $(this).val(lst[0].value);
+        });
+    }
 	
 	function chk(id, state, doFnc){
 		$('.cb-'+id).each(function(i, me){
