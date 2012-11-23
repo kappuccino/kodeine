@@ -2,4 +2,5 @@
 /media/*
 /user/*
 /.idea/*
+.idea
 /.ht*
