@@ -3,6 +3,8 @@
 * = Autre / Divers / Inclassable...
 
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+2012-11-23
+- Correction du menu top.php pour bien prendre en compte la gestion des droits
 
 2012-11-21
 + Correction du patcher/installer
