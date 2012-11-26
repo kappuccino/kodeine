@@ -1,6 +1,6 @@
 /*!
 
-   Flowplayer v5.1.1 (Friday, 19. October 2012 04:24PM) | flowplayer.org/license
+   Flowplayer v5.2.0 (Wednesday, 21. November 2012 04:34PM) | flowplayer.org/license
 
 */
 !function($) { 
@@ -15,7 +15,7 @@ $(function() {
 var instances = [],
    extensions = [],
    UA = navigator.userAgent,
-   use_native = /iPhone/i.test(UA) || /Android/.test(UA) && /Firefox/.test(UA);
+   use_native = /iP(hone|od)/i.test(UA) || /Android/.test(UA) && /Firefox/.test(UA);
 
 
 /* flowplayer()  */
@@ -26,13 +26,16 @@ window.flowplayer = function(fn) {
       $(fn).data("flowplayer");
 };
 
+
 $.extend(flowplayer, {
 
-   version: '5.1.1',
+   version: '5.2.0',
 
    engine: {},
 
    conf: {},
+
+   support: {},
 
    defaults: {
 
@@ -44,6 +47,8 @@ $.extend(flowplayer, {
       // first engine to try
       engine: 'html5',
 
+      fullscreen: window == window.top,
+
       // keyboard shortcuts
       keyboard: true,
 
@@ -54,7 +59,7 @@ $.extend(flowplayer, {
 
       splash: false,
 
-      swf: "http://releases.flowplayer.org/5.1.1/flowplayer.swf",
+      swf: "http://releases.flowplayer.org/5.2.0/flowplayer.swf",
 
       speeds: [0.25, 0.5, 1, 1.5, 2],
 
@@ -79,9 +84,7 @@ $.extend(flowplayer, {
          'Invalid RTMP URL'
       ]
 
-   },
-
-   support: {}
+   }
 
 });
 
@@ -99,14 +102,17 @@ $.fn.flowplayer = function(opts, callback) {
    return !opts && this.data("flowplayer") || this.each(function() {
 
       // private variables
-      var root = $(this),
+      var root = $(this).addClass("is-loading"),
          conf = $.extend({}, flowplayer.defaults, flowplayer.conf, opts, root.data()),
-         videoTag = $("video", root),
+         videoTag = $("video", root).addClass("fp-engine").removeAttr("controls"),
+         urlResolver = new URLResolver(videoTag),
+         storage = {},
          lastSeekPosition,
-         initialTypes = [],
-         savedVolume,
          engine;
 
+      try {
+         storage = window.localStorage || storage;
+      } catch(e) {}
 
       /*** API ***/
       var api = {
@@ -114,29 +120,40 @@ $.fn.flowplayer = function(opts, callback) {
          // properties
          conf: conf,
          currentSpeed: 1,
-         volumeLevel: conf.volume,
-         video: null,
+         volumeLevel: storage.volume * 1 || conf.volume,
+         video: {},
 
          // states
-         splash: false,
-         ready: false,
-         paused: false,
-         playing: false,
-         loading: false,
-         muted: false,
          disabled: false,
          finished: false,
+         loading: false,
+         muted: storage.muted == "true" || conf.muted,
+         paused: false,
+         playing: false,
+         ready: false,
+         splash: false,
 
          // methods
          load: function(video, callback) {
 
             if (api.error || api.loading || api.disabled) return;
 
-            root.trigger("load", [api, video, engine]);
+            // resolve URL
+            video = urlResolver.resolve(video);
+            $.extend(video, engine.pick(video.sources));
 
-            // callback
-            if ($.isFunction(video)) callback = video;
-            if (callback) root.one("ready", callback);
+            if (video.src) {
+               var e = $.Event("load");
+               root.trigger(e, [api, video, engine]);
+
+               if (!e.isDefaultPrevented()) {
+                  engine.load(video);
+
+                  // callback
+                  if ($.isFunction(video)) callback = video;
+                  if (callback) root.one("ready", callback);
+               }
+            }
 
             return api;
          },
@@ -200,8 +217,15 @@ $.fn.flowplayer = function(opts, callback) {
             return api.seek(time, fn);
          },
 
+         mute: function(flag) {
+            if (flag == undefined) flag = !api.muted;
+            storage.muted = api.muted = flag;
+            api.volume(flag ? 0 : storage.volume);
+            api.trigger("mute", flag);
+         },
+
          volume: function(level) {
-            if (api.ready && level != api.volumeLevel) engine.volume(Math.min(Math.max(level, 0), 1));
+            if (api.ready) engine.volume(Math.min(Math.max(level, 0), 1));
             return api;
          },
 
@@ -223,12 +247,18 @@ $.fn.flowplayer = function(opts, callback) {
 
 
          stop: function() {
-            if (api.ready) engine.stop();
+            if (api.ready) {
+               api.pause();
+               api.seek(0, function() {
+                  root.trigger("stop");
+               });
+            }
             return api;
          },
 
          unload: function() {
             if (!root.hasClass("is-embedding")) {
+
                if (conf.splash) {
                   api.trigger("unload");
                   engine.unload();
@@ -237,16 +267,19 @@ $.fn.flowplayer = function(opts, callback) {
                }
             }
             return api;
+         },
+
+         disable: function(flag) {
+            if (flag === undefined) flag = !api.disabled;
+
+            if (flag != api.disabled) {
+               api.disabled = flag;
+               api.trigger("disable", flag);
+            }
          }
 
       };
 
-      /* togglers */
-      $.each(['disable', 'mute'], function(i, key) {
-         api[key] = function() {
-            return api.trigger(key);
-         };
-      });
 
       /* event binding / unbinding */
       $.each(['bind', 'one', 'unbind'], function(i, key) {
@@ -276,9 +309,8 @@ $.fn.flowplayer = function(opts, callback) {
          if (conf.splash || root.hasClass("is-splash")) {
             api.splash = conf.splash = conf.autoplay = true;
             root.addClass("is-splash");
+            videoTag.attr("preload", "none");
          }
-
-         if (conf.poster) delete conf.autoplay;
 
          // extensions
          $.each(extensions, function(i) {
@@ -289,22 +321,22 @@ $.fn.flowplayer = function(opts, callback) {
          engine = flowplayer.engine[conf.engine];
          if (engine) engine = engine(api, root);
 
-         if (engine) {
+         if (engine.pick(urlResolver.initialSources)) {
             api.engine = conf.engine;
 
          // 2. failed -> try another
          } else {
-            delete flowplayer.engine[conf.engine];
-
             $.each(flowplayer.engine, function(name, impl) {
-               engine = this(api, root);
-               if (engine) api.engine = name;
-               return false;
+               if (name != conf.engine) {
+                  engine = this(api, root);
+                  if (engine.pick(urlResolver.initialSources)) api.engine = name;
+                  return false;
+               }
             });
          }
 
          // no engine
-         if (!engine) return api.trigger("error", { code: 5 });
+         if (!api.engine) return api.trigger("error", { code: 5 });
 
          // start
          conf.splash ? api.unload() : api.load();
@@ -330,65 +362,63 @@ $.fn.flowplayer = function(opts, callback) {
          }
 
          // loading
+         root.addClass("is-loading");
          api.loading = true;
 
 
       }).bind("ready unload", function(e) {
-         var ready = e.type == "ready";
-         root.toggleClass("is-splash", !ready).toggleClass("is-ready", ready);
-         api.ready = ready;
-         api.splash = !ready;
+         var is_ready = e.type == "ready";
+         root.toggleClass("is-splash", !is_ready).toggleClass("is-ready", is_ready);
+         api.ready = is_ready;
+         api.splash = !is_ready;
 
-         function noLoad() {
+
+      }).bind("ready", function(e, api, video) {
+         api.video = video;
+         api.video.time = 0;
+
+         function notLoading() {
             root.removeClass("is-loading");
             api.loading = false;
          }
 
-         // load
-         if (ready) {
-            api.volume(conf.volume);
+         if (conf.splash) root.one("progress", notLoading);
+         else notLoading();
 
-            if (conf.autoplay) {
-               root.one("resume", noLoad);
+         // saved state
+         if (api.muted) api.mute(true);
+         else api.volume(api.volumeLevel);
 
-            } else {
-               if (!api.playing) api.trigger("pause");
-               noLoad();
-            }
 
-         // unload
-         } else {
-            api.video.time = 0;
-            if (conf.splash) videoTag.remove();
-         }
+      }).bind("unload", function(e) {
+         if (conf.splash) videoTag.remove();
+         root.removeClass("is-loading");
+         api.loading = false;
 
-      }).bind("mute", function(e) {
-         var flag = api.muted = !api.muted;
-         if (flag) savedVolume = api.volumeLevel;
-         api.volume(flag ? 0 : savedVolume);
+
+      }).bind("progress", function(e, api, time) {
+         api.video.time = time;
+
 
       }).bind("speed", function(e, api, val) {
          api.currentSpeed = val;
 
       }).bind("volume", function(e, api, level) {
          api.volumeLevel = Math.round(level * 100) / 100;
-
-         if (api.muted && api.volumeLevel) {
-            root.removeClass("is-muted");
-            api.muted = false;
-         }
+         if (!api.muted) storage.volume = level;
+         else if (level) api.mute(false);
 
 
       }).bind("beforeseek seek", function(e) {
          api.seeking = e.type == "beforeseek";
          root.toggleClass("is-seeking", api.seeking);
 
-      }).bind("ready pause resume unload finish", function(e, _api, video) {
+      }).bind("ready pause resume unload finish stop", function(e, _api, video) {
 
          // PAUSED: pause / finish
-         api.paused = /pause|finish|unload/.test(e.type);
+         api.paused = /pause|finish|unload|stop/.test(e.type);
 
-         // SHAKY HACK: first-frame / poster / preload=none
+         // SHAKY HACK: first-frame / preload=none
          if (e.type == "ready") {
             if (video) {
                api.paused = !video.duration || !conf.autoplay && (conf.preload != 'none' || api.engine == 'flash');
@@ -404,9 +434,6 @@ $.fn.flowplayer = function(opts, callback) {
          // sanity check
          if (!api.load.ed) api.pause();
 
-      }).bind("disable", function(){
-         api.disabled = !api.disabled;
-
       }).bind("finish", function(e) {
          api.finished = true;
 
@@ -421,33 +448,66 @@ $.fn.flowplayer = function(opts, callback) {
 
 };
 
+!function() {
+
+   var s = flowplayer.support,
+      browser = $.browser,
+      video = $("<video loop autoplay preload/>")[0],
+      IS_IE = browser.msie,
+      UA = navigator.userAgent,
+      IS_IPAD = /iPad|MeeGo/.test(UA),
+      IS_ANDROID = /Android/.test(UA),
+      IPAD_VER = IS_IPAD ? parseFloat(/Version\/(\d\.\d)/.exec(UA)[1], 10) : 0;
+
+
+   $.extend(s, {
+      video: !!video.canPlayType,
+      subtitles: !!video.addTextTrack,
+      fullscreen: typeof document.webkitCancelFullScreen == 'function'
+         && !/Mac OS X 10_5.+Version\/5\.0\.\d Safari/.test(UA) || document.mozFullScreenEnabled,
+      fullscreen_keyboard: !$.browser.safari || $.browser.version > "536",
+      inlineBlock: !(browser.msie && browser.version < 8),
+      touch: ('ontouchstart' in window),
+      dataload: !IS_IPAD || IPAD_VER >= 6,
+      zeropreload: !IS_IE && !IS_ANDROID, // IE supports only preload=metadata
+      volume: !IS_IPAD && !IS_ANDROID,
+   });
+
+   // flashVideo
+   try {
+      var ver = IS_IE ? new ActiveXObject("ShockwaveFlash.ShockwaveFlash").GetVariable('$version') :
+         navigator.plugins["Shockwave Flash"].description;
+
+      ver = ver.split(/\D+/);
+      if (!IS_IE) ver = ver.slice(1);
+
+      s.flashVideo = ver[0] > 9 || ver[0] == 9 && ver[2] >= 115;
+
+   } catch (ignored) {}
+
+   // animation
+   s.animation = (function() {
+      var vendors = ['','Webkit','Moz','O','ms','Khtml'], el = $("<p/>")[0];
+
+      for (var i = 0; i < vendors.length; i++) {
+         if (el.style[vendors[i] + 'AnimationName'] !== 'undefined') return true;
+      }
+   })();
+
+
+
+}();
+
+
 /* The most minimal Flash embedding */
-var IS_IE = $.browser.msie;
-
-try {
-
-   var ver = IS_IE ? new ActiveXObject("ShockwaveFlash.ShockwaveFlash").GetVariable('$version') :
-      navigator.plugins["Shockwave Flash"].description;
-
-   ver = ver.split(/\D+/);
-   if (!IS_IE) ver = ver.slice(1);
-
-   flowplayer.support.flashVideo = ver[0] > 9 || ver[0] == 9 && ver[2] >= 115;
-
-} catch (err) {
-
-}
-
 
 // movie required in opts
 function embed(swf, flashvars) {
 
-   window["objectId"] = new Object();
-
    var id = "obj" + ("" + Math.random()).slice(2, 15),
       tag = '<object class="fp-engine" id="' + id+ '" name="' + id + '" ';
 
-   tag += IS_IE ? 'classid="clsid:D27CDB6E-AE6D-11cf-96B8-444553540000">' :
+   tag += $.browser.msie ? 'classid="clsid:D27CDB6E-AE6D-11cf-96B8-444553540000">' :
       ' data="' + swf  + '" type="application/x-shockwave-flash">';
 
    var opts = {
@@ -459,7 +519,7 @@ function embed(swf, flashvars) {
       flashvars: "",
 
       // https://github.com/flowplayer/flowplayer/issues/13#issuecomment-9369919
-      movie: swf + (IS_IE ? "?" + id : ""),
+      movie: swf + ($.browser.msie ? "?" + id : ""),
       name: id
    };
 
@@ -495,29 +555,35 @@ flowplayer.engine.flash = function(player, root) {
       objectTag,
       api;
 
-   function pick(sources) {
-      for (var i = 0, source; i < sources.length; i++) {
-         source = sources[i];
-         if (/mp4|flv|flash/.test(source.type)) return source;
-      }
-   }
-
-   // not supported
-   if (!flowplayer.support.flashVideo || !pick(video.sources)) return;
-
-   // ok
-   $("video", root).remove();
-
    var engine = {
+
+      pick: function(sources) {
+         if (flowplayer.support.flashVideo) {
+
+            if (conf.rtmp) {
+               var flash = $.grep(sources, function(source) { return source.type == 'flash'; })[0];
+               if (flash) return flash;
+            }
+
+            for (var i = 0, source; i < sources.length; i++) {
+               source = sources[i];
+               if (/mp4|flv/.test(source.type)) return source;
+            }
+         }
+      },
 
       load: function(video) {
 
-         var source = pick(video.sources);
-         source.url = (conf.rtmp ? source.src : $("<a/>").attr("href", source.src)[0].href)
-            .replace(/&amp;/g, '%26').replace(/&/g, '%26').replace(/=/g, '%3D');
+         $("video", root).remove();
+
+         var url = video.src.replace(/&amp;/g, '%26').replace(/&/g, '%26').replace(/=/g, '%3D'),
+            is_absolute = /^https?:/.test(url);
+
+         // convert to absolute
+         if (!is_absolute) url = $("<a/>").attr("href", url)[0].href;
 
          if (api) {
-            api.__play(source.url);
+            api.__play(url);
 
          } else {
 
@@ -525,16 +591,16 @@ flowplayer.engine.flash = function(player, root) {
 
             var opts = {
                hostname: conf.embedded ? conf.hostname : top.location.hostname,
-               url: source.url,
-               callback: "$."+ callbackId
+               url: url,
+               callback: "jQuery."+ callbackId
             };
 
+            if (is_absolute) delete conf.rtmp;
+
             // optional conf
-            $.each(['key', 'autoplay', 'preload', 'poster', 'rtmp', 'loop', 'debug'], function(i, key) {
+            $.each(['key', 'autoplay', 'preload', 'rtmp', 'loop', 'debug'], function(i, key) {
                if (conf[key]) opts[key] = conf[key];
             });
-
-            if (/^https?:/.test(source.url)) delete opts.rtmp;
 
             objectTag = embed(conf.swf, opts);
 
@@ -556,8 +622,7 @@ flowplayer.engine.flash = function(player, root) {
 
                if (conf.debug && type != "status") console.log("--", type, arg);
 
-               var event = $.Event(type),
-                  video = player.video;
+               var event = $.Event(type);
 
                switch (type) {
 
@@ -566,20 +631,20 @@ flowplayer.engine.flash = function(player, root) {
                   case "ready": arg = $.extend(video, arg); break;
                   case "click": event.flash = true; break;
                   case "keydown": event.which = arg; break;
-                  case "buffered": video.buffered = true; break;
                   case "seek": video.time = arg; break;
+                  case "buffered": video.buffered = true; break;
 
                   case "status":
-                     if (!video.time || arg.time > video.time) {
-                        video.time = arg.time;
-                        player.trigger("progress", arg.time);
-                     }
+                     player.trigger("progress", arg.time);
 
-                     if (arg.buffer < video.bytes) {
+                     if (arg.buffer <= video.bytes && !video.buffered) {
                         video.buffer = arg.buffer / video.bytes * video.duration;
                         player.trigger("buffer", video.buffer);
-                     }
+
+                     } else if (video.buffered) player.trigger("buffered");
+
                      break;
+
                }
 
                // add some delay to that player is truly ready after an event
@@ -589,8 +654,6 @@ flowplayer.engine.flash = function(player, root) {
 
          }
 
-         return source;
-
       },
 
       // not supported yet
@@ -598,7 +661,7 @@ flowplayer.engine.flash = function(player, root) {
 
 
       unload: function() {
-         api && api.__unload();
+         api && api.__unload && api.__unload();
          delete $[callbackId];
          $("object", root).remove();
          api = 0;
@@ -606,25 +669,14 @@ flowplayer.engine.flash = function(player, root) {
 
    };
 
-   $.each("pause,resume,seek,volume,stop".split(","), function(i, name) {
+   $.each("pause,resume,seek,volume".split(","), function(i, name) {
 
       engine[name] = function(arg) {
+
          if (player.ready) {
 
-            if (name == 'seek') {
-
-               // started
-               if (player.video.time) {
-                  player.trigger("beforeseek");
-
-               // not started (TODO: simplify)
-               } else {
-                  engine.resume();
-                  player.seeking = false;
-                  player.trigger("resume");
-                  return;
-               }
-
+            if (name == 'seek' && player.video.time && !player.paused) {
+               player.trigger("beforeseek");
             }
 
             if (arg === undefined) {
@@ -646,7 +698,7 @@ flowplayer.engine.flash = function(player, root) {
 
 var VIDEO = $('<video/>')[0];
 
-   // HTML5 --> Flowplayer event
+// HTML5 --> Flowplayer event
 var EVENTS = {
 
    // fired
@@ -675,50 +727,45 @@ var EVENTS = {
 
 };
 
-flowplayer.support.video = !!VIDEO.canPlayType;
-
 function round(val) {
    return Math.round(val * 100) / 100;
+}
+
+function canPlay(type) {
+   if (!/video/.test(type)) type = "video/" + type;
+   return !!VIDEO.canPlayType(type).replace("no", '');
 }
 
 flowplayer.engine.html5 = function(player, root) {
 
    var videoTag = $("video", root),
+      support = flowplayer.support,
       track = $("track", videoTag),
       conf = player.conf,
+      self,
       timer,
       api;
 
-   function canPlay(type) {
-      if (!/video/.test(type)) type = "video/" + type;
-      return !!VIDEO.canPlayType(type).replace("no", '');
-   }
+   return self = {
 
-   function pick(video) {
-      for (var i = 0, source; i < video.sources.length; i++) {
-         source = video.sources[i];
-         if (canPlay(source.type)) return source;
-      };
-   }
-
-   // not supported
-   if (!flowplayer.support.video || !pick(player.video)) return;
-
-   // ok
-   videoTag.addClass("fp-engine").removeAttr("controls");
-
-   return {
+      pick: function(sources) {
+         if (support.video) {
+            for (var i = 0, source; i < sources.length; i++) {
+               if (canPlay(sources[i].type)) return sources[i];
+            }
+         }
+      },
 
       load: function(video) {
 
-         var source = pick(video);
-
          if (conf.splash && !api) {
+
             videoTag = $("<video/>", {
-               src: source.src,
-               type: 'video/' + source.type,
+               src: video.src,
+               type: 'video/' + video.type,
                autoplay: 'autoplay',
                'class': 'fp-engine'
+
             }).prependTo(root);
 
             if (track.length) videoTag.append(track.attr("default", ""));
@@ -728,22 +775,36 @@ flowplayer.engine.html5 = function(player, root) {
             api = videoTag[0];
 
          } else {
+
             api = videoTag[0];
 
             // change of clip
-            if (video.src && api.src != video.src) {
+            if (player.video.src) {
                videoTag.attr("autoplay", "autoplay");
-               api.src = source.src;
-               api.load();
+               api.src = video.src;
+
+            // preload=none or no initial "loadeddata" event
+            } else if (conf.preload == 'none' || !support.dataload) {
+
+               if (support.zeropreload) {
+                  player.trigger("ready", video).trigger("pause").one("ready", function() {
+                     root.trigger("resume");
+                  });
+
+               } else {
+                  player.one("ready", function() {
+                     root.trigger("pause");
+                  });
+               }
             }
+
          }
 
-         // no events fired when preload=none
-         if (conf.preload == 'none') root.trigger("ready", [player, {}]);
+         listen(api, video, $("source", videoTag).add(videoTag));
 
-         listen(api, $("source", videoTag));
+         // iPad (+others?) demands load()
+         if (conf.preload != 'none' || !support.zeropreload || !support.dataload) api.load();
 
-         return source;
       },
 
       pause: function() {
@@ -764,25 +825,19 @@ flowplayer.engine.html5 = function(player, root) {
          } catch (ignored) {}
       },
 
-      // seek(0) && pause() && display poster
-      stop: function() {
-         api.currentTime = 0;
-         setTimeout(function() { api.load(); }, 100);
-      },
-
       volume: function(level) {
          api.volume = level;
       },
 
       unload: function() {
          $("video", root).remove();
+         timer = clearInterval(timer);
          api = 0;
-         clearInterval(timer);
       }
 
    };
 
-   function listen(api, sources) {
+   function listen(api, video, sources) {
 
       // listen only once
       if (api.listening) return; api.listening = true;
@@ -795,24 +850,24 @@ flowplayer.engine.html5 = function(player, root) {
 
       $.each(EVENTS, function(type, flow) {
 
-        api.addEventListener(type, function(e) {
+         api.addEventListener(type, function(e) {
 
-            // safari hack for bad URL
+            // safari hack for bad URL (10s before fails)
             if (flow == "progress" && e.srcElement && e.srcElement.readyState === 0) {
                setTimeout(function() {
                   if (!player.video.duration) {
                      flow = "error";
                      player.trigger(flow, { code: 4 });
                   }
-               }, 500);
+               }, 10000);
             }
 
             if (conf.debug && !/progress/.test(flow)) console.log(type, "->", flow, e);
 
             // no events if player not ready
-            if (!player.ready && !/ready|error/.test(flow) || !flow) { return; }
+            if (!player.ready && !/ready|error/.test(flow) || !flow || !$("video", root).length) { return; }
 
-            var event = $.Event(flow), video = player.video, arg;
+            var event = $.Event(flow), arg;
 
             switch (flow) {
 
@@ -822,7 +877,8 @@ flowplayer.engine.html5 = function(player, root) {
                      duration: api.duration,
                      width: api.videoWidth,
                      height: api.videoHeight,
-                     url: api.currentSrc
+                     url: api.currentSrc,
+                     src: api.currentSrc
                   });
 
                   try {
@@ -839,7 +895,7 @@ flowplayer.engine.html5 = function(player, root) {
                      } catch (ignored) {}
 
                      if (video.buffer) {
-                        if (video.buffer < video.duration) {
+                        if (video.buffer <= video.duration && !video.buffered) {
                            player.trigger("buffer", e);
 
                         } else if (!video.buffered) {
@@ -855,9 +911,15 @@ flowplayer.engine.html5 = function(player, root) {
                   break;
 
                case "progress": case "seek":
-                  // Safari can give negative times. add rounding
-                  arg = video.time = Math.max(api.currentTime, 0);
-                  break;
+
+                  if (api.currentTime > 0) {
+                     arg = Math.max(api.currentTime, 0);
+                     break;
+
+                  } else if (flow == 'progress') {
+                     return;
+                  }
+
 
                case "speed":
                   arg = round(api.playbackRate);
@@ -883,34 +945,36 @@ flowplayer.engine.html5 = function(player, root) {
 var TYPE_RE = /.(\w{3,4})$/i;
 
 function parseSource(el) {
-   var type = el.attr("type"), src = el.attr("src");
-   return { src: src, type: type ? type.replace("video/", "") : src.split(TYPE_RE)[1] };
+
+   var src = el.attr("src"),
+      type = (el.attr("type") || "").replace("video/", ""),
+      suffix = src.split(TYPE_RE)[1];
+
+   return { src: src, suffix: suffix || type, type: type || suffix };
 }
 
 /* Resolves video object from initial configuration and from load() method */
-flowplayer(function(api, root) {
+function URLResolver(videoTag) {
 
-   var videoTag = $("video", root),
-      initialSources = [];
+   var self = this,
+      sources = [];
 
-   // initial video
+   // initial sources
    $("source", videoTag).each(function() {
-      initialSources.push(parseSource($(this)));
+      sources.push(parseSource($(this)));
    });
 
-   if (!initialSources.length) initialSources.push(parseSource(videoTag));
+   if (!sources.length) sources.push(parseSource(videoTag));
 
-   api.video = { sources: initialSources };
+   self.initialSources = sources;
 
-   // a new video is loaded
-   api.bind("load", function(e, api, video, engine) {
-
-      video = video || api.video;
+   self.resolve = function(video) {
+      if (!video) return { sources: sources };
 
       if ($.isArray(video)) {
 
          video = { sources: $.map(video, function(el) {
-            var type = Object.keys(el)[0];
+            var type; $.each(el, function(key, value) { type = key; });
             el.type = type;
             el.src = el[type];
             delete el[type];
@@ -921,22 +985,20 @@ flowplayer(function(api, root) {
 
          video = { src: video, sources: [] };
 
-         $.each(initialSources, function(i, source) {
+         $.each(sources, function(i, source) {
             if (source.type != 'flash') {
                video.sources.push({
                   type: source.type,
-                  src: video.src.replace(TYPE_RE, "") + "." + source.type
+                  src: video.src.replace(TYPE_RE, "") + "." + source.suffix
                });
             }
          });
-
       }
 
-      api.video = $.extend(video, engine.load(video));
+      return video;
+   };
 
-   });
-
-});
+};
 /* A minimal jQuery Slider plugin with all goodies */
 
 // skip IE policies
@@ -958,6 +1020,8 @@ $.throttle = function(fn, delay) {
 
 
 $.fn.slider2 = function() {
+
+   var IS_IPAD = /iPad/.test(navigator.userAgent);
 
    return this.each(function() {
 
@@ -1006,8 +1070,10 @@ $.fn.slider2 = function() {
             if (speed === undefined) { speed = 0; }
             var to = (value * 100) + "%";
 
-            if (!maxValue || value <= maxValue)
-               progress.stop().animate(vertical ? { height: to } : { width: to }, speed, "linear");
+            if (!maxValue || value <= maxValue) {
+               if (!IS_IPAD) progress.stop(); // stop() broken on iPad
+               progress.animate(vertical ? { height: to } : { width: to }, speed, "linear");
+            }
 
             return value;
          },
@@ -1030,7 +1096,6 @@ $.fn.slider2 = function() {
             slide: function(value, speed, fireEvent) {
                calc();
                if (fireEvent) fire(value);
-
                move(value, speed);
             }
 
@@ -1091,20 +1156,10 @@ function format(sec) {
    return zeropad(min) + ":" + zeropad(sec);
 }
 
-
-// detect animation support
-flowplayer.support.animation = (function() {
-   var vendors = ['','Webkit','Moz','O','ms','Khtml'], el = $("<p/>")[0];
-
-   for (var i = 0; i < vendors.length; i++) {
-      if (el.style[vendors[i] + 'AnimationName'] !== 'undefined') return true;
-   }
-})();
-
-
 flowplayer(function(api, root) {
 
    var conf = api.conf,
+      support = flowplayer.support,
       hovertimer;
 
    root.addClass("flowplayer is-mouseout").append('\
@@ -1129,7 +1184,7 @@ flowplayer(function(api, root) {
          <div class="time">\
             <em class="elapsed">00:00</em>\
             <em class="remaining"/>\
-            <em class="duration">99:99</em>\
+            <em class="duration">00:00</em>\
          </div>\
          <div class="message"><h2/><p/></div>\
       </div>'.replace(/class="/g, 'class="fp-')
@@ -1147,6 +1202,7 @@ flowplayer(function(api, root) {
       waiting = find("waiting"),
       ratio = find("ratio"),
       speed = find("speed"),
+      durationEl = find("duration"),
       origRatio = ratio.css("paddingTop"),
 
       // sliders
@@ -1163,12 +1219,7 @@ flowplayer(function(api, root) {
    function setRatio(val) {
       if (!parseInt(origRatio, 10))
          ratio.css("paddingTop", val * 100 + "%");
-
-      // no inline-block support. sorry; no feature detection
-      if ($.browser.msie && $.browser.version < 8) {
-         $("object", root).height(root.height());
-      }
-
+      if (!support.inlineBlock) $("object", root).height(root.height());
    }
 
    function hover(flag) {
@@ -1176,7 +1227,7 @@ flowplayer(function(api, root) {
    }
 
    // loading...
-   if (!flowplayer.support.animation) waiting.html("<p>loading &hellip;</p>");
+   if (!support.animation) waiting.html("<p>loading &hellip;</p>");
 
    setRatio(conf.ratio);
 
@@ -1184,7 +1235,7 @@ flowplayer(function(api, root) {
 
    // no fullscreen in IFRAME
    try {
-      if (window != window.top) fullscreen.remove();
+      if (!conf.fullscreen) fullscreen.remove();
 
    } catch (e) {
       fullscreen.remove();
@@ -1193,14 +1244,14 @@ flowplayer(function(api, root) {
 
    api.bind("ready", function() {
 
-      var dur = api.video.duration;
+      var duration = api.video.duration;
 
-      timelineApi.disable(!dur);
+      timelineApi.disable(!duration);
 
       setRatio(api.video.videoHeight / api.video.videoWidth);
 
       // initial time & volume
-      find("duration").add(remaining).html(format(dur));
+      durationEl.add(remaining).html(format(duration));
       volumeApi.slide(api.volumeLevel);
 
 
@@ -1230,7 +1281,7 @@ flowplayer(function(api, root) {
       var time = api.video.time,
          duration = api.video.duration;
 
-      if (!timelineApi.dragging || typeof Touch == 'object') {
+      if (!timelineApi.dragging) {
          timelineApi.slide(time / duration, api.seeking ? 0 : 250);
       }
 
@@ -1240,16 +1291,18 @@ flowplayer(function(api, root) {
    }).bind("finish resume seek", function(e) {
       root.toggleClass("is-finished", e.type == "finish");
 
+   }).bind("stop", function() {
+      elapsed.html(format(0));
+      timelineApi.slide(0, 100);
+
    }).bind("finish", function() {
       elapsed.html(format(api.video.duration));
-      window.foo = timelineApi;
       timelineApi.slide(1, 100);
+      root.removeClass("is-seeking");
 
    // misc
    }).bind("beforeseek", function() {
-
       progress.stop();
-
 
    }).bind("volume", function() {
       volumeApi.slide(api.volumeLevel);
@@ -1261,8 +1314,8 @@ flowplayer(function(api, root) {
       volumeApi.disable(flag);
       root.toggleClass("is-disabled", api.disabled);
 
-   }).bind("mute", function() {
-      root.toggleClass("is-muted", api.muted);
+   }).bind("mute", function(e, api, flag) {
+      root.toggleClass("is-muted", flag);
 
    }).bind("error", function(e, api, error) {
       root.removeClass("is-loading").addClass("is-error");
@@ -1317,11 +1370,28 @@ flowplayer(function(api, root) {
 
    // click
    }).bind("click.player", function(e) {
-      if ($(e.target).is(".fp-ui, .fp-engine") || e.flash || e.force) {
+      if ($(e.target).is(".fp-ui, .fp-engine") || e.flash) {
          e.preventDefault();
          return api.toggle();
       }
    });
+
+   // is-poster
+   if (conf.poster) root.css("backgroundImage", "url(" + conf.poster + ")");
+
+   var bc = root.css("backgroundColor"),
+      bg = root.css("backgroundImage") != "none" || bc && bc != "rgba(0, 0, 0, 0)" && bc != "transparent";
+
+   if (!conf.autoplay && !conf.splash && bg) {
+
+      api.bind("ready stop", function() {
+         root.addClass("is-poster").one("ready progress", function() {
+            root.removeClass("is-poster");
+         });
+      });
+
+   }
+
 
    $(".fp-toggle", root).click(api.toggle);
 
@@ -1357,11 +1427,12 @@ var focused,
  // keyboard. single global listener
 $(document).bind("keydown.fp", function(e) {
 
-   if (!focused || !focused.conf.keyboard) return;
-
    var el = focused,
       metaKeyPressed = e.ctrlKey || e.metaKey || e.altKey,
-      key = e.which;
+      key = e.which,
+      conf = el && el.conf;
+
+   if (!el || !conf.keyboard || el.disabled) return;
 
    // help dialog (shift key not truly required)
    if ($.inArray(key, [63, 187, 191, 219]) != -1) {
@@ -1369,10 +1440,10 @@ $(document).bind("keydown.fp", function(e) {
       return false;
    }
 
-   // close help
-   if (key == 27 && focusedRoot.hasClass(IS_HELP)) {
-      focusedRoot.toggleClass(IS_HELP);
-      return false;
+   // close help / unload
+   if (key == 27) {
+      if (focusedRoot.hasClass(IS_HELP)) { focusedRoot.toggleClass(IS_HELP); return false; }
+      if (conf.splash) { el.unload(); return false; }
    }
 
    if (!metaKeyPressed && el.ready) {
@@ -1396,9 +1467,9 @@ $(document).bind("keydown.fp", function(e) {
          case 37: case 72: el.seeking = true; el.seek(false); break;       // backward
          case 190: el.seekTo(); break;                                     // to last seek position
          case 32: el.toggle(); break;                                      // spacebar
-         case 70: el.fullscreen(); break;                                  // toggle fullscreen
+         case 70: conf.fullscreen && el.fullscreen(); break;               // toggle fullscreen
          case 77: el.mute(); break;                                        // mute
-         case 27: el[el.isFullscreen ? 'fullscreen' : 'unload'](); break;  // esc
+         case 27: el[el.isFullscreen ? "fullscreen" : "unload"](); break;  // esc
       }
 
    }
@@ -1424,7 +1495,7 @@ flowplayer(function(api, root) {
             <p><em>space</em>play / pause</p>\
             <p><em>esc</em>stop</p>\
             <p><em>f</em>fullscreen</p>\
-            <p><em>shift</em> + <em>&#8592;</em><em>&#8594;</em>slower / faster</p>\
+            <p><em>shift</em> + <em>&#8592;</em><em>&#8594;</em>slower / faster <small>(latest Chrome and Safari)</small></p>\
          </div>\
          <div class="fp-help-section">\
             <p><em>&#8593;</em><em>&#8595;</em>volume</p>\
@@ -1452,11 +1523,7 @@ var VENDOR = $.browser.mozilla ? "moz": "webkit",
    FS_ENTER = "fullscreen",
    FS_EXIT = "fullscreen-exit",
    FULL_PLAYER,
-   FS_SUPPORT = typeof document.webkitCancelFullScreen == 'function' || document.mozFullScreenEnabled;
-
-// detect native fullscreen support
-
-flowplayer.support.fullscreen = FS_SUPPORT;
+   FS_SUPPORT = flowplayer.support.fullscreen;
 
 
 // esc button
@@ -1474,6 +1541,8 @@ $(document).bind(VENDOR + "fullscreenchange", function(e) {
 
 flowplayer(function(player, root) {
 
+   if (!player.conf.fullscreen) return;
+
    player.isFullscreen = false;
 
    player.fullscreen = function(flag) {
@@ -1483,7 +1552,10 @@ flowplayer(function(player, root) {
       if (FS_SUPPORT) {
 
          if (flag) {
-            root[0][VENDOR + 'RequestFullScreen'](Element.ALLOW_KEYBOARD_INPUT);
+            root[0][VENDOR + 'RequestFullScreen'](
+               flowplayer.support.fullscreen_keyboard ? Element.ALLOW_KEYBOARD_INPUT : undefined
+            );
+
          } else {
             document[VENDOR + 'CancelFullScreen']();
          }
@@ -1494,6 +1566,11 @@ flowplayer(function(player, root) {
 
       return player;
    };
+
+   //
+   root.bind("dblclick.fs", function() {
+      if (player.ready && !player.isFullscreen) player.fullscreen();
+   });
 
    player.bind(FS_ENTER, function(e) {
       root.addClass("is-fullscreen");
@@ -1572,11 +1649,11 @@ flowplayer(function(player, root) {
       var has_cuepoints = items.filter("[data-cuepoints]").length;
 
       // highlight
-      player.bind("load", function() {
+      player.bind("load", function(e, api, video) {
 
          // active
          var prev = active().removeClass(klass),
-            el = $("a[href*='" + player.video.src.replace(TYPE_RE, "") + "']", root).addClass(klass),
+            el = $("a[href*='" + video.src.replace(TYPE_RE, "") + ".']", root).addClass(klass),
             clips = els(),
             index = clips.index(el),
             is_last = index == clips.length - 1;
@@ -1585,8 +1662,8 @@ flowplayer(function(player, root) {
          root.removeClass("video" + clips.index(prev)).addClass("video" + index).toggleClass("last-video", is_last);
 
          // video properties
-         player.video.index = index;
-         player.video.is_last = is_last;
+         video.index = index;
+         video.is_last = is_last;
 
          // cuepoints
          if (has_cuepoints) player.cuepoints = el.data("cuepoints");
@@ -1618,7 +1695,6 @@ flowplayer(function(player, root) {
 
       if (conf.advance) {
          root.unbind("finish.pl").bind("finish.pl", function() {
-            root.addClass("is-playing"); // hide play button
 
             // next clip is found or loop
             if (active().next().length || conf.loop) {
@@ -1626,6 +1702,8 @@ flowplayer(function(player, root) {
 
             // stop to last clip, play button starts from 1:st clip
             } else {
+               root.addClass("is-playing"); // show play button
+
                player.one("resume", function() {
                   player.next();
                   return false;
@@ -1668,7 +1746,7 @@ flowplayer(function(player, root) {
          cue.index = i;
 
          // progress_interval / 2 = 0.125
-         if (Math.abs(cue.time - time) < 0.125) {
+         if (Math.abs(cue.time - time) < 0.125 * player.currentSpeed) {
             setClass(i);
             root.trigger("cuepoint", [player, cue]);
          }
@@ -1708,14 +1786,6 @@ flowplayer(function(player, root) {
    }
 
 });
-var TRACK_EL = $("<track/>")[0];
-
-flowplayer.support.subtitles = !!TRACK_EL.track;
-
-// TODO: remove in 6.0
-$.extend($.support, flowplayer.support);
-
-
 flowplayer(function(player, root, engine) {
 
    var track = $("track", root),
@@ -1732,17 +1802,19 @@ flowplayer(function(player, root, engine) {
    // avoid duplicate loads
    track.remove();
 
-   // Thanks: https://github.com/delphiki/Playr/blob/master/playr.js#L569
-   var TIMECODE_RE = /^([0-9]{2}:[0-9]{2}:[0-9]{2}[,.]{1}[0-9]{3}) --\> ([0-9]{2}:[0-9]{2}:[0-9]{2}[,.]{1}[0-9]{3})(.*)/;
+   var TIMECODE_RE = /^(([0-9]{2}:)?[0-9]{2}:[0-9]{2}[,.]{1}[0-9]{3}) --\> (([0-9]{2}:)?[0-9]{2}:[0-9]{2}[,.]{1}[0-9]{3})(.*)/;
 
    function seconds(timecode) {
       var els = timecode.split(':');
+      if (els.length == 2) els.unshift(0);
       return els[0] * 60 * 60 + els[1] * 60 + parseFloat(els[2].replace(',','.'));
    }
 
    player.subtitles = [];
 
    var url = track.attr("src");
+
+   if (!url) return;
 
    $.get(url, function(txt) {
 
@@ -1763,7 +1835,7 @@ flowplayer(function(player, root, engine) {
             entry = {
                title: title,
                startTime: seconds(timecode[1]),
-               endTime: seconds(timecode[2]),
+               endTime: seconds(timecode[2] || timecode[3]),
                text: text
             };
 
@@ -1800,9 +1872,7 @@ flowplayer(function(player, root, engine) {
          wrap.removeClass("fp-active");
       }
 
-   }).bind("seek", function() {
-
-      var time = player.video.time;
+   }).bind("seek", function(e, api, time) {
 
       $.each(player.cuepoints || [], function(i, cue) {
          var entry = cue.subtitle;
@@ -1841,9 +1911,7 @@ flowplayer(function(player, root) {
                root.attr("title") || video.src.split("/").slice(-1)[0].replace(TYPE_RE, ''),
                Math.round(time / 1000)
             );
-
             time = 0;
-
          }
 
       }
@@ -1864,72 +1932,21 @@ flowplayer(function(player, root) {
    }
 
 });
-/*
-   Bunch of hacks to gain mobile WebKit support. Main shortomings include:
-
-   1. cannot insert video tag dynamically -> splash screen is tricky / hack
-   2. autoplay not supported
-
-   Both of these issues cannot be feature detected. More issues can be found here:
-
-   http://blog.millermedeiros.com/2011/03/html5-video-issues-on-the-ipad-and-how-to-solve-them/
-*/
-
-if (/iPad|MeeGo/.test(UA)) {
-
-   // Warning: This is a hack!. iPad is the new IE for developers.
+if (flowplayer.support.touch) {
 
    flowplayer(function(player, root) {
+      var isAndroid = /Android/.test(UA);
 
-      // custom loaded event
-      var conf = player.conf,
-         loaded;
-
-      conf.autoplay = player.splash = conf.splash = false;
-
-      // old generation fix
-      if (/Version\/5/.test(UA)) conf.preload = "none";
-
-
-      if (conf.native_ipad_fullscreen) {
-         player.fullscreen = function() {
-           $('video', root)[0].webkitEnterFullScreen();
-         }
+      // hide volume
+      if (!flowplayer.support.volume) {
+         root.addClass("no-volume no-mute");
       }
 
-      root.bind("load", function() {
-         var video = $('video', root)[0],
-            poster = $(video).attr('poster'),
-            autoplay = $(video).attr('autoplay');
+      // fake mouseover effect with click
+      root.one("touchstart", function() {
+         isAndroid && player.toggle();
 
-         // poster fix
-         if (poster && !autoplay) {
-           root.css('background', 'url(' + poster + ') center no-repeat');
-           root.css('background-size', 'contain');
-         }
-
-         root.addClass("is-ipad is-paused").removeClass("is-loading");
-         player.ready = player.paused = true;
-         player.loading = false;
-
-         if (autoplay) player.resume();
-
-         // fake ready event on start
-         video.addEventListener("canplay", function(e) {
-            root.trigger("ready").trigger("resume");
-         }, false);
-
-      });
-
-      // force playback start with a first click
-      root.bind("touchstart", function(e) {
-
-         if (!loaded) {
-            root.triggerHandler({ type: 'click.player', force: true });
-            loaded = true;
-         }
-
-         // fake mouseover effect with click
+      }).bind("touchstart", function(e) {
          if (player.playing && !root.hasClass("is-mouseover")) {
             root.addClass("is-mouseover");
             return false;
@@ -1937,65 +1954,38 @@ if (/iPad|MeeGo/.test(UA)) {
 
       });
 
+      // native fullscreen
+      if (player.conf.native_fullscreen && $.browser.webkit) {
+         player.fullscreen = function() {
+            $('video', root)[0].webkitEnterFullScreen();
+         }
+      }
 
-      player.unload = function() {
-         player.pause();
-         root.trigger("unload");
-         loaded = false;
-      };
+
+      // Android browser gives video.duration == 1 until second 'timeupdate' event
+      isAndroid && player.bind("ready", function() {
+
+         var video = $('video', root);
+         video.one('canplay', function() {
+            video[0].play();
+         });
+         video[0].play();
+
+         player.bind("progress.dur", function() {
+
+            var duration = video[0].duration;
+
+            if (duration !== 1) {
+               player.video.duration = duration;
+               $(".fp-duration", root).html(format(duration));
+               player.unbind("progress.dur");
+            }
+         });
+      });
+
 
    });
 
-}
-if (/Android/.test(navigator.userAgent)) {
-  flowplayer(function(player, root) {
-
-    // custom loaded event
-    var loaded;
-
-    player.splash = player.conf.splash = false;
-    player.conf.autoplay = false;
-    
-    //Setup fullscreen
-    var video = $('video', root)[0];
-    player.fullscreen = function() {
-      video.webkitEnterFullScreen();
-    }
-
-    root.bind("load", function() {
-      root.addClass("is-paused").removeClass("is-loading");
-      player.ready = player.paused = true;
-      player.loading = false;
-      
-      var handleVideoDurationOnTimeUpdate = function() { // Android browser gives video.duration == 1 until second 'timeupdate' event fired
-        if (video.duration != 1) {
-          player.video.duration = video.duration;
-          $('.fp-duration', root).html(format(video.duration));
-          video.removeEventListener('timeupdate', handleVideoDurationOnTimeUpdate);
-        }
-      };
-      video.addEventListener('timeupdate', handleVideoDurationOnTimeUpdate);
-    });
-    
-    // force playback start with a first click
-    root.bind("touchstart", function(e) {
-      if (!loaded) {
-        root.triggerHandler("click.player");
-        loaded = true;
-      }
-      // fake mouseover effect with click
-      if (player.playing && !root.hasClass("is-mouseover")) {
-        root.addClass("is-mouseover");
-        return false;
-      }
-    });
-
-    player.unload = function() {
-      player.pause();
-      root.trigger("unload");
-      loaded = false;
-    };
-  });
 }
 
 flowplayer(function(player, root) {
@@ -2018,8 +2008,6 @@ flowplayer(function(player, root) {
          el = $("<div/>", { 'class': 'flowplayer', css: { width: width, height: height }}),
          tag = $("<video/>").appendTo(el);
 
-      if (conf.poster) tag.attr("poster", conf.poster);
-
       // configuration
       $.each(['origin', 'analytics', 'logo', 'key', 'rtmp'], function(i, key) {
          if (conf[key]) el.attr("data-" + key, conf[key]);
@@ -2030,7 +2018,7 @@ flowplayer(function(player, root) {
          tag.append($("<source/>", { type: "video/" + src.type, src: src.src }));
       });
 
-      var code = $("<foo/>", { src: "http://embed.flowplayer.org/5.1.1/embed.min.js" }).append(el);
+      var code = $("<foo/>", { src: "http://embed.flowplayer.org/5.2.0/embed.min.js" }).append(el);
       return $("<p/>").append(code).html().replace(/<(\/?)foo/g, "<$1script");
    };
 

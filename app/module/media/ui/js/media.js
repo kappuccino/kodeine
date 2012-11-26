@@ -1419,7 +1419,7 @@ var modal = {
 				$.getScript("/admin/core/ui/_flowplayer5/flowplayer.min.js")
 					.done($.proxy(function(script, status) {
 						this.body  = $('<div id="player" />').appendTo(this.frame);
-						this.video = $('<video src="'+data.url+'" autoplay="true" />').appendTo(this.body);
+						this.video = $('<video src="'+data.url+'" />').appendTo(this.body);
 						this.show(data);
 					}, this ));
 			}
@@ -1458,13 +1458,13 @@ var modal = {
 	},
 
 	hide : function(data) {
-
 		if (data.type == 'video') {
 			if (this.ext == 'flv') {
 				$f().stop();
 				$f().unload();
 			} else {
-				this.player.unload();
+				this.player.data('flowplayer').stop();
+				this.player.data('flowplayer').unload();
 			}
 		}
 
