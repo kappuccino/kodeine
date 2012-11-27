@@ -77,13 +77,15 @@
 	
 	$tps = $app->fsFolder(KROOT.'/media/newsletter');
 	$templates = array();
-	foreach($tps as $t) {
-		$info = @file_get_contents($t.'/info.xml' );
-		if($info) {
-			preg_match("#<name>(.*)</name>?#", $info, $name);
-			$templates[$t] = utf8_decode($name[1]);
-		}		
-	}
+    if(is_array($tps)) {
+        foreach($tps as $t) {
+            $info = @file_get_contents($t.'/info.xml' );
+            if($info) {
+                preg_match("#<name>(.*)</name>?#", $info, $name);
+                $templates[$t] = utf8_decode($name[1]);
+            }
+        }
+    }
 	//$app->pre($templates);
 
 ?><!DOCTYPE html>
