@@ -58,13 +58,12 @@
 
 <div class="inject-subnav-right hide">
 	
-	<li><a onclick="filterToggle('content<?php echo $id_type ?>');" class="btn btn-mini">Options d'affichage</a></li>
-	
-	<li><a href="<?php echo (($e['is_gallery']) ? 'gallery-album' : 'data' )."?id_type=".$id_type; ?>" class="btn btn-small btn-success">Ajouter <?php echo $cType['typeName']; ?> </a></li>
+	<li><a onclick="filterToggle('content<?php echo $id_type ?>');" class="btn btn-small">Affichage</a></li>
+
 
 	<li>
 		<div class="btn-group">
-			<a class="btn btn-mini dropdown-toggle" data-toggle="dropdown" href="#"><?php echo $cType['typeName']; ?> <span class="caret"></span></a>
+			<a class="btn btn-mini dropdown-toggle" data-toggle="dropdown" href="#"><i class="icon-list"></i> <?php echo $cType['typeName']; ?> <span class="caret"></span></a>
 			<ul class="dropdown-menu"><?php
 			foreach($app->apiLoad('content')->contentType(array('profile' => true)) as $e){
 				echo '<li class="clearfix">';
@@ -75,7 +74,8 @@
 			?></ul>
 		</div>
 
-	</li>
+	</li><li><a href="<?php echo (($e['is_gallery']) ? 'gallery-album' : 'data' )."?id_type=".$id_type; ?>" class="btn btn-small btn-success">Ajouter <?php echo $cType['typeName']; ?> </a></li>
+
 </div>
 
 <div id="app">

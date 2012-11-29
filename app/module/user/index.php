@@ -49,20 +49,20 @@
 ?></header>
 
 <div class="inject-subnav-right hide">
-	<li><a onclick="filterToggle('user');" class="btn btn-mini">Options d'affichage</a></li>
+	<li><a onclick="filterToggle('user');" class="btn btn-small">Affichage</a></li>
 	<li><a href="data" class="btn btn-small btn-success">Nouvel utilisateur</a></li>
 </div>
 
 <div id="app">
 	
 	<div class="quickForm clearfix" style="<?php echo ($filter['open']) ? '' : 'display:none;' ?>">
-		<form action="index" method="post">
+		<form action="index" method="post" class="form-inline">
 			<input type="hidden" name="filter[open]"	value="1" />
 			<input type="hidden" name="filter[offset]"	value="0" />
 	
 			Recherche
 			<input type="text" name="filter[q]" value="<?php echo $filter['q'] ?>" class="input-small" />
-			
+
 			Combien
 			<input type="text" name="filter[limit]" value="<?php echo $filter['limit'] ?>" size="3" class="input-small" />
 
