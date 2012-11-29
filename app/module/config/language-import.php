@@ -1,4 +1,5 @@
 <?php
+
 	function xmlList($app){
 
 		$exist = $app->countryGet();
@@ -72,7 +73,7 @@
 	<p>Choisissez dans la liste ci-dessous les langues qui seront directement importées dans votre configuration</p>
 
 	<form method="post" action="language-import" id="data">
-	<table width="100%" border="0" cellpadding="0" cellspacing="0" class="listing">
+	<table width="100%" border="0" cellpadding="0" cellspacing="0" class="listing sortable__">
 		<thead>
 			<tr>
 				<th width="30"></th>
@@ -80,16 +81,16 @@
 				<th width="300">Pays</th>
 				<th width="100">Locale</th>
 				<th>Langue</th>
-				<th width="150" class="filter">
-					<input type="text" class="input-small" id="filter" size="15" />
-				</th>
 			</tr>
 		</thead>
 		<tbody>
-			<?php foreach(xmlList($app) as $zone => $es){ ?>
+			<?php foreach(xmlList($app) as $zone => $es){ if(count($es) > 0){ ?>
 			<tr class="separator">
 				<td width="30">&nbsp;</td>
-				<td colspan="5" style="font-weight: bold;"><?php echo $zone ?></td>
+				<td style="font-weight: bold;"><?php echo $zone ?></td>
+				<td></td>
+				<td></td>
+				<td></td>
 			</tr>
 			<?php foreach($es as $e){ ?>
 			<tr>
@@ -97,10 +98,9 @@
 				<td><?php echo $e['iso'] ?></td>
 				<td><?php echo $e['name'] ?></td>
 				<td><?php echo $e['locale'] ?></td>
-				<td colspan="2"><?php echo $e['language'] ?></td>
+				<td><?php echo $e['language'] ?></td>
 			</tr>
-			<?php } ?>
-		<?php } ?>
+		<?php }}} ?>
 		<tbody>
 	</table>
 	</form>

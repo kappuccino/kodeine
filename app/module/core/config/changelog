@@ -3,6 +3,9 @@
 * = Autre / Divers / Inclassable...
 
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+2012-11-29
+- Micro fix de CSS pour avoir le bon curseur de sousis sur les colones classables
+
 2012-11-23
 - Correction du menu top.php pour bien prendre en compte la gestion des droits
 
