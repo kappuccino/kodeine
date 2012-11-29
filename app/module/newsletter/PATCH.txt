@@ -1,3 +1,0 @@
-ALTER TABLE  `k_newsletter` ADD  `newsletterHtmlDesigner` MEDIUMTEXT NOT NULL AFTER  `newsletterHtml` ,
-ADD  `newsletterTemplateSource` VARCHAR( 255 ) NOT NULL AFTER  `newsletterHtmlDesigner` ,
-ADD  `newsletterTemplateUrl` VARCHAR( 255 ) NOT NULL AFTER  `newsletterTemplateSource`;

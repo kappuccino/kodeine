@@ -1,6 +1,6 @@
 <?php
 	# VIDEO
-	require_once(KROOT.'/app/plugin/getID3/getid3/getid3.php');
+	require_once(KROOT.'/app/plugin/getid3/getid3/getid3.php');
 	$url	= $_GET['url'];
 	$flv	= substr($url, 0, -4);
 	$getID3 = new getID3;
@@ -22,7 +22,9 @@
 <head>
 	<title></title>
 	<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
-	<script type="text/javascript" src="<?php echo KPROMPT.'/app/admin/ressource/plugin/flowplayer/flowplayer-3.2.6.min.js' ?>"></script>
+	<script src="/admin/core/ui/_jquery/jquery-1.7.2.min.js"></script>
+	<link rel="stylesheet" type="text/css" href="/admin/core/ui/_flowplayer5/skin/functional.css" />
+	<script type="text/javascript" src="/admin/core/ui/_flowplayer5/flowplayer.min.js"></script>
 	<style>
 		body{
 			font-family: Arial;
@@ -32,21 +34,26 @@
 </head>
 <body>
 
-<a href="<?php echo $url ?>" style="<?php echo $style ?> margin:0 auto; display:block; width:<?php echo $width ?>px; height:<?php echo $height ?>px" id="player">
-	<img src="<?php echo KPROMPT ?>/app/admin/ressource/plugin/flowplayer/play.png" height="83" width="83" style="margin:<?php echo round(($height - 83)/2) ?>px 0px 0px <?php echo round(($width - 83)/2) ?>px;" />
-</a>
+<div id="player" style="<?php echo $style ?> margin:0 auto; display:block; width:<?php echo $width ?>px; height:<?php echo $height ?>px">
+	<video src="<?php echo $url ?>"></video>
+</div>
+<!-- <a href="<?php echo $url ?>"  id="player">
+	<img src="/admin/media/ui/img/play.png" height="100" width="100" style="margin:<?php echo round(($height - 83)/2) ?>px 0px 0px <?php echo round(($width - 83)/2) ?>px;" />
+</a> -->
 
 <p style="text-align:center">
 	<?php echo basename($url) ?> &#8212; <?php echo $duree ?> &#8212; <?php echo $width.'x'.$height ?> &#8212; <?php echo round(filesize(KROOT.$url) / 1024 / 1024, 2); ?> Mo
-	<a href="media.video.poster.php?url=<?php echo $url ?>">Modifier le Poster</a>
+	<a href="/admin/media/helper/video-poster?url=<?php echo $url ?>">Modifier le Poster</a>
 </p>
 
 <script>
-	flowplayer("player", "<?php echo KPROMPT ?>/app/admin/ressource/plugin/flowplayer/flowplayer-3.2.7.swf");
-	
-	function d(v){
-		document.getElementById('log').innerHTML = v;
-	}
+	//flowplayer("player", "/admin/core/ui/_flowplayer/flowplayer-3.2.12.swf");
+	$(function() {
+		$('#player').flowplayer({ swf: "/admin/core/ui/_flowplayer5/flowplayer.swf" });
+		function d(v){
+			document.getElementById('log').innerHTML = v;
+		}
+	});
 </script>
 
 </body></html>

@@ -1,7 +1,7 @@
 
 <div id="sub_nav" class="notOnTop text <?php #$tmp = $app->filterGet('admin'); echo ($tmp['adminSubMenu'] == '') ? 'icon text' : $tmp['adminSubMenu']; unset($tmp) ?>"><div class="wrapper clearfix">
 	
-
+    <?php $pref = $app->configGet('newsletter'); ?>
 	<ul class="left">
 		<li class="<?php echo isMe('/newsletter/$') ? 'me':'' ?>">
 			<a href="/admin/newsletter/">
@@ -10,12 +10,14 @@
 			</a>
 		</li>
 
+        <?php if($pref['connector'] == 'cloudApp') { ?>
 		<li class="<?php echo isMe('/newsletter/list') ? 'me':'' ?>">
 			<a href="/admin/newsletter/list">
 				<!-- <img src="/admin/newsletter/ui/img/template.png" /> -->
 				<span>Listes</span>
 			</a>
 		</li>
+        <?php } ?>
 
 		<li class="<?php echo isMe('/newsletter/template') ? 'me':'' ?>">
 			<a href="/admin/newsletter/template">
@@ -24,6 +26,7 @@
 			</a>
 		</li>
 
+        <?php if($pref['connector'] == 'cloudApp') { ?>
 		<li class="<?php echo isMe('/newsletter/blacklist') ? 'me':'' ?>">
 			<a href="/admin/newsletter/blacklist">
 				<!-- <img src="/admin/newsletter/ui/img/blackandwhite.png" /> -->
@@ -37,6 +40,7 @@
 				<span>Consommation</span>
 			</a>
 		</li>
+        <?php } ?>
 
 		<li class="<?php echo isMe('/newsletter/pref') ? 'me':'' ?>">
 			<a href="/admin/newsletter/pref">

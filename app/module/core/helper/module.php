@@ -42,7 +42,7 @@
 			}
 		}
 
-		$js = array('success' => done);
+		$js = array('success' => $done);
 	}else
 
 	# PATCH
@@ -55,7 +55,7 @@
 		$before = KROOT.'/app/module/'.$module['key'].'/config/patch-todo.xml';
 		$after  = KROOT.'/app/module/'.$module['key'].'/config/patch-done.xml';
 
-		if($_GET['again'] == 'true' && file_exists($after)){	
+		if($_GET['again'] == 'true' && file_exists($after)){
 			$done = $app->apiLoad('corePatch')->patchIt($after);
 		}else
 		if(file_exists($before)){

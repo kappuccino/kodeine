@@ -263,15 +263,16 @@
 			<table border="0">
 				<tr>
 					<td width="60">Creation</td>
-					<td width="99"><input type="text" name="userDateCreate" id="userDateCreate" value="<?php echo $app->formValue($data['userDateCreate'], $_POST['userDateCreate']); ?>" size="10" /></td>
+					<td width="120"><input type="text" name="userDateCreate" id="userDateCreate" value="<?php echo $app->formValue($data['userDateCreate'], $_POST['userDateCreate']); ?>" size="10" /><i class="icon-remove-sign clear"></i></td>
 					<td width="70">Mise a jour</td>
-					<td width="99"><input type="text" name="userDateUpdate" id="userDateUpdate" value="<?php echo $app->formValue($data['userDateUpdate'], $_POST['userDateUpdate']); ?>" size="10" /></td>
+					<td width="120"><input type="text" name="userDateUpdate" id="userDateUpdate" value="<?php echo $app->formValue($data['userDateUpdate'], $_POST['userDateUpdate']); ?>" size="10" /><i class="icon-remove-sign clear"></i></td>
 					<td width="70">Expiration</td>
-					<td width="80"><input type="text" name="userDateExpire" id="userDateExpire" value="<?php echo $app->formValue($data['userDateExpire'], $_POST['userDateExpire']); ?>" size="10" /></td>
+					<td width="120"><input type="text" name="userDateExpire" id="userDateExpire" value="<?php echo $app->formValue($data['userDateExpire'], $_POST['userDateExpire']); ?>" size="10" /><i class="icon-remove-sign clear"></i></td>
 				</tr>
 			</table>
 		</div>
 	</li>
+
 	<li id="id_profile" class="clearfix form-item">
 		<div class="hand">&nbsp;</div>
 		<div class="toggle">&nbsp;</div>
@@ -379,6 +380,11 @@
 		$('#userDateExpire').datepicker({
 			format: 'yyyy-mm-dd'
 		});
+
+		$('#userDateCreate').siblings('.clear').on('click', function() {$('#userDateCreate').val('');});
+		$('#userDateUpdate').siblings('.clear').on('click', function() {$('#userDateUpdate').val('');});
+		$('#userDateExpire').siblings('.clear').on('click', function() {$('#userDateExpire').val('');});
+
 		
 	});
 		

@@ -184,7 +184,7 @@
 			}
 	
 			foreach($app->dbMulti("SELECT language FROM k_contentdata WHERE id_content=".$e['id_content']) as $l){
-				$languages .= "<a href=\"data?id_content=".$e['id_content']."&language=".$l['language']."\" class=\"lang\">".strtoupper($l['language'])."</a> ";
+				$languages .= "<a href=\"data-language?id_content=".$e['id_content']."&language=".$l['language']."\" class=\"lang\">".strtoupper($l['language'])."</a> ";
 			}
 			
 			$link = "data?id_content=".$e['id_content']."&language=".$e['language'];

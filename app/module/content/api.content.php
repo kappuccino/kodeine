@@ -1332,24 +1332,30 @@ public function contentVersionSet($opt=array()){
 
 /* + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - 
 + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - */
-public function contentRemove($id_type, $id_content, $language){
+public function contentRemove($id_type, $id_content, $language=''){
 
-	$type = $this->contentType(array(
-		'id_type' => $id_type
-	));
+    if(intval($id_content) == 0) return false;
 
-	if($type['is_ad'] == 1){
-		$this->dbQuery("DELETE FROM k_contentad				WHERE id_content=".$id_content." AND language='".$language."'");
-		$this->dbQuery("DELETE FROM k_contentadstats		WHERE id_content=".$id_content." AND language='".$language."'");
-	}else
-	if($type['is_gallery'] == 1){
-		$this->dbQuery("DELETE FROM k_contentitem".$id_type."	WHERE id_content=".$id_content." AND language='".$language."'");
-		$this->dbQuery("DELETE FROM k_contentalbum".$id_type."	WHERE id_content=".$id_content." AND language='".$language."'");
-	}else{
-		$this->dbQuery("DELETE FROM k_content".$id_type."		WHERE id_content=".$id_content." AND language='".$language."'");
-	}
+    if($id_type > 0) {
+        $type = $this->contentType(array(
+            'id_type' => $id_type
+        ));
+        // Si pas de langue renseignee alors on supprime le contenu et toutes ses langues
+        $sqllang = ($language != '') ? " AND language='".$language."'" : "";
 
-	$this->dbQuery("DELETE FROM k_contentdata	WHERE id_content=".$id_content." AND language='".$language."'");
+        if($type['is_ad'] == 1){
+            $this->dbQuery("DELETE FROM k_contentad				WHERE id_content=".$id_content." ".$sqllang);
+            $this->dbQuery("DELETE FROM k_contentadstats		WHERE id_content=".$id_content." ".$sqllang);
+        }else
+        if($type['is_gallery'] == 1){
+            $this->dbQuery("DELETE FROM k_contentitem".$id_type."	WHERE id_content=".$id_content." ".$sqllang);
+            $this->dbQuery("DELETE FROM k_contentalbum".$id_type."	WHERE id_content=".$id_content." ".$sqllang);
+        }else{
+            $this->dbQuery("DELETE FROM k_content".$id_type."		WHERE id_content=".$id_content." ".$sqllang);
+        }
+    }
+
+    $this->dbQuery("DELETE FROM k_contentdata	WHERE id_content=".$id_content." ".$sqllang);
 	$data = $this->dbMulti("SELECT * FROM k_contentdata WHERE id_content=".$id_content);
 
 	// il n'y a plus de data (du tout !)

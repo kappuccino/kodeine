@@ -1,6 +1,6 @@
 <?php
-	require(dirname(dirname(__FILE__)).'/api/core.admin.php');
-	$app = new coreAdmin();
+	/*require(dirname(dirname(__FILE__)).'/api/core.admin.php');
+	$app = new coreAdmin();*/
 
 	if(!$app->userIsAdmin) header("Location: ./");
 
@@ -65,37 +65,38 @@
 		 
 	}
 	if ($reload) {
-		header("Location: ./business.index.php");
+		header("Location: ./");
 		exit(0);
 	}
-	
-	include(ADMINUI.'/doctype.php');
-?>
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="fr">
+
+?><!DOCTYPE html>
+<html lang="fr">
 <head>
-	<title>Kodeine</title>
-	<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
-	<?php include(ADMINUI.'/head.php'); ?>
+    <title>Kodeine</title>
+    <?php include(COREINC.'/head.php'); ?>
 </head>
 <body>
-<div id="pathway">
-	<a href="core.panel.php">Admin</a> &raquo;
-	<a href="business.index.php">Business</a> &raquo;
-	<a href="business.edit.php?id_cart=<?php echo $_REQUEST['id_cart'] ?>">Edition de la commande #<?php echo $_REQUEST['id_cart'] ?></a>
-	<?php include(ADMINUI.'/pathway.php'); ?>
-</div>
 
-<?php include('ressource/ui/menu.business.php'); ?>
+<header><?php
+    include(COREINC.'/top.php');
+    include(__DIR__.'/ui/menu.php');
+    ?></header>
+
+
+
+<?php //include('ressource/ui/menu.business.php'); ?>
 
 <div class="app">
 
-	<form action="business.edit.php" method="post">
+	<form action="edit" method="post">
 
 	<input type="hidden" name="update" value="1" />
 	<input type="hidden" name="id_cart" value="<?php echo $myCmd['id_cart'] ?>" />
 
 	<div style="width:900px; margin:0 auto;">
 		<h1>Edition de la commande #<?php echo $_REQUEST['id_cart'] ?></h1>
+
+        <div class="clearfix"></div>
 
 		<p>Statut : <select name="cartStatus"><?php
 			foreach($app->apiLoad('business')->businessStatusGet() as $e){
@@ -120,4 +121,11 @@
 	</form>
 
 
-</div></body></html>
+</div>
+
+<?php include(COREINC.'/end.php'); ?>
+<script>
+</script>
+
+
+</body></html>

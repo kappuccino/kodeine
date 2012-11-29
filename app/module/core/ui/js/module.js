@@ -5,7 +5,7 @@ function install(a, mod, core){
 		$(a).html('En cours...').addClass('doing');	
 
 		d({module:mod, install:true, core:core}, function(data){
-			$(a).removeClass('doing');	
+			$(a).removeClass('doing').remove();
 		});
 	}
 }

@@ -3,6 +3,14 @@
 * = Autre / Divers / Inclassable...
 
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+2012-11-29
+- Micro fix de CSS pour avoir le bon curseur de sousis sur les colones classables
+
+2012-11-23
+- Correction du menu top.php pour bien prendre en compte la gestion des droits
+
+2012-11-21
++ Correction du patcher/installer
 
 2012-10-17 (51)
 + Refonte du patch pour la compilation des LESS, le passage des LESS/CSS se fait depuis la homepage

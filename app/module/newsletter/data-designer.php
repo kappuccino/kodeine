@@ -77,13 +77,15 @@
 	
 	$tps = $app->fsFolder(KROOT.'/media/newsletter');
 	$templates = array();
-	foreach($tps as $t) {
-		$info = @file_get_contents($t.'/info.xml' );
-		if($info) {
-			preg_match("#<name>(.*)</name>?#", $info, $name);
-			$templates[$t] = utf8_decode($name[1]);
-		}		
-	}
+    if(is_array($tps)) {
+        foreach($tps as $t) {
+            $info = @file_get_contents($t.'/info.xml' );
+            if($info) {
+                preg_match("#<name>(.*)</name>?#", $info, $name);
+                $templates[$t] = utf8_decode($name[1]);
+            }
+        }
+    }
 	//$app->pre($templates);
 
 ?><!DOCTYPE html>
@@ -102,6 +104,23 @@
 	include(__DIR__.'/ui/menu.php')
 ?></header>
 
+<div class="inject-subnav-right hide">
+    <?php if($data['id_newsletter'] > 0) { ?>
+        <?php if($data['newsletterSendDate'] != NULL){ ?>
+            <li><a href="analytic?id_newsletter=<?php echo $_REQUEST['id_newsletter'] ?>" class="btn btn-mini">Consulter les statistiques</a></li>
+            <li><a href="data" class="btn btn-mini">Nouveau</a></li>
+        <?php } ?>
+        <?php if($_REQUEST['id_newsletter'] > 0){ ?>
+            <li><a href="preview?id_newsletter=<?php echo $_REQUEST['id_newsletter'] ?>" class="btn btn-mini" target="_blank">Prévisualiser</a></li>
+            <?php } ?>
+        <?php if($data['newsletterSendDate'] == NULL){ ?>
+            <li><a href="javascript:$('#do').val('test');save();" class="btn btn-mini btn-success">Enregistrer et envoyer un mail de test</a></li>
+            <li><a href="javascript:$('#do').val('test');save();" class="btn btn-mini btn-success">Enregistrer et sélectionner les abonnés</a></li>
+        <?php } ?>
+    <?php } ?>
+    <li><a href="javascript:save();" class="btn btn-mini btn-success">Enregistrer</a></li>
+</div>
+
 <div id="app">
 
 <?php	if($message == NULL && $_GET['message'] != NULL) $message = urldecode($_GET['message']);
@@ -118,22 +137,22 @@
 	<input type="hidden" name="do" id="do" value="" />
 
 	<table cellpadding="5" width="100%">
-		<tr>
-			<td height="30" colspan="2">
-				<a href="javascript:save();" class="btn btn-mini">Enregistrer</a>
-            <?php if($data['id_newsletter'] > 0) { ?>
-				<?php if($data['newsletterSendDate'] == NULL){ ?>
-				<a href="javascript:$('#do').val('test');save();" class="btn btn-mini">Enregistrer et envoyer un mail de test</a>
-				<a href="javascript:$('#do').val('list');save();" class="btn btn-mini">Enregistrer et sélectionner les abonnés</a>
-				<?php } if($_REQUEST['id_newsletter'] > 0){ ?>
-				<a href="preview?id_newsletter=<?php echo $_REQUEST['id_newsletter'] ?>" class="btn btn-mini" target="_blank">Prévisualiser</a>
-				<?php } if($data['newsletterSendDate'] != NULL){ ?>
-				<a href="analytic?id_newsletter=<?php echo $_REQUEST['id_newsletter'] ?>" class="btn btn-mini">Consulter les statistiques</a>
-				<a href="data" class="btn btn-mini">Nouveau</a>
+        <!--<tr>
+            <td height="30" colspan="2">
+                <a href="javascript:save();" class="btn btn-mini">Enregistrer</a>
+                <?php if($data['id_newsletter'] > 0) { ?>
+                <?php if($data['newsletterSendDate'] == NULL){ ?>
+                    <a href="javascript:$('#do').val('test');save();" class="btn btn-mini">Enregistrer et envoyer un mail de test</a>
+                    <a href="javascript:$('#do').val('list');save();" class="btn btn-mini">Enregistrer et sélectionner les abonnés</a>
+                    <?php } if($_REQUEST['id_newsletter'] > 0){ ?>
+                    <a href="preview?id_newsletter=<?php echo $_REQUEST['id_newsletter'] ?>" class="btn btn-mini" target="_blank">Prévisualiser</a>
+                    <?php } if($data['newsletterSendDate'] != NULL){ ?>
+                    <a href="analytic?id_newsletter=<?php echo $_REQUEST['id_newsletter'] ?>" class="btn btn-mini">Consulter les statistiques</a>
+                    <a href="data" class="btn btn-mini">Nouveau</a>
+                    <?php } ?>
                 <?php } ?>
-            <?php } ?>
-			</td>
-		</tr>
+            </td>
+        </tr>-->
 		<tr>
 			<td width="100">Nom</td>
 			<td><input type="text" name="newsletterName" value="<?php echo $app->formValue($data['newsletterName'], $_POST['newsletterName']); ?>" style="width:96%" /></td>	

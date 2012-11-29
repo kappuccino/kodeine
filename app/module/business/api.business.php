@@ -1,6 +1,6 @@
 <?php
 /* + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - 
-	Last release		2010.10.18
+	Last release		2010.10.18-g
 + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - */
 
 class business extends coreApp {
@@ -385,6 +385,28 @@ public function businessCartAdd($opt=array()){
 	return true;
 }
 
+/* + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + -
++ - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - */
+public function businessCartAddRaw($opt=array()){
+
+    if($opt['debug']) $this->pre("OPT", $opt);
+
+    # Options
+    $id_cart	    = $opt['id_cart'];
+    $id_cartline	= $opt['id_cartline'];
+    $def            = array('k_businesscartline' => $opt['data']);
+
+    # Mettre a jour les valeurs du CARLTLINE
+    if($id_cartline != NULL) $this->dbQuery($this->dbUpdate($def)." WHERE id_cartline=".$id_cartline);
+    else  $this->dbQuery($this->dbInsert($def));
+
+    if($opt['debug']) $this->pre($this->db_query, $this->db_error);
+
+    # Update CART
+    $this->businessCartPrice($id_cart);
+
+    return true;
+}
 
 /* + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + -
 + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - */
@@ -908,8 +930,8 @@ public function businessCmdMail($opt){
 		if($opt['mailCc'] != '')		$mailCc[] = $opt['mailCc'];
 		if(is_array($opt['mailBcc']))	$mailBcc  = array_merge($mailBcc, $opt['mailBcc']);
 
-		$mailTitle 	= ($opt['mailTitle'] != '') ? $opt['mailTitle'] : $shop['shopMailTitle'];
-		$template	= USER.'/mail/'.$shop['shopMailTemplate'];
+        $mailTitle 	= ($opt['mailTitle'] != '') ? $opt['mailTitle'] : $shop['shopMailTitle'];
+        $template 	= ($opt['mailTemplate'] != '') ? USER.'/mail/'.$opt['mailTemplate'] : USER.'/mail/'.$shop['shopMailTemplate'];
 	}else{
 		/*$mailTo		= array($opt['mailTo']);
 		$mailCc		= array($opt['mailCc']);

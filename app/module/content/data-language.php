@@ -1,4 +1,5 @@
 <?php
+
 	if($_POST['copy']){
 		$app->apiLoad('content')->contentDuplicateLanguage($_POST['id_content'], $_POST['from'], $_POST['copy']);
 		header("Location: data-language?id_content=".$_POST['id_content'].'&language='.$_POST['copy']);
@@ -168,20 +169,21 @@
 				<input type="hidden" name="id_content"	value="<?php echo $_REQUEST['id_content'] ?>" />
 				<input type="hidden" name="from" 		value="<?php echo $_REQUEST['language'] ?>" />
 		
-				Recopier les donnï¿½es de cette langue vers 
+				Recopier les données de cette langue vers
 				<select name="copy" class="select-small nomargin"><?php
 					foreach($unset as $e){
 						echo "<option value=\"".$e['iso']."\">".$e['countryLanguage']."</option>";
 					}
 				?></select>
 				<button type="submit" name="valider" class="button button-green" style="float: none;">Valider</button>
-				(Pensez ï¿½ enregistrer cette langue avant de la recopier)
+				(Pensez à enregistrer cette langue avant de la recopier)
 			</form>
 		</div>
 	<?php } ?>
 
 
 	<div class="inject-subnav-right hide">
+        
 		<li>
 			<div class="btn-group">
 				<a class="btn btn-mini dropdown-toggle" data-toggle="dropdown" href="#">Autres actions <span class="caret"></span></a>
@@ -282,7 +284,7 @@
 					</span>
 					<div class="spacer">&nbsp;</div>
 					<span>
-						<label class="off">Mots-clï¿½s</label>
+						<label class="off">Mots-clés</label>
 						<div class="form"><input type="text" name="contentMetaKeywords" value="<?php echo $app->formValue($data['contentMetaKeywords'], $_POST['contentMetaKeywords']); ?>" size="100" style="width:99%;" /></div>
 					</span>
 					<br style="clear:both" /> 

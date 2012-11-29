@@ -74,27 +74,7 @@ function init(){
 	$(window).resize(function() {
 		spreadGrid();
 	});
-	
-	/* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
-	/*var History = window.History; // Note: We are using a capital H instead of a lower h
-    if ( !History.enabled ) {
-        hasHistory = false;
-    } else {
-    	console.log('load')
-	    History.Adapter.bind(window,'statechange',function(){ // Note: We are using statechange instead of popstate
-	    	console.log("statechange")
-	    	var State = History.getState(); // Note: We are using History.getState() instead of event.state
-			console.log(State)
-			// fixer les url avec le hash
-			//var root = History.getRootUrl()
-			//var reg = new RegExp("("+root+"/admin/media/#)", "g"); 
-			
-	        History.log(State.data, State.title, State.url);
-	    });
-    }*/
-	
-	
-	
+
 	modeSet(viewMode);
 }
 
@@ -147,18 +127,6 @@ function sliderInit(){
 		}
 	});
 	
-	/*mySlider = new Slider('sliderLine', 'sliderPlot', {
-		steps: 300,
-		snap:50,
-		range: [minH, (minH + 300)],
-		onComplete: function(){
-			if(sliderMove) folderElementResizeReload();
-
-			folderElementSize(this.step, (this.step*factor));
-
-			if(!sliderMove) sliderMove = true;
-		}
-	}).set(0);*/
 }
 
 /* + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - 
@@ -348,9 +316,7 @@ function folderlElement(el, position){
 			});
 		}
 		
-		var insert = $('<img src="'+myMedia+'/media-folder.png" height="32" width="32" />')/*.bind('click', function() {
-			folderNavFromPosition(position);
-		});*/
+		var insert = $('<img src="'+myMedia+'/media-folder.png" height="32" width="32" />');
 		
 	}else
 
@@ -421,16 +387,15 @@ function folderlElement(el, position){
 				top.css('background', 'url('+myMedia+'/media-nano-video.png) no-repeat 4px center');
 			}
 
-			/*var _play = new Element('img', {
-				'src'		: myPath+'ressource/img/media-play.png',
-				'events'	: {
-					'click' : function(){
-						actionViewVideo(el.url);
-					}
-				}
-			}).inject(iconeaction);*/
+			var _play = $('<img src="'+myMedia+'/media-play.png" title="Lire la vid&eacute;o" />').appendTo(iconeaction).bind('click', function() {
+				modal.open({ type : 'video', url : el.url });
+			});
 
-			var _play = $('<img src="'+myMedia+'/media-flip.png" title="Gerer le poster de la video" />').appendTo(iconeaction).bind('click', function() {
+			var _nfo = $('<img src="'+myMedia+'/media-nano-info.png" title="Voir les infos techniques" />').appendTo(iconeaction).bind('click', function() {
+				window.open('/admin/media/helper/player-video?url='+el.url, '', '');
+			});
+
+			var _poster = $('<img src="'+myMedia+'/media-flip.png" title="Gerer le poster de la video" />').appendTo(iconeaction).bind('click', function() {
 				var url = el.url;
 				window.open('helper/video-poster?url='+url, '', '');
 			});
@@ -476,6 +441,7 @@ function folderlElement(el, position){
 		if(insert.src == ''){
 
 			var insert = $('<img src="'+myMedia+'/media-file_'+el.kind+'.png" height="128" width="128" />');
+
 		}
 	}
 
@@ -526,7 +492,7 @@ function folderlElement(el, position){
 
 /* + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - 
 + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - */
-function folderElementResizeReload(){
+/*function folderElementResizeReload(){
 	//console.log("resize !")
 	return true;
 
@@ -553,7 +519,7 @@ function folderElementResizeReload(){
 		}
 
 	});
-}
+}*/
 
 /* + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - 
 + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - */
@@ -1413,8 +1379,104 @@ function distantDownload(){
 
 }
 
+/* Modal generator
+* modal.open({ type : 'video', url : el.url });
+* */
+var modal = {
+
+	open : function(data) {
+		if (data.type == 'video') {
+			this.frame = this.buildFrame(data);
+			this.buildBody(data);
+		}
+	},
+
+	buildFrame : function(data) {
+		var _class = 'genericmodal';
+		if (typeof data.class !== 'undefined') {
+			_class = data.class;
+		}
+
+		return $('<div id="modal-'+data.type+'" class="'+_class+'" style="display:none;" />');
+	},
+
+	buildBody : function(data) {
+
+		if (data.type == 'video') {
+			this.ext = this.getExt(data.url);
+
+			// build flowplayer 3.x
+			if (this.ext == 'flv') {
+				$.getScript("/admin/core/ui/_flowplayer/flowplayer-3.2.11.min.js")
+					.done($.proxy(function(script, status) {
+						this.body = $('<a href="'+data.url+'" id="player" />').appendTo(this.frame);
+						this.show(data);
+					}, this ));
 
 
+			// build flowplayer 5.x
+			} else {
+				$.getScript("/admin/core/ui/_flowplayer5/flowplayer.min.js")
+					.done($.proxy(function(script, status) {
+						this.body  = $('<div id="player" />').appendTo(this.frame);
+						this.video = $('<video src="'+data.url+'" />').appendTo(this.body);
+						this.show(data);
+					}, this ));
+			}
+		}
+
+
+	},
+
+	show : function(data) {
+
+		$('#fade-wall').fadeTo(218, 1);
+		this.frame.appendTo('body').css('display', 'block');
+
+		$(document).on('keydown', $.proxy(function(e) {
+			if (e.keyCode == 27) {
+				this.hide(data);
+			}
+		}, this ));
+		$('#fade-wall').on('click', $.proxy(function() {
+			this.hide(data);
+		}, this ));
+
+		if (data.type == 'video') {
+
+			if (this.ext == 'flv') {
+				flowplayer("player", "/admin/core/ui/_flowplayer/flowplayer-3.2.12.swf", {
+					clip : {
+						autoPlay: true
+					}
+				});
+			} else {
+				this.player = $('#player').flowplayer({ swf: "/admin/core/ui/_flowplayer5/flowplayer.swf" });
+				this.frame.css('height', 'auto');
+			}
+		}
+	},
+
+	hide : function(data) {
+		if (data.type == 'video') {
+			if (this.ext == 'flv') {
+				$f().stop();
+				$f().unload();
+			} else {
+				this.player.data('flowplayer').stop();
+				this.player.data('flowplayer').unload();
+			}
+		}
+
+		this.frame.remove();
+		$('#fade-wall').hide();
+	},
+
+	getExt : function(filename) {
+		return filename.split('.').pop();
+	}
+
+}
 
 
 
