@@ -14,6 +14,7 @@ const ENCODING_DEFAULT		= self::ENCODING_JSON;
 
 protected $_credentials		= '';
 protected $_host			= '';
+protected $_port            = 80;
 protected $_secure			= false;
 protected $_mode			= 'classic';
 protected $_persistent		= true;
@@ -74,6 +75,15 @@ public function setHost($host){
 
 public function getHost(){
 	return $this->_host;
+}
+
+public function setPort($port){
+	$this->_port = $port;
+	return true;
+}
+
+public function getPort(){
+	return $this->_port;
 }
 
 public function setMode($mode){
@@ -162,7 +172,7 @@ public function request($opt = array()){
 
 	$mode	= $this->getMode();
 	$scheme = ($this->isSecure() == true) ? 'https' : 'http';
-	$url	= $scheme.'://'.$this->getHost().$uri;
+	$url	= $scheme.'://'.$this->getHost().':'.$this->getPort().$uri;
 
 	$opt_	= array_merge($opt, array(
 		'url'	=> $url,
@@ -174,13 +184,13 @@ public function request($opt = array()){
 	$a = microtime(true);
 
 	if($mode == 'classic'){
-		$out = $this->requestClassic($opt_);
+		$out = @$this->requestClassic($opt_);
 	}else
 	if($mode == 'curl'){
-		$out = $this->requestCurl($opt_);	
+		$out = @$this->requestCurl($opt_);
 	}else
 	if($mode == 'socket'){
-		$out = $this->requestSocket($opt_);
+		$out = @$this->requestSocket($opt_);
 	}
 
 	if(is_array($out)) $out['duration'] = microtime(true) - $a;
@@ -198,15 +208,15 @@ private function requestSocket($opt){
 	$data	= $opt['data'];
 	$debug	= $opt['debug'];
 
-	$fp = fsockopen($this->getHost(), 80, $errno, $errstr, 2);
-
 	$query[] = "GET ".$opt['uri']." HTTP/1.1";
-	$query[] = "Host: ".$this->getHost();
+	$query[] = "Host: ".$this->getHost().':'.$this->getHost();
+	$query[] = 'Authorization: Basic '.base64_encode($this->getCredentials());
     $query[] = "Connection: Close\r\n\r\n";
 	$query	 = implode("\r\n", $query)."\r\n";
-	
-	$resp = $this->sendREST($fp, $query);
-	fclose($fp);	
+
+	$fp     = fsockopen($this->getHost(), $this->getPort(), $errno, $errstr, 1);
+	$resp   = $this->sendREST($fp, $query, true);
+			  fclose($fp);
 
 	list($headers, $body) = explode("\r\n\r\n", $resp);
 	$headers = $this->headerToArray($headers);
@@ -231,7 +241,7 @@ private function requestClassic($opt){
 	$opts	= array(
 		'http' => array(
 			'header'			=> "Authorization: Basic " . base64_encode($this->getCredentials()),
-			'method'			=> 'POST',
+			'method'			=> $verb,
 			'content'			=> http_build_query($data),
 			'follow_location'	=> true,
 			'user_agent'		=> 'Mozilla/4.0 (compatible;)'
