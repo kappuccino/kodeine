@@ -23,6 +23,7 @@
 		$newsletterStyle = json_encode($_POST['style']);
 	
 		$def['k_newsletter'] = array(
+            'is_archive'				=> array('value' => $_POST['is_archive'],			'zero'  => true),
 			'newsletterName' 			=> array('value' => $_POST['newsletterName'], 		'check' => '.'),
 			'newsletterTitle' 			=> array('value' => $_POST['newsletterTitle'], 		'check' => '.'),
 			'newsletterHtml' 			=> array('value' => $_POST['newsletterHtml']),
@@ -121,6 +122,13 @@
 			<td>Titre du mail</td>
 			<td><input type="text" name="newsletterTitle" value="<?php echo $app->formValue($data['newsletterTitle'], $_POST['newsletterTitle']); ?>" style="width:96%" /></td>	
 		</tr>
+        <tr>
+            <td>Archivage</td>
+            <td>
+                <input type="checkbox" id="is_archive" name="is_archive" value="1" <?php if($app->formValue($data['is_archive'], $_POST['is_archive'])) echo "checked" ?> />
+                <label for="is_archive">Si cette option est activée, la newsletter sera lisible par tout le monde depuis le site internet</label>
+            </td>
+        </tr>
 		<tr>
 			<td colspan="2">
 				<table width="100%" cellpadding="0" cellspacing="0">
