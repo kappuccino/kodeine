@@ -208,7 +208,8 @@
 
 						echo '<div class="content">';
 						echo '<a href="./?id_type='.$e['id_type'].'">Afficher</a> &nbsp; &nbsp; ';
-						echo '<a href="../field/asso?id_type='.$e['id_type'].'">Gérer les champs</a>';
+                        echo '<a href="../field/asso?id_type='.$e['id_type'].'">Gérer les champs</a> &nbsp; &nbsp; ';
+                        echo '<a href="type-row?id_type='.$e['id_type'].'">Colonnes</a>';
 						echo '</div>';
 
 					echo '</div></li>';
@@ -227,7 +228,7 @@
 				<?php } ?>
 			</div>
 			<div class="right">
-				<a href="../field/" class="nomargin btn btn-mini">Gérer tous les champs</a>
+                <a href="../field/" class="nomargin btn btn-mini">Gérer tous les champs</a>
 			</div>
 		</div>
 	</form>
