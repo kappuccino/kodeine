@@ -3,6 +3,10 @@
 * = Autre / Divers / Inclassable...
 
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+2012-11-30 (build 5.0.6)
+- fix gestion droits acces user dans core/includes/top.php
++ modif CSS reduction du padding sur liste du subnav
+
 2012-11-29
 - Micro fix de CSS pour avoir le bon curseur de sousis sur les colones classables
 
