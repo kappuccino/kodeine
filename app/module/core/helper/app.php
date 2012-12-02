@@ -47,23 +47,19 @@
 	#
 	function __autoload($api){
 
-		/*if(substr(strtolower($class), 0, 4) == 'core'){
-			$api = APP.'/module/core/core.'.	substr(strtolower($class), 4)	.'.php';
-		}else{
-			$pts = array_map('strtolower', explode(' ', preg_replace('/(?!^)[[:upper:]]/',' \0', $class)));
-			$mod = strtolower($pts[0]);
-			unset($pts[0]);
-			$api = APP.'/module/'.$mod.'/api.'.$mod.implode('', array_map('ucfirst', $pts)).'.php';
-		}*/
-	
+		$first = substr(strtolower($api), 0, 4);
+
 		if(strpos($api, ".php") !== false){
 			$direct	= true;
 			$class	= $api;
 		}else
-		if(substr(strtolower($api), 0, 4) == 'core'){
+		if($first == 'core'){
 			$class	= APP.'/module/core/core.'.substr(strtolower($api), 4).'.php';
 			$alter	= USER.'/api/core.'.substr(strtolower($api), 4).'.php';
-			
+		}else
+		if($first == 'data'){
+			$class	= APP.'/module/core/data.'.substr(strtolower($api), 4).'.php';
+			$alter	= USER.'/api/data.'.substr(strtolower($api), 4).'.php';
 		}else{
 			$parts	= array_map('strtolower', explode(' ', preg_replace('/(?!^)[[:upper:]]/',' \0', $api)));
 			$mod   	= $parts[0];

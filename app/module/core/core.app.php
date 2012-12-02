@@ -334,14 +334,19 @@ public function pre(){
 + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - */
 function apiLoad($api, $name=NULL, $new=false){
 
+	$first = substr(strtolower($api), 0, 4);
+
 	if(strpos($api, ".php") !== false){
 		$direct	= true;
 		$class	= $api;
 	}else
-	if(substr(strtolower($api), 0, 4) == 'core'){
+	if($first == 'core'){
 		$class	= APP.'/module/core/core.'.substr(strtolower($api), 4).'.php';
 		$alter	= USER.'/api/core.'.substr(strtolower($api), 4).'.php';
-		
+	}else
+	if($first == 'data'){
+		$class	= APP.'/module/core/data.'.substr(strtolower($api), 4).'.php';
+		$alter	= USER.'/api/data.'.substr(strtolower($api), 4).'.php';
 	}else{
 		$parts	= array_map('strtolower', explode(' ', preg_replace('/(?!^)[[:upper:]]/',' \0', $api)));
 		$mod   	= $parts[0];
@@ -613,7 +618,7 @@ public function helperUrlEncode($str, $language=NULL, $id_content=NULL){
 	$NewText = preg_replace("/^-/",								'',		$NewText);
 	
 	$url = $NewText;
-	
+	$found = false;
 	if($language != NULL){
 	
 		if($id_content != NULL) $idc = " AND id_content != ".$id_content;
