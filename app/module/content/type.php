@@ -216,7 +216,7 @@
 				}
 			
 			}else{
-				echo '<div class="noType">Vous devez créer au minium un type pour créer de nouveau contenu</div>';
+				echo '<div class="noType">Vous devez créer au minimum un type pour créer de nouveau contenu</div>';
 			}
 		?></ul>
 	

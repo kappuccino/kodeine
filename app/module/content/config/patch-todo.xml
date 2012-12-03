@@ -192,6 +192,7 @@
 	<job action = "createField"		table = "k_type" 			field = "use_chapter"				type = "TINYINT(1)" 	null = "NO"		after = "use_search" />
 	<job action = "createField"		table = "k_type" 			field = "use_category"				type = "TINYINT(1)" 	null = "NO"		after = "use_chapter" />
 	<job action = "createField"		table = "k_type" 			field = "use_socialforum"			type = "TINYINT(1)" 	null = "NO"		after = "use_category" />
+    <job action = "createField"		table = "k_type" 			field = "typeListLayout"			type = "MEDIUMTEXT" 	null = "NO"		after = "typeFormLayout" />
 
 	<job action = "dropfield"		table = "k_type" 			field = "is_album" />	
 

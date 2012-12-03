@@ -44,6 +44,7 @@
 
 	$dir = ($filter['direction'] == 'ASC') ? 'DESC' : 'ASC';
 
+
 ?><!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -80,15 +81,18 @@
 
 <div id="app">
 	
-	<div class="quickForm" style="display:<?php echo $filter['open'] ? 'block' : 'none;' ?>;">
+	<div class="quickForm" style="display:<?php echo ($filter['open'] || $filter['q'] != '') ? 'block' : 'none;' ?>;">
 	<form action="index" method="post" class="form-horizontal">
 
 		<input type="hidden" name="id_type"			value="<?php echo $id_type ?>" />
 		<input type="hidden" name="filter[open]"	value="1" />
 		<input type="hidden" name="filter[offset]"	value="0" />
-		
-		<label class="control-label" for="prependedInput">Combien</label>
-		<input type="text" name="filter[limit]" class="input-small" placeholder="" value="<?php echo $filter['limit'] ?>" size="3" />
+
+        <label class="control-label" for="prependedInput">Chercher</label>
+        <input type="text" name="filter[q]" class="input-small" placeholder="" value="<?php echo $filter['q'] ?>" size="5" />
+
+        <label class="control-label" for="prependedInput">Combien</label>
+        <input type="text" name="filter[limit]" class="input-small" placeholder="" value="<?php echo $filter['limit'] ?>" size="3" />
 
 		<label class="control-label" for="prependedInput">Catégorie</label>
 		<?php
@@ -180,7 +184,7 @@
 			
 			$colspan = '';
 			if(!$cType['is_business']) {
-				$colspan = 'colspan="2"';
+				//$colspan = 'colspan="2"';
 			}
 	
 			foreach($app->dbMulti("SELECT language FROM k_contentdata WHERE id_content=".$e['id_content']) as $l){
@@ -219,6 +223,15 @@
 					echo "<td><a href=\"".$link."\" style=\"width:100%;display:block;\">".$e['contentRef']."</a></td>";
 				}
 
+                if(is_array($cType['typeListLayout'])) {
+                    foreach($cType['typeListLayout'] as $f) {
+                        $field	= $app->apiLoad('field')->fieldGet(array('id_field' => $f['id_field']));
+                        $aff = $e['field'][$field['fieldKey']];
+                        if($field['fieldType'] == 'date') $aff = $app->helperDate($aff, '%d.%m.%G');
+                        echo "<td><a href=\"".$link."\">".$aff."</a></td>";
+                    }
+                }
+
 			echo "</tr>";
 	
 			if($filter['viewChildren']){
@@ -243,7 +256,7 @@
 	<form method="post" action="index" id="listing">
 		<input type="hidden" name="id_type"		value="<?php echo $id_type ?>" />
 		<input type="hidden" name="language"	value="<?php echo $language ?>" />
-		
+
 		<table border="0" cellpadding="0" cellspacing="0" class="listing">
 			<thead>
 				<tr>
@@ -264,8 +277,23 @@
 
 					<th class="filter order <?php if($filter['order'] == 'k_contentdata.contentName') echo 'order'.$dir; ?>" onClick="document.location='index?id_type=<?php echo $_REQUEST['id_type'] ?>&cf&order=k_contentdata.contentName&direction=<?php echo $dir ?>'">
 						<span>Nom</span>
-						<input type="text" class="input-small" placeholder="filtrer..." id="filter"/>
+						<!--<input type="text" class="input-small" placeholder="filtrer..." id="filter"/>-->
 					</th>
+                    <?php
+                        if(is_array($cType['typeListLayout'])) {
+                            foreach($cType['typeListLayout'] as $e) {
+                                $field	= $app->apiLoad('field')->fieldGet(array('id_field' => $e['id_field']));
+                                $fieldbdd = 'k_content'.$cType['id_type'].'.field'.$e['id_field'];
+                    ?>
+                        <th width="<?php echo $e['width']; ?>" class="order <?php if($filter['order'] == $fieldbdd) 	echo 'order'.$dir; ?>" onClick="document.location='index?id_type=<?php echo $_REQUEST['id_type'] ?>&cf&order=<?php echo $fieldbdd; ?>&direction=<?php echo $dir ?>'">
+                            <span><?php echo $field['fieldName']; ?></span>
+                        </th>
+
+                    <?php
+                            }
+                        }
+                    ?>
+
 				</tr>
 			</thead>
 			<tbody>
@@ -281,6 +309,7 @@
 					foreach($content as $e){
 						$count++; // count pour les labels
 						view($app, $cType, $filter, $e, 0, $count);
+
 					}
 				}
 			?>
