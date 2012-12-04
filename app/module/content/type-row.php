@@ -35,16 +35,22 @@ if((isset($_GET['add']) || isset($_GET['remove']) ) && $_GET['id_field'] > 0) {
 
 }
 if(isset($_GET['pos'])) {
-    $do = true;
+    $do         = true;
 
-    $used = $data['typeListLayout'];
+    $used       = $data['typeListLayout'];
 
-    $pos = explode(',', $_GET['pos']);
-    $newused = array();
+    $pos        = explode(',', $_GET['pos']);
+    $width      = explode(',', $_GET['width']);
+    $newused    = array();
 
+    $i = 0;
     foreach($pos as $p) {
         foreach($used as $k=>$e) {
-            if($p == $e['id_field']) $newused[] = $e;
+            if($p == $e['id_field']) {
+                $e['width'] = $width[$i];
+                $newused[]  = $e;
+                $i ++;
+            }
         }
     }
     $newused    = array_merge($newused);
@@ -198,7 +204,8 @@ foreach($field as $f) {
                 if(sizeof($used) > 0){
                     foreach($used as $e){
                         $field	= $app->apiLoad('field')->fieldGet(array('id_field' => $e['id_field']));
-                        echo "<li id=\"".$field['id_field']."\">". $field['fieldName']. "(" . $field['fieldKey'] . ")<br />";
+                        echo "<li id=\"".$field['id_field']."\" style=\"height: 75px;\">". $field['fieldName']. " (" . $field['fieldKey'] . ")<br />";
+                        echo "Largeur <input type=\"text\" size=\"2\" id=\"w" . $field['id_field'] . "\" value=\"".$e['width']."\"><br />";
                         echo "<a href=\"type-row?id_type=".$_REQUEST['id_type']."&id_field=".$field['id_field']."&remove\" class=\"btn btn-mini\">Supprimer</a> ";
                         echo "</li>";
                     }
@@ -226,9 +233,14 @@ foreach($field as $f) {
                 });*/
 
                 function sauver(){
-                    ordre = mySortables.sortable("toArray");
-                    ordre = ordre.join(',');
-                    document.location='type-row?id_type=<?php echo $_REQUEST['id_type'] ?>&pos='+ordre;
+                    ordreA = mySortables.sortable("toArray");
+                    ordre = ordreA.join(',');
+                    var w = new Array();
+                    for(i=0;i<ordreA.length;i++) {
+                        w.push($('#w'+ordreA[i]).val());
+                    }
+                    width = w.join(',');
+                    document.location='type-row?id_type=<?php echo $_REQUEST['id_type'] ?>&pos='+ordre+'&width='+width;
                 }
 
             </script>
