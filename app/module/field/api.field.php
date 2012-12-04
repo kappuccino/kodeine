@@ -240,7 +240,7 @@ public function fieldChoiceSet($id_field, $es){
 						'choiceValue'	=> array('value' => trim($n))
 					);
 					$this->dbQuery($this->dbInsert($def));
-					$this->pre($this->db_query, $this->db_error);
+					#$this->pre($this->db_query, $this->db_error);
 				}
 			}
 		}else{

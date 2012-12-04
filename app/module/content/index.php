@@ -81,7 +81,7 @@
 
 <div id="app">
 	
-	<div class="quickForm" style="display:<?php echo ($filter['open'] || $filter['q'] != '') ? 'block' : 'none;' ?>;">
+	<div class="quickForm" style="display:<?php echo ($filter['open']) ? 'block' : 'none;' ?>;">
 	<form action="index" method="post" class="form-horizontal">
 
 		<input type="hidden" name="id_type"			value="<?php echo $id_type ?>" />
@@ -227,8 +227,60 @@
                     foreach($cType['typeListLayout'] as $f) {
                         $field	= $app->apiLoad('field')->fieldGet(array('id_field' => $f['id_field']));
                         $aff = $e['field'][$field['fieldKey']];
-                        if($field['fieldType'] == 'date') $aff = $app->helperDate($aff, '%d.%m.%G');
-                        echo "<td><a href=\"".$link."\">".$aff."</a></td>";
+                        $islink = true;
+                        if($field['fieldType'] == 'date') $aff      = $app->helperDate($aff, '%d.%m.%G');
+                        if($field['fieldType'] == 'boolean') $aff   = ($aff == '1') ? 'Oui' : 'Non';
+                        if(is_array($aff)) {
+                            $tmp = array();
+                            if($field['fieldType'] == 'user') {
+                                foreach($aff as $a) {
+                                    $tmp[]  =  '<a href="/admin/user/data?id_user='.$a['id_user'].'">'.$a['id_user'].' - '.$a['userMail'].'</a>';
+                                }
+                                $aff   = implode(' , ', $tmp);
+                                $islink = false;
+                            }
+                            if($field['fieldType'] == 'media') {
+
+                                foreach($aff as $type=>$a) {
+                                    $tmp[]  = '<b>'.$type.'</b>';
+                                    foreach($a as $aa) {
+                                        $tmp[]  =  '<a href="'.$aa['url'].'" target="_blank">'.$aa['url'].'</a>';
+                                    }
+                                }
+                                $aff   = implode('<br />', $tmp);
+                                $islink = false;
+                            }
+                            if($field['fieldType'] == 'category') {
+                                if(key($aff) == 0) {
+                                    foreach($aff as $a) {
+                                        $tmp[]  =  $a['categoryName'];
+                                    }
+                                    $aff    = implode(' , ', $tmp);
+                                }else
+                                    $aff = $aff['categoryName'];
+                            }
+                            if($field['fieldType'] == 'dbtable') {
+                                $aff = print_r($aff, true);
+                            }
+                            if($field['fieldType'] == 'content') {
+                                if(key($aff) == 0) {
+                                    foreach($aff as $a) {
+                                        $tmp[]  =  '<a href="data?id_content='.$a['id_content'].'">'.$a['id_content'].' - '.$a['contentName'].'</a>';
+                                    }
+                                    $aff    = implode(' , ', $tmp);
+                                }else
+                                    $aff = $aff['id_content'].' - '.$aff['contentName'];
+                            }
+                            if($field['fieldType'] == 'dbtabledd') {
+                                $aff = print_r($aff, true);
+                            }
+                            //$aff = print_r($field['fieldParam'], true);
+                        }
+                        //if(is_array($aff)) $aff = print_r($aff, true);
+                        echo "<td>";
+                        if($islink) echo "<a href=\"".$link."\">".$aff."</a>";
+                        else echo $aff;
+                        echo "</td>";
                     }
                 }
 
