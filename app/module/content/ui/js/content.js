@@ -445,6 +445,8 @@ function enableMove(){
 	mySortables = $('.field-list');
 	myTabSortables = $('.do-viewer');
 
+	$('.tabset').addClass('editing');
+
 	$.each(mySortables, function(k,v) {
 		
 		// réactiver les sort si disabled
@@ -463,8 +465,7 @@ function enableMove(){
 		}
 		
 	});
-	
-	
+
 	$.each(myTabSortables, function(k,v) {
 		
 		$(v).sortable({		
@@ -527,6 +528,7 @@ function enableMove(){
 function disableMove(){
 
 	doMove = false;
+	$('.tabset').removeClass('editing');
 
 	mySortables.each(function(k,v) {
 		$(v).sortable({ disabled: true });
@@ -553,18 +555,18 @@ function openView(n,p){
 
 	if(n == 'ALL'){
 		$('.tabset .view-tab').each(function(i, view){
-			$(view).css('display', '').find('.view-label').css('display', '');
+		//	$(view).css('display', '').find('.view-label').css('display', '');
+			$(view).removeClass('hide').find('.view-label').css('display', 'block');
 		});
 
 		$('.tabset .tab li.is-tab').addClass('is-selected');
-
 	}else{
 		
-		$('.tabset .view-tab').css('display', 'none');
-		$('.tabset .view-label-toggle').css('display', 'none');
 		$('.tabset .tab li').removeClass('is-selected');
+		$('.tabset .view-tab').addClass('hide'); //css('display', 'none');
+		$('.tabset .view-label-toggle').css('display', 'none');
 
-		$('.view').eq(n).css('display', '');
+		$('.view').eq(n).removeClass('hide'); //css('display', '');
 
 		$('.tabset .tab li').eq(p).addClass('is-selected');
 	}

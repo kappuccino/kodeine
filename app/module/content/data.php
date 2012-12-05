@@ -282,7 +282,7 @@
 
 <div class="tabset">
 
-	<div class="wrapper"><ul class="tab clearfix">
+	<div class="wrapper"><ul class="tab fix clearfix">
 
 		<ul class="do-viewer">
 		<?php foreach($type['typeFormLayout']['tab'] as $e){ ?>
@@ -353,6 +353,7 @@
 					$replace[] = '#'.$name;
 				}
 			}
+
 		?></ul>
 	</div>
 	<?php } ?>
