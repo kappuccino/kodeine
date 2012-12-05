@@ -4,11 +4,11 @@ Kodeine Change log
 * = Autre / Divers / Inclassable...
 
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-2012-12-05 (build 5.0.12)
-- Fix CSS
+2012-12-03 (build 5.0.13)
++ possibilite d'ajouter des colonnes dans content/index depuis la gestion des types
 
 2012-11-30 (build 5.0.12)
-- content/data : modification nom et ordres des boutons et bouton retour avec icone liste + nom du type
++ content/data : modification nom et ordres des boutons et bouton retour avec icone liste + nom du type
 
 2012-11-22 (build 5.0.11)
 - content/data : correction de la fonction JS dupli() qui duplique les prix sur tous les groupes dans les content de type business

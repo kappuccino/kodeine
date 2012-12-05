@@ -209,14 +209,14 @@
 						echo '<div class="content">';
 						echo '<a href="./?id_type='.$e['id_type'].'">Afficher</a> &nbsp; &nbsp; ';
                         echo '<a href="../field/asso?id_type='.$e['id_type'].'">Gérer les champs</a> &nbsp; &nbsp; ';
-                       // echo '<a href="type-row?id_type='.$e['id_type'].'">Colonnes</a>';
+                        echo '<a href="type-row?id_type='.$e['id_type'].'">Colonnes</a>';
 						echo '</div>';
 
 					echo '</div></li>';
 				}
 			
 			}else{
-				echo '<div class="noType">Vous devez créer au minium un type pour créer de nouveau contenu</div>';
+				echo '<div class="noType">Vous devez créer au minimum un type pour créer de nouveau contenu</div>';
 			}
 		?></ul>
 	
