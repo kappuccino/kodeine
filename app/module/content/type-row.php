@@ -134,7 +134,7 @@ foreach($field as $f) {
 <div class="inject-subnav-right hide">
     <li>
         <div class="btn-group">
-            <a class="btn btn-mini dropdown-toggle" data-toggle="dropdown" href="#"><?php echo $type['typeName']; ?> <span class="caret"></span></a>
+            <a class="btn btn-mini dropdown-toggle" data-toggle="dropdown" href="#"><i class="icon-list"></i> <?php echo $data['typeName']; ?> <span class="caret"></span></a>
             <ul class="dropdown-menu"><?php
                 foreach($app->apiLoad('content')->contentType(array('profile' => true)) as $e){
                     echo '<li class="clearfix">';
@@ -145,6 +145,12 @@ foreach($field as $f) {
                 ?></ul>
         </div>
     </li>
+    <li>
+        <a href="<?php echo (($e['is_gallery']) ? 'gallery-album' : 'index' )."?id_type=".$data['id_type']; ?>" class="btn btn-small">
+            <i class="icon-list"></i> <?php echo $data['typeName']; ?>
+        </a>
+    </li>
+
 </div>
 
 <div id="app">

@@ -130,7 +130,8 @@
 		<input type="checkbox" name="filter[categoryThrough]" value="1" <?php if($filter['categoryThrough']) echo ' checked'; ?> />
 
 		<button class="btn btn-mini" type="submit">Filter les résultats</button>
-		<button class="btn btn-mini">Annuler</button>
+        <button class="btn btn-mini">Annuler</button>
+        <a href="type-row?id_type=<?php echo $id_type; ?>" class="btn btn-mini">Gérer les colonnes</a>
 	</form>
 	</div>	
 
@@ -170,138 +171,154 @@
 	
 		$fields = $app->apiLoad('field')->fieldGet(array('id_type' => $id_type, 'debug' => false));
 		$lang	= $app->countryGet(array('is_used' => true));
-	
-		/* + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - */
-	
-		function view($app, $cType, $filter, $e, $level=0, $count=NULL){
 
-			if(intval($e['id_content']) == 0) return false;
-		
-			$version = $app->apiLoad('content')->contentVersionGet(array(
-				'id_content'	=> $e['id_content'],
-				'language'		=> $e['language']
-			));
-			
-			$colspan = '';
-			if(!$cType['is_business']) {
-				//$colspan = 'colspan="2"';
-			}
-	
-			foreach($app->dbMulti("SELECT language FROM k_contentdata WHERE id_content=".$e['id_content']) as $l){
-				$languages .= "<a href=\"data-language?id_content=".$e['id_content']."&language=".$l['language']."\" class=\"lang\">".strtoupper($l['language'])."</a> ";
-			}
-			
-			$link = "data?id_content=".$e['id_content']."&language=".$e['language'];
+    /* + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - */
 
-			echo 
-			"<tr>".
-				"<td><input type=\"checkbox\" name=\"remove[]\" value=\"".$e['id_content']."\" class=\"chk cb\" id=\"chk_remove_".$count."\" /></td>".
-				"<td>".
-					"<input type=\"hidden\"		name=\"see[".$e['id_content']."]\" value=\"0\" />".
-					"<input type=\"checkbox\"	name=\"see[".$e['id_content']."]\" value=\"1\" class=\"chk cs\" ".(($e['contentSee']) ? "checked" : '')." id=\"chk_see_".$count."\" />".
-				"</td>".
-				"<td class=\"icone\"><a href=\"javascript:duplicate(".$e['id_content'].");\"><i class=\"icon-tags\"></i></a></td>".
-				"<td style=\"padding-left:5px;\">".sizeof($version)."</td>".
-				"<td><a href=\"comment?id_content=".$e['id_content']."\">".$e['contentCommentCount']."</a></td>".
-				"<td>".$languages."</td>".
-				"<td><a href=\"".$link."\">".$e['id_content']."</a></td>".
-				"<td class=\"dateTime\">".
-					"<a href=\"".$link."\">".
-						"<span class=\"date\">".$app->helperDate($e['contentDateCreation'], '%d.%m.%G')."</span> ".
-						"<span class=\"time\">".$app->helperDate($e['contentDateCreation'], '%Hh%M')."</span>".
-					"</a>".
-				"</td>".
-				"<td class=\"dateTime\">".
-					"<a href=\"".$link."\">".
-						"<span class=\"date\">".$app->helperDate($e['contentDateUpdate'], '%d.%m.%G')."</span> ".
-						"<span class=\"time\">".$app->helperDate($e['contentDateUpdate'], '%Hh%M')."</span>".
-					"</a>".
-				"</td>".
-				"<td style=\"padding-left:".(5 + ($level * 15))."px;\" ".$colspan."><a href=\"".$link."\" style=\"width:100%;display:block;\">".$e['contentName']."</a></td>";
+    function view($app, $cType, $filter, $e, $level=0, $count=NULL){
 
-				if($cType['is_business']){
-					echo "<td><a href=\"".$link."\" style=\"width:100%;display:block;\">".$e['contentRef']."</a></td>";
-				}
+        if(intval($e['id_content']) == 0) return false;
 
-                if(is_array($cType['typeListLayout'])) {
-                    foreach($cType['typeListLayout'] as $f) {
-                        $field	= $app->apiLoad('field')->fieldGet(array('id_field' => $f['id_field']));
-                        $aff = $e['field'][$field['fieldKey']];
-                        $islink = true;
-                        if($field['fieldType'] == 'date') $aff      = $app->helperDate($aff, '%d.%m.%G');
-                        if($field['fieldType'] == 'boolean') $aff   = ($aff == '1') ? 'Oui' : 'Non';
-                        if(is_array($aff)) {
-                            $tmp = array();
-                            if($field['fieldType'] == 'user') {
-                                foreach($aff as $a) {
-                                    $tmp[]  =  '<a href="/admin/user/data?id_user='.$a['id_user'].'">'.$a['id_user'].' - '.$a['userMail'].'</a>';
-                                }
-                                $aff   = implode(' , ', $tmp);
-                                $islink = false;
-                            }
-                            if($field['fieldType'] == 'media') {
+        $version = $app->apiLoad('content')->contentVersionGet(array(
+            'id_content'	=> $e['id_content'],
+            'language'		=> $e['language']
+        ));
 
-                                foreach($aff as $type=>$a) {
-                                    $tmp[]  = '<b>'.$type.'</b>';
-                                    foreach($a as $aa) {
-                                        $tmp[]  =  '<a href="'.$aa['url'].'" target="_blank">'.$aa['url'].'</a>';
-                                    }
-                                }
-                                $aff   = implode('<br />', $tmp);
-                                $islink = false;
-                            }
-                            if($field['fieldType'] == 'category') {
-                                if(key($aff) == 0) {
-                                    foreach($aff as $a) {
-                                        $tmp[]  =  $a['categoryName'];
-                                    }
-                                    $aff    = implode(' , ', $tmp);
-                                }else
-                                    $aff = $aff['categoryName'];
-                            }
-                            if($field['fieldType'] == 'dbtable') {
-                                $aff = print_r($aff, true);
-                            }
-                            if($field['fieldType'] == 'content') {
-                                if(key($aff) == 0) {
-                                    foreach($aff as $a) {
-                                        $tmp[]  =  '<a href="data?id_content='.$a['id_content'].'">'.$a['id_content'].' - '.$a['contentName'].'</a>';
-                                    }
-                                    $aff    = implode(' , ', $tmp);
-                                }else
-                                    $aff = $aff['id_content'].' - '.$aff['contentName'];
-                            }
-                            if($field['fieldType'] == 'dbtabledd') {
-                                $aff = print_r($aff, true);
-                            }
-                            //$aff = print_r($field['fieldParam'], true);
+        $colspan = '';
+        if(!$cType['is_business']) {
+            //$colspan = 'colspan="2"';
+        }
+
+        foreach($app->dbMulti("SELECT language FROM k_contentdata WHERE id_content=".$e['id_content']) as $l){
+            $languages .= "<a href=\"data-language?id_content=".$e['id_content']."&language=".$l['language']."\" class=\"lang\">".strtoupper($l['language'])."</a> ";
+        }
+
+        $link = "data?id_content=".$e['id_content']."&language=".$e['language'];
+
+        echo
+            "<tr>".
+            "<td><input type=\"checkbox\" name=\"remove[]\" value=\"".$e['id_content']."\" class=\"chk cb\" id=\"chk_remove_".$count."\" /></td>".
+            "<td>".
+            "<input type=\"hidden\"		name=\"see[".$e['id_content']."]\" value=\"0\" />".
+            "<input type=\"checkbox\"	name=\"see[".$e['id_content']."]\" value=\"1\" class=\"chk cs\" ".(($e['contentSee']) ? "checked" : '')." id=\"chk_see_".$count."\" />".
+            "</td>".
+            "<td class=\"icone\"><a href=\"javascript:duplicate(".$e['id_content'].");\"><i class=\"icon-tags\"></i></a></td>".
+            "<td style=\"padding-left:5px;\">".sizeof($version)."</td>".
+            "<td><a href=\"comment?id_content=".$e['id_content']."\">".$e['contentCommentCount']."</a></td>".
+            "<td>".$languages."</td>".
+            "<td><a href=\"".$link."\">".$e['id_content']."</a></td>".
+            "<td class=\"dateTime\">".
+            "<a href=\"".$link."\">".
+            "<span class=\"date\">".$app->helperDate($e['contentDateCreation'], '%d.%m.%G')."</span> ".
+            "<span class=\"time\">".$app->helperDate($e['contentDateCreation'], '%Hh%M')."</span>".
+            "</a>".
+            "</td>".
+            "<td class=\"dateTime\">".
+            "<a href=\"".$link."\">".
+            "<span class=\"date\">".$app->helperDate($e['contentDateUpdate'], '%d.%m.%G')."</span> ".
+            "<span class=\"time\">".$app->helperDate($e['contentDateUpdate'], '%Hh%M')."</span>".
+            "</a>".
+            "</td>".
+            "<td style=\"padding-left:".(5 + ($level * 15))."px;\" ".$colspan."><a href=\"".$link."\" style=\"width:100%;display:block;\">".$e['contentName']."</a></td>";
+
+        if($cType['is_business']){
+            echo "<td><a href=\"".$link."\" style=\"width:100%;display:block;\">".$e['contentRef']."</a></td>";
+        }
+
+        viewRow($app, $cType, $filter, $e, $level, $count);
+
+        echo "</tr>";
+
+        if($filter['viewChildren']){
+            $subs = $app->dbMulti("SELECT id_content FROM k_content WHERE id_parent=".$e['id_content']." ORDER BY pos_parent ASC");
+
+            foreach($subs as $sub){
+                $sub = $app->apiLoad('content')->contentGet(array(
+                    'debug'	 		=> false,
+                    'raw'			=> true,
+                    'language'		=> $e['language'],
+                    'id_content' 	=> $sub['id_content']
+                ));
+
+                view($app, $cType, $filter, $sub, $level+1, null);
+            }
+        }
+
+    }
+
+
+    /* + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - */
+
+    function viewRow($app, $cType, $filter, $e, $level=0, $count=NULL){
+
+        if(is_array($cType['typeListLayout'])) {
+            foreach($cType['typeListLayout'] as $f) {
+
+                $field	= $app->apiLoad('field')->fieldGet(array('id_field' => $f['id_field']));
+                $aff    = $e['field'][$field['fieldKey']];
+                $islink = true;
+
+                // Type date
+                if($field['fieldType'] == 'date') $aff      = $app->helperDate($aff, '%d.%m.%G');
+                if($field['fieldType'] == 'boolean') $aff   = ($aff == '1') ? 'Oui' : 'Non';
+
+                // Type Array
+                if(is_array($aff)) {
+                    $tmp = array();
+
+                    // Type User
+                    if($field['fieldType'] == 'user') {
+                        foreach($aff as $a) {
+                            $tmp[]  =  '<a href="/admin/user/data?id_user='.$a['id_user'].'" title="ID : '.$a['id_user'].'">'.$a['userMail'].'</a>';
                         }
-                        //if(is_array($aff)) $aff = print_r($aff, true);
-                        echo "<td>";
-                        if($islink) echo "<a href=\"".$link."\">".$aff."</a>";
-                        else echo $aff;
-                        echo "</td>";
+                        $aff   = implode(' , ', $tmp);
+                        $islink = false;
+                    }
+                    // Type Media
+                    if($field['fieldType'] == 'media') {
+
+                        foreach($aff as $type=>$a) {
+                            $tmp[]  = '<b>'.$type.'</b>';
+                            foreach($a as $aa) {
+                                $tmp[]  =  '<a href="'.$aa['url'].'" target="_blank" title="Ouvrir">'.$aa['url'].'</a>';
+                            }
+                        }
+                        $aff   = implode('<br />', $tmp);
+                        $islink = false;
+                    }
+                    // Type Category
+                    if($field['fieldType'] == 'category') {
+                        if(key($aff) == 0) {
+                            foreach($aff as $a) {
+                                $tmp[]  =  $a['categoryName'];
+                            }
+                            $aff    = implode(' , ', $tmp);
+                        }else
+                            $aff = $aff['categoryName'];
+                    }
+                    // Type table externe
+                    if($field['fieldType'] == 'dbtable') {
+                        $aff = print_r($aff, true);
+                    }
+                    // Type Content
+                    if($field['fieldType'] == 'content') {
+                        if(key($aff) == 0) {
+                            foreach($aff as $a) {
+                                $tmp[]  =  '<a href="data?id_content='.$a['id_content'].'" title="ID : '.$a['id_content'].'" >'.$a['contentName'].'</a>';
+                            }
+                            $aff    = implode(' , ', $tmp);
+                        }else
+                            $aff = $aff['id_content'].' - '.$aff['contentName'];
                     }
                 }
 
-			echo "</tr>";
-	
-			if($filter['viewChildren']){
-				$subs = $app->dbMulti("SELECT id_content FROM k_content WHERE id_parent=".$e['id_content']." ORDER BY pos_parent ASC");
-	
-				foreach($subs as $sub){
-					$sub = $app->apiLoad('content')->contentGet(array(
-						'debug'	 		=> false,
-						'raw'			=> true,
-						'language'		=> $e['language'],
-						'id_content' 	=> $sub['id_content']
-					));
-	
-					view($app, $cType, $filter, $sub, $level+1, null);
-				}
-			}
-	
-		}
+                echo "<td>";
+                if($islink) echo "<a href=\"".$link."\">".$aff."</a>";
+                else echo $aff;
+                echo "</td>";
+            }
+        }
+
+    }
 	
 	?>
 

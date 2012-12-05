@@ -123,7 +123,7 @@
     }
 
 	if($_REQUEST['id_content'] != NULL){
-	
+
 		if($_REQUEST['reloadFromVersion'] != NULL){
 			$data = $app->apiLoad('content')->contentVersionGet(array(
 				'id_version' => $_REQUEST['reloadFromVersion']
@@ -136,7 +136,6 @@
 				'raw'			=> true
 			));
 		}
-
 		if($data['id_content'] == $_REQUEST['id_content']){
 			$type	= $app->apiLoad('content')->contentType(array('id_type' => $data['id_type'], 'debug' => false)); 
 			$title	= $data['contentName'];
