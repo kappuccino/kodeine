@@ -108,7 +108,7 @@
     <?php if($data['id_newsletter'] > 0) { ?>
         <?php if($data['newsletterSendDate'] != NULL){ ?>
             <li><a href="analytic?id_newsletter=<?php echo $_REQUEST['id_newsletter'] ?>" class="btn btn-mini">Consulter les statistiques</a></li>
-            <li><a href="data" class="btn btn-mini">Nouveau</a></li>
+            <li><a href="data-designer" class="btn btn-mini">Nouveau</a></li>
         <?php } ?>
         <?php if($_REQUEST['id_newsletter'] > 0){ ?>
             <li><a href="preview?id_newsletter=<?php echo $_REQUEST['id_newsletter'] ?>" class="btn btn-mini" target="_blank">Prévisualiser</a></li>

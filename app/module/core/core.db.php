@@ -39,35 +39,23 @@ public static function __getInstance(){
 }
 
 /* + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - 
-public function dbExtConnect($host=NULL, $log=NULL, $pass=NULL){
-	$con = @mysql_connect($host, $log, $pass);
-	if(!$con){ die(DB_ERROR_CONNECT); }else{ return $con; }
++ - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - */
+public function dbExtConnect($host, $log, $pass, $database){
+
+	$con = new mysqli($host, $log, $pass, $database);
+	if($con->connect_errno){
+		printf("Echec de la connexion : %s\n", mysqli_connect_error());
+		exit();
+	}
+
+	return $con;
 }
 
+/* + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + -
++ - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - */
 public function dbExtClose($connection){
-	mysql_close($connection);
+	$connection->close();
 }
-
-public function dbExtSelectDb($db){
-	$out = @mysql_select_db($db);
-	if(!$out){ die(DB_ERROR_USEDB); }else{ return $out; }
-}
-+ - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - */
-
-/* + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - 
-public function dbNumFields($result=NULL){
-	$result = ($result == NULL) ? $this->db_result : $result;
-	return mysql_num_fields($result);
-}
-+ - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - */
-
-/* + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - 
-public function dbFieldName($index, $result=NULL){
-	return ($result == NULL)
-		? mysql_field_name($this->db_result, $index)
-		: mysql_field_name($result, $index);
-}
-+ - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - */
 
 /* + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - 
 + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - */

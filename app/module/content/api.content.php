@@ -220,7 +220,6 @@ public function contentGet($opt=array()){
 		$useSocialForum = false;
 	}
 
-
 	# Former la JOINTURE d'apres le TYPE
 	#
 	if($is_item){
@@ -259,6 +258,7 @@ public function contentGet($opt=array()){
 	if($useShop){
 		$join[] = "INNER JOIN k_contentshop ON k_content.id_content = k_contentshop.id_content";
 	}
+
 
 	if($useSocialForum){
 		$join[] = "INNER JOIN k_contentsocialforum ON k_content.id_content = k_contentsocialforum.id_content";
@@ -468,7 +468,7 @@ public function contentGet($opt=array()){
 			if($opt['debug']) $this->pre("No ADZONE found for ID/KEY : ".$opt['adZone']);
 			return array();
 		}
-	}	
+	}
 
 	if($opt['id_user'] != NULL)		$cond[] = "k_content.id_user=".$opt['id_user'];
 	if($opt['contentSee'] != 'ALL')	$cond[] = "contentSee=".(isset($opt['contentSee']) ? $opt['contentSee'] : '1');
@@ -558,8 +558,8 @@ public function contentGet($opt=array()){
 		foreach($content as $idx => $c){				
 			foreach($fieldAssoDb as $f){
 				$tmp = explode($this->splitter, $c['field'.$f['id_field']]);
-				foreach($tmp as $idx => $tmp_){
-					if($tmp_ == NULL) unset($tmp[$idx]);
+				foreach($tmp as $tmpidx => $tmp_){
+					if($tmp_ == NULL) unset($tmp[$tmpidx]);
 				}
 				$content[$idx]['field'.$f['id_field']] = array_values($tmp);
 			}
@@ -1572,6 +1572,8 @@ public function contentType($opt=array()){
 				'bottom' => array()
 			);
 		}
+        $type['typeListLayout'] = json_decode(utf8_encode($type['typeListLayout']), true);
+        if(!is_array($type['typeListLayout'])) $type['typeListLayout'] = array();
 	}
 
 	if($opt['debug']) $this->pre($this->db_query, $this->db_error, $type);

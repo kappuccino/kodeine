@@ -4,6 +4,10 @@ Kodeine Change log
 * = Autre / Divers / Inclassable...
 
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+2012-11-30 (build 5.0.9)
+- user/data : bouton retour avec icone liste + nom du type
+
 2012-11-09 (build 5.0.7)
 - Standardisation des boutons
 - Correction pb modification onglets dans user/data

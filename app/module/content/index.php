@@ -44,6 +44,7 @@
 
 	$dir = ($filter['direction'] == 'ASC') ? 'DESC' : 'ASC';
 
+
 ?><!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -58,13 +59,12 @@
 
 <div class="inject-subnav-right hide">
 	
-	<li><a onclick="filterToggle('content<?php echo $id_type ?>');" class="btn btn-mini">Options d'affichage</a></li>
-	
-	<li><a href="<?php echo (($e['is_gallery']) ? 'gallery-album' : 'data' )."?id_type=".$id_type; ?>" class="btn btn-small btn-success">Ajouter <?php echo $cType['typeName']; ?> </a></li>
+	<li><a onclick="filterToggle('content<?php echo $id_type ?>');" class="btn btn-small">Affichage</a></li>
+
 
 	<li>
 		<div class="btn-group">
-			<a class="btn btn-mini dropdown-toggle" data-toggle="dropdown" href="#"><?php echo $cType['typeName']; ?> <span class="caret"></span></a>
+			<a class="btn btn-mini dropdown-toggle" data-toggle="dropdown" href="#"><i class="icon-list"></i> <?php echo $cType['typeName']; ?> <span class="caret"></span></a>
 			<ul class="dropdown-menu"><?php
 			foreach($app->apiLoad('content')->contentType(array('profile' => true)) as $e){
 				echo '<li class="clearfix">';
@@ -75,20 +75,24 @@
 			?></ul>
 		</div>
 
-	</li>
+	</li><li><a href="<?php echo (($e['is_gallery']) ? 'gallery-album' : 'data' )."?id_type=".$id_type; ?>" class="btn btn-small btn-success">Ajouter <?php echo $cType['typeName']; ?> </a></li>
+
 </div>
 
 <div id="app">
 	
-	<div class="quickForm" style="display:<?php echo $filter['open'] ? 'block' : 'none;' ?>;">
+	<div class="quickForm" style="display:<?php echo ($filter['open']) ? 'block' : 'none;' ?>;">
 	<form action="index" method="post" class="form-horizontal">
 
 		<input type="hidden" name="id_type"			value="<?php echo $id_type ?>" />
 		<input type="hidden" name="filter[open]"	value="1" />
 		<input type="hidden" name="filter[offset]"	value="0" />
-		
-		<label class="control-label" for="prependedInput">Combien</label>
-		<input type="text" name="filter[limit]" class="input-small" placeholder="" value="<?php echo $filter['limit'] ?>" size="3" />
+
+        <label class="control-label" for="prependedInput">Chercher</label>
+        <input type="text" name="filter[q]" class="input-small" placeholder="" value="<?php echo $filter['q'] ?>" size="5" />
+
+        <label class="control-label" for="prependedInput">Combien</label>
+        <input type="text" name="filter[limit]" class="input-small" placeholder="" value="<?php echo $filter['limit'] ?>" size="3" />
 
 		<label class="control-label" for="prependedInput">Catégorie</label>
 		<?php
@@ -126,7 +130,8 @@
 		<input type="checkbox" name="filter[categoryThrough]" value="1" <?php if($filter['categoryThrough']) echo ' checked'; ?> />
 
 		<button class="btn btn-mini" type="submit">Filter les résultats</button>
-		<button class="btn btn-mini">Annuler</button>
+        <button class="btn btn-mini">Annuler</button>
+        <a href="type-row?id_type=<?php echo $id_type; ?>" class="btn btn-mini">Gérer les colonnes</a>
 	</form>
 	</div>	
 
@@ -166,84 +171,177 @@
 	
 		$fields = $app->apiLoad('field')->fieldGet(array('id_type' => $id_type, 'debug' => false));
 		$lang	= $app->countryGet(array('is_used' => true));
-	
-		/* + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - */
-	
-		function view($app, $cType, $filter, $e, $level=0, $count=NULL){
 
-			if(intval($e['id_content']) == 0) return false;
-		
-			$version = $app->apiLoad('content')->contentVersionGet(array(
-				'id_content'	=> $e['id_content'],
-				'language'		=> $e['language']
-			));
-			
-			$colspan = '';
-			if(!$cType['is_business']) {
-				$colspan = 'colspan="2"';
-			}
-	
-			foreach($app->dbMulti("SELECT language FROM k_contentdata WHERE id_content=".$e['id_content']) as $l){
-				$languages .= "<a href=\"data-language?id_content=".$e['id_content']."&language=".$l['language']."\" class=\"lang\">".strtoupper($l['language'])."</a> ";
-			}
-			
-			$link = "data?id_content=".$e['id_content']."&language=".$e['language'];
+    /* + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - */
 
-			echo 
-			"<tr>".
-				"<td><input type=\"checkbox\" name=\"remove[]\" value=\"".$e['id_content']."\" class=\"chk cb\" id=\"chk_remove_".$count."\" /></td>".
-				"<td>".
-					"<input type=\"hidden\"		name=\"see[".$e['id_content']."]\" value=\"0\" />".
-					"<input type=\"checkbox\"	name=\"see[".$e['id_content']."]\" value=\"1\" class=\"chk cs\" ".(($e['contentSee']) ? "checked" : '')." id=\"chk_see_".$count."\" />".
-				"</td>".
-				"<td class=\"icone\"><a href=\"javascript:duplicate(".$e['id_content'].");\"><i class=\"icon-tags\"></i></a></td>".
-				"<td style=\"padding-left:5px;\">".sizeof($version)."</td>".
-				"<td><a href=\"comment?id_content=".$e['id_content']."\">".$e['contentCommentCount']."</a></td>".
-				"<td>".$languages."</td>".
-				"<td><a href=\"".$link."\">".$e['id_content']."</a></td>".
-				"<td class=\"dateTime\">".
-					"<a href=\"".$link."\">".
-						"<span class=\"date\">".$app->helperDate($e['contentDateCreation'], '%d.%m.%G')."</span> ".
-						"<span class=\"time\">".$app->helperDate($e['contentDateCreation'], '%Hh%M')."</span>".
-					"</a>".
-				"</td>".
-				"<td class=\"dateTime\">".
-					"<a href=\"".$link."\">".
-						"<span class=\"date\">".$app->helperDate($e['contentDateUpdate'], '%d.%m.%G')."</span> ".
-						"<span class=\"time\">".$app->helperDate($e['contentDateUpdate'], '%Hh%M')."</span>".
-					"</a>".
-				"</td>".
-				"<td style=\"padding-left:".(5 + ($level * 15))."px;\" ".$colspan."><a href=\"".$link."\" style=\"width:100%;display:block;\">".$e['contentName']."</a></td>";
+    function view($app, $cType, $filter, $e, $level=0, $count=NULL){
 
-				if($cType['is_business']){
-					echo "<td><a href=\"".$link."\" style=\"width:100%;display:block;\">".$e['contentRef']."</a></td>";
-				}
+        if(intval($e['id_content']) == 0) return false;
 
-			echo "</tr>";
-	
-			if($filter['viewChildren']){
-				$subs = $app->dbMulti("SELECT id_content FROM k_content WHERE id_parent=".$e['id_content']." ORDER BY pos_parent ASC");
-	
-				foreach($subs as $sub){
-					$sub = $app->apiLoad('content')->contentGet(array(
-						'debug'	 		=> false,
-						'raw'			=> true,
-						'language'		=> $e['language'],
-						'id_content' 	=> $sub['id_content']
-					));
-	
-					view($app, $cType, $filter, $sub, $level+1, null);
-				}
-			}
-	
-		}
+        $version = $app->apiLoad('content')->contentVersionGet(array(
+            'id_content'	=> $e['id_content'],
+            'language'		=> $e['language']
+        ));
+
+        $colspan = '';
+        if(!$cType['is_business']) {
+            //$colspan = 'colspan="2"';
+        }
+
+        foreach($app->dbMulti("SELECT language FROM k_contentdata WHERE id_content=".$e['id_content']) as $l){
+            $languages .= "<a href=\"data-language?id_content=".$e['id_content']."&language=".$l['language']."\" class=\"lang\">".strtoupper($l['language'])."</a> ";
+        }
+
+        $link = "data?id_content=".$e['id_content']."&language=".$e['language'];
+
+        echo
+            "<tr valign=\"top\">".
+            "<td><input type=\"checkbox\" name=\"remove[]\" value=\"".$e['id_content']."\" class=\"chk cb\" id=\"chk_remove_".$count."\" /></td>".
+            "<td>".
+            "<input type=\"hidden\"		name=\"see[".$e['id_content']."]\" value=\"0\" />".
+            "<input type=\"checkbox\"	name=\"see[".$e['id_content']."]\" value=\"1\" class=\"chk cs\" ".(($e['contentSee']) ? "checked" : '')." id=\"chk_see_".$count."\" />".
+            "</td>".
+            "<td class=\"icone\"><a href=\"javascript:duplicate(".$e['id_content'].");\"><i class=\"icon-tags\"></i></a></td>".
+            //"<td style=\"padding-left:5px;\">".sizeof($version)."</td>".
+            //"<td><a href=\"comment?id_content=".$e['id_content']."\">".$e['contentCommentCount']."</a></td>".
+            "<td>".$languages."</td>".
+            "<td><a href=\"".$link."\">".$e['id_content']."</a></td>".
+            "<td class=\"dateTime\">".
+            "<a href=\"".$link."\">".
+            "<span class=\"date\">".$app->helperDate($e['contentDateCreation'], '%d.%m.%G')."</span> ".
+            "<span class=\"time\">".$app->helperDate($e['contentDateCreation'], '%Hh%M')."</span>".
+            "</a>".
+            "</td>".
+            "<td class=\"dateTime\">".
+            "<a href=\"".$link."\">".
+            "<span class=\"date\">".$app->helperDate($e['contentDateUpdate'], '%d.%m.%G')."</span> ".
+            "<span class=\"time\">".$app->helperDate($e['contentDateUpdate'], '%Hh%M')."</span>".
+            "</a>".
+            "</td>".
+            "<td style=\"padding-left:".(5 + ($level * 15))."px;\" ".$colspan."><a href=\"".$link."\" style=\"width:100%;display:block;\">".$e['contentName']."</a></td>";
+
+        if($cType['is_business']){
+            echo "<td><a href=\"".$link."\" style=\"width:100%;display:block;\">".$e['contentRef']."</a></td>";
+        }
+
+        viewRow($app, $cType, $filter, $e, $level, $count);
+
+        echo "</tr>";
+
+        if($filter['viewChildren']){
+            $subs = $app->dbMulti("SELECT id_content FROM k_content WHERE id_parent=".$e['id_content']." ORDER BY pos_parent ASC");
+
+            foreach($subs as $sub){
+                $sub = $app->apiLoad('content')->contentGet(array(
+                    'debug'	 		=> false,
+                    'raw'			=> true,
+                    'language'		=> $e['language'],
+                    'id_content' 	=> $sub['id_content']
+                ));
+
+                view($app, $cType, $filter, $sub, $level+1, null);
+            }
+        }
+
+    }
+
+
+    /* + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - */
+
+    function viewRow($app, $cType, $filter, $e, $level=0, $count=NULL){
+
+        if(is_array($cType['typeListLayout'])) {
+            foreach($cType['typeListLayout'] as $f) {
+                $field = array();
+                if(is_numeric($f['field'])) {
+                    $field	= $app->apiLoad('field')->fieldGet(array('id_field' => $f['field']));
+                    $aff    = $e['field'][$field['fieldKey']];
+                }else {
+                    if($f['field'] == 'contentMedia') $field['fieldType'] = 'media';
+                    $aff    = $e[$f['field']];
+                    if(in_array($f['field'], array('contentDateStart', 'contentDateEnd')) && $e[$f['field']] != NULL) {
+                        $aff =  "<span class=\"date\">".$app->helperDate($aff, '%d.%m.%G')."</span> ".
+                                "<span class=\"time\">".$app->helperDate($aff, '%Hh%M')."</span>";
+                    }
+                }
+
+                $islink = true;
+
+                // Type date
+                if($field['fieldType'] == 'date') $aff      = $app->helperDate($aff, '%d.%m.%G');
+                if($field['fieldType'] == 'boolean') $aff   = ($aff == '1') ? 'Oui' : 'Non';
+
+                // Type Array
+                if(is_array($aff)) {
+                    $tmp = array();
+
+                    // Type User
+                    if($field['fieldType'] == 'user') {
+                        foreach($aff as $a) {
+                            $tmp[]  =  '<a href="/admin/user/data?id_user='.$a['id_user'].'" title="ID : '.$a['id_user'].'">'.$a['userMail'].'</a>';
+                        }
+                        $aff   = implode(' , ', $tmp);
+                        $islink = false;
+                    }
+                    // Type Media
+                    if($field['fieldType'] == 'media') {
+                        $i = 0;
+                        $affmedia = '';
+                        foreach($aff as $type=>$a) {
+                            if($i > 0) $affmedia .= "<br />";
+                            $i++;
+                            $affmedia  .= '<b>'.$type.' ('.sizeof($a).')</b><br />';
+                            $medias = array();
+                            foreach($a as $aa) {
+                                $medias[]  = '<a href="'.$aa['url'].'" target="_blank" title="'.$aa['url'].'">'.basename($aa['url']).'</a> ';
+                            }
+                            $affmedia .= implode(' , ', $medias);
+                        }
+                        $aff = $affmedia;
+
+                        $islink = false;
+                    }
+                    // Type Category
+                    if($field['fieldType'] == 'category') {
+                        if(key($aff) == 0) {
+                            foreach($aff as $a) {
+                                $tmp[]  =  $a['categoryName'];
+                            }
+                            $aff    = implode(' , ', $tmp);
+                        }else
+                            $aff = $aff['categoryName'];
+                    }
+                    // Type table externe
+                    if($field['fieldType'] == 'dbtable') {
+                        $aff = print_r($aff, true);
+                    }
+                    // Type Content
+                    if($field['fieldType'] == 'content') {
+                        if(key($aff) == 0) {
+                            foreach($aff as $a) {
+                                $tmp[]  =  '<a href="data?id_content='.$a['id_content'].'" title="ID : '.$a['id_content'].'" >'.$a['contentName'].'</a>';
+                            }
+                            $aff    = implode(' , ', $tmp);
+                        }else
+                            $aff = $aff['id_content'].' - '.$aff['contentName'];
+                    }
+                }
+
+                echo "<td>";
+                if($islink) echo "<a href=\"".$link."\">".$aff."</a>";
+                else echo $aff;
+                echo "</td>";
+            }
+        }
+
+    }
 	
 	?>
 
 	<form method="post" action="index" id="listing">
 		<input type="hidden" name="id_type"		value="<?php echo $id_type ?>" />
 		<input type="hidden" name="language"	value="<?php echo $language ?>" />
-		
+
 		<table border="0" cellpadding="0" cellspacing="0" class="listing">
 			<thead>
 				<tr>
@@ -251,12 +349,12 @@
 					<th width="20" class="icone order <?php if($filter['order'] == 'k_content.contentSee') echo 'order'.$dir; ?>" onClick="document.location='index?id_type=<?php echo $_REQUEST['id_type'] ?>&cf&order=k_content.contentSee&direction=<?php echo $dir ?>'"><span><i class="icon-eye-open icon-white"></i></span></th>
 						
 					<th width="20" class="icone"><i class="icon-tags icon-white"></i></th>
-					<th width="20" class="icone"><i class="icon-file icon-white"></i></th>
-					<th width="20" class="icone"><i class="icon-comment icon-white"></i></th>
+					<!--<th width="20" class="icone"><i class="icon-file icon-white"></i></th>-->
+					<!--<th width="20" class="icone"><i class="icon-comment icon-white"></i></th>-->
 					<th width="<?php echo 20 + (sizeof($lang) * 20) ?>"class="icone"><i class="icon-globe icon-white"></i></th>
 					<th width="60" 	class="order <?php if($filter['order'] == 'k_content.id_content') echo 'order'.$dir; ?>" onClick="document.location='index?id_type=<?php echo $_REQUEST['id_type'] ?>&cf&order=k_content.id_content&direction=<?php echo $dir ?>'"><span>#</span></th>
-					<th width="130" class="order <?php if($filter['order'] == 'k_content.contentDateCreation')  echo 'order'.$dir; ?>" onClick="document.location='index?id_type=<?php echo $_REQUEST['id_type'] ?>&cf&order=k_content.contentDateCreation&direction=<?php echo $dir ?>'"><span>Création</span></th>
-					<th width="130" class="order <?php if($filter['order'] == 'k_content.contentDateUpdate') 	echo 'order'.$dir; ?>" onClick="document.location='index?id_type=<?php echo $_REQUEST['id_type'] ?>&cf&order=k_content.contentDateUpdate&direction=<?php echo $dir ?>'"><span>Mise à jour</span></th>
+					<th width="115" class="order <?php if($filter['order'] == 'k_content.contentDateCreation')  echo 'order'.$dir; ?>" onClick="document.location='index?id_type=<?php echo $_REQUEST['id_type'] ?>&cf&order=k_content.contentDateCreation&direction=<?php echo $dir ?>'"><span>Création</span></th>
+					<th width="115" class="order <?php if($filter['order'] == 'k_content.contentDateUpdate') 	echo 'order'.$dir; ?>" onClick="document.location='index?id_type=<?php echo $_REQUEST['id_type'] ?>&cf&order=k_content.contentDateUpdate&direction=<?php echo $dir ?>'"><span>Mise à jour</span></th>
 						
 					<?php if($cType['is_business']){ ?>
 					<th width="200" class="order <?php if($filter['order'] == 'k_content.contentRef') echo 'order'.$dir; ?>" onClick="document.location='index?id_type=<?php echo $_REQUEST['id_type'] ?>&cf&order=k_content.contentRef&direction=<?php echo $dir ?>'"><span>R&eacute;f&eacute;rence</span></th>
@@ -264,8 +362,28 @@
 
 					<th class="filter order <?php if($filter['order'] == 'k_contentdata.contentName') echo 'order'.$dir; ?>" onClick="document.location='index?id_type=<?php echo $_REQUEST['id_type'] ?>&cf&order=k_contentdata.contentName&direction=<?php echo $dir ?>'">
 						<span>Nom</span>
-						<input type="text" class="input-small" placeholder="filtrer..." id="filter"/>
+						<!--<input type="text" class="input-small" placeholder="filtrer..." id="filter"/>-->
 					</th>
+                    <?php
+                        if(is_array($cType['typeListLayout'])) {
+                            foreach($cType['typeListLayout'] as $e) {
+                                if(is_numeric($e['field'])) {
+                                    $field	    = $app->apiLoad('field')->fieldGet(array('id_field' => $e['field']));
+                                    $fieldbdd = 'k_content'.$_REQUEST['id_type'].'.field'.$e['field'];
+                                }else {
+                                    $field = array('fieldName' => $e['field']);
+                                    $fieldbdd = 'k_content.'.$e['field'];
+                                }
+                    ?>
+                        <th width="<?php echo $e['width']; ?>" class="order <?php if($filter['order'] == $fieldbdd) 	echo 'order'.$dir; ?>" onClick="document.location='index?id_type=<?php echo $_REQUEST['id_type'] ?>&cf&order=<?php echo $fieldbdd; ?>&direction=<?php echo $dir ?>'">
+                            <span><?php echo $field['fieldName']; ?></span>
+                        </th>
+
+                    <?php
+                            }
+                        }
+                    ?>
+
 				</tr>
 			</thead>
 			<tbody>
@@ -281,6 +399,7 @@
 					foreach($content as $e){
 						$count++; // count pour les labels
 						view($app, $cType, $filter, $e, 0, $count);
+
 					}
 				}
 			?>
@@ -290,8 +409,12 @@
 				<tr>
 					<td><input type="checkbox" onchange="cbchange($(this));" class="chk" id="chk_remove_all" /></td>
 					<td><input type="checkbox" onchange="cschange($(this));" class="chk" id="chk_see_all" /></td>
-					<td colspan="7" height="25"><a href="#" onClick="remove();" class="btn btn-mini"><span>Effectuer les changement sur la selection</span></a></td>
-					<td colspan="<?php echo $cType['is_business'] ? 2 : 1 ?>" class="pagination"><?php
+					<td colspan="5" height="25"><a href="#" onClick="remove();" class="btn btn-mini"><span>Effectuer les changements sur la selection</span></a></td>
+                    <?php
+                        $cs = $cType['is_business'] ? 2 : 1;
+                        $cs += sizeof($cType['typeListLayout']);
+                    ?>
+                    <td colspan="<?php echo $cs; ?>" class="pagination" align="right"><?php
 						echo 'Total: '.$total.' &nbsp; ';
 						$app->pagination($total, $limit, $filter['offset'], 'index?cf&id_type='.$id_type.'&offset=%s');
 					?></td>

@@ -4,6 +4,12 @@ Kodeine Change log
 * = Autre / Divers / Inclassable...
 
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+2012-12-06 (build 5.0.10)
+- Fix pb options affichage + alignement pagination a droite dans index
+
+2012-12-03 (build 5.0.9)
+- data.php : remise en place de la case a cocher Archive
+
 2012-11-09 (build 5.0.7)
 - Standardisation des boutons et ajout du bouton "ajouter (type contenu)"
 

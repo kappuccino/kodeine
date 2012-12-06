@@ -123,7 +123,7 @@
     }
 
 	if($_REQUEST['id_content'] != NULL){
-	
+
 		if($_REQUEST['reloadFromVersion'] != NULL){
 			$data = $app->apiLoad('content')->contentVersionGet(array(
 				'id_version' => $_REQUEST['reloadFromVersion']
@@ -136,7 +136,6 @@
 				'raw'			=> true
 			));
 		}
-
 		if($data['id_content'] == $_REQUEST['id_content']){
 			$type	= $app->apiLoad('content')->contentType(array('id_type' => $data['id_type'], 'debug' => false)); 
 			$title	= $data['contentName'];
@@ -215,25 +214,25 @@
 <header><?php
 	include(COREINC.'/top.php');
 	include(dirname(__DIR__).'/content/ui/menu.php')
-?></header>	
+?></header>
+
 
 <div class="inject-subnav-right hide">
 	<li>
 		<div class="btn-group">
-			<a class="btn btn-mini dropdown-toggle" data-toggle="dropdown" href="#">Autres actions <span class="caret"></span></a>
+			<a class="btn btn-mini dropdown-toggle" data-toggle="dropdown" href="#">Actions <span class="caret"></span></a>
 			<ul class="dropdown-menu">
-				<li class="clearfix"><a href="data?id_type=<?php echo $type['id_type'] ?>" class="left">Nouveau document (<?php echo $type['typeName'] ?>)</a>
+				<li class="clearfix"><a href="data?id_type=<?php echo $type['id_type'] ?>" class="left">Nouveau</a>
 				<?php if($data['id_content'] > 0){ ?>
-				<li class="clearfix"><a href="data?id_content=<?php echo $data['id_content'] ?>" class="left">Recharger le formulaire</a></li>
+				<li class="clearfix"><a href="data?id_content=<?php echo $data['id_content'] ?>" class="left">Recharger</a></li>
 				<li class="clearfix"><a href="data-language?id_content=<?php echo $data['id_content'] ?>&language=<?php echo $data['language'] ?>" class="left">Traduction</a></li>
 				<li class="clearfix"><a href="/admin/comment/index?id_content=<?php echo $data['id_content'] ?>" class="left">Commentaire</a></li>
 				<li class="clearfix"><a href="parent?id_content=<?php echo $data['id_content'] ?>" class="left">Sous-contenu</a></li>
 				<?php } ?>
-			</ul>
 		</div>
 	</li>
 	<li>
-		<a href="/admin/content/?id_type=<?php echo $type['id_type'] ?>" class="btn btn-small">Retour à la liste</a>
+		<a href="/admin/content/?id_type=<?php echo $type['id_type'] ?>" class="btn btn-small"><i class="icon-list"></i> <?php echo $type['typeName']; ?></a>
 	</li>
     <li>
         <a onclick="removeThis(<?php echo $_REQUEST['id_content'] ?>)" class="btn btn-small btn-danger">Supprimer</a>
@@ -282,7 +281,7 @@
 
 <div class="tabset">
 
-	<div class="wrapper"><ul class="tab clearfix">
+	<div class="wrapper"><ul class="tab fix clearfix">
 
 		<ul class="do-viewer">
 		<?php foreach($type['typeFormLayout']['tab'] as $e){ ?>
@@ -353,6 +352,7 @@
 					$replace[] = '#'.$name;
 				}
 			}
+
 		?></ul>
 	</div>
 	<?php } ?>

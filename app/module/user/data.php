@@ -163,6 +163,9 @@
 
 <div class="inject-subnav-right hide">
 	<li><a href="data" class="btn btn-small">Nouvel utilisateur</a></li>
+    <li>
+        <a href="/admin/user/" class="btn btn-small"><i class="icon-list"></i> Utilisateurs</a>
+    </li>
 	<li><a href="#" onclick="$('#data').submit();" class="btn btn-small btn-success">Enregistrer</a></li>
 </div>
 
@@ -377,13 +380,17 @@
 		$('#userDateUpdate').datepicker({
 			format: 'yyyy-mm-dd'
 		});
-		$('#userDateExpire').datepicker({
-			format: 'yyyy-mm-dd'
-		});
+        $('#userDateExpire').datepicker({
+            format: 'yyyy-mm-dd'
+        });
+        $('.datePicker').datepicker({
+            format: 'yyyy-mm-dd'
+        });
 
 		$('#userDateCreate').siblings('.clear').on('click', function() {$('#userDateCreate').val('');});
 		$('#userDateUpdate').siblings('.clear').on('click', function() {$('#userDateUpdate').val('');});
-		$('#userDateExpire').siblings('.clear').on('click', function() {$('#userDateExpire').val('');});
+        $('#userDateExpire').siblings('.clear').on('click', function() {$('#userDateExpire').val('');});
+        $('.datePicker').siblings('.clear').on('click', function() {$(this).val('');});
 
 		
 	});
@@ -391,7 +398,7 @@
 	var d = new Date();
 	var day = (d.getUTCDate() < 10) ? '0'+d.getUTCDate() : d.getUTCDate();
 	if ($('#userDateCreate').val() == '') $('#userDateCreate').val(d.getFullYear()+'-'+(d.getUTCMonth()+1)+'-'+day);
-	if ($('#userDateUpdate').val() == '') $('#userDateUpdate').val(d.getFullYear()+'-'+(d.getUTCMonth()+1)+'-'+day);
+    if ($('#userDateUpdate').val() == '') $('#userDateUpdate').val(d.getFullYear()+'-'+(d.getUTCMonth()+1)+'-'+day);
 
 
 </script>

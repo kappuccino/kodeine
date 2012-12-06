@@ -111,7 +111,8 @@
 	}	
 
 ?><!DOCTYPE html>
-<html lang="fr">
+<html lang="fr" xmlns="http://www.w3.org/1999/html" xmlns="http://www.w3.org/1999/html"
+      xmlns="http://www.w3.org/1999/html">
 <head>
 	<title>Kodeine</title>
 	<?php
@@ -126,14 +127,14 @@
 	include(dirname(__DIR__).'/content/ui/menu.php')
 ?></header>
 
+<div class="inject-subnav-right hide">
+	<li><a href="./" class="btn btn-mini">G&eacute;rer les champs</a></li>
+    <li><a href="../content/type" class="btn btn-mini">G&eacute;rer les types</a></li>
+</div>
+
 <div id="app"><div class="wrapper"><div class="row-fluid">
 	
 	<div class="span3">
-
-		<div class="clearfix">
-			<a href="./" class="btn btn-mini left">G&eacute;rer les champs</a>
-			<a href="../content/type" class="btn btn-mini right">G&eacute;rer les types</a>
-		</div>	
 
 		<ul id="asso">
 			<li class="section clearfix">
