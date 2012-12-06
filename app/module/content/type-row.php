@@ -12,7 +12,7 @@ if($_REQUEST['id_type'] != NULL){
 
 $do = false;
 
-if((isset($_GET['add']) || isset($_GET['remove']) ) && $_GET['id_field'] > 0) {
+if((isset($_GET['add']) || isset($_GET['remove']) ) && $_GET['field'] != '') {
     $do = true;
 
     if(isset($_GET['add'])) $action = 'add';
@@ -21,11 +21,11 @@ if((isset($_GET['add']) || isset($_GET['remove']) ) && $_GET['id_field'] > 0) {
     $used = $data['typeListLayout'];
 
     foreach($used as $k=>$e) {
-        if($e['id_field'] == $_GET['id_field']) {
+        if($e['field'] == $_GET['field']) {
             unset($used[$k]);
         }
     }
-    if($action == 'add') $used[] = array('id_field' => $_GET['id_field'], 'width' => 200);
+    if($action == 'add') $used[] = array('field' => $_GET['field'], 'width' => 200);
     $used = array_merge($used);
 
     if(sizeof($used) > 2 && $action == 'add') {
@@ -46,7 +46,7 @@ if(isset($_GET['pos'])) {
     $i = 0;
     foreach($pos as $p) {
         foreach($used as $k=>$e) {
-            if($p == $e['id_field']) {
+            if($p == $e['field']) {
                 $e['width'] = $width[$i];
                 $newused[]  = $e;
                 $i ++;
@@ -74,13 +74,26 @@ if($do) {
 $opt    = array('id_type' => $_REQUEST['id_type']);
 $field	= $app->apiLoad('field')->fieldGet($opt);
 $used   = $data['typeListLayout'];
-$not    = array();
 $tmp    = array();
-foreach($data['typeListLayout'] as $e) $tmp[] = $e['id_field'];
+
+$contentField = array('contentMedia', 'contentDateStart', 'contentDateEnd');
+if($data['is_business']) array_push($contentField, 'contentRef', 'contentWeight', 'contentStock');
+
+// Champs utilises
+foreach($data['typeListLayout'] as $e) $tmp[] = $e['field'];
+
+// Champs de k_content(id_type) non utilises
+$not    = array();
 foreach($field as $f) {
     if(!in_array($f['id_field'], $tmp)) $not[] = $f;
 }
 
+// Champs de k_content non utilises
+$notC   = array();
+foreach($contentField as $f) {
+    if(!in_array($f, $tmp)) $notC[] = $f;
+}
+//$app->pre($not, $notC);
 
 ?><!DOCTYPE html>
 <html lang="fr">
@@ -169,7 +182,7 @@ foreach($field as $f) {
                 </thead>
 
             <tbody>
-                <?php if(sizeof($not) == 0){ ?>
+                <?php if(sizeof($not) == 0 && sizeof($notC) == 0){ ?>
             <tr>
                 <td colspan="4" style="padding:40px 0px 40px 0px; text-align:center; font-weight:bold">Aucun champ disponible</td>
             </tr>
@@ -177,7 +190,14 @@ foreach($field as $f) {
                 foreach($not as $e){ ?>
                 <tr>
                     <td><?php echo $e['fieldName']. '(' . $e['fieldKey'] . ')' ?></td>
-                    <td><a class="btn btn-mini" href="type-row?id_type=<?php echo $_REQUEST['id_type'] ?>&id_field=<?php echo $e['id_field'] ?>&add">Ajouter</a></td>
+                    <td><a class="btn btn-mini" href="type-row?id_type=<?php echo $_REQUEST['id_type'] ?>&field=<?php echo $e['id_field'] ?>&add">Ajouter</a></td>
+                </tr>
+                    <?php } ?>
+                <?php
+                foreach($notC as $e){ ?>
+                <tr>
+                    <td><b><?php echo $e; ?></b></td>
+                    <td><a class="btn btn-mini" href="type-row?id_type=<?php echo $_REQUEST['id_type'] ?>&field=<?php echo $e ?>&add">Ajouter</a></td>
                 </tr>
                     <?php } ?>
 			</tbody>
@@ -209,10 +229,20 @@ foreach($field as $f) {
 
                 if(sizeof($used) > 0){
                     foreach($used as $e){
-                        $field	= $app->apiLoad('field')->fieldGet(array('id_field' => $e['id_field']));
-                        echo "<li id=\"".$field['id_field']."\" style=\"height: 75px;\">". $field['fieldName']. " (" . $field['fieldKey'] . ")<br />";
-                        echo "Largeur <input type=\"text\" size=\"2\" id=\"w" . $field['id_field'] . "\" value=\"".$e['width']."\"><br />";
-                        echo "<a href=\"type-row?id_type=".$_REQUEST['id_type']."&id_field=".$field['id_field']."&remove\" class=\"btn btn-mini\">Supprimer</a> ";
+                        // Champs persos de k_content(id_type)
+                        if(is_numeric($e['field'])) {
+                            $field	    = $app->apiLoad('field')->fieldGet(array('id_field' => $e['field']));
+                            $id_field   = $field['id_field'];
+                            $fieldName  = $field['fieldName']. " (" . $field['fieldKey'] . ")";
+
+                        // Champs natifs de k_content
+                        }else {
+                            $id_field   = $e['field'];
+                            $fieldName  = $e['field'];
+                        }
+                        echo "<li id=\"".$id_field."\" style=\"height: 75px;\">". $fieldName . "<br />";
+                        echo "Largeur <input type=\"text\" size=\"2\" id=\"w" . $id_field . "\" value=\"".$e['width']."\"><br />";
+                        echo "<a href=\"type-row?id_type=".$_REQUEST['id_type']."&field=".$id_field."&remove\" class=\"btn btn-mini\">Supprimer</a> ";
                         echo "</li>";
                     }
                 }

@@ -1573,7 +1573,7 @@ public function contentType($opt=array()){
 			);
 		}
         $type['typeListLayout'] = json_decode(utf8_encode($type['typeListLayout']), true);
-        if(!is_array($type['typeFormLayout'])) $type['typeListLayout'] = array();
+        if(!is_array($type['typeListLayout'])) $type['typeListLayout'] = array();
 	}
 
 	if($opt['debug']) $this->pre($this->db_query, $this->db_error, $type);
