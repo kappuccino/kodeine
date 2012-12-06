@@ -49,15 +49,15 @@
 
 <div class="inject-subnav-right hide">
 	
-	<li><a onclick="filterToggle('newsletter');" class="btn btn-mini">Options d'affichage</a></li>
+	<li><a onclick="filterToggle('newsletter');" class="btn btn-small">Affichage</a></li>
 	<li><a href="data-designer" class="btn btn-small btn-success">Utiliser le designer</a></li>
 	<li><a href="data" class="btn btn-small btn-success">Ajouter une newsletter</a></li>
 </div>
 
 <div id="app">
 
-	<div class="menu-inline-left clearfix">
-		<form action="./" method="post" id="filter" class="form-horizontal" style="display:<?php echo $filter['open'] ? 'block' : 'none;' ?>;">
+	<div class="quickForm" style="display:<?php echo $filter['open'] ? 'block' : 'none;' ?>;">
+		<form action="./" method="post" class="form-horizontal">
 
 			<input type="hidden" name="id_type"			value="1" />
 			<input type="hidden" name="filter[open]"	value="1" />
@@ -109,7 +109,9 @@
 			<tr>
 				<td><input type="checkbox" onchange="cbchange($(this));" /></td>
 				<td colspan="5">
-					<a href="#" onClick="remove();" class="btn btn-mini">Supprimer la selection</a> 
+					<a href="#" onClick="remove();" class="btn btn-mini">Supprimer la selection</a>
+                </td>
+                <td align="right">
 					<span class="pagination"><?php $app->pagination($total, $limit, $filter['offset'], 'index?cf&offset=%s'); ?></span>
 				</td>
 			</tr>
