@@ -409,8 +409,12 @@
 				<tr>
 					<td><input type="checkbox" onchange="cbchange($(this));" class="chk" id="chk_remove_all" /></td>
 					<td><input type="checkbox" onchange="cschange($(this));" class="chk" id="chk_see_all" /></td>
-					<td colspan="7" height="25"><a href="#" onClick="remove();" class="btn btn-mini"><span>Effectuer les changement sur la selection</span></a></td>
-					<td colspan="<?php echo $cType['is_business'] ? 2 : 1 ?>" class="pagination"><?php
+					<td colspan="5" height="25"><a href="#" onClick="remove();" class="btn btn-mini"><span>Effectuer les changements sur la selection</span></a></td>
+                    <?php
+                        $cs = $cType['is_business'] ? 2 : 1;
+                        $cs += sizeof($cType['typeListLayout']);
+                    ?>
+                    <td colspan="<?php echo $cs; ?>" class="pagination" align="right"><?php
 						echo 'Total: '.$total.' &nbsp; ';
 						$app->pagination($total, $limit, $filter['offset'], 'index?cf&id_type='.$id_type.'&offset=%s');
 					?></td>

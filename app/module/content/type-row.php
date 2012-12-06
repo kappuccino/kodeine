@@ -1,5 +1,5 @@
 <?php
-
+$limit = 3;
 if($_REQUEST['id_type'] != NULL){
     $data	= $app->apiLoad('content')->contentType(array(
         'id_type'			=> $_REQUEST['id_type']
@@ -28,9 +28,9 @@ if((isset($_GET['add']) || isset($_GET['remove']) ) && $_GET['field'] != '') {
     if($action == 'add') $used[] = array('field' => $_GET['field'], 'width' => 200);
     $used = array_merge($used);
 
-    if(sizeof($used) > 2 && $action == 'add') {
+    if(sizeof($used) > $limit && $action == 'add') {
         $do = false;
-        $message = 'KO: Le nombre de colonnes supplémentaires est limité à 2';
+        $message = 'KO: Le nombre de colonnes supplémentaires est limité à '.$limit;
     }
 
 }
@@ -76,6 +76,7 @@ $field	= $app->apiLoad('field')->fieldGet($opt);
 $used   = $data['typeListLayout'];
 $tmp    = array();
 
+// Champs de k_content autorises
 $contentField = array('contentMedia', 'contentDateStart', 'contentDateEnd');
 if($data['is_business']) array_push($contentField, 'contentRef', 'contentWeight', 'contentStock');
 
