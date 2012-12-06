@@ -195,15 +195,15 @@
         $link = "data?id_content=".$e['id_content']."&language=".$e['language'];
 
         echo
-            "<tr>".
+            "<tr valign=\"top\">".
             "<td><input type=\"checkbox\" name=\"remove[]\" value=\"".$e['id_content']."\" class=\"chk cb\" id=\"chk_remove_".$count."\" /></td>".
             "<td>".
             "<input type=\"hidden\"		name=\"see[".$e['id_content']."]\" value=\"0\" />".
             "<input type=\"checkbox\"	name=\"see[".$e['id_content']."]\" value=\"1\" class=\"chk cs\" ".(($e['contentSee']) ? "checked" : '')." id=\"chk_see_".$count."\" />".
             "</td>".
             "<td class=\"icone\"><a href=\"javascript:duplicate(".$e['id_content'].");\"><i class=\"icon-tags\"></i></a></td>".
-            "<td style=\"padding-left:5px;\">".sizeof($version)."</td>".
-            "<td><a href=\"comment?id_content=".$e['id_content']."\">".$e['contentCommentCount']."</a></td>".
+            //"<td style=\"padding-left:5px;\">".sizeof($version)."</td>".
+            //"<td><a href=\"comment?id_content=".$e['id_content']."\">".$e['contentCommentCount']."</a></td>".
             "<td>".$languages."</td>".
             "<td><a href=\"".$link."\">".$e['id_content']."</a></td>".
             "<td class=\"dateTime\">".
@@ -252,9 +252,19 @@
 
         if(is_array($cType['typeListLayout'])) {
             foreach($cType['typeListLayout'] as $f) {
+                $field = array();
+                if(is_numeric($f['field'])) {
+                    $field	= $app->apiLoad('field')->fieldGet(array('id_field' => $f['field']));
+                    $aff    = $e['field'][$field['fieldKey']];
+                }else {
+                    if($f['field'] == 'contentMedia') $field['fieldType'] = 'media';
+                    $aff    = $e[$f['field']];
+                    if(in_array($f['field'], array('contentDateStart', 'contentDateEnd')) && $e[$f['field']] != NULL) {
+                        $aff =  "<span class=\"date\">".$app->helperDate($aff, '%d.%m.%G')."</span> ".
+                                "<span class=\"time\">".$app->helperDate($aff, '%Hh%M')."</span>";
+                    }
+                }
 
-                $field	= $app->apiLoad('field')->fieldGet(array('id_field' => $f['id_field']));
-                $aff    = $e['field'][$field['fieldKey']];
                 $islink = true;
 
                 // Type date
@@ -275,14 +285,20 @@
                     }
                     // Type Media
                     if($field['fieldType'] == 'media') {
-
+                        $i = 0;
+                        $affmedia = '';
                         foreach($aff as $type=>$a) {
-                            $tmp[]  = '<b>'.$type.'</b>';
+                            if($i > 0) $affmedia .= "<br />";
+                            $i++;
+                            $affmedia  .= '<b>'.$type.' ('.sizeof($a).')</b><br />';
+                            $medias = array();
                             foreach($a as $aa) {
-                                $tmp[]  =  '<a href="'.$aa['url'].'" target="_blank" title="Ouvrir">'.$aa['url'].'</a>';
+                                $medias[]  = '<a href="'.$aa['url'].'" target="_blank" title="'.$aa['url'].'">'.basename($aa['url']).'</a> ';
                             }
+                            $affmedia .= implode(' , ', $medias);
                         }
-                        $aff   = implode('<br />', $tmp);
+                        $aff = $affmedia;
+
                         $islink = false;
                     }
                     // Type Category
@@ -333,12 +349,12 @@
 					<th width="20" class="icone order <?php if($filter['order'] == 'k_content.contentSee') echo 'order'.$dir; ?>" onClick="document.location='index?id_type=<?php echo $_REQUEST['id_type'] ?>&cf&order=k_content.contentSee&direction=<?php echo $dir ?>'"><span><i class="icon-eye-open icon-white"></i></span></th>
 						
 					<th width="20" class="icone"><i class="icon-tags icon-white"></i></th>
-					<th width="20" class="icone"><i class="icon-file icon-white"></i></th>
-					<th width="20" class="icone"><i class="icon-comment icon-white"></i></th>
+					<!--<th width="20" class="icone"><i class="icon-file icon-white"></i></th>-->
+					<!--<th width="20" class="icone"><i class="icon-comment icon-white"></i></th>-->
 					<th width="<?php echo 20 + (sizeof($lang) * 20) ?>"class="icone"><i class="icon-globe icon-white"></i></th>
 					<th width="60" 	class="order <?php if($filter['order'] == 'k_content.id_content') echo 'order'.$dir; ?>" onClick="document.location='index?id_type=<?php echo $_REQUEST['id_type'] ?>&cf&order=k_content.id_content&direction=<?php echo $dir ?>'"><span>#</span></th>
-					<th width="130" class="order <?php if($filter['order'] == 'k_content.contentDateCreation')  echo 'order'.$dir; ?>" onClick="document.location='index?id_type=<?php echo $_REQUEST['id_type'] ?>&cf&order=k_content.contentDateCreation&direction=<?php echo $dir ?>'"><span>Création</span></th>
-					<th width="130" class="order <?php if($filter['order'] == 'k_content.contentDateUpdate') 	echo 'order'.$dir; ?>" onClick="document.location='index?id_type=<?php echo $_REQUEST['id_type'] ?>&cf&order=k_content.contentDateUpdate&direction=<?php echo $dir ?>'"><span>Mise à jour</span></th>
+					<th width="115" class="order <?php if($filter['order'] == 'k_content.contentDateCreation')  echo 'order'.$dir; ?>" onClick="document.location='index?id_type=<?php echo $_REQUEST['id_type'] ?>&cf&order=k_content.contentDateCreation&direction=<?php echo $dir ?>'"><span>Création</span></th>
+					<th width="115" class="order <?php if($filter['order'] == 'k_content.contentDateUpdate') 	echo 'order'.$dir; ?>" onClick="document.location='index?id_type=<?php echo $_REQUEST['id_type'] ?>&cf&order=k_content.contentDateUpdate&direction=<?php echo $dir ?>'"><span>Mise à jour</span></th>
 						
 					<?php if($cType['is_business']){ ?>
 					<th width="200" class="order <?php if($filter['order'] == 'k_content.contentRef') echo 'order'.$dir; ?>" onClick="document.location='index?id_type=<?php echo $_REQUEST['id_type'] ?>&cf&order=k_content.contentRef&direction=<?php echo $dir ?>'"><span>R&eacute;f&eacute;rence</span></th>
@@ -351,8 +367,13 @@
                     <?php
                         if(is_array($cType['typeListLayout'])) {
                             foreach($cType['typeListLayout'] as $e) {
-                                $field	= $app->apiLoad('field')->fieldGet(array('id_field' => $e['id_field']));
-                                $fieldbdd = 'k_content'.$cType['id_type'].'.field'.$e['id_field'];
+                                if(is_numeric($e['field'])) {
+                                    $field	    = $app->apiLoad('field')->fieldGet(array('id_field' => $e['field']));
+                                    $fieldbdd = 'k_content'.$_REQUEST['id_type'].'.field'.$e['field'];
+                                }else {
+                                    $field = array('fieldName' => $e['field']);
+                                    $fieldbdd = 'k_content.'.$e['field'];
+                                }
                     ?>
                         <th width="<?php echo $e['width']; ?>" class="order <?php if($filter['order'] == $fieldbdd) 	echo 'order'.$dir; ?>" onClick="document.location='index?id_type=<?php echo $_REQUEST['id_type'] ?>&cf&order=<?php echo $fieldbdd; ?>&direction=<?php echo $dir ?>'">
                             <span><?php echo $field['fieldName']; ?></span>
@@ -388,8 +409,12 @@
 				<tr>
 					<td><input type="checkbox" onchange="cbchange($(this));" class="chk" id="chk_remove_all" /></td>
 					<td><input type="checkbox" onchange="cschange($(this));" class="chk" id="chk_see_all" /></td>
-					<td colspan="7" height="25"><a href="#" onClick="remove();" class="btn btn-mini"><span>Effectuer les changement sur la selection</span></a></td>
-					<td colspan="<?php echo $cType['is_business'] ? 2 : 1 ?>" class="pagination"><?php
+					<td colspan="5" height="25"><a href="#" onClick="remove();" class="btn btn-mini"><span>Effectuer les changements sur la selection</span></a></td>
+                    <?php
+                        $cs = $cType['is_business'] ? 2 : 1;
+                        $cs += sizeof($cType['typeListLayout']);
+                    ?>
+                    <td colspan="<?php echo $cs; ?>" class="pagination" align="right"><?php
 						echo 'Total: '.$total.' &nbsp; ';
 						$app->pagination($total, $limit, $filter['offset'], 'index?cf&id_type='.$id_type.'&offset=%s');
 					?></td>
