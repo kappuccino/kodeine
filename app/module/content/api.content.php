@@ -1284,13 +1284,22 @@ public function contentDuplicateLanguage($id_content, $fr, $to){
 	if($this->db_error) die($this->pre($this->db_query, $this->db_error));
 
 	# On s'occupe des parties qui concerne les traductions MORE
-	$more	= $this->dbOne("SELECT * FROM k_content".$from['id_type']." WHERE id_content=".$id_content);
-	$tmp	= array();
-	foreach($moreFields as $mf){
-		$tmp[] = "'".addslashes($more[$mf])."'";
+	$select = '';
+	$values = '';
+
+	if(count($moreFields) > 0){
+		$more   = $this->dbOne("SELECT * FROM k_content".$from['id_type']." WHERE id_content=".$id_content);
+		$tmp    = array();
+
+		foreach($moreFields as $mf){
+			$tmp[] = "'".addslashes($more[$mf])."'";
+		}
+
+		$select = ', '.implode(',', $moreFields);
+		$values = ', '.implode(',', $tmp);
 	}
 
-	$this->dbQuery("INSERT INTO k_content".$from['id_type']." (id_content, language, ".implode(', ', $moreFields).") VALUES ('".$id_content."', '".$to."', ".implode(',', $tmp).")");
+	$this->dbQuery("INSERT INTO k_content".$from['id_type']." (id_content, language".$select.") VALUES ('".$id_content."','".$to."'".$values.")");
 	if($this->db_error) die($this->pre($this->db_query, $this->db_error));
 }
 
