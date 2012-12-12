@@ -317,6 +317,7 @@ public function socialForumFamily(){
 
 	$forum = $this->socialForumGet(array(
 		'thread'	=> true,
+		'mid_socialforum' => 0,
 		'debug'		=> false
 	));
 
@@ -324,8 +325,10 @@ public function socialForumFamily(){
 	#
 	$this->tempFor	= array();
 	$this->socialForumFamilyParent($forum);
+
 	foreach($this->tempFor as $id_socialforum => $tree){
 		$this->dbQuery("UPDATE k_socialforum SET socialForumParent='".json_encode($tree)."' WHERE id_socialforum=".$id_socialforum);
+		#$this->pre($this->db_query, $this->db_error);
 	}
 
 	# CHILDREN + THREAD
@@ -345,13 +348,14 @@ public function socialForumFamily(){
 /* + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + -
 	Trouver tous les PARENTS pour un FORUM
 + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - */
-private function socialForumFamilyParent($forum, $path=array()){
+private function socialForumFamilyParent($forum, $path=array(), $add=NULL){
+
+	if($add != NULL) $path[] = $add;
 
 	foreach($forum as $c){
 		$this->tempFor[$c['id_socialforum']] = $path;
 		if(sizeof($c['sub']) > 0){
-			$path[] = intval($c['id_socialforum']);
-			$this->socialForumFamilyParent($c['sub'], $path);
+			$this->socialForumFamilyParent($c['sub'], $path, intval($c['id_socialforum']));
 		}
 	}
 

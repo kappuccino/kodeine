@@ -433,7 +433,7 @@ function socialPostRemove($id_socialpost){
 
 	// Decrementer les EVENTS ou je me trouvais
 	if(sizeof($post['socialPostEvent']) > 0){
-		$this->dbQuery("UPDATE k_socialforum SET socialEventPostCount=socialEventPostCount-1 WHERE id_socialforum IN(".implode(',', $post['socialPostEvent']).")");
+		$this->dbQuery("UPDATE k_socialevent SET socialEventPostCount=socialEventPostCount-1 WHERE id_socialevent IN(".implode(',', $post['socialPostEvent']).")");
 		if($opt['debug']) $this->pre($this->db_query, $this->db_error);
 	}
 
@@ -449,8 +449,10 @@ function socialPostRemove($id_socialpost){
 	$this->dbQuery("DELETE FROM k_socialpostforum 	WHERE id_socialpost IN(".implode(',', $del).")");
 	$this->dbQuery("DELETE FROM k_socialpostevent 	WHERE id_socialpost IN(".implode(',', $del).")");
 
-	$this->dbQuery("DELETE FROM k_socialactivity 	WHERE socialActivityThread IN(".implode(',', $del).") AND socialActivityKey='id_socialpost'");
-	$this->dbQuery("DELETE FROM k_socialsandbox 	WHERE socialSandboxId IN(".implode(',', $del).") AND socialSandboxType='id_socialpost'");
+	$this->dbQuery("DELETE FROM k_socialactivity 	WHERE socialActivityId 		IN(".implode(',', $del).") AND socialActivityKey='id_socialpost'");
+	$this->dbQuery("DELETE FROM k_socialactivity 	WHERE socialActivityThread	IN(".implode(',', $del).") AND socialActivityKey='id_socialpost'");
+
+	$this->dbQuery("DELETE FROM k_socialsandbox 	WHERE socialSandboxId  IN(".implode(',', $del).") AND socialSandboxType='id_socialpost'");
 
 	// Reconstruire le CACHE pour ce post (flat + thread)
 	$this->socialPostBuild($post['id_socialpostthread']);
@@ -486,6 +488,7 @@ function socialPostBuild($id_socialpostthread){
 	$thread		= $this->socialPostBuildThread($id_socialpostthread, $id_socialpostthread);
 
 	$def = array('k_socialpost' => array(
+		'socialPostDateLast'	=> array('function' => 'NOW()'),
 		'socialPostFlat'		=> array('value' => json_encode($flat)),
 		'socialPostThread'		=> array('value' => json_encode($thread)),
 	));

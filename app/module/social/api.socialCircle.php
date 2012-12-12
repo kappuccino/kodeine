@@ -79,15 +79,15 @@ function socialCircleGet($opt=array()){
 
 		foreach($opt['search'] as $e){
 			if($e['searchField'] > 0){
-				$tmp[] = $this->dbMatch("field".$e['searchField'], $e['searchValue'], $e['searchMode']);
+				$tmp[] = $this->dbMatch("k_socialcircle.field".$e['searchField'], $e['searchValue'], $e['searchMode']);
 			}else
 			if($fieldKey[$e['searchField']]['id_field'] != NULL){
-				$tmp[] = $this->dbMatch("field".$fieldKey[$e['searchField']]['id_field'], $e['searchValue'], $e['searchMode']);
+				$tmp[] = $this->dbMatch("k_socialcircle.field".$fieldKey[$e['searchField']]['id_field'], $e['searchValue'], $e['searchMode']);
 			}else
 			if($field[$e['searchField']]['id_field'] != NULL){
-				$tmp[] = $this->dbMatch("field".$field[$e['searchField']]['id_field'], $e['searchValue'], $e['searchMode']);
+				$tmp[] = $this->dbMatch("k_socialcircle.field".$field[$e['searchField']]['id_field'], $e['searchValue'], $e['searchMode']);
 			}else{
-				$tmp[] = $this->dbMatch($e['searchField'], $e['searchValue'], $e['searchMode']);
+				$tmp[] = $this->dbMatch("k_socialcircle.".$e['searchField'], $e['searchValue'], $e['searchMode']);
 			}
 		}
 
@@ -399,8 +399,11 @@ public function socialCircleMediaLink($opt){
 + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - */
 function socialCirclePendingAccept($opt){
 
-	$id_socialcircle	= $opt['id_socialcircle'];
 	$user				= is_array($opt['user']) ? $opt['user'] : array($opt['user']);
+	$id_socialcircle	= $opt['id_socialcircle'];
+	$circle				= $this->socialCircleGet(array(
+		'id_socialcircle' => $id_socialcircle
+	));
 	
 	foreach($user as $id_user){
 		if(intval($id_user) > 0){
@@ -415,7 +418,20 @@ function socialCirclePendingAccept($opt){
 
 		$this->dbQuery("INSERT IGNORE INTO k_socialcircleuser (id_socialcircle, id_user, timeline) VALUES ".implode(', ', $add));
 		if($opt['debug']) $this->pre($this->db_query, $this->db_error);
+
+		// ACTIVITY + NOTIFICATION
+		$this->apiLoad('socialActivity')->socialActivitySet(array(
+			'debug'					=> false,
+			'id_user'				=> $circle['id_user'],	// ACTIVITY au nom du OWNER du CIRCLE
+			'notification'			=> true,
+			'notificationUser'		=> $id_user,			// NOTIFIER ces utilisateurs
+
+			'socialActivityKey'		=> 'id_socialcircle',
+			'socialActivityId'		=> $id_socialcircle,
+			'socialActivityFlag'	=> 'ACCEPTED'
+		));
 	}
+
 
 	$this->socialCircleMemberCount(array(
 		'debug'				=> false,
@@ -601,6 +617,7 @@ function socialCircleMemberGet($opt){
 /* + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - 
 + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - */
 function socialCircleMemberAdd($opt){
+if($opt['debug']) $this->pre($opt);
 
 	$id_socialcircle	= $opt['id_socialcircle'];
 	$user				= $opt['user'];
@@ -613,6 +630,8 @@ function socialCircleMemberAdd($opt){
 	$user	= is_array($user) ? $user : array($user);	
 	
 	if($opt['force']) $table = 'k_socialcircleuser';
+	
+	$flag = ($table == 'k_socialcirclepending') ? 'PENDING' : 'ENTER';
 
 	foreach($user as $id_user){
 		if(intval($id_user) > 0) $tmp[] = "(".$id_socialcircle.", ".$id_user.", ".time().")";
@@ -640,6 +659,21 @@ function socialCircleMemberAdd($opt){
 		'socialSandboxType'	=> 'id_socialcircle',
 		'socialSandboxId'	=> $id_socialcircle
 	));
+
+	# ACTIVITY + NOTIFICATION
+	#
+	foreach($user as $id_user){
+		$this->apiLoad('socialActivity')->socialActivitySet(array(
+			'debug'					=> false,
+			'id_user'				=> $id_user,			// ACTIVITY au nom de l'ABONNE
+			'notification'			=> true,
+			'notificationUser'		=> $circle['id_user'], 	// Notifier le OWNER du circle
+	
+			'socialActivityKey'		=> 'id_socialcircle',
+			'socialActivityId'		=> $id_socialcircle,
+			'socialActivityFlag'	=> $flag
+		));
+	}
 }
 
 /* + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - 
@@ -664,6 +698,17 @@ function socialCircleMemberRemove($opt){
 		'users'				=> $user
 	));
 
+	# ACTIVITY + NOTIFICATION
+	#
+	foreach($user as $id_user){
+		$this->apiLoad('socialActivity')->socialActivitySet(array(
+			'debug'					=> false,
+			'remove'				=> true,
+			'id_user'				=> $id_user,
+			'socialActivityKey'		=> 'id_socialcircle',
+			'socialActivityId'		=> $id_socialcircle,
+		));
+	}
 }
 
 /* + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - 

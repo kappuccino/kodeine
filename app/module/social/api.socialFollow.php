@@ -46,21 +46,41 @@ function socialFollowIt($opt){
 	$this->dbQuery($query);
 	if($opt['debug']) $this->pre($this->db_query, $this->db_error);
 
-	# Update COUNT
-	#
-	$this->socialFollowFix(array('debug' => false, 'id_user' => $follower));
-	$this->socialFollowFix(array('debug' => false, 'id_user' => $followed));
-	
-	
-	# Remove from my CIRCLES
+	# Remove the FOLLOW LINK
 	#
 	if($remove){
 		$myCircles = $this->dbMulti("SELECT id_socialcircle FROM k_socialcircle WHERE id_user=".$follower);
 		foreach($myCircles as $e){
 			$this->dbQuery("DELETE FROM k_socialcircleuser WHERE id_socialcircle=".$e['id_socialcircle']." AND id_user=".$follower);
 		}
+
+		// Remove Activity & Notification
+		$this->apiLoad('socialActivity')->socialActivitySet(array(
+			'debug'					=> false,
+			'remove'				=> true,
+			'id_user'				=> $follower,
+			'socialActivityKey'		=> 'follow',
+			'socialActivityId'		=> $followed
+		));
+	}else{
+		// Add Activity + Notification
+		$this->apiLoad('socialActivity')->socialActivitySet(array(
+			'debug'					=> false,
+			'id_user'				=> $follower,		// ACTIVITY au nom du FOLLOWER
+			'notification'			=> true,
+			'notificationUser'		=> $followed, 		// Notifier le FOLLLOWED qu'il est suivit
+			'socialActivityKey'		=> 'follow',
+			'socialActivityId'		=> $followed,
+			'socialActivityFlag'	=> 'FOLLOW'
+		));
 	}
 
+	# Update COUNT
+	#
+	$this->socialFollowFix(array('debug' => false, 'id_user' => $follower));
+	$this->socialFollowFix(array('debug' => false, 'id_user' => $followed));
+	
+	return true;
 }
 
 /* + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + -

@@ -16,7 +16,9 @@ function socialUserGet($opt){
 		return array();
 	}
 
-	if($this->user['id_user'] > 0){
+//	//	if($this->user['id_user'] > 0){
+	if($opt['id_user'] > 0){
+	
 		$so = $this->dbOne("SELECT * FROM k_usersocial WHERE id_user=".$opt['id_user']);
 		$me = $this->apiLoad('user')->userGet(array_merge(array(
 			'id_user'	=> $opt['id_user'],

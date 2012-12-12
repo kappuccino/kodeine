@@ -42,10 +42,10 @@ function socialMessageGet($opt=array()){
 	// GET mid_socialmessage
 	if(array_key_exists('mid_socialmessage', $opt)){
 
-		if(intval($opt['mid_socialmessage']) > 0){
+		if(intval($opt['mid_socialmessage']) >= 0){
 			$cond[] = "k_socialmessage.mid_socialmessage=".$opt['mid_socialmessage'];
 		}else{
-			if($opt['debug']) $this->pre("ERROR: MID_SOCIALMESSAGE (NUMERIC > 0)", "GIVEN", var_export($opt['id_socialmessage'], true));
+			if($opt['debug']) $this->pre("ERROR: MID_SOCIALMESSAGE (NUMERIC >= 0)", "GIVEN", var_export($opt['id_socialmessage'], true));
 			return array();
 		}
 
@@ -78,6 +78,39 @@ function socialMessageGet($opt=array()){
 		}else{
 			$cond[] = "k_socialmessage.id_user=".$opt['id_user'];
 		}
+	}
+
+
+	# FIELD
+	#
+	$fields = $this->apiLoad('field')->fieldGet(array('socialMessage' => true));
+	foreach($fields as $f){
+		$fieldKey[$f['fieldKey']] = $f;
+		if($f['is_search'])												$fieldSearch[]		= $f;
+		if($f['fieldType'] == 'content' && $f['fieldContentType'] > 0)	$fieldAssoContent[] = $f;
+		if($f['fieldType'] == 'user')									$fieldAssoUser[]	= $f;
+	}
+
+	# RECHECHE
+	#
+	if(is_array($opt['search'])){
+		unset($tmp);
+
+		foreach($opt['search'] as $e){
+			if($e['searchField'] > 0){
+				$tmp[] = $this->dbMatch("k_socialmessage.field".$e['searchField'], $e['searchValue'], $e['searchMode']);
+			}else
+			if($fieldKey[$e['searchField']]['id_field'] != NULL){
+				$tmp[] = $this->dbMatch("k_socialmessage.field".$fieldKey[$e['searchField']]['id_field'], $e['searchValue'], $e['searchMode']);
+			}else
+			if($field[$e['searchField']]['id_field'] != NULL){
+				$tmp[] = $this->dbMatch("k_socialmessage.field".$field[$e['searchField']]['id_field'], $e['searchValue'], $e['searchMode']);
+			}else{
+				$tmp[] = $this->dbMatch("k_socialmessage.".$e['searchField'], $e['searchValue'], $e['searchMode']);
+			}
+		}
+
+		if(sizeof($tmp) > 0) $cond[] = "(".implode(' '.$searchLink.' ', $tmp).")";
 	}
 
 
@@ -188,7 +221,7 @@ function socialMessageSet($opt){
 	# NEW !
 	#
 	if($opt['id_socialmessage'] == NULL){
-		$this->dbQuery("INSERT INTO k_socialmessage (socialMessageDate) VALUES (NOW())");
+		$this->dbQuery("INSERT INTO k_socialmessage (socialMessageDate, socialMessageDateLast) VALUES (NOW(), NOW())");
 		$id_socialmessage = $this->db_insert_id;
 		if($opt['debug']) $this->pre($this->db_query, $this->db_error);
 	}else{
@@ -221,17 +254,42 @@ function socialMessageSet($opt){
 	if($opt['debug']) $this->pre($this->db_query, $this->db_error);
 
 
-	# BUILD CACHE
+	# FIELD
 	#
-#	if(intval($opt['replyTo']) > 0 && intval($opt['thread']) > 0){
+	if(sizeof($opt['field']) > 0){
+
+		# Si on utilise le KEY au lieu des ID
+		$fields = $this->apiLoad('field')->fieldGet(array('socialMessage' => true));
+		foreach($fields as $e){
+			$fieldsKey[$e['fieldKey']] = $e;
+		} $fields = $fieldsKey;
+
+		unset($def);
+		$apiField = $this->apiLoad('field');
+
+		foreach($opt['field'] as $id_field => $value){
+			if(!is_integer($id_field)) $id_field = $fields[$id_field]['id_field'];
+			
+			if(intval($id_field) > 0){
+				$value = $apiField->fieldSaveValue($id_field, $value);
+				$def['k_socialmessage']['field'.$id_field] = array('value' => $value);
+			}
+		}
+
+		$this->dbQuery($this->dbUpdate($def)." WHERE id_socialmessage=".$id_socialmessage);
+		if($opt['debug']) $this->pre($this->db_query, $this->db_error);
+	}
+
+
+	# BUILD CACHE & UPDATE DATE (socialMessageDateLast)
+	#
 	$this->socialMessageBuild(array(
-		'debug'						=> $opt['debug'],
+		'debug'						=> false,
 		'id_socialmessagethread'	=> $opt['core']['id_socialmessagethread']['value']
 	));
-#	}
 
 
-	# SEND TO ...
+	# SEND TO ... (premier message)
 	#
 	if(is_array($opt['sendTo']) && sizeof($opt['sendTo']) > 0){
 		$addu[] = "(".$id_socialmessage.", ".$opt['core']['id_user']['value'].", 1)";
@@ -246,7 +304,29 @@ function socialMessageSet($opt){
 
 		$this->dbQuery("UPDATE k_socialmessage SET socialMessageRecipient='".json_encode($rcpt)."' WHERE id_socialmessage=".$id_socialmessage);
 		if($opt['debug']) $this->pre($this->db_query, $this->db_error);
+	}else
+	
+	# REPLY TO (utiliser les Recipient du Thread)
+	#
+	if(intval($opt['replyTo']) > 0){
+		
+		$thread = $this->socialMessageGet(array(
+			'id_socialmessage' => $opt['replyTo']
+		));
+
+		$rcpt	= $thread['socialMessageRecipient'];
+		$rcpt[] = $thread['id_user'];
+		
+		foreach($rcpt as $rcp){
+			// Le user courant a deja le ce message
+			$value	=  (($rcp == $this->user['id_user']) ? 1 : 0);
+			$addu[] = "(".$id_socialmessage.", ".$rcp.", ".$value.")";
+		}
+
+		$this->dbQuery("INSERT INTO k_socialmessageuser (id_socialmessage, id_user, is_read) VALUES ".implode(', ', $addu));
+		if($opt['debug']) $this->pre($this->db_query, $this->db_error);
 	}
+
 
 	# VIEW + OPENGRAPH
 	#
@@ -254,6 +334,7 @@ function socialMessageSet($opt){
 		'type' 	=> 'message',
 		'id' 	=> $id_socialmessage
 	));
+	
 }
 
 /* + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - 
@@ -299,6 +380,7 @@ function socialMessageBuild($opt){
 	$thread	= $this->socialMessageBuildThread($id_socialmessagethread, $id_socialmessagethread);
 
 	$def	= array('k_socialmessage' => array(
+		'socialMessageDateLast'	=> array('function' => 'NOW()'),
 		'socialMessageFlat'		=> array('value' => json_encode($flat)),
 		'socialMessageThread'	=> array('value' => json_encode($thread))
 	));

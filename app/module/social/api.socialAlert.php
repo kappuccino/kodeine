@@ -34,7 +34,8 @@ function socialAlertGet($opt){
 		}		
 	}
 
-	# FIELD
+
+	# Field
 	#
 	$fields = $this->apiLoad('field')->fieldGet(array('socialAlert' => true));
 	foreach($fields as $f){
@@ -44,8 +45,27 @@ function socialAlertGet($opt){
 		if($f['fieldType'] == 'user')									$fieldAssoUser[]	= $f;
 	}
 
-	if($dbMode == 'dbMulti'){
+#	$this->pre($fields, $fieldKey);
 
+
+	# Search (version simplifie)
+	#
+	if(is_array($opt['search'])){
+		foreach($opt['search'] as $e){
+			if($e['searchField'] > 0){
+				$tmp[] = $this->dbMatch("k_socialalert.field".$e['searchField'],	$e['searchValue'], $e['searchMode']);
+			}else
+			if($fieldKey[$e['searchField']]['id_field'] != NULL){
+				$tmp[] = $this->dbMatch("k_socialalert.field".$fieldKey[$e['searchField']]['id_field'], $e['searchValue'], $e['searchMode']);
+			}
+		}
+		if(sizeof($tmp) > 0) $cond[] = "(".implode(' '.$searchLink.' ', $tmp).")";
+	}
+
+
+	# LIMITATION & ORDER
+	#
+	if($dbMode == 'dbMulti'){
 		$order = "\nORDER BY ".(($opt['order'] != '' && $opt['direction'] != '')
 			? $opt['order']." ".$opt['direction']
 			: "k_socialalert.id_socialalert DESC");
@@ -55,18 +75,20 @@ function socialAlertGet($opt){
 			: "0,50");
 
 		if($opt['noLimit'] == true) unset($limit);
-
 	}else{
 		$flip = true;
 	}
 	
 
-	$field		= "k_socialalert.*";
-	$where		= is_array($cond) ? "\nWHERE\n".implode(" AND ", $cond) : NULL;
-	$inner		= is_array($join) ? "\n".implode("\n", $join)."\n" : NULL;
+	# EXECUTE
+	#
+	$field	= "k_socialalert.*";
+	$where	= is_array($cond) ? "\nWHERE\n".implode(" AND ", $cond) : NULL;
+	$inner	= is_array($join) ? "\n".implode("\n", $join)."\n" : NULL;
 
-	$alert		= $this->$dbMode("SELECT ".$field." FROM k_socialalert ". $inner . $where .$order . $limit);
+	$alert	= $this->$dbMode("SELECT ".$field." FROM k_socialalert ". $inner . $where .$order . $limit);
 	if($opt['debug']) $this->pre("QUERY", $this->db_query, "ERROR", $this->db_error, "DATA", $alert);
+
 
 	# FORMAT
 	#

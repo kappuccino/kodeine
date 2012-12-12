@@ -67,9 +67,9 @@ function socialActivityGet($opt){
 function socialActivitySet($opt){
 if($opt['debug']) $this->pre("OPTION", $opt);
 
-	$id_user	= $opt['id_user'];				if(intval($id_user) <= 0)		return false;
-	$key		= $opt['socialActivityKey'];	if($key == NULL)				return false;
-	$flag		= $opt['socialActivityFlag'];	if($flag == NULL)				return false;
+	$id_user	= $opt['id_user'];				if(intval($id_user) <= 0)				return false;
+	$key		= $opt['socialActivityKey'];	if($key == NULL)						return false;
+	$flag		= $opt['socialActivityFlag'];	if($flag == NULL && !$opt['remove'])	return false;
 	$id			= $opt['socialActivityId'];
 	$thread		= $opt['socialActivityThread'];
 
@@ -107,28 +107,43 @@ if($opt['debug']) $this->pre("OPTION", $opt);
 		$id_act = $this->db_insert_id;
 		if($opt['debug']) $this->pre($this->db_query, $this->db_error);
 
+		// Hook
+		$this->eventTrigger('socialActivity', 'socialActivitySet', array('id_socialactivity' => $id_act));
+		
 		# Create NOTIFICATION
 		#
 		if($id_act > 0 && $opt['notification']){
 
-			if($opt['socialActivityKey'] == 'id_socialpost'){
-				$noti	= 'socialPostSubscribed';
-				$table	= 'k_socialpost';
-				$thrd	= 'id_socialpostthread';
-			}else
-			if($opt['socialActivityKey'] == 'id_socialmessage'){
-				$noti	= 'socialMessageSubscribed';
-				$table	= 'k_socialmessage';
-				$thrd	= 'id_socialmessagethread';
+			// Je donne dans les OPT la liste des personne qui recoivent la notification
+			if(isset($opt['notificationUser'])){
+				$usrs = is_array($opt['notificationUser']) ? $opt['notificationUser'] : array($opt['notificationUser']);
 			}
 			
-			// ?
-			$item = $this->dbOne("SELECT ".$noti." FROM ".$table." WHERE ".$thrd."=".$thread." AND ".$noti." != ''");
-			//$item = $this->dbOne("SELECT ".$noti." FROM ".$table." WHERE ".$thrd."=".$thread);
-			if($opt['debug']) $this->pre($this->db_query, $this->db_error);
+			// Si non j'utilise les tables pour trouver les personne qui auront la notification
+			else{
+
+				if($opt['socialActivityKey'] == 'id_socialpost'){
+					$noti	= 'socialPostSubscribed';
+					$table	= 'k_socialpost';
+					$thrd	= 'id_socialpostthread';
+				}else
+				if($opt['socialActivityKey'] == 'id_socialmessage'){
+					$noti	= 'socialMessageSubscribed';
+					$table	= 'k_socialmessage';
+					$thrd	= 'id_socialmessagethread';
+				}
+
+				// ?
+				$item = $this->dbOne("SELECT ".$noti." FROM ".$table." WHERE ".$thrd."=".$thread." AND ".$noti." != ''");
+				//$item = $this->dbOne("SELECT ".$noti." FROM ".$table." WHERE ".$thrd."=".$thread);
+				if($opt['debug']) $this->pre($this->db_query, $this->db_error);
+				
+				$usrs = json_decode($item[$noti], true);
+				$usrs = is_array($usrs) ? $usrs : array();
+			}
 			
-			$usrs = json_decode($item[$noti], true);
-			$usrs = is_array($usrs) ? $usrs : array();
+			// secu
+			if(!is_array($usrs)) $usrs = array();
 			
 			// Lever une notification pour tous les SUBSCRIBED USER sauf MOI
 			foreach($usrs as $u){

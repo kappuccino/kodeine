@@ -1,6 +1,6 @@
 <?php
 
-class socialNotification extends social{
+class socialNotification extends socialActivity{
 
 function __clone(){}
 
@@ -24,13 +24,13 @@ if($opt['debug']) $this->pre("OPTION", $opt);
 			return array();
 		}	
 	}
-	
+
 	// GET: Period
 	if(array_key_exists('period', $opt)){
 		if(isset($opt['period']['from']) && isset($opt['period']['to'])){
 			$from	= date("Y-m-d", strtotime($opt['period']['from'])).	' 00:00:00';
 			$to		= date("Y-m-d", strtotime($opt['period']['to'])).	' 23:59:59';
-			
+
 			$cond[]	= "(socialActivityDate >= '".$from."' AND socialActivityDate <= '".$to."')";
 		}else{
 			if($opt['debug']) $this->pre("ERROR: period (ARRAY(from,to)", "GIVEN", var_export($opt['period'], true));
@@ -49,11 +49,33 @@ if($opt['debug']) $this->pre("OPTION", $opt);
 	}
 
 
+	# Search (version simplifie)
+	#
+	if(is_array($opt['search'])){
 
-	# Former les LIMITATIONS et ORDRE
+		$field = $this->apiLoad('field')->fieldGet(array(
+			'socialActivity' => true
+		));
+		
+		foreach($field as $f){
+			$fieldKey[$f['fieldKey']]= $f;
+		}
+
+		foreach($opt['search'] as $e){
+			if($e['searchField'] > 0){
+				$tmp[] = $this->dbMatch("k_socialactivity.field".$e['searchField'],	$e['searchValue'], $e['searchMode']);
+			}else
+			if($fieldKey[$e['searchField']]['id_field'] != NULL){
+				$tmp[] = $this->dbMatch("k_socialactivity.field".$fieldKey[$e['searchField']]['id_field'], 	$e['searchValue'], $e['searchMode']);
+			}
+		}
+		if(sizeof($tmp) > 0) $cond[] = "(".implode(' '.$searchLink.' ', $tmp).")";
+	}
+
+
+	# LIMITATIONS & ORDER
 	#
 	if($dbMode == 'dbMulti'){
-
 		$order = "\nORDER BY ".(($opt['order'] != '' && $opt['direction'] != '')
 			? $opt['order']." ".$opt['direction']
 			: "socialActivityDate DESC")."\n";
@@ -68,27 +90,22 @@ if($opt['debug']) $this->pre("OPTION", $opt);
 	}
 
 
-
-
-
-
-
+	# EXECUTION
+	#
 	$cond[]	= "k_socialnotification.id_user=".$id_user;
 	$where 	= "\t".implode("\n\tAND ", $cond);
-
 	$data	= $this->$dbMode(
 		"SELECT * FROM k_socialnotification\n".
 		"INNER JOIN k_socialactivity ON k_socialnotification.id_socialactivity = k_socialactivity.id_socialactivity\n\n".
 		"WHERE ".$where . $order . $limit
 	);
 	if($opt['debug']) $this->pre($this->db_query, $this->db_error);
-
 	if(sizeof($data) == 0) return array();
+
 
 	# WITH USER
 	#
 	if($opt['withUser']){
-
 		foreach($data as $n => $e){
 			if(intval($e['id_user']) > 0){
 				$id_users[] = $e['id_user'];
@@ -96,11 +113,17 @@ if($opt['debug']) $this->pre("OPTION", $opt);
 			}
 		}
 
+		// Simplifier
+		$id_users = array_values(array_unique($id_users));
+
 		if(sizeof($id_users) > 0){
 			$users = $this->apiLoad('user')->userGet(array(
+				'debug'		=> false,
+				'useMedia'	=> true,
+				'noLimit'	=> true,
 				'id_user'	=> $id_users,
-				'useMedia'	=> true
 			));
+
 			foreach($users as $u){
 				$uids[$u['id_user']] = $u;
 			}
@@ -113,7 +136,6 @@ if($opt['debug']) $this->pre("OPTION", $opt);
 	# WITH POST
 	#
 	if($opt['withPost']){
-
 		foreach($data as $n => $e){
 			if($e['socialActivityKey'] == 'id_socialpost' && intval($e['socialActivityId']) > 0){
 				$id_socialpost[]		= $e['socialActivityId'];
@@ -123,15 +145,40 @@ if($opt['debug']) $this->pre("OPTION", $opt);
 
 		if(sizeof($id_socialpost) > 0){
 			$posts = $this->apiLoad('socialPost')->socialPostGet(array(
-				'id_socialpost' => $id_socialpost,
-				'withUser'		=> $opt['withUser']
+				'id_socialpost' => array_unique($id_socialpost),
+				'debug'			=> false,
+				'withUser'		=> $opt['withUser'],
+				'noLimit'		=> true
 			));
-			
 			foreach($posts as $p){
 				$spids[$p['id_socialpost']] = $p;
 			}
 			foreach($data as $n => $e){
 				$data[$n]['socialPost'] = $spids[$e['socialActivityId']];
+			}
+		}
+	}
+	
+	# WITH CIRCLE
+	#
+	if($opt['withCircle']){
+		foreach($data as $n => $e){
+			if($e['socialActivityKey'] == 'id_socialcircle' && intval($e['socialActivityId']) > 0){
+				$id_socialcircle[] = $e['socialActivityId'];
+				$data[$n]['socialCircle'] = NULL;
+			}
+		}
+
+		if(sizeof($id_socialcircle) > 0){
+			$circles = $this->apiLoad('socialCircle')->socialCircleGet(array(
+				'id_socialcircle'	=> $id_socialcircle,
+			#	'withUser'			=> $opt['withUser']
+			));
+			foreach($circles as $c){
+				$scids[$c['id_socialcircle']] = $c;
+			}
+			foreach($data as $n => $e){
+				$data[$n]['socialCircle'] = $scids[$e['socialActivityId']];
 			}
 		}
 	}
