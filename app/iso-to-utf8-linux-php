@@ -1,0 +1,31 @@
+#!/bin/bash
+# converting all files to utf8
+
+
+DIR=$1
+USR=$2
+GRP=$3
+
+for f in `/usr/bin/find $DIR -name "*.php"`
+do
+    if [ "/usr/bin/test -f $f" ]; then
+        CHARSET="$( /usr/bin/file -bi "$f"|/usr/bin/awk -F "=" '{print $2}')"
+        echo -n "$f"
+
+        if [ "$CHARSET" != "utf-8" ]; then
+        	echo -n "IS $CHARSET Converting "
+  	      	/usr/bin/iconv -f "$CHARSET" -t utf8 "$f" -o "$f".utf8 && mv -f "$f".utf8 "$f" && echo -n "OK"
+  	    fi
+        echo ""
+    else
+        echo "Skipping $f - it's a regular file";
+    fi
+done
+
+echo "OWNERSHIP";
+/bin/chown -Rv $USR.$GRP $DIR
+
+echo "MOD 755"
+/usr/bin/find $DIR -name "*.php" -exec chmod 755 \{\} \; -print
+
+echo ""
