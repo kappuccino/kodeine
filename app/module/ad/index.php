@@ -47,7 +47,7 @@
 		<div class="top">
 			<div class="logo">Logo</div>
 			<div class="pathway clearfix">
-				<h1><a href="index">Publicité</a>&raquo; 
+				<h1><a href="index">PublicitÃ©</a>&raquo; 
 					<a href="index">Liste</a></h1>
 			</div>
 		</div>
@@ -101,9 +101,9 @@
 				<td><?php echo number_format($e['adView'],  0, '.', ' '); ?></td>
 				<td><?php echo number_format($e['adClick'], 0, '.', ' '); ?></td>
 			</tr>
-		<?php } }else{ ?>
+		<?php } }else{Â ?>
 		<tr>
-			<td colspan="6" style="text-align:center; padding:50px 0px 50px 0px; font-weight:bold;">Il n'y aucune publicité avec ces critères de recherche.<br /><br /><a href="data" class="button button-green" style="float:none">Ajouter une publicité maintenant</a></td>
+			<td colspan="6" style="text-align:center; padding:50px 0px 50px 0px; font-weight:bold;">Il n'y aucune publicitÃ© avec ces critÃ¨res de recherche.<br /><br /><a href="data" class="button button-green" style="float:none">Ajouter une publicitÃ© maintenant</a></td>
 		</tr>
 		<?php } ?>
 		</tbody>

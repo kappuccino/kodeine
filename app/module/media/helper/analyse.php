@@ -61,7 +61,7 @@
 			}).delay(100);
 
 		}else{
-			$('all').set('html', 'Analyse terminée');
+			$('all').set('html', 'Analyse terminÃ©e');
 		}
 	}
 

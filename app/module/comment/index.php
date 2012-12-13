@@ -58,7 +58,7 @@
 
 	<?php if($_REQUEST['id_content'] != NULL){ ?>
 	<div class="mar-top-20 mar-bot-20">
-		<a href="../content/data?id_content=<?php echo $_REQUEST['id_content'] ?>" class="btn btn-mini">Revenir à la page</a>
+		<a href="../content/data?id_content=<?php echo $_REQUEST['id_content'] ?>" class="btn btn-mini">Revenir Ã  la page</a>
 		<input type="hidden" name="id_content" value="<?php echo $_REQUEST['id_content'] ?>" />
 	</div>
 	<?php } ?>

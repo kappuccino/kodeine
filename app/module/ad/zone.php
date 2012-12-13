@@ -52,7 +52,7 @@
 <body>
 <div id="pathway">
 	<a href="core.panel.php">Admin</a> &raquo;
-	<a href="ad.index.php">Publicité</a> &raquo;
+	<a href="ad.index.php">PublicitÃ©</a> &raquo;
 	<a href="ad.zone.php">Zone</a>
 	<?php include(ADMINUI.'/pathway.php'); ?>
 </div>
@@ -81,7 +81,7 @@
 			<td><input type="checkbox" name="remove[]" value="<?php echo $e['id_adzone'] ?>" class="cb" /></td>
 			<td class="sniff"><a href="ad.zone.php?id_adzone=<?php echo $e['id_adzone'] ?>"><?php echo $e['zoneName'] ?></a></td>
 		</tr>
-		<?php } ?>
+		<?php }Â ?>
 	</tbody>
 	<tfoot>
 		<tr>
@@ -110,7 +110,7 @@
 			<td><input type="text" name="zoneName" value="<?php echo $app->formValue($data['zoneName'], $_POST['zoneName']); ?>" /></td>
 		</tr>
 		<tr>
-			<td>Clé</td>
+			<td>ClÃ©</td>
 			<td><input type="text" name="zoneCode" value="<?php echo $app->formValue($data['zoneCode'], $_POST['zoneCode']); ?>" /></td>
 		</tr>
 		<tr>

@@ -51,9 +51,9 @@
 			<td height="30" colspan="2">
 				<?php if($data['newsletterSendDate'] == NULL){ ?>
 				<a href="#" id="send" onclick="return false;" class="btn btn-mini">Envoyer sur MailChimp</a>
-				<a href="data?id_newsletter=<?php echo $_REQUEST['id_newsletter'] ?>" class="btn btn-mini">Annuler et revenir à l'éditeur</a>
+				<a href="data?id_newsletter=<?php echo $_REQUEST['id_newsletter'] ?>" class="btn btn-mini">Annuler et revenir Ã  l'Ã©diteur</a>
 				<?php } if($_REQUEST['id_newsletter'] > 0){ ?>
-				<a href="preview?id_newsletter=<?php echo $_REQUEST['id_newsletter'] ?>" class="btn btn-mini" target="_blank">Prévisualiser</a>
+				<a href="preview?id_newsletter=<?php echo $_REQUEST['id_newsletter'] ?>" class="btn btn-mini" target="_blank">PrÃ©visualiser</a>
 				<?php } if($data['newsletterSendDate'] != NULL){ ?>
 				<a href="analytic?id_newsletter=<?php echo $_REQUEST['id_newsletter'] ?>" class="btn btn-mini">Consulter les statistiques</a>
 				<?php } ?>
@@ -63,7 +63,7 @@
 	
 	<?php if($data['newsletterSendDate'] != NULL){ ?>
 		
-		<div class="message">La newsletter a déjà été envoyée sur MailChimp</div>
+		<div class="message">La newsletter a dÃ©jÃ  Ã©tÃ© envoyÃ©e sur MailChimp</div>
 		
 	<?php } else { ?>
 	
@@ -73,7 +73,7 @@
 			$lists	= $apiConnector->listGet();
 			//$app->pre($lists);
 		?>
-			Sélectionner une liste<br /><select name="id_newsletterList" id="id_newsletterList" style="width:250px;">
+			SÃ©lectionner une liste<br /><select name="id_newsletterList" id="id_newsletterList" style="width:250px;">
 				<option value=""></option>
 		<?php
 			foreach($lists['data'] as $list) {		

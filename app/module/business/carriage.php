@@ -78,10 +78,10 @@
 		}else{ ?>
 			<tr>
 				<td colspan="3" style="font-weight:bold; padding-top:30px; padding-bottom:30px;" align="center">
-					Auncune donnée
+					Auncune donnÃ©e
 				</td>
 			</tr>
-		<?php } ?>
+		<?php }Â ?>
 		</tbody>
 		<tfoot>
 			<tr>

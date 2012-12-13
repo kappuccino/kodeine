@@ -84,7 +84,7 @@ rsort($files);
 	?>
 
     <div class="alert">
-        Le dossier /user/dump est utilisé pour sauvegarder les exports de votre base de données, voici son contenu.
+        Le dossier /user/dump est utilisÃ© pour sauvegarder les exports de votre base de donnÃ©es, voici son contenu.
     </div>
 
     <form action="export" method="post" id="listing">
@@ -109,7 +109,7 @@ rsort($files);
 
 					$more = ($m[3] == 'patch')
 							? 'Point de sauvegarde automatique (patch)'
-							: 'Sauvegarde effectuée manuellement par l\'utilisateur';
+							: 'Sauvegarde effectuÃ©e manuellement par l\'utilisateur';
 
 					echo "<tr>";
 					echo "<td class=\"check-red\"><input type=\"checkbox\" name=\"del[]\" value=\"".basename($e)."\" class=\"cb chk\" id=\"chkdel".$chkdel."\" /></td>";
@@ -121,7 +121,7 @@ rsort($files);
 				}
 			}else{
 				echo "<tr><td colspan=\"5\" style=\"padding:40px 0px 40px 0px; text-align:center; font-weight:bold\">".
-						"Il n'y a aucun backup de base de données".
+						"Il n'y a aucun backup de base de donnÃ©es".
 						"</td></tr>";
 			}
 
@@ -149,7 +149,7 @@ rsort($files);
 
 <script>
     function con(f){
-        if(confirm("Voulez-vous rellement recharger la base de donnée à cette date ?\n\n\nCETTE FONCTION EST A EXECUTER AVEC UNE PRUDENCE EXTREME !!!")){
+        if(confirm("Voulez-vous rellement recharger la base de donnÃ©e Ã  cette date ?\n\n\nCETTE FONCTION EST A EXECUTER AVEC UNE PRUDENCE EXTREME !!!")){
             document.location = 'export?reload='+f;
         }
     }

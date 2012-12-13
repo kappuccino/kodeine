@@ -37,7 +37,7 @@
 				<a id="button-upload" class="btn btn-mini">Envoyer des fichiers</a>
 				<!--<a id="button-maintenance">Maintenance</a>-->
 				<a id="button-hidepanel" class="btn btn-mini">Masquer la zone</a>
-				<a id="button-pref" class="btn btn-mini">Préférence</a>
+				<a id="button-pref" class="btn btn-mini">PrÃ©fÃ©rence</a>
 			</div>
 			<div id="slider">
 				<!-- <div id="sliderLine">
@@ -103,8 +103,8 @@
 		<form id="uploadembed">
 			<div class="left clearfix">
 				<div class="caption-up">
-					Glissez des fichiers dans la fenetre pour les télécharger.<br /><br />
-					Si votre navigateur ne supporte pas cette fonctionalité, cliquez sur le bouton "Parcourir".<br /><br />
+					Glissez des fichiers dans la fenetre pour les tÃ©lÃ©charger.<br /><br />
+					Si votre navigateur ne supporte pas cette fonctionalitÃ©, cliquez sur le bouton "Parcourir".<br /><br />
 					
 					<input id="file_upload" name="file_upload" type="file" multiple="true">
 					<!-- <a class="btn" href="javascript:$('#file_upload').uploadify('upload')">Envoyer les fichiers</a> -->
@@ -112,7 +112,7 @@
 
 				<div class="caption-down">
 					Entrez les url distantes.<br />
-					<a class="btn" onclick="distantDownload();">Télécharger</a>
+					<a class="btn" onclick="distantDownload();">TÃ©lÃ©charger</a>
 				</div>
 			</div>
 

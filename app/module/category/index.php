@@ -40,7 +40,7 @@
 
 		if($do){
 			$result  = $app->apiLoad('category')->categorySet($_POST['id_category'], $def, $lan);
-			$message = ($result) ? 'OK: Enregistrement effectué' : 'KO: Erreur APP:<br />'.$app->db_error;
+			$message = ($result) ? 'OK: Enregistrement effectuÃ©' : 'KO: Erreur APP:<br />'.$app->db_error;
 			$reload  = 'id_category='.$app->apiLoad('category')->id_category.'&message='.urlencode($message);
 		}else{
 			$message = 'KO: Attention, les champs ne sont pas remplis correctement.';
@@ -77,7 +77,7 @@
 
 		$title = $data['categoryName'];
 	}else{
-		$title = 'Nouvelle catégorie';
+		$title = 'Nouvelle catÃ©gorie';
 	}
 
 	/* + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - 
@@ -135,7 +135,7 @@
 				<a href="./" class="btn btn-mini">Annuler</a>
 			</div>
 			<div class="right">
-				<a href="../field/asso?id_type=category" class="btn btn-mini">Gérer les champs</a>
+				<a href="../field/asso?id_type=category" class="btn btn-mini">GÃ©rer les champs</a>
 			</div>
 		</div>
 	</div>
@@ -158,7 +158,7 @@
 	
 		<table border="0" cellspacing="0" cellpadding="0" class="form">
 			<tr>
-				<td width="150">Catégorie parente</td>
+				<td width="150">CatÃ©gorie parente</td>
 				<td><?php
 					$category = $app->apiLoad('category')->categoryGet(array(
 						'language' 			=> 'fr',
@@ -206,13 +206,13 @@
 						<td colspan="2" class="view-split"><?php
 							if($i == 0){
 								echo "<input type=\"hidden\" name=\"ref\" value=\"".$iso."\" /> ";
-								echo "Cette langue est la version de référence";
+								echo "Cette langue est la version de rÃ©fÃ©rence";
 							}else{
 								$copy = ($data['lan'][$iso]['is_copy'] == '1' && $i > 0) ? true : false;
 								$chk  = ($copy || $_REQUEST['id_category'] == '') ? ' checked' : NULL;
 	
 								echo "<input type=\"hidden\"   name=\"lan[".$iso."][copy]\" value=\"0\" />";
-								echo "<input type=\"checkbox\" name=\"lan[".$iso."][copy]\" value=\"1\" ".$chk." id=\"copy-".$iso."\" onChange=\"toggleCopy('".$iso."')\" /> Identique à la version de référence";
+								echo "<input type=\"checkbox\" name=\"lan[".$iso."][copy]\" value=\"1\" ".$chk." id=\"copy-".$iso."\" onChange=\"toggleCopy('".$iso."')\" /> Identique Ã  la version de rÃ©fÃ©rence";
 							}
 						?></td>
 					</tr>
@@ -246,7 +246,7 @@
 					</tr>
 					<?php if(sizeof($fields) > 0){ ?>
 					<tr>
-						<td colspan="2" class="view-split">Paramètres supplémentaires</td>
+						<td colspan="2" class="view-split">ParamÃ¨tres supplÃ©mentaires</td>
 					</tr>
 					<?php foreach($fields as $f){ ?>
 					<tr valign="top">

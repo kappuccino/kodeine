@@ -45,7 +45,7 @@ public function newsletterSet($id_newsletter, $def){
 + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - */
 public function newsletterGet($opt=array()){
 
-	# Gérer les options
+	# GÃ©rer les options
 	#
 	$limit		= ($opt['limit'] != '') 	? $opt['limit']		: 30;
 	$offset		= ($opt['offset'] != '') 	? $opt['offset']	: 0;

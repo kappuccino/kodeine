@@ -85,9 +85,9 @@
 				<?php }
 			}else{ ?>
 				<tr>
-					<td colspan="3"><div class="noData">Il n'y a aucune recherche enregistré</div></td>
+					<td colspan="3"><div class="noData">Il n'y a aucune recherche enregistrÃ©</div></td>
 				</tr>
-			<?php } ?>
+			<?php }Â ?>
 			</tbody>
 			<tfoot>
 				<tr>

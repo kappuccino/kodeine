@@ -87,7 +87,7 @@
 					<td><a href="./?id_theme=<?php echo $e['id_theme'] ?>"><?php echo $e['themeName'] ?></a></td>
 					<td><a href="./?id_theme=<?php echo $e['id_theme'] ?>&dofield">Configurer</a></td>
 				</tr>
-				<?php } ?>
+				<?php }Â ?>
 			</tbody>
 			<tfoot>
 				<tr>
@@ -131,7 +131,7 @@
 		
 		<?php }else{ ?>	
 
-			<b>Champs utilisé</b>
+			<b>Champs utilisÃ©</b>
 			<ul id="la" class="myList clearfix"><?php
 				if(sizeof($var) > 0){
 					foreach($var as $e){ ?>

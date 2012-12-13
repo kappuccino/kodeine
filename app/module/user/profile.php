@@ -79,7 +79,7 @@
 					<td><input type="checkbox" name="remove[]" value="<?php echo $e['id_profile'] ?>" /></td>
 					<td class="sniff"><a href="profile?id_profile=<?php echo $e['id_profile'] ?>"><?php echo $e['profileName'] ?></a></td>
 				</tr>
-				<?php } ?>
+				<?php } ?>
 			</tbody>
 			<tfoot>
 				<tr>
@@ -124,7 +124,7 @@
 			?></div>
 	
 			<div class="span3">
-				<b>Catégorie</b><br /> <?php echo
+				<b>CatÃ©gorie</b><br /> <?php echo
 				$app->apiLoad('category')->categorySelector(array(
 					'name'		=> 'profileRule[id_category][]',
 					'language'	=> 'fr',

@@ -43,7 +43,7 @@
 		<table width="100%" border="1">
 			<tr valign="top">
 				<td width="40%">
-					N° Commande 	: <?php echo $myCmd['cartCmdNumber'] ?><br />
+					NÂ° Commande 	: <?php echo $myCmd['cartCmdNumber'] ?><br />
 					Code client 		: <?php echo $myCmd['id_user'] ?><br />
 					Date				: <?php echo $myCmd['cartDateCmd'] ?><br />
 					<?php					
@@ -53,7 +53,7 @@
                     ?>
 					Statut				: <?php echo $myCmd['cartStatus'] ?><br />
                     <?php                   
-                        //Règlement
+                        //RÃ¨glement
                         $statut = $app->apiLoad('business')->businessConfigGet(array('configField' => 'cartPayment', 'configKey' => $myCmd['cartPayment']));            
                         if($statut[0]['configCustom'] != '')$myCmd['cartPayment'] = $statut[0]['configCustom'];
                     ?>
@@ -122,12 +122,12 @@
             </tr>                   
             <?php }} ?>
 			<tr>
-				<td><b>Total Général HT</b></td>
+				<td><b>Total GÃ©nÃ©ral HT</b></td>
 				<td width="50%" align="right"><?php echo $myCmd['cartTotal'] ?></td>
 			</tr>
                 <?php foreach($tva as $t=>$v){if($v['base'] > 0){  ?>
                 <tr class="basetva">
-                    <td>TVA à <?php echo $t ?> %</td>
+                    <td>TVA Ã  <?php echo $t ?> %</td>
                     <td width="50%" align="right"><?php echo $v['base'] ?></td>
                 </tr>                   
                 <?php }} ?>

@@ -153,10 +153,10 @@
 			<td colspan="2">
 				<table class="dest" width="99%">
 					<tr>
-						<td><b>Champs personnalisés</b></td>
+						<td><b>Champs personnalisÃ©s</b></td>
 					</tr>
 					<tr>
-						<td>Insérer ces variables dans le gabarit : <?php
+						<td>InsÃ©rer ces variables dans le gabarit : <?php
 						
 							$field = $app->apiLoad('field')->fieldGet(array(
 								'user'	=> true	
@@ -180,7 +180,7 @@
 
 		<tr>
 			<td colspan="2" style="padding-top:20px;">
-				<a href="javascript:toggleEditor('templateData');" class="btn btn-mini">Activer/Désactiver l'éditeur de texte</a>
+				<a href="javascript:toggleEditor('templateData');" class="btn btn-mini">Activer/DÃ©sactiver l'Ã©diteur de texte</a>
 				<textarea name="templateData" id="templateData" style="width:99%; height:900px;"><?php
 					$data = $app->formValue($data['templateData'], $_POST['templateData']);
 					if(preg_match("#<head>#", $data) OR trim($data) == '') $plugins = 'fullpage,';
@@ -219,7 +219,7 @@
 		style_formats 						: [<?php echo @file_get_contents(USER.'/config/tinymceStyleFormats.php') ?>],
 		setup 								: function(ed) {
 		    ed.addButton('mybutton', {
-		        title : 'Insérer des images',
+		        title : 'InsÃ©rer des images',
 		        image : 'ressource/img/myb.gif',
 		        onclick : function() {
 					mediaPicker(ed.id, 'mce');

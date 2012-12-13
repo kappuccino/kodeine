@@ -6,7 +6,7 @@ if (isset($_GET['auto'])) {
 
 function stripChars($string){
 	return $string;
-	/*return strtr($string,'ΰαβγδηθικλμνξορςστυφωϊϋόύÿΐΑΒΓΔΗΘΙΚΛΜΝΞΟΡÒΣΤΥΦΩΪΫάέ ',
+	/*return strtr($string,'Γ Γ΅ΓΆΓ£Γ¤Γ§Γ¨Γ©ΓªΓ«Γ¬Γ­Γ®Γ―Γ±Γ²Γ³Γ΄ΓµΓ¶ΓΉΓΊΓ»ΓΌΓ½ΓΏΓ€ΓΓ‚ΓƒΓ„Γ‡ΓΓ‰ΓΓ‹ΓΓΓΓΓ‘Γ’Γ“Γ”Γ•Γ–Γ™ΓΓ›ΓΓ ',
 						'aaaaaceeeeiiiinooooouuuuyyAAAAACEEEEIIIINOOOOOUUUUY_');*/
 }
 

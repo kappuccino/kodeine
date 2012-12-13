@@ -87,7 +87,7 @@
 	<?php if(sizeof($_POST['remove']) > 0 ){ ?>
 		<div class="message messageWarning alert alert-error">
 			<form action="/admin/field/index" method="post" class="nomargin">
-				<b>ATTENTION</b> vous êtes sur le point de supprimer un ou plusieurs champs, cette action est irrémédiable
+				<b>ATTENTION</b> vous Ãªtes sur le point de supprimer un ou plusieurs champs, cette action est irrÃ©mÃ©diable
 			
 				<?php foreach($_POST['remove'] as $e){ ?>
 				<input type="hidden" name="killme[]" value="<?php echo $e ?>" />
@@ -171,8 +171,8 @@
 		</tr>
 		<tr>
 			<td></td>
-			<td><i>Utilisé pour nommer un champ dans le code, n'utiliser que des lettres. 
-			Changer le contenu de ce champ pourrait provoquer des problèmes sur le site</i></td>
+			<td><i>UtilisÃ© pour nommer un champ dans le code, n'utiliser que des lettres. 
+			Changer le contenu de ce champ pourrait provoquer des problÃ¨mes sur le site</i></td>
 		</tr>
 		<tr valign="top">
 			<td>Instruction</td>
@@ -182,7 +182,7 @@
 			<td>Style</td>
 			<td>
 				<textarea name="fieldStyle" rows="4" cols="40"><?php echo $app->formValue($data['fieldStyle'], $_POST['fieldStyle']) ?></textarea><br />
-				<i>styles appliqués au champ (format css en ligne)</i><br /><br />
+				<i>styles appliquÃ©s au champ (format css en ligne)</i><br /><br />
 				<input type="checkbox" class="chk" id="chk_tinymce" name="is_editor" value="1" <?php if($app->formValue($data['is_editor'], $_POST['is_editor'])) echo " checked"; ?> />
 				Utiliser un editeur de texte enrichi
 				<br /><br /><br /><br />
@@ -262,7 +262,7 @@
 		<tr class="line-type line-multichoice line-onechoice <?php echo ($fieldView == 'choice') ? '' : 'line-off' ?>">
 			<td></td>
 			<td><?php $choices = $app->apiLoad('field')->fieldChoiceGet(array('id_field' => $data['id_field'])); ?>
-				<a href="javascript:addChoice()" class="button button-green">Ajouter un élement</a><br style="clear:both" />
+				<a href="javascript:addChoice()" class="button button-green">Ajouter un Ã©lement</a><br style="clear:both" />
 				<ul id="choices">
 					<?php foreach($choices as $e){ ?>
 					<li id="<?php echo $e['id_fieldchoice'] ?>">

@@ -36,7 +36,7 @@
 
 	<?php if(isset($_GET['test']) && $success){ ?>
 	<div class="message messageValid">
-		Compte parametré correctement, vous pouvez dialoguer avec le serveur de Kappuccino
+		Compte parametrÃ© correctement, vous pouvez dialoguer avec le serveur de Kappuccino
 	</div>
 	<?php }else if(isset($_GET['test']) && !$success){ ?>
 	<div class="message messageWarning">
@@ -47,7 +47,7 @@
 	<table width="100%" border="0" cellpadding="0" cellspacing="0" class="listing">
 		<thead>
 			<tr>
-				<th width="20%">Paramètre</th>
+				<th width="20%">ParamÃ¨tre</th>
 				<th width="30%">Valeur</th>
 				<th width="50%">&nbsp;</th>
 			</tr>
@@ -56,7 +56,7 @@
 			<tr>
 				<td>Adresses email de test</td>
 				<td><input type="text" name="pref[test]" value="<?php echo $pref['test'] ?>" size="50" /></td>
-				<td>Séparer les adresses par des virgules pour envoyer les test sur plusieurs adresses</td>
+				<td>SÃ©parer les adresses par des virgules pour envoyer les test sur plusieurs adresses</td>
 			</tr>
 
 

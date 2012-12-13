@@ -101,8 +101,8 @@
 					<th width="30"  class="icone"><i class="icon-tags icon-white"></i></th>
 					<th width="90"  class="icone"><i class="icon-globe icon-white"</th>
 					<th width="60" 	class="order">#</th>
-					<th width="100" class="order">Création</th>
-					<th width="100" class="order">Mise à jour</th>
+					<th width="100" class="order">CrÃ©ation</th>
+					<th width="100" class="order">Mise Ã  jour</th>
 					<th 			class="order">Nom</th>
 				</tr>
 			</thead>

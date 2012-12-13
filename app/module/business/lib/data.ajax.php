@@ -79,7 +79,7 @@
             $tva[$l['contentTax']]['base'] += $l['contentPriceTaxQuantity'] - $l['contentPriceQuantity'];
         }
     }
-    # Tri par ordre décroissant TVA
+    # Tri par ordre dÃ©croissant TVA
     ksort($tva);
     
 	*/

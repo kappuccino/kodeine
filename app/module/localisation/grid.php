@@ -23,7 +23,7 @@
 <div class="app"><div class="wrapper">
 
 	<div class="mar-top-20 mar-bot-20">
-		<a href="./" class="button rButton">Revenir à la liste</a>
+		<a href="./" class="button rButton">Revenir Ã  la liste</a>
 	</div>
 
 	<table border="0" cellpadding="0" cellspacing="0" class="listing">

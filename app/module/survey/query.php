@@ -203,7 +203,7 @@
 							$c = array(
 								'RADIO'			=> 'Choix unique',
 								'CHECKBOX'		=> 'Choix multiples',
-								'GRADUATION'	=> 'Note 0 à 20',
+								'GRADUATION'	=> 'Note 0 Ã  20',
 								'FREE'			=> 'Texte libre'
 							);
 
@@ -224,14 +224,14 @@
 					</td>
 				</tr>
 				<tr>
-					<td>Réponse autre</td>
+					<td>RÃ©ponse autre</td>
 					<td><input type="checkbox" name="allow_other" value="1" <?php echo $app->formValue($query['allow_other'], $_POST['allow_other']) ? 'checked' : '' ?> /></td>
 				</tr>
 				<tr>
-					<td>Réponse vide</td>
+					<td>RÃ©ponse vide</td>
 					<td>
 						<input type="checkbox" name="allow_empty" value="1" <?php echo $app->formValue($query['allow_empty'], $_POST['allow_empty']) ? 'checked' : '' ?> />
-						<i>(En cochant cette case, une reponse vide sera accepté)</i>
+						<i>(En cochant cette case, une reponse vide sera acceptÃ©)</i>
 					</td>
 				</tr>
 			</table>
@@ -244,7 +244,7 @@
 			));
 		?>
 		<fieldset>
-			<legend>Réponses</legend>
+			<legend>RÃ©ponses</legend>
 			<ul class="qItems"><?php
 				foreach($items as $i){
 					echo "<li class=\"clearfix\" id=\"".$i['id_surveyqueryitem']."\">";
@@ -283,7 +283,7 @@
 					<td><input type="text" name="surveyGroupName" value="<?php echo $app->formValue($group['surveyGroupName'], $_POST['surveyGroupName']) ?>" style="width:75%;" /></td>
 				</tr>
 				<tr>
-					<td colspan="2">Texte de présentation</td>
+					<td colspan="2">Texte de prÃ©sentation</td>
 				</tr>
 				<tr>
 					<td colspan="2"><textarea name="surveyGroupDescription" style="height:120px; width:100%;"><?php echo $app->formValue($group['surveyGroupDescription'], $_POST['surveyGroupDescription']) ?></textarea></td>
@@ -296,7 +296,7 @@
 		<a href="query?id_survey=<?php echo $_REQUEST['id_survey'] ?>" class="btn btn-mini">Nouvelle question</a>
 
 		<?php if($query['id_surveyquery'] > 0){ ?>
-		<a href="javascript:removeQuery(<?php echo $query['id_surveyquery'] ?>)" class="btn btn-mini">Supprimer définitivement cette question</a>
+		<a href="javascript:removeQuery(<?php echo $query['id_surveyquery'] ?>)" class="btn btn-mini">Supprimer dÃ©finitivement cette question</a>
 		<?php } ?>
 
 	</div></div>

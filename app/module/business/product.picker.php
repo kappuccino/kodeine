@@ -198,7 +198,7 @@
         Combien
         <input type="text" name="filter[limit]" value="<?php echo $filter['limit'] ?>" size="3" />
         
-        Catégorie
+        CatÃ©gorie
         <?php echo $app->apiLoad('category')->categorySelector(array(
                 'name'      => 'filter[id_category]',
                 'value'     => $filter['id_category'],
@@ -216,9 +216,9 @@
                 echo "<option value=\"".$e['id_shop']."\"".(($filter['id_shop'] == $e['id_shop']) ? ' selected' : '').">".$e['shopName']."</option>";
             }
         ?></select>
-        <?php } ?>
+        <?php }Â ?>
         
-        Héritage
+        HÃ©ritage
         <input type="hidden" name="filter[categoryThrough]" value="0" />
         <input type="checkbox" name="filter[categoryThrough]" value="1" <?php if($filter['categoryThrough']) echo ' checked'; ?> />
         
@@ -236,7 +236,7 @@
         Ordonner
         <input type="radio" name="filter[viewChildren]" value="1" <?php if($filter['viewChildren']) echo ' checked'; ?> />
 
-        <input type="submit" class="" value="Filter les résultats" />
+        <input type="submit" class="" value="Filter les rÃ©sultats" />
 
     </form>
 </div>
@@ -256,8 +256,8 @@
                 <th width="30" class="icone"><img src="ressource/img/ico-comment-th.png" height="20" width="20" /></th>
                 <th width="<?php echo 20 + (sizeof($lang) * 25) ?>"class="icone"><img src="ressource/img/ico-flag.png" height="20" width="20" /></th>
                 <th width="60"  class="order <?php if($filter['order'] == 'k_content.id_content') echo 'order'.$dir; ?>"            onClick="document.location='product.picker.php?id_type=<?php echo $_REQUEST['id_type'] ?>&cf&order=k_content.id_content&direction=<?php echo $dir ?>'"><span>#</span></th>
-                <th width="100" class="order <?php if($filter['order'] == 'k_content.contentDateCreation') echo 'order'.$dir; ?>"   onClick="document.location='product.picker.php?id_type=<?php echo $_REQUEST['id_type'] ?>&cf&order=k_content.contentDateCreation&direction=<?php echo $dir ?>'"><span>Création</span></th>
-                <th width="100" class="order <?php if($filter['order'] == 'k_content.contentDateUpdate') echo 'order'.$dir; ?>"     onClick="document.location='product.picker.php?id_type=<?php echo $_REQUEST['id_type'] ?>&cf&order=k_content.contentDateUpdate&direction=<?php echo $dir ?>'"><span>Mise à jour</span></th>
+                <th width="100" class="order <?php if($filter['order'] == 'k_content.contentDateCreation') echo 'order'.$dir; ?>"   onClick="document.location='product.picker.php?id_type=<?php echo $_REQUEST['id_type'] ?>&cf&order=k_content.contentDateCreation&direction=<?php echo $dir ?>'"><span>CrÃ©ation</span></th>
+                <th width="100" class="order <?php if($filter['order'] == 'k_content.contentDateUpdate') echo 'order'.$dir; ?>"     onClick="document.location='product.picker.php?id_type=<?php echo $_REQUEST['id_type'] ?>&cf&order=k_content.contentDateUpdate&direction=<?php echo $dir ?>'"><span>Mise Ã  jour</span></th>
                 <th             class="order <?php if($filter['order'] == 'k_contentdata.contentName') echo 'order'.$dir; ?>"       onClick="document.location='product.picker.php?id_type=<?php echo $_REQUEST['id_type'] ?>&cf&order=k_contentdata.contentName&direction=<?php echo $dir ?>'"><span>Nom</span></th>
                 <?php if($cType['is_business']){ ?>
                 <th width="200" class="order <?php if($filter['order'] == 'k_content.contentRef') echo 'order'.$dir; ?>"            onClick="document.location='product.picker.php?id_type=<?php echo $_REQUEST['id_type'] ?>&cf&order=k_content.contentRef&direction=<?php echo $dir ?>'"><span>R&eacute;f&eacute;rence</span></th>

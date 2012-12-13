@@ -15,7 +15,7 @@
 		<table border="0" cellpadding="0" cellspacing="0" class="listing">
 			<thead>
 				<tr>
-					<th width="20%">Paramètre</th>
+					<th width="20%">ParamÃ¨tre</th>
 					<th width="30%">Valeur</th>
 					<th width="50%">&nbsp;</th>
 				</tr>

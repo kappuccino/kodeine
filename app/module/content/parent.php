@@ -165,7 +165,7 @@
 					<td><a href="data?id_content=<?php echo $e['id_content'] ?>"><?php echo $e['contentName'] ?></a></td>
 					<td><a class="btn btn-mini" href="parent?id_content=<?php echo $_GET['id_content'] ?>&id_type=<?php echo $id_type ?>&add=<?php echo $e['id_content'] ?>">Ajouter</a></td>
 				</tr>
-				<?php } ?>
+				<?php }Â ?>
 			</tbody>
 			<tfoot>
 				<tr>

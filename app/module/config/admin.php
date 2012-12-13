@@ -51,7 +51,7 @@
 
 	<?php if(isset($_GET['saved'])){ ?>
 	<div class="message messageValid">
-		Mise à jour des paramètre de configuration
+		Mise Ã  jour des paramÃ¨tre de configuration
 	</div>
 	<?php } ?>
 	
@@ -60,11 +60,11 @@
 		<input type="hidden" name="action" value="1" />
 		
 		<!--
-		<h4>Ces paramètres sont spécifiques à votre navigateur</h4>
+		<h4>Ces paramÃ¨tres sont spÃ©cifiques Ã  votre navigateur</h4>
 		<table width="100%" border="0" cellpadding="0" cellspacing="0" class="listing">
 			<thead>
 				<tr>
-					<th width="25%">Paramètre</th>
+					<th width="25%">ParamÃ¨tre</th>
 					<th width="25%">Valeur</th>
 					<th width="50%">Explication</th>
 				</tr>
@@ -93,11 +93,11 @@
 		-->
 
 
-		<h4>Ces paramètres sont commun à tous les utilisateurs de ce back office</h4>
+		<h4>Ces paramÃ¨tres sont commun Ã  tous les utilisateurs de ce back office</h4>
 		<table width="100%" border="0" cellpadding="0" cellspacing="0" class="listing">
 			<thead>
 				<tr>
-					<th width="25%">Paramètre</th>
+					<th width="25%">ParamÃ¨tre</th>
 					<th width="25%">Valeur</th>
 					<th width="50%">Explication</th>
 				</tr>
@@ -106,7 +106,7 @@
 				<tr>
 					<td>Brand name</td>
 					<td><input type="text" name="brandName" value="<?php echo $app->formValue($data['brandName'], $_POST['brandName']) ?>" style="width:80%;" /></td>
-					<td>Le nom qui est affiché en haut à gauche</td>
+					<td>Le nom qui est affichÃ© en haut Ã  gauche</td>
 				</tr>
 			</tbody>
 		</table>

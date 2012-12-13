@@ -131,14 +131,14 @@
 		</tfoot>
 	</table>
 
-<?php }else{ ?>
+<?php }else{Â ?>
 
 	<div style="font-weight:bold; font-size:14px; text-align:center; padding-top:50px; color:#808080;">
-		Aucune nouvelle donnée, vos listes d'envois sont à jour
+		Aucune nouvelle donnÃ©e, vos listes d'envois sont Ã  jour
 	</div>
 	
 
-<?php } ?>
+<?php }Â ?>
 </div>
 </div>
 </body></html>

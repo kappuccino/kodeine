@@ -20,7 +20,7 @@
 				<a id="button-upload" class="btn btn-mini">Envoyer des fichiers</a>
 				<!--<a id="button-maintenance">Maintenance</a>-->
 				<a id="button-hidepanel" class="btn btn-mini">Masquer la zone</a>
-				<a id="button-pref" class="btn btn-mini">Préférence</a>
+				<a id="button-pref" class="btn btn-mini">PrÃ©fÃ©rence</a>
 			</div>
 			<div id="slider">
 				<!-- <div id="sliderLine">
@@ -76,8 +76,8 @@
 	<div class="uploadcontainer clearfix">
 		<form id="uploadembed">
 			<div class="left clearfix">
-				<p>Glissez des fichiers dans la fenetre pour les télécharger.</p>
-				<p>Si votre navigateur ne supporte pas cette fonctionalité, cliquez sur le bouton "Télécharger".</p>
+				<p>Glissez des fichiers dans la fenetre pour les tÃ©lÃ©charger.</p>
+				<p>Si votre navigateur ne supporte pas cette fonctionalitÃ©, cliquez sur le bouton "TÃ©lÃ©charger".</p>
 				<br /><br />
 				<input id="file_upload" name="file_upload" type="file" multiple="true">
 				<!-- <a class="btn" href="javascript:$('#file_upload').uploadify('upload')">Envoyer les fichiers</a> -->

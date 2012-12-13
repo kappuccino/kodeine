@@ -32,7 +32,7 @@
 		<li class="clearfix<?php echo isMe('/config/robots') ? ' me':'' ?>">
 			<a href="/admin/config/robots"><span>Robots.txt</span></a>
 		</li>
-		<?php } ?>
+		<?php }Â ?>
 
 		<li class="clearfix<?php echo isMe('/config/language') ? ' me':'' ?>">
 			<a href="/admin/config/language"><span>Langues</span></a>

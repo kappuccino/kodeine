@@ -82,7 +82,7 @@ function filterReset(){
 + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - */
 public function searchGet($opt=array()){
 
-	# Gérer les options
+	# GÃ©rer les options
 	#
 	$limit		= isset($opt['limit']) 		? $opt['limit']			: 30;
 	$offset		= isset($opt['offet']) 		? $opt['offset']		: 0;

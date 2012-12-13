@@ -43,7 +43,7 @@
 	<a href="newsletter.index.php">Liste des newsletter</a> &raquo;
 	<a href="newsletter.data.php?id_newsletter=<?php echo $data['id_newsletter'] ?>"><?php echo $data['newsletterName'] ?></a> &raquo;
 	<a href="newsletter.analytic.php?id_newsletter=<?php echo $data['id_newsletter'] ?>">Statistiques</a> &raquo;
-	Activité des clicks
+	ActivitÃ© des clicks
 
 	<?php include(ADMINUI.'/pathway.php'); ?>
 </div>

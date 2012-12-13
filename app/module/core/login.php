@@ -79,7 +79,7 @@
 			<input type="password" name="regen" class="field" autocomplete="off" placeholder="mot de passe" />
 			et <a href="#" onclick="rgx('<?php echo $_GET['t'] ?>')">valider le</a>
 		</div>
-		<?php } ?>
+		<?php }Â ?>
 	</div>
 
 	<a class="lost" onclick="toggle();"></a>

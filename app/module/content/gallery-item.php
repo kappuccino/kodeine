@@ -186,7 +186,7 @@
 			echo "<label>".$e['fieldName'];
 				if($e['is_needed']) echo ' *';
 				if(preg_match("#richtext#", $field)){
-					echo "<br /><a href=\"javascript:toggleEditor('form-field-".$e['id_field']."');\">Activer/Désactiver l'éditeur</a>";
+					echo "<br /><a href=\"javascript:toggleEditor('form-field-".$e['id_field']."');\">Activer/DÃ©sactiver l'Ã©diteur</a>";
 				}
 			echo "</label>";
 
@@ -300,7 +300,7 @@
 				</div>
 				
 				<div class="control-group ">
-					<label class="control-label" for="contentSeeChkbox"><a href="#" >Visibilité</a></label>
+					<label class="control-label" for="contentSeeChkbox"><a href="#" >VisibilitÃ©</a></label>
 					<div class="controls">
 						<input type="checkbox" name="contentSee" id="contentSeeChkbox" value="1" <?php if($app->formValue($data['contentSee'], $_POST['contentSee'])) echo "checked"; ?> />
 						Indique que ce document est visible sur le site
@@ -337,7 +337,7 @@
 				<th>&nbsp;</th>
 			</tr>
 			<tr>
-				<th width="25%" 	class="previous"><a href="<?php echo ($leftLink  != '') ? $leftLink  : '#'; ?>">&#8592; Element précédent</a></th>
+				<th width="25%" 	class="previous"><a href="<?php echo ($leftLink  != '') ? $leftLink  : '#'; ?>">&#8592; Element prÃ©cÃ©dent</a></th>
 				<th align="center"	class="current"	>Element courant</th>
 				<th width="25%" 	class="next"	><a href="<?php echo ($rightLink != '') ? $rightLink : '#'; ?>">Element suivant &#8594;</a></th>
 			</tr>
@@ -346,7 +346,7 @@
 					if($leftLink != ''){
 						previewMe($previous, 200, $leftLink);
 					}else{
-						echo "<br /><br /><span id=\"leftDeadEnd\" style=\"padding:5px;\">Vous êtes au debut de l'album</span>";
+						echo "<br /><br /><span id=\"leftDeadEnd\" style=\"padding:5px;\">Vous Ãªtes au debut de l'album</span>";
 					}
 				?>&nbsp;</td>
 				<td class="current"><?php previewMe($data, 600); ?></td>
@@ -354,7 +354,7 @@
 					if($rightLink != ''){
 						previewMe($next, 200, $rightLink);
 					}else{
-						echo "<br /><br /><span id=\"rightDeadEnd\" style=\"padding:5px;\">Vous êtes a la fin de l'album</span>";	
+						echo "<br /><br /><span id=\"rightDeadEnd\" style=\"padding:5px;\">Vous Ãªtes a la fin de l'album</span>";	
 					}
 				?></td>
 			</tr>

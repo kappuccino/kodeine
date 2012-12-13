@@ -64,7 +64,7 @@
 
 		if($do){
 			$result  = $app->apiLoad('chapter')->chapterSet($_POST['id_chapter'], $def, $lan);
-			$message = ($result) ? 'OK: Enregistrement effectué' : 'KO: Erreur APP:<br />'.$app->db_error;
+			$message = ($result) ? 'OK: Enregistrement effectuÃ©' : 'KO: Erreur APP:<br />'.$app->db_error;
 			
 			if($result) cache($app);
 		}else{
@@ -261,13 +261,13 @@
 			
 							if($i == 0){
 								echo "<input type=\"hidden\" name=\"ref\" value=\"".$iso."\" /> ";
-								echo "<div class=\"alert\">Cette langue est la version de référence</div>";
+								echo "<div class=\"alert\">Cette langue est la version de rÃ©fÃ©rence</div>";
 							}else{
 								$copy = ($data['lan'][$iso]['is_copy'] && $i > 0) ? true : false;
 								$chk  = ($copy) ? ' checked' : NULL;
 			
 								echo "<input type=\"hidden\"   name=\"lan[".$iso."][copy]\" value=\"0\" />";
-								echo "<div class=\"alert\"><input type=\"checkbox\" name=\"lan[".$iso."][copy]\" value=\"1\" ".$chk." id=\"copy-".$iso."\" onChange=\"toggleCopy('".$iso."')\" /> Identique à la version de référence";
+								echo "<div class=\"alert\"><input type=\"checkbox\" name=\"lan[".$iso."][copy]\" value=\"1\" ".$chk." id=\"copy-".$iso."\" onChange=\"toggleCopy('".$iso."')\" /> Identique Ã  la version de rÃ©fÃ©rence";
 							}
 												
 						?></td>
@@ -304,7 +304,7 @@
 					</tr>
 					<?php if(sizeof($fields) > 0){ ?>
 					<tr>
-						<td colspan="2" style="background:#A6B5BE; font-weight:bold; padding:4px; height:18px;">Paramètres supplémentaires</td>
+						<td colspan="2" style="background:#A6B5BE; font-weight:bold; padding:4px; height:18px;">ParamÃ¨tres supplÃ©mentaires</td>
 					</tr>
 					<?php foreach($fields as $f){ ?>
 					<tr valign="top">

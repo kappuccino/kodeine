@@ -51,7 +51,7 @@ foreach($groups as $g){
 	foreach($query as $q){
 		echo "<h2>".$q['surveyQueryName']."</h2>";
 		
-		echo "<p>".$stat[$q['id_surveyquery']]['player']." personne(s) qui ont répondus</p>";
+		echo "<p>".$stat[$q['id_surveyquery']]['player']." personne(s) qui ont rÃ©pondus</p>";
 
 		$items = $app->apiLoad('survey')->surveyQueryItemGet(array(
 			'id_surveyquery' => $q['id_surveyquery']
@@ -91,7 +91,7 @@ foreach($groups as $g){
 		}else
 		if($q['surveyQueryType'] == 'FREE'){
 
-			echo "<a onClick=\"op($(this), 'q".$q['id_surveyquery']."')\" class=\"closed\">Afficher toutes les réponses libres</a>";
+			echo "<a onClick=\"op($(this), 'q".$q['id_surveyquery']."')\" class=\"closed\">Afficher toutes les rÃ©ponses libres</a>";
 
 			$es = $app->dbMulti("SELECT * FROM k_surveyslotitem WHERE id_surveyquery=".$q['id_surveyquery']);
 			

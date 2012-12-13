@@ -57,7 +57,7 @@ function doMediaAction(e, around){
 				
 				/* /!\ ATTENTION !! On passe l'id #contentMedia a ?field
 				 * mais le # fout en l'air la variable. Exploser le premier
-				 * char de la chaine, le remettre après sur embed.php
+				 * char de la chaine, le remettre aprï¿½s sur embed.php
 				 */
 				
 				$(e+'-choosing').attr('src', '/admin/media/embed?field='+e.substr(1, e.length));
@@ -253,7 +253,7 @@ function setRichEditor(){
 		
 		setup : function(ed) {
 		    ed.addButton('mybutton', {
-		        title : 'Insérer des images',
+		        title : 'Insï¿½rer des images',
 		        image : '/admin/core/ui/img/_img/myb.gif',
 		        onclick : function() {
 					mediaPicker(ed.id, 'mce');
@@ -348,7 +348,7 @@ function formLayout(save){
 
 	// Toujours visibles
 	$('.field-list-bottom li.form-item').each(function(i, li){
-		obj.bottom[i] = {
+		obj.bottom[i] = {
 			'field'		: $(li).attr('id'),
 			'close'		: $(li).hasClass('closed')
 		};
@@ -449,11 +449,11 @@ function enableMove(){
 
 	$.each(mySortables, function(k,v) {
 		
-		// réactiver les sort si disabled
+		// rï¿½activer les sort si disabled
 		if (typeof $(v).data('sortable') !== 'undefined') {
 			 $(v).sortable({disabled : false});
 		} else {
-			// sinon les créer
+			// sinon les crï¿½er
 			
 			$(v).sortable({
 				handle: 'div.hand',
@@ -637,7 +637,7 @@ function tabAction(){
 				return true;
 			}
 
-			// Verifier s'il y a des champs dans la VIEW associés
+			// Verifier s'il y a des champs dans la VIEW associï¿½s
 			var views	= parent.parent().parent().parent().parent().find('.view');
 			var view	= views[i];
 			var items	= $(view).find('.form-item');
@@ -810,7 +810,7 @@ function toggleEditor(id) {
 
 /* + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - 
 	Les fonctions qui suivent servent a la gestion d'un field CONTENT (tableau)
-	ou d'un USER ou d'un DBTABLE (table externe comme source de données)
+	ou d'un USER ou d'un DBTABLE (table externe comme source de donnï¿½es)
 + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - */
 tagSearchStorage = {};
 tagSortable		 = [];
@@ -1047,7 +1047,7 @@ function modalShowUpload() {
 	/*$('#modal-upload .uploadcontainer').css('left', (($(window).width() - 600) / 2));
 	$('#modal-upload .uploadcontainer').css('top', (($(window).height() - 400) / 2));*/
 	
-	/* Mettre a jour les path d'upload si déjà chargé */
+	/* Mettre a jour les path d'upload si dï¿½jï¿½ chargï¿½ */
 	/*var uploadPath = $('#path').attr('data-url');
 	if (typeof $('#modal-upload .uploadcontainer #file_upload').data('uploadifive') === 'object') 
 		$('#modal-upload .uploadcontainer #file_upload').data('uploadifive').settings.uploadScript = 'helper/upload-action?f='+uploadPath;

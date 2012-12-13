@@ -681,7 +681,7 @@ function mediaUrlData($opt){
 		if($srcLastMod > $cacheLastMod) unlink(KROOT.$store);
 	}
 
-	# La comande qui sera utilisé par la balise <IMG />
+	# La comande qui sera utilisÃ© par la balise <IMG />
 	$img = (file_exists(KROOT.$store) && $cache) ? $store : $render;
 
 	# Gerer le domaine pour CDN ou autre

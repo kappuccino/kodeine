@@ -21,7 +21,7 @@
 			$message = ($result) ? 'OK: Enregistrement en base' : 'KO: Erreur, APP : <br />'.$app->apiLoad('survey')->db_query.' '.$app->apiLoad('survey')->db_error;
 			if($result) header("Location: data?id_survey=".$app->apiLoad('survey')->id_survey);
 		}else{
-			$message = 'WA: Merci de compléter les champs correctement';
+			$message = 'WA: Merci de complÃ©ter les champs correctement';
 		}
 	}
 
@@ -32,7 +32,7 @@
 		
 		$title	= "Modification ".$data['surveyName'];
 	}else{
-		$title 	= "Nouvelle enquête";
+		$title 	= "Nouvelle enquÃªte";
 	}
 
 ?><!DOCTYPE html>
@@ -62,9 +62,9 @@
 		<a href="data" class="btn btn-mini">Nouveau</a>
 		<?php if($data['id_survey'] > 0){ ?>
 		<a href="data?id_survey=<?php echo $data['id_survey'] ?>"  class="btn btn-mini">Recharger la page</a>
-		<a href="query?id_survey=<?php echo $data['id_survey'] ?>"  class="btn btn-mini">Gérer les question/réponses</a>
+		<a href="query?id_survey=<?php echo $data['id_survey'] ?>"  class="btn btn-mini">GÃ©rer les question/rÃ©ponses</a>
 		<a href="stat?id_survey=<?php echo $data['id_survey'] ?>"  class="btn btn-mini">Afficher les stats</a>
-		<?php } ?>
+		<?php }Â ?>
 	</div>
 
 	<form action="data" method="post" id="data">

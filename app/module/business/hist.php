@@ -32,7 +32,7 @@
 	<div class="clearfix">
 		<form action="/admin/business/hist" method="get">
 			<div class="left">
-				Date de début <input type="text" class="input-small nomargin" name="rangeStart" id="rangeStart" value="<?php echo $_GET['rangeStart'] ?>" /><i id="clearstart" class="clearfield icon-remove-sign"></i>&nbsp;
+				Date de dÃ©but <input type="text" class="input-small nomargin" name="rangeStart" id="rangeStart" value="<?php echo $_GET['rangeStart'] ?>" /><i id="clearstart" class="clearfield icon-remove-sign"></i>&nbsp;
 				Date de fin <input type="text" class="input-small nomargin" name="rangeEnd" id="rangeEnd" value="<?php echo $_GET['rangeEnd'] ?>" /><i id="clearend" class="clearfield icon-remove-sign"></i>&nbsp;
 				Shop
 				<?php echo $app->apiLoad('shop')->shopSelector(array(
@@ -104,7 +104,7 @@
 	?>
 	
 	<br />
-	<h3>Détail des commandes sur la période</h3>
+	<h3>DÃ©tail des commandes sur la pÃ©riode</h3>
 
 	<table width="100%" border="0" cellpadding="0" cellspacing="0" class="listing sortable">
 		<thead>
@@ -129,7 +129,7 @@
 				<td><?php echo $e['cartPayment'] ?></td>
 				<td align="right"><?php echo $e['cartTotalFinal'] ?></td>
 			</tr>
-			<?php } ?>
+			<?php }Â ?>
 		</tbody>
 		<tfoot>
 			<tr>

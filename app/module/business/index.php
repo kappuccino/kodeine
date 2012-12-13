@@ -116,7 +116,7 @@
 				<td height="30"></td>
 				<td colspan="5"><?php
 				if(sizeof($cmd)){ ?>
-					<a href="#" onClick="remove();" class="btn btn-mini">Supprimer les commandes selectionnés</a> 
+					<a href="#" onClick="remove();" class="btn btn-mini">Supprimer les commandes selectionnÃ©s</a> 
 					<span class="pagination"><?php $app->pagination($app->apiLoad('business')->total, $app->apiLoad('business')->limit, $filter['offset'], '/admin/business/index?cf&offset=%s'); ?></span>
 				<?php } ?></td>
 				<td>&nbsp;</td>
@@ -134,7 +134,7 @@
 <script src="/app/module/core/ui/_datatables/jquery.dataTables.js"></script>
 <script>
 	function remove(){
-		if(confirm("Confirmer la suppression des commandes selectionnées et la recreditation du stock ?")){
+		if(confirm("Confirmer la suppression des commandes selectionnÃ©es et la recreditation du stock ?")){
 			$('#listing').submit();
 		}
 	}

@@ -45,7 +45,7 @@
 			$message = ($result) ? 'OK: Enregistrement en base' : 'KO: Erreur, APP : <br />'.$app->apiLoad('user')->db_query.' '.$app->apiLoad('user')->db_error;
 			if($result) header("Location: data?id_user=".$app->apiLoad('user')->id_user);
 		}else{
-			$message = 'WA: Merci de compléter les champs correctement';
+			$message = 'WA: Merci de complÃ©ter les champs correctement';
 		}
 	}
 
@@ -218,7 +218,7 @@
 			}
 		?></ul>
 	</div>
-	<?php } ?>
+	<?php }Â ?>
 
 	<div class="view">
 		<div class="view-label">
@@ -289,7 +289,7 @@
 				}
 			?></select>
 		
-			Autoriser l'accès à l'administration 
+			Autoriser l'accÃ¨s Ã  l'administration 
 			<input type="checkbox" name="is_admin" value="1" <?php if($app->formValue($data['is_admin'], $_POST['is_admin'])) echo " checked"; ?> />
 		</div>
 	</li>

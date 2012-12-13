@@ -45,7 +45,7 @@
                 $mail->MsgHTML(eregi_replace("[\]", '', $data['newsletterHtml']));
                 
                 if(!$mail->Send()) $message = "Erreur d'envoi".$mail->ErrorInfo;   
-                else $message = 'OK: Newsletter enregistrée et envoyée en mode [TEST] ('.$pref['test'].')';
+                else $message = 'OK: Newsletter enregistrÃ©e et envoyÃ©e en mode [TEST] ('.$pref['test'].')';
 				
 			}else
 			if($result && $_POST['do'] == 'list'){
@@ -53,7 +53,7 @@
 					header("Location: ./data-list?id_newsletter=".$app->apiLoad('newsletter')->id_newsletter);
 					exit();
 				}else{
-					$message = 'KO: Cette newsletter est en cours d\'envois ou bien elle a déjà été envoyé.';
+					$message = 'KO: Cette newsletter est en cours d\'envois ou bien elle a dÃ©jÃ  Ã©tÃ© envoyÃ©.';
 				}
 			}
 	
@@ -111,11 +111,11 @@
             <li><a href="data-designer" class="btn btn-mini">Nouveau</a></li>
         <?php } ?>
         <?php if($_REQUEST['id_newsletter'] > 0){ ?>
-            <li><a href="preview?id_newsletter=<?php echo $_REQUEST['id_newsletter'] ?>" class="btn btn-mini" target="_blank">Prévisualiser</a></li>
+            <li><a href="preview?id_newsletter=<?php echo $_REQUEST['id_newsletter'] ?>" class="btn btn-mini" target="_blank">PrÃ©visualiser</a></li>
             <?php } ?>
         <?php if($data['newsletterSendDate'] == NULL){ ?>
             <li><a href="javascript:$('#do').val('test');save();" class="btn btn-mini btn-success">Enregistrer et envoyer un mail de test</a></li>
-            <li><a href="javascript:$('#do').val('test');save();" class="btn btn-mini btn-success">Enregistrer et sélectionner les abonnés</a></li>
+            <li><a href="javascript:$('#do').val('test');save();" class="btn btn-mini btn-success">Enregistrer et sÃ©lectionner les abonnÃ©s</a></li>
         <?php } ?>
     <?php } ?>
     <li><a href="javascript:save();" class="btn btn-mini btn-success">Enregistrer</a></li>
@@ -143,9 +143,9 @@
                 <?php if($data['id_newsletter'] > 0) { ?>
                 <?php if($data['newsletterSendDate'] == NULL){ ?>
                     <a href="javascript:$('#do').val('test');save();" class="btn btn-mini">Enregistrer et envoyer un mail de test</a>
-                    <a href="javascript:$('#do').val('list');save();" class="btn btn-mini">Enregistrer et sélectionner les abonnés</a>
+                    <a href="javascript:$('#do').val('list');save();" class="btn btn-mini">Enregistrer et sÃ©lectionner les abonnÃ©s</a>
                     <?php } if($_REQUEST['id_newsletter'] > 0){ ?>
-                    <a href="preview?id_newsletter=<?php echo $_REQUEST['id_newsletter'] ?>" class="btn btn-mini" target="_blank">Prévisualiser</a>
+                    <a href="preview?id_newsletter=<?php echo $_REQUEST['id_newsletter'] ?>" class="btn btn-mini" target="_blank">PrÃ©visualiser</a>
                     <?php } if($data['newsletterSendDate'] != NULL){ ?>
                     <a href="analytic?id_newsletter=<?php echo $_REQUEST['id_newsletter'] ?>" class="btn btn-mini">Consulter les statistiques</a>
                     <a href="data" class="btn btn-mini">Nouveau</a>
@@ -189,7 +189,7 @@
 		
 		<div style="float: left;">
 			<div id="add">
-				<select id="stRepeater"><option value="0">Insérer un élément</option></select>
+				<select id="stRepeater"><option value="0">InsÃ©rer un Ã©lÃ©ment</option></select>
 			</div>
 			<br clear="both">
 			<div id="edit">
@@ -315,7 +315,7 @@ function save() {
     var html = $preview.contents()[0].outerHTML;
     $.post('helper/designer-save', { id_newsletter: id_newsletter, html: html, templatehtml: templatehtml}, function(data) {
         if(data != 0) {
-            //alert('Enregistré');
+            //alert('EnregistrÃ©');
             $('#data').submit();
         }
     }); 

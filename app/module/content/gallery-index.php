@@ -36,7 +36,7 @@
 			<a id="buttonImport" class="btn btn-mini">Ajouter des elements</a>
 		
 			<input type="radio" name="mode" onclick="makeSort()" checked="checked" /> Classement &nbsp; &nbsp;
-			<input type="radio" name="mode" onclick="makeMove()" /> Déplacement
+			<input type="radio" name="mode" onclick="makeMove()" /> DÃ©placement
 		</div>
 	</div>
 	

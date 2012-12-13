@@ -28,7 +28,7 @@
 		<div id="safe">
 			<div class="section" id="section-internalLink">
 				<div class="head clearfix">
-					<div class="title">Vérifier les liens internes</div>
+					<div class="title">VÃ©rifier les liens internes</div>
 					<div class="action" role="link"><a onclick="lancer('internalLink')">Lancer</a></div>
 				</div>
 				<div class="progress"><div class="bar"></div></div>
@@ -36,7 +36,7 @@
 				<div class="listing"></div>
 	
 				<div class="description">
-					Cette routine permet de vérifier si les liens présent dans les pages sont encore valides.
+					Cette routine permet de vÃ©rifier si les liens prÃ©sent dans les pages sont encore valides.
 				</div>
 			</div>
 	
@@ -52,8 +52,8 @@
 				<div class="verbose"></div>
 	
 				<div class="description">
-					La cache du contenu permet d'accélerer la récupération d'inforamtion annexes, comme
-					la liste des catégories associé à un article. 
+					La cache du contenu permet d'accÃ©lerer la rÃ©cupÃ©ration d'inforamtion annexes, comme
+					la liste des catÃ©gories associÃ© Ã  un article. 
 				</div>
 			</div>
 	
@@ -61,7 +61,7 @@
 	
 			<div class="section"  id="section-mediaCache">
 				<div class="head clearfix">
-					<div class="title">Vérifier la cache des media</div>
+					<div class="title">VÃ©rifier la cache des media</div>
 					<div class="action"><a onclick="lancer('mediaCache')">Lancer</a></div>
 				</div>
 	
@@ -69,8 +69,8 @@
 				<div class="verbose"></div>
 	
 				<div class="description">
-					Cette routine permet de faire le ménage parmi les images de cache déjà créées qui ne sont
-					plus utilisées si les originaux ont disparu.
+					Cette routine permet de faire le mÃ©nage parmi les images de cache dÃ©jÃ  crÃ©Ã©es qui ne sont
+					plus utilisÃ©es si les originaux ont disparu.
 				</div>
 			</div>
 	

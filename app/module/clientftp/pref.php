@@ -47,7 +47,7 @@
 
 	<?php if(isset($_GET['test']) && $success){ ?>
 	<div class="message messageValid">
-		Compte parametré correctement
+		Compte parametrÃ© correctement
 	</div>
 	<?php }else if(isset($_GET['test']) && !$success){ ?>
 	<div class="message messageWarning">
@@ -58,7 +58,7 @@
 	<table width="100%" border="0" cellpadding="0" cellspacing="0" class="listing">
 		<thead>
 			<tr>
-				<th width="20%">Paramètre</th>
+				<th width="20%">ParamÃ¨tre</th>
 				<th width="30%">Valeur</th>
 				<th width="50%">&nbsp;</th>
 			</tr>
@@ -67,16 +67,16 @@
 			<tr>
 				<td width="100">Identifiant</td>
 				<td><input type="text" name="pref[login]" value="<?php echo $pref['login'] ?>" size="50" autocomplete="off" /></td>
-				<td>L'identifiant utilisé pour se connecter au serveur</td>
+				<td>L'identifiant utilisÃ© pour se connecter au serveur</td>
 			</tr>
 			<tr>
 				<td>Mot de passe</td>
 				<td><input type="password" name="pref[password]" value="<?php echo $pref['password'] ?>" size="30" /></td>
-				<td>Le mot de passe associé à ce compte</td>
+				<td>Le mot de passe associÃ© Ã  ce compte</td>
 			</tr>
 			<tr>
 				<td></td>
-				<td><a href="pref?test" class="btn btn-small">Tester ces paramètres</a></td>
+				<td><a href="pref?test" class="btn btn-small">Tester ces paramÃ¨tres</a></td>
 				<td></td>
 			</tr>
 		</tbody>

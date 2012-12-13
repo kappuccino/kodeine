@@ -84,7 +84,7 @@
 				<td class="sniff" colspan="2"><a href="/admin/business/coupon?id_coupon=<?php echo $e['id_coupon'] ?>"><?php echo $e['couponName'] ?></a></td>
 			</tr>
 			<?php }
-		}else{ ?>
+		}else{Â ?>
 			<tr>
 				<td colspan="3" style="font-weight:bold; padding-top:30px; padding-bottom:30px;" align="center">
 					Auncun coupon

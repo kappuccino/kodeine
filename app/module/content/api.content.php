@@ -1111,7 +1111,7 @@ public function contentDuplicate($id_content){
 	#
 	$from		= $this->dbOne("SELECT * FROM k_content WHERE id_content=".$id_content);
 
-	# Trouver les champs à dupliquer
+	# Trouver les champs Ã  dupliquer
 	#
 	$core		= $this->dbMulti("SHOW COLUMNS FROM k_content WHERE Field != 'id_content'");
 	$coreFields	= $this->dbKey($core, 'Field');
@@ -1131,7 +1131,7 @@ public function contentDuplicate($id_content){
 	$new = $this->db_insert_id;
 
 
-	# On effectus quelques mise à jour pour la nouvelle version
+	# On effectus quelques mise Ã  jour pour la nouvelle version
 	#
 	$this->dbQuery("UPDATE k_content SET contentSee=0, contentDateUpdate=NOW() WHERE id_content=".$new);
 	if($this->db_error) die($this->pre($this->db_query, $this->db_error));

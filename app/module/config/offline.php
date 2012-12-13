@@ -61,7 +61,7 @@
 			<table class="listing">
 				<thead>
 					<tr>
-						<th>Groupes concernés</th>
+						<th>Groupes concernÃ©s</th>
 					</tr>
 				</thead>
 				<tbody>

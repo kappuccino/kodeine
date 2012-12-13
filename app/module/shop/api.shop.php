@@ -17,7 +17,7 @@ public function shop(){
 public function shopGet($opt=array()){
 if($opt['debug']) $this->pre("[OPT]", $opt);
 
-	# Gérer les options
+	# GÃ©rer les options
 	#
 	$limit		= ($opt['limit'] != '') 		? $opt['limit']			: 30;
 	$offset		= ($opt['offset'] != '') 		? $opt['offset']		: 0;

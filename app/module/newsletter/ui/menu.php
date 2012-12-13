@@ -45,7 +45,7 @@
 		<li class="<?php echo isMe('/newsletter/pref') ? 'me':'' ?>">
 			<a href="/admin/newsletter/pref">
 				<!-- <img src="/admin/newsletter/ui/img/pref.png" /> -->
-				<span>Préférences</span>
+				<span>PrÃ©fÃ©rences</span>
 			</a>
 		</li>
 	</ul>

@@ -60,11 +60,11 @@
 <div id="app"><div class="wrapper"><div class="row-fluid">
 
 	<div class="span6">
-		<p><b>Champs utilisés</b></p>
+		<p><b>Champs utilisÃ©s</b></p>
 		<ul id="la" class="myList clearfix">
 			<?php foreach($field as $e){ ?>
 			<li id="<?php echo $e['id_field'] ?>"><?php echo $e['fieldName'].' ('.$e['fieldKey'].')' ?></li>
-			<?php } ?>
+			<?php }Â ?>
 		</ul>
 		<input type="hidden" id="move" size="80" value="" />
 	</div>
@@ -74,7 +74,7 @@
 		<ul id="lb" class="myList clearfix">
 			<?php foreach($rest as $e){ ?>
 			<li id="<?php echo $e['id_field'] ?>"><?php echo $e['fieldName'].' ('.$e['fieldKey'].')' ?></li>
-			<?php } ?>
+			<?php }Â ?>
 		</ul>
 	</div>	
 

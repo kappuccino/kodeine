@@ -70,7 +70,7 @@
 			Combien
 			<input type="text" name="filter[limit]" value="<?php echo $filter['limit'] ?>" size="3" />
 
-			<button class="btn btn-mini" type="submit">Filter les résultats</button>
+			<button class="btn btn-mini" type="submit">Filter les rÃ©sultats</button>
 			<button class="btn btn-mini">Annuler</button>
 		</form>
 	</div>
@@ -81,7 +81,7 @@
 			<tr>
 				<th width="30"  class="icone"><i class="icon-remove icon-white"></i></th>
 				<th width="80"  class="order <?php if($filter['order'] == 'k_survey.id_survey')			echo 'order'.$dir; ?>" onClick="document.location='index?cf&order=k_survey.id_survey&direction=<?php echo $dir ?>'"><span>#</span></th>
-				<th width="110" class="order <?php if($filter['order'] == 'k_survey.surveyDateCreate')	echo 'order'.$dir; ?>" onClick="document.location='index?cf&order=k_survey.surveyDateCreate&direction=<?php echo $dir ?>'"><span>Création</span></th>
+				<th width="110" class="order <?php if($filter['order'] == 'k_survey.surveyDateCreate')	echo 'order'.$dir; ?>" onClick="document.location='index?cf&order=k_survey.surveyDateCreate&direction=<?php echo $dir ?>'"><span>CrÃ©ation</span></th>
 				<th			    class="order <?php if($filter['order'] == 'k_survey.surveyName')		echo 'order'.$dir; ?>" onClick="document.location='index?cf&order=k_survey.surveyName&direction=<?php echo $dir ?>'"><span>Nom</span></th>
 			</tr>
 		</thead>
@@ -102,10 +102,10 @@
 		}else{ ?>
 			<tr>
 				<td colspan="4" style="text-align:center; font-weight:bold; padding:30px 0px 30px 0px;">
-					Aucun résultat avec cette recherche
+					Aucun rÃ©sultat avec cette recherche
 				</td>
 			</tr>
-		<?php } ?>
+		<?php }Â ?>
 		</tbody>
 		<tfoot>
 			<?php if(sizeof($surveys) > 0){ ?>

@@ -70,7 +70,7 @@
 </div>
 
 <div id="app"><div class="wrapper">
-	<p>Choisissez dans la liste ci-dessous les langues qui seront directement importées dans votre configuration</p>
+	<p>Choisissez dans la liste ci-dessous les langues qui seront directement importÃ©es dans votre configuration</p>
 
 	<form method="post" action="language-import" id="data">
 	<table width="100%" border="0" cellpadding="0" cellspacing="0" class="listing sortable__">
@@ -100,7 +100,7 @@
 				<td><?php echo $e['locale'] ?></td>
 				<td><?php echo $e['language'] ?></td>
 			</tr>
-		<?php }}} ?>
+		<?php }}}Â ?>
 		<tbody>
 	</table>
 	</form>

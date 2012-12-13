@@ -33,7 +33,7 @@
 
 		$title = $data['adName'];
 	}else{
-		$title = 'Nouvelle publicité';
+		$title = 'Nouvelle publicitÃ©';
 	}
 ?><!DOCTYPE html>
 <html lang="fr">
@@ -49,7 +49,7 @@
 		<div class="top">
 			<div class="logo">Logo</div>
 			<div class="pathway clearfix">
-				<h1><a href="index">Publicité</a> &raquo; 
+				<h1><a href="index">PublicitÃ©</a> &raquo; 
 					<a href="data">Editer</a>
 						&raquo; <?php echo $title ?></h1>
 			</div>
@@ -116,7 +116,7 @@
 						<td>
 							<table border="0">
 								<tr>
-									<td width="120">Débute</td>
+									<td width="120">DÃ©bute</td>
 									<td width="120">Termine</td>
 									<td width="120">Active</td>
 								</tr>
@@ -141,8 +141,8 @@
 									<td><?php echo number_format($data['adClick'], 0, '.', ' '); ?></td>	
 								</tr>
 								<tr align="right">
-									<td>Remettre à zéro <input type="checkbox" value="1" name="resetView" /></td>
-									<td>Remettre à zéro <input type="checkbox" value="1" name="resetClick" /></td>
+									<td>Remettre Ã  zÃ©ro <input type="checkbox" value="1" name="resetView" /></td>
+									<td>Remettre Ã  zÃ©ro <input type="checkbox" value="1" name="resetClick" /></td>
 								</tr>
 							</table>
 						</td>
@@ -154,13 +154,13 @@
 			<div class="span6">
 				<table cellpadding="3" width="100%">
 					<tr>
-						<td>Coller ici le code Javascript ou Flash pour afficher la publicité</td>
+						<td>Coller ici le code Javascript ou Flash pour afficher la publicitÃ©</td>
 					</tr>
 					<tr>
 						<td><textarea name="adCode" style="height:60px; width:99%;"><?php echo $app->formValue($data['adCode'], $_POST['adCode']) ?></textarea></td>
 					</tr>
 					<tr>
-						<td>Liste des images qui seront affiché pour cette campagne</td>
+						<td>Liste des images qui seront affichÃ© pour cette campagne</td>
 					</td>
 					</tr>
 						<td>

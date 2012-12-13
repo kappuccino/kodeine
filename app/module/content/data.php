@@ -228,7 +228,7 @@
 				<li class="clearfix"><a href="data-language?id_content=<?php echo $data['id_content'] ?>&language=<?php echo $data['language'] ?>" class="left">Traduction</a></li>
 				<li class="clearfix"><a href="/admin/comment/index?id_content=<?php echo $data['id_content'] ?>" class="left">Commentaire</a></li>
 				<li class="clearfix"><a href="parent?id_content=<?php echo $data['id_content'] ?>" class="left">Sous-contenu</a></li>
-				<?php } ?>
+				<?php } ?>
 		</div>
 	</li>
 	<li>
@@ -314,7 +314,7 @@
 				if(sizeof($versions) > 0){
 					foreach($versions as $vrs){
 						$sel = ($_REQUEST['reloadFromVersion'] == $vrs['id_version']) ? ' selected' : NULL;
-						echo "<option value=\"".$vrs['id_version']."\"".$sel.">Afficher la version du : ".$app->helperDate($vrs['versionDate'], '%e %b %G à %Hh %Mm %S')."</option>";
+						echo "<option value=\"".$vrs['id_version']."\"".$sel.">Afficher la version du : ".$app->helperDate($vrs['versionDate'], '%e %b %G ï¿½ %Hh %Mm %S')."</option>";
 					}
 				}
 			}else{
@@ -355,7 +355,7 @@
 
 		?></ul>
 	</div>
-	<?php } ?>
+	<?php } ?>
 
 	<div class="view">
 		<div class="view-label">
@@ -404,7 +404,7 @@
 				<input type="text" name="contentUrl" id="urlField" class="field" value="<?php echo $app->formValue($data['contentUrl'], $_POST['contentUrl']); ?>" size="100" style="width:75%; float:left;" />
 				<div style="float:left; margin-top:2px;">
 					<input type="checkbox" id="autogen" checked="checked" onclick="if(this.checked)urlCheck();" />
-					Générer automatiquent
+					GÃ©nÃ©rer automatiquent
 				</div>
 			</div>
 		</span>
@@ -415,7 +415,7 @@
 		<div class="toggle"></div>
 
 		<span class="">
-			<label>Titre réf.</label>
+			<label>Titre rÃ©f.</label>
 			<div class="form"><input type="text" class="field" name="contentHeadTitle" value="<?php echo $app->formValue($data['contentHeadTitle'], $_POST['contentHeadTitle']); ?>" size="100" style="width:99%;" /></div>
 		</span>
 
@@ -423,14 +423,14 @@
 		<div class="spacer"></div>
 		
 		<span>
-			<label class="off">Mots-clés réf.</label>
+			<label class="off">Mots-clÃ©s rÃ©f.</label>
 			<div class="form"><input type="text" name="contentMetaKeywords" class="field" value="<?php echo $app->formValue($data['contentMetaKeywords'], $_POST['contentMetaKeywords']); ?>" size="100" style="width:99%;" /></div>
 		</span>
 		
 		<br style="clear:both" />
 		<div class="spacer"></div>
 		<span>
-			<label class="off">Description réf.</label>
+			<label class="off">Description rÃ©f.</label>
 			<div class="form"><input type="text" name="contentMetaDescription" class="field" value="<?php echo $app->formValue($data['contentMetaDescription'], $_POST['contentMetaDescription']); ?>" size="100" style="width:99%;" /></div>
 		</span>
 	</li>
@@ -438,7 +438,7 @@
 	<li id="contentSee" class="clearfix form-item">
 		<div class="hand"></div>
 		<div class="toggle"></div>
-		<label for="contentSeeBx">Visibilité</label>
+		<label for="contentSeeBx">VisibilitÃ©</label>
 		<div class="form" style="padding-top:3px;">
 			<input type="checkbox" name="contentSee" id="contentSeeBx" value="1" <?php if($app->formValue($data['contentSee'], $_POST['contentSee'])) echo "checked"; ?> />
 			Indique que ce document est visible sur le site
@@ -448,7 +448,7 @@
 	<li id="contentRef" class="clearfix form-item <?php echo $app->formError('contentRef', 'needToBeFilled') ?>">
 		<div class="hand"></div>
 		<div class="toggle"></div>
-		<label>Référence</label>
+		<label>RÃ©fÃ©rence</label>
 		<div class="form"><input type="text" name="contentRef" class="input-thin" value="<?php echo $app->formValue($data['contentRef'], $_POST['contentRef']); ?>" size="100" style="width:99%;" /></div>
 	</li>
 
@@ -478,7 +478,7 @@
 		<label>Stock</label>
 		<div class="form">
 			<input type="text" name="contentStock" class="input-thin" value="<?php echo $app->formValue($data['contentStock'], $_POST['contentStock']); ?>" size="8" />
-			<input type="checkbox" name="contentStockNeg" value="1" <?php if($app->formValue($data['contentStockNeg'], $_POST['contentStockNeg'])) echo "checked" ?> /> Autoriser le stock négatif
+			<input type="checkbox" name="contentStockNeg" value="1" <?php if($app->formValue($data['contentStockNeg'], $_POST['contentStockNeg'])) echo "checked" ?> /> Autoriser le stock nÃ©gatif
 		</div>
 	</li>
 
@@ -492,7 +492,7 @@
 				'name'		=> 'contentTemplate',
 				'value'		=> $app->formValue($data['contentTemplate'], $_POST['contentTemplate']),
 				'empty'		=> true,
-				'emptyText'	=> 'Utiliser la mise en page par défaut'
+				'emptyText'	=> 'Utiliser la mise en page par dÃ©faut'
 			));
 			
 			if(sizeof($opt['options']) > 0){
@@ -538,7 +538,7 @@
 				}
 			?></select>
 			<?php if($data['id_content'] > 0) echo "(note actuelle : ".$data['contentRateAvg'].")"; ?>
-			<input type="checkbox" name="resetRating" value="1" /> Remettre à zero les notes.
+			<input type="checkbox" name="resetRating" value="1" /> Remettre Ã  zero les notes.
 		</div>
 	</li>
 
@@ -566,7 +566,7 @@
 					</td>
 				</tr>
 				<tr>
-					<td>Mise a jour</td>
+					<td>Mise aÃ  jour</td>
 					<td>
 						<?php
 							$v = $app->formValue($data['contentDateUpdate'], $_POST['contentDateUpdate']);
@@ -615,7 +615,7 @@
 			<?php } if($type['use_category']){ ?>
 			<div style="width:<?php echo $usePercent ?>%;" class="panelItem">
 				<span class="panelLabel clearfix">
-					<span class="name">Catégorie</span>
+					<span class="name">CatÃ©gorie</span>
 					<span class="action">
 						<a onclick="sizer('#id_category', 100, 100)"><i class="icon-plus"></i></a>
 						<a onclick="sizer('#id_category', 100,-100)"><i class="icon-minus"></i></a>
@@ -706,7 +706,7 @@
 		<div class="toggle"></div>
 
 		<span class="<?php echo $app->formError('contentAdUrl', 'needToBeFilled'); ?> clearfix">
-			<label>Publicité Url</label>
+			<label>PublicitÃ© Url</label>
 			<div class="form">
 				<input type="text" name="contentAdUrl" value="<?php echo $app->formValue($data['contentAdUrl'], $_POST['contentAdUrl']); ?>" size="100" autocomplete="off" style="width:99%;" />
 			</div>
@@ -735,10 +735,10 @@
 		<div class="spacer"></div>
 
 		<span class="clearfix">
-			<label class="off">Pondération</label>
+			<label class="off">PondÃ©ration</label>
 			<div class="form clearfix">
 				<input type="text" name="contentAdPriority" value="<?php echo $app->formValue($data['contentAdPriority'], $_POST['contentAdPriority']); ?>" size="10" autocomplete="off" />
-				<i>pourcentage servant a donner plus de poids a une bannière</i>
+				<i>pourcentage servant a donner plus de poids a une banniÃ¨re</i>
 			</div>
 		</span>
 
@@ -761,7 +761,7 @@
 		<div class="hand"></div>
 		<div class="toggle"></div>
 
-		<label>Publicité Code</label>
+		<label>PublicitÃ© Code</label>
 		<div class="form">
 			<textarea name="contentAdCode" style="width:99%; height:100px;"><?php
 				echo $app->formValue($data['contentAdCode'], $_POST['contentAdCode']);
@@ -809,7 +809,7 @@
 					<td style="text-align:right;"><input type="text"		name="group[<?php echo $id_group ?>][contentPriceNormal]"	value="<?php echo $app->formValue($e['contentPriceNormal'], 	$_POST['group'][$id_group]['contentPriceNormal']) ?>" size="6" class="fl-no is-toggle input-thin" <?php echo $disabled ?> /></td>
 					<td style="padding-left:50px;"><input type="text"		name="group[<?php echo $id_group ?>][contentPriceComment]"	value="<?php echo $app->formValue($e['contentPriceComment'], 	$_POST['group'][$id_group]['contentPriceComment']) ?>" class="fl-co is-toggle input-thin" <?php echo $disabled ?> /></td>
 				</tr>
-				<?php } ?>
+				<?php } ?>
 				</tbody>
 				<tfoot>
 					<tr>

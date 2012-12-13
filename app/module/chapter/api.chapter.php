@@ -255,7 +255,7 @@ public function chapterSet($id_chapter, $def, $lan){
 	# Remettre les associations a jour si on rajoute un chapitre
 	if($needNewAffect) $this->chapterNewAffect($id_chapter);
 
-	# Remettre à jour le profile
+	# Remettre Ã  jour le profile
 	$this->chapterProfile($id_chapter);
 
 	return true;
@@ -266,7 +266,7 @@ public function chapterSet($id_chapter, $def, $lan){
 + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - */
 public function chapterRemove($id_chapter){
 
-	# Mettre a jour les points d'entré des profiles
+	# Mettre a jour les points d'entrÃ© des profiles
 	foreach($this->dbMulti("SELECT * FROM k_userprofile") as $p){
 		$rule = unserialize($p['profileRule']);
 

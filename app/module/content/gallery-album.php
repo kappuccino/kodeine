@@ -169,7 +169,7 @@
 			echo "<label>".$e['fieldName'];
 				if($e['is_needed']) echo ' *';
 				if(preg_match("#richtext#", $field)){
-					echo "<br /><a href=\"javascript:toggleEditor('form-field-".$e['id_field']."');\">Activer/Désactiver l'éditeur</a>";
+					echo "<br /><a href=\"javascript:toggleEditor('form-field-".$e['id_field']."');\">Activer/DÃ©sactiver l'Ã©diteur</a>";
 				}
 
 			echo "</label>";
@@ -212,7 +212,7 @@
 			<a href="javascript:$('#data').submit()" class="button button-blue">Enregistrer</a>
 			<?php if($data['id_content'] > 0){ ?>
 			<a href="gallery-index?id_type=<?php echo $data['id_type'] ?>#<?php echo $data['id_content'] ?>" class="button button-blue">Afficher l'album en image</a>
-			<?php } ?>
+			<?php }Â ?>
 		</div>
 	
 	<?php
@@ -227,7 +227,7 @@
 	?>
 	<table width="100%" border="0" cellpadding="0" cellspacing="2" class="gCarrousel">
 		<tr>
-			<th width="25%" 	class="previous"><a href="<?php echo ($leftLink  != '') ? $leftLink  : '#'; ?>">&#8592; Album précédente</a></th>
+			<th width="25%" 	class="previous"><a href="<?php echo ($leftLink  != '') ? $leftLink  : '#'; ?>">&#8592; Album prÃ©cÃ©dente</a></th>
 			<th align="center"	class="current"	>&#8593; <?php
 				echo ($data['id_album'] == 0)
 					? "<a href=\"gallery-index?id_type=".$type['id_type']."\">Racine</a>"
@@ -240,7 +240,7 @@
 				if($leftLink != ''){
 					echo "<a href=\"".$leftLink."\">".$previous['contentName']."</a>";
 				}else{
-					echo "<span id=\"leftDeadEnd\" style=\"padding:5px;\">Vous êtes au debut de l'album</span>";
+					echo "<span id=\"leftDeadEnd\" style=\"padding:5px;\">Vous Ãªtes au debut de l'album</span>";
 				}
 			?>&nbsp;</td>
 			<td class="current" align="center";>Album courant: <?php echo $data['contentName']  ?></td>
@@ -248,7 +248,7 @@
 				if($rightLink != ''){
 					echo "<a href=\"".$rightLink."\">".$next['contentName']."</a>";
 				}else{
-					echo "<span id=\"rightDeadEnd\" style=\"padding:5px;\">Vous êtes a la fin de l'album</span>";	
+					echo "<span id=\"rightDeadEnd\" style=\"padding:5px;\">Vous Ãªtes a la fin de l'album</span>";	
 				}
 			?></td>
 		</tr>
@@ -289,7 +289,7 @@
 					<li class="clearfix form-item">
 						<div class="hand">&nbsp;</div>
 						<div class="toggle toggle-hidden">&nbsp;</div>
-						<label>Visibilité</label>
+						<label>VisibilitÃ©</label>
 						<div class="form">
 							<input type="checkbox" name="contentSee" id="contentSee" value="1" <?php if($app->formValue($data['contentSee'], $_POST['contentSee'])) echo "checked"; ?> />
 							Indique que cet album est visible sur le site
@@ -304,7 +304,7 @@
 						<div class="form">
 							<input type="hidden" 	name="removeSync" value="0" />
 							<input type="checkbox"	name="removeSync" value="1" checked="checked" />
-							Cet album est synchronisé avec le dossier <b><?php echo $data['contentAlbumSyncFolder'] ?></b>
+							Cet album est synchronisÃ© avec le dossier <b><?php echo $data['contentAlbumSyncFolder'] ?></b>
 						</div>
 					</li>
 					<? } ?>

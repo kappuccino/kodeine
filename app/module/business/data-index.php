@@ -94,7 +94,7 @@
 	
 	    function remove(){
 	        
-	        if(confirm('Etes vous sur de vouloir supprimer les commandes sélectionées ?')){
+	        if(confirm('Etes vous sur de vouloir supprimer les commandes sÃ©lectionÃ©es ?')){
 	            $('#listing').submit();
 	        }
 	    }

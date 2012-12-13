@@ -33,12 +33,12 @@
 		<thead>
 			<tr>
 				<th>Module</th>
-				<th width="100">Installé</th>
-				<th width="100">Activé</th>
+				<th width="100">InstallÃ©</th>
+				<th width="100">ActivÃ©</th>
 				<th width="100">Patch</th>
 
 				<th width="80">Version</th>
-				<th width="80">Dernière</th>
+				<th width="80">DerniÃ¨re</th>
 				<th width="100"></th>
 			</tr>
 		</thead>

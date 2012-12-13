@@ -159,7 +159,7 @@
 
 	<?php if(sizeof($_POST['remove']) > 0 ){ ?>
 	<div class="message messageWarning">
-		<p><b>ATTENTION</b> vous êtes sur le point de supprimer un ou plusieurs contenus, cette action est irrémédiable (destruction de tables)</p>
+		<p><b>ATTENTION</b> vous Ãªtes sur le point de supprimer un ou plusieurs contenus, cette action est irrÃ©mÃ©diable (destruction de tables)</p>
 		
 		<form action="type" method="post">
 			<?php foreach($_POST['remove'] as $e){ ?>
@@ -208,7 +208,7 @@
 
 						echo '<div class="content">';
 						echo '<a href="./?id_type='.$e['id_type'].'">Afficher</a> &nbsp; &nbsp; ';
-                        echo '<a href="../field/asso?id_type='.$e['id_type'].'">Gérer les champs</a> &nbsp; &nbsp; ';
+                        echo '<a href="../field/asso?id_type='.$e['id_type'].'">GÃ©rer les champs</a> &nbsp; &nbsp; ';
                         echo '<a href="type-row?id_type='.$e['id_type'].'">Colonnes</a>';
 						echo '</div>';
 
@@ -216,7 +216,7 @@
 				}
 			
 			}else{
-				echo '<div class="noType">Vous devez créer au minimum un type pour créer de nouveau contenu</div>';
+				echo '<div class="noType">Vous devez crÃ©er au minimum un type pour crÃ©er de nouveau contenu</div>';
 			}
 		?></ul>
 	
@@ -228,7 +228,7 @@
 				<?php } ?>
 			</div>
 			<div class="right">
-                <a href="../field/" class="nomargin btn btn-mini">Gérer tous les champs</a>
+                <a href="../field/" class="nomargin btn btn-mini">GÃ©rer tous les champs</a>
 			</div>
 		</div>
 	</form>
@@ -238,8 +238,8 @@
 		<input type="hidden" name="id_type" value="<?php echo $data['id_type'] ?>" />
 		
 		<?php if($data['id_type'] == NULL){ ?>
-			<div class="alert message messageWarning">Une fois le type créé, vous ne pouvez plus modifier Business ou Galerie</div>
-		<?php } ?>
+			<div class="alert message messageWarning">Une fois le type crÃ©Ã©, vous ne pouvez plus modifier Business ou Galerie</div>
+		<?php }Â ?>
 	
 		<table cellpadding="0" cellspacing="0" border="0" class="form">
 			<?php if($data['id_type'] == NULL){ ?>
@@ -252,7 +252,7 @@
 				<td><input type="checkbox" name="is_gallery" value="1" <?php if($app->formValue($data['is_galery'], $_POST['is_gallery'])) echo " checked" ?>/></td>
 			</tr>
 			<tr valign="top">
-				<td>Publicité</td>
+				<td>PublicitÃ©</td>
 				<td><input type="checkbox" name="is_ad" value="1" <?php if($app->formValue($data['is_ad'], $_POST['is_ad'])) echo " checked" ?> /></td>
 			</tr>
 			<?php }else{ ?>
@@ -265,7 +265,7 @@
 				<td><?php echo ($data['is_gallery']) ? "Oui" : "Non" ?>		<input type="hidden" name="is_gallery" value="<?php echo $data['is_gallery'] ?>" /></td>
 			</tr>
 			<tr valign="top">
-				<td>Publicité</td>
+				<td>PublicitÃ©</td>
 				<td><?php echo ($data['is_ad']) 	 ? "Oui" : "Non" ?>		<input type="hidden" name="is_ad" value="<?php echo $data['is_ad'] ?>" /></td>
 			</tr>
 			<?php } ?>
@@ -279,7 +279,7 @@
 					<input type="checkbox" name="use_group"			value="1" <?php if($app->formValue($data['use_group'], 			$_POST['use_group'])) 			echo "checked" ?> /> Les groupes<br />
 					<input type="checkbox" name="use_search"		value="1" <?php if($app->formValue($data['use_search'],			$_POST['use_search'])) 			echo "checked" ?> /> Les groupes intelligents<br />
 					<input type="checkbox" name="use_chapter"		value="1" <?php if($app->formValue($data['use_chapter'],		$_POST['use_chapter'])) 		echo "checked" ?> /> L'arborescence<br />
-					<input type="checkbox" name="use_category"		value="1" <?php if($app->formValue($data['use_category'],		$_POST['use_category'])) 		echo "checked" ?> /> Les catégories<br />
+					<input type="checkbox" name="use_category"		value="1" <?php if($app->formValue($data['use_category'],		$_POST['use_category'])) 		echo "checked" ?> /> Les catÃ©gories<br />
 					<input type="checkbox" name="use_socialforum"	value="1" <?php if($app->formValue($data['use_socialforum'],	$_POST['use_socialforum'])) 	echo "checked" ?> /> Les Forums sociaux
 				</td>
 			</tr>

@@ -32,7 +32,7 @@
     $configName = array(
                         'cartStatus'            => 'Statut de commande',
                         'cartDeliveryStatus'    => 'Etat de livraison',
-                        'cartPayment'           => 'Mode de règlement',
+                        'cartPayment'           => 'Mode de rÃ¨glement',
                         );
     $config = $app->apiLoad('business')->businessConfigGet(array('order' => 'ORDER BY configField ASC'));
 
@@ -58,8 +58,8 @@
 	    <thead>
 	        <tr>
 	            <th>Champ</th>
-	            <th>Clé</th>
-	            <th>Libellé</th>
+	            <th>ClÃ©</th>
+	            <th>LibellÃ©</th>
 	        </tr>
 	    </thead>
 	    <tbody><?php
@@ -104,11 +104,11 @@
 	            <td><?php echo $configName[$data['configField']] ?></td>
 	        </tr>
 	        <tr>
-	            <td width="150">Clé</td>
+	            <td width="150">ClÃ©</td>
 	            <td><?php echo $data['configKey'] ?></td>
 	        </tr>
 	        <tr>
-	            <td width="150">Libellé</td>
+	            <td width="150">LibellÃ©</td>
 	            <td><input type="text" name="configCustom" value="<?php echo $app->formValue($data['configCustom'], $_POST['configCustom']); ?>" /></td>
 	        </tr>
 	        <tr>

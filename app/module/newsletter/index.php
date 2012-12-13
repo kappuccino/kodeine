@@ -69,7 +69,7 @@
 			<label class="control-label" for="prependedInput">Combien</label>
 			<input type="text" name="filter[limit]" value="<?php echo $filter['limit'] ?>" size="3" />
 
-			<button class="btn btn-mini" type="submit">Filter les résultats</button>
+			<button class="btn btn-mini" type="submit">Filter les rÃ©sultats</button>
 			<button class="btn btn-mini">Annuler</button>
 		</form>
 	</div>
@@ -102,7 +102,7 @@
 			<tr>
 				<td colspan="7" style="padding:40px 0px 40px 0px; text-align:center; font-weight:bold">Aucun contenu disponible<br /><br /><a class="btn btn-mini" href="data">Ajouter une nouvelle Newsletter</a></td>
 			</tr>
-		<?php } ?>
+		<?php }Â ?>
 		</tbody>
 		<?php if(sizeof($newsletter) > 0){ ?>
 		<tfoot>

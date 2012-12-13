@@ -207,10 +207,10 @@
 	<input type="hidden" name="id_album"	value="<?php echo ($_REQUEST['id_album']) ? $_REQUEST['id_album'] : 0 ?>" />
 
 
-	<h2>Générer une arborescence</h2>
+	<h2>GÃ©nÃ©rer une arborescence</h2>
 	<p>
-		<input type="radio" id="inside" name="sel" value="inside" checked="checked" /> Insérer les elements dans le dossier <?php echo strip_tags($title) ?><br />
-		<input type="radio" id="create" name="sel" value="create" /> Créer un album dans <?php echo strip_tags($title) ?> porant le nom du dossier choisi
+		<input type="radio" id="inside" name="sel" value="inside" checked="checked" /> InsÃ©rer les elements dans le dossier <?php echo strip_tags($title) ?><br />
+		<input type="radio" id="create" name="sel" value="create" /> CrÃ©er un album dans <?php echo strip_tags($title) ?> porant le nom du dossier choisi
 	</p>
 	<input type="text" name="discoverFolder" id="discoverFolder" size="70" value="<?php echo $_GET['sync'] ?>" />
 	<a href="#" onclick="mediaOpen('line', 'discoverFolder')">choisir</a>

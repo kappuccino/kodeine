@@ -6,7 +6,7 @@
 	<div class="logo"><?php echo ($cfg['brandName'] == '') ? 'Kodeine' : $cfg['brandName']; ?></div>
 
 	<ul class="right">
-		<li><a href="/admin/core/login?logout">Se déconnecter</a></li>
+		<li><a href="/admin/core/login?logout">Se dÃ©connecter</a></li>
 		<li><a href="/admin/core/support" target="_blank">Support</a></li>
 		<li><a href="/" target="_blank">Ouvrir le site</a></li>
 	</ul>

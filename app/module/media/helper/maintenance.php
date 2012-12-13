@@ -99,7 +99,7 @@
 	}
 	
 	
-	echo " terminée - vous pouvez fermer ce panel.";
+	echo " terminÃ©e - vous pouvez fermer ce panel.";
 
 
 ?></body></html>

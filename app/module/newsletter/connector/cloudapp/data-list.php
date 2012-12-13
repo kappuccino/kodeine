@@ -52,14 +52,14 @@
 			}else
 			if($result && $_POST['do'] == 'test'){
 				$app->apiLoad('newsletter')->newsletterPreview($_POST['id_newsletter']);
-				$message = ($result) ? 'OK: Newsletter enregistré et envoyé en mode [TEST] ('.$pref['test'].')' : 'KO: Erreur Test';
+				$message = ($result) ? 'OK: Newsletter enregistrÃ© et envoyÃ© en mode [TEST] ('.$pref['test'].')' : 'KO: Erreur Test';
 			}else
 			if($result && $_POST['do'] == 'send'){
 				if($data['newsletterSendDate'] == NULL){
 					header("Location: connector/cloudapp/push?id_newsletter=".$app->apiLoad('newsletter')->id_newsletter);
 					exit();
 				}else{
-					$message = 'KO: Cette newsletter est en cours d\'envois ou bien elle a déjà été envoyé.';
+					$message = 'KO: Cette newsletter est en cours d\'envois ou bien elle a dÃ©jÃ  Ã©tÃ© envoyÃ©.';
 				}
 			}
 	
@@ -99,14 +99,14 @@
 <div class="inject-subnav-right hide">
 			
 	<?php if($data['newsletterSendDate'] == NULL){ ?>
-	<li><a href="javascript:$('#do').val('back');$('#data').submit();" class="btn btn-small">Revenir à l'éditeur</a></li>
+	<li><a href="javascript:$('#do').val('back');$('#data').submit();" class="btn btn-small">Revenir Ã  l'Ã©diteur</a></li>
 	<li><a href="javascript:$('#do').val('test');$('#data').submit();" class="btn btn-small">Tester la newsletter</a></li>
 	<?php } ?>
 	<?php if($_REQUEST['id_newsletter'] > 0){ ?>
-	<li><a href="preview?id_newsletter=<?php echo $_REQUEST['id_newsletter'] ?>" class="btn btn-small" target="_blank">Prévisualiser</a></li>
+	<li><a href="preview?id_newsletter=<?php echo $_REQUEST['id_newsletter'] ?>" class="btn btn-small" target="_blank">PrÃ©visualiser</a></li>
 	<?php } ?>	
 	<?php if($data['newsletterSendDate'] == NULL){ ?>
-	<li><a href="javascript:$('#do').val('send');$('#data').submit();" class="btn btn-small btn-danger">Envoyer aux abonnés</a></li>
+	<li><a href="javascript:$('#do').val('send');$('#data').submit();" class="btn btn-small btn-danger">Envoyer aux abonnÃ©s</a></li>
 	<?php } ?>
 	<?php if($data['newsletterSendDate'] != NULL){ ?>
 	<li><a href="analytic?id_newsletter=<?php echo $_REQUEST['id_newsletter'] ?>" class="btn btn-small">Consulter les statistiques</a></li>
@@ -136,7 +136,7 @@
 			<td>Archivage</td>
 			<td>
 				<input type="checkbox" id="is_archive" name="is_archive" value="1" <?php if($app->formValue($data['is_archive'], $_POST['is_archive'])) echo "checked" ?> />
-				<label for="is_archive">Si cette option est activée, la newsletter sera lisible par tout le monde depuis le site internet</label>
+				<label for="is_archive">Si cette option est activÃ©e, la newsletter sera lisible par tout le monde depuis le site internet</label>
 			</td>
 		</tr>-->
 		<tr valign="top">
@@ -144,17 +144,17 @@
 				<span class="heading">Destinataires <i id="totalView"></i></span>
 
 				<span style="float:right;margin-bottom: 5px;">
-					<i><label for="newsletterAllUser">Si cette option est activée, cette newsletter sera envoyée à tous les utilisateurs, même ceux qui n'acceptent pas de recevoir de newsletter.</label></i>
+					<i><label for="newsletterAllUser">Si cette option est activÃ©e, cette newsletter sera envoyÃ©e Ã  tous les utilisateurs, mÃªme ceux qui n'acceptent pas de recevoir de newsletter.</label></i>
 					<input type="checkbox" name="newsletterAllUser" id="newsletterAllUser" value="1" <?php if($app->formValue($data['newsletterAllUser'], $_POST['newsletterAllUser'])) echo "checked" ?> />
 				</span>
 				<table border="0" width="100%" class="dest desttab">
 					<tr>
 						<!--
-						<td width="20%" height="18"><i>Abonnés aux newsletters	<span id="totalType"></span></i></td>
+						<td width="20%" height="18"><i>AbonnÃ©s aux newsletters	<span id="totalType"></span></i></td>
 						-->
 						<td width="25%"><i>Groupe d'utilisateurs				(<span id="totalGroup"></span>)</i></td>
-						<td width="25%"><i>Utilisateur par critères				(<span id="totalSearch"></span>)</i></td>
-						<td width="25%"><i>Liste enregistrées					(<span id="totalList"></span>)</i></td>
+						<td width="25%"><i>Utilisateur par critÃ¨res				(<span id="totalSearch"></span>)</i></td>
+						<td width="25%"><i>Liste enregistrÃ©es					(<span id="totalList"></span>)</i></td>
 						<td width="25%"><i>Liste d'emails - un par ligne		(<span id="totalRaw"></span>)</i></td>
 					</tr>
 					<tr valign="top">
@@ -244,7 +244,7 @@
 				if($('#newsletterListRaw').val().length == 0){
 					$('#totalRaw').html('0');
 				}else{
-					$('#totalRaw').html(rawLength); // +' (validité des mails non vérifiée)');
+					$('#totalRaw').html(rawLength); // +' (validitÃ© des mails non vÃ©rifiÃ©e)');
 				}
 
 				$('#totalView').html('('+ (d.total + rawLength) +')');

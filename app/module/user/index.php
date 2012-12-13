@@ -82,7 +82,7 @@
 				}?>
 			</select>
 
-			<button class="btn btn-mini" type="submit">Filtrer les résultats</button>
+			<button class="btn btn-mini" type="submit">Filtrer les rÃ©sultats</button>
 		</form>
 	</div>
 	
@@ -92,8 +92,8 @@
 			<tr>
 				<th width="20"  class="icone"><i class="icon-remove icon-white"></i></th>
 				<th width="80"  class="order <?php if($filter['order'] == 'k_user.id_user')	echo 'order'.$dir; ?>" onClick="document.location='/admin/user/index?cf&order=k_user.id_user&direction=<?php echo $dir ?>'"><span>#</span></th>
-				<th width="110" class="order <?php if($filter['order'] == 'k_user.userDateCreate')	echo 'order'.$dir; ?>" onClick="document.location='/admin/user/index?cf&order=k_user.userDateCreate&direction=<?php echo $dir ?>'"><span>Création</span></th>
-				<th width="110" class="order <?php if($filter['order'] == 'k_user.userDateUpdate')	echo 'order'.$dir; ?>" onClick="document.location='/admin/user/index?cf&order=k_user.userDateUpdate&direction=<?php echo $dir ?>'"><span>Mise à jour</span></th>
+				<th width="110" class="order <?php if($filter['order'] == 'k_user.userDateCreate')	echo 'order'.$dir; ?>" onClick="document.location='/admin/user/index?cf&order=k_user.userDateCreate&direction=<?php echo $dir ?>'"><span>CrÃ©ation</span></th>
+				<th width="110" class="order <?php if($filter['order'] == 'k_user.userDateUpdate')	echo 'order'.$dir; ?>" onClick="document.location='/admin/user/index?cf&order=k_user.userDateUpdate&direction=<?php echo $dir ?>'"><span>Mise Ã  jour</span></th>
 				<th			    class="order <?php if($filter['order'] == 'k_user.userMail')		echo 'order'.$dir; ?>" onClick="document.location='/admin/user/index?cf&order=k_user.userMail&direction=<?php echo $dir ?>'"><span>Nom</span></th>
 				<?php
 					$colspan = 1;
@@ -141,10 +141,10 @@
 			}else{ ?>
 			<tr>
 				<td colspan="<?php echo (4 + $colspan) ?>" style="text-align:center; font-weight:bold; padding:30px 0px 30px 0px;">
-					Aucun résultat avec cette recherche
+					Aucun rÃ©sultat avec cette recherche
 				</td>
 			</tr>
-		<?php } ?>
+		<?php }Â ?>
 		</tbody>
 		<tfoot>
 			<tr>

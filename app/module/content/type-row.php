@@ -30,7 +30,7 @@ if((isset($_GET['add']) || isset($_GET['remove']) ) && $_GET['field'] != '') {
 
     if(sizeof($used) > $limit && $action == 'add') {
         $do = false;
-        $message = 'KO: Le nombre de colonnes supplémentaires est limité à '.$limit;
+        $message = 'KO: Le nombre de colonnes supplÃ©mentaires est limitÃ© Ã  '.$limit;
     }
 
 }
@@ -193,14 +193,14 @@ foreach($contentField as $f) {
                     <td><?php echo $e['fieldName']. '(' . $e['fieldKey'] . ')' ?></td>
                     <td><a class="btn btn-mini" href="type-row?id_type=<?php echo $_REQUEST['id_type'] ?>&field=<?php echo $e['id_field'] ?>&add">Ajouter</a></td>
                 </tr>
-                    <?php } ?>
+                    <?php }Â ?>
                 <?php
                 foreach($notC as $e){ ?>
                 <tr>
                     <td><b><?php echo $e; ?></b></td>
                     <td><a class="btn btn-mini" href="type-row?id_type=<?php echo $_REQUEST['id_type'] ?>&field=<?php echo $e ?>&add">Ajouter</a></td>
                 </tr>
-                    <?php } ?>
+                    <?php }Â ?>
 			</tbody>
 			<tfoot>
             <tr>

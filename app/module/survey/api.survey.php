@@ -15,7 +15,7 @@ public function surveyGet($opt=array()){
 
 	if($opt['debug']) $this->pre("[OPT]", $opt);
 
-	# Gérer les options
+	# GÃ©rer les options
 	#
 	$limit		= ($opt['limit'] != '') 		? $opt['limit']			: 30;
 	$offset		= ($opt['offset'] != '') 		? $opt['offset']		: 0;
@@ -180,7 +180,7 @@ public function surveySlotGet($opt=array()){
 
 	if($opt['debug']) $this->pre("[OPT]", $opt);
 
-	# Gérer les options
+	# GÃ©rer les options
 	#
 	$limit		= ($opt['limit'] != '') 		? $opt['limit']			: 30;
 	$offset		= ($opt['offset'] != '') 		? $opt['offset']		: 0;

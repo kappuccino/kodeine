@@ -57,7 +57,7 @@ public function adGet($opt=array()){
 
 	if(BENCHME) @$GLOBALS['bench']->benchmarkMarker($bmStep='adGet() @='.json_encode($opt));
 
-	# Gérer les options
+	# GÃ©rer les options
 	#
 	$limit		= ($opt['limit'] != '') 	? $opt['limit']		: 30;
 	$offset		= ($opt['offset'] != '') 	? $opt['offset']	: 0;

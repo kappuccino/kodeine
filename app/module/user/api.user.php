@@ -17,7 +17,7 @@ public function userGet($opt=array()){
 
 	if($opt['debug']) $this->pre("[OPT]", $opt);
 
-	# Gérer les options
+	# GÃ©rer les options
 	#
 	$useField	= isset($opt['useField']) 		? $opt['useField']		: true;
 	$useMedia	= isset($opt['useMedia'])		? $opt['useMedia']		: false;
@@ -590,7 +590,7 @@ public function userSearch($opt){
 	$search = $this->dbOne("SELECT * FROM k_search WHERE id_search=".$opt['id_search']);
 	$search['searchParam'] = unserialize($search['searchParam']);
 
-	# Gérer les options
+	# GÃ©rer les options
 	#
 	$limit		= ($opt['limit'] != '') 	? $opt['limit']		: 30;
 	$offset		= ($opt['offset'] != '') 	? $opt['offset']	: 0;
@@ -1255,7 +1255,7 @@ public function userImportCSV($file, $post=NULL){
 	}
 
 
-	# Construir la réponse
+	# Construir la rÃ©ponse
 	$build = array(
 		'lignes' 		=> $lignes,
 		'sepLigne' 		=> $sepLigne,
@@ -1419,7 +1419,7 @@ public function userImportAddressBookCSV($file, $post=NULL){
     }
 
 
-    # Construir la réponse
+    # Construir la rÃ©ponse
     $build = array(
         'lignes'        => $lignes,
         'sepLigne'      => $sepLigne,

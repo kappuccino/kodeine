@@ -97,13 +97,13 @@
 
 			Vue par 
 			<select name="mode"><?php
-				foreach(array('chapter' => 'Chapitre', 'category' => 'Catégorie', 'group' => 'Groupe') as $k => $v){
+				foreach(array('chapter' => 'Chapitre', 'category' => 'CatÃ©gorie', 'group' => 'Groupe') as $k => $v){
 					$sel = ($_GET['mode'] == $k) ? ' selected' : NULL;
 					echo "<option value=\"".$k."\"".$sel.">".$v."</option>";
 				}
 			?></select>
 			
-			<input type="checkbox" name="inheritance" value="1" <?php if($_GET['inheritance']) echo ' checked' ?> /> Afficher les héritages
+			<input type="checkbox" name="inheritance" value="1" <?php if($_GET['inheritance']) echo ' checked' ?> /> Afficher les hÃ©ritages
 			
 			<input type="submit" class="button rButton" style="margin:-2px 0px 0px 5px;" value="Afficher" />
 
@@ -115,7 +115,7 @@
 	$exp =
 	"<div class=\"action\">".
 		"<a href=\"javascript:allTogg(true);\">Tout afficher</a>, ".
-		"<a href=\"javascript:allTogg(false);\">Tout réduire</a>".
+		"<a href=\"javascript:allTogg(false);\">Tout rÃ©duire</a>".
 	"</div>";
 
 	/* - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + */
@@ -192,7 +192,7 @@
 	/* - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + */
 
 	if(in_array($_GET['mode'], array('', 'chapter'))){
-		echo "<h1>Classement par chapitre (".((!$_GET['inheritance']) ? 'sans' : 'avec')." héritage)</h1>";
+		echo "<h1>Classement par chapitre (".((!$_GET['inheritance']) ? 'sans' : 'avec')." hÃ©ritage)</h1>";
 		echo $exp;
 
 		$data = $app->apiLoad('chapter')->chapterGet(array(
@@ -205,7 +205,7 @@
 
 	}else
 	if($_GET['mode'] == 'category'){
-		echo "<h1>Classement par catégorie (".((!$_GET['inheritance']) ? 'sans' : 'avec')." héritage)</h1>";
+		echo "<h1>Classement par catÃ©gorie (".((!$_GET['inheritance']) ? 'sans' : 'avec')." hÃ©ritage)</h1>";
 		echo $exp;
 
 		$data = $app->apiLoad('category')->categoryGet(array(
@@ -218,7 +218,7 @@
 
 	}else
 	if($_GET['mode'] == 'group'){
-		echo "<h1>Classement par groupe (".((!$_GET['inheritance']) ? 'sans' : 'avec')." héritage)</h1>";
+		echo "<h1>Classement par groupe (".((!$_GET['inheritance']) ? 'sans' : 'avec')." hÃ©ritage)</h1>";
 		echo $exp;
 
 		$data = $app->apiLoad('user')->userGroupGet(array(

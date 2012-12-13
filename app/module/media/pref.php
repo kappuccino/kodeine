@@ -31,7 +31,7 @@
 		<table border="0" cellpadding="0" cellspacing="0" class="listing">
 			<thead>
 				<tr>
-					<th width="20%">Paramètre</th>
+					<th width="20%">ParamÃ¨tre</th>
 					<th width="30%">Valeur</th>
 					<th width="50%">&nbsp;</th>
 				</tr>
@@ -51,7 +51,7 @@
 						<input type="hidden" 	name="pref[urlEncode]" value="0" />
 						<input type="checkbox" 	name="pref[urlEncode]" value="1" <?php if($pref['urlEncode']) echo 'checked' ?> />
 					</td>
-					<td>Formatage des noms de fichiers et de dossiers (suppression des espaces et caractères sp&eacute;ciaux)</td>
+					<td>Formatage des noms de fichiers et de dossiers (suppression des espaces et caractÃ¨res sp&eacute;ciaux)</td>
 				</tr>
 			</tbody>
 			<tfoot>

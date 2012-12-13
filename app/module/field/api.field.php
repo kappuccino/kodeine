@@ -870,12 +870,12 @@ public function fieldForm($id_field, $value, $opt=array()){
 		// Si je demande du CONTENT
 		if($field['fieldType'] == 'content' && $field['fieldContentType'] > 0){
 			$type		= $this->apiLoad('content')->contentType(array('id_type' => $field['fieldContentType']));
-			/* mofifié, nx backoffice */
+			/* mofifiÃ©, nx backoffice */
 			# $open		= "<a href=\"content.".(($type['is_gallery']) ? "gallery." : NULL)."index.php?id_type=".$field['fieldContentType']."\" target=\"blank\" class=\"open\">Ouvrir: ".$type['typeName']."</a>";
 			$open		= "<a href=\"".(($type['is_gallery']) ? "gallery-" : NULL)."index?id_type=".$field['fieldContentType']."\" target=\"blank\" class=\"open\">Ouvrir: ".$type['typeName']."</a>";
 			$action		= "tagSearch(".$field['id_field'].", ".$type['id_type'].", '".$name."', '".$addType."')";
 			$search		= "<a onClick=\"".$action."\">Chercher (".$type['typeName'].")</a>";
-			$create		= "<a onClick=\"tagCreate(".$field['id_field'].", ".$type['id_type'].", '".$name."', '".$addType."')\">Créer cet élement</a>";
+			$create		= "<a onClick=\"tagCreate(".$field['id_field'].", ".$type['id_type'].", '".$name."', '".$addType."')\">CrÃ©er cet Ã©lement</a>";
 			$tags		= (sizeof($value) > 0)
 				? $this->apiLoad('content')->contentGet(array(
 					'id_content'	=> $value,
@@ -1035,7 +1035,7 @@ public function fieldForm($id_field, $value, $opt=array()){
 		
 		// bar du haut (action)
 		$form .= "<div class=\"media-header clearfix\">";
-		$form .= "<a onClick=\"mediaPicker('".$id."','sort')\" class=\"left\">Ajouter des média (selection dans une nouvelle fenêtre)</a>";
+		$form .= "<a onClick=\"mediaPicker('".$id."','sort')\" class=\"left\">Ajouter des mÃ©dia (selection dans une nouvelle fenÃªtre)</a>";
 		$form .= "<a onClick=\"javascript:$('#".$id."').toggleClass('display-off');\" class=\"right\">Afficher / masquer la version texte</a>";
 		$form .= "</div>";
 
@@ -1079,8 +1079,8 @@ public function fieldForm($id_field, $value, $opt=array()){
 		$form .= 	'<div id="modal-upload" data-field="'.$id.'" style="display: none;">
 						<div class="uploadcontainer clearfix">
 							<div class="left clearfix">
-								<p>Glissez des fichiers dans la fenetre pour les télécharger.</p>
-								<p>Si votre navigateur ne supporte pas cette fonctionalité, cliquez sur le bouton "Parcourir".</p>
+								<p>Glissez des fichiers dans la fenetre pour les tÃ©lÃ©charger.</p>
+								<p>Si votre navigateur ne supporte pas cette fonctionalitÃ©, cliquez sur le bouton "Parcourir".</p>
 								<br /><br />
 								<input id="file_upload" name="file_upload" type="file" multiple="true">
 							</div>
@@ -1243,7 +1243,7 @@ public function fieldTrace($data, $e, $f=array()){
 		echo "<label>".$e['fieldName'];
 			if($e['is_needed']) echo ' *';
 			if(preg_match("#richtext#", $field)){
-				echo "<br /><a href=\"javascript:toggleEditor('form-field-".$e['id_field']."');\">Activer/Désactiver l'éditeur</a>";
+				echo "<br /><a href=\"javascript:toggleEditor('form-field-".$e['id_field']."');\">Activer/DÃ©sactiver l'Ã©diteur</a>";
 			}
 		echo "</label>";
 

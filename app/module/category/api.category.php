@@ -399,7 +399,7 @@ public function categorySelector($opt){
 + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - */
 public function categoryRemove($id_category){
 
-	# Mettre a jour les points d'entré des profiles
+	# Mettre a jour les points d'entrÃ© des profiles
 	#
 	foreach($this->dbMulti("SELECT * FROM k_userprofile") as $p){
 		$rule = unserialize($p['profileRule']);

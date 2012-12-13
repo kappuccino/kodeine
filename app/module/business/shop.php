@@ -85,7 +85,7 @@
 						<td class="sniff" colspan="2"><a href="shop?id_shop=<?php echo $e['id_shop'] ?>"><?php echo $e['shopName'] ?></a></td>
 					</tr>
 					<?php }
-				}else{ ?>
+				}else{Â ?>
 					<tr>
 						<td colspan="3" style="font-weight:bold; padding-top:30px; padding-bottom:30px;" align="center">
 							Auncun shop
@@ -134,7 +134,7 @@
 				<td class="check check-green"><input type="checkbox" name="allow_card" class="chk" id="chk-cb" value="1" <?php if($app->formValue($data['allow_card'], $_POST['allow_card'])) echo 'checked'; ?> /></td>
 			</tr>
 			<tr>
-				<td style="padding-left:20px;" class="check check-green">Chèque</td>
+				<td style="padding-left:20px;" class="check check-green">ChÃ¨que</td>
 				<td class="check check-green"><input type="checkbox" name="allow_cheque" class="chk" id="chk-cheque" value="1" <?php if($app->formValue($data['allow_cheque'], $_POST['allow_cheque'])) echo 'checked'; ?> /></td>
 			</tr>
 			<tr>
@@ -150,7 +150,7 @@
 				<td><textarea name="shopMailCc" style="height:40px; width:90%;"><?php echo $app->formValue($data['shopMailCc'], $_POST['shopMailCc']) ?></textarea></td>
 			</tr>
 			<tr valign="top">
-				<td>Envois en copie cachée</td>
+				<td>Envois en copie cachÃ©e</td>
 				<td><textarea name="shopMailBcc" style="height:40px; width:90%;"><?php echo $app->formValue($data['shopMailBcc'], $_POST['shopMailBcc']) ?></textarea></td>
 			</tr>
 			<tr>

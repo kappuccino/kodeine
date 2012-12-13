@@ -20,7 +20,10 @@ private function __construct($host=NULL, $login=NULL, $passwd=NULL, $database=NU
 	    exit();
 	}
 
+#	self::$_instance->set_charset("utf8");
+
 	if(ISUTF8 === true) self::$_instance->set_charset("utf8");
+#	var_dump(self::$_instance->get_charset());
 }
 
 public function __destruct__(){

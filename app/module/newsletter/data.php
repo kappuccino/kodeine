@@ -38,14 +38,14 @@
 
 			if($result && $_POST['do'] == 'test'){
 				$app->apiLoad('newsletter')->newsletterPreview($_POST['id_newsletter']);
-				$message = ($result) ? 'OK: Newsletter enregistrÈ et envoyÈ en mode [TEST] ('.$pref['test'].')' : 'KO: Erreur Test';
+				$message = ($result) ? 'OK: Newsletter enregistr√© et envoy√© en mode [TEST] ('.$pref['test'].')' : 'KO: Erreur Test';
 			}else
 			if($result && $_POST['do'] == 'list'){
 				if($data['newsletterSendDate'] == NULL){
 					header("Location: ./data-list?id_newsletter=".$app->apiLoad('newsletter')->id_newsletter);
 					exit();
 				}else{
-					$message = 'KO: Cette newsletter est en cours d\'envois ou bien elle a dÈj‡ ÈtÈ envoyÈ.';
+					$message = 'KO: Cette newsletter est en cours d\'envois ou bien elle a d√©j√† √©t√© envoy√©.';
 				}
 			}
 	
@@ -89,11 +89,11 @@
 	<li><a href="data" class="btn btn-mini">Nouveau</a></li>
 	<?php } ?>
 	<?php if($_REQUEST['id_newsletter'] > 0){ ?>
-	<li><a href="preview?id_newsletter=<?php echo $_REQUEST['id_newsletter'] ?>" class="btn btn-small" target="_blank">PrÈvisualiser</a></li>
+	<li><a href="preview?id_newsletter=<?php echo $_REQUEST['id_newsletter'] ?>" class="btn btn-small" target="_blank">Pr√©visualiser</a></li>
 	<?php } ?>
 	<?php if($data['newsletterSendDate'] == NULL){ ?>
 	<li><a href="javascript:$('#do').val('test');$('#data').submit();" class="btn btn-small">Tester la newsletter</a></li>
-	<li><a href="javascript:$('#do').val('list');$('#data').submit();" class="btn btn-small btn-success">Enregistrer et sÈlectionner les abonnÈs</a></li>
+	<li><a href="javascript:$('#do').val('list');$('#data').submit();" class="btn btn-small btn-success">Enregistrer et s√©lectionner les abonn√©s</a></li>
 	<?php } ?>
 	<li><a href="javascript:$('#data').submit();" class="btn btn-small btn-success">Enregistrer</a></li>
 </div>
@@ -126,7 +126,7 @@
             <td>Archivage</td>
             <td>
                 <input type="checkbox" id="is_archive" name="is_archive" value="1" <?php if($app->formValue($data['is_archive'], $_POST['is_archive'])) echo "checked" ?> />
-                <label for="is_archive">Si cette option est activÈe, la newsletter sera lisible par tout le monde depuis le site internet</label>
+                <label for="is_archive">Si cette option est activ√©e, la newsletter sera lisible par tout le monde depuis le site internet</label>
             </td>
         </tr>
 		<tr>
@@ -171,10 +171,10 @@
 						</td>
 						<td width="30%">
 							<div style="float:right; width:98%;">
-							<span class="heading">Champs personnalisÈs</span>
+							<span class="heading">Champs personnalis√©s</span>
 							<table class="dest desttab" width="98%" style="margin:0px 0px 20px 0px;">
 								<tr>
-									<td>InsÈrer ces variables dans le corps du mail : <br /><?php
+									<td>Ins√©rer ces variables dans le corps du mail : <br /><?php
 									
 										$field = $app->apiLoad('field')->fieldGet(array(
 											'user'	=> true	
@@ -202,7 +202,7 @@
 		</tr>
 		<tr>
 			<td colspan="2">
-				<a href="javascript:toggleEditor('newsletterHtml');" class="btn btn-mini">Activer/DÈsactiver l'Èditeur de texte</a>
+				<a href="javascript:toggleEditor('newsletterHtml');" class="btn btn-mini">Activer/D√©sactiver l'√©diteur de texte</a>
 
 				<textarea name="newsletterHtml" id="newsletterHtml" style="height:900px; width:100%;"><?php
 					$html = $app->formValue($data['newsletterHtml'], $_POST['newsletterHtml']);
@@ -247,7 +247,7 @@
 		extended_valid_elements				: 'webversion,unsubscribe,currentday,currentdayname,currentmonth,currentmonthname,currentyear',
 		setup 								: function(ed) {
 		    ed.addButton('mybutton', {
-		        title : 'InsÈrer des images',
+		        title : 'Ins√©rer des images',
 		        image : '/admin/core/ui/img/_img/myb.gif',
 		        onclick : function() {
 					mediaPicker(ed.id, 'mce');
@@ -267,7 +267,7 @@
 	function loadTemplate(menu){
 		id = menu[0].options[menu.selectedIndex].value;
 
-		if(id != null && confirm("Voulez vous remplacer le contenu et le style existant par le gabarit selectionnÈ ?")){
+		if(id != null && confirm("Voulez vous remplacer le contenu et le style existant par le gabarit selectionn√© ?")){
 			var ed = tinyMCE.get('newsletterHtml');
 			ed.setProgressState(1);
 			

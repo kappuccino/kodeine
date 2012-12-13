@@ -77,7 +77,7 @@
 		<tfoot>
 			<tr>
 				<td height="25"><input type="checkbox" onClick="$$('.checkboxDel').set('checked', this.checked);" /></td>
-				<td colspan="3"><a href="javascript:confirmClean();" class="button rButton">Vider le pool des mailings selectionnées</a></td>	
+				<td colspan="3"><a href="javascript:confirmClean();" class="button rButton">Vider le pool des mailings selectionnÃ©es</a></td>	
 			</tr>
 		</tfoot>
 	</table>
@@ -93,7 +93,7 @@
 <script>
 
 	function confirmClean(){
-		if(confirm("Voulez vous vraiment vider la queue des newsletter selectionnés ?\n\nNOTE\nCELA SUPPRIMATE TOUS LES MAILS EN ATTENTE, aucun mail ne sera envoyé")){
+		if(confirm("Voulez vous vraiment vider la queue des newsletter selectionnÃ©s ?\n\nNOTE\nCELA SUPPRIMATE TOUS LES MAILS EN ATTENTE, aucun mail ne sera envoyÃ©")){
 			$('pool').submit();
 		}else{
 			return false;

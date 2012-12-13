@@ -70,7 +70,7 @@
 			$app->dbQuery("DELETE FROM k_newsletterlistmail WHERE id_newslettermail IN(".implode(',', $tmp).")");
 		}
 
-		header("Location: list?message=".urlencode("OK: Purge terminée. Suppression de ".sizeof($tmp)." mail(s) dans l'intégralité des listes"));
+		header("Location: list?message=".urlencode("OK: Purge terminÃ©e. Suppression de ".sizeof($tmp)." mail(s) dans l'intÃ©gralitÃ© des listes"));
 
 	}else
 	if($_POST['todo'] == 'createListFromFlag' && trim($_POST['listName']) != NULL){
@@ -279,7 +279,7 @@
 		<div class="clearfix">
 			<input type="text" name="speed" style=" width:200px;" />
 			<br />
-			<input type="submit" value="Abonner / Désabonner ce membre" />
+			<input type="submit" value="Abonner / DÃ©sabonner ce membre" />
 		</div>
 	</form>
 
@@ -322,14 +322,14 @@
 					$me = $app->dbOne("SELECT * FROM k_newslettermail WHERE mail='".trim(urldecode($_GET['speed']))."'");
 
 					if($me['flag'] == 'IGNORE'){
-						echo "<p>Cet email est actuellement désabonné <a href=\"#\" onclick=\"allow();\">Autoriser de nouveau</a></p>";
+						echo "<p>Cet email est actuellement dÃ©sabonnÃ© <a href=\"#\" onclick=\"allow();\">Autoriser de nouveau</a></p>";
 					}
 				?>
 					<table class="listing" cellpadding="0" cellspacing="0" width="100%">
 						<thead>
 							<tr>
 								<th></th>
-								<th>Sélectionnez les listes avec lesquelles cet email doit être relié.</th>
+								<th>SÃ©lectionnez les listes avec lesquelles cet email doit Ãªtre reliÃ©.</th>
 							</tr>
 						</thead>
 						<tbody>
@@ -351,9 +351,9 @@
 							<tr>
 								<td></td>
 								<td>
-									<input type="submit" value="Mettre à jour les abonnement pour ce membre" />
+									<input type="submit" value="Mettre Ã  jour les abonnement pour ce membre" />
 									<?php if($me['flag'] != 'IGNORE'){ ?>
-									ou <a href="#" onclick="desabo()" class="btn btn-mini">Désabonner cet email de toute les listes</a>
+									ou <a href="#" onclick="desabo()" class="btn btn-mini">DÃ©sabonner cet email de toute les listes</a>
 									<?php } ?>
 								</td>
 							</tr>
@@ -382,7 +382,7 @@
 			
 			?>
 			<form method="get" style="padding:5px 0px 5px 0px; text-align:center; background:rgb(250,250,250);">
-				Trier les résultats : 
+				Trier les rÃ©sultats : 
 				<select onchange="document.location=this.options[this.selectedIndex].value"><?php
 				foreach(array('', 'VALID', 'BOUNCE', 'IGNORE', 'ERROR') as $e){
 					$sel = ($e == $_GET['flag']) ? ' selected' : NULL;
@@ -428,12 +428,12 @@
 					<?php }else{ ?>
 					<tr>
 						<td width="30" height="25"><input type="checkbox" onchange="$('.cbk').set('checked', this.checked);" /></td>
-						<td><a href="javascript:kill()" class="btn btn-mini">Supprimer les mails selectionnés</a></td>
+						<td><a href="javascript:kill()" class="btn btn-mini">Supprimer les mails selectionnÃ©s</a></td>
 						<td style="text-align:right">
 							<span class="pagination"><?php $app->pagination($total, $max, $_GET['p'], 'list?id_newsletterlist='.$_GET['id_newsletterlist'].'&user&flag='.$_GET['flag'].'&p=%s'); ?></span>
 						</td>
 					</tr>
-					<?php } ?>
+					<?php }Â ?>
 				</tfoot>
 			</table>
 			</form>
@@ -451,7 +451,7 @@
 							field.parent().parent().remove();
 						}else
 						if(r.flag == 'doublon'){
-							if(confirm("Le mail que vous modifié à la main est déja présent dans la base de données :\n\n\n Souhaitez vous associer ce mail à liste courante ?")){
+							if(confirm("Le mail que vous modifiÃ© Ã  la main est dÃ©ja prÃ©sent dans la base de donnÃ©es :\n\n\n Souhaitez vous associer ce mail Ã  liste courante ?")){
 								
 								var newget = $.ajax({
 																				
@@ -478,7 +478,7 @@
 					});
 					
 					if(field.id != field.value){
-						if(confirm("Voulez vous enregistrer les changements dans l'intégratlité des listes ou ce mail est présent ?")){
+						if(confirm("Voulez vous enregistrer les changements dans l'intÃ©gratlitÃ© des listes ou ce mail est prÃ©sent ?")){
 
 							json.get({
 								'id_newslettermail' : idmail,
@@ -499,7 +499,7 @@
 					});
 
 					if(count == 0) return false;
-					if(confirm("Voulez vous supprimer tous les mails selectionnés ?")){
+					if(confirm("Voulez vous supprimer tous les mails selectionnÃ©s ?")){
 						$('#mails').submit();
 					}
 				}
@@ -544,8 +544,8 @@
 			<td>
 				<a href="javascript:$('#data').submit();" class="btn btn-mini">Enregistrer</a>
 				<?php if($data['id_newsletterlist'] != NULL){ ?>
-				<a href="javascript:$('#data').submit();" class="btn btn-mini">Enregistrer et importer les données distantes</a>
-				<?php } ?>
+				<a href="javascript:$('#data').submit();" class="btn btn-mini">Enregistrer et importer les donnÃ©es distantes</a>
+				<?php }Â ?>
 				<a href="list" class="btn btn-mini">Nouveau</a>
 			</td>
 		</tr>
@@ -576,13 +576,13 @@
 						<td><?php echo $g_['flag'] ?></td>
 						<td><?php echo $g_['H'] ?></td>
 					</tr>
-					<?php } ?>
+					<?php }Â ?>
 					</tbody>
 				</table><?php
 				}
 			?></td>
 		</tr>
-		<?php } ?>
+		<?php }Â ?>
 	</table>
 	<?php } ?>
 

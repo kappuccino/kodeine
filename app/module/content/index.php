@@ -94,7 +94,7 @@
         <label class="control-label" for="prependedInput">Combien</label>
         <input type="text" name="filter[limit]" class="input-small" placeholder="" value="<?php echo $filter['limit'] ?>" size="3" />
 
-		<label class="control-label" for="prependedInput">Catégorie</label>
+		<label class="control-label" for="prependedInput">CatÃ©gorie</label>
 		<?php
 			echo $app->apiLoad('category')->categorySelector(array(
 				'name'		=> 'filter[id_category]',
@@ -113,7 +113,7 @@
 				echo "<option value=\"".$e['id_shop']."\"".(($filter['id_shop'] == $e['id_shop']) ? ' selected' : '').">".$e['shopName']."</option>";
 			}
 		?></select>
-		<?php } ?>
+		<?php } ?>
 		
 		<label class="control-label" for="prependedInput">Langue</label>
 		<select name="filter[language]"><?php
@@ -125,13 +125,13 @@
 
 		&nbsp;Tous 		<input type="radio" 	name="filter[viewChildren]" 	value="0" <?php if(!$filter['viewChildren']) echo ' checked'; ?> />
 		&nbsp;Ordonner 	<input type="radio" 	name="filter[viewChildren]" 	value="1" <?php if( $filter['viewChildren']) echo ' checked'; ?> />
-		&nbsp;Héritage 	<input type="hidden" 	name="filter[categoryThrough]" 	value="0" />
+		&nbsp;HÃ©ritage 	<input type="hidden" 	name="filter[categoryThrough]" 	value="0" />
 
 		<input type="checkbox" name="filter[categoryThrough]" value="1" <?php if($filter['categoryThrough']) echo ' checked'; ?> />
 
-		<button class="btn btn-mini" type="submit">Filter les résultats</button>
+		<button class="btn btn-mini" type="submit">Filter les rÃ©sultats</button>
         <button class="btn btn-mini">Annuler</button>
-        <a href="type-row?id_type=<?php echo $id_type; ?>" class="btn btn-mini">Gérer les colonnes</a>
+        <a href="type-row?id_type=<?php echo $id_type; ?>" class="btn btn-mini">GÃ©rer les colonnes</a>
 	</form>
 	</div>	
 
@@ -353,8 +353,8 @@
 					<!--<th width="20" class="icone"><i class="icon-comment icon-white"></i></th>-->
 					<th width="<?php echo 20 + (sizeof($lang) * 20) ?>"class="icone"><i class="icon-globe icon-white"></i></th>
 					<th width="60" 	class="order <?php if($filter['order'] == 'k_content.id_content') echo 'order'.$dir; ?>" onClick="document.location='index?id_type=<?php echo $_REQUEST['id_type'] ?>&cf&order=k_content.id_content&direction=<?php echo $dir ?>'"><span>#</span></th>
-					<th width="115" class="order <?php if($filter['order'] == 'k_content.contentDateCreation')  echo 'order'.$dir; ?>" onClick="document.location='index?id_type=<?php echo $_REQUEST['id_type'] ?>&cf&order=k_content.contentDateCreation&direction=<?php echo $dir ?>'"><span>Création</span></th>
-					<th width="115" class="order <?php if($filter['order'] == 'k_content.contentDateUpdate') 	echo 'order'.$dir; ?>" onClick="document.location='index?id_type=<?php echo $_REQUEST['id_type'] ?>&cf&order=k_content.contentDateUpdate&direction=<?php echo $dir ?>'"><span>Mise à jour</span></th>
+					<th width="115" class="order <?php if($filter['order'] == 'k_content.contentDateCreation')  echo 'order'.$dir; ?>" onClick="document.location='index?id_type=<?php echo $_REQUEST['id_type'] ?>&cf&order=k_content.contentDateCreation&direction=<?php echo $dir ?>'"><span>CrÃ©ation</span></th>
+					<th width="115" class="order <?php if($filter['order'] == 'k_content.contentDateUpdate') 	echo 'order'.$dir; ?>" onClick="document.location='index?id_type=<?php echo $_REQUEST['id_type'] ?>&cf&order=k_content.contentDateUpdate&direction=<?php echo $dir ?>'"><span>Mise Ã  jour</span></th>
 						
 					<?php if($cType['is_business']){ ?>
 					<th width="200" class="order <?php if($filter['order'] == 'k_content.contentRef') echo 'order'.$dir; ?>" onClick="document.location='index?id_type=<?php echo $_REQUEST['id_type'] ?>&cf&order=k_content.contentRef&direction=<?php echo $dir ?>'"><span>R&eacute;f&eacute;rence</span></th>

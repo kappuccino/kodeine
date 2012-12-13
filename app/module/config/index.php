@@ -118,17 +118,17 @@
 				<tr>
 					<td width="100">Destinataire</td>
 					<td><input type="text" name="configMailTo" value="<?php echo $app->formValue($data['configMailTo'], $_POST['configMailTo']) ?>" style="width:80%;" /></td>
-					<td>Destinataire des mails expédiés depuis le site</td>
+					<td>Destinataire des mails expÃ©diÃ©s depuis le site</td>
 				</tr>
 				<tr>
 					<td>Copie</td>
 					<td><input type="text" name="configMailCc" value="<?php echo $app->formValue($data['configMailCc'], $_POST['configMailCc']) ?>" style="width:80%;" /></td>
-					<td>Destinataire en copie des mails expédiés depuis le site</td>
+					<td>Destinataire en copie des mails expÃ©diÃ©s depuis le site</td>
 				</tr>
 				<tr>
-					<td>Copie cachée</td>
+					<td>Copie cachÃ©e</td>
 					<td><input type="text" name="configMailBcc" value="<?php echo $app->formValue($data['configMailBcc'], $_POST['configMailBcc']) ?>" style="width:80%;" /></td>
-					<td>Destinataire invisible des mails expédiés depuis le site</td>
+					<td>Destinataire invisible des mails expÃ©diÃ©s depuis le site</td>
 				</tr>
 				<tr>
 					<td width="75">Theme</td>
@@ -139,7 +139,7 @@
 							echo "<option value=\"".$e['id_theme']."\"".$sel.">".$e['themeName']."</option>";
 						}
 					?></select></td>
-					<td>Le theme qui est choisi par défaut (il peut être changé par le chapitre et/ou le module)</td>
+					<td>Le theme qui est choisi par dÃ©faut (il peut Ãªtre changÃ© par le chapitre et/ou le module)</td>
 				</tr>
 				<tr>
 					<td>Chapitre</td>
@@ -151,7 +151,7 @@
 							'one'		=> true
 						))
 					?></td>
-					<td>Le chapitre par défaut qui est utilisé à l'ouverture du site</td>
+					<td>Le chapitre par dÃ©faut qui est utilisÃ© Ã  l'ouverture du site</td>
 				</tr>
 				<tr>
 					<td>Langue</td>
@@ -162,7 +162,7 @@
 							echo "<option value=\"".$e['iso']."\"".$sel.">".$e['countryLanguage']."</option>";
 						}
 					?></select></td>
-					<td>La langue qui est choisie par défaut à l'ouverture du site</td>
+					<td>La langue qui est choisie par dÃ©faut Ã  l'ouverture du site</td>
 				</tr>
 				<tr>
 					<td>Format de la date</td>
@@ -188,7 +188,7 @@
 							}
 						?></select>
 					</td>
-					<td>Les dates seront formatées de cette manière</td>
+					<td>Les dates seront formatÃ©es de cette maniÃ¨re</td>
 				</tr>
 				<tr>
 					<td>Format de l'heure</td>
@@ -205,7 +205,7 @@
 							}
 						?></select>
 					</td>
-					<td>Les heures seront formatées de cette manière</td>
+					<td>Les heures seront formatÃ©es de cette maniÃ¨re</td>
 				</tr>
 				<tr>
 					<td>Google Analytics</td>
@@ -216,8 +216,8 @@
 		</table>
 	
 		<div class="mar-top-20">
-			Il est possible de changer ponctuellement les paramères par défaut pour certaines nom de domaine<br />
-			Note, vous pouvez utiliser des expressions regulières pour définir un domaine. Exemple (*)?(.)?kappuccino.org pour satisfaire www.kappuccino.org et kappuccino.org
+			Il est possible de changer ponctuellement les paramÃ¨res par dÃ©faut pour certaines nom de domaine<br />
+			Note, vous pouvez utiliser des expressions reguliÃ¨res pour dÃ©finir un domaine. Exemple (*)?(.)?kappuccino.org pour satisfaire www.kappuccino.org et kappuccino.org
 		</div>
 
 		<table width="100%" border="0" cellpadding="0" cellspacing="0" class="listing mar-top-10">
@@ -261,7 +261,7 @@
 					</td>
 					<td><input type="text" name="domain[<?php echo $k ?>][analytic]" value="<?php echo $app->formValue($e['analytic'], $_POST['domain'][$k]['analytic']) ?>" size="20" /></td>
 				</tr>
-				<?php } ?>
+				<?php }Â ?>
 				<tr>
 					<td><input type="text" name="domain[new][domain]" value="<?php echo $app->formValue('', $_POST['domain']['new']['domain']) ?>" size="35" /></td>
 					<td><?php echo
@@ -323,7 +323,7 @@
 	
 						echo '<td>';
 							if(preg_match("#richtext#", $field)){
-								echo "<br /><a href=\"javascript:toggleEditor('form-field-".$e['id_field']."');\">Activer/Désactiver l'éditeur</a>";
+								echo "<br /><a href=\"javascript:toggleEditor('form-field-".$e['id_field']."');\">Activer/DÃ©sactiver l'Ã©diteur</a>";
 							}
 
 							echo $field;

@@ -109,7 +109,7 @@
 					<td><img src="/admin/core/ui/img/_img/boxcheck<?php if($e['is_used']) 		echo "ed"; ?>.png" align="absmiddle" /></td>
 					<td><img src="/admin/core/ui/img/_img/boxcheck<?php if($e['is_delivered'])	echo "ed"; ?>.png" align="absmiddle" /></td>
 				</tr>
-			<?php }} ?>
+			<?php }}Â ?>
 			</tbody>
 			<tfoot>
 				<tr>
@@ -152,7 +152,7 @@
 				<td>Langue</td>
 				<td>
 					<input type="text" name="countryLanguage" value="<?php echo $app->formValue($data['countryLanguage'], $_POST['countryLanguage']); ?>" />
-					Exemple : Français, Anglais, Allemand
+					Exemple : FranÃ§ais, Anglais, Allemand
 				</td>
 			</tr>
 			<tr>
@@ -163,10 +163,10 @@
 				</td>
 			</tr>
 			<tr>
-				<td>Reférence</td>
+				<td>RefÃ©rence</td>
 				<td><select name="iso_ref"><?php
 					if($data['iso'] == $data['iso_ref']) $selSame = ' selected';
-					echo "<option value=\"\"".$selSame.">Pas de référence</option>";
+					echo "<option value=\"\"".$selSame.">Pas de rÃ©fÃ©rence</option>";
 	
 					$all = $app->countryGet();
 					foreach($all as $e){
@@ -200,18 +200,18 @@
 				<td>Livraison</td>
 				<td>
 					<input type="checkbox" name="is_delivered" value="1" <?php echo $app->formValue($data['is_delivered'], $_POST['is_delivered']) ? ' checked' : ''; ?> />
-					Apparait dans la liste des pays autorisé pour livraison (eBusiness)
+					Apparait dans la liste des pays autorisÃ© pour livraison (eBusiness)
 				</td>
 			</tr>
 		</table>
 		
-		<p>La <u>référence</u> est la langue pour laquelle les traduction seront demandé.<br />
-		Par exemple CH (suisse) a pour référence FR (france), ce qui permet de ne pas avoir 
-		a gérer deux fois le contenu dans la même langue</p>
+		<p>La <u>rÃ©fÃ©rence</u> est la langue pour laquelle les traduction seront demandÃ©.<br />
+		Par exemple CH (suisse) a pour rÃ©fÃ©rence FR (france), ce qui permet de ne pas avoir 
+		a gÃ©rer deux fois le contenu dans la mÃªme langue</p>
 	
 		</form>
 	</div>
-	<?php } ?>
+	<?php }Â ?>
 	
 </div></div></div>
 
@@ -225,7 +225,7 @@
 	}
 	
 	function addZone(){
-		zone = prompt("Quel nom voulez vous donner à cette zone ?");
+		zone = prompt("Quel nom voulez vous donner Ã  cette zone ?");
 		if(zone.length > 0){
 			//position = $('#countryZone').options.length;
 			$('#countryZone').append('<option value="'+zone+'" selected="selected">'+zone+'</option>');

@@ -74,7 +74,7 @@
 		<input type="button" id="updHeight" value="Fixer" />
 	</div>
 	<div class="item">
-		Carrée <input type="text" id="inSquare" class="in" />
+		CarrÃ©e <input type="text" id="inSquare" class="in" />
 		<input type="button" id="updSquare" value="Afficher" />
 	</div>
 	<div class="item">
@@ -142,7 +142,7 @@
 
 				this.inject(stage);
 
-				more = (ratio < 1) ? ' (Affichage réduit : '+this.height+'x'+this.width+')' : '';
+				more = (ratio < 1) ? ' (Affichage rÃ©duit : '+this.height+'x'+this.width+')' : '';
 				$('legend').set('html', 'Image actuelle : '+height+'x'+width+more);
 			}
 		});
@@ -182,7 +182,7 @@
 			evalScripts: true,
 			onComplete:function(data){
 				if(data.success){
-					alert("Image enregistrée");
+					alert("Image enregistrÃ©e");
 				}else{
 					alert("Error");
 				}

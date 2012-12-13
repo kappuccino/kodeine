@@ -184,7 +184,7 @@
 		echo "</div>";
 		
 		echo "<div class=\"under\">";
-		echo "<a href=\"player-video?url=".$_GET['url']."\">Visionner cette vidéo</a> &nbsp; | &nbsp; ";
+		echo "<a href=\"player-video?url=".$_GET['url']."\">Visionner cette vidÃ©o</a> &nbsp; | &nbsp; ";
 		echo "<a href=\"#\" onClick=\"remove()\">Supprimer ce poster</a>";
 		echo "</div>";
 
@@ -205,7 +205,7 @@
 		$width  = round($info['width']  * $ratio);
 		
 		echo "<div class=\"zone\">";
-		echo "<div style=\"padding:10px 0px 15px 10px;\">Cliquez sur une image pour choisir le poster de la vidéo</div>";
+		echo "<div style=\"padding:10px 0px 15px 10px;\">Cliquez sur une image pour choisir le poster de la vidÃ©o</div>";
 
 		echo "<div style=\"text-align:center;\">";
 		foreach($files as $n => $img){
@@ -223,7 +223,7 @@
 		echo "<div class=\"zone\" style=\"height:520px;\">";
 			echo "<div style=\"text-align:center; font-size:24px; padding:220px 0px 0px 0px; font-weight:bold;\">";
 				echo "Il n'y a pas encore de poster de defini pour cette video.<br /><br />";
-				echo "<div id=\"log\"><a href=\"#\" onClick=\"extraction();\">Extraire les images de la vidéo</a></div>";
+				echo "<div id=\"log\"><a href=\"#\" onClick=\"extraction();\">Extraire les images de la vidÃ©o</a></div>";
 			echo "</div>";
 		echo "</div>";
 	}
@@ -236,7 +236,7 @@
 <script>
 
 	function pick(n) {
-		if(confirm("Garder cette image comme poster de la vidéo ?")) {
+		if(confirm("Garder cette image comme poster de la vidÃ©o ?")) {
 		   document.location = 'video-poster?&url=<?php echo $_GET['url'] ?>&pick='+n;
 		}
 	}

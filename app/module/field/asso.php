@@ -87,7 +87,7 @@
 	$use	= array_merge(array('-1'), $app->dbKey($field, 'id_field', true));
 	$not	= $app->dbMulti("SELECT * FROM k_field WHERE id_field NOT IN(".implode(',', $use).")");
 	$core	= array(
-		'category'				=> array('name' => 'Cat�gories',				'link' => "/admin/category/index"),
+		'category'				=> array('name' => 'Catégories',				'link' => "/admin/category/index"),
 		'chapter'				=> array('name' => 'Arborescence',				'link' => "/admin/chapter/index"),
 		'user'					=> array('name' => 'Utilisateurs',				'link' => "/admin/user/index")
 	);
@@ -104,7 +104,7 @@
 			'socialForum'			=> array('name' => 'Social Forum',			'link' => "/admin/social/forum"),
 			'socialCircle'			=> array('name' => 'Social Cercle'),
 			'socialAlert'			=> array('name' => 'Social Alerte'),
-			'socialActivity'		=> array('name' => 'Social Activit�'),
+			'socialActivity'		=> array('name' => 'Social Activité'),
 			'socialEvent'			=> array('name' => 'Social Evenement'),
 			'socialEventUserData'	=> array('name' => 'Social Evenement (utilisateur)')
 		));
@@ -190,7 +190,7 @@
 				<?php echo $e['fieldName'] ?>
 				<a href="index?id_field=<?php echo $e['id_field']; ?>">(<?php echo $e['fieldKey'] ?>)</a>
 			</li>
-			<?php } ?>
+			<?php }Â ?>
 		</ul>
 	</div>
 
@@ -202,7 +202,7 @@
 				<?php echo $e['fieldName'] ?>
 				<a href="index?id_field=<?php echo $e['id_field']; ?>">(<?php echo $e['fieldKey'] ?>)</a>
 			</li>
-			<?php } ?>
+			<?php }Â ?>
 		</ul>
 	</div>
 

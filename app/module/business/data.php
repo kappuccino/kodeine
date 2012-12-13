@@ -118,7 +118,7 @@
     # Tri par ordre croissant TVA
     ksort($tva);*/
     
-    # Tri par ordre décroissant les lignes de commande
+    # Tri par ordre dÃ©croissant les lignes de commande
     //krsort($myCmd['line']);
 	
 	/*
@@ -148,7 +148,7 @@
 			<div class="pathway clearfix">
 				<h1>
 					<a href="/admin/business/">Business</a> &raquo;
-					<a href="/admin/business/data?id_cart=<?php echo $_REQUEST['id_cart'] ?>">Création de commande</a>
+					<a href="/admin/business/data?id_cart=<?php echo $_REQUEST['id_cart'] ?>">CrÃ©ation de commande</a>
 				</h1>
 				<!--<div class="types clearfix">
 					<div class="button button-blue"><a href="next.php">Lien #1</a></div>
@@ -178,7 +178,7 @@
 	<div style="padding:10px 10px 10px 0px">
 	    <a onclick="cartremove()" class="button button-red">Supprimer la commande</a>
 	    <a onclick="finalise()" class="button button-blue">Finaliser la commande</a>
-	    <a href="data-index" class="button button-blue">Commandes en cours de création</a>
+	    <a href="data-index" class="button button-blue">Commandes en cours de crÃ©ation</a>
 	</div>
 	
 	<br />
@@ -192,7 +192,7 @@
 	
 			<div class="center">
 				<div class="control-group">
-					<label class="control-label" for="cartName"><h3>Création de commande</h3></label>
+					<label class="control-label" for="cartName"><h3>CrÃ©ation de commande</h3></label>
 					<div class="controls">
 						<input class="input-xlarge" id="cartName" onchange="save()" name="cartName" type="text" value="<?php echo $myCmd['cartName']; ?>" placeholder="Nom de la commande">
 					</div>
@@ -266,7 +266,7 @@
 				<table width="100%" border="1" id="table-cart">
 					<tr>
 						<td width="100">Ref</td>
-						<td>Libellé Produit</td>
+						<td>LibellÃ© Produit</td>
 	
 						<td width="90">P.U. HT</td>
 						<td width="90">Remise</td>
@@ -282,7 +282,7 @@
 					<?php
 					    foreach($myCmd['line'] as $l){
 					        
-					    // Récupération du stock
+					    // RÃ©cupÃ©ration du stock
 					    $stock = "-";
 					    if($l['id_content'] > 0) {
 					        $qstock = $app->dbOne("SELECT contentStock,contentStockNeg FROM k_content WHERE id_content='".$l['id_content']."'");
@@ -325,7 +325,7 @@
 					<tr>
 	                    <td colspan="12">
 	                        <div style="float:left; margin:10px;">
-	                            <a class="button button-blue" onclick="productPicker(0)">Sélectionner un produit</a>
+	                            <a class="button button-blue" onclick="productPicker(0)">SÃ©lectionner un produit</a>
 	                        </div>
 	                        <div style="float:left; margin:10px;">
 	                            <a class="button button-blue" onclick="addCartLine();">Ajouter un produit manuellement</a>
@@ -347,12 +347,12 @@
 	                </tr>			        
 			        <?php }} ?>
 					<tr id="trTotalHT">
-						<td><b>Total Général HT</b></td>
+						<td><b>Total GÃ©nÃ©ral HT</b></td>
 						<td width="50%" align="right"><b><span id="cartTotal"><?php echo $myCmd['cartTotal'] ?></span></b></td>
 					</tr>
 	                <?php foreach($myCmd['cartTax'] as $t=>$v){if($v['base'] > 0){  ?>
 	                <tr class="basetva">
-	                    <td>TVA à <?php echo $t ?> %</td>
+	                    <td>TVA Ã  <?php echo $t ?> %</td>
 	                    <td width="50%" align="right"><?php echo $v['base'] ?></td>
 	                </tr>                   
 	                <?php }} ?>
@@ -423,14 +423,14 @@
 	    
 	    // Finalisation de la commande !
 	    function finalise(){
-	        if(confirm('Etes vous sur de vouloir finaliser la commande ?\nLa commande ne pourra plus être modifiée')){
+	        if(confirm('Etes vous sur de vouloir finaliser la commande ?\nLa commande ne pourra plus Ãªtre modifiÃ©e')){
 	            $("#cartfinalise").val("1");
 	            $("#form-cart").submit();
 	        }
 	        return false;
 	    }
 	    
-	    // On sauve et on met à jour les champs du formulaire
+	    // On sauve et on met Ã  jour les champs du formulaire
 	    function save(){
 	        //$("#form-cart").submit();
 	       
@@ -471,7 +471,7 @@
 	                total = data.cartTax[taux].total;
 	                base = data.cartTax[taux].base;
 	                $("#trTotalHT").before("<tr class=\"totaltva\"><td>Total HT " + taux + " %</td><td width=\"50%\" align=\"right\">" + total + "</td></tr>");
-	                $("#trTotalTVA").before("<tr class=\"basetva\"><td>TVA à " + taux + " %</td><td width=\"50%\" align=\"right\">" + base + "</td></tr>");
+	                $("#trTotalTVA").before("<tr class=\"basetva\"><td>TVA Ã  " + taux + " %</td><td width=\"50%\" align=\"right\">" + base + "</td></tr>");
 	            }
 	            if(data.msg)alert(data.msg);   
 	            
