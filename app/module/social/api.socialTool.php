@@ -6,7 +6,7 @@ function __clone(){}
 function socialTool(){}
 
 
-function socialtoolExternal($opt){
+function socialToolExternal($opt){
 
 	# GET
 	#
