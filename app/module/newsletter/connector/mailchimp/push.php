@@ -11,10 +11,10 @@
 		$list	= $apiConnector->listGet(array('filters' => array('list_id' => $_REQUEST['id_newsletterList'])));
 		//$app->pre($list['data'][0]['default_from_name']);
 		//die();
-	    $options['subject'] = utf8_encode($data['newsletterTitle']);
-	    $options['from_email'] = $list['data'][0]['default_from_email'];
-	    $options['from_name']  = $list['data'][0]['default_from_name'];
-	    $options['to_name']	= "*|FNAME|*";
+	    $options['subject']     = $data['newsletterTitle'];
+	    $options['from_email']  = $list['data'][0]['default_from_email'];
+	    $options['from_name']   = $list['data'][0]['default_from_name'];
+	    $options['to_name']	    = "*|FNAME|*";
 	    
 	    $conditions = array();
 	    if(sizeof($_REQUEST['listInterestGroupings']) > 0) {
@@ -31,8 +31,8 @@
 	    }
 		//$app->pre($segment_opts);
 	    $content = array();
-	    $content['html'] = utf8_encode($data['newsletterHtml']);
-	    $content['text'] = utf8_encode(strip_tags($data['newsletterHtml']));
+	    $content['html'] = $data['newsletterHtml'];
+	    $content['text'] = strip_tags($data['newsletterHtml']);
 	    $content['url'] = 'http://'.$_SERVER['HTTP_HOST'].'/?preview-newsletter='.base64_encode($_REQUEST['id_newsletter']);
 	    $content['archive'] = "archive";
 	    

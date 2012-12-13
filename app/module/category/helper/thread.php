@@ -19,7 +19,7 @@
 
 				echo "<div class=\"handle\"></div>";
 
-				echo "<div class=\"data\" style=\"margin-left:".($_GET['level'] * 20)."px;\"><a href=\"javascript:void();\" onclick=\"edit(".$e['id_category'].")\">".utf8_encode($e['categoryName'])."</a></div>";
+				echo "<div class=\"data\" style=\"margin-left:".($_GET['level'] * 20)."px;\"><a href=\"javascript:void();\" onclick=\"edit(".$e['id_category'].")\">".$e['categoryName']."</a></div>";
 
 
 

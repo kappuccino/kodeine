@@ -22,7 +22,7 @@
 			'fieldInstruction'	=> array('value' => $_POST['fieldInstruction']),
 			'fieldContentType'	=> array('value' => $_POST['fieldContentType'],		'zero'  => true),
 			'fieldUserField'	=> array('value' => $_POST['fieldUserField'],		'zero'  => true),
-			'fieldParam'		=> array('value' => utf8_encode(json_encode($_POST['param']))),
+			'fieldParam'		=> array('value' => json_encode($_POST['param'])),
 			'fieldStyle'		=> array('value' => $_POST['fieldStyle']),
 			'fieldShowForm'		=> array('value' => $_POST['fieldShowForm'],		'zero'	=> true)
 		);

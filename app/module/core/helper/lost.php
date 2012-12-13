@@ -17,7 +17,7 @@
 			if($app->db_error == NULL){
 				die(json_encode(array('success' => true, 'query' => addslashes($app->db_query))));
 			}else{
-				die(json_encode(array('success' => false, 'reason' => utf8_encode($app->db_error."\n".$app->db_query))));
+				die(json_encode(array('success' => false, 'reason' => $app->db_error."\n".$app->db_query)));
 			}
 		}else{
 			die(json_encode(array('success' => false, 'reason' => 'no lost entry')));
@@ -45,7 +45,7 @@
 	)));
 
 	@$app->dbQuery($query);
-	if($app->db_error != '') die(json_encode(array('success' => false, 'reason' => utf8_encode($app->db_error."\n".$app->db_query))));
+	if($app->db_error != '') die(json_encode(array('success' => false, 'reason' => $app->db_error."\n".$app->db_query)));
 
 
 	# Envoyer un mail
@@ -61,7 +61,7 @@
 	$mail->Subject	= "[kodeine] Nouveau mot de passe";
 	$mail->Body		= "Pour regenerer votre mot de passe, cliquez ici\nhttp://".$_SERVER['HTTP_HOST']."/admin/core/login?t=".$token;
 
-	if(!$mail->Send()) die(json_encode(array('success' => false, 'reason' => utf8_encode($mail->ErrorInfo))));
+	if(!$mail->Send()) die(json_encode(array('success' => false, 'reason' => $mail->ErrorInfo)));
 
 
 	# OK !!!

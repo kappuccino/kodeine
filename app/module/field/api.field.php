@@ -81,7 +81,7 @@ public function fieldGet($opt=array()){
 	$query	= "SELECT * FROM k_field\n".$where.$order;
 	$field	= $this->$dbMode($query);
 
-	if($opt['utf8']){
+	/*if($opt['utf8']){
 		if($dbMode == 'dbOne'){
 			$field = array_map('utf8_encode', $field);
 		}else
@@ -90,7 +90,7 @@ public function fieldGet($opt=array()){
 				$field[$idx] = array_map('utf8_encode', $e);
 			}
 		}
-	}
+	}*/
 	
 	if($opt['debug']) $this->pre("QUERY", $this->db_query, "ERROR", $this->db_error, "DATA", $field);
 
@@ -162,7 +162,7 @@ public function fieldCacheBuild(){
 		foreach($flds as $type => $fld){
 			foreach($fld as $nf => $f){
 				unset($f['fieldParam'], $f['fieldStyle']);
-				$f['fieldName'] = utf8_encode($f['fieldName']);
+				$f['fieldName'] = $f['fieldName'];
 				$fields[$type][$e['id_type']][] = $f;
 			}
 		}

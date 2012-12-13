@@ -4,5 +4,5 @@
 	$template_source = @file_get_contents($_REQUEST['url'].'/'.$file[1]);
     //echo htmlspecialchars('&eacute; - é');
     $template_source = str_replace("&nbsp;", " ", $template_source);
-	die(utf8_encode($template_source));
+	die($template_source);
 ?>

@@ -17,7 +17,7 @@
 	foreach($data as $d) {
 		echo '<li>';
 		echo '<a href="#" onclick="$(\'#select_id_content\').val('.$d['id_content'].');$(\'#results\').hide();return false;">';
-		echo $d['id_content'].' - '.utf8_encode($d['contentName']);
+		echo $d['id_content'].' - '.$d['contentName'];
 		echo '</a>';
 		echo '</li>';
 	}

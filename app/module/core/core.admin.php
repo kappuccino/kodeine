@@ -297,16 +297,14 @@ function moduleData($mod, $core=true){
 	$data = $xpath->query('/element/data')->item(0)->childNodes;
 	if($data->length > 0){
 		foreach($data as $e){
-			$module[$e->nodeName] = utf8_decode($e->nodeValue);
-		#	$module[$e->nodeName] = $e->nodeValue;
+			$module[$e->nodeName] = $e->nodeValue;
 		}
 	}
 
 	$less = $xpath->query('/element/less')->item(0)->childNodes;
 	if($less->length > 0){
 		foreach($less as $e){
-			$module['less'][] = $folder.'/'.$mod.utf8_decode($e->nodeValue);
-		#	$module['less'][] = $folder.'/'.$mod.$e->nodeValue;
+			$module['less'][] = $folder.'/'.$mod.$e->nodeValue;
 		}
 	}
 	
@@ -398,8 +396,7 @@ public function loc($mod){
 	$data	= $xpath->query('/language/item');
 
 	foreach($data as $e){
-		$items[$e->getAttributeNode('key')->nodeValue] = utf8_decode($e->nodeValue);
-	#	$items[$e->getAttributeNode('key')->nodeValue] = $e->nodeValue;
+		$items[$e->getAttributeNode('key')->nodeValue] = $e->nodeValue;
 	}
 
 	# - - - - - - - - - - - - - - - - - - - - - - - -	
@@ -416,8 +413,7 @@ public function loc($mod){
 	
 		if($data->length > 0){
 			foreach($data as $e){
-				$items[$e->getAttributeNode('key')->nodeValue] = utf8_decode($e->nodeValue);
-			#	$items[$e->getAttributeNode('key')->nodeValue] = $e->nodeValue;
+				$items[$e->getAttributeNode('key')->nodeValue] = $e->nodeValue;
 			}
 		}
 	}

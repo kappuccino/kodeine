@@ -51,10 +51,10 @@
 
 	$fields = $app->apiLoad('field')->fieldGet(array(
 		'category'	=> true,
-		'debug'		=> false	
+		'debug'		=> false
 	));
 
-	$languages = $app->countryGet(array('is_used' => 1));
+	$languages = $app->countryGet(array('is_used' => 1, 'debug' => false));
 	foreach($languages as $e){
 		$isoJS[] = "'".$e['iso']."'";
 	}

@@ -78,7 +78,7 @@
 
 	$country = $app->countryGet(array('is_used' => true));
 	foreach($country as $e){
-		$languages[$e['iso']] = utf8_encode($e['countryLanguage']);
+		$languages[$e['iso']] = $e['countryLanguage'];
 	}
 
 ?><!DOCTYPE html>
@@ -125,8 +125,6 @@
 			</tfoot>
 		</table>
 	</form>
-
-
 
 	<?php if($_REQUEST['master'] != NULL){ ?>
 	<form action="./" method="post" id="form-slave" class="span3">
@@ -184,7 +182,7 @@
 				echo "<div class=\"item item-".$e['language']."\">".
 
 					"<div class=\"top clearfix\">".
-						"<span class=\"left\">".utf8_decode($languages[$e['language']])."</span>".
+						"<span class=\"left\">".$languages[$e['language']]."</span>".
 						"<a class=\"btn btn-mini right toggle\" onclick=\"on('".$e['language']."')\">Activer/Désactiver l'éditeur de texte</a>".
 						"<a class=\"btn btn-mini right\" onclick=\"kill('".$e['language']."');\" style=\"margin-right:10px;\">Supprimer cette version</a>".
 					"</div>".
@@ -200,7 +198,7 @@
 			echo '<div class="add clearfix">';
 			if(sizeof($plus) > 0){
 				foreach($plus as $e){
-					echo '<a onClick="setup(\''.$e.'\', $(this));" class="btn btn-mini">Ajouter '.utf8_decode($languages[$e]).'</a>';
+					echo '<a onClick="setup(\''.$e.'\', $(this));" class="btn btn-mini">Ajouter '.$languages[$e].'</a>';
 				}
 			}
 			echo '</div>';

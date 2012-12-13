@@ -3,7 +3,7 @@
 	if(!headers_sent()) header('Content-type: text/javascript');
 
 	function encode_items(&$item, $key){
-		$item = utf8_encode($item);
+		$item = $item;
 	}
 	
 	$pref		= $app->configGet('media');

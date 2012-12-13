@@ -22,6 +22,7 @@ private function __construct($host=NULL, $login=NULL, $passwd=NULL, $database=NU
 
 #	self::$_instance->set_charset("utf8");
 
+#	var_dump(ISUTF8);
 	if(ISUTF8 === true) self::$_instance->set_charset("utf8");
 #	var_dump(self::$_instance->get_charset());
 }

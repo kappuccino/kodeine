@@ -149,7 +149,7 @@ rsort($files);
 
 <script>
     function con(f){
-        if(confirm("Voulez-vous rellement recharger la base de donnée à cette date ?\n\n\nCETTE FONCTION EST A EXECUTER AVEC UNE PRUDENCE EXTREME !!!")){
+        if(confirm("Voulez-vous rellement recharger la base de données a cette date ?\n\n\nCETTE FONCTION EST A EXECUTER AVEC UNE PRUDENCE EXTREME !!!")){
             document.location = 'export?reload='+f;
         }
     }

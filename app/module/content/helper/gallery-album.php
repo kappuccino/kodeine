@@ -14,7 +14,7 @@
 
 	if(sizeof($albums) > 0){
 		foreach($albums as $idx => $e){
-			$albums[$idx]['contentName'] = utf8_encode($e['contentName']);
+			$albums[$idx]['contentName'] = $e['contentName'];
 		}
 	}	
 

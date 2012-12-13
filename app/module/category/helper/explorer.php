@@ -8,7 +8,7 @@
 		$temp[] = array(
 			'id_category' 	=> $e['id_category'],
 			'parent'		=> $e['categoryParent'],
-			'name'			=> utf8_encode($e['categoryName']),
+			'name'			=> $e['categoryName'],
 			'hasChildren'	=> ($e['categoryHasChildren'] == '1')
 		);
 	}

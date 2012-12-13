@@ -1236,6 +1236,7 @@ function countryGet($opt=array()){
 	if($dbMode == 'dbOne') unset($order);
 
 	$country = $this->$dbMode("SELECT * FROM k_country ".$where.$order);
+	if($opt['debug']) $this->pre($this->db_query, $this->db_error, $country);
 
 	if($opt['byZone'] && $dbMode == 'dbMulti'){
 		foreach($country as $e){

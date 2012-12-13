@@ -111,11 +111,11 @@
 	$data['items']	= $content;
 	
 	foreach($data['path'] as $idx => $e){
-		$data['path'][$idx]['contentName'] = utf8_encode($e['contentName']);
+		$data['path'][$idx]['contentName'] = $e['contentName'];
 	}
 	
 	foreach($data['items'] as $idx => $e){
-		$data['items'][$idx]['contentName'] = utf8_encode($e['contentName']);
+		$data['items'][$idx]['contentName'] = $e['contentName'];
 	}
 	
 

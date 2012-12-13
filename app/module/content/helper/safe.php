@@ -93,7 +93,7 @@
 			$out = array(
 				'isBroken'		=> $isBroken,
 				'id_content'	=> $_GET['element'],
-				'contentName'	=> utf8_encode($c['contentName']),
+				'contentName'	=> $c['contentName'],
 				'what'			=> $_GET['what']
 			);
 		}else{

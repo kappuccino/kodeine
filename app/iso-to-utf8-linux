@@ -12,7 +12,6 @@ cd $DIR;
 echo "JE SUIS DANS $DIR"
 
 for f in `find . -name "*.php"`
-#for f in *.php
 do
     if [ "test -f $f" ]; then
         CHARSET="$( file -bi "$f"|awk -F "=" '{print $2}')"
@@ -20,7 +19,7 @@ do
 
         if [ "$CHARSET" != "utf-8" ]; then
         	echo -n "IS $green $CHARSET $reset Converting $f "
-  	      	iconv -f "$CHARSET" -t utf8 "$f" -o "$f".utf8 && mv -f "$f".utf8 "$f" && echo -n "OK"
+  	      	#iconv -f "$CHARSET" -t utf8 "$f" -o "$f".utf8 && mv -f "$f".utf8 "$f" && echo -n "OK"
   	    fi
         echo ""
     else

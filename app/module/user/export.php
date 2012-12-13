@@ -56,7 +56,7 @@
 				foreach($e as $e_){
 					if (!is_array($e_)) $row[] = htmlentities($e_);
 				}
-				$line[] = utf8_encode(implode("\t", $row));
+				$line[] = implode("\t", $row);
 			}
 
 			$out = implode("\n", $line);

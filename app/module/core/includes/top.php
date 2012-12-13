@@ -20,11 +20,6 @@
 
 	$mods = $app->moduleList();
 	foreach($mods as $e){
-
-		/*$e['config']['installed'] == 'YES' &&*/ 
-		//if($app->userCan($e['key'].'.index') && $e['menu'] == 'YES' && ($e['config']['enabled'] == 'YES') OR ($e['key'] == 'user')){
-		//if($app->userCan($e['key'].'.index') && $e['menu'] == 'YES' && ($e['config']['enabled'] == 'YES') OR ($e['key'] == 'user')){
-        //$app->pre($e);
 		if(($app->userCan($e['key'].'.index') && $e['menu'] == 'YES') && ($e['config']['enabled'] == 'YES' || $e['key'] == 'user')){
 
 			$class = (is_array($e['dependencies']) && sizeof($e['dependencies']) > 0)

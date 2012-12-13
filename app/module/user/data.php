@@ -3,7 +3,7 @@
 	if($_POST['action']){
 	#	die($app->pre($_POST));
 
-		$app->dbQuery("UPDATE k_group SET groupFormLayout='".utf8_encode($_POST['groupFormLayout'])."' WHERE id_group=".$_REQUEST['id_group']);
+		$app->dbQuery("UPDATE k_group SET groupFormLayout='".$_POST['groupFormLayout']."' WHERE id_group=".$_REQUEST['id_group']);
 		#$app->pre($app->db_query, $app->db_error);
 		$do = true;
 

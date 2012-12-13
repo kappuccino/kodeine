@@ -5,5 +5,5 @@
 	
     $html = '';
     $html = str_replace("&nbsp;", " ", $data['newsletterHtmlDesigner']);
-	die(utf8_encode($html));  
+	die($html);
 ?>

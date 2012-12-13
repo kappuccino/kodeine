@@ -1411,7 +1411,7 @@ public function contentCacheBuild($id_content, $opt=array()){
 		// Langue
 		$cache['language'][$e['language']] = array(
 			'contentUrl'	=> $e['contentUrl'],
-			'contentName'	=> utf8_encode($e['contentName'])
+			'contentName'	=> $e['contentName']
 		);
 
 		// Categorie
@@ -1425,7 +1425,7 @@ public function contentCacheBuild($id_content, $opt=array()){
 			$cache['category'][$e['language']][] = array(
 				'id_category'	=> $e['id_category'],
 				'categoryUrl'	=> $e['categoryUrl'],
-				'categoryName'	=> utf8_encode($e['categoryName']),
+				'categoryName'	=> $e['categoryName'],
 				'categoryMedia'	=> $e['categoryMedia']
 			);
 		}
@@ -1567,21 +1567,21 @@ public function contentType($opt=array()){
 	
 	
 	if($dbMode == 'dbOne'){
-		$type['typeFormLayout'] = json_decode(utf8_encode($type['typeFormLayout']), true);
+		$type['typeFormLayout'] = json_decode($type['typeFormLayout'], true);
 
 		if(!is_array($type['typeFormLayout'])){
 
 			$type['typeFormLayout'] = array(
 				'tab' => array(
 					'view0' => array(
-						'label' => 'Defaut@',
+						'label' => 'Défaut',
 						'field' => array()
 					)
 				),
 				'bottom' => array()
 			);
 		}
-        $type['typeListLayout'] = json_decode(utf8_encode($type['typeListLayout']), true);
+        $type['typeListLayout'] = json_decode($type['typeListLayout'], true);
         if(!is_array($type['typeListLayout'])) $type['typeListLayout'] = array();
 	}
 

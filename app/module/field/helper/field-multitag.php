@@ -40,7 +40,7 @@
 		foreach($rez as $e){
 			$m[] = array(
 				'id_content' 	=> $e['id_content'],
-				'contentName'	=> utf8_encode($e['contentName'])
+				'contentName'	=> $e['contentName']
 			);
 		}
 	}else
@@ -104,7 +104,7 @@
 		foreach($rez as $e){
 			$m[] = array(
 				'dbtable_id' 	=> $e['dbtable_id'],
-				'dbtable_view'	=> utf8_encode($e['dbtable_view'])
+				'dbtable_view'	=> $e['dbtable_view']
 			);
 		}
 
