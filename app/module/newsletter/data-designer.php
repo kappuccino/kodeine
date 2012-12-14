@@ -9,6 +9,7 @@
 		$def['k_newsletter'] = array(
 			'newsletterName' 			=> array('value' => $_POST['newsletterName'], 		'check' => '.'),
 			'newsletterTitle' 			=> array('value' => $_POST['newsletterTitle'], 		'check' => '.'),
+            'is_designer'               => array('value' => 1),
 			'newsletterTemplateUrl' 	=> array('value' => $_POST['newsletterTemplateUrl'])
 		);
 		
@@ -36,13 +37,13 @@
                 ));
                 require_once(PLUGIN.'/phpmailer/class.phpmailer.php');
                 $mail = new PHPMailer();
-                $mail->SetFrom('noreply@cem.com','CEM');
+                $mail->SetFrom('noreply@'.$_SERVER['HTTP_HOST'], $_SERVER['HTTP_HOST']);
         
                 $mail->AddAddress($pref['test']);
         
                 $mail->Subject  = $data['newsletterTitle'];
-                $mail->AltBody  = strip_tags($data['newsletterHtml']);
-                $mail->MsgHTML(eregi_replace("[\]", '', $data['newsletterHtml']));
+                $mail->AltBody  = utf8_decode(strip_tags($data['newsletterHtml']));
+                $mail->MsgHTML(utf8_decode($data['newsletterHtml']));
                 
                 if(!$mail->Send()) $message = "Erreur d'envoi".$mail->ErrorInfo;   
                 else $message = 'OK: Newsletter enregistrée et envoyée en mode [TEST] ('.$pref['test'].')';
@@ -82,7 +83,7 @@
             $info = @file_get_contents($t.'/info.xml' );
             if($info) {
                 preg_match("#<name>(.*)</name>?#", $info, $name);
-                $templates[$t] = utf8_decode($name[1]);
+                $templates[$t] = $name[1];
             }
         }
     }
@@ -115,7 +116,7 @@
             <?php } ?>
         <?php if($data['newsletterSendDate'] == NULL){ ?>
             <li><a href="javascript:$('#do').val('test');save();" class="btn btn-mini btn-success">Enregistrer et envoyer un mail de test</a></li>
-            <li><a href="javascript:$('#do').val('test');save();" class="btn btn-mini btn-success">Enregistrer et sélectionner les abonnés</a></li>
+            <li><a href="javascript:$('#do').val('list');save();" class="btn btn-mini btn-success">Enregistrer et sélectionner les abonnés</a></li>
         <?php } ?>
     <?php } ?>
     <li><a href="javascript:save();" class="btn btn-mini btn-success">Enregistrer</a></li>
@@ -267,6 +268,7 @@ function templateLoad(is_start) {
         }
     });
     request.done(function(data) {
+
         $template = $(data);
         if(is_start) {
         	start(true);
@@ -301,7 +303,7 @@ $(document).ready(function() {
         start(false);
    });
    request.fail(function(data) {
-        alert('Format de la template incorrect');
+        alert('Format de la template incorrect get');
    });
        
     //start(<?php echo (trim($data['newsletterHtmlDesigner']) != '') ? 'false' : 'true'; ?>);   
@@ -316,7 +318,7 @@ function save() {
     $.post('helper/designer-save', { id_newsletter: id_newsletter, html: html, templatehtml: templatehtml}, function(data) {
         if(data != 0) {
             //alert('Enregistré');
-            $('#data').submit();
+            $('#data').submit()
         }
     }); 
 }

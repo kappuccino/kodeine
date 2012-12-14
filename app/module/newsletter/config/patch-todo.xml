@@ -48,6 +48,7 @@
 
 	<job action = "createField"		table = "k_newsletter"			field = "newsletterSendDate" 	type = "DATETIME" 		null = "YES" />
 	<job action = "createField" 	table = "k_newsletter" 			field = "is_archive"			type = "TINYINT(1)"		null = "NO"		after = "id_newsletter" />
+    <job action = "createField" 	table = "k_newsletter" 			field = "is_designer"			type = "TINYINT(1)"		null = "NO"		after = "is_archive" />
 	<job action = "createField" 	table = "k_newsletter" 			field = "newsletterLink"		type = "MEDIUMTEXT"		null = "NO"		after = "newsletterType" />
 	<job action = "createField" 	table = "k_newsletter" 			field = "newsletterSearch"		type = "VARCHAR(255)"	null = "NO"		after = "newsletterType" />
 	<job action = "createField" 	table = "k_newsletter" 			field = "newsletterGroup" 		type = "VARCHAR(255)" 	null = "NO" 	after = "newsletterSearch" />

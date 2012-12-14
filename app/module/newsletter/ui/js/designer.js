@@ -12,13 +12,18 @@ function start(init){
     templatehtml = html1;
     $template = $(html1);
     tmp1.remove();
-
+    var isMSIE = /*@cc_on!@*/0;
     // Chargement de la template
     if(init) {
         //alert('init true');
-
-        //console.log(html);
-        document.getElementById('preview').contentDocument.write(html1);
+        if(document.getElementById('preview').contentWindow.document.head) {
+            if (!isMSIE) document.getElementById('preview').contentWindow.document.head.innerHTML = "";
+        }
+        if(document.getElementById('preview').contentWindow.document.head) {
+            if (!isMSIE)  document.getElementById('preview').contentWindow.document.body.innerHTML = "";
+        }
+        //document.getElementById('preview').contentDocument.write(html1);
+        document.getElementById('preview').contentWindow.document.write(html1);
         //$preview.contents()[0].innerHTML = html1;
     } else {
 
@@ -28,10 +33,26 @@ function start(init){
         designerhtml = html2;
         $designer = $(html2);
         tmp2.remove();
-        document.getElementById('preview').contentDocument.write(html2);
+        if(document.getElementById('preview').contentWindow.document.head) {
+            if (!isMSIE) document.getElementById('preview').contentWindow.document.head.innerHTML = "";
+        }
+        if(document.getElementById('preview').contentWindow.document.head) {
+            if (!isMSIE) document.getElementById('preview').contentWindow.document.body.innerHTML = "";
+        }
+        document.getElementById('preview').contentWindow.document.write(html2);
         //$preview.contents()[0].innerHTML = html2;
     }
 
+    // Ajout du JS + CSS
+    if($preview.find("head").length > 0) {
+        $preview.find("head").append(css);
+    }
+
+    if($preview.find("body").length > 0) {
+        $preview.find("body")[0].appendChild(script);
+        $preview.find("body")[0].appendChild(script2);
+        $preview.find("body")[0].appendChild(script3);
+    }
 
     $preview.find("repeater").each( function(e) {
         id_repeater ++;
@@ -60,19 +81,26 @@ function start(init){
                         repeaterApplyContent(tmp.attr("data-id"), "load");
                     }
                 }, 'json');
+            }else {
+                $(this).find("item").each( function(it) {
+                    var item = $(this);
+                    var urlitem = $(this).attr("data-url");
+                    //console.log(urlitem);
+                    if(urlitem) {
+                        $.post(urlitem, {  }, function(dataitem) {
+                            if(dataitem != '') item.html(dataitem);
+                        });
+                    }
+                });
             }
         });
+
     }
 
-    // Ajout du JS + CSS
-    $preview.find("head").append(css);
-    $preview.find("body").append(script);
-    $preview.find("body").append(script2);
-    $preview.find("body").append(script3);
     sizeIFrame();
 
     // Recuperation de tous les types de repeaters et ajout des options dans le menu deroulant
-    $("#stRepeater").html('<option value="0">Insérer un élément</option>');
+    $("#stRepeater").html('<option value="0">Ins&eacute;rer un &eacute;l&eacute;ment</option>');
     $template.find("repeater").each( function(e) {
         $("#stRepeater").append(new Option($(this).attr('data-name'), $(this).attr('data-ref'), false, false));
     });
@@ -82,9 +110,7 @@ function start(init){
         repeaterAdd($(this).val());
     });
 
-    /*$preview.find("repeaters").sortable({
-     items: "repeater"
-     });*/
+    setTimeout("document.getElementById('preview').contentWindow.load_sortable()", 2000);
 }
 
 
@@ -95,7 +121,7 @@ function repeaterAdd(ref) {
     var previewRepeaters    = $preview.find("repeaters[data-ref=" + ref + "]");
     var lastRepeater        = previewRepeaters.find("repeater");
     var multiple            = previewRepeaters.attr('data-multiple');
-    var newRepeater         = false;
+
     if(!multiple && lastRepeater.html()) {
         alert("Ce contenu a déjà été inséré");
     } else {
@@ -122,6 +148,8 @@ function repeaterAddHeader(repeater) {
     var id          = repeater.attr('data-id');
     var displayEdit = '<div class="repeaterEdit"></div>';
     displayEdit += '<div class="repeaterBTEdit">';
+    /*displayEdit += '<a class="repeaterUp">Monter</a>';
+     displayEdit += '<a class="repeaterDown">Descendre</a>';*/
     displayEdit += '<a class="repeaterEdit">Modifier</a>';
     displayEdit += '<a class="repeaterDuplicate">Dupliquer</a>';
     displayEdit += '<a class="repeaterDelete">Supprimer</a>';
@@ -293,9 +321,7 @@ function repeaterEdit (id) {
     });
     edit.find("textarea").each( function(e) {
         if($(this).attr("data-richtext") == "1") {
-            tinyMCE.init({
-                mode : "exact",
-                elements : ""+$(this).attr('id')+"",
+            $(this).tinymce({
                 width : "350",
                 // General options
                 theme : "advanced",
@@ -307,8 +333,18 @@ function repeaterEdit (id) {
                 theme_advanced_toolbar_align : "left",
                 theme_advanced_statusbar_location : "bottom",
                 theme_advanced_resizing : true,
-
+                force_br_newlines : true,
+                force_p_newlines : false,
+                forced_root_block : "",
                 invalid_elements : "p",
+                paste_preprocess : function(pl, o) {
+                    //alert('ok');
+                    //example: keep bold,italic,underline and paragraphs
+                    //o.content = strip_tags( o.content,'<b><u><i><p>' );
+
+                    // remove all tags => plain text
+                    o.content = strip_tags( o.content,'' );
+                },
 
                 setup : function(ed) {
                     ed.addButton('mediapicker', {
@@ -338,18 +374,22 @@ function repeaterEdit (id) {
     edit.find('.repeaterRemove').click( function() {
         repeaterRemove(id);
     });
-    /*edit.find('.repeaterUp').click( function() {
-     repeaterMove(id, 'up');
-     });
-     edit.find('.repeaterDown').click( function() {
-     repeaterMove(id, 'down');
-     });*/
+    edit.find('.repeaterUp').click( function() {
+        repeaterMove(id, 'up');
+    });
+    edit.find('.repeaterDown').click( function() {
+        repeaterMove(id, 'down');
+    });
 
 
 
     // Ajout des formulaires de modification des champs
 
     //alert(el);
+}
+
+function repeaterMove(id, sens) {
+    var repeater = $preview.find("repeater[data-id="+ id + "]");
 }
 
 function editClose() {
@@ -381,7 +421,7 @@ function repeaterSelect (id) {
 
         $("#select_id_content").change( function() {
             alert('ok' + $(this).val());
-            //repeaterApplyContent(id); 
+            //repeaterApplyContent(id);
         });
 
 
@@ -507,4 +547,57 @@ function repeaterRemove (id) {
 // Hauteur automatique iframe
 function sizeIFrame() {
     //$("#preview").height($("#preview").contents().find("html").outerHeight() + 100);
+}
+
+function strip_tags (str, allowed_tags)
+{
+
+    var key = '', allowed = false;
+    var matches = [];    var allowed_array = [];
+    var allowed_tag = '';
+    var i = 0;
+    var k = '';
+    var html = '';
+    var replacer = function (search, replace, str) {
+        return str.split(search).join(replace);
+    };
+    // Build allowes tags associative array
+    if (allowed_tags) {
+        allowed_array = allowed_tags.match(/([a-zA-Z0-9]+)/gi);
+    }
+    str += '';
+
+    // Match tags
+    matches = str.match(/(<\/?[\S][^>]*>)/gi);
+    // Go through all HTML tags
+    for (key in matches) {
+        if (isNaN(key)) {
+            // IE7 Hack
+            continue;
+        }
+
+        // Save HTML tag
+        html = matches[key].toString();
+        // Is tag not in allowed list? Remove from str!
+        allowed = false;
+
+        // Go through all allowed tags
+        for (k in allowed_array) {            // Init
+            allowed_tag = allowed_array[k];
+            i = -1;
+
+            if (i != 0) { i = html.toLowerCase().indexOf('<'+allowed_tag+'>');}
+            if (i != 0) { i = html.toLowerCase().indexOf('<'+allowed_tag+' ');}
+            if (i != 0) { i = html.toLowerCase().indexOf('</'+allowed_tag)   ;}
+
+            // Determine
+            if (i == 0) {                allowed = true;
+                break;
+            }
+        }
+        if (!allowed) {
+            str = replacer(html, "", str); // Custom replace. No regexing
+        }
+    }
+    return str;
 }

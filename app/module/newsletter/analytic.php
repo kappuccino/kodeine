@@ -70,7 +70,7 @@
 
 	<?php if(is_array($stat['campaign']) && $data['newsletterSendDate'] != NULL){ ?>
 		
-		<h3 class="campaignName"><?php echo utf8_decode($stat['campaign']['campaignName']) ?></h3>
+		<h3 class="campaignName"><?php echo $stat['campaign']['campaignName'] ?></h3>
 	
 		<p class="campaignNameCaption">
 			Envoy&eacute; a <?php echo $total ?> destinataires le <?php echo $app->helperDate($data['newsletterSendDate'], '%e %B %G &agrave; %Hh%M') ?>
