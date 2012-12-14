@@ -72,7 +72,7 @@ function start(init){
 	sizeIFrame();
 	
     // Recuperation de tous les types de repeaters et ajout des options dans le menu deroulant
-    $("#stRepeater").html('<option value="0">Insérer un élément</option>');
+    $("#stRepeater").html('<option value="0">Ins?rer un ?l?ment</option>');
     $template.find("repeater").each( function(e) {
         $("#stRepeater").append(new Option($(this).attr('data-name'), $(this).attr('data-ref'), false, false));
     });
@@ -97,7 +97,7 @@ function repeaterAdd(ref) {
     var multiple            = previewRepeaters.attr('data-multiple');
 
     if(!multiple && lastRepeater.html()) {
-        alert("Ce contenu a déjà été inséré");
+        alert("Ce contenu a d?j? ?t? ins?r?");
     } else {
         previewRepeaters.append( templateRepeaters.html() ).children(':last').hide().fadeIn(500);
         id_repeater ++;
@@ -210,11 +210,11 @@ function repeaterEdit (id) {
     
     //displayEdit += '<div class="repeaterUpdate" data-id="'+ id + '">Modifier les champs</div>';
     if(repeater.attr("data-type") == "content") {
-        //displayEdit += '<div class="repeaterSelect" data-id="'+ id + '">Sélectionner un contenu</div>';
+        //displayEdit += '<div class="repeaterSelect" data-id="'+ id + '">S?lectionner un contenu</div>';
         
         var id_content = "";
         if(repeater.attr("data-id_content")) id_content = repeater.attr("data-id_content");
-        displayEdit += "<p><b>Sélectionner un contenu</b></p><hr>";
+        displayEdit += "<p><b>S?lectionner un contenu</b></p><hr>";
         displayEdit += 'ID : <input type="text" id="select_id_content" value="' + id_content + '">';
         displayEdit += '<br />Chercher et charger un contenu : <input type="text" id="search_content"><div id="results"></div>';
         displayEdit += '<div class="btApply">Charger le contenu</div>';
@@ -223,7 +223,7 @@ function repeaterEdit (id) {
         
         
     }else if(repeater.attr("data-type") == "user") {
-        displayEdit += '<div class="repeaterSelect" data-id="'+ id + '">Sélectionner un utlisateur</div>';
+        displayEdit += '<div class="repeaterSelect" data-id="'+ id + '">S?lectionner un utlisateur</div>';
     }
     
     //displayEdit += '<br clear="both"><div class="repeaterUp" data-id="'+ id + '">Monter</div>';
@@ -310,7 +310,7 @@ function repeaterEdit (id) {
                 
 				setup : function(ed) {
 				    ed.addButton('mediapicker', {
-				        title : 'Insérer des images',
+				        title : 'Ins?rer des images',
 				        image : '/admin/core/ui/img/_img/myb.gif',
 				        onclick : function() {
 							mediaPicker(ed.id, 'mce');
@@ -369,7 +369,7 @@ function repeaterSelect (id) {
         
         var id_content = "";
         if(repeater.attr("data-id_content")) id_content = repeater.attr("data-id_content");
-        edit.append("<p><b>Sélectionner un contenu</b></p><hr>");
+        edit.append("<p><b>S?lectionner un contenu</b></p><hr>");
         edit.append('ID : <input type="text" value="' + id_content + '" id="select_id_content">');
         edit.append('<div class="btApply">Charger le contenu</div>');
         
@@ -384,7 +384,7 @@ function repeaterSelect (id) {
         
         
     }else if(repeater.attr("data-type") == "user") {
-        edit.html("<p><b>Sélectionner un utlisateur</b></p><hr>");
+        edit.html("<p><b>S?lectionner un utlisateur</b></p><hr>");
         
     }
     $(".btClose").click( function() {
@@ -494,7 +494,7 @@ function repeaterApplyUser(id, action) {
 // Suppression d'repeater
 function repeaterRemove (id) {
     var repeater = $preview.find("repeater[data-id="+ id + "]");
-    if(confirm("Etes-vous sûr de vouloir supprimer ce bloc ?")) {
+    if(confirm("Etes-vous s?r de vouloir supprimer ce bloc ?")) {
         repeater.fadeOut(200, function() {$(this).remove()});
     	$("#edit").fadeOut(150);
 		sizeIFrame();  

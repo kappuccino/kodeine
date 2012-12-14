@@ -6,7 +6,6 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="fr">
 <head>
 	<title>Admin : <?php echo$_SERVER['SERVER_NAME']?> - Filemanager</title>
-	<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
 	<link rel="stylesheet" type="text/css" href="../kafeine/ressource/css.kafeine.css" />
 
 	<script type="text/javascript" src="../kafeine/ressource/mootools/mootools-1.2.1-core.js"></script>

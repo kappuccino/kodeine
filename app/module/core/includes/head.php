@@ -1,4 +1,4 @@
-<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-15" />
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 
 	<?php
 		echo $app->less('/admin/core/ui/css/_style.less');

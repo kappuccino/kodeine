@@ -2,7 +2,6 @@
 <html lang="fr">
 <head>
 	<title>Envoyer des images</title>
-	<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
 
 	<?php include(COREINC.'/head.php'); ?>
 	<script src="/app/module/core/ui/_jquery/jquery-1.7.2.min.js" type="text/javascript"></script>

@@ -68,7 +68,6 @@
 		if(!$app->userIsAdmin && !in_array($url['path'], array('/admin/core/login', '/admin/core/helper/lost'))){
 			$app->go('/admin/core/login');
 		}else{
-		#	header("Content-Type: text/html; charset=iso-8859-1");
 			header("Content-Type: text/html; charset=UTF-8");
 			include($file.'.php');
 		}

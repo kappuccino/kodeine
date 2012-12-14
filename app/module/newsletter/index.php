@@ -100,7 +100,11 @@
 			</tr>
 		<?php }}else{ ?>
 			<tr>
-				<td colspan="7" style="padding:40px 0px 40px 0px; text-align:center; font-weight:bold">Aucun contenu disponible<br /><br /><a class="btn btn-mini" href="data">Ajouter une nouvelle Newsletter</a></td>
+				<td colspan="7" style="padding:40px 0px 40px 0px; text-align:center; font-weight:bold">
+					Aucun newsletter disponible
+					<!--<br /><br />
+					<a href="data">Ajouter une nouvelle Newsletter</a>-->
+				</td>
 			</tr>
 		<?php } ?>
 		</tbody>

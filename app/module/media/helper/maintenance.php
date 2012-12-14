@@ -5,7 +5,6 @@
 ?><html xmlns="http://www.w3.org/1999/xhtml" xml:lang="fr">
 <head>
 	<title></title>
-	<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
 	<style>
 		body{
 			font-family: Arial;

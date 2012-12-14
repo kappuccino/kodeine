@@ -102,7 +102,7 @@ function spreadGrid() {
 	
 	percent = 100/rowNB;
 
-	// si pas assez d'ÈlÈments dans la ligne
+	// si pas assez d'√©l√©ments dans la ligne
 	if (rowNB > $('.dragme').length) {
 		rowNB = $('.dragme').length;
 		if (percent > 25) percent = 25;
@@ -329,17 +329,17 @@ function folderlElement(el, position){
 		}
 
 		// Ajouter l'action en ajout 'ajouter'
-		$('<a>InsÈrer</a>').bind('click', function() {
+		$('<a>Ins√©rer</a>').bind('click', function() {
 			selectFile(el.url);
 		}).appendTo(top);
 
 		// Legende
-		var _meta = $('<img src="'+myMedia+'/media-t.png" title="LÈgende" />').appendTo(iconeaction).bind('click', function() {
+		var _meta = $('<img src="'+myMedia+'/media-t.png" title="L√©gende" />').appendTo(iconeaction).bind('click', function() {
 			actionMetadata(el.url);
 		});
 
 		// Url
-		var _link = $('<img src="'+myMedia+'/media-copy.png" title="Afficher le chemin d\'accËs" />').appendTo(iconeaction).bind('click', function() {
+		var _link = $('<img src="'+myMedia+'/media-copy.png" title="Afficher le chemin d\'acc√®s" />').appendTo(iconeaction).bind('click', function() {
 			actionClipBoard(el.url);
 		});
 
@@ -387,7 +387,7 @@ function folderlElement(el, position){
 				top.css('background', 'url('+myMedia+'/media-nano-video.png) no-repeat 4px center');
 			}
 
-			var _play = $('<img src="'+myMedia+'/media-play.png" title="Lire la vid&eacute;o" />').appendTo(iconeaction).bind('click', function() {
+			var _play = $('<img src="'+myMedia+'/media-play.png" title="Lire la vid√©o" />').appendTo(iconeaction).bind('click', function() {
 				modal.open({ type : 'video', url : el.url });
 			});
 
@@ -395,7 +395,7 @@ function folderlElement(el, position){
 				window.open('/admin/media/helper/player-video?url='+el.url, '', '');
 			});
 
-			var _poster = $('<img src="'+myMedia+'/media-flip.png" title="Gerer le poster de la video" />').appendTo(iconeaction).bind('click', function() {
+			var _poster = $('<img src="'+myMedia+'/media-flip.png" title="G√©rer le poster de la video" />').appendTo(iconeaction).bind('click', function() {
 				var url = el.url;
 				window.open('helper/video-poster?url='+url, '', '');
 			});
@@ -452,7 +452,8 @@ function folderlElement(el, position){
 	if(insert.attr('src') != ''){
 
 		var _image = $('<img />');
-		
+		var _image = $('<img />');
+
 		_image.attr('src', insert.attr('src'));
 		
 		_image.css('display', 'none');
@@ -755,7 +756,7 @@ function actionDelete(p){
 	src = collection[p].name;
 	
 	if($('#'+src).hasClass('isLocked')){
-		alert("Ce dossier est protÈgÈ contre la suppression");
+		alert("Ce dossier est prot√©g√© contre la suppression");
 		return false;
 	}
 
@@ -814,7 +815,7 @@ function actionMove(src, dstElement){
 				folderView(true);
 			}, 100)
 		} else {
-			$('#folderWay').append('<div class="no-move">Impossible de dÈplacer ce fichier ici.</span>');
+			$('#folderWay').append('<div class="no-move">Impossible de d√©placer ce fichier ici.</span>');
 			setTimeout(function() {
 				$('#folderWay .no-move').fadeTo(218, 0, function() {
 					$(this).remove();
@@ -1113,7 +1114,7 @@ function modalShowUpload() {
 	isSafari		= (/safari/.test(navigator.userAgent.toLowerCase())) ? true : false;
 	isSafariFive	= (isSafari && /version\/5/.test(navigator.userAgent.toLowerCase())) ? true : false;
 	
-	/* Mettre a jour les path d'upload si dÈj‡ chargÈ */
+	/* Mettre a jour les path d'upload si d√©j√† charg√© */
 	var uploadPath	= $('#path').attr('data-url');
 
 	// SI ON A ACCES AU FILEREADER DU BROWSER
@@ -1176,7 +1177,7 @@ function modalShowUpload() {
 				'onUploadSuccess' : function(file, data, response) {
 				},
 				'onInit' : function(instance) {
-					// dÈplacer la queue dans le container
+					// d√©placer la queue dans le container
 					$('#'+instance.settings.queueID).appendTo("#queue");
 				},
 				'onUploadError' : function(file, errorCode, errorMsg, errorString) {
@@ -1185,7 +1186,7 @@ function modalShowUpload() {
 		}
 
 	}else{
-		alert('En raison d\'un bug inhÈrent ‡ la version de votre navigateur, l\'upload de fichiers est indisponible. Merci de mettre ‡ jour votre navigateur.');
+		alert('En raison d\'un bug inh√©rent √† la version de votre navigateur, l\'upload de fichiers est indisponible. Merci de mettre √† jour votre navigateur.');
 		modalHideUpload();
 	}
 }
@@ -1374,7 +1375,7 @@ function distantDownload(){
 
 	}).fail(function(data){
 		$('#distantUpload').removeClass('doing');
-		alert("Fichier impossible a rÈcupÈrer");
+		alert("Fichier impossible a r√©cup√©rer");
 	});
 
 }

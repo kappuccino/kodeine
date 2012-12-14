@@ -21,7 +21,6 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="fr">
 <head>
 	<title></title>
-	<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
 	<script src="/admin/core/ui/_jquery/jquery-1.7.2.min.js"></script>
 	<link rel="stylesheet" type="text/css" href="/admin/core/ui/_flowplayer5/skin/functional.css" />
 	<script type="text/javascript" src="/admin/core/ui/_flowplayer5/flowplayer.min.js"></script>
