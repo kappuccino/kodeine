@@ -95,6 +95,17 @@ public function listSubscribe($opt = array()) {
     $send_welcome		= false;
     $email_type			= 'html';
 
+    /* --- Example ---
+    $opt = array(
+        'email'		=> $email,
+        'merges'	=> array(
+                            'GROUPINGS'   => array(
+                                array('name'=>'Type contact', 'groups' => 'contacts NL')
+                            )
+                        )
+    );
+     --- */
+
     $data = array(
         'id' 				=> $opt['id_list'],
         'email_address'		=> $opt['email'],
