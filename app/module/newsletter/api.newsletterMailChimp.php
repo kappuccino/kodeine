@@ -76,9 +76,41 @@ public function campaignCreate($opt = array()) {
 	return $this->send($opt, 'campaignCreate');
 }
 
+/* + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + -
++ - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - */
+
+public function campaignStats($opt = array()) {
+    return $this->send($opt, 'campaignStats');
+}
+
 
 /* + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - 
 + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - */
 
+public function listSubscribe($opt = array()) {
+
+    $double_optin		= true;
+    $update_existing	= false;
+    $replace_interests	= true;
+    $send_welcome		= false;
+    $email_type			= 'html';
+
+    $data = array(
+        'id' 				=> $opt['id_list'],
+        'email_address'		=> $opt['email'],
+        'merge_vars' 		=> $opt['merges'],
+        'double_optin' 		=> $double_optin,
+        'update_existing' 	=> $update_existing,
+        'replace_interests' => $replace_interests,
+        'send_welcome' 		=> $send_welcome,
+        'email_type' 		=> $email_type
+    );
+
+
+    return $this->send($data, 'listSubscribe');
+}
+
+/* + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + -
++ - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - */
 
 } ?>

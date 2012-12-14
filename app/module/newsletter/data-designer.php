@@ -119,7 +119,9 @@
             <li><a href="javascript:$('#do').val('list');save();" class="btn btn-mini btn-success">Enregistrer et sélectionner les abonnés</a></li>
         <?php } ?>
     <?php } ?>
+    <?php if($data['newsletterSendDate'] == NULL){ ?>
     <li><a href="javascript:save();" class="btn btn-mini btn-success">Enregistrer</a></li>
+    <?php } ?>
 </div>
 
 <div id="app">
@@ -162,7 +164,7 @@
 			<td>Titre du mail</td>
 			<td><input type="text" name="newsletterTitle" value="<?php echo $app->formValue($data['newsletterTitle'], $_POST['newsletterTitle']); ?>" style="width:96%" /></td>	
 		</tr>
-    <?php if($data['id_newsletter'] > 0) { ?>
+    <?php if($data['id_newsletter'] > 0 && $data['newsletterSendDate'] == NULL) { ?>
 		<tr>
 			<td>Choix du template</td>
 			<td>
@@ -182,7 +184,7 @@
 	</table>
 
 	
-    <?php if($data['id_newsletter'] > 0) { ?>
+    <?php if($data['id_newsletter'] > 0 && $data['newsletterSendDate'] == NULL) { ?>
 
 		<div id="previewContainer">    
 		    <iframe width="100%" scrolling="yes" frameborder="0" name="preview" id="preview"></iframe>
