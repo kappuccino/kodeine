@@ -506,7 +506,7 @@ public function fieldAffectNew($map, $id_field, $id=0){
 + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - */
 public function fieldAffectRemove($id_field, $map='ALL', $id=0){
 
-	#$this->pre($id_field, $map);
+	#$this->pre($id_field, $map, $id);
 
 	# On recupere les MAP ou on utilise celle passe en argument
 	#
@@ -523,6 +523,7 @@ public function fieldAffectRemove($id_field, $map='ALL', $id=0){
 
 
 	#$this->pre("On trouve ce champs", $id_field, "dans", $used);
+
 
 	# Si je n'ai aucune MAP qui utilise ce champs ...
 	#
@@ -541,7 +542,16 @@ public function fieldAffectRemove($id_field, $map='ALL', $id=0){
 		// Save in DB
 		$this->fieldAffectPop($e['map'], $id_field, $e['id']);
 	}
-	
+
+	# Suppression des champs pour le groupe
+	#
+	if ($map == "user") {
+		$userGroups = $this->dbMulti("SELECT * FROM k_fieldaffect WHERE map = 'usergroup'");
+		foreach($userGroups as $group) {
+			$this->fieldAffectPop('usergroup', $id_field, $group['id']);
+		}
+	}
+
 	return true;
 }
 
