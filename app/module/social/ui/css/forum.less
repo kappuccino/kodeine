@@ -1,0 +1,65 @@
+@import "/app/module/core/ui/css/0-mixins.less";
+
+ul{
+	margin: 0px;
+	padding: 0px;
+}
+	.holder{
+		background: #e6ecec;
+	}
+	li{
+		list-style-type: none;
+		margin: 0px;
+		padding: 0px;
+	}
+		li .toggle{
+			float: left;
+			width: 18px; height: 22px;
+			background: url('/@{corepath}/img/common/chevron.png') no-repeat top left;
+			cursor: pointer;
+		}
+			li .toggle.opened{
+				background: url(../img/arrow-folder-open.png) no-repeat center center;
+			}
+
+		li .check{
+			float: left;
+			padding: 3px 3px 0px 3px;
+		}
+		li .handle{
+			margin: 5px 0px 0px 0px;
+			width: 11px; height: 11px;
+			cursor: pointer;
+			background: url(../img/item-handle.png) no-repeat left bottom;
+			float: left;
+		}
+
+		li .data{
+			float: left;
+			padding: 4px;
+		}
+			li ul li .data{
+				margin-left: 15px;
+			}
+
+			li .data a{
+				color:#515151;
+				text-decoration: none;
+			}
+			li .data a:hover{
+				text-decoration: underline;
+			}
+		li .browse{
+			float: right;
+			width: 50px;
+			padding: 4px 4px 0px 0px;
+		}
+			li .browse a{
+				color: #515151;
+				text-decoration: none;
+			}
+
+		.view-same{
+			background-color: rgb(250,250,250);
+		}
+
