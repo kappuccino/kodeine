@@ -1,7 +1,7 @@
 #edit, #add {
     float: left;
     z-index:999;
-    width: 350px;
+    width: 400px;
     padding: 5px;
     background: #dedede; 
     border: 1px solid #999;
@@ -12,14 +12,14 @@
     display: none;
 }
     #edit .editHeader {
-        width: 340px;
+        width: 390px;
         background: #dedede; 
     }
     #edit input {
-        width: 340px;
+        width: 390px;
     }
     #edit textarea {
-        width: 340px;
+        width: 390px;
         height: 150px;
     }
     #select_id_content {
@@ -27,12 +27,12 @@
     }
 #previewContainer {
     float: left;
-    width: 800px;
+    width: 750px;
     border: 1px solid #ccc;
 }
 #preview {
     width: 100%;
-    height: 800px;
+    height: 750px;
 }
 #results {
     position: absolute;

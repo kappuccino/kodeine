@@ -61,7 +61,7 @@
 			'id_newsletter' 	=> $_REQUEST['id_newsletter']
 		));
 		
-		if($data['newsletterHtmlDesigner'] != '') header("Location: ./data-designer?id_newsletter=".$_REQUEST['id_newsletter']);
+		if($data['is_designer'] == 1) header("Location: ./data-designer?id_newsletter=".$_REQUEST['id_newsletter']);
 	}else{
 		$title = 'Nouvelle newsletter';
 	}

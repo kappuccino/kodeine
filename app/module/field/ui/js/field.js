@@ -4,8 +4,8 @@ $(function() {
 		"bInfo": false,
 		"bPaginate" : false,
 		"oLanguage": {
-			"sSearch": "Filtrer les résultats",
-			"sInfo": "",
+			"sSearch": "Filtrer les r√©sultats",
+			"sInfo": ""
 		},
 		"aoColumns": aoCol($('.sortable'))
     });

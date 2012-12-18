@@ -15,21 +15,25 @@
 		//$html = preg_replace("/<br([^>]+)\>/i", "<br $1 />", $html);
         $html = str_replace('<br>', '<br />', $html);
         $html = str_replace('<br /><br />', '<br />', $html);
+        $html = str_replace('<hr>', '<hr />', $html);
+        $html = str_replace('<hr /><hr />', '<hr />', $html);
         $html = str_replace("'", "\\'", $html);
         $html = str_replace("&nbsp;", " ", $html);
 		return $html;
 	}
+echo $_REQUEST['html'];
 	$html			= formatHtml($html);
 	$templatehtml	= formatHtml($templatehtml);
-	
+
+echo '-----------------------------------------------------'.$html;
 	$html_final = $app->apiLoad('newsletter')->newsletterDesignerCompil($html);
-	
-	//$app->pre($html_final);
+
+	$app->pre($html_final);
 	
 	$def['k_newsletter'] = array(
-		'newsletterHtmlDesigner' 	=> array('value' => utf8_decode($html)),
-		'newsletterTemplateSource' 	=> array('value' => utf8_decode($templatehtml)),
-		'newsletterHtml' 			=> array('value' => utf8_decode($html_final))
+		'newsletterHtmlDesigner' 	=> array('value' => $html),
+		'newsletterTemplateSource' 	=> array('value' => $templatehtml),
+		'newsletterHtml' 			=> array('value' => $html_final)
 	);
 	$result	 = $app->apiLoad('newsletter')->newsletterSet($_REQUEST['id_newsletter'], $def);
 
