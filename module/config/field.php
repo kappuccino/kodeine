@@ -1,4 +1,5 @@
 <?php
+
 	if(isset($_GET['apply'])){
 		foreach(explode(',', $_GET['apply']) as $idx => $e){
 			if($e != NULL){
@@ -19,6 +20,7 @@
 		}
 
 		header("Location: field");
+		exit();
 	}
 
 	$field_ = $app->dbMulti("SELECT * FROM k_config WHERE configModule = 'bootExt'");
@@ -33,6 +35,7 @@
 	foreach($rest as $idx => $e){
 		if(array_key_exists($e['id_field'], $field)) unset($rest[$idx]);
 	}	
+
 ?><!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -49,18 +52,14 @@
 ?></header>
 
 <div class="inject-subnav-right hide">
-	<li>
-		<a href="./" class="btn btn-small">Annuler</a>
-	</li>
-	<li>
-		<a onclick="sauver()" class="btn btn-small btn-success">Enregistrer</a>
-	</li>
+	<li><a href="./" class="btn btn-small"><?php echo $i18n->_('Annuler') ?></a></li>
+	<li><a onclick="sauver()" class="btn btn-small btn-success"><?php echo $i18n->_('Enregistrer') ?></a></li>
 </div>
 
 <div id="app"><div class="wrapper"><div class="row-fluid">
 
 	<div class="span6">
-		<p><b>Champs utilisés</b></p>
+		<p><b><?php echo $i18n->_('Champs utilisés') ?></b></p>
 		<ul id="la" class="myList clearfix">
 			<?php foreach($field as $e){ ?>
 			<li id="<?php echo $e['id_field'] ?>"><?php echo $e['fieldName'].' ('.$e['fieldKey'].')' ?></li>
@@ -70,7 +69,7 @@
 	</div>
 
 	<div class="span6">
-		<p class="t"><b>Autres champs utilisables</b></p>
+		<p class="t"><b><?php echo $i18n->_('Autres champs utilisables') ?></b></p>
 		<ul id="lb" class="myList clearfix">
 			<?php foreach($rest as $e){ ?>
 			<li id="<?php echo $e['id_field'] ?>"><?php echo $e['fieldName'].' ('.$e['fieldKey'].')' ?></li>

@@ -21,10 +21,14 @@
 	</less>
 
     <i18n>
-        <file>/index.php</file>
         <file>/admin.php</file>
+        <file>/export.php</file>
         <file>/field.php</file>
+        <file>/index.php</file>
         <file>/language-export.php</file>
+        <file>/language.php</file>
+        <file>/offline.php</file>
+        <file>/robots.php</file>
         <file>/ui/menu.php</file>
     </i18n>
 

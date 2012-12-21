@@ -24,6 +24,7 @@
 		}
 
 		header("Location: offline");
+		exit();
 	}
 
 	# Data
@@ -47,8 +48,8 @@
 ?></header>
 
 <div class="inject-subnav-right hide">
-	<li><a href="./" class="btn btn-small">Annuler</a></li>
-	<li><a onclick="$('#data').submit();" class="btn btn-small btn-success">Enregistrer</a></li>
+	<li><a href="./" class="btn btn-small"><?php echo $i18n->_('Annuler') ?></a></li>
+	<li><a onclick="$('#data').submit();" class="btn btn-small btn-success"><?php echo $i18n->_('Enregistrer') ?></a></li>
 </div>
 
 <div id="app"><div class="wrapper">
@@ -61,7 +62,7 @@
 			<table class="listing">
 				<thead>
 					<tr>
-						<th>Groupes concernés</th>
+						<th><?php echo $i18n->_('Groupes concernés') ?></th>
 					</tr>
 				</thead>
 				<tbody>
@@ -83,6 +84,7 @@
 			<textarea name="offlineMessage" id="offlineMessage" style="width:100%; height:500px;"><?php
 				echo $app->formValue($data['offlineMessage'], $_POST['offlineMessage']);
 			?></textarea>
+
 		</div>
 	</div>
 
