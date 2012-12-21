@@ -42,10 +42,10 @@ function socialMessageGet($opt=array()){
 	// GET mid_socialmessage
 	if(array_key_exists('mid_socialmessage', $opt)){
 
-		if(intval($opt['mid_socialmessage']) >= 0){
+		if(intval($opt['mid_socialmessage']) > 0){
 			$cond[] = "k_socialmessage.mid_socialmessage=".$opt['mid_socialmessage'];
 		}else{
-			if($opt['debug']) $this->pre("ERROR: MID_SOCIALMESSAGE (NUMERIC >= 0)", "GIVEN", var_export($opt['id_socialmessage'], true));
+			if($opt['debug']) $this->pre("ERROR: MID_SOCIALMESSAGE (NUMERIC > 0)", "GIVEN", var_export($opt['id_socialmessage'], true));
 			return array();
 		}
 
@@ -161,7 +161,7 @@ function socialMessageGet($opt=array()){
 		# MEDIA TRANSLATION
 		if($opt['human']){
 			foreach($messages as $n => $m){
-				$messageMedia = json_decode(stripslashes($p['socialMessageMedia']), true);
+				$messageMedia = json_decode(stripslashes($m['socialMessageMedia']), true);
 				if(sizeof($messageMedia) > 0){
 					foreach($messageMedia as $e){
 						$media[$e['type']][] = $this->mediaInfos($e['url']);
