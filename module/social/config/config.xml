@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<element>
+
+    <data>
+        <key>social</key>
+        <version>5.0.2</version>
+        <lastMod>2012-12-18</lastMod>
+
+        <name><![CDATA[Social network]]></name>
+        <description></description>
+        <panelIcon></panelIcon>
+        <install>YES</install>
+    </data>
+
+    <profile>
+        <item code="index"		type="ALLOW_DENY" name="Accessible" />
+    </profile>
+
+</element>
