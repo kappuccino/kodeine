@@ -6,7 +6,11 @@
 class newsletter extends coreApp {
 
 function __clone(){}
-public function newsletter(){}
+public function newsletter(){
+    $config	            = $this->configGet('newsletter');
+    $this->connector    = $config['connector'];
+    //$this->pre($config);
+}
 
 /* + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - 
 + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - */

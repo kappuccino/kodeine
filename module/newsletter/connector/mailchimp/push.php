@@ -17,7 +17,7 @@
 	    $options['to_name']	    = "*|FNAME|*";
 	    
 	    $conditions = array();
-	    if(sizeof($_REQUEST['listInterestGroupings']) > 0) {
+	    if(is_array($_REQUEST['listInterestGroupings'])) {
 	    	foreach($_REQUEST['listInterestGroupings'] as $r) {				
 				$pos = strpos($r, '-');
 				if($pos != false) {

@@ -272,11 +272,11 @@ public function contentGet($opt=array()){
 		$join[] = "INNER JOIN k_contentad ON ".$jTable.".id_content = k_contentad.id_content";
 		$cond[] = "k_contentad.language='".$language."'";
 	}
-	
-	
-	/*if($opt['assoUser']){
-		$join[] = "INNER JOIN k_user ON k_content.id_user = k_user.id_user";
-	}*/
+
+	if($opt['assoUser'] == true){
+		$join[] = "INNER JOIN k_user     ON k_content.id_user = k_user.id_user";
+		$join[] = "INNER JOIN k_userdata ON k_user.id_user = k_userdata.id_user";
+	}
 
 	# Search
 	#

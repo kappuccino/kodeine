@@ -82,7 +82,7 @@
 				<th width="20"	class="icone"><i class="icon-tags icon-white"></i></th>
 				<th width="20"	class="icone"><i class="icon-signal icon-white"></i></th>
 				<th width="80"	class="order <?php if($filter['order'] == 'k_newsletter.id_newsletter') echo 'order'.$dir; ?>" 	onClick="document.location='index?cf&order=k_newsletter.id_newsletter&direction=<?php echo $dir ?>'"><span>#</span></th>
-				<th width="120"	class="order <?php if($filter['order'] == 'newsletterSendDate') echo 'order'.$dir; ?>"		 	onClick="document.location='index?cf&order=newsletterSendDate&direction=<?php echo $dir ?>'"><span>Date d'envois</span></th>
+				<th width="120"	class="order <?php if($filter['order'] == 'newsletterSendDate') echo 'order'.$dir; ?>"		 	onClick="document.location='index?cf&order=newsletterSendDate&direction=<?php echo $dir ?>'"><span>Date d'envoi</span></th>
 				<th 			class="order <?php if($filter['order'] == 'newsletterName')  echo 'order'.$dir; ?>" 			onClick="document.location='index?cf&order=newsletterName&direction=<?php echo $dir ?>'"><span>Nom</span></th>
 				<th width="45%" class="order <?php if($filter['order'] == 'newsletterTitle') echo 'order'.$dir; ?>" 			onClick="document.location='index?cf&order=newsletterTitle&direction=<?php echo $dir ?>'"><span>Titre de l'email</span></th>
 			</tr>
@@ -94,7 +94,7 @@
 				<td class="icone"><a href="javascript:duplicate(<?php echo $e['id_newsletter'] ?>);"><i class="icon-tags"></i></a></td>
 				<td style="padding-left:3px;"><a href="analytic?id_newsletter=<?php echo $e['id_newsletter'] ?>"><i class="icon-signal"></i></a></td>
 				<td><a href="data?id_newsletter=<?php echo $e['id_newsletter'] ?>"><?php echo $e['id_newsletter'] ?></a></td>
-				<td><?php echo ($e['newsletterSendDate'] != NULL) ? $app->helperDate($e['newsletterSendDate'], '%e %b %G %Hh%M') : '-' ?></td>
+				<td><a href="data?id_newsletter=<?php echo $e['id_newsletter'] ?>"><?php echo $e['newsletterSendDate']; ?></a></td>
 				<td><a href="data?id_newsletter=<?php echo $e['id_newsletter'] ?>"><?php echo $e['newsletterName'] ?></a></td>
 				<td><a href="data?id_newsletter=<?php echo $e['id_newsletter'] ?>"><?php echo $e['newsletterTitle'] ?></a></td>
 			</tr>

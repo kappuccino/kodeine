@@ -123,7 +123,7 @@ $(document).ready(function() {
 				'data' : {'id_newsletter' : <?php echo $data['id_newsletter'] ?>, 'id_newsletterList' : $('#id_newsletterList').val(), 'listInterestGroupings' : $('#listInterestGroupings').val() }
 			}).done(function(d) {
 				//alert('done : '+d);
-				if(d == '1') {
+				if(d == '1' || d == '') {
 					document.location = 'data-list?id_newsletter=<?php echo $data['id_newsletter'] ?>';
 				}else {
 					alert(d);
