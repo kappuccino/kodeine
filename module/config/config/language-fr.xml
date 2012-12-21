@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <language>
 
-	<item key="UPDATED">Mise à jour des paramètre de configuration</item>
+	<item key="UPDATED"                 >Mise à jour des paramètre de configuration</item>
 
 	<!-- Table headers name -->
-	<item key="PARAMETERS">Paramètres</item>
-	<item key="VALUE">Valeur</item>
-	<item key="EXPLANATION">Explication</item>
-	<item key="DOMAINE_NAME">Nom de domaine</item>
-	<item key="CHAPTER">Arborescence</item>
-	<item key="THEME">Thème</item>
-	<item key="GOOGLE_ANALYTICS">Google Analytics</item>
-	
+	<item key="PARAMETERS"              >Paramètres</item>
+	<item key="VALUE"                   >Valeur</item>
+	<item key="EXPLANATION"             >Explication</item>
+	<item key="DOMAINE_NAME"            >Nom de domaine</item>
+	<item key="CHAPTER"                 >Arborescence</item>
+	<item key="THEME"                   >Thème</item>
+	<item key="GOOGLE_ANALYTICS"        >Google Analytics</item>
+
 	<!-- Config items -->
 	<item key=""></item>
 	<item key=""></item>

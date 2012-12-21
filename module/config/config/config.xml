@@ -20,7 +20,15 @@
 		<file>/ui/css/field.less</file>
 	</less>
 
-	<profile>
+    <i18n>
+        <file>/index.php</file>
+        <file>/admin.php</file>
+        <file>/field.php</file>
+        <file>/language-export.php</file>
+        <file>/ui/menu.php</file>
+    </i18n>
+
+    <profile>
 		<item code="index"		type="ALLOW_DENY" name="Accessible" />
 		<item code="backoffice"	type="ALLOW_DENY" name="Back office" />
 		<item code="theme"		type="ALLOW_DENY" name="Theme" />

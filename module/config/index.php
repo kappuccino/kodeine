@@ -59,7 +59,10 @@
 
 	# Data
 	#
+	$i18n   = $app->apiLoad('coreI18n')->languageSet('fr')->load('config');
+
 	$l		= $app->loc('config');
+
 	$db 	= $app->dbMulti("SELECT * FROM k_config WHERE configModule='boot'");
 	$ext 	= $app->dbMulti("SELECT * FROM k_config WHERE configModule='bootExt'");
 	$dom	= array();
@@ -98,9 +101,7 @@
 
 <div id="app"><div class="wrapper">
 
-	<?php
-		if(isset($_GET['saved'])) echo '<div class="message messageValid">'.$l['UPDATED'].'</div>';
-	 ?>
+	<?php if(isset($_GET['saved'])) echo '<div class="message messageValid">'.$l['UPDATED'].'</div>'; ?>
 
 	<form action="./" method="post" id="data">
 	
@@ -109,29 +110,29 @@
 		<table width="100%" border="0" cellpadding="0" cellspacing="0" class="listing">
 			<thead>
 				<tr>
-					<th width="25%"><?php echo $l['PARAMETERS'] ?></th>
-					<th width="25%"><?php echo $l['VALUE'] ?></th>
-					<th width="50%"><?php echo $l['EXPLANATION'] ?></th>
+					<th width="25%"><?php echo $i18n->__('PARAMETERS') ?></th>
+					<th width="25%"><?php echo $i18n->__('VALUE') ?></th>
+					<th width="50%"><?php echo $i18n->__('CONFIG_EXPLANATION') ?></th>
 				</tr>
 			</thead>
 			<tbody>
 				<tr>
-					<td width="100">Destinataire</td>
+					<td><?php echo $i18n->_('Destinataire du m\'ail') ?></td>
 					<td><input type="text" name="configMailTo" value="<?php echo $app->formValue($data['configMailTo'], $_POST['configMailTo']) ?>" style="width:80%;" /></td>
-					<td>Destinataire des mails expédiés depuis le site</td>
+					<td><?php echo $i18n->_('Destinataire des mails expédiés depuis le site') ?></td>
 				</tr>
 				<tr>
-					<td>Copie</td>
+					<td><?php echo $i18n->_('Copie') ?></td>
 					<td><input type="text" name="configMailCc" value="<?php echo $app->formValue($data['configMailCc'], $_POST['configMailCc']) ?>" style="width:80%;" /></td>
-					<td>Destinataire en copie des mails expédiés depuis le site</td>
+					<td><?php echo $i18n->_('Destinataire en copie des mails expédiés depuis le site') ?></td>
 				</tr>
 				<tr>
-					<td>Copie cachée</td>
+					<td><?php echo $i18n->_('Copie cachée') ?></td>
 					<td><input type="text" name="configMailBcc" value="<?php echo $app->formValue($data['configMailBcc'], $_POST['configMailBcc']) ?>" style="width:80%;" /></td>
 					<td>Destinataire invisible des mails expédiés depuis le site</td>
 				</tr>
 				<tr>
-					<td width="75">Theme</td>
+					<td>Theme</td>
 					<td><select name="defaultIdTheme"><?php
 						$theme = $app->dbMulti("SELECT * FROM k_theme");
 						foreach($theme as $e){
@@ -184,7 +185,7 @@
 							);
 							foreach($dates as $e){
 								$sel = ($e == $app->formValue($data['dateFormat'], $_POST['dateFormat'])) ? ' selected' : NULL;
-								echo "<option value=\"".$e."\"".$sel.">".utf8_decode(strftime($e))."</option>";
+								echo "<option value=\"".$e."\"".$sel.">".strftime($e)."</option>";
 							}
 						?></select>
 					</td>
@@ -215,10 +216,10 @@
 			</tbody>
 		</table>
 	
-		<div class="mar-top-20">
-			Il est possible de changer ponctuellement les paramères par défaut pour certaines nom de domaine<br />
-			Note, vous pouvez utiliser des expressions regulières pour définir un domaine. Exemple (*)?(.)?kappuccino.org pour satisfaire www.kappuccino.org et kappuccino.org
-		</div>
+		<div class="mar-top-20"><?php echo
+			$i18n->_('Il est possible de changer ponctuellement les paramères par défaut pour certaines nom de domaine<br />
+			Note, vous pouvez utiliser des expressions regulières pour définir un domaine. Exemple (*)?(.)?kappuccino.org pour satisfaire www.kappuccino.org et kappuccino.org');
+		?></div>
 
 		<table width="100%" border="0" cellpadding="0" cellspacing="0" class="listing mar-top-10">
 			<thead>
