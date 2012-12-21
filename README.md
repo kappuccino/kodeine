@@ -1,21 +1,7 @@
-Installation de Kodeine
-========================================================
+# Kodeine, webapp with a brain
 
-- 1 Clone me 
-- 2 Rename /kodeine to /app in your project
-- 3 have fun
+### Installation
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-http://daringfireball.net/projects/markdown/syntax
+1. Clone me 
+2. Rename /kodeine to /app in your project
+3. have fun
