@@ -1,4 +1,7 @@
 <?php
+
+	$i18n = $app->apiLoad('coreI18n')->languageSet('fr')->load('content');
+
 	if(isset($_GET['add'])){
 		$last = $app->dbOne("SELECT MAX(pos_parent) AS la FROM k_content WHERE id_parent=".$_GET['id_content']);
 		$app->dbQuery("UPDATE k_content SET id_parent=".$_GET['id_content'].", pos_parent=".($last['la'] + 1)." WHERE id_content=".$_GET['add']);

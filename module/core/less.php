@@ -1,5 +1,8 @@
 <?php
-	if(!defined('COREINC')) die('@');
+
+	if(!defined('COREINC')) die('Direct access not allowed');
+	$i18n = $app->apiLoad('coreI18n')->languageSet('fr')->load('core');
+
 ?><!DOCTYPE html>
 <html lang="fr">
 <head>

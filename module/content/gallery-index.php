@@ -1,4 +1,7 @@
 <?php
+
+	$i18n = $app->apiLoad('coreI18n')->languageSet('fr')->load('content');
+
 	if($_REQUEST['id_type'] == NULL){
 		$type = $app->apiLoad('content')->contentType(array('profile' => true));
 		$goto = ($type[0]['is_gallery']) ? 'gallery.index' : 'index';
@@ -23,8 +26,7 @@
 <header><?php
 	include(COREINC.'/top.php');
 	include(__DIR__.'/ui/menu.php');
-?>
-</header>
+?></header>
 
 <div id="app">
 	<div class="row-fluid">

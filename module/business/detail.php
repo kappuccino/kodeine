@@ -1,5 +1,7 @@
 <?php
 
+	$i18n = $app->apiLoad('coreI18n')->languageSet('fr')->load('business');
+
 	# Data
 	$myCmd = $app->apiLoad('business')->businessCartGet(array(
 		'is_cmd'	=> true,

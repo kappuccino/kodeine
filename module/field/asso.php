@@ -1,5 +1,7 @@
 <?php
 
+	$i18n = $app->apiLoad('coreI18n')->languageSet('fr')->load('field');
+
 	# Les TYPE numeric (content + album)
 	#
 	if(empty($_REQUEST['id_type'])) {
@@ -222,7 +224,10 @@
 
 		connectWith: ".myList",
 		stop: function(e,ui) {
-
+			parent = $(this).parent();
+			
+			console.log($(this));
+			console.log( $(ui.item[0]).parent() )
 	    	if($(ui.item[0]).parent().attr('id') == 'lb'){
 	    		if($(ui.item[0]).hasClass('in-place')) $('#messageWarning').css('display', '');
 	    		$('#move').val($('#move').val() + ',' + $(ui.item[0]).attr('id')); 

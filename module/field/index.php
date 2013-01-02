@@ -1,5 +1,7 @@
 <?php
 
+	$i18n = $app->apiLoad('coreI18n')->languageSet('fr')->load('field');
+
 	# REMOVE FIELD
 	#
 	if(sizeof($_POST['killme']) > 0){

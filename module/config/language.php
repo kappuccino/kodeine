@@ -1,6 +1,8 @@
 <?php
 
-	// Remove
+	$i18n = $app->apiLoad('coreI18n')->languageSet('fr')->load('config');
+
+// Remove
 	if(sizeof($_POST['del']) > 0){
 		foreach($_POST['del'] as $e){
 			$app->dbQuery("DELETE FROM k_country WHERE iso='".$e."'");

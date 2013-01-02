@@ -1,5 +1,7 @@
 <?php
 
+	$i18n = $app->apiLoad('coreI18n')->languageSet('fr')->load('config');
+
 	if(isset($_GET['dw'])){
 		$file = DUMPDIR.'/'.$_GET['dw'];
 		$out  = file_get_contents($file);

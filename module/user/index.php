@@ -1,4 +1,7 @@
 <?php
+
+	$i18n = $app->apiLoad('coreI18n')->languageSet('fr')->load('user');
+
 	// Remove
 	if(sizeof($_POST['del']) > 0){
 		foreach($_POST['del'] as $e){

@@ -13,7 +13,7 @@
 		$app->configSet($module['key'], 'enabled', 'YES');
 		$js = array('success' => true);
 	}else
-	
+
 	# DISABLE
 	#
 	if($_GET['disabled'] == 'true'){

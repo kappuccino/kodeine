@@ -1,6 +1,8 @@
 <?php
 
-	# Save
+	$i18n = $app->apiLoad('coreI18n')->languageSet('fr')->load('config');
+
+# Save
 	#
 	if($_POST['action']){
 		$keys = array(

@@ -1,4 +1,7 @@
 <?php
+
+	$i18n = $app->apiLoad('coreI18n')->languageSet('fr')->load('survey');
+
 	if($_REQUEST['id_survey'] == NULL){
 		header("Location: index");
 		exit();

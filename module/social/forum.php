@@ -1,5 +1,7 @@
 <?php
 
+	$i18n = $app->apiLoad('coreI18n')->languageSet('fr')->load('social');
+
 	# REMOVE
 	#
 	if(sizeof($_POST['del']) > 0){

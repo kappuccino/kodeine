@@ -1,4 +1,7 @@
 <?php
+
+	$i18n = $app->apiLoad('coreI18n')->languageSet('fr')->load('user');
+
 	# Suppression d'un groupe
 	#
 	if(sizeof($_POST['remove']) > 0){

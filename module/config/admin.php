@@ -1,5 +1,7 @@
 <?php
 
+	$i18n = $app->apiLoad('coreI18n')->languageSet('fr')->load('config');
+
 	if($_POST['action']){
 
 		// TOUS

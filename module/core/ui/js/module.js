@@ -53,9 +53,9 @@ function upgrade(a, mod){
 
 		d({module:mod, download:true, core:true}, function(data){
 			if(data.success){
-				$(a).html('Terminé').removeClass('doing');
+				$(a).html('TerminÃ©').removeClass('doing');
 				setTimeout(function(){
-					$(a).html('Mise à jour');
+					$(a).html('Mise Ã  jour');
 				}, 1000);
 			}
 		});
@@ -75,7 +75,7 @@ function checkRepo(){
 			$('#repo-'+mod).html(repo);
 			
 			if(parseInt(curr) <= parseInt(repo)){
-				$('#upgd-'+mod).empty().append('<a class="btn btn-small" onclick="upgrade(this, \''+mod+'\')">Mise à jour</a>');
+				$('#upgd-'+mod).empty().append('<a class="btn btn-small" onclick="upgrade(this, \''+mod+'\')">Mise Ã  jour</a>');
 			}
 		}
 	});

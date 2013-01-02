@@ -1,5 +1,8 @@
 <?php
-    $cmd = $app->dbMulti("SELECT * FROM k_businesscart WHERE is_admin=1 AND is_cmd=0 ORDER BY id_cart ASC");
+
+	$i18n = $app->apiLoad('coreI18n')->languageSet('fr')->load('business');
+	$cmd = $app->dbMulti("SELECT * FROM k_businesscart WHERE is_admin=1 AND is_cmd=0 ORDER BY id_cart ASC");
+
 ?><!DOCTYPE html>
 <html lang="fr">
 <head>

@@ -1,4 +1,8 @@
-<!DOCTYPE html>
+<?php
+
+	$i18n = $app->apiLoad('coreI18n')->languageSet('fr')->load('core');
+
+?><!DOCTYPE html>
 <html lang="fr">
 <head>
     <title>Kodeine</title>

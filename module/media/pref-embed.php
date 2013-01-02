@@ -1,5 +1,8 @@
 <?php
+
+	$i18n = $app->apiLoad('coreI18n')->languageSet('fr')->load('media');
 	$pref = $app->configGet('media');
+
 ?><!DOCTYPE html>
 <html lang="fr">
 <head>

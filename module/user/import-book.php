@@ -1,5 +1,7 @@
 <?php
-    $uploaddir  = USER.'/temp';
+
+	$i18n       = $app->apiLoad('coreI18n')->languageSet('fr')->load('user');
+	$uploaddir  = USER.'/temp';
     $file       = '/user.tmp';
     
     //die($app->pre($_POST));

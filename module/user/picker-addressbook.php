@@ -1,8 +1,6 @@
 <?php
-    require(dirname(dirname(__FILE__)).'/api/core.admin.php');
-    $app = new coreAdmin();
 
-    if(!$app->userIsAdmin) header("Location: ./");
+	$i18n = $app->apiLoad('coreI18n')->languageSet('fr')->load('user');
 
     # Suppression d'un carnet d'adresse
     #

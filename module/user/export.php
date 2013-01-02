@@ -1,4 +1,7 @@
 <?php
+
+	$i18n = $app->apiLoad('coreI18n')->languageSet('fr')->load('user');
+
 	# Quel sont les groupes à exporter
 	#
 	$group = array(

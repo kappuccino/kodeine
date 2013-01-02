@@ -1,5 +1,7 @@
 <?php
 
+	$i18n = $app->apiLoad('coreI18n')->languageSet('fr')->load('localisation');
+
 	if(sizeof($_POST['removeMaster']) > 0){
 		foreach($_POST['removeMaster'] as $e){
 			$app->dbQuery("DELETE FROM k_localisation WHERE label LIKE '".$e."_%'");

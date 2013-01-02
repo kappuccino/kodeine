@@ -1,4 +1,9 @@
-<?php if(isset($_GET['n'])) die(); ?><!DOCTYPE html>
+<?php
+
+	$i18n = $app->apiLoad('coreI18n')->languageSet('fr')->load('media');
+	if(isset($_GET['n'])) die();
+
+?><!DOCTYPE html>
 <html lang="fr">
 <head>
 	<title>Kodeine</title>

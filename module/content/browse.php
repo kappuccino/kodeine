@@ -1,4 +1,6 @@
 <?php
+
+	$i18n = $app->apiLoad('coreI18n')->languageSet('fr')->load('content');
 	$types = $app->apiLoad('content')->contentType(array('profile' => true));
 
 	if(sizeof($types) == 0){
