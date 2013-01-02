@@ -1,4 +1,6 @@
 <?php
+
+	$i18n       = $app->apiLoad('coreI18n')->languageSet('fr')->load('content');
 	$language 	= ($_REQUEST['language'] != NULL) ? $_REQUEST['language'] :  'fr';
 	$languages	= $app->countryGet(array('is_used' => 1));
 

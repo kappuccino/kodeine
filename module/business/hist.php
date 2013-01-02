@@ -1,4 +1,7 @@
 <?php
+
+	$i18n = $app->apiLoad('coreI18n')->languageSet('fr')->load('business');
+
 	# Filter
 	if(isset($_GET['cf'])){
 		$app->filterSet('hist', $_GET);

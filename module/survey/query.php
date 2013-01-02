@@ -1,4 +1,7 @@
 <?php
+
+	$i18n = $app->apiLoad('coreI18n')->languageSet('fr')->load('survey');
+
 	if($_REQUEST['id_survey'] == NULL){
 		header("Location: index");
 		exit();
@@ -447,7 +450,7 @@
 				$('<input type="checkbox" value="1" name="'+item['+d.id_surveyqueryitem+'][true]+'" value="'+$('#newItem').val()+'" />').appendTo(right);
 				$('<span>Bonne r&eacute;ponse</span>').appendTo(right);
 				
-				$('#newItem').val() = '';
+				$('#newItem').val('');
 				m(); // Add move behaviour
 			});
 			

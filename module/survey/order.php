@@ -1,4 +1,7 @@
 <?php
+
+	$i18n = $app->apiLoad('coreI18n')->languageSet('fr')->load('survey');
+
 	# Ajouter un ITEM
 	#
 	if($_POST['todo'] == 'newItem' && trim($_POST['item']) != NULL){

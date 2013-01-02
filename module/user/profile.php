@@ -1,4 +1,7 @@
 <?php
+
+	$i18n = $app->apiLoad('coreI18n')->languageSet('fr')->load('user');
+
 	if(sizeof($_POST['remove']) > 0){
 		foreach($_POST['remove'] as $e){
 			$app->dbQuery("UPDATE k_user SET id_profile=0 WHERE id_profile=".$e);

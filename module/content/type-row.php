@@ -1,4 +1,7 @@
 <?php
+
+$i18n = $app->apiLoad('coreI18n')->languageSet('fr')->load('content');
+
 $limit = 3;
 if($_REQUEST['id_type'] != NULL){
     $data	= $app->apiLoad('content')->contentType(array(

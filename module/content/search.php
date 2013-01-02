@@ -1,4 +1,7 @@
 <?php
+
+	$i18n = $app->apiLoad('coreI18n')->languageSet('fr')->load('content');
+
 	if($_POST['actionParam']){
 	#	$app->pre($_POST);
 		$app->dbQuery("UPDATE k_search SET searchChain='".$_POST['searchChain']."', searchParam='".serialize($_POST['searchParam'])."' WHERE id_search=".$_POST['id_search']);

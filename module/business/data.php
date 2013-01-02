@@ -1,5 +1,8 @@
 <?php
-    foreach($_POST as $k=>$v){
+
+	$i18n = $app->apiLoad('coreI18n')->languageSet('fr')->load('business');
+
+	foreach($_POST as $k=>$v){
         $tab = explode('-',$k);
         if(sizeof($tab) == 3){
             $_POST[$tab[0]][$tab[1]][$tab[2]] = $v;

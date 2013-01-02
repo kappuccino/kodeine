@@ -1,4 +1,7 @@
 <?php
+
+	$i18n = $app->apiLoad('coreI18n')->languageSet('fr')->load('content');
+
 	if($_REQUEST['id_type'] == NULL){
 		$type = $app->apiLoad('content')->contentType(array('profile' => true));
 		

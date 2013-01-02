@@ -1,5 +1,7 @@
 <?php
 
+	$i18n = $app->apiLoad('coreI18n')->languageSet('fr')->load('content');
+
 	# Suppresion du TYPE (suppression de toute les donnes reliees)
 	#
 	if(sizeof($_POST['killme']) > 0){

@@ -1,4 +1,6 @@
 <?php
+
+	$i18n = $app->apiLoad('coreI18n')->languageSet('fr')->load('user');
 	if($_REQUEST['id_group'] == NULL) header("Location: group");
 	
 	$group = $app->apiLoad('user')->userGroupGet(array(

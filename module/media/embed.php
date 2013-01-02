@@ -1,4 +1,9 @@
-<?php if(isset($_GET['off'])) die('-*-'); ?><!DOCTYPE html>
+<?php
+
+	$i18n = $app->apiLoad('coreI18n')->languageSet('fr')->load('media');
+	if(isset($_GET['off'])) die('-*-');
+
+?><!DOCTYPE html>
 <html lang="fr">
 <head>
 	<link rel="stylesheet" type="text/css" href="/admin/core/ui/_jqueryui/jqui.slider.css" />

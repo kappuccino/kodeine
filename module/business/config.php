@@ -1,4 +1,7 @@
 <?php
+
+	$i18n = $app->apiLoad('coreI18n')->languageSet('fr')->load('business');
+
     if($_POST['action']){
         $do = true;
 

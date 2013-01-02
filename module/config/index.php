@@ -1,5 +1,7 @@
 <?php
 
+	$i18n = $app->apiLoad('coreI18n')->languageSet('fr')->load('config');
+
 	# Save
 	#
 	if($_POST['action']){
@@ -16,7 +18,7 @@
 			$q	 = ($exi[1])
 				? "UPDATE k_config SET configValue='".addslashes($_POST[$k])."' WHERE configModule='boot' AND configName='".$k."'"
 				: "INSERT INTO k_config (configModule, configName, configValue) VALUES ('boot', '".$k."', '".addslashes($_POST[$k])."')";
-				
+
 			$app->dbQuery($q);
 		}
 
@@ -37,7 +39,7 @@
 		}
 
 		if(sizeof($_POST['ext']) > 0){
-			$i = 0; 
+			$i = 0;
 			foreach($_POST['ext'] as $ext_id => $ext_value){
 				$val = $app->apiLoad('field')->fieldSaveValue($ext_id, $ext_value);
 				$app->dbQuery("UPDATE k_config SET configValue='".addslashes($val)."' WHERE configModule='bootExt' AND configName='".$i.":id_field:".$ext_id."'");
@@ -51,10 +53,6 @@
 
 	# Data
 	#
-	$i18n   = $app->apiLoad('coreI18n')->languageSet('fr')->load('config');
-
-	$l		= $app->loc('config');
-
 	$db 	= $app->dbMulti("SELECT * FROM k_config WHERE configModule='boot'");
 	$ext 	= $app->dbMulti("SELECT * FROM k_config WHERE configModule='bootExt'");
 	$dom	= array();
@@ -208,11 +206,11 @@
 		<table width="100%" border="0" cellpadding="0" cellspacing="0" class="listing mar-top-10">
 			<thead>
 				<tr>
-					<th width="20%"><?php echo $l['DOMAINE_NAME'] ?></th>
-					<th width="20%"><?php echo $l['CHAPTER'] ?></th>
-					<th width="20%"><?php echo $l['THEME'] ?></th>
-					<th width="20%"><?php echo $l['LANGUAGE'] ?></th>
-					<th width="20%"><?php echo $l['GOOGLE_ANALYTICS'] ?></th>
+					<th width="20%"><?php echo $i18n->_('Nom de domaine') ?></th>
+					<th width="20%"><?php echo $i18n->_('Chapitre') ?></th>
+					<th width="20%"><?php echo $i18n->_('Thême') ?></th>
+					<th width="20%"><?php echo $i18n->_('Langue') ?></th>
+					<th width="20%"><?php echo $i18n->_('Google Analytics') ?></th>
 				</tr>
 			</thead>
 			<tbody>

@@ -1,5 +1,7 @@
 <?php
 
+	$i18n = $app->apiLoad('coreI18n')->languageSet('fr')->load('comment');
+
 	if(isset($_GET['allow'])){
 		$id = base64_decode($_GET['allow']);
 		$app->dbQuery("UPDATE k_contentcomment SET is_moderate=1 WHERE id_comment=".$id);

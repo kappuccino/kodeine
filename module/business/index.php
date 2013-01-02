@@ -1,4 +1,7 @@
 <?php
+
+	$i18n = $app->apiLoad('coreI18n')->languageSet('fr')->load('business');
+
 	// Remove
 	if(sizeof($_POST['del']) > 0){
 		foreach($_POST['del'] as $e){
@@ -65,7 +68,7 @@
 			   'value'		=> $filter['id_shop'],
 			   'language'	=> 'fr',
 			   'one'		=> true,
-			   'id'			=> "shop-select",
+			   'id'			=> 'shop-select',
 			   'empty'		=> true
 			));
 		?>

@@ -4,7 +4,7 @@
 	<ul class="right">
 		<li>
 			<a href="module">
-				<span>Gestion des modules</span>
+				<span><?php echo $i18n->_('Gestion des modules') ?></span>
 			</a>
 		</li>
 	</ul>

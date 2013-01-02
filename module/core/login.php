@@ -1,5 +1,7 @@
 <?php
-	if(!defined('APP')) die('No direct access allowed');
+
+	if(!defined('COREINC')) die('Direct access not allowed');
+	$i18n = $app->apiLoad('coreI18n')->languageSet('fr')->load('core');
 
 	# Logout
 	if(isset($_REQUEST['logout'])){
@@ -24,13 +26,14 @@
 		$app->go('./');
 	}else
 	if($app->userIsLogged && !$app->userIsAdmin){
-		die("Vous etes identifi&eacute; mais vous ne pouvez pas acc&eacute;der a l'admin : <a href=\"?logout=1\">se d&eacute;connecter</a>");
+		echo $i18n->_('Vous êtes identifié mais vous ne pouvez pas accéder a l\'admin : <a href=\"?logout=1\">se déconnecter</a>');
+		die();
 	}
 
 	if($_GET['t'] != ''){
 		$app->dbQuery("DELETE FROM k_userlost WHERE lostTTL < ".time());
-		$req	= $app->dbOne("SELECT * FROM k_userlost WHERE lostToken = '".$_GET['t']."'");
-		$usr	= $app->apiLoad('user')->userGet(array(
+		$req = $app->dbOne("SELECT * FROM k_userlost WHERE lostToken = '".$_GET['t']."'");
+		$usr = $app->apiLoad('user')->userGet(array(
 			'id_user'	=> $req['id_user']
 		));
 
@@ -40,7 +43,7 @@
 	}
 
 ?><!DOCTYPE html> 
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="fr">
+<html xml:lang="fr">
 <head>
 	<title>Kodeine</title>
 	<link rel="stylesheet" type="text/css" media="all" href="ui/css/login.css" />

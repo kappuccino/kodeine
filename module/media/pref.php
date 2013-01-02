@@ -1,5 +1,7 @@
 <?php
 
+	$i18n = $app->apiLoad('coreI18n')->languageSet('fr')->load('media');
+
 	if($_POST['action']){
 		foreach($_POST['pref'] as $k => $p){
 			$app->configSet('media', $k, $p);

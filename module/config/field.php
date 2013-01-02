@@ -1,5 +1,7 @@
 <?php
 
+	$i18n = $app->apiLoad('coreI18n')->languageSet('fr')->load('config');
+
 	if(isset($_GET['apply'])){
 		foreach(explode(',', $_GET['apply']) as $idx => $e){
 			if($e != NULL){

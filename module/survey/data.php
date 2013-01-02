@@ -1,5 +1,7 @@
 <?php
 
+	$i18n = $app->apiLoad('coreI18n')->languageSet('fr')->load('survey');
+
 	if($_POST['action']){
 	#	die($app->pre($_POST));
 		$do = true;
