@@ -3,12 +3,11 @@
 
 	<data>
 		<key>clientftp</key>
-		<version>5.0.1</version>
-		<lastMod>2012-10-21</lastMod>
+		<version>5.0.2</version>
+        <lastMod>2013-01-02</lastMod>
 
 		<name><![CDATA[Client FTP]]></name>
 		<description><![CDATA[G&eacute;rer les acc&egrave;s FTP suppl&eacute;mentaires]]></description>
-		<panelIcon>{moduleFolder}/ressource/icon.png</panelIcon>
 	</data>
 
 	<profile>
