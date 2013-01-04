@@ -62,6 +62,7 @@ public function getCredentials(){
 
 public function setConnectionSecure($secure = true){
 	$this->_secure = $secure;
+	if($secure) $this->setPort(443);
 	if($this->getMode() == 'curl') $this->_curlReset();
 
     return true;
@@ -161,7 +162,7 @@ public function headerToArray($h){
 /* + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + -
 	REQUEST ...
 + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - */
-public function request($opt = array()){
+public function request($opt=array()){
 
 	$uri 	= $opt['uri'];
 	$verb	= $opt['verb'];		if(!isset($opt['verb']))	$verb	= 'GET';
@@ -209,7 +210,7 @@ private function requestSocket($opt){
 	$debug	= $opt['debug'];
 
 	$query[] = "GET ".$opt['uri']." HTTP/1.1";
-	$query[] = "Host: ".$this->getHost().':'.$this->getHost();
+	$query[] = "Host: ".$this->getHost().':'.$this->getPort();
 	$query[] = 'Authorization: Basic '.base64_encode($this->getCredentials());
     $query[] = "Connection: Close\r\n\r\n";
 	$query	 = implode("\r\n", $query)."\r\n";
