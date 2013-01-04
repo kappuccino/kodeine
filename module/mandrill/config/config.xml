@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<element>
+
+	<data>
+		<key>mandrill</key>
+		<version>1.0.0</version>
+		<lastMod>2013-01-03</lastMod>
+
+		<name><![CDATA[Mandrill]]></name>
+		<description><![CDATA[]]></description>
+		<hidden>YES</hidden>
+	</data>
+
+</element>
