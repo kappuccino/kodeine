@@ -11,6 +11,9 @@ private $query      = NULL;
 private $debug      = false;
 private $keep       = false;
 
+private $hasMany    = array();
+private $hasOne     = array();
+
 /* + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + -
 + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - */
 function dataModel(){
@@ -111,6 +114,30 @@ function get(){
 	if($this->debug()) echo $query."\n";
 
 	$this->data = $query->toArray();
+
+	/*if(count($this->hasMany) > 0){
+		foreach($this->hasMany as $m){
+			$model  = new $m['model'];
+
+			echo "****\n";
+			$tmp = $model->debug(true)->get(); //1, 'fr');
+			print_r($tmp);
+			echo "****\n";
+
+		}
+	}
+
+	$this->pre($this->hasMany);*/
+
+
+
+
+
+
+
+
+	echo "\n--\n";
+
 	return $this->keep ? $this : $this->data;
 }
 
@@ -252,6 +279,22 @@ function toJson(){
 	$out = json_encode($this->data);
 	return $out;
 }
+
+/* + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + -
++ - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - */
+function hasOne($model){
+	$this->hasOne[] = $model;
+}
+
+/* + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + -
++ - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - */
+function hasMany($model){
+
+	$this->hasMany[] = $model;
+
+	return $this;
+}
+
 
 
 }

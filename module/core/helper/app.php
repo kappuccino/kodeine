@@ -45,7 +45,7 @@
 
 	# AUTOLOAD
 	#
-	function __autoload($api){
+	function kodeineAutoload($api){
 
 		$first = substr(strtolower($api), 0, 4);
 
@@ -58,17 +58,24 @@
 			$alter	= USER.'/api/core.'.substr(strtolower($api), 4).'.php';
 		}else
 		if($first == 'data'){
-			$class	= APP.'/module/core/data.'.substr(strtolower($api), 4).'.php';
-			$alter	= USER.'/api/data.'.substr(strtolower($api), 4).'.php';
+			$parts	= array_map('strtolower', explode(' ', preg_replace('/(?!^)[[:upper:]]/',' \0', $api)));
+			$file   = lcfirst(substr(implode('', array_map('ucfirst', $parts)), 4));
+
+			$class	= APP.'/module/core/data.'.$file.'.php';
+			$alter	= USER.'/api/data.'.$file.'.php';
+
+		#	$class	= APP.'/module/core/data.'.substr(strtolower($api), 4).'.php';
+		#	$alter	= USER.'/api/data.'.substr(strtolower($api), 4).'.php';
 		}else{
 			$parts	= array_map('strtolower', explode(' ', preg_replace('/(?!^)[[:upper:]]/',' \0', $api)));
 			$mod   	= $parts[0];
+			$file   = $mod.implode('', array_map('ucfirst', $parts));
 	
 			if(count($parts) > 1){
 				unset($parts[0]);
-				$class	= APP.'/module/'.$mod.'/api.'.$mod.implode('', array_map('ucfirst', $parts)).'.php';
-				$alter	= USER.'/module/'.$mod.'/api.'.$mod.implode('', array_map('ucfirst', $parts)).'.php';
-				$custom	= USER.'/api/api.'.$mod.implode('', array_map('ucfirst', $parts)).'.php';
+				$class	= APP.'/module/'.$mod.'/api.'.$file.'.php';
+				$alter	= USER.'/module/'.$mod.'/api.'.$file.'.php';
+				$custom	= USER.'/api/api.'.$file.'.php';
 			}else{
 				$class	= APP.'/module/'.$mod.'/api.'.$api.'.php';
 				$alter	= USER.'/module/'.$mod.'/api.'.$api.'.php';
@@ -76,8 +83,8 @@
 			}
 		}
 	
-		$alter	= (isset($custom) && file_exists($custom))	? $custom	: $alter;
-		$class	= (isset($alter)  && file_exists($alter)) 	? $alter	: $class;
+		$alter	= (isset($custom) && file_exists($custom)) ? $custom : $alter;
+		$class	= (isset($alter)  && file_exists($alter))  ? $alter	 : $class;
 
 		if(file_exists($class)){
 			try{
@@ -88,5 +95,7 @@
 			}
 		}
 	}
+
+	spl_autoload_register('kodeineAutoload');
 
 ?>
