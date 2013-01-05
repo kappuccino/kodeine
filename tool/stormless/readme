@@ -1,0 +1,13 @@
+usage :
+	$ node config.js
+
+Le script scannera automatiquement le backoffice et mettra en place les directives de compilation less.
+
+Par exemple :
+	0-style.less --|importe|--> 0-grid.less
+				 --|importe|--> 0-mixins.less
+				 --|importe|--> /content/ui/data.less
+
+
+	Si l'on travaille l'un des trois fichiers importé et qu'on lance stormless; le fichier parent
+	sera trouvé via la config et sera compilé afin de garder une synchro entre les 3 enfants.
