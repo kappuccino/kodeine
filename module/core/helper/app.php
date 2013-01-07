@@ -63,16 +63,14 @@
 
 			$class	= APP.'/module/core/data.'.$file.'.php';
 			$alter	= USER.'/api/data.'.$file.'.php';
-
-		#	$class	= APP.'/module/core/data.'.substr(strtolower($api), 4).'.php';
-		#	$alter	= USER.'/api/data.'.substr(strtolower($api), 4).'.php';
 		}else{
 			$parts	= array_map('strtolower', explode(' ', preg_replace('/(?!^)[[:upper:]]/',' \0', $api)));
 			$mod   	= $parts[0];
-			$file   = $mod.implode('', array_map('ucfirst', $parts));
-	
+
 			if(count($parts) > 1){
 				unset($parts[0]);
+				$file   = $mod.implode('', array_map('ucfirst', $parts));
+
 				$class	= APP.'/module/'.$mod.'/api.'.$file.'.php';
 				$alter	= USER.'/module/'.$mod.'/api.'.$file.'.php';
 				$custom	= USER.'/api/api.'.$file.'.php';
@@ -86,6 +84,7 @@
 		$alter	= (isset($custom) && file_exists($custom)) ? $custom : $alter;
 		$class	= (isset($alter)  && file_exists($alter))  ? $alter	 : $class;
 
+	#	echo $class."\n";
 		if(file_exists($class)){
 			try{
 				require_once($class);
