@@ -66,6 +66,7 @@
 	}
 
 	$files = $app->fsFile(DUMPDIR, 'export-*.sql');
+	$files = is_array($files) ? $files : array();
 	rsort($files);
 
 ?><!DOCTYPE html>
