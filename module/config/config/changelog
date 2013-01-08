@@ -4,6 +4,9 @@ Kodeine Change log
 * = Autre / Divers / Inclassable...
 
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+2012-01-08 (5.0.9)
+- Fix erreur si aucun DUMP existant
+
 2013-01-02 (5.0.8)
 - Suppression des images
 
