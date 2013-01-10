@@ -306,7 +306,7 @@
                     }
                     // Type Category
                     if($field['fieldType'] == 'category') {
-                        if(key($aff) == 0) {
+                        if(key($aff) == '0') {
                             foreach($aff as $a) {
                                 $tmp[]  =  $a['categoryName'];
                             }
@@ -320,7 +320,7 @@
                     }
                     // Type Content
                     if($field['fieldType'] == 'content') {
-                        if(key($aff) == 0) {
+                        if(key($aff) == '0') {
                             foreach($aff as $a) {
                                 $tmp[]  =  '<a href="data?id_content='.$a['id_content'].'" title="ID : '.$a['id_content'].'" >'.$a['contentName'].'</a>';
                             }
