@@ -1,6 +1,6 @@
 <?php 
 
-require_once(dirname(dirname(dirname(__FILE__))).'/module/core/helper/app.php');
+#require_once(dirname(dirname(dirname(__FILE__))).'/module/core/helper/app.php');
 
 class coreAdmin extends coreApp {
 
@@ -358,30 +358,7 @@ function moduleData($mod, $core=true){
 	return  $module;
 }
 
-/* + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - 
-+ - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - */
-function less($less){
-
-	$css = substr($less, 0, -4).'css';
-	
-	$css_ = str_replace('/admin/', '/app/module/', $css);
-	$les_ = str_replace('/admin/', '/app/module/', $less);
-
-	$statCss = @stat(KROOT.$css_);
-	$statLes = @stat(KROOT.$les_);
-	
-	if($statCss['mtime'] > $statLes['mtime']){
-		$head = '<link rel="stylesheet" type="text/css" href="'.$css.'" />'.PHP_EOL;
-	#	define('USELESS', false);
-	}else{
-		$head = '<link rel="stylesheet/less" type="text/css" href="'.$less.'" />'.PHP_EOL;
-	#	define('USELESS', true);
-	}
-
-	return $head;
-}
-
-/* + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - 
+/* + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + -
 + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - */
 public function loc($mod){
 

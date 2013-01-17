@@ -48,11 +48,8 @@
 ?><!DOCTYPE html>
 <html lang="fr">
 <head>
-	<title>Kodeine</title>
-	<?php
-		echo $app->less('/admin/theme/ui/css/style.less');
-		include(COREINC.'/head.php');
-	?>
+	<?php include(COREINC.'/head.php'); ?>
+    <link rel="stylesheet" type="text/css" href="ui/css/theme.css" />
 </head>
 <body>
 

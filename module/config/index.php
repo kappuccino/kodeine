@@ -67,11 +67,8 @@
 ?><!DOCTYPE html>
 <html lang="fr">
 <head>
-	<title>Kodeine</title>
-	<?php
-		echo $app->less('/admin/content/ui/css/data.less');
-		include(COREINC.'/head.php');
-	?>
+	<?php include(COREINC.'/head.php'); ?>
+    <link rel="stylesheet" type="text/css" href="/admin/content/ui/css/data.less" />
 </head>
 <body>
 

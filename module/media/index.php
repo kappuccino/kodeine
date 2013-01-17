@@ -6,13 +6,10 @@
 ?><!DOCTYPE html>
 <html lang="fr">
 <head>
-	<title>Kodeine</title>
+	<?php include(COREINC.'/head.php'); ?>
+    <link rel="stylesheet" type="text/css" href="ui/css/media.css" />
 	<link rel="stylesheet" type="text/css" href="/admin/core/ui/_jqueryui/jqui.slider.css" />
 	<link rel="stylesheet" type="text/css" href="/admin/core/ui/_flowplayer5/skin/functional.css" />
-	<?php
-		echo $app->less('/admin/media/ui/css/media.less');
-		include(COREINC.'/head.php');
-	?>
 </head>
 <body>
 

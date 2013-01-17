@@ -2,24 +2,33 @@
 
 ### Requirement
 
-* Nginx, Apache 2 or Lighttp
+* Nginx, Lighttp or Apache 2
 * PHP 5.3
 * MySQL 5.1
 
 ### Installation
 
 1. Clone me 
-2. Rename /kodeine to /app in your project and choose rewrite rules sets
+2. Rename /kodeine to /app in your project and choose rewrite rules sets below
 3. Have fun
 
-##### Lighttpd
+##### nginx
 <pre>
-url.rewrite-if-not-file = (
-	"^([^?]*)?(?:\?(.*))?"  => "/app/index.php?rewrite=$1&$2"
-)
+server {
+	...
+	
+	try_files $uri $uri/ /app/index.php?$args&rewrite=$uri;
+
+	location = / {
+    	rewrite / /app/index.php last;
+	}
+
+	...
+}
 </pre>
 
-##### Apache2
+
+##### Apache
 <pre>
 Options None
 Options +FollowSymLinks
@@ -37,4 +46,11 @@ Options +FollowSymLinks
 	RewriteRule ^(.*)?$ app/index.php?rewrite=$1 [QSA,L]
 	RewriteRule ^$ app/index.php [QSA,L]
 &lt;/IfModule&gt;
+</pre>
+
+##### Lighttpd
+<pre>
+url.rewrite-if-not-file = (
+	"^([^?]*)?(?:\?(.*))?"  => "/app/index.php?rewrite=$1&$2"
+)
 </pre>

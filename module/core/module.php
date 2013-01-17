@@ -23,13 +23,6 @@
 
 <div class="inject-subnav-right hide">
 	<li>
-		<span><?php if(file_exists(APP.'/module/core/ui/css/_style.css')){ ?>
-		<a href="/admin/core/less?nocss">Utiliser le LESS</a>
-		<?php }else{ ?>
-		<a href="/admin/core/less?compile">Utiliser le CSS</a>
-		<?php } ?></span>
-	</li>
-	<li>
 		<a class="btn btn-small btn-success" onclick="checkRepo()"><?php echo $i18n->_('Vérifier les mise à jour') ?></a>
 	</li>
 </div>
