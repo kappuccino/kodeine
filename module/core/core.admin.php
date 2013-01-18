@@ -378,6 +378,8 @@ function less($less){
 	#	define('USELESS', true);
 	}
 
+    $head = '<link rel="stylesheet" type="text/css" href="'.$css.'" />'.PHP_EOL;
+
 	return $head;
 }
 

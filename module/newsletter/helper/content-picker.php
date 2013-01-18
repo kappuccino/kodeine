@@ -9,19 +9,16 @@
 		'useCategory'	=> false,
 		'contentSee'	=> 'ALL',
 		'search'		=> $_REQUEST['q'],
-		'debug'			=> false
+        'sqlWhere'      => " OR k_content.id_content LIKE '%".$_REQUEST['q']."%' ",
+        'debug'			=> false
 	));
 	if(sizeof($data) == 0) die();
 	echo '<div class="results-inner">';
-	echo '<ul>';
 	foreach($data as $d) {
-		echo '<li>';
-		echo '<a href="#" onclick="$(\'#select_id_content\').val('.$d['id_content'].');$(\'#results\').hide();return false;">';
+		echo '<a href="#" data-id_content="'.$d['id_content'].'" onclick="return false;">';
 		echo $d['id_content'].' - '.$d['contentName'];
 		echo '</a>';
-		echo '</li>';
 	}
-	echo '</ul>';
 	echo '</div>';
 	die();
 ?>

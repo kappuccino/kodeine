@@ -132,6 +132,10 @@ function layoutEvents() {
 function layoutEdit(layout) {
     var editable    = layout.find(".editable");
     var id_layout   = layout.attr("data-idx");
+    var id_type     = layout.attr("data-id_type");
+    var id_content  = layout.attr("data-id_content");
+    var user        = layout.attr("data-user");
+    var id_user     = layout.attr("data-id_user");
 
     $(".layout").removeClass("layoutActive");
     layout.addClass("layoutActive");
@@ -146,22 +150,65 @@ function layoutEdit(layout) {
         layoutSave(layout);
     });
 
-    /*
-     line : input text
-     text : textarea
-     richtext : textarea tinymce
-     href : href du lien
-     */
-
     // Menu deroulant changement layout
-    editor.append('<div class="edit-form">Changer de mise en forme<br /><select id="layoutChange"></select></div>');
     var layouts = layoutList(layout.parent("items"));
-    layouts.each( function() {
-        var opt = new Option(getName($(this)), getId($(this)), false, false);
-        $("#layoutChange").append(opt);
-    });
+    if(layouts.length > 1) {
+        editor.append('<div class="edit-form">Changer de mise en forme : <select id="layoutChange"></select></div><hr>');
+        layouts.each( function() {
+            var opt = new Option(getName($(this)), getId($(this)), false, false);
+            $("#layoutChange").append(opt);
+        });
 
-    $("#layoutChange option[value='" + getId(layout) + "']").attr('selected','selected');
+        $("#layoutChange option[value='" + getId(layout) + "']").attr('selected','selected');
+
+        $("#layoutChange").change( function(e) {
+            layoutChange(layout, $(this).val());
+        });
+    }
+
+    // Selecteur content
+    if(id_type) {
+        if(id_content) id_content = id_content;
+        else id_content = "";
+        var searchContent = '<div class="edit-form">';
+        searchContent += 'Chercher un contenu<br /><input type="text" id="search_content"><div id="results"></div>';
+        searchContent += '<br />ID contenu sélectionné : <input type="text" id="select_id_content" value="' + id_content + '" size="5">';
+        searchContent += '&nbsp;<a class="btn apply">Recharger le contenu</a></div><hr>';
+
+        editor.append(searchContent);
+
+        $("#search_content").bind('keydown keyup',function() {
+            var request = $.ajax({
+                url: 'helper/content-picker',
+                data: {
+                    q: $(this).val(),
+                    id_type: id_type
+                }
+            });
+            request.done(function(data) {
+                $('#results').fadeIn(200);
+                $('#results').html(data);
+                $('#results a').click( function(e) {
+                    $("#select_id_content").val($(this).attr("data-id_content"));
+                    $('#results').fadeOut(200);
+
+                    if($("#select_id_content").val() > 0) {
+                        layoutApplyContent(layout, $("#select_id_content").val());
+                    }
+                    e.preventDefault();
+                    e.stopImmediatePropagation();
+                });
+            });
+        });
+
+        $(".btn.apply").click( function() {
+            if($("#select_id_content").val() > 0) {
+                layoutApplyContent(layout, $("#select_id_content").val());
+            }
+        });
+
+    }
+
 
     editable.each( function() {
         var type  = getType($(this));
@@ -186,11 +233,19 @@ function layoutEdit(layout) {
     });
     richtext();
 
-    $("#layoutChange").change( function(e) {
-        layoutChange(layout, $(this).val());
-    });
-}
 
+}
+function layoutApplyContent(layout, id_content) {
+    $.post('helper/designer-content', { id_content: id_content }, function(d) {
+        var content = $.parseJSON(d);
+        console.log(content);
+        layoutInit(layout, content);
+        editorClose();
+        layoutEdit(layout);
+    });
+
+
+}
 function layoutSave(layout) {
     var editable    = layout.find(".editable");
     var id_layout   = layout.attr("data-idx");
@@ -331,6 +386,7 @@ function editorClose() {
 function editorOpen() {
     $("#overlay").show();
     editor.html("");
+    editor.css({'marginTop': ($(window).scrollTop() + 10) + 'px'});
     editor.fadeIn(100);
     $(".delete, .duplicate").hide();
 }
