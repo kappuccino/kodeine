@@ -396,8 +396,10 @@ public function newsletterDesignerCompil($html){
 	$html = preg_replace("#</repeater([^>]*)>#", "", $html);
 	$html = preg_replace("#<layout([^>]*)>#", "", $html);
 	$html = preg_replace("#</layout([^>]*)>#", "", $html);
-	$html = preg_replace("#<item([^>]*)>#", "", $html);
-	$html = preg_replace("#</item([^>]*)>#", "", $html);
+    $html = preg_replace("#<item([^>]*)>#", "", $html);
+    $html = preg_replace("#</item([^>]*)>#", "", $html);
+    $html = preg_replace("#<items([^>]*)>#", "", $html);
+    $html = preg_replace("#</items([^>]*)>#", "", $html);
 	$html = preg_replace("#<div class=\"repeaterEdit\"([^>]*)>(.*)</div>#", "", $html);
 	$html = preg_replace("#<div class=\"repeaterBTEdit\"([^>]*)>(.*)</div>#", "", $html);
 	$html = preg_replace("#<script([^>]*)>(.*)</script>#", "", $html);

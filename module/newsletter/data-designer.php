@@ -17,8 +17,8 @@
 		if($_POST['do'] == 'template') {
 			$template_info = @file_get_contents($_POST['newsletterTemplateUrl'].'/info.xml');
 			preg_match("#<file>(.*)</file>?#", $template_info, $file);
-			$template_source = @file_get_contents($_POST['newsletterTemplateUrl'].'/'.$file[1]);
-			$def['k_newsletter']['newsletterTemplateSource'] 	= array('value' => $template_source);
+			/*$template_source = @file_get_contents($_POST['newsletterTemplateUrl'].'/'.$file[1]);
+			$def['k_newsletter']['newsletterTemplateSource'] 	= array('value' => $template_source);*/
 			$def['k_newsletter']['newsletterHtmlDesigner'] 		= array('value' => '');
 		}
 		
@@ -65,6 +65,20 @@
 		}
 	}
 
+
+    // Changement de template
+    if($_POST['newsletterTemplateUrl'] != '') {
+        $def = array();
+        $template_info = @file_get_contents($_POST['newsletterTemplateUrl'].'/info.xml');
+        preg_match("#<file>(.*)</file>?#", $template_info, $file);
+        $template_source = @file_get_contents($_POST['newsletterTemplateUrl'].'/'.$file[1]);
+
+        $def['k_newsletter']['newsletterTemplateUrl'] 	    = array('value' => $_POST['newsletterTemplateUrl']);
+        $def['k_newsletter']['newsletterTemplateSource'] 	= array('value' => $template_source);
+        $def['k_newsletter']['newsletterHtmlDesigner'] 		= array('value' => '');
+        $result	 = $app->apiLoad('newsletter')->newsletterSet($_REQUEST['id_newsletter'], $def);
+    }
+
 	if($_REQUEST['id_newsletter'] != NULL){
 		$data = $app->apiLoad('newsletter')->newsletterGet(array(
 			'id_newsletter' 	=> $_REQUEST['id_newsletter']
@@ -93,9 +107,7 @@
 <head>
 	<title>Kodeine</title>
 	<?php include(COREINC.'/head.php'); ?>
-	
-	<link rel="stylesheet" type="text/css" media="all" href="ui/css/newsletter.css" /> 
-	<link rel="stylesheet" type="text/css" media="all" href="ui/css/designer.css" />
+
 </head>
 
 <body>
@@ -164,171 +176,59 @@
 			<td>Titre du mail</td>
 			<td><input type="text" name="newsletterTitle" value="<?php echo $app->formValue($data['newsletterTitle'], $_POST['newsletterTitle']); ?>" style="width:96%" /></td>	
 		</tr>
+    </table>
+</form>
     <?php if($data['id_newsletter'] > 0 && $data['newsletterSendDate'] == NULL) { ?>
-		<tr>
-			<td>Choix du template</td>
-			<td>
-				<select name="newsletterTemplateUrl" id="newsletterTemplateUrl" onChange="templateChange();">
-					<option value=""></option>
-					<?php foreach($templates as $url=>$name) { ?>
-					<option value="<?php echo $url; ?>" <?php if($url == $_POST['newsletterTemplateUrl'] || $url == $data['newsletterTemplateUrl']) echo ' selected="selected" '; ?>><?php echo $name; ?></option>
-					<?php }?>
-				</select>
-				
-				
-				<a href="#" onClick="return templateChange();" class="btn btn-mini">Recharger le template</a>
-				
-			</td>	
-		</tr>
+		Choix du template :
+        <form method="post" action="" id="formTemplateChange">
+            <select name="newsletterTemplateUrl" id="newsletterTemplateUrl" onChange="templateChange();">
+                <option value=""></option>
+                <?php foreach($templates as $url=>$name) { ?>
+                <option value="<?php echo $url; ?>" <?php if($url == $_POST['newsletterTemplateUrl'] || $url == $data['newsletterTemplateUrl']) echo ' selected="selected" '; ?>><?php echo $name; ?></option>
+                <?php }?>
+            </select>
+        </form>
+
+        <a href="#" onClick="return templateChange();" class="btn btn-mini">Recharger le template</a>
     <?php } ?>
-	</table>
 
 	
-    <?php if($data['id_newsletter'] > 0 && $data['newsletterSendDate'] == NULL) { ?>
+    <?php
+        if($data['id_newsletter'] > 0 && $data['newsletterSendDate'] == NULL) {
+            $iframeUrl = 'designer.php?id_newsletter='.$data['id_newsletter'].'';
+    ?>
 
-		<div id="previewContainer">    
-		    <iframe width="100%" scrolling="yes" frameborder="0" name="preview" id="preview"></iframe>
-		</div>
-		
-		<div style="float: left;">
-			<div id="add">
-				<select id="stRepeater"><option value="0">Insérer un élément</option></select>
-			</div>
-			<br clear="both">
-			<div id="edit">
-			</div>
-		</div>
-		
-		
-		<!--<div id="templatediv" style="display: none;">
-		    <?php //echo $data['newsletterTemplateSource']; ?>
-		</div>
-		<textarea id="templatetext" style="display: none;">
-		    <?php //echo $data['newsletterTemplateSource']; ?>
-		</textarea>
-		<iframe id="template" style="display: none;"></iframe>
-		<textarea id="newsletterHtml" style="display: none;">
-		    <?php //echo $data['newsletterHtmlDesigner']; ?>
-		</textarea>-->
-		
+        <iframe src="<?php echo $iframeUrl; ?>" width="100%" style="height:1200px;"></iframe>
 
     <?php } ?>
 
 
-</form>
 
 
 </div>
 
 <?php include(COREINC.'/end.php'); ?>
 
-    <script type="text/javascript" src="ui/js/designer.js"></script>
 
-	<script src="/admin/core/ui/_tinymce/jscripts/tiny_mce/jquery.tinymce.js"></script>
-	<script src="/admin/core/ui/_tinymce/jscripts/tiny_mce/tiny_mce.js"></script>
 <script>
-    <?php if($data['id_newsletter'] > 0) { ?>
 
-var id_newsletter = <?php echo $data['id_newsletter']; ?>;
-var id_repeater = 0;
-var repeaterData = new Object();
-
-var $template       = $();
-var templatehtml    = '';
-var $designer       = $();
-var designerhtml    = '';
-var $preview = $("#preview").contents();
-
-var css = '<link rel="stylesheet" type="text/css" media="all" href="http://<?php echo $_SERVER["HTTP_HOST"]; ?>/admin/newsletter/ui/css/designer.css" />';
-var script      = document.createElement( 'script' );
-var script2     = document.createElement( 'script' );
-var script3     = document.createElement( 'script' );
-script.type     = 'text/javascript';
-script2.type    = 'text/javascript';
-script3.type    = 'text/javascript';
+<?php
+/*
+<script src="/admin/core/ui/_tinymce/jscripts/tiny_mce/jquery.tinymce.js"></script>
+<script src="/admin/core/ui/_tinymce/jscripts/tiny_mce/tiny_mce.js"></script>
 script.src      = 'http://<?php echo $_SERVER["HTTP_HOST"]; ?>/app/module/core/ui/_jquery/jquery-1.7.2.min.js';
 script2.src     = 'http://<?php echo $_SERVER["HTTP_HOST"]; ?>/app/module/core/ui/_jqueryui/jqui.sortable.min.js';
 script3.src     = 'http://<?php echo $_SERVER["HTTP_HOST"]; ?>/app/module/newsletter/ui/js/designer-iframeload.js';
+*/
+?>
 
 function templateChange() {
     if(confirm('Etes-vous certain de changer de template ?')) {
-        templateLoad(true);
+        alert('ok');
+        $('#formTemplateChange').submit();
     }else {
-        //$('#do').val('');
         return false;
     }
 }
-
-function templateLoad(is_start) {   
-    var templateUrl = $('#newsletterTemplateUrl').val();
-    //alert(templateUrl);
-    var request = $.ajax({
-        url: 'helper/designer-template',
-        dataType: 'xml',
-        data: {
-            url: templateUrl
-        }
-    });
-    request.done(function(data) {
-
-        $template = $(data);
-        if(is_start) {
-        	start(true);
-        }
-   });
-   request.fail(function(data) {
-        alert('Format de la template incorrect');
-   });
-}
-
-$(document).ready(function() {
-     templateLoad();
-     
-    // Bouton enregistrer
-    $('#btSave').click( function(e) {
-        save();
-    });
-    // Bouton enregistrer
-    $('#btReset').click( function(e) {
-        start(true);
-    }); 
-    
-    var request = $.ajax({
-        url: 'helper/designer-get',
-        dataType: 'xml',
-        data: {
-            id_newsletter: <?php echo $data['id_newsletter']; ?>
-        }
-    });
-    request.done(function(data) {
-        $designer = $(data);
-        start(false);
-   });
-   request.fail(function(data) {
-        alert('Format de la template incorrect get');
-   });
-       
-    //start(<?php echo (trim($data['newsletterHtmlDesigner']) != '') ? 'false' : 'true'; ?>);   
-    
-    
-});
-
-
-// Enregistrement de la newsletter en cours
-function save() {
-    var html = $preview.contents()[0].outerHTML;
-    $.post('helper/designer-save', { id_newsletter: id_newsletter, html: html, templatehtml: templatehtml}, function(data) {
-        if(data != 0) {
-            //alert('Enregistré');
-            $('#data').submit()
-        }
-    }); 
-}
-    <?php } else { ?>
-// Enregistrement de la newsletter en cours
-function save() {
-    $('#data').submit();
-}
-    <?php } ?>
 </script>
 </body></html>
