@@ -20,7 +20,7 @@ $(document).ready(function() {
     $('#layoutAdd').find('option').remove();
     var optinit = new Option("", "", false, false);
     $("#layoutAdd").append(optinit);
-    $("items").each( function(e) {
+    $(".repeat, .unique.noremove").each( function(e) {
         var opt = new Option(getName($(this)), getId($(this)), false, false);
         $("#layoutAdd").append(opt);
     });
@@ -30,7 +30,7 @@ $(document).ready(function() {
     // ------------------------------
     if(init == true) {
         // Ajout 1 item par bloc
-        $("items").each( function(e) {
+        $(".repeat").each( function(e) {
             var item = $(this);
             if(item.attr("data-url")) {
                 var opt = {};
@@ -55,7 +55,7 @@ $(document).ready(function() {
     $('a').click( function(e){
         e.preventDefault();
     });
-    layoutEvents();
+    bindEvents();
 
 
     // Sauvegarde
@@ -64,7 +64,7 @@ $(document).ready(function() {
     });
 
     // Sortable
-    $("items").sortable({
+    $(".repeat").sortable({
         items: ".layout"
     });
     //$(".layout").disableSelection();
@@ -79,9 +79,9 @@ $(document).ready(function() {
 
 function layoutAdd(id, content) {
 
-    var items   = search("items", id);
+    var items   = search(".repeat", id);
 
-    if(items.attr("data-repeat", "1")) {
+    if( (items.attr("data-unique") != "1") || ((items.attr("data-unique") == "1") && !(items.find('.layout.template'))) ) {
         idx++;
 
         if(items) {
@@ -95,17 +95,20 @@ function layoutAdd(id, content) {
         }
         $("#layoutAdd").val("");
 
-        layoutEvents();
+        bindEvents();
     }else {
-
+        alert("Ajout impossible");
     }
 }
 
 function layoutList(items) {
-    return items.find("item").find(".layout");
+    var layouts = items.find('.layout.template');
+    //console.log(layouts);
+    return layouts;
 }
 
-function layoutEvents() {
+function bindEvents() {
+    // Repeat
     $('.layout').hover(
         function () {
             $(this).find(".delete, .duplicate").show();
@@ -127,6 +130,14 @@ function layoutEvents() {
         e.preventDefault();
         e.stopImmediatePropagation();
     });
+
+    // Unique
+    $('.unique').click( function(e){
+        uniqueEdit($(this));
+        e.preventDefault();
+        e.stopImmediatePropagation();
+    });
+
 }
 
 function layoutEdit(layout) {
@@ -137,7 +148,7 @@ function layoutEdit(layout) {
     var user        = layout.attr("data-user");
     var id_user     = layout.attr("data-id_user");
 
-    $(".layout").removeClass("layoutActive");
+    $(".layoutActive").removeClass("layoutActive")
     layout.addClass("layoutActive");
 
     editorOpen();
@@ -151,7 +162,7 @@ function layoutEdit(layout) {
     });
 
     // Menu deroulant changement layout
-    var layouts = layoutList(layout.parent("items"));
+    var layouts = layoutList(layout.parent(".repeat"));
     if(layouts.length > 1) {
         editor.append('<div class="edit-form">Changer de mise en forme : <select id="layoutChange"></select></div><hr>');
         layouts.each( function() {
@@ -238,7 +249,7 @@ function layoutEdit(layout) {
 function layoutApplyContent(layout, id_content) {
     $.post('helper/designer-content', { id_content: id_content }, function(d) {
         var content = $.parseJSON(d);
-        console.log(content);
+        //console.log(content);
         layoutInit(layout, content);
         editorClose();
         layoutEdit(layout);
@@ -279,22 +290,23 @@ function layoutSave(layout) {
 }
 
 function layoutChange(layout, id) {
-    var items       = layout.parent("items");
-    var newLayout   = items.find("item").find(".layout[data-id=" + id + "]").clone();
+    var items       = layout.parent(".repeat");
+    var newLayout   = items.find(".layout.template[data-id=" + id + "]").clone();
 
     newLayout.attr("data-idx", layout.attr("data-idx"));
     layoutInit(newLayout);
 
     layout.before(newLayout);
-    layoutRemove(layout);
+    layout.remove();
     editorClose();
     layoutEdit(newLayout);
-    layoutEvents();
+    bindEvents();
 }
 function layoutRemove(layout) {
-    layout.fadeOut(200);
-    layout.fadeOut('slow').queue(function() { layout.remove(); });
-
+    if(confirm("Confirmer la suppression ?")) {
+        layout.fadeOut(200);
+        layout.fadeOut('slow').queue(function() { layout.remove(); });
+    }
 }
 
 function layoutDuplicate(layout) {
@@ -308,13 +320,15 @@ function layoutDuplicate(layout) {
     newLayout.find(".delete, .duplicate").hide();
     newLayout.fadeIn(200);
     //layoutInit(newLayout);
-    layoutEvents();
+    bindEvents();
 }
 
 function layoutInit(layout, content) {
 
-    var items           = layout.parent("items");
+    var items           = layout.parent(".repeat");
     var layoutControl   = "";
+
+    layout.removeClass("template");
 
     if(items.attr("data-repeat", "1")) {
         layoutControl += '<a class="btn duplicate">Dupliquer</a>';
@@ -375,10 +389,9 @@ function layoutInit(layout, content) {
 // EDITOR
 //------------------------
 
-
 function editorClose() {
     $("#overlay").hide();
-    $(".layout").removeClass("layoutActive");
+    $(".layoutActive").removeClass("layoutActive");
     editor.fadeOut(100);
     editor.html("");
     $(".delete, .duplicate").hide();
@@ -391,6 +404,93 @@ function editorOpen() {
     $(".delete, .duplicate").hide();
 }
 
+//------------------------
+// UNIQUE
+//------------------------
+
+function uniqueEdit(el) {
+    var type        = getType(el);
+    var id          = getId(el, true);
+    var name        = getName(el);
+    var href        = false;
+    var atype       = type.split(",");
+
+    if(atype[0] == "href") {
+        href = true;
+        type = atype[1];
+    }
+
+
+    $(".layoutActive").removeClass("layoutActive");
+    el.addClass("layoutActive");
+
+    editorOpen();
+    editor.html('<div class="edit-header"><a class="btn save">Enregistrer</a><a class="btn close">Annuler</a></div>');
+
+    $('.close').click( function(e){
+        editorClose();
+    });
+    $('.save').click( function(e){
+        uniqueSave(el);
+    });
+
+
+    var html  = '<div class="edit-form">';
+    var val   = el.html();
+    //alert(type);
+    if(href) {
+        html += 'URL <br /><input type="text" id="href-' + id + '" value="' + el.attr("href") + '"> ';
+    }
+
+    if(type == "line") {
+        html += name + '<br /><input type="text" id="' + id + '" value="' + val + '"> ';
+    }
+    if(type == "text") {
+        html += name + '<br /><textarea class="mceNoEditor" rows="10" id="' + id + '">' + val + '</textarea> ';
+    }
+    if(type == "richtext") {
+        html += name + '<br /><textarea class="mceEditor" rows="10" name="' + id + '" id="' + id + '">' + val + '</textarea> ';
+    }
+    editor.append(html + "</div>");
+
+    richtext();
+
+}
+
+
+function uniqueSave(el) {
+
+    var type  = getType(el);
+    var id    = getId(el, true);
+    var name  = getName(el);
+    var atype       = type.split(",");
+    var href        = false;
+    if(atype[0] == "href") {
+        href = true;
+        type = atype[1];
+    }
+
+    var val   = "";
+
+    if(href) {
+        val = editor.find("#href-" + id).val();
+        el.attr("href", val);
+    }
+
+    if(type == "text" || type == "line") {
+        val = editor.find("#" + id).val();
+        el.html(val);
+    }
+
+    if (type == "richtext") {
+        var ed  = tinymce.get(id);
+        val     = ed.getContent();
+        el.html(val);
+    }
+
+    editorClose();
+
+}
 
 //------------------------
 // DATA

@@ -22,13 +22,15 @@ body {
     line-height: 25px;
 }
 
-item { display: none; }
-.layout {
+.template {
+    display: none;
+}
+.layout, .unique {
     position: relative;
     border: 1px dashed #aeaeae !important;
     z-index: 8;
 }
-.layout:hover {
+.layout:hover, .unique:hover {
     border: 1px dashed #2c89d2 !important;
     cursor: pointer !important;
 }
