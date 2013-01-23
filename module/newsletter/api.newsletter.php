@@ -390,7 +390,8 @@ Newsletter provenant du Designer > suppression de toutes les balises propres au 
 + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - */
 public function newsletterDesignerCompil($html){
 
-    $html = preg_replace('#<!--TEMPLATE-->(.*)<!--/TEMPLATE-->#i', '', $html);
+    $html = preg_replace('#<!--TEMPLATE-->(.*?)<!--/TEMPLATE-->#is', $newtext, $html);
+    $html = preg_replace('#\<\!\-\-TEMPLATE\-\-\>(.*)\<\!\-\-\/TEMPLATE\-\-\>#i', '', $html);
     $html = str_replace('<a class="btn duplicate">Dupliquer</a>', '', $html);
     $html = str_replace('<a class="btn delete">Supprimer</a>', '', $html);
     $html = preg_replace("#<script([^>]*)>(.*)</script>#", "", $html);

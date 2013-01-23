@@ -274,7 +274,7 @@ function layoutEdit(layout) {
             html += name + '<br /><input type="text" id="editor-' + id + '" value="' + imgSrc + '">';
             html += '<input type="hidden" id="editor-height-' + id + '" value="' + imgH + '">';
             html += '<input type="hidden" id="editor-width-' + id + '" value="' + imgW + '">';
-            html += '<a onclick="mediaPicker(\'editor-' + id + '\',\'line\')" class="btn">Sélectionner une image</a>';
+            html += '<a onclick="mediaPicker(\'editor-' + id + '\',\'line\')" class="btn apply">Sélectionner une image</a>';
             //html += '<img src="' + imgSrc + '" id="editor-preview-' + id + '"><hr>';
 
         }
@@ -305,7 +305,8 @@ function layoutSave(layout) {
     var id_layout   = layout.attr("data-idx");
     data[id_layout] = {};
 
-    editable.each( function() {
+    ed_length = editable.length - 1;
+    editable.each( function(i) {
         var type  = getType($(this));
         var id    = getId($(this), true);
         var name  = getName($(this));
@@ -345,12 +346,15 @@ function layoutSave(layout) {
             $.post('helper/designer-media', { src: editor.find("#editor-" + id).val(), w: imgW, h: imgH}, function(d) {
                 val = d;
                 img.attr("src", val);
+                data[id_layout][id] = val;
             });
+        }else {
+            data[id_layout][id] = val;
         }
-        data[id_layout][id] = val;
+
+        if(ed_length == i) editorClose();
 
     });
-    editorClose();
 
 }
 
@@ -657,6 +661,7 @@ function editorClose() {
 
     if(h < 50) h = 50;
     editor.css({'marginTop': h + 'px'});
+    editor.offset({top: h + 20});
 }
 function editorOpen() {
     var h = ($(window).scrollTop() + 50);
@@ -669,6 +674,7 @@ function editorOpen() {
     $("#overlay").show();
     editor.find(".top").hide();
     editor.css({'marginTop': h + 'px'});
+    editor.offset({top: h + 20});
     //editor.fadeIn(100);
     $(".delete, .duplicate").hide();
     sizeIframe();
@@ -742,7 +748,7 @@ function uniqueEdit(el) {
         html += name + '<br /><input type="text" id="editor-' + id + '" value="' + imgSrc + '">';
         html += '<input type="hidden" id="editor-height-' + id + '" value="' + imgH + '">';
         html += '<input type="hidden" id="editor-width-' + id + '" value="' + imgW + '">';
-        html += '<a onclick="mediaPicker(\'editor-' + id + '\',\'line\')" class="btn">Sélectionner une image</a>';
+        html += '<a onclick="mediaPicker(\'editor-' + id + '\',\'line\')" class="btn apply">Sélectionner une image</a>';
 
     }
     editor.append(html + "</div></div>");
