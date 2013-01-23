@@ -204,12 +204,9 @@
 
 ?><!DOCTYPE html>
 <head>
-	<title>Kodeine</title>
+	<?php include(COREINC.'/head.php'); ?>
+    <link rel="stylesheet" type="text/css" href="ui/css/data.css" />
 	<link rel="stylesheet" type="text/css" href="/admin/core/ui/_datepicker/css/datepicker.css" />
-	<?php
-		echo $app->less('/admin/content/ui/css/data.less');
-		include(COREINC.'/head.php');
-	?>
 </head>
 <body>
 	
@@ -217,7 +214,6 @@
 	include(COREINC.'/top.php');
 	include(dirname(__DIR__).'/content/ui/menu.php')
 ?></header>
-
 
 <div class="inject-subnav-right hide">
 	<li>
@@ -233,15 +229,9 @@
 				<?php } ?>
 		</div>
 	</li>
-	<li>
-		<a href="/admin/content/?id_type=<?php echo $type['id_type'] ?>" class="btn btn-small"><i class="icon-list"></i> <?php echo $type['typeName']; ?></a>
-	</li>
-    <li>
-        <a onclick="removeThis(<?php echo $_REQUEST['id_content'] ?>)" class="btn btn-small btn-danger">Supprimer</a>
-    </li>
-	<li>
-		<a onclick="$('#data').submit()" class="btn btn-small btn-success">Enregistrer</a>
-	</li>
+	<li><a href="/admin/content/?id_type=<?php echo $type['id_type'] ?>" class="btn btn-small"><i class="icon-list"></i> <?php echo $type['typeName']; ?></a></li>
+    <li><a onclick="removeThis(<?php echo $_REQUEST['id_content'] ?>)" class="btn btn-small btn-danger">Supprimer</a></li>
+	<li><a onclick="$('#data').submit()" class="btn btn-small btn-success">Enregistrer</a></li>
 </div>
 
 <div id="app" class="data"><?php

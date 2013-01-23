@@ -86,11 +86,8 @@
 ?><!DOCTYPE html>
 <html lang="fr">
 <head>
-	<title>Kodeine</title>
-	<?php
-		echo $app->less('/admin/localisation/ui/css/localisation.less');
-		include(COREINC.'/head.php');
-	?>
+	<?php include(COREINC.'/head.php'); ?>
+    <link rel="stylesheet" type="text/css" href="ui/css/localisation.css" />
 </head>
 <body>
 

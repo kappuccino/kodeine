@@ -16,10 +16,8 @@
 ?><!DOCTYPE html>
 <html lang="fr">
 <head>
-	<?php
-		echo $app->less('/admin/content/ui/css/gallery.less');
-		include(COREINC.'/head.php');
-	?>
+	<?php include(COREINC.'/head.php'); ?>
+    <link rel="stylesheet" type="text/css" href="ui/css/gallery.css" />
 </head>
 <body>
 	

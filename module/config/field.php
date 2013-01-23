@@ -41,10 +41,8 @@
 ?><!DOCTYPE html>
 <html lang="fr">
 <head>
-	<?php
-		echo $app->less('/admin/config/ui/css/field.less');
-		include(COREINC.'/head.php');
-	?>
+	<?php include(COREINC.'/head.php'); ?>
+    <link rel="stylesheet" type="text/css" href="ui/css/field.css" />
 </head>
 <body>
 

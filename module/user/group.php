@@ -56,11 +56,8 @@
 ?><!DOCTYPE html>
 <html lang="fr">
 <head>
-	<title>Kodeine</title>
-	<?php
-		echo $app->less('/app/module/user/ui/css/group.less');
-		include(COREINC.'/head.php');
-	?>
+	<?php include(COREINC.'/head.php'); ?>
+    <link rel="stylesheet" type="text/css" href="ui/css/group.css" />
 </head>
 <body>
 

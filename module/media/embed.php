@@ -6,12 +6,10 @@
 ?><!DOCTYPE html>
 <html lang="fr">
 <head>
+	<?php include(COREINC.'/head.php'); ?>
+    <link rel="stylesheet" type="text/css" href="ui/css/media.css" />
 	<link rel="stylesheet" type="text/css" href="/admin/core/ui/_jqueryui/jqui.slider.css" />
 	<link rel="stylesheet" type="text/css" href="/admin/media/ui/_uploadifive/uploadifive.css">
-	<?php
-		echo $app->less('/admin/media/ui/css/media.less');
-		include(COREINC.'/head.php');
-	?>
 </head>
 <body>
 <div id="media" class="clearfix">

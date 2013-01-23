@@ -148,11 +148,8 @@
 ?><!DOCTYPE html>
 <html lang="fr">
 <head>
-	<title>Kodeine</title>
-	<?php
-		echo $app->less('/admin/content/ui/css/data.less');
-		include(COREINC.'/head.php');
-	?>
+	<?php include(COREINC.'/head.php'); ?>
+	<link rel="stylesheet" type="text/css" href="/admin/content/ui/css/data.css" />
 	<link rel="stylesheet" type="text/css" href="/admin/content/ui/css/dropdowns.css" />
 	<link rel="stylesheet" type="text/css" href="/admin/core/ui/_datepicker/css/datepicker.css" />
 </head>
@@ -165,9 +162,7 @@
 
 <div class="inject-subnav-right hide">
 	<li><a href="data" class="btn btn-small">Nouvel utilisateur</a></li>
-    <li>
-        <a href="/admin/user/" class="btn btn-small"><i class="icon-list"></i> Utilisateurs</a>
-    </li>
+    <li><a href="/admin/user/" class="btn btn-small"><i class="icon-list"></i> Utilisateurs</a></li>
 	<li><a href="#" onclick="$('#data').submit();" class="btn btn-small btn-success">Enregistrer</a></li>
 </div>
 

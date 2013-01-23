@@ -4,6 +4,9 @@ Kodeine Change log
 * = Autre / Divers / Inclassable...
 
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+2013-01-17 (5.0.8)
+- LESS to CSS
+
 2012-12-07
 + Correction dans le nom du patch qui etait -done.xml par defaut (pas bon)
 
@@ -11,4 +14,4 @@ Kodeine Change log
 + Gestion du .ignore pour ne pas afficher des dossier/fichiers
 
 2012-10-24
-+ Si une image est uploade en portrait, une rotation est effectué pour la voir correctement (EXIF Orientation: 6=90deg, 8=-90deg
++ Si une image est uploade en portrait, une rotation est effectuï¿½ pour la voir correctement (EXIF Orientation: 6=90deg, 8=-90deg

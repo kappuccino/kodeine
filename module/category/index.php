@@ -102,10 +102,8 @@
 ?><!DOCTYPE html>
 <html lang="fr">
 <head>
-	<?php
-		echo $app->less('/admin/category/ui/css/category.less');
-		include(COREINC.'/head.php');
-	?>
+	<?php include(COREINC.'/head.php'); ?>
+    <link rel="stylesheet" type="text/css" href="ui/css/category.css" />
 </head>
 <body>
 

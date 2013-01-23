@@ -116,11 +116,8 @@
 <html lang="fr" xmlns="http://www.w3.org/1999/html" xmlns="http://www.w3.org/1999/html"
       xmlns="http://www.w3.org/1999/html">
 <head>
-	<title>Kodeine</title>
-	<?php
-		echo $app->less('/admin/field/ui/css/asso.less');
-		include(COREINC.'/head.php');
-	?>
+	<?php include(COREINC.'/head.php'); ?>
+    <link rel="stylesheet" type="text/css" href="ui/css/asso.css" />
 </head>
 <body>
 
