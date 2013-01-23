@@ -4,6 +4,9 @@ Kodeine Change log
 * = Autre / Divers / Inclassable...
 
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+2013-01-23 (5.0.16)
+- Fix content/index : pb bouton "Effectuer les changements"
+
 2013-01-02 (5.0.15)
 - Suppression de certianes images
 

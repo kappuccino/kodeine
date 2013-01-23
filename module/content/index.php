@@ -412,7 +412,7 @@
 				<tr>
 					<td><input type="checkbox" onchange="cbchange($(this));" class="chk" id="chk_remove_all" /></td>
 					<td><input type="checkbox" onchange="cschange($(this));" class="chk" id="chk_see_all" /></td>
-					<td colspan="5" height="25"><a href="#" onClick="remove();" class="btn btn-mini"><span>Effectuer les changements sur la selection</span></a></td>
+					<td colspan="5" height="25"><a href="#" onClick="apply();" class="btn btn-mini"><span>Effectuer les changements sur la selection</span></a></td>
                     <?php
                         $cs = $cType['is_business'] ? 2 : 1;
                         $cs += sizeof($cType['typeListLayout']);
@@ -451,7 +451,7 @@
 		}
 	}
 
-	function remove(){
+	function apply(){
 		if(confirm("Confirmez-vous les changements sur la selection ?")){
 			$('#listing').submit();
 		}
