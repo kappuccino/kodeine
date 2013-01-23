@@ -689,7 +689,7 @@ function setFile(url){
 function selectFile(file, prompt){
 
 	prompt = (prompt == null) ? detectType(file) : prompt;
-	
+
 	switch(method){
 		case 'mce'			: parent.opener.insertRichEditor(field, '<img src="'+file+'" />');	break;
 		case 'sort'			: parent.opener.mediaInsert(field, prompt+'@@'+file, 'sort'); 		break;
@@ -701,6 +701,7 @@ function selectFile(file, prompt){
 		case 'line'			: fld = parent.opener.document.getElementById(field);
 							  fld.value  = file;
 							  fld.fireEvent('change', fld);
+
 							  break;
 
 		case 'editable'		: parent.opener.editable.imageBack(file);

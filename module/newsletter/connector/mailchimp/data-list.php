@@ -27,10 +27,11 @@
 
 <header><?php
 	include(COREINC.'/top.php');
-	include(dirname(dirname(__DIR__)).'/ui/menu.php');
+    include(dirname(dirname(__DIR__)).'/ui/menu.php');
+    include(dirname(dirname(__DIR__)).'/ui/steps.php');
 ?></header>
 
-<div id="app">
+<div class="wrapper clearfix">
 
 <?php
 	if($message == NULL && $_GET['message'] != NULL) $message = urldecode($_GET['message']);
@@ -46,27 +47,15 @@
 	<input type="hidden" name="id_newsletter" value="<?php echo $data['id_newsletter'] ?>" />
 	<input type="hidden" name="do" id="do" value="" />
 
-	<table cellpadding="5" width="100%">
-		<tr>
-			<td height="30" colspan="2">
-				<?php if($data['newsletterSendDate'] == NULL){ ?>
-				<a href="#" id="send" onclick="return false;" class="btn btn-mini">Envoyer sur MailChimp</a>
-				<a href="data?id_newsletter=<?php echo $_REQUEST['id_newsletter'] ?>" class="btn btn-mini">Annuler et revenir à l'éditeur</a>
-				<?php } if($_REQUEST['id_newsletter'] > 0){ ?>
-				<a href="preview?id_newsletter=<?php echo $_REQUEST['id_newsletter'] ?>" class="btn btn-mini" target="_blank">Prévisualiser</a>
-				<?php } if($data['newsletterSendDate'] != NULL){ ?>
-				<a href="analytic?id_newsletter=<?php echo $_REQUEST['id_newsletter'] ?>" class="btn btn-mini">Consulter les statistiques</a>
-				<?php } ?>
-			</td>
-		</tr>
-	</table>
 	
 	<?php if($data['newsletterSendDate'] != NULL){ ?>
 		
 		<div class="message">La newsletter a déjà été envoyée sur MailChimp</div>
 		
 	<?php } else { ?>
-	
+
+    <p><a href="#" id="send" onclick="return false;" class="btn btn-primary">Envoyer sur MailChimp</a></p>
+        <div class="clearfix"></div>
 		<?php 
 			unset($api);				 
 			//$app->pre($apis);

@@ -20,27 +20,35 @@
     //die($app->pre($html));
     $head    = '
         <link rel="stylesheet" type="text/css" media="all" href="ui/css/designer.css" />
+    <link rel="stylesheet" href="http://code.jquery.com/ui/1.10.0/themes/base/jquery-ui.css" />
     ';
     if(trim($html) == '') $init = '<script type="text/javascript">var init = true;</script>';
     else $init = '<script type="text/javascript">var init = false;</script>';
 
     $end     = '
-        <div class="top">
-            <div class="in">
-                Ajouter un &eacute;l&eacute;ment : <select id="layoutAdd"></select>
-                <a class="btn" id="save">Sauvegarder</a>
+
+        <!--TEMPLATE-->
+        <div class="edit ui-widget-content">
+        <div class="edit-header ui-widget-header">
+            <a class="btn save">Enregistrer</a><a class="btn close">Annuler</a>
+        </div>
+            <div class="top">
+                <div class="in">
+                    Ajouter un &eacute;l&eacute;ment : <select id="layoutAdd"></select>
+                </div>
             </div>
         </div>
-        <div class="edit"></div>
         <div id="overlay"></div>
         '.$init.'
         <script type="text/javascript">var id_newsletter = '.$id_newsletter.';</script>
-        <script type="text/javascript" src="/app/module/core/ui/_jquery/jquery-1.7.2.min.js"></script>
-        <script type="text/javascript" src="/app/module/core/ui/_jqueryui/jqui.sortable.min.js"></script>
+<script type="text/javascript" src="http://code.jquery.com/jquery-1.9.0.js"></script>
+<script type="text/javascript" src="http://code.jquery.com/ui/1.10.0/jquery-ui.js"></script>
         <script type="text/javascript" src="/admin/core/ui/_tinymce/jscripts/tiny_mce/tiny_mce.js"></script>
         <script src="/admin/core/ui/js/common.js" type="text/javascript"></script>
 
         <script type="text/javascript" src="ui/js/designer.js"></script>
+
+        <!--/TEMPLATE-->
     ';
 
     if(trim($html) == '') {

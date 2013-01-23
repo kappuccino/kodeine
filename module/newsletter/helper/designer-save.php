@@ -1,10 +1,11 @@
 <?php    
     if(!$app->userIsAdmin) header("Location: ./");
 
-	$html			= $_REQUEST['html'];
+    $html			= $_REQUEST['finalhtml'];
+    $designerhtml	= $_REQUEST['designerhtml'];
 
 	function formatHtml($html) {
-		$html = preg_replace('#<div([^>]*)(class\\s*=\\s*["\']repeaterBTEdit["\'])([^>]*)>(.*?)</div>#i', '', $html);
+		$html = preg_replace('#<!--TEMPLATE-->(.*)<!--/TEMPLATE-->#i', '', $html);
 		$html = preg_replace('#<link([^>]*)>#i', '', $html);
 		$html = preg_replace('#<script([^>]*)>(.*)</script>#i', '', $html);
 		$html = preg_replace('#<item([^>]*)class="active">#i', '<repeater$1>', $html);
@@ -22,8 +23,8 @@
 	$html_final = $app->apiLoad('newsletter')->newsletterDesignerCompil($html);
 	
 	$def['k_newsletter'] = array(
-		'newsletterHtmlDesigner' 	=> array('value' => $html),
-		'newsletterHtml' 			=> array('value' => $html_final)
+		'newsletterHtmlDesigner' 	=> array('value' => addslashes($designerhtml)),
+		'newsletterHtml' 			=> array('value' => addslashes($html_final))
 	);
 	$result	 = $app->apiLoad('newsletter')->newsletterSet($_REQUEST['id_newsletter'], $def);
 

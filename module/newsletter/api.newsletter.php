@@ -364,7 +364,7 @@ public function newsletterPrepareBody($id_newsletter, $data=NULL){
 
 	# Wrapp
 	#
-	if(!preg_match("#<body>#", $data)){
+	if(!preg_match("#<body>#", $data) && $data['newsletterHtmlDesigner'] == ''){
 
 		// Image de fond
 		if($from['newsletterStyle']['backgroundImage'] != ''){
@@ -389,21 +389,17 @@ public function newsletterPrepareBody($id_newsletter, $data=NULL){
 Newsletter provenant du Designer > suppression de toutes les balises propres au designer
 + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - */
 public function newsletterDesignerCompil($html){
-	
-	/*$html = str_replace("<!--[CDATA[", "", $html);
-	$html = str_replace("]]></html>", "</html>", $html);*/
-	$html = preg_replace("#<repeater([^>]*)>#", "", $html);
-	$html = preg_replace("#</repeater([^>]*)>#", "", $html);
-	$html = preg_replace("#<layout([^>]*)>#", "", $html);
-	$html = preg_replace("#</layout([^>]*)>#", "", $html);
-    $html = preg_replace("#<item([^>]*)>#", "", $html);
-    $html = preg_replace("#</item([^>]*)>#", "", $html);
-    $html = preg_replace("#<items([^>]*)>#", "", $html);
-    $html = preg_replace("#</items([^>]*)>#", "", $html);
-	$html = preg_replace("#<div class=\"repeaterEdit\"([^>]*)>(.*)</div>#", "", $html);
-	$html = preg_replace("#<div class=\"repeaterBTEdit\"([^>]*)>(.*)</div>#", "", $html);
-	$html = preg_replace("#<script([^>]*)>(.*)</script>#", "", $html);
-	$html = preg_replace("#<link([^>]*)>#", "", $html);
+
+    $html = preg_replace('#<!--TEMPLATE-->(.*)<!--/TEMPLATE-->#i', '', $html);
+    $html = str_replace('<a class="btn duplicate">Dupliquer</a>', '', $html);
+    $html = str_replace('<a class="btn delete">Supprimer</a>', '', $html);
+    $html = preg_replace("#<script([^>]*)>(.*)</script>#", "", $html);
+    $html = preg_replace("#<link([^>]*)>#", "", $html);
+
+    // Doctype
+    $doctype = '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+';
+    $html = $doctype.$html;
 	
 	return $html;
 }
