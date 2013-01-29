@@ -50,8 +50,8 @@
 <div class="inject-subnav-right hide">
 	
 	<li><a onclick="filterToggle('newsletter');" class="btn btn-small">Affichage</a></li>
-	<li><a href="data-designer" class="btn btn-small btn-success">Utiliser le designer</a></li>
-	<li><a href="data" class="btn btn-small btn-success">Ajouter une newsletter</a></li>
+	<li><a href="data-options?designer" class="btn btn-small btn-success">Utiliser le designer</a></li>
+	<li><a href="data-options" class="btn btn-small btn-success">Ajouter une newsletter</a></li>
 </div>
 
 <div id="app">
@@ -113,7 +113,7 @@
 			<tr>
 				<td><input type="checkbox" onchange="cbchange($(this));" /></td>
 				<td colspan="5">
-					<a href="#" onClick="remove();" class="btn btn-mini">Supprimer la selection</a>
+					<a href="#" onClick="newsletterRemove();" class="btn btn-mini">Supprimer la selection</a>
                 </td>
                 <td align="right">
 					<span class="pagination"><?php $app->pagination($total, $limit, $filter['offset'], 'index?cf&offset=%s'); ?></span>
@@ -136,7 +136,7 @@
 		}
 	}
 	
-	function remove(){
+	function newsletterRemove(){
 		if(confirm("SUPPRIMER ?")){
 			$('#listing').submit();
 		}

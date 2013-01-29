@@ -52,6 +52,7 @@
 	#
 	require_once(APP.'/plugin/phpmailer/class.phpmailer.php');
 	$mail = new PHPMailer();
+    $mail->CharSet = "UTF-8";
 	$mail->AddReplyTo("no-reply@".$_SERVER['HTTP_HOST']);
 	$mail->SetFrom("no-reply@".$_SERVER['HTTP_HOST']);
 	$mail->AddReplyTo("no-reply@".$_SERVER['HTTP_HOST']);

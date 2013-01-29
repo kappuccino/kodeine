@@ -9,9 +9,10 @@ if($_POST['action']){
     $def['k_newsletter'] = array(
         'newsletterName' 			=> array('value' => $_POST['newsletterName'], 		'check' => '.'),
         'newsletterTitle' 			=> array('value' => $_POST['newsletterTitle'], 		'check' => '.'),
-        'is_designer'               => array('value' => 1),
         'newsletterTemplateUrl' 	=> array('value' => $_POST['newsletterTemplateUrl'])
     );
+    if(isset($_REQUEST['designer'])) {
+        $def['k_newsletter']['is_designer'] = array('value' => 1);
 
     // Changement de template
     if($_POST['do'] == 'template') {
