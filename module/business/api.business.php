@@ -951,6 +951,7 @@ public function businessCmdMail($opt){
 	# Mail
 	#
 	$mail = new PHPMailer();
+    $mail->CharSet = "UTF-8";
     if($opt['mailFrom'] != '') $mail->SetFrom($opt['mailFrom']);
 	else $mail->SetFrom('noreply@'.$_SERVER['HTTP_HOST']);
 

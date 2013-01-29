@@ -45,6 +45,7 @@
 
 		require_once(KROOT.'/app/plugin/phpmailer/class.phpmailer.php');
 		$mail = new PHPMailer();
+        $mail->CharSet = "UTF-8";
 		$mail->SetFrom("noreply@".$_SERVER['HTTP_HOST']);
 		$mail->AddReplyTo("noreply@".$_SERVER['HTTP_HOST']);
 		$mail->AddAddress($myCmd['cartEmail']);
