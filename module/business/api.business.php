@@ -960,7 +960,7 @@ public function businessCmdMail($opt){
 		if(filter_var($e, FILTER_VALIDATE_EMAIL) !== FALSE) $mail->AddAddress($e);
 	}
 	$mail->ClearReplyTos();
-    if($opt['mailReplyTo'] != '') $mail->AddReplyTo($opt['mailFrom']);
+    if($opt['mailReplyTo'] != '') $mail->AddReplyTo($opt['mailReplyTo']);
     else $mail->AddReplyTo('noreply@'.$_SERVER['HTTP_HOST']);
 
 	// CC
