@@ -3,6 +3,9 @@
 * = Autre / Divers / Inclassable...
 
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+2013-01-29 (build 5.0.10)
+- Fix pb encodage UTF-8 de la fonction helperDate() avec setlocale(LC_ALL, 'fr_FR.UTF8') dans core.admin.php
+
 2013-01-28 (build 5.0.9)
 + labelisation multilingue du backoffice (i18n)
 
