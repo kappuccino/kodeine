@@ -951,14 +951,16 @@ public function businessCmdMail($opt){
 	# Mail
 	#
 	$mail = new PHPMailer();
-	$mail->SetFrom('noreply@'.$_SERVER['HTTP_HOST']);
+    if($opt['mailFrom'] != '') $mail->SetFrom($opt['mailFrom']);
+	else $mail->SetFrom('noreply@'.$_SERVER['HTTP_HOST']);
 
 	// TO
 	foreach($mailTo as $e){
 		if(filter_var($e, FILTER_VALIDATE_EMAIL) !== FALSE) $mail->AddAddress($e);
 	}
 	$mail->ClearReplyTos();
-	$mail->AddReplyTo('noreply@'.$_SERVER['HTTP_HOST']);
+    if($opt['mailReplyTo'] != '') $mail->AddReplyTo($opt['mailFrom']);
+    else $mail->AddReplyTo('noreply@'.$_SERVER['HTTP_HOST']);
 
 	// CC
 	foreach($mailCc as $e){
