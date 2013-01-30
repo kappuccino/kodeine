@@ -278,7 +278,7 @@
 		<ul class="do-viewer">
 		<?php foreach($type['typeFormLayout']['tab'] as $e){ ?>
 			<li class="is-tab do-view">
-				<span class="text"><?php echo utf8_decode($e['label']) ?></span>
+				<span class="text"><?php echo $e['label'] ?></span>
 				<span class="edit"></span>
 				<span class="remove"></span>
 				<span class="handle"></span>
@@ -329,7 +329,7 @@
 	<?php foreach($type['typeFormLayout']['tab'] as $id => $tab){ ?>
 	<div class="view view-tab" id="<?php echo $id ?>">
 		<div class="view-label view-label-toggle">
-			<span><?php echo utf8_decode($tab['label']) ?></span>
+			<span><?php echo $tab['label'] ?></span>
 		</div>
 		<ul class="is-sortable field-list"><?php
 			foreach($tab['field'] as $f){
