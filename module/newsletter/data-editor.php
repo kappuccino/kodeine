@@ -75,7 +75,8 @@ if($_REQUEST['id_newsletter'] != NULL){
 
 <header><?php
     include(COREINC.'/top.php');
-    include(__DIR__.'/ui/menu.php')
+    include(__DIR__.'/ui/menu.php');
+    include(__DIR__.'/ui/steps.php');
     ?></header>
 
 <div class="inject-subnav-right hide">
@@ -111,21 +112,6 @@ if($_REQUEST['id_newsletter'] != NULL){
         <input type="hidden" name="do" id="do" value="" />
 
         <table cellpadding="5" width="100%">
-            <tr>
-                <td width="100">Nom</td>
-                <td><input type="text" name="newsletterName" value="<?php echo $app->formValue($data['newsletterName'], $_POST['newsletterName']); ?>" style="width:96%" /></td>
-            </tr>
-            <tr>
-                <td>Titre du mail</td>
-                <td><input type="text" name="newsletterTitle" value="<?php echo $app->formValue($data['newsletterTitle'], $_POST['newsletterTitle']); ?>" style="width:96%" /></td>
-            </tr>
-            <tr>
-                <td>Archivage</td>
-                <td>
-                    <input type="checkbox" id="is_archive" name="is_archive" value="1" <?php if($app->formValue($data['is_archive'], $_POST['is_archive'])) echo "checked" ?> />
-                    <label for="is_archive">Si cette option est activée, la newsletter sera lisible par tout le monde depuis le site internet</label>
-                </td>
-            </tr>
             <tr>
                 <td colspan="2">
                     <table width="100%" cellpadding="0" cellspacing="0">

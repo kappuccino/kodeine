@@ -7,12 +7,14 @@ if($_POST['action']){
 
 
     $def['k_newsletter'] = array(
+        'is_archive'				=> array('value' => $_POST['is_archive'],			'zero'  => true),
         'newsletterName' 			=> array('value' => $_POST['newsletterName'], 		'check' => '.'),
         'newsletterTitle' 			=> array('value' => $_POST['newsletterTitle'], 		'check' => '.'),
         'newsletterTemplateUrl' 	=> array('value' => $_POST['newsletterTemplateUrl'])
     );
     if(isset($_REQUEST['designer'])) {
         $def['k_newsletter']['is_designer'] = array('value' => 1);
+    }
 
     // Changement de template
     if($_POST['do'] == 'template') {
@@ -47,7 +49,7 @@ if($_POST['action']){
             $mail->MsgHTML(utf8_decode($data['newsletterHtml']));
 
             if(!$mail->Send()) $message = "Erreur d'envoi".$mail->ErrorInfo;
-            else $message = 'OK: Newsletter enregistr�e et envoy�e en mode [TEST] ('.$pref['test'].')';
+            else $message = 'OK: Newsletter enregistrée et envoyée en mode [TEST] ('.$pref['test'].')';
 
         }else
             if($result && $_POST['do'] == 'list'){
@@ -55,11 +57,11 @@ if($_POST['action']){
                     header("Location: ./data-list?id_newsletter=".$app->apiLoad('newsletter')->id_newsletter);
                     exit();
                 }else{
-                    $message = 'KO: Cette newsletter est en cours d\'envois ou bien elle a d�j� �t� envoy�.';
+                    $message = 'KO: Cette newsletter est en cours d\'envoi ou bien elle a déjà été envoyée.';
                 }
             }
 
-        header("Location: data-designer?id_newsletter=".$app->apiLoad('newsletter')->id_newsletter.'&message='.urlencode($message));
+        header("Location: data-options?id_newsletter=".$app->apiLoad('newsletter')->id_newsletter.'&message='.urlencode($message));
 
     }else{
         $message = 'KO: Merci de remplir les champs correctement';
@@ -84,6 +86,9 @@ if($_REQUEST['id_newsletter'] != NULL){
     $data = $app->apiLoad('newsletter')->newsletterGet(array(
         'id_newsletter' 	=> $_REQUEST['id_newsletter']
     ));
+    if($data['newsletterSendDate'] != NULL) {
+        header("Location: analytic?id_newsletter=".$_REQUEST['id_newsletter']);
+    }
 
     $title = $data['newsletterName'];
 }else{
@@ -144,7 +149,7 @@ if(is_array($tps)) {
     ?>
     <div class="wrapper clearfix">
 
-    <form action="data-designer" method="post" id="data" enctype="multipart/form-data">
+    <form action="data-options" method="post" id="data" enctype="multipart/form-data">
 
         <input type="hidden" name="action" value="1" />
         <input type="hidden" name="id_newsletter" value="<?php echo $data['id_newsletter'] ?>" />
@@ -158,6 +163,13 @@ if(is_array($tps)) {
             <tr>
                 <td>Titre du mail</td>
                 <td><input type="text" name="newsletterTitle" value="<?php echo $app->formValue($data['newsletterTitle'], $_POST['newsletterTitle']); ?>" style="width:500px" /></td>
+            </tr>
+            <tr>
+                <td>Archivage</td>
+                <td>
+                    <input type="checkbox" id="is_archive" name="is_archive" value="1" <?php if($app->formValue($data['is_archive'], $_POST['is_archive'])) echo "checked" ?> />
+                    <label for="is_archive">Si cette option est activée, la newsletter sera lisible par tout le monde depuis le site internet</label>
+                </td>
             </tr>
         </table>
     </form>
