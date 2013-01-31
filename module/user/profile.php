@@ -102,7 +102,7 @@
 			}
 		?>
 
-		<form action="profile" method="post" id="data">
+		<form action="profile?id_profile=<?php echo $data['id_profile'] ?>" method="post" id="data">
 
 		<input type="hidden" name="action" value="1" />
 		<input type="hidden" name="id_profile" value="<?php echo $data['id_profile'] ?>" />

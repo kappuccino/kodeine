@@ -14,6 +14,7 @@ myMedia			= '/admin/media/ui/img';
 isDrag			= false;
 hasHistory 		= false;
 scrollWidth		= '';
+root            = '/media';
 
 /* + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - 
 + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - */
@@ -185,7 +186,7 @@ function folderView(hash){
 		dataType: 'json',
 		data: {
 			'factor': factor,
-			'folder': folder
+			'folder': root + folder
 		}
 	}).done(function(data) {
 		if(data != null){
@@ -646,7 +647,9 @@ function makeDragAndDrop(){
 function viewUrl(){
 
 	var before	= '';
-	var parts 	= folder.split("\/");
+
+    var parts 	= folder.split("\/");
+
 	var str		= [];
 
 	$('#path').empty();
@@ -675,7 +678,7 @@ function viewUrl(){
 /* + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - 
 + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - */
 function setFolder(url){
-	folder = url;
+	folder = url.replace(root,"");
 }
 
 /* + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - 
@@ -801,7 +804,7 @@ function actionMove(src, dstElement){
 
 	var get = $.ajax({
 		url: 'helper/action',
-		data: {'action':'move', 'src':folder+'/'+src, 'dst':dst},
+		data: {'action':'move', 'src':root + folder+'/'+src, 'dst':root + dst},
 		dataType: 'json'
 	});
 	
@@ -848,7 +851,7 @@ function actionRename(position){
 				
 				var get = $.ajax({
 					url: 'helper/action',
-					data: {'action':'rename', 'src':folder+'/'+old, 'dst':folder+'/'+$(this).val()},
+					data: {'action':'rename', 'src':root + folder+'/'+old, 'dst':root + folder+'/'+$(this).val()},
 					dataType: 'json'
 				});
 				
@@ -916,7 +919,7 @@ function actionNewDirectory(newDir){
 
 	var get = $.ajax({
 		url: 'helper/action',
-		data: {'action':'newdir', 'src':folder+'/'+newDir},
+		data: {'action':'newdir', 'src':root + folder+'/'+newDir},
 		dataType: 'json'
 	});
 	
@@ -928,7 +931,7 @@ function actionNewDirectory(newDir){
 				'name'	: newDir,
 				'tags'	: 'isDir',
 				'type'	: 'dir',
-				'url'	: folder+'/'+newDir
+				'url'	: root + folder+'/'+newDir
 			});
 			
 			last = collection[collection.length - 1];
@@ -1133,7 +1136,7 @@ function modalShowUpload() {
 				'auto'         : true,
 				'formData'     : {'test' : 'something'},
 				'queueID'      : 'queue',
-				'uploadScript' : 'helper/upload-action?f='+uploadPath,
+				'uploadScript' : 'helper/upload-action?f='+root + uploadPath,
 				'onSelect'     : function(event,ID,fileObj) {
 				},
 				'onDrop' : function(file, count) {
@@ -1340,7 +1343,7 @@ function actionPdfToImage(url){
 		//	if(r.callBack != null) eval(r.callBack);
 
 			if(r.success == true){
-				folderNav(folder);
+				folderNav(root + folder);
 			}
 		}
 	}).get({
@@ -1365,7 +1368,7 @@ function distantDownload(){
 		data : {
 			'action': 	'download',
 			'data':		$('#distantUpload').val(),
-			'folder': 	folder
+			'folder': 	root + folder
 		}
 	}).done(function(data){
 

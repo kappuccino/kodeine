@@ -14,6 +14,14 @@
 #	$prompt 	= (($k->userSettingGet('root') == NULL) ? KPROMPT.'/media' : $k->userSettingGet('root'));
 	$prompt		= '/media';
 
+$prompt = '/media';
+
+if($app->userCan('media.root') != '') {
+    if(file_exists(KROOT.$app->userCan('media.root'))) {
+        $prompt = $app->userCan('media.root');
+    }
+}
+//die($prompt);
 #	$folder 	= urldecode($_GET['folder']);
 	$folder 	= rawurldecode($_GET['folder']);
 	
