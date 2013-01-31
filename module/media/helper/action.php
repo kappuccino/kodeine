@@ -38,6 +38,9 @@
                     $success 	= 'true';
                     $callBack 	= "log_('DUPLICATE SUCCESS : $src > $dst');folderView();";
                 }
+            } else {
+                $success 	= 'false';
+                $callBack 	= "log_('DUPLICATE FAILED : action non autorisée');";
             }
 		break;
 
@@ -77,6 +80,9 @@
                     $success 	= 'true';
                     $callBack 	= "log_('MOVE SUCCESS : $src > $dst');";
                 }*/
+            } else {
+                $success 	= 'false';
+                $callBack 	= "log_('MOVE FAILED : action non autorisée');";
             }
 		break;
 
@@ -95,8 +101,11 @@
 
                 }else{
                     $success 	= 'false';
-                    $callBack 	= "log_('REMOVE FAILEDD : $src');";
+                    $callBack 	= "log_('REMOVE FAILED : $src');";
                 }
+            } else {
+                $success 	= 'false';
+                $callBack 	= "log_('REMOVE FAILED : action non autorisée');";
             }
 
 		break;
@@ -127,6 +136,9 @@
                     $success 	= 'false';
                     $callBack 	= "log_('NEWDIR FAILED : $src');";
                 }
+            } else {
+                $success 	= 'false';
+                $callBack 	= "log_('NEWDIR FAILED : action non autorisée');";
             }
 		break;
 		
@@ -151,6 +163,9 @@
                     $success	= 'false';
                     $callBack	= "log_('RENAME SUCCESS API : $src > $dst')";
                 }
+            } else {
+                $success 	= 'false';
+                $callBack 	= "log_('RENAME FAILED : action non autorisée');";
             }
 		break;
 
