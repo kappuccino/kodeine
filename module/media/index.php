@@ -104,8 +104,8 @@
 		useData		= 'true';
 		myPrompt	= '<?php echo KPROMPT ?>';
 			hash 	= getHash();
-			url  	= (hash == '') ? '<?php echo $last; ?>' : hash;
-        root = '/media<?php echo $root; ?>';
+            url  	= (hash == '' || hash == '/') ? '<?php echo ($last != '') ? $last : '/media'; ?>' : hash;
+        root = '<?php echo ($last != '') ? '/media'.$root : ''; ?>';
         folderNav(url);
 	});
 </script>
