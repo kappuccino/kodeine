@@ -6,8 +6,8 @@ $(document).ready(function() {
 			"bPaginate" : false,
 			"bAutoWidth" : false,
 			"oLanguage": {
-				"sSearch": "Filtrer les résultats",
-				"sInfo": "",
+				"sSearch": "Filtrer les rÃ©sultats",
+				"sInfo": ""
 			},
 			"aoColumns": aoCol($('.sortable'))
 	    });
@@ -55,6 +55,14 @@ $(document).ready(function() {
 			}
 		});
 	}
+
+	$('a[data-ajaxhandler]').on('click', function(e) {
+		var el = $(this).attr('data-ajaxhandler');
+		kajaxHandler($(el), $(this));
+	});
+
+
+
 });
 
 function subNavOnDemand(){
@@ -349,7 +357,7 @@ function buildRichEditor(){
 		
 		setup : function(ed) {
 		    ed.addButton('mybutton', {
-		        title : 'Insérer des images',
+		        title : 'InsÃ©rer des images',
 		        image : '/admin/core/ui/img/_img/myb.gif',
 		        onclick : function() {
 					mediaPicker(ed.id, 'mce');
@@ -393,4 +401,63 @@ function toggleSlider(that, callbackON, callbackOFF) {
 function jumpMenu(targ,selObj,restore){
 	eval(targ+".location='"+selObj.options[selObj.selectedIndex].value+"'");
 	if (restore) selObj.selectedIndex=0;
+}
+
+
+function kajaxHandler(el, btn) {
+
+	// INIT
+	el.css('display', 'block');
+	var url          = el.attr('data-url');
+	var innersaved   = el.html();
+
+	if (url.length == 0) return console.log('No url specified');
+	var _attrs = el[0].attributes;
+	var patt   = /^data-/;
+	var attrs  = {};
+	btn.hide();
+
+	for(var k in _attrs) {
+		if (typeof _attrs[k].name !== 'string') continue;
+		if (_attrs[k].name.match(patt)) {
+			if (_attrs[k].name != 'data-url')
+				attrs[_attrs[k].name.substring(5)] = _attrs[k].nodeValue;
+		}
+	}
+
+	el.wrapInner('<form id="k-ajax-form"></form>');
+
+	for (var attr in attrs) {
+		var hid = $('<input type="hidden" name="'+attr+'" value="'+attrs[attr]+'" />').appendTo('#k-ajax-form');
+	}
+
+	// BINDS
+	var cancel = el.find('a[data-action="cancel"]').on('click', function() {
+		el.css('display', 'none');
+		el.html(innersaved);
+		btn.show();
+	});
+
+	// AJAX
+	var go = el.find('a[data-action="go"]').on('click', function() {
+		var ser = $('#k-ajax-form').serialize();
+		$.ajax({
+			url     : url,
+			data    : ser,
+			type    : 'POST',
+			dataType: 'json'
+		}).done(function(r) {
+			if (!r.success) {
+				alert('Une erreur s\'est produite sur le serveur.');
+				console.log(r);
+			} else {
+				if (r.reload) window.location.reload();
+				cancel.trigger('click');
+			}
+		}).error(function(xhr, status, error) {
+			console.log("Error : "+error+" status : "+status);
+			cancel.trigger('click');
+		});
+	});
+
 }
