@@ -1,7 +1,7 @@
 <?php
 // http://guides.rubyonrails.org/active_record_querying.html
 
-class dataSQL extends coreApp{
+class coreDbQuery extends coreApp{
 
 private $dbQuery    = 'SELECT';
 private $dbMode     = 'dbMulti';
@@ -126,11 +126,13 @@ public function set($key=NULL, $value=NULL){
 
 	if(is_array($key)){
 		foreach($key as $k => $v){
-			$this->values[] = $k."='".$v."'";
+		#	$this->values[]   = $k."='".$v."'";
+			$this->values[$k] = $k."='".$v."'";
 		}
 	}else
 	if(is_string($key) && $value != ''){
-		$this->values[] = $key."='".$value."'";
+	#	$this->values[]     = $key."='".$value."'";
+		$this->values[$key] = $key."='".$value."'";
 	}else
 	if($key === NULL){
 		return implode(', ', $this->values);
@@ -209,7 +211,7 @@ public function __toString(){
 
 	if($this->dbQuery == 'SELECT'){
 		$query[] = 'SELECT '.$this->select();
-		$query[] = 'FROM '.$this->from();
+		$query[] = 'FROM `'.$this->from().'`';
 
 		if(count($this->join) > 0) $query[] = $this->join();
 
@@ -222,18 +224,18 @@ public function __toString(){
 
 	}else
 	if($this->dbQuery == 'INSERT'){
-		$query[] = 'INSERT INTO '.$this->from();
+		$query[] = 'INSERT INTO `'.$this->from().'`';
 		if(isset($set)) $query[] = $set;
 
 	}else
 	if($this->dbQuery == 'UPDATE'){
-		$query[] = 'UPDATE '.$this->from();
+		$query[] = 'UPDATE `'.$this->from().'`';
 		if(isset($set))     $query[] = $set;
 		if(isset($where))   $query[] = $where;
 
 	}else
 	if($this->dbQuery == 'DELETE'){
-		$query[] = 'DELETE FROM '.$this->from();
+		$query[] = 'DELETE FROM `'.$this->from().'`';
 		if(isset($where)) $query[] = $where;
 	}
 
