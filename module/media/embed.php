@@ -85,8 +85,8 @@
 		askType		= '<?php echo $askType ?>';
 		useData		= 'true';
 		myPrompt	= '<?php echo KPROMPT ?>';
-        url  	    = '<?php echo $last; ?>';
-        root        = '/media<?php echo $root; ?>';
+        url  	= '<?php echo ($last != '') ? $last : '/media'; ?>';
+        root    = '<?php echo ($last != '') ? '/media'.$root : ''; ?>';
 
 		folderNav(url);
 	});
