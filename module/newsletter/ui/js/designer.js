@@ -482,7 +482,7 @@ function repeatEdit(repeat) {
     editor.append('<div class="edit-form">Classement : <select id="editor-direction"><option value="ASC">Croissant</option><option value="DESC">Décroissant</option></select></div>');
 
     // Submit
-    editor.append('<div class="edit-form"><a class="editor-load">Charger les éléments></a></div>');
+    editor.append('<div class="edit-form"><a class="editor-load btn">Charger les éléments</a></div>');
 
     $('.close').click( function(e){
         editorClose();

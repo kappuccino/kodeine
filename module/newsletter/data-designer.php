@@ -2,35 +2,37 @@
 	$api	= $app->apiLoad('newsletter');
 	$pref	= $app->configGet('newsletter');
 
+    if($_POST['do'] == 'test'){
+        //die('ok');
+        $result = $app->apiLoad('newsletter')->newsletterPreview($_REQUEST['id_newsletter']);
+        $message = ($result) ? 'OK: Newsletter envoyée en mode [TEST] ('.$pref['test'].')' : 'KO: Erreur Test';
+    }
+
 	if($_POST['action']){
-		$do = true;
-		
-		
-		$def['k_newsletter'] = array(
-			'newsletterName' 			=> array('value' => $_POST['newsletterName'], 		'check' => '.'),
-			'newsletterTitle' 			=> array('value' => $_POST['newsletterTitle'], 		'check' => '.'),
-            'is_designer'               => array('value' => 1),
-			'newsletterTemplateUrl' 	=> array('value' => $_POST['newsletterTemplateUrl'])
-		);
+        $do = true;
 
-		// Changement de template
-		if($_POST['do'] == 'template') {
-			$template_info = @file_get_contents($_POST['newsletterTemplateUrl'].'/info.xml');
-			preg_match("#<file>(.*)</file>?#", $template_info, $file);
-			/*$template_source = @file_get_contents($_POST['newsletterTemplateUrl'].'/'.$file[1]);
-			$def['k_newsletter']['newsletterTemplateSource'] 	= array('value' => $template_source);*/
-			$def['k_newsletter']['newsletterHtmlDesigner'] 		= array('value' => '');
-		}
-		
+        $def['k_newsletter'] = array(
+            'newsletterTemplateUrl' 	=> array('value' => $_POST['newsletterTemplateUrl'])
+        );
 
-		if(!$app->formValidation($def)) $do = $false;
+        // Changement de template
+        if($_POST['do'] == 'template') {
+            $template_info = @file_get_contents($_POST['newsletterTemplateUrl'].'/info.xml');
+            preg_match("#<file>(.*)</file>?#", $template_info, $file);
+            /*$template_source = @file_get_contents($_POST['newsletterTemplateUrl'].'/'.$file[1]);
+            $def['k_newsletter']['newsletterTemplateSource'] 	= array('value' => $template_source);*/
+            $def['k_newsletter']['newsletterHtmlDesigner'] 		= array('value' => '');
+        }
 
-		if($do){
-			$result	 = $app->apiLoad('newsletter')->newsletterSet($_POST['id_newsletter'], $def);
-			$message = ($result) ? 'OK: Enregistrement' : 'KO: Probleme, APP : <br />'.$app->db_error;
 
-			if($result && $_POST['do'] == 'test'){
-                
+        if(!$app->formValidation($def)) $do = $false;
+
+        if($do){
+            $result	 = $app->apiLoad('newsletter')->newsletterSet($_POST['id_newsletter'], $def);
+            $message = ($result) ? 'OK: Enregistrement' : 'KO: Probleme, APP : <br />'.$app->db_error;
+
+            if($result && $_POST['do'] == 'test'){
+
                 // Envoi de mail de test
                 $data = $app->apiLoad('newsletter')->newsletterGet(array(
                     'id_newsletter'     => $_REQUEST['id_newsletter']
@@ -38,31 +40,31 @@
                 require_once(PLUGIN.'/phpmailer/class.phpmailer.php');
                 $mail = new PHPMailer();
                 $mail->SetFrom('noreply@'.$_SERVER['HTTP_HOST'], $_SERVER['HTTP_HOST']);
-        
+
                 $mail->AddAddress($pref['test']);
-        
+
                 $mail->Subject  = $data['newsletterTitle'];
                 $mail->AltBody  = utf8_decode(strip_tags($data['newsletterHtml']));
                 $mail->MsgHTML(utf8_decode($data['newsletterHtml']));
-                
-                if(!$mail->Send()) $message = "Erreur d'envoi".$mail->ErrorInfo;   
-                else $message = 'OK: Newsletter enregistrée et envoyée en mode [TEST] ('.$pref['test'].')';
-				
-			}else
-			if($result && $_POST['do'] == 'list'){
-				if($data['newsletterSendDate'] == NULL){
-					header("Location: ./data-list?id_newsletter=".$app->apiLoad('newsletter')->id_newsletter);
-					exit();
-				}else{
-					$message = 'KO: Cette newsletter est en cours d\'envois ou bien elle a déjà été envoyé.';
-				}
-			}
-	
-			header("Location: data-designer?id_newsletter=".$app->apiLoad('newsletter')->id_newsletter.'&message='.urlencode($message));
 
-		}else{
-			$message = 'KO: Merci de remplir les champs correctement';
-		}
+                if(!$mail->Send()) $message = "Erreur d'envoi".$mail->ErrorInfo;
+                else $message = 'OK: Newsletter enregistrée et envoyée en mode [TEST] ('.$pref['test'].')';
+
+            }else
+            if($result && $_POST['do'] == 'list'){
+                if($data['newsletterSendDate'] == NULL){
+                    header("Location: ./data-list?id_newsletter=".$app->apiLoad('newsletter')->id_newsletter);
+                    exit();
+                }else{
+                    $message = 'KO: Cette newsletter est en cours d\'envois ou bien elle a déjà été envoyé.';
+                }
+            }
+
+            header("Location: data-designer?id_newsletter=".$app->apiLoad('newsletter')->id_newsletter.'&message='.urlencode($message));
+
+        }else{
+            $message = 'KO: Merci de remplir les champs correctement';
+        }
 	}
 
 
@@ -125,7 +127,7 @@
             <li><a href="preview?id_newsletter=<?php echo $_REQUEST['id_newsletter'] ?>" class="btn btn-mini" target="_blank">Prévisualiser</a></li>
             <?php } ?>
         <?php if($data['newsletterSendDate'] == NULL){ ?>
-            <li><a href="javascript:$('#do').val('test');save();" class="btn btn-mini btn-success">Enregistrer et envoyer un mail de test</a></li>
+            <li><a href="javascript:$('#do').val('test');$('#data').submit();" class="btn btn-mini">Envoyer un mail de test</a></li>
         <?php } ?>
     <?php } ?>
     <?php if($data['newsletterSendDate'] == NULL){ ?>
@@ -143,6 +145,12 @@
 ?>
 
     <?php if($data['id_newsletter'] > 0 && $data['newsletterSendDate'] == NULL) { ?>
+
+    <form action="data-designer?id_newsletter=<?php echo $data['id_newsletter'] ?>" method="post" id="data" enctype="multipart/form-data">
+        <input type="hidden" name="id_newsletter" value="<?php echo $data['id_newsletter'] ?>" />
+        <input type="hidden" name="do" id="do" value="" />
+    </form>
+
 
     <div class="wrapper clearfix">
 

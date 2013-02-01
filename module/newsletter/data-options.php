@@ -12,7 +12,7 @@ if($_POST['action']){
         'newsletterTitle' 			=> array('value' => $_POST['newsletterTitle'], 		'check' => '.'),
         'newsletterTemplateUrl' 	=> array('value' => $_POST['newsletterTemplateUrl'])
     );
-    if(isset($_REQUEST['designer'])) {
+    if($_REQUEST['designer'] == 1) {
         $def['k_newsletter']['is_designer'] = array('value' => 1);
     }
 
@@ -131,7 +131,7 @@ if(is_array($tps)) {
         <li><a href="preview?id_newsletter=<?php echo $_REQUEST['id_newsletter'] ?>" class="btn btn-mini" target="_blank">Prévisualiser</a></li>
         <?php } ?>
     <?php if($data['newsletterSendDate'] == NULL){ ?>
-        <li><a href="javascript:$('#do').val('test');save();" class="btn btn-mini btn-success">Enregistrer et envoyer un mail de test</a></li>
+        <!--<li><a href="javascript:$('#do').val('test');save();" class="btn btn-mini">Envoyer un mail de test</a></li>-->
         <?php } ?>
     <?php } ?>
     <?php if($data['newsletterSendDate'] == NULL){ ?>
@@ -154,6 +154,7 @@ if(is_array($tps)) {
         <input type="hidden" name="action" value="1" />
         <input type="hidden" name="id_newsletter" value="<?php echo $data['id_newsletter'] ?>" />
         <input type="hidden" name="do" id="do" value="" />
+        <input type="hidden" name="designer" value="<?php echo $_REQUEST['designer']; ?>" />
 
         <table cellpadding="5" width="100%">
             <tr>

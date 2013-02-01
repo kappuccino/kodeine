@@ -129,23 +129,44 @@ public function newsletterRemove($id_newsletter){
 + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - */
 public function newsletterPreview($id_newsletter){
 
-	$pref = $this->configGet('newsletter');
-	$data = $this->newsletterGet(array('id_newsletter' => $id_newsletter));
-	$body = $this->newsletterPrepareBody($id_newsletter, $newsletter['newsletterHtml']);
+    $pref = $this->configGet('newsletter');
+    // Envoi de mail de test
+    $data = $this->apiLoad('newsletter')->newsletterGet(array(
+        'id_newsletter'     => $id_newsletter
+    ));
+    require_once(PLUGIN.'/phpmailer/class.phpmailer.php');
+    $mail = new PHPMailer();
+    $mail->Charset = "UTF-8";
+    $mail->SetFrom('noreply@'.$_SERVER['HTTP_HOST'], $_SERVER['HTTP_HOST']);
+    $mails = explode(',', $pref['test']);
 
-	$send = array(
-		'mails'				=> array_map('trim', explode(',', $pref['test'])),
-		'newsletterName'	=> $data['newsletterTitle'],
-		'newsletterHtml'	=> $body
-	);
+    foreach($mails as $m) {
+        if(trim($m) != '') $mail->AddAddress(trim($m));
+    }
 
-	$rest = new newsletterREST($pref['auth'], $pref['passw']);
-	$prev = $rest->request('/preview.php', 'POST', $send);
-	$prev = json_decode($prev, true);
-	
-	if(!$prev['success']) die($this->pre($prev));
-	
-	return $prev['success'];
+    $mail->Subject  = $data['newsletterTitle'];
+    $mail->AltBody  = strip_tags($data['newsletterHtml']);
+    $mail->MsgHTML($data['newsletterHtml']);
+
+    return $mail->Send();
+    /*
+        $pref = $this->configGet('newsletter');
+        $data = $this->newsletterGet(array('id_newsletter' => $id_newsletter));
+        $body = $this->newsletterPrepareBody($id_newsletter, $newsletter['newsletterHtml']);
+
+        $send = array(
+            'mails'				=> array_map('trim', explode(',', $pref['test'])),
+            'newsletterName'	=> $data['newsletterTitle'],
+            'newsletterHtml'	=> $body
+        );
+
+        $rest = new newsletterREST($pref['auth'], $pref['passw']);
+        $prev = $rest->request('/preview.php', 'POST', $send);
+        $prev = json_decode($prev, true);
+
+        if(!$prev['success']) die($this->pre($prev));
+
+        return $prev['success'];*/
 }
 
 /* + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - 

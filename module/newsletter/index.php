@@ -50,7 +50,7 @@
 <div class="inject-subnav-right hide">
 	
 	<li><a onclick="filterToggle('newsletter');" class="btn btn-small">Affichage</a></li>
-	<li><a href="data-options?designer" class="btn btn-small btn-success">Utiliser le designer</a></li>
+	<li><a href="data-options?designer=1" class="btn btn-small btn-success">Utiliser le designer</a></li>
 	<li><a href="data-options" class="btn btn-small btn-success">Ajouter une newsletter</a></li>
 </div>
 

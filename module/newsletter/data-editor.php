@@ -46,7 +46,7 @@ if($_POST['action']){
                 }
             }
 
-        header("Location: data?id_newsletter=".$app->apiLoad('newsletter')->id_newsletter.'&message='.urlencode($message));
+        header("Location: data-editor?id_newsletter=".$app->apiLoad('newsletter')->id_newsletter.'&message='.urlencode($message));
 
     }else{
         $message = 'KO: Merci de remplir les champs correctement';
@@ -105,7 +105,7 @@ if($_REQUEST['id_newsletter'] != NULL){
     }
     ?>
 
-    <form action="data" method="post" id="data" enctype="multipart/form-data">
+    <form action="data-editor" method="post" id="data" enctype="multipart/form-data">
 
         <input type="hidden" name="action" value="1" />
         <input type="hidden" name="id_newsletter" value="<?php echo $data['id_newsletter'] ?>" />

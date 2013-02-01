@@ -1,4 +1,5 @@
 <?php
+echo 'zef';
 	if(!$app->userIsAdmin) header("Location: ./");
 
 	$data = $app->apiLoad('newsletter')->newsletterGet(array(
