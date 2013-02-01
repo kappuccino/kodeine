@@ -4,6 +4,9 @@ Kodeine Change log
 * = Autre / Divers / Inclassable...
 
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+2013-02-01 (5.0.9)
+- Fix pbs boutons avec onclick="remove()"
+
 2013-01-02 (5.0.8)
 - Suppression des images
 

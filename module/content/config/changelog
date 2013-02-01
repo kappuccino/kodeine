@@ -4,6 +4,9 @@ Kodeine Change log
 * = Autre / Divers / Inclassable...
 
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+2013-02-01 (5.0.19)
+- Fix pbs boutons avec onclick="remove()"
+
 2013-01-23 (5.0.18)
 - Fix bouton "Effectuer les changements" dans content/index
 

@@ -115,7 +115,7 @@
 				<td><input type="checkbox" onchange="$$('.cb').set('checked', this.checked);" /></td>
 				<td><input type="checkbox" onchange="$$('.cm').set('checked', this.checked);" /></td>
 				<td colspan="<?php echo ($_REQUEST['id_content'] == NULL) ? '5' : '3'; ?>">
-					<a href="#" onClick="remove();" class="btn btn-mini">Effectuer les changements sur la selection</a> 
+					<a href="#" onClick="apply();" class="btn btn-mini">Effectuer les changements sur la selection</a>
 					<span class="pagination"><?php 
 						$app->pagination($total, $limit, $filter['offset'], '/admin/comment/?cf&id_content='.$_GET['id_content'].'&offset=%s');
 					?></span>
@@ -136,7 +136,7 @@
 
 <?php include(COREINC.'/end.php'); ?>
 <script>
-	function remove(){
+	function apply(){
 		if(confirm("Voulez vous supprimer ou moderer les commentaires ?")){
 			$('#listing').submit();
 		}

@@ -27,7 +27,7 @@ $(function() {
    doSort();
 });
 
-function remove(){
+function apply(){
 	if(confirm("SUPPRIMER ?")){
 		$('#listing').submit();
 	}

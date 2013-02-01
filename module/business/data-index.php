@@ -81,7 +81,7 @@
 	            <td height="25" class="check check-red"><input class="chk" type="checkbox" id="chkall" onchange="cbchange($(this))" />
 	            	<label for="chkall"><i class="icon-remove icon-white"></i></label>
 	            </td>
-	            <td coslpan="3"><a href="#" onClick="remove();" class="button button-red">Supprimer la s&eacute;l&eacute;ction</a></td>
+	            <td coslpan="3"><a href="#" onClick="apply();" class="button button-red">Supprimer la s&eacute;l&eacute;ction</a></td>
 	        </tr>
 	    </tfoot>
 	</table>
@@ -95,7 +95,7 @@
 	
 	<script>
 	
-	    function remove(){
+	    function apply(){
 	        
 	        if(confirm('Etes vous sur de vouloir supprimer les commandes sélectionées ?')){
 	            $('#listing').submit();

@@ -91,7 +91,7 @@
 				<tr>
 					<?php if(sizeof($account) > 0){ ?>
 					<td height="25" class="check check-red"><input id="chkdel-all" class="chk" type="checkbox" onchange="cbchange($(this));" /></td>
-					<td colspan="2"><a href="#" onClick="remove();" class="btn btn-mini">Supprimer la s&eacute;l&eacute;ction</a></td>
+					<td colspan="2"><a href="#" onClick="apply();" class="btn btn-mini">Supprimer la s&eacute;l&eacute;ction</a></td>
 				</tr>
 				<?php }else{ ?>
 				<tr>
@@ -151,7 +151,7 @@
 		}
 	}
 	
-	function remove(){
+	function apply(){
 		if(confirm("SUPPRIMER ?")){
 			$('#listing').submit();
 		}

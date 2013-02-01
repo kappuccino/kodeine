@@ -3,8 +3,8 @@
 
 	<data>
 		<key>clientftp</key>
-		<version>5.0.2</version>
-        <lastMod>2013-01-02</lastMod>
+		<version>5.0.3</version>
+        <lastMod>2013-02-01</lastMod>
 
 		<name><![CDATA[Client FTP]]></name>
 		<description><![CDATA[G&eacute;rer les acc&egrave;s FTP suppl&eacute;mentaires]]></description>

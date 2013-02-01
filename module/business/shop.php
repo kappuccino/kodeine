@@ -100,7 +100,7 @@
 					<tr>
 						<td></td>
 						<td height="30">
-							<a href="#" onClick="remove();" class="btn btn-mini">Supprimer la selection</a> 
+							<a href="#" onClick="apply();" class="btn btn-mini">Supprimer la selection</a>
 						</td>
 					</tr>
 				</tfoot>
@@ -190,7 +190,7 @@
 <script src="/admin/core/ui/_datatables/jquery.dataTables.js"></script>
 <script>
 
-	function remove(){
+	function apply(){
 		if(confirm("SUPPRIMER ?")){
 			$('#listing').submit();
 		}

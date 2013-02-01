@@ -136,7 +136,7 @@
             <tfoot>
 	            <tr>
 	                <td class="check-red"><input type="checkbox" class="chk" id="delall" onchange="cbchange($(this));" /></td>
-	                <td colspan="2"><a href="#" onClick="remove();" class="btn btn-mini"><span><?php echo $i18n->_('Supprimer la selection') ?></span></a></td>
+	                <td colspan="2"><a href="#" onClick="apply();" class="btn btn-mini"><span><?php echo $i18n->_('Supprimer la selection') ?></span></a></td>
 	                <td><?php echo round(($t / 1024 / 1024), 2) ?> Mo</td>
 	                <td></td>
 	            </tr>
@@ -161,7 +161,7 @@
         }
     }
 
-	function remove(){
+	function apply(){
 		if(confirm("<?php echo $i18n->_('Confirmez-vous la suppression ?') ?>")) $('#listing').submit();
 	}
 

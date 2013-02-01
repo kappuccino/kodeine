@@ -88,7 +88,7 @@
 			        <tr>
 			            <?php if(sizeof($tax) > 0){ ?>
 			            <td class="check check-red" height="25"><input class="chk" id="chkdel-all" type="checkbox" onchange="cbchange($(this))" /></td>
-			            <td><a href="#" onClick="remove();" class="btn btn-mini">Supprimer la s&eacute;l&eacute;ction</a></td>
+			            <td><a href="#" onClick="apply();" class="btn btn-mini">Supprimer la s&eacute;l&eacute;ction</a></td>
 			        </tr>
 			        <?php }else{ ?>
 			        <tr>
@@ -135,7 +135,7 @@
 <?php include(COREINC.'/end.php'); ?>
 <script>
 
-    function remove(){
+    function apply(){
         if(confirm("SUPPRIMER ?")){
             $('#listing').submit();
         }

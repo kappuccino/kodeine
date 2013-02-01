@@ -93,7 +93,7 @@
 			<?php if(sizeof($type) > 0){ ?>
 			<tr>
 				<td width="30" height="25"><input type="checkbox" onchange="$$('.cb').set('checked', this.checked);" /></td>
-				<td colspan="3"><a href="#" onClick="remove();" class="btn btn-mini">Supprimer la selection</a></td>
+				<td colspan="3"><a href="#" onClick="applyRemove();" class="btn btn-mini">Supprimer la selection</a></td>
 			</tr>
 			<?php }else{ ?>
 			<tr>
@@ -237,7 +237,7 @@
 		}
 	}
 
-	function remove(){
+	function applyRemove(){
 		if(confirm("SUPPRIMER ?")){
 			$('#listing').submit();
 		}

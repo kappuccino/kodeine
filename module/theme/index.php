@@ -92,7 +92,7 @@
 			<tfoot>
 				<tr>
 					<td width="25"><input type="checkbox" onchange="$('.listing .del').attr('checked', this.checked);" /></td>
-					<td colspan="2"><a href="#" onClick="remove();" class="btn btn-mini"><?php echo $i18n->_('Supprimer la selection') ?></a> </td>
+					<td colspan="2"><a href="#" onClick="applyRemove();" class="btn btn-mini"><?php echo $i18n->_('Supprimer la selection') ?></a> </td>
 				</tr>
 			</tfoot>
 		</table>

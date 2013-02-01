@@ -185,7 +185,7 @@
 		
 		echo "<div class=\"under\">";
 		echo "<a href=\"player-video?url=".$_GET['url']."\">Visionner cette vidéo</a> &nbsp; | &nbsp; ";
-		echo "<a href=\"#\" onClick=\"remove()\">Supprimer ce poster</a>";
+		echo "<a href=\"#\" onClick=\"posterRemove()\">Supprimer ce poster</a>";
 		echo "</div>";
 
 	}else
@@ -241,7 +241,7 @@
 		}
 	}
 
-	function remove(){
+	function posterRemove(){
 		if(confirm("Supprimer ce poster ?")) {
 		   document.location = 'video-poster?&url=<?php echo $_GET['url'] ?>&noPoster';
 		}

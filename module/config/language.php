@@ -110,7 +110,7 @@
 			<tfoot>
 				<tr>
 					<td height="30"></td>
-					<td colspan="4"><a onClick="remove();" class="btn btn-mini"><?php echo $i18n->_('Supprimer la selection') ?></a></td>
+					<td colspan="4"><a onClick="apply();" class="btn btn-mini"><?php echo $i18n->_('Supprimer la selection') ?></a></td>
 				</tr>
 			</tfoot>
 		</table>
@@ -210,7 +210,7 @@
 <?php include(COREINC.'/end.php'); ?>
 <script>
 
-	function remove(){
+	function apply(){
 		if(confirm("<?php echo addslashes($i18n->_('SUPPRIMER ?')) ?>")) $('#form').submit();
 	}
 	

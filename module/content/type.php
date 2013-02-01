@@ -223,7 +223,7 @@
 		<div class="clearfix">
 			<div class="left">
 				<?php if(sizeof($types) > 0){ ?>
-				<a onclick="remove();" class="btn btn-mini">Supprimer la selection</a>
+				<a onclick="apply();" class="btn btn-mini">Supprimer la selection</a>
 				<a href="type" class="btn btn-mini">Annuler</a>
 				<?php } ?>
 			</div>
@@ -314,5 +314,11 @@
 
 <?php include(COREINC.'/end.php'); ?>
 <script src="ui/js/type.js" type="text/javascript"></script>
+<script>
+
+    function apply(){
+        if(confirm("<?php echo addslashes($i18n->_('SUPPRIMER ?')) ?>")) $('#listing').submit();
+    }
+</script>
 
 </body></html>

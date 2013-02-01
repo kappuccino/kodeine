@@ -113,7 +113,7 @@
 			<tr>
 				<td><input type="checkbox" onchange="cbchange($(this));" /></td>
 				<td colspan="5">
-					<a href="#" onClick="remove();" class="btn btn-mini">Supprimer la selection</a>
+					<a href="#" onClick="applyRemove();" class="btn btn-mini">Supprimer la selection</a>
                 </td>
                 <td align="right">
 					<span class="pagination"><?php $app->pagination($total, $limit, $filter['offset'], 'index?cf&offset=%s'); ?></span>
@@ -136,7 +136,7 @@
 		}
 	}
 	
-	function remove(){
+	function applyRemove(){
 		if(confirm("SUPPRIMER ?")){
 			$('#listing').submit();
 		}
