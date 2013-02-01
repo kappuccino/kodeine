@@ -13,13 +13,15 @@
 	<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
 
 	<?php include(COREINC.'/head.php'); ?>
-	<link rel="stylesheet" type="text/css" media="all" href="ui/css/newsletter.css" /> 
+	<link rel="stylesheet" type="text/css" media="all" href="../../ui/css/newsletter.css" />
 </head>
 <body>
 	
 <header><?php
 	include(COREINC.'/top.php');
 	include(dirname(dirname(__DIR__)).'/ui/menu.php');
+    $step = 'send';
+    include(dirname(dirname(__DIR__)).'/ui/steps.php');
 ?></header>	
 
 <div id="app">

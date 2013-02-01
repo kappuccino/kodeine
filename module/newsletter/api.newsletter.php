@@ -129,23 +129,44 @@ public function newsletterRemove($id_newsletter){
 + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - */
 public function newsletterPreview($id_newsletter){
 
-	$pref = $this->configGet('newsletter');
-	$data = $this->newsletterGet(array('id_newsletter' => $id_newsletter));
-	$body = $this->newsletterPrepareBody($id_newsletter, $newsletter['newsletterHtml']);
+    $pref = $this->configGet('newsletter');
+    // Envoi de mail de test
+    $data = $this->apiLoad('newsletter')->newsletterGet(array(
+        'id_newsletter'     => $id_newsletter
+    ));
+    require_once(PLUGIN.'/phpmailer/class.phpmailer.php');
+    $mail = new PHPMailer();
+    $mail->Charset = "UTF-8";
+    $mail->SetFrom('noreply@'.$_SERVER['HTTP_HOST'], $_SERVER['HTTP_HOST']);
+    $mails = explode(',', $pref['test']);
 
-	$send = array(
-		'mails'				=> array_map('trim', explode(',', $pref['test'])),
-		'newsletterName'	=> $data['newsletterTitle'],
-		'newsletterHtml'	=> $body
-	);
+    foreach($mails as $m) {
+        if(trim($m) != '') $mail->AddAddress(trim($m));
+    }
 
-	$rest = new newsletterREST($pref['auth'], $pref['passw']);
-	$prev = $rest->request('/preview.php', 'POST', $send);
-	$prev = json_decode($prev, true);
-	
-	if(!$prev['success']) die($this->pre($prev));
-	
-	return $prev['success'];
+    $mail->Subject  = $data['newsletterTitle'];
+    $mail->AltBody  = strip_tags($data['newsletterHtml']);
+    $mail->MsgHTML($data['newsletterHtml']);
+
+    return $mail->Send();
+    /*
+        $pref = $this->configGet('newsletter');
+        $data = $this->newsletterGet(array('id_newsletter' => $id_newsletter));
+        $body = $this->newsletterPrepareBody($id_newsletter, $newsletter['newsletterHtml']);
+
+        $send = array(
+            'mails'				=> array_map('trim', explode(',', $pref['test'])),
+            'newsletterName'	=> $data['newsletterTitle'],
+            'newsletterHtml'	=> $body
+        );
+
+        $rest = new newsletterREST($pref['auth'], $pref['passw']);
+        $prev = $rest->request('/preview.php', 'POST', $send);
+        $prev = json_decode($prev, true);
+
+        if(!$prev['success']) die($this->pre($prev));
+
+        return $prev['success'];*/
 }
 
 /* + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - 
@@ -364,7 +385,7 @@ public function newsletterPrepareBody($id_newsletter, $data=NULL){
 
 	# Wrapp
 	#
-	if(!preg_match("#<body>#", $data)){
+	if(!preg_match("#<body>#", $data) && $data['newsletterHtmlDesigner'] == ''){
 
 		// Image de fond
 		if($from['newsletterStyle']['backgroundImage'] != ''){
@@ -389,19 +410,18 @@ public function newsletterPrepareBody($id_newsletter, $data=NULL){
 Newsletter provenant du Designer > suppression de toutes les balises propres au designer
 + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - */
 public function newsletterDesignerCompil($html){
-	
-	/*$html = str_replace("<!--[CDATA[", "", $html);
-	$html = str_replace("]]></html>", "</html>", $html);*/
-	$html = preg_replace("#<repeater([^>]*)>#", "", $html);
-	$html = preg_replace("#</repeater([^>]*)>#", "", $html);
-	$html = preg_replace("#<layout([^>]*)>#", "", $html);
-	$html = preg_replace("#</layout([^>]*)>#", "", $html);
-	$html = preg_replace("#<item([^>]*)>#", "", $html);
-	$html = preg_replace("#</item([^>]*)>#", "", $html);
-	$html = preg_replace("#<div class=\"repeaterEdit\"([^>]*)>(.*)</div>#", "", $html);
-	$html = preg_replace("#<div class=\"repeaterBTEdit\"([^>]*)>(.*)</div>#", "", $html);
-	$html = preg_replace("#<script([^>]*)>(.*)</script>#", "", $html);
-	$html = preg_replace("#<link([^>]*)>#", "", $html);
+
+    $html = preg_replace('#<!--TEMPLATE-->(.*?)<!--/TEMPLATE-->#is', $newtext, $html);
+    $html = preg_replace('#\<\!\-\-TEMPLATE\-\-\>(.*)\<\!\-\-\/TEMPLATE\-\-\>#i', '', $html);
+    $html = str_replace('<a class="btn duplicate">Dupliquer</a>', '', $html);
+    $html = str_replace('<a class="btn delete">Supprimer</a>', '', $html);
+    $html = preg_replace("#<script([^>]*)>(.*)</script>#", "", $html);
+    $html = preg_replace("#<link([^>]*)>#", "", $html);
+
+    // Doctype
+    $doctype = '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+';
+    $html = $doctype.$html;
 	
 	return $html;
 }

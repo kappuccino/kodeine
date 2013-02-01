@@ -12,5 +12,4 @@
 	
     //$app->pre($data['field']);
     if(sizeof($data) > 0) die(json_encode($data));
-    else die(0);  
 ?>

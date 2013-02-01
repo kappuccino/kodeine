@@ -29,3 +29,15 @@
 
 .label { font-size: 12px; line-height: 14px; margin-left: 2px; font-weight: bold }
 
+#sub_steps {
+    background: #ddd;
+    padding: 5px 0;
+}
+#sub_steps a {
+    color: #555;
+}
+#sub_steps a.active {
+    color: #000;
+    foint-weight: bold;
+}
+

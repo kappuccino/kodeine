@@ -94,16 +94,14 @@
 <header><?php
 	include(COREINC.'/top.php');
 	include(dirname(dirname(__DIR__)).'/ui/menu.php');
+    include(dirname(dirname(__DIR__)).'/ui/steps.php');
 ?></header>
 
 <div class="inject-subnav-right hide">
-			
-	<?php if($data['newsletterSendDate'] == NULL){ ?>
-	<li><a href="javascript:$('#do').val('back');$('#data').submit();" class="btn btn-small">Revenir à l'éditeur</a></li>
-	<li><a href="javascript:$('#do').val('test');$('#data').submit();" class="btn btn-small">Tester la newsletter</a></li>
-	<?php } ?>
+
 	<?php if($_REQUEST['id_newsletter'] > 0){ ?>
 	<li><a href="preview?id_newsletter=<?php echo $_REQUEST['id_newsletter'] ?>" class="btn btn-small" target="_blank">Prévisualiser</a></li>
+    <li><a href="javascript:$('#do').val('test');$('#data').submit();" class="btn btn-small">Envoyer un mail de test</a></li>
 	<?php } ?>	
 	<?php if($data['newsletterSendDate'] == NULL){ ?>
 	<li><a href="javascript:$('#do').val('send');$('#data').submit();" class="btn btn-small btn-danger">Envoyer aux abonnés</a></li>

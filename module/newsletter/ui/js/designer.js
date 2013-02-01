@@ -1,552 +1,964 @@
-function insertRichEditor(field, value) {
-    $('#'+field).append(value);
-}
 
-// Chargement de la template ou du dernier enregistrement
-function start(init){
+// Variables globales
+var idx     = 0;
+var editor  = $(".edit");
+var data    = new Object();
 
-    //return;
-    var tmp1 = $('<div/>');
-    tmp1.append($template.find('html'));
-    var html1 = tmp1.html();
-    templatehtml = html1;
-    $template = $(html1);
-    tmp1.remove();
-    var isMSIE = /*@cc_on!@*/0;
-    // Chargement de la template
-    if(init) {
-        //alert('init true');
-        if(document.getElementById('preview').contentWindow.document.head) {
-            if (!isMSIE) document.getElementById('preview').contentWindow.document.head.innerHTML = "";
+// Apres le chargement de la page
+$(document).ready(function() {
+
+    // Init du compteur de layouts
+    $(".layout").each( function(e) {
+        if($(this).attr("data-idx")) {
+            var id = parseInt($(this).attr("data-idx"));
+            //alert(idx);
+            if(id > idx) idx = id + 1;
         }
-        if(document.getElementById('preview').contentWindow.document.head) {
-            if (!isMSIE)  document.getElementById('preview').contentWindow.document.body.innerHTML = "";
-        }
-        //document.getElementById('preview').contentDocument.write(html1);
-        document.getElementById('preview').contentWindow.document.write(html1);
-        //$preview.contents()[0].innerHTML = html1;
-    } else {
-
-        var tmp2 = $('<div/>');
-        tmp2.append($designer.find('html'));
-        var html2 = tmp2.html();
-        designerhtml = html2;
-        $designer = $(html2);
-        tmp2.remove();
-        if(document.getElementById('preview').contentWindow.document.head) {
-            if (!isMSIE) document.getElementById('preview').contentWindow.document.head.innerHTML = "";
-        }
-        if(document.getElementById('preview').contentWindow.document.head) {
-            if (!isMSIE) document.getElementById('preview').contentWindow.document.body.innerHTML = "";
-        }
-        document.getElementById('preview').contentWindow.document.write(html2);
-        //$preview.contents()[0].innerHTML = html2;
-    }
-
-    // Ajout du JS + CSS
-    if($preview.find("head").length > 0) {
-        $preview.find("head").append(css);
-    }
-
-    if($preview.find("body").length > 0) {
-        $preview.find("body")[0].appendChild(script);
-        $preview.find("body")[0].appendChild(script2);
-        $preview.find("body")[0].appendChild(script3);
-    }
-
-    $preview.find("repeater").each( function(e) {
-        id_repeater ++;
-        $(this).attr("data-id", id_repeater);
-        if(init) {
-            $(this).find("layout").not(":first").remove();
-        }
-        repeaterData[id_repeater] = new Object();
-        repeaterAddHeader($(this));
-
     });
 
-    // data-external : chargements liste content / user
-    if(init) {
-        $preview.find("repeaters").each( function(e) {
-            var url = $(this).attr("data-external");
-            var ref = $(this).attr("data-ref");
-            //alert(url);
-            if(url) {
-                $(this).find("repeater").remove();
-                $.post(url, function(data) {
-                    for(var i= 0; i < data.length; i++)
-                    {
-                        var tmp = repeaterAdd(ref);
-                        tmp.attr("data-id_content", data[i]);
-                        repeaterApplyContent(tmp.attr("data-id"), "load");
-                    }
-                }, 'json');
-            }else {
-                $(this).find("item").each( function(it) {
-                    var item = $(this);
-                    var urlitem = $(this).attr("data-url");
-                    //console.log(urlitem);
-                    if(urlitem) {
-                        $.post(urlitem, {  }, function(dataitem) {
-                            if(dataitem != '') item.html(dataitem);
-                        });
+    // Chargement des elements a ajouter
+    $('#layoutAdd').find('option').remove();
+    var optinit = new Option("", "", false, false);
+    $("#layoutAdd").append(optinit);
+    $(".repeat, .unique.noremove").each( function(e) {
+        var opt = new Option(getName($(this)), getId($(this)), false, false);
+        $("#layoutAdd").append(opt);
+    });
+
+    // ------------------------------
+    // Initialisation template
+    // ------------------------------
+    if(init == true) {
+        // Ajout 1 item par bloc
+        $(".repeat").each( function(e) {
+            var item = $(this);
+            if(item.attr("data-url")) {
+                var opt = {};
+                $.post($(this).attr("data-url"), opt, function(d) {
+                    var list = $.parseJSON(d);
+                    for(i in list) {
+                        layoutAdd(getId(item), list[i]);
                     }
                 });
+            }else {
+                layoutAdd(getId(item));
             }
-        });
-
-    }
-
-    sizeIFrame();
-
-    // Recuperation de tous les types de repeaters et ajout des options dans le menu deroulant
-    $("#stRepeater").html('<option value="0">Ins&eacute;rer un &eacute;l&eacute;ment</option>');
-    $template.find("repeater").each( function(e) {
-        $("#stRepeater").append(new Option($(this).attr('data-name'), $(this).attr('data-ref'), false, false));
-    });
-    // Si ajout repeater
-    $('#stRepeater').change( function(e) {
-        editClose();
-        repeaterAdd($(this).val());
-    });
-
-    setTimeout("document.getElementById('preview').contentWindow.load_sortable()", 2000);
-}
-
-
-
-// Ajout d'un repeater
-function repeaterAdd(ref) {
-    var templateRepeaters   = $template.find("repeaters[data-ref=" + ref + "]");
-    var previewRepeaters    = $preview.find("repeaters[data-ref=" + ref + "]");
-    var lastRepeater        = previewRepeaters.find("repeater");
-    var multiple            = previewRepeaters.attr('data-multiple');
-
-    if(!multiple && lastRepeater.html()) {
-        alert("Ce contenu a déjà été inséré");
-    } else {
-        previewRepeaters.append( templateRepeaters.html() ).children(':last').hide().fadeIn(500);
-        id_repeater ++;
-        newRepeater = previewRepeaters.find("repeater").last();
-        newRepeater.find("layout").not(':first').remove();
-        newRepeater.attr("data-id", id_repeater);
-        //if(newRepeater.attr("data-type") != "content" && newRepeater.attr("data-type") != "user") {
-        repeaterData[id_repeater] = new Object();
-        //}
-
-        repeaterAddHeader(newRepeater);
-    }
-
-    $('#stRepeater option[value=0]').attr("selected", "selected");
-
-    sizeIFrame();
-    return newRepeater;
-}
-
-// Ajout des fonctions de modification d'un repeater
-function repeaterAddHeader(repeater) {
-    var id          = repeater.attr('data-id');
-    var displayEdit = '<div class="repeaterEdit"></div>';
-    displayEdit += '<div class="repeaterBTEdit">';
-    /*displayEdit += '<a class="repeaterUp">Monter</a>';
-     displayEdit += '<a class="repeaterDown">Descendre</a>';*/
-    displayEdit += '<a class="repeaterEdit">Modifier</a>';
-    displayEdit += '<a class="repeaterDuplicate">Dupliquer</a>';
-    displayEdit += '<a class="repeaterDelete">Supprimer</a>';
-    displayEdit += '</div>';
-
-    repeater.find(".repeaterEdit, .repeaterBTEdit").remove();
-    repeater.prepend(displayEdit);
-
-    repeaterInitChanges(id);
-}
-
-// Initialisation des actions pour les fonctions de modification d'un repeater
-function repeaterInitChanges(id) {
-    //alert(id);
-    var repeater    = $preview.find("repeater[data-id=" + id + "]");
-    var repeaters   = $preview.find("repeaters[data-ref=" + repeater.attr('data-ref') + "]");
-
-    repeater.find("div.repeaterEdit").css({ opacity: 0 });
-    repeater.hover( function() {
-        $(this).find('a.repeaterEdit').fadeIn(200);
-        if(repeaters.attr('data-multiple')) $(this).find('a.repeaterDuplicate').fadeIn(200);
-        $(this).find('a.repeaterDelete').fadeIn(200);
-        $(this).find("div.repeaterEdit").css({ opacity: 0.2 });
-    }, function() {
-        $(this).find('a.repeaterEdit').fadeOut(200);
-        if(repeaters.attr('data-multiple')) $(this).find('a.repeaterDuplicate').fadeOut(200);
-        $(this).find('a.repeaterDelete').fadeOut(200);
-        $(this).find("div.repeaterEdit:not(.active)").css({ opacity: 0 });
-    });
-    // Si clic sur bouton Modifier
-    repeater.find('.repeaterEdit:not(.repeaterDuplicate)').click( function() {
-        $preview.find("repeater").removeClass('active');
-        $preview.find(".repeaterEdit").removeClass('active');
-        repeater.find("div.repeaterEdit").addClass('active');
-        repeater.addClass('active');
-        repeaterEdit(id);
-    });
-    // Si clic sur bouton Dupliquer
-    repeater.find('.repeaterDuplicate').click( function() {
-        repeaterDuplicate(id);
-    });
-    // Si clic sur bouton Supprimer
-    repeater.find('.repeaterDelete').click( function() {
-        repeaterRemove(id);
-    });
-
-    sizeIFrame();
-}
-
-// Modification des champs du repeater
-function repeaterDuplicate (id) {
-    var repeater = $preview.find("repeater[data-id=" + id + "]");
-    id_repeater ++;
-    repeater.clone(true).insertAfter(repeater).attr("data-id", id_repeater);
-
-    sizeIFrame();
-}
-
-// Changement de mise en page d'un repeaters
-function layoutChange (id, ref) {
-    var repeater            = $preview.find("repeater[data-id=" + id + "]");
-    var templateRepeaters   = $template.find("repeater[data-ref=" + repeater.attr("data-ref") + "]");
-    repeater.find("layout").html(templateRepeaters.find("layout[data-ref=" + ref + "]").html());
-    if(repeater.attr("data-type") == "content") repeaterApplyContent(id, 'layoutChange');
-    else if(repeater.attr("data-type") == "user") repeaterApplyUser(id, 'layoutChange');
-    else repeaterApplyData(id, 'layoutChange');
-    sizeIFrame();
-}
-
-// Modification des champs du repeater
-function repeaterEdit (id) {
-    var edit = $("#edit");
-
-    var repeater = $preview.find("repeater[data-id="+ id + "]");
-
-    var templateRepeaters = $template.find("repeater[data-ref=" + repeater.attr("data-ref") + "]");
-    edit.html("");
-    edit.stop().fadeIn(150);
-
-
-    var displayEdit = "";
-
-    displayEdit += '<div class="btClose">Fermer</div>';
-
-    displayEdit += 'Mise en forme : <select class="stLayout"></select><br clear="both">';
-
-    //displayEdit += '<div class="repeaterUpdate" data-id="'+ id + '">Modifier les champs</div>';
-    if(repeater.attr("data-type") == "content") {
-        //displayEdit += '<div class="repeaterSelect" data-id="'+ id + '">Sélectionner un contenu</div>';
-
-        var id_content = "";
-        if(repeater.attr("data-id_content")) id_content = repeater.attr("data-id_content");
-        displayEdit += "<p><b>Sélectionner un contenu</b></p><hr>";
-        displayEdit += 'ID : <input type="text" id="select_id_content" value="' + id_content + '">';
-        displayEdit += '<br />Chercher et charger un contenu : <input type="text" id="search_content"><div id="results"></div>';
-        displayEdit += '<div class="btApply">Charger le contenu</div>';
-
-
-
-
-    }else if(repeater.attr("data-type") == "user") {
-        displayEdit += '<div class="repeaterSelect" data-id="'+ id + '">Sélectionner un utlisateur</div>';
-    }
-
-    //displayEdit += '<br clear="both"><div class="repeaterUp" data-id="'+ id + '">Monter</div>';
-
-    //displayEdit += '<div class="repeaterDown" data-id="'+ id + '">Descendre</div>';
-
-    displayEdit += '<br clear="both"><p><b>Modifier les champs</b></p><hr>';
-
-    edit.html(displayEdit);
-
-
-    $("#search_content").bind('change keydown keyup',function() {
-        //alert('ok' + $(this).val());
-
-        var repeater            = $preview.find("repeater[data-id=" + id + "]");
-        var templateRepeaters   = $template.find("repeater[data-ref=" + repeater.attr("data-ref") + "]");
-        var id_type = repeater.find("layout[data-ref=" + $('.stLayout').val() + "]").attr('data-id_type');
-        var request = $.ajax({
-            url: 'helper/content-picker',
-            data: {
-                q: $(this).val(),
-                id_type: id_type
-            }
-        });
-        request.done(function(data) {
-            $('#results').html(data);
-        });
-    });
-
-    if(repeater.attr("data-type") == "content") {
-        $(".btApply").click( function() {
-
-            repeater.attr("data-id_content", $('#select_id_content').val());
-            //alert($('#select_id_content').val());
-            repeaterApplyContent(id);
-            repeaterEdit(id);
         });
     }
 
-    // Select layout
-    templateRepeaters.find("layout").each( function(e) {
-        edit.find(".stLayout").append(new Option($(this).attr('data-name'), $(this).attr('data-ref'), false, false));
+    // Controller des repeat
+    $(".edit-repeat").remove();
+    $(".repeat").each( function() {
+        $(this).before('<!--TEMPLATE--><div class="edit-repeat" data-id="' + getId($(this)) + '">Editer liste</div><!--/TEMPLATE-->');
+        $(".edit-repeat").click( function(e){
+            repeatEdit($(this));
+            e.preventDefault();
+            e.stopImmediatePropagation();
+        });
     });
 
-    // Affichage du formulaire de modification des champs
-    repeater.find("item").each( function(e) {
 
-        var ref     = $(this).attr('data-ref');
-        var rich    = $(this).attr('data-richtext');
-        var type    = $(this).attr('data-type');
-        var name    = $(this).attr('data-name');
-        var value   = $(this).html();
-        if(ref) {
-            edit.append("<b>" + name + "</b><br>");
-            if(type == "singleline") {
-                edit.append('<input data-ref="' + ref + '" type="text" value="' + value + '">');
-            }
-            if(type == "multiline") {
-                edit.append('<textarea data-ref="' + ref + '" id="' + ref + '" data-richtext="' + rich + '">' + value + '</textarea>');
-            }
-            edit.append("<hr>");
+    // ---- Events
+    // Ajout d'un item
+    $("#layoutAdd").change( function(e) {
+        layoutAdd($(this).val());
+    });
+    // Desactiver liens
+    $('a').click( function(e){
+        e.preventDefault();
+    });
+    bindEvents();
+
+
+    // Sauvegarde
+    $('#save').click( function(e) {
+        save();
+    });
+
+    // Sortable
+    $(".repeat").sortable({
+        items: ".layout"
+    });
+    //$(".edit").resizable();
+    $(".edit").draggable({ handle: "div.ui-widget-header" });
+
+    loadData();
+
+});
+
+//------------------------
+// LAYOUTS
+//------------------------
+
+function layoutAdd(id, content) {
+
+    var items   = search(".repeat", id);
+
+    if( (items.attr("data-unique") != "1") || ((items.attr("data-unique") == "1") && !(items.find('.layout.template'))) ) {
+        idx++;
+
+        if(items) {
+            var layouts     = layoutList(items);
+            var newLayout   = layouts.first().clone().attr("data-idx", idx );
+
+            layoutInit(newLayout, content);
+            newLayout.hide();
+            items.append(newLayout);
+            newLayout.fadeIn(200);
         }
-    });
-    edit.append('<div class="btApply">Enregistrer</div>');
-    $(".btApply").click( function() {
-        repeaterApplyData(id);
-    });
-    edit.find("textarea").each( function(e) {
-        if($(this).attr("data-richtext") == "1") {
-            $(this).tinymce({
-                width : "350",
-                // General options
-                theme : "advanced",
-                plugins : "pagebreak,style,layer,table,save,advhr,advimage,advlink,emotions,iespell,inlinepopups,insertdatetime,preview,media,searchreplace,print,contextmenu,paste,directionality,fullscreen,noneditable,visualchars,nonbreaking,xhtmlxtras,template",
+        $("#layoutAdd").val("");
 
-                // Theme options
-                theme_advanced_buttons1 : "mediapicker,bold,italic,underline,|,link,unlink,|,pasteword",
-                theme_advanced_toolbar_location : "top",
-                theme_advanced_toolbar_align : "left",
-                theme_advanced_statusbar_location : "bottom",
-                theme_advanced_resizing : true,
-                force_br_newlines : true,
-                force_p_newlines : false,
-                forced_root_block : "",
-                invalid_elements : "p",
-                paste_preprocess : function(pl, o) {
-                    //alert('ok');
-                    //example: keep bold,italic,underline and paragraphs
-                    //o.content = strip_tags( o.content,'<b><u><i><p>' );
-
-                    // remove all tags => plain text
-                    o.content = strip_tags( o.content,'' );
-                },
-
-                setup : function(ed) {
-                    ed.addButton('mediapicker', {
-                        title : 'Insérer des images',
-                        image : '/admin/core/ui/img/_img/myb.gif',
-                        onclick : function() {
-                            mediaPicker(ed.id, 'mce');
-                        }
-                    });
-                }
-            });
-        }
-    });
-    $(".btClose").click( function() {
-        repeater.find("div.repeaterEdit").removeClass('active');
-        repeater.find("div.repeaterEdit").css({ opacity: 0 });
-        edit.fadeOut(150);
-        edit.html("");
-        $preview.find("repeater").removeClass('active');
-    });
-    edit.find(".stLayout").change( function(e) {
-        layoutChange(id, $(this).val());
-    });
-    edit.find('.repeaterSelect').click( function() {
-        repeaterSelect(id);
-    });
-    edit.find('.repeaterRemove').click( function() {
-        repeaterRemove(id);
-    });
-    edit.find('.repeaterUp').click( function() {
-        repeaterMove(id, 'up');
-    });
-    edit.find('.repeaterDown').click( function() {
-        repeaterMove(id, 'down');
-    });
-
-
-
-    // Ajout des formulaires de modification des champs
-
-    //alert(el);
-}
-
-function repeaterMove(id, sens) {
-    var repeater = $preview.find("repeater[data-id="+ id + "]");
-}
-
-function editClose() {
-    var edit = $("#edit");
-    edit.stop().fadeOut(150);
-    edit.html("");
-}
-// Selection d'un contenu ou utilisateur
-function repeaterSelect (id) {
-    var edit = $("#edit");
-    edit.html("");
-    edit.stop().fadeIn(150);
-
-    var repeater = $preview.find("repeater[data-id="+ id + "]");
-
-    edit.html('<div class="btClose">Fermer</div>');
-
-    if(repeater.attr("data-type") == "content") {
-
-        var id_content = "";
-        if(repeater.attr("data-id_content")) id_content = repeater.attr("data-id_content");
-        edit.append("<p><b>Sélectionner un contenu</b></p><hr>");
-        edit.append('ID : <input type="text" value="' + id_content + '" id="select_id_content">');
-        edit.append('<div class="btApply">Charger le contenu</div>');
-
-        $(".btApply").click( function() {
-            repeaterApplyContent(id);
-        });
-
-        $("#select_id_content").change( function() {
-            alert('ok' + $(this).val());
-            //repeaterApplyContent(id);
-        });
-
-
-    }else if(repeater.attr("data-type") == "user") {
-        edit.html("<p><b>Sélectionner un utlisateur</b></p><hr>");
-
-    }
-    $(".btClose").click( function() {
-        editClose();
-    });
-}
-
-// Application des champs saisis pour le repeater
-function repeaterApplyData(id, action) {
-    var repeater = $preview.find("repeater[data-id="+ id + "]");
-    if(action == 'layoutChange') {
-        repeater.find("layout item").each( function(e) {
-            var ref     = $(this).attr("data-ref");
-            var value   = repeaterData[id][ref];
-            $(this).html(value);
-        });
+        bindEvents();
 
     }else {
-        $("#edit input, #edit textarea").each( function(e) {
-            var ref     = $(this).attr("data-ref");
-            var value   = $(this).val();
-            repeater.find("item[data-ref=" + ref + "]").html(value);
-            repeaterData[id][ref] = value;
+        alert("Ajout impossible");
+    }
+    sizeIframe();
+}
+
+function layoutList(items) {
+    var layouts = items.find('.layout.template');
+    //console.log(layouts);
+    return layouts;
+}
+
+function bindEvents() {
+    // Repeat
+    $('.layout').hover(
+        function () {
+            $(this).find(".delete, .duplicate").show();
+        },
+        function () { $(this).find(".delete, .duplicate").hide(); }
+    );
+    $('.layout').click( function(e){
+        layoutEdit($(this));
+        e.preventDefault();
+        e.stopImmediatePropagation();
+    });
+    $('.delete').click( function(e){
+        layoutRemove($(this).parent(".layout"));
+        e.preventDefault();
+        e.stopImmediatePropagation();
+    });
+    $('.duplicate').click( function(e){
+        layoutDuplicate( $(this).parent(".layout"));
+        e.preventDefault();
+        e.stopImmediatePropagation();
+    });
+
+    // Unique
+    $('.unique').click( function(e){
+        uniqueEdit($(this));
+        e.preventDefault();
+        e.stopImmediatePropagation();
+    });
+    sizeIframe();
+}
+
+function layoutEdit(layout) {
+    var editable    = layout.find(".editable");
+    var id_layout   = layout.attr("data-idx");
+    var id_type     = layout.attr("data-id_type");
+    var id_content  = layout.attr("data-id_content");
+    var user        = layout.attr("data-user");
+    var id_user     = layout.attr("data-id_user");
+
+    $(".layoutActive").removeClass("layoutActive");
+    layout.addClass("layoutActive");
+
+    editorOpen();
+    //editor.html('<div class="edit-header"><a class="btn save">Enregistrer</a><a class="btn close">Annuler</a></div>');
+
+    $('.close').click( function(e){
+        editorClose();
+        e.preventDefault();
+        e.stopImmediatePropagation();
+    });
+    $('.save').click( function(e){
+        layoutSave(layout);
+        e.preventDefault();
+        e.stopImmediatePropagation();
+    });
+
+    // Menu deroulant changement layout
+    var layouts = layoutList(layout.parent(".repeat"));
+    if(layouts.length > 1) {
+        editor.append('<div class="edit-form">Changer de mise en forme : <select id="layoutChange"></select><hr></div>');
+        layouts.each( function() {
+            var opt = new Option(getName($(this)), getId($(this)), false, false);
+            $("#layoutChange").append(opt);
+        });
+
+        $("#layoutChange option[value='" + getId(layout) + "']").attr('selected','selected');
+
+        $("#layoutChange").change( function(e) {
+            layoutChange(layout, $(this).val());
         });
     }
 
-    sizeIFrame();
+    // Selecteur content
+    if(id_type) {
+        if(id_content) id_content = id_content;
+        else id_content = "";
+        var searchContent = '<div class="edit-form">';
+        searchContent += 'Chercher un contenu<br /><input type="text" id="search_content"><div id="results"></div>';
+        searchContent += '<br />ID contenu sélectionné : <input type="text" id="select_id_content" value="' + id_content + '" size="5">';
+        searchContent += '&nbsp;<a class="btn apply">Recharger le contenu</a><hr></div>';
+
+        editor.append(searchContent);
+
+        $("#search_content").bind('keydown keyup',function() {
+            var request = $.ajax({
+                url: 'helper/content-picker',
+                data: {
+                    q: $(this).val(),
+                    id_type: id_type
+                }
+            });
+            request.done(function(d) {
+                $('#results').fadeIn(200);
+                $('#results').html(d);
+                $('#results a').click( function(e) {
+                    $("#select_id_content").val($(this).attr("data-id_content"));
+                    $('#results').fadeOut(200);
+
+                    if($("#select_id_content").val() > 0) {
+                        layoutApplyContent(layout, $("#select_id_content").val());
+                    }
+                    e.preventDefault();
+                    e.stopImmediatePropagation();
+                });
+            });
+        });
+
+        $(".btn.apply").click( function() {
+            if($("#select_id_content").val() > 0) {
+                layoutApplyContent(layout, $("#select_id_content").val());
+            }
+        });
+
+    }
+
+
+    editable.each( function() {
+        var type  = getType($(this));
+        var id    = getId($(this), true);
+        var name  = getName($(this));
+        var html  = '<div class="edit-form">';
+        var val   = $(this).html();
+
+        var href  = false;
+        var atype = type.split(",");
+
+        if(atype[0] == "href") {
+            href = true;
+            type = atype[1];
+        }
+        if(href) {
+            html += 'URL (' + name + ')<br /><input type="text" id="editor-href-' + id + '" value="' + $(this).attr("href") + '"> ';
+        }
+        //alert(type);
+        if(type == "line" || type == "href") {
+            if(type == "href") val = $(this).attr("href");
+            html += name + '<br /><input type="text" id="editor-' + id + '" value="' + val + '"> ';
+        }
+        if(type == "text") {
+            html += name + '<br /><textarea class="mceNoEditor" rows="10" id="editor-' + id + '">' + val + '</textarea> ';
+
+        }
+        if(type == "image") {
+            var imgSrc = $(this).attr("src");
+            var imgW = ($(this).attr("width")) ? $(this).attr("width") : "";
+            var imgH = ($(this).attr("height")) ? $(this).attr("height") : "";
+
+            html += name + '<br /><input type="text" id="editor-' + id + '" value="' + imgSrc + '">';
+            html += '<input type="hidden" id="editor-height-' + id + '" value="' + imgH + '">';
+            html += '<input type="hidden" id="editor-width-' + id + '" value="' + imgW + '">';
+            html += '<a onclick="mediaPicker(\'editor-' + id + '\',\'line\')" class="btn apply">Sélectionner une image</a>';
+            //html += '<img src="' + imgSrc + '" id="editor-preview-' + id + '"><hr>';
+
+        }
+        if(type == "richtext") {
+            html += name + '<br /><textarea class="mceEditor" rows="10" name="editor-preview' + id + '" id="editor-' + id + '">' + val + '</textarea> ';
+        }
+        editor.append(html + "</div>");
+
+    });
+    richtext();
+
+
+}
+function layoutApplyContent(layout, id_content) {
+    $.post('helper/designer-content', { id_content: id_content }, function(d) {
+        var content = $.parseJSON(d);
+        //console.log(content);
+        layoutInit(layout, content);
+        editorClose();
+        layoutEdit(layout);
+    });
+    sizeIframe();
+
+
+}
+function layoutSave(layout) {
+    var editable    = layout.find(".editable");
+    var id_layout   = layout.attr("data-idx");
+    data[id_layout] = {};
+
+    ed_length = editable.length - 1;
+    editable.each( function(i) {
+        var type  = getType($(this));
+        var id    = getId($(this), true);
+        var name  = getName($(this));
+        var val   = "";
+        var href  = false;
+        var atype = type.split(",");
+
+        if(atype[0] == "href") {
+            href = true;
+            type = atype[1];
+        }
+        if(href) {
+            $(this).attr("href", editor.find("#editor-href-" + id).val());
+            data[id_layout]["href-" + id] = editor.find("#editor-href-" + id).val();
+        }
+        if (type == "href") {
+            val = editor.find("#editor-" + id).val();
+            $(this).attr("href", val);
+        }
+        if(type == "text" || type == "line") {
+            val = editor.find("#editor-" + id).val();
+            $(this).html(val);
+        }
+        if (type == "richtext") {
+
+            //alert("editor-" + id);
+            var ed  = tinymce.get("editor-" + id);
+            val     = ed.getContent();
+            $(this).html(val);
+        }
+        if (type == "image") {
+            var imgW = editor.find("#editor-width-" + id).val();
+            var imgH = editor.find("#editor-height-" + id).val();
+
+            var img  = $(this);
+            val = editor.find("#editor-" + id).val();
+            $.post('helper/designer-media', { src: editor.find("#editor-" + id).val(), w: imgW, h: imgH}, function(d) {
+                val = d;
+                img.attr("src", val);
+                data[id_layout][id] = val;
+            });
+        }else {
+            data[id_layout][id] = val;
+        }
+
+        if(ed_length == i) editorClose();
+
+    });
+
 }
 
-// Application du contenu selectionne pour le repeater
-function repeaterApplyContent(id, action) {
-    var edit = $("#edit");
-    var repeater = $preview.find("repeater[data-id="+ id + "]");
+function layoutChange(layout, id) {
+    var items       = layout.parent(".repeat");
+    var newLayout   = items.find(".layout.template[data-id=" + id + "]").clone();
 
-    var id_content = "";
+    newLayout.attr("data-idx", layout.attr("data-idx"));
+    layoutInit(newLayout);
 
-    if(repeater.attr("data-id_content") > 0) id_content = repeater.attr("data-id_content");
-    if(action != 'layoutChange' && action != 'load') id_content = edit.find("input").val();
-    $.post('helper/designer-content', { id_content: id_content }, function(data) {
-        if(data != 0) {
-            repeater.find("item").each( function(e) {
-                var ref     = $(this).attr("data-ref");
-                var value   = "";
-                if(action == 'layoutChange' && repeaterData[id][ref]) {
-                    value = repeaterData[id][ref];
-                } else {
-                    value = new Object();
-                    value = eval("data."+$(this).attr("data-fieldKey"));
-                }
-                $(this).html(value);
-            });
-            repeater.attr("data-id_content", id_content);
-        }
-        repeater.find("item").each( function(e) {
-            var item        = $(this);
-            var ref         = $(this).attr("data-ref");
-            var url         = $(this).attr("data-url");
-            if(action == 'layoutChange' && repeaterData[id][ref]) {
-            } else {
-                if(url) {
-                    $.post(url, { id_content: id_content }, function(dataitem) {
-                        if(dataitem != '') item.html(dataitem);
-                    });
+    layout.before(newLayout);
+    layout.remove();
+    editorClose();
+    layoutEdit(newLayout);
+    bindEvents();
+}
+function layoutRemove(layout) {
+    if(confirm("Confirmer la suppression ?")) {
+        layout.fadeOut(200);
+        layout.fadeOut('slow').queue(function() { layout.remove(); });
+    }
+
+    sizeIframe();
+}
+
+function layoutDuplicate(layout) {
+    var newLayout   = layout.clone();
+    idx ++;
+    newLayout.attr("data-idx", idx);
+
+    newLayout.hide();
+    layout.after(newLayout);
+
+    newLayout.find(".delete, .duplicate").hide();
+    newLayout.fadeIn(200);
+    //layoutInit(newLayout);
+    bindEvents();
+}
+
+function layoutInit(layout, content) {
+
+    var items           = layout.parent(".repeat");
+    var layoutControl   = "";
+    var id_layout       = layout.attr("data-idx");
+
+    layout.removeClass("template");
+
+    if(items.attr("data-repeat", "1")) {
+        layoutControl += '<a class="btn duplicate">Dupliquer</a>';
+    }
+    layoutControl += '<a class="btn delete">Supprimer</a>';
+
+    layout.prepend(layoutControl);
+
+    var editable    = layout.find(".editable");
+
+    if(content) {
+        data[id_layout] = {};
+        editable.each( function() {
+            var item  = $(this);
+            var type  = getType(item);
+            var id    = getId(item);
+            var url   = item.attr("data-url");
+            val = eval("content." + id);
+
+            if(url) {
+                var valeur = "";
+                if(type == "href") valeur = item.attr("href");
+                else valeur = item.html();
+                var opt = {value:valeur, content:content};
+                $.post(url, opt, function(d) {
+                    if(type == "href") item.attr("href", d);
+                    else if(type == "image") item.attr("src", d);
+                    else item.html(d);
+                    data[id_layout][id] = d;
+                });
+            }else {
+                if(val) {
+                    if(type == "href") item.attr("href", val);
+                    else if(type == "image") item.attr("src", val);
+                    else item.html(val);
+                    data[id_layout][id] = val;
                 }
             }
         });
-    }, 'json');
-
-    sizeIFrame();
-}
-
-// Application du User selectionne pour le repeater
-function repeaterApplyUser(id, action) {
-
-    var edit = $("#edit");
-    var repeater = $preview.find("repeater[data-id="+ id + "]");
-
-    var id_user = "";
-
-    if(repeater.attr("data-id_user")) id_user = repeater.attr("data-id_user");
-    if(action != 'layoutChange') id_user = edit.find("input").val();
-    $.post('helper/designer-user', { id_user: id_user }, function(data) {
-        if(data != 0) {
-            repeater.find("item").each( function(e) {
-                var item  = $(this);
-                var value = new Object();
-                value = eval("data."+$(this).attr("data-fieldKey"));
-                item.html(value);
-            });
-            repeater.attr("data-id_user", id_user);
+        if(content.id_content) {
+            layout.attr("data-id_content", content.id_content);
         }
-        repeater.find("item").each( function(e) {
-            var item        = $(this);
-            var url         = $(this).attr("data-url");
-            if(url) {
-                $.post(url, { id_user: id_user }, function(dataitem) {
-                    if(dataitem != '') item.html(dataitem);
+    }else {
+        // DATA: chargement de data si existe
+        if(layout.attr("data-idx")) {
+            if(data[id_layout]) {
+                editable.each( function() {
+                    var type  = getType($(this));
+                    var id    = getId($(this));
+                    if(data[id_layout][id]) {
+                        val = data[id_layout][id];
+                        if(type == "href") $(this).attr("href", val);
+                        else if(type == "image") $(this).attr("src", val);
+                        else $(this).html(val);
+                    }
                 });
             }
-        });
-    }, 'json');
+        }
+    }
 
-    sizeIFrame();
 }
 
 
-// Suppression d'repeater
-function repeaterRemove (id) {
-    var repeater = $preview.find("repeater[data-id="+ id + "]");
-    if(confirm("Etes-vous certain de vouloir supprimer ce bloc ?")) {
-        repeater.fadeOut(200, function() {$(this).remove()});
-        $("#edit").fadeOut(150);
-        sizeIFrame();
+function repeatEdit(repeat) {
+    var id      = getId(repeat);
+    var id_type = repeat.attr("data-id_type");
+
+    editorOpen();
+
+    editor.find(".save").hide();
+
+    // Combien
+    editor.append('<div class="edit-form">Combien : <input type="text" id="editor-limit" style="width: 30px;"></div>');
+
+    // Tri
+    editor.append('<div class="edit-form">Trier par : <select id="editor-order"><option value="contentDateCreation">Date de création</option><option value="contentDateUpdate">Date de modification</option><option value="contentView">Nombre de vues</option><option value="contentName">Titre</option></select></div>');
+
+    // Ordre
+    editor.append('<div class="edit-form">Classement : <select id="editor-direction"><option value="ASC">Croissant</option><option value="DESC">Décroissant</option></select></div>');
+
+    // Submit
+    editor.append('<div class="edit-form"><a class="editor-load btn">Charger les éléments</a></div>');
+
+    $('.close').click( function(e){
+        editorClose();
+    });
+    $('.editor-load').click( function(e){
+        var limit       = $("#editor-limit").val();
+        var order       = $("#editor-order").val();
+        var direction   = $("#editor-direction").val();
+        var id_type     = id_type;
+        var opt = {"limit":limit, "order":order, "direction":direction, "id_type":id_type};
+        console.log(opt);
+        $.post('helper/designer-contentList', opt, function(d) {
+            var list = $.parseJSON(d);
+            for(i in list) {
+                layoutAdd(getId(repeat), list[i]);
+            }
+        });
+    });
+
+
+
+    $(".edit-form").show();
+
+
+    /*
+    var editable    = layout.find(".editable");
+    var id_layout   = layout.attr("data-idx");
+    var id_type     = layout.attr("data-id_type");
+    var id_content  = layout.attr("data-id_content");
+    var user        = layout.attr("data-user");
+    var id_user     = layout.attr("data-id_user");
+
+    $(".layoutActive").removeClass("layoutActive");
+    layout.addClass("layoutActive");
+
+    editorOpen();
+    //editor.html('<div class="edit-header"><a class="btn save">Enregistrer</a><a class="btn close">Annuler</a></div>');
+
+    $('.close').click( function(e){
+        editorClose();
+    });
+    $('.save').click( function(e){
+        layoutSave(layout);
+    });
+
+    // Menu deroulant changement layout
+    var layouts = layoutList(layout.parent(".repeat"));
+    if(layouts.length > 1) {
+        editor.append('<div class="edit-form">Changer de mise en forme : <select id="layoutChange"></select><hr></div>');
+        layouts.each( function() {
+            var opt = new Option(getName($(this)), getId($(this)), false, false);
+            $("#layoutChange").append(opt);
+        });
+
+        $("#layoutChange option[value='" + getId(layout) + "']").attr('selected','selected');
+
+        $("#layoutChange").change( function(e) {
+            layoutChange(layout, $(this).val());
+        });
+    }
+
+    // Selecteur content
+    if(id_type) {
+        if(id_content) id_content = id_content;
+        else id_content = "";
+        var searchContent = '<div class="edit-form">';
+        searchContent += 'Chercher un contenu<br /><input type="text" id="search_content"><div id="results"></div>';
+        searchContent += '<br />ID contenu sélectionné : <input type="text" id="select_id_content" value="' + id_content + '" size="5">';
+        searchContent += '&nbsp;<a class="btn apply">Recharger le contenu</a><hr></div>';
+
+        editor.append(searchContent);
+
+        $("#search_content").bind('keydown keyup',function() {
+            var request = $.ajax({
+                url: 'helper/content-picker',
+                data: {
+                    q: $(this).val(),
+                    id_type: id_type
+                }
+            });
+            request.done(function(d) {
+                $('#results').fadeIn(200);
+                $('#results').html(d);
+                $('#results a').click( function(e) {
+                    $("#select_id_content").val($(this).attr("data-id_content"));
+                    $('#results').fadeOut(200);
+
+                    if($("#select_id_content").val() > 0) {
+                        layoutApplyContent(layout, $("#select_id_content").val());
+                    }
+                    e.preventDefault();
+                    e.stopImmediatePropagation();
+                });
+            });
+        });
+
+        $(".btn.apply").click( function() {
+            if($("#select_id_content").val() > 0) {
+                layoutApplyContent(layout, $("#select_id_content").val());
+            }
+        });
+
+    }
+
+
+    editable.each( function() {
+        var type  = getType($(this));
+        var id    = getId($(this), true);
+        var name  = getName($(this));
+        var html  = '<div class="edit-form">';
+        var val   = $(this).html();
+
+        var href  = false;
+        var atype = type.split(",");
+
+        if(atype[0] == "href") {
+            href = true;
+            type = atype[1];
+        }
+        if(href) {
+            html += 'URL (' + name + ')<br /><input type="text" id="editor-href-' + id + '" value="' + $(this).attr("href") + '"> ';
+        }
+        //alert(type);
+        if(type == "line" || type == "href") {
+            if(type == "href") val = $(this).attr("href");
+            html += name + '<br /><input type="text" id="editor-' + id + '" value="' + val + '"> ';
+        }
+        if(type == "text") {
+            html += name + '<br /><textarea class="mceNoEditor" rows="10" id="editor-' + id + '">' + val + '</textarea> ';
+
+        }
+        if(type == "image") {
+            var imgSrc = $(this).attr("src");
+            var imgW = ($(this).attr("width")) ? $(this).attr("width") : "";
+            var imgH = ($(this).attr("height")) ? $(this).attr("height") : "";
+
+            html += name + '<br /><input type="text" id="editor-' + id + '" value="' + imgSrc + '">';
+            html += '<input type="hidden" id="editor-height-' + id + '" value="' + imgH + '">';
+            html += '<input type="hidden" id="editor-width-' + id + '" value="' + imgW + '">';
+            html += '<a onclick="mediaPicker(\'editor-' + id + '\',\'line\')" class="btn">Sélectionner une image</a>';
+            //html += '<img src="' + imgSrc + '" id="editor-preview-' + id + '"><hr>';
+
+        }
+        if(type == "richtext") {
+            html += name + '<br /><textarea class="mceEditor" rows="10" name="editor-preview' + id + '" id="editor-' + id + '">' + val + '</textarea> ';
+        }
+        editor.append(html + "</div>");
+
+    });
+    richtext();
+*/
+
+}
+
+
+//------------------------
+// EDITOR
+//------------------------
+
+function editorClose() {
+    $("#overlay").hide();
+    $(".layoutActive").removeClass("layoutActive");
+    //editor.fadeOut(100);
+
+    //editor.not(".top").hide();
+    editor.find("repeat, .close").hide();
+    //console.log(editor.find(".top"));
+    editor.find(".top").show();
+    editor.find(".edit-form").remove();
+    $(".delete, .duplicate").hide();
+    sizeIframe();
+
+    var h = ($(window).scrollTop() + 50);
+
+    if(parent.document) h = $(parent.document).scrollTop() - 230;
+
+    if(h < 50) h = 50;
+    editor.css({'marginTop': h + 'px'});
+    editor.offset({top: h + 20});
+}
+function editorOpen() {
+    var h = ($(window).scrollTop() + 50);
+
+    if(parent.document) h = $(parent.document).scrollTop() - 230;
+
+    if(h < 50) h = 50;
+
+    editor.find(".save, .close").show(); //html('<div class="edit-header ui-widget-header"><a class="btn save">Enregistrer</a><a class="btn close">Annuler</a></div>');
+    $("#overlay").show();
+    editor.find(".top").hide();
+    editor.css({'marginTop': h + 'px'});
+    editor.offset({top: h + 20});
+    //editor.fadeIn(100);
+    $(".delete, .duplicate").hide();
+    sizeIframe();
+
+    $(document).click(function (e)
+    {
+        var container = $(".edit");
+        if (container.has(e.target).length === 0) {
+            editorClose();
+            $("#overlay").hide();
+        }
+    });
+    editor.find(".top").hide();
+}
+
+//------------------------
+// UNIQUE
+//------------------------
+
+function uniqueEdit(el) {
+    var type        = getType(el);
+    var id          = getId(el, true);
+    var name        = getName(el);
+    var href        = false;
+    var atype       = type.split(",");
+
+    if(atype[0] == "href") {
+        href = true;
+        type = atype[1];
+    }
+
+
+    $(".layoutActive").removeClass("layoutActive");
+    el.addClass("layoutActive");
+
+    editorOpen();
+
+    $('.close').click( function(e){
+        editorClose();
+        e.preventDefault();
+        e.stopImmediatePropagation();
+    });
+    $('.save').click( function(e){
+        uniqueSave(el);
+        e.preventDefault();
+        e.stopImmediatePropagation();
+    });
+
+
+    var html  = '<div class="edit-form">';
+    var val   = el.html();
+    //alert(type);
+    if(href) {
+        html += 'URL <br /><input type="text" id="editor-href-' + id + '" value="' + el.attr("href") + '"> ';
+    }
+
+    if(type == "line") {
+        html += name + '<br /><input type="text" id="editor-' + id + '" value="' + val + '"> ';
+    }
+    if(type == "text") {
+        html += name + '<br /><textarea class="mceNoEditor" rows="10" id="editor-' + id + '">' + val + '</textarea> ';
+    }
+    if(type == "richtext") {
+        html += name + '<br /><textarea class="mceEditor" rows="10" name="editor-' + id + '" id="editor-' + id + '">' + val + '</textarea> ';
+    }
+    if(type == "image") {
+        var imgSrc = el.attr("src");
+        var imgW = (el.attr("width")) ? el.attr("width") : "";
+        var imgH = (el.attr("height")) ? el.attr("height") : "";
+
+        html += name + '<br /><input type="text" id="editor-' + id + '" value="' + imgSrc + '">';
+        html += '<input type="hidden" id="editor-height-' + id + '" value="' + imgH + '">';
+        html += '<input type="hidden" id="editor-width-' + id + '" value="' + imgW + '">';
+        html += '<a onclick="mediaPicker(\'editor-' + id + '\',\'line\')" class="btn apply">Sélectionner une image</a>';
+
+    }
+    editor.append(html + "</div></div>");
+
+    richtext();
+
+}
+
+
+function uniqueSave(el) {
+
+    var type  = getType(el);
+    var id    = getId(el, true);
+    var name  = getName(el);
+    var atype       = type.split(",");
+    var href        = false;
+    if(atype[0] == "href") {
+        href = true;
+        type = atype[1];
+    }
+
+    var val   = "";
+
+    if(href) {
+        val = editor.find("#editor-href-" + id).val();
+        el.attr("href", val);
+    }
+
+    if(type == "text" || type == "line") {
+        val = editor.find("#editor-" + id).val();
+        el.html(val);
+    }
+
+    if (type == "richtext") {
+        var ed  = tinymce.get("editor-" + id);
+        val     = ed.getContent();
+        el.html(val);
+    }
+    if (type == "image") {
+        var imgW = editor.find("#editor-width-" + id).val();
+        var imgH = editor.find("#editor-height-" + id).val();
+
+        val = editor.find("#editor-" + id).val();
+        $.post('helper/designer-media', { src: editor.find("#editor-" + id).val(), w: imgW, h: imgH}, function(d) {
+            val = d;
+            el.attr("src", val);
+        });
+    }
+
+    editorClose();
+
+}
+
+//------------------------
+// DATA
+//------------------------
+function loadData() {
+    $(".layout").each( function(e) {
+        var layout = $(this);
+        if(layout.attr("data-idx")) {
+            var editable    = layout.find(".editable");
+            var id_layout   = layout.attr("data-idx");
+            data[id_layout] = {};
+            editable.each( function() {
+                var type  = getType($(this));
+                var id    = getId($(this));
+                var val   = $(this).html();
+
+                if(type == "href") {
+                    val = $(this).attr("href");
+                }
+                data[id_layout][id] = val;
+
+            });
+        }
+    });
+
+}
+
+function urlList(url, opt) {
+    if(!opt) var opt = {};
+    $.post(url, opt, function(d) {
+        var list = $.parseJSON(d);
+        return list;
+    });
+}
+function urlLoad(url, opt) {
+    if(!opt) var opt = {};
+    $.post(url, opt, function(d) {
+        //alert('url : ' + url + ' - result : ' + d);
+        return d;
+    });
+}
+
+//------------------------
+// UTILITIES
+//------------------------
+
+// Fonctions pour recuperer facilement les attributs
+function getId(el, as) {
+    //console.log(el);
+    if(el) {
+        var id = el.attr('data-id');
+        if(as) id = id.replace(".", "---");
+        else id = id.replace("---", ".");
+        return id;
     }
 }
+function getName(el) {
+    if(el) return (el.attr('data-name')) ? el.attr('data-name') : el.attr('data-id');
+}
+function getType(el) {
+    var r = "line";
+    if(el) {
+        if(el.attr('data-type')) r = el.attr('data-type')
+        else {
+            if(el.get(0).nodeName.toLowerCase() == "img") r = "image";
+            //if(el.get(0).nodeName == "a") r = "href";
+        }
+    }
+    return r;
+}
+// Fonctions pour chercher par ID
+function search(el, id) {
+    return $(el + "[data-id=" + id + "]");
+}
+
+function sizeIframe() {
+    var h = $(document).outerHeight(true) + 50;
+
+    var ifra = parent.document.getElementById("designer-iframe");
+    if(ifra) ifra.style.height = h+"px";
+}
 
 
-// Hauteur automatique iframe
-function sizeIFrame() {
-    //$("#preview").height($("#preview").contents().find("html").outerHeight() + 100);
+function topBar() {
+    /*var ifra = parent.document.getElementById("designer-iframe");
+
+    if(ifra) {
+        var h = $(parent.document).scrollTop() - $(ifra).offset().top;
+        if(h < 0) h = 0;
+        //h = $(ifra).offset().top;//$(parent.document).scrollTop();
+        $(".top").css("marginTop", h + "px");
+    }*/
+}
+
+//-----------------------
+// SAUVEGARDE
+//-----------------------
+
+function save() {
+    var html = document.documentElement.outerHTML;
+    //var out = $("<out>" + html + "</out>");
+    /*out.find("template").remove();
+    var outhtml = out.html();
+    //console.log(html);
+    console.log(outhtml);*/
+
+    var outhtml = html;
+
+    $.post('helper/designer-save', { id_newsletter: id_newsletter, finalhtml: outhtml, designerhtml: html}, function(d) {
+        if(d != 0) {
+            alert('Enregistré');
+            $('#data').submit()
+        }
+    });
+}
+
+//-----------------------
+// TINYMCE
+//-----------------------
+
+function richtext() {
+    tinymce.init({
+        mode : "textareas",
+
+        editor_selector : "mceEditor",
+        editor_deselector : "mceNoEditor",
+        // General options
+        theme : "advanced",
+        plugins : "pagebreak,style,layer,table,save,advhr,advimage,advlink,emotions,iespell,inlinepopups,insertdatetime,preview,media,searchreplace,print,contextmenu,paste,directionality,fullscreen,noneditable,visualchars,nonbreaking,xhtmlxtras,template",
+
+        // Theme options
+        theme_advanced_buttons1 : "mediapicker,bold,italic,underline,|,link,unlink,|,pasteword",
+        theme_advanced_toolbar_location : "top",
+        theme_advanced_toolbar_align : "left",
+        theme_advanced_statusbar_location : "bottom",
+        theme_advanced_resizing : true,
+        force_br_newlines : true,
+        force_p_newlines : false,
+        forced_root_block : "",
+        invalid_elements : "p",
+        paste_preprocess : function(pl, o) {
+            //example: keep bold,italic,underline and paragraphs
+            //o.content = strip_tags( o.content,'<b><u><i><p>' );
+
+            // remove all tags => plain text
+            o.content = strip_tags( o.content,'' );
+        },
+
+        setup : function(ed) {
+            ed.addButton('mediapicker', {
+                title : 'Insérer des images',
+                image : '/admin/core/ui/img/_img/myb.gif',
+                onclick : function() {
+                    mediaPicker(ed.id, 'mce');
+                }
+            });
+        }
+    });
 }
 
 function strip_tags (str, allowed_tags)
