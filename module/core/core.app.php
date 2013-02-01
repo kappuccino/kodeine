@@ -1049,7 +1049,7 @@ public function kodeineInit($get){
 	# CHAPTER
 	# Recupere le CHAPTER en fonction de l'URL GET ou celui par DEFAUT
 	#
-	$chapter = array_key_exists($get['urlChapter'], $chaptersDbUi)
+	$chapter = @array_key_exists($get['urlChapter'], $chaptersDbUi)
 		? $chaptersDbUi[$get['urlChapter']]
 		: $chaptersDbId[$this->kodeine['defaultIdChapter']];
 
