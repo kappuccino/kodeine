@@ -664,6 +664,7 @@ function editorClose() {
     editor.offset({top: h + 20});
 }
 function editorOpen() {
+    editor.find(".edit-form").remove();
     var h = ($(window).scrollTop() + 50);
 
     if(parent.document) h = $(parent.document).scrollTop() - 230;
