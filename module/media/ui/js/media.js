@@ -179,6 +179,7 @@ function folderNavFromPosition(n){
 + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - */
 function folderView(hash){
 
+
 	$('#path').html('Chargement en cours');
 
 	var remote = $.ajax({
@@ -599,13 +600,13 @@ function folderElementSize(myWidth, myHeight, e){
 + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - */
 function makeDragAndDrop(){
 
+
 	$('.dragme .icone').each(function(i, e){
 		
 		if ( $(e).hasClass('ui-draggable') ) {
 			return true;
 		}
-
-		$(e).draggable({
+        $(e).draggable({
 			handle: $(e).find('.icone'),
 			zIndex: 9999,
 			//helper: 'clone',
@@ -673,6 +674,8 @@ function viewUrl(){
 	}
 	
 	$('#path').attr('data-url', before);
+
+    uploadPath	= root + before;
 }
 
 /* + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - 
@@ -1106,7 +1109,7 @@ function modalPref() {
 /* + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - 
 + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - */
 function modalShowUpload() {
-	
+
 /*	$('#modal-upload').fadeTo(218, 1);
 	$('#fade-wall').fadeTo(218, 1);
 	$('#modal-upload .uploadcontainer').fadeTo(218, 1);
@@ -1119,7 +1122,7 @@ function modalShowUpload() {
 	isSafariFive	= (isSafari && /version\/5/.test(navigator.userAgent.toLowerCase())) ? true : false;
 	
 	/* Mettre a jour les path d'upload si déjà chargé */
-	var uploadPath	= $('#path').attr('data-url');
+	//uploadPath	= root + $('#path').attr('data-url');
 
 	// SI ON A ACCES AU FILEREADER DU BROWSER
 	if(typeof FileReader !== 'undefined' && !isSafariFive) {
@@ -1135,14 +1138,18 @@ function modalShowUpload() {
 			$('#modal-upload .uploadcontainer #file_upload').uploadifive({
 				'buttonText'   : 'Parcourir',
 				'auto'         : true,
-				'formData'     : {'test' : 'something'},
+				'formData'     : {'f' : root + $('#path').attr('data-url')},
 				'queueID'      : 'queue',
-				'uploadScript' : 'helper/upload-action?f='+root + uploadPath,
+				'uploadScript' : 'helper/upload-action',
+                'onUpload' : function(){
+                    this.data('uploadifive').settings.formData = {'f' : root + $('#path').attr('data-url')};
+                },
 				'onSelect'     : function(event,ID,fileObj) {
 				},
 				'onDrop' : function(file, count) {
 				},
 				'onUploadComplete' : function(file, data) {
+                    alert($('#path').attr('data-url'));
 				},
 				'onQueueComplete' : function() {					
 					modalHideUpload();
@@ -1166,10 +1173,14 @@ function modalShowUpload() {
 	        $('#file_upload').uploadify({
 				'swf'      : '/admin/media/ui/_uploadify/uploadify.swf?phpsessid='+phpsid,
 				'auto'     : true,
-				'formData' : {'test' : 'something'},
-	            'uploader' : 'helper/upload-action?f='+$('#path').attr('data-url'),
+				'formData' : {'f' : root + $('#path').attr('data-url')},
+	            'uploader' : 'helper/upload-action',
 	            'width'    : 100,
 	            'buttonText' : 'Parcourir',
+
+                'onUploadStart' : function(file) {
+                    $("#file_upload").uploadify("settings", "formData", {'f' : root + $('#path').attr('data-url')});
+                },
 				'onUploadComplete' : function(file) {
 				},
 				'onQueueComplete' : function() {
