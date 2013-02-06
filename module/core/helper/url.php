@@ -18,7 +18,9 @@
 
 	# IMAGE
 	#
-	if(preg_match("#^/([w|h|s|c]):([0-9,]{1,})(,([0-9]{1,}))?(.*)#", $url, $r)){
+	if(substr($url, 2, 1) == ':'){
+		preg_match("#^/([w|h|s|c]):([0-9,]{1,})(,([0-9]{1,}))?(.*)#", $url, $r);
+
 		$_GET['image'] 	= true;
 		$_GET['mode']  	= $r[1];
 		$_GET['value']	= $r[2];
@@ -27,7 +29,7 @@
 
 		if($trace) $app->pre("IMG", $r, "GET", $_GET);
 
-		include(dirname(__FILE__).'/image.php');
+		include(__DIR__.'/image.php');
 		exit();
 	}else
 
