@@ -1247,6 +1247,7 @@ public function businessAccountGet($opt=array()){
     }else{
         $dbMode = 'dbMulti';
     }
+    if($opt['accountNumber'] > 0) $cond[] = "accountNumber=".$opt['accountNumber'];
 
     # Former les conditions
     #

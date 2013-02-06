@@ -179,6 +179,11 @@ if($opt['debug']) $this->pre("[OPT]", $opt);
 			$posts[$n]['socialPostRateMinusUser']	= ($e['socialPostRateMinusUser'] != '') ? json_decode($e['socialPostRateMinusUser'], true)	: array();
 
 			$posts[$n]['socialPostDataParam']		= ($e['socialPostDataParam'] != '') 	? json_decode($e['socialPostDataParam'], true)		: array();
+
+			$posts[$n]['socialPostDataVal']		    = (strpos($e['socialPostDataVal'], '[') !== false)
+					? json_decode($e['socialPostDataVal'], true)
+					: $e['socialPostDataVal'];
+
 		}
 
 
@@ -230,7 +235,6 @@ if($opt['debug']) $this->pre("[OPT]", $opt);
 	
 	return $posts;
 }
-
 
 /* + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - 
 + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - */

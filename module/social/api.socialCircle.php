@@ -147,7 +147,6 @@ function socialCircleGet($opt=array()){
 	return $circles;
 }
 
-
 /* + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - 
 + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - */
 function socialCircleSet($opt){
@@ -315,19 +314,25 @@ function socialCircleRemove($id_socialcircle){
 	// Cache cleaning
 	$users = $this->dbMulti("SELECT id_user FROM k_socialcircleuser WHERE id_socialcircle=".$id_socialcircle);
 	$users = $this->dbKey($users, 'id_user');
-#$this->pre($users);
 
 	foreach($users as $e){
 		$this->socialUserCacheClean($e);
 	}
 
-	// Suppression du cercle et de ses membres
+	// Suppression du CIRCLE et de ses USER
 	$this->dbQuery("DELETE FROM k_socialcirclepending 	WHERE id_socialcircle=".$id_socialcircle);
 	$this->dbQuery("DELETE FROM k_socialcircleuser 		WHERE id_socialcircle=".$id_socialcircle);
 	$this->dbQuery("DELETE FROM k_socialcircle 			WHERE id_socialcircle=".$id_socialcircle);
 
-	// Supprime les posts relier a ce cercle
-	$this->dbQuery("DELETE FROM k_socialpostcircle		WHERE id_socialcircle=".$id_socialcircle);
+	// Supprime les POST relier a ce CIRCLE
+	$posts = $this->apiLoad('socialPost')->socialPostGet(array(
+		'id_socialcircle'	=> $id_socialcircle,
+		'noLimit'			=> true
+	));
+
+	foreach($posts as $p){
+		$this->apiLoad('socialPost')->socialPostRemove($p['id_socialpost']);
+	}
 }
 
 /* + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + -
