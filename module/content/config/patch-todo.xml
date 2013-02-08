@@ -148,7 +148,8 @@
 
 	<job action = "createField" 	table = "k_contentdata"		field = "contentHeadTitle"			type = "VARCHAR(255)" 	null = "NO"		after = "contentName" />
 	<job action = "createField" 	table = "k_contentdata"		field = "contentMetaKeywords"		type = "VARCHAR(255)" 	null = "NO"		after = "contentHeadTitle" />
-	<job action = "createField" 	table = "k_contentdata"		field = "contentMetaDescription"	type = "MEDIUMTEXT" 	null = "NO"		after = "contentMetaKeywords" />
+    <job action = "createField" 	table = "k_contentdata"		field = "contentMetaDescription"	type = "MEDIUMTEXT" 	null = "NO"		after = "contentMetaKeywords" />
+    <job action = "createField" 	table = "k_contentdata"		field = "contentUrlAuto"	        type = "TINYINT(1)" 	null = "NO"		default = "1"   after = "contentMetaDescription" />
 
 	<job action = "createField"		table = "k_contentcomment" 	field = "commentUsername"			type = "VARCHAR(255)"	null = "NO" 	after = "is_moderate" />
 	<job action = "changeField" 	table = "k_contentcomment" 	field = "commentGood,commentGood" 	type = "MEDIUMINT(64)" 	null = "NO" 	default = "0" 				unsigned="YES" />

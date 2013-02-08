@@ -35,7 +35,8 @@
 			'contentName' 				=> array('value' => $_POST['contentName'], 				'check' => '.'),
 			'contentHeadTitle' 			=> array('value' => $_POST['contentHeadTitle'], 		'null' => true),
 			'contentMetaKeywords' 		=> array('value' => $_POST['contentMetaKeywords'], 		'null' => true),
-			'contentMetaDescription'	=> array('value' => $_POST['contentMetaDescription'],	'null' => true)
+			'contentMetaDescription'	=> array('value' => $_POST['contentMetaDescription'],	'null' => true),
+            'contentUrlAuto'	        => array('value' => $_POST['contentUrlAuto'],	        'zero' => true)
 		);
 		if(!$app->formValidation($dat)) $do = false;
 
@@ -395,7 +396,7 @@
 			<div class="form clearfix">
 				<input type="text" name="contentUrl" id="urlField" class="field" value="<?php echo $app->formValue($data['contentUrl'], $_POST['contentUrl']); ?>" size="100" style="width:75%; float:left;" />
 				<div style="float:left; margin-top:2px;">
-					<input type="checkbox" id="autogen" checked="checked" onclick="if(this.checked)urlCheck();" />
+					<input type="checkbox" id="autogen" value="1" name="contentUrlAuto" onclick="if(this.checked)urlCheck();"  <?php if($app->formValue($data['contentUrlAuto'], $_POST['contentUrlAuto']) || (!isset($data['contentUrlAuto']) && !isset($_POST['contentUrlAuto']))) echo "checked" ?> />
 					Générer automatiquent
 				</div>
 			</div>
