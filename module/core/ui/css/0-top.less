@@ -172,24 +172,49 @@
 
 	}
 
+	.btn{
+		display: block;
+		color: #333;
+		margin-top: -5px;
+		padding: 3px 9px 1px 9px;
+
+		&.btn-success,
+		&.btn-danger{
+			color: #FFF;
+		}
+	}
+
 	.btn-group{
+		top: -5px;
 		padding: 0px; margin: 0px;
 		display: block;
+
+		span.caret{
+			display: inline-block;
+		}
+
 		a{
 			display: block;
-			//padding-top: 4px;
 			padding-bottom: 3px;
 			text-shadow: none;
+
+			&.btn{
+				padding-bottom: 0;
+			}
 		}
-		a:hover{
-			background: none;
+
+		a.dropdown-toggle.btn.btn-mini{
+			padding: 3px 9px 3px 9px;
 		}
+
 		.dropdown-menu{
 			padding: 6px 0 6px 0;
+
 			li{
 				margin: auto;
 				text-align: left;
 				float: none;
+
 				a{
 					clear: none;
 					margin: 0px;
@@ -203,98 +228,31 @@
 					}
 				}
 			}
+
+			.btn{
+				&.btn-mini{
+					padding: 3px 9px 1px 9px;
+				}
+			}
 		}
+
 		li:hover{
 			background: @top-background;
+
 			a{
 				color: #FFF;
 			}
 		}
-		
+
 		.btn{
 			margin-top: 0;
+
+			&.btn-mini{
+				padding: 0 9px 0 9px;
+			}
 		}
-	}
-	
-	.btn{
-		display: block;
-		padding-bottom: 0px;
-		color: #333;
-		margin-top: -5px;
-		padding: 3px 9px 1px 9px;
 
-		&.btn-success,
-		&.btn-danger{
-			color: #FFF;
-		}
-	}
-}
-
-
-
-
-#sub_nav{
-
-	.btn-group{
-		span.caret{
-			display: inline-block;
-		}
-	}
-
-	li img, li span{
-		display: none;
-	}
-
-	//////////////////////////////////////////////////////////////////////////////////////////
-
-	&.icon&.text{
-		.btn-group{
-			top:10px;
-		}
-	}
-
-	//////////////////////////////////////////////////////////////////////////////////////////
-
-	&.icon li{
-		img{
-			display: block;
-		}
-		.btn-group{
-			top: 6px;
-		}
-	}
-
-	//////////////////////////////////////////////////////////////////////////////////////////
-
-	&.text li{
-		span{
-			display: block;
-		}
-		.btn-group{
-			top: -5px;
-		}
 	}
 
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
