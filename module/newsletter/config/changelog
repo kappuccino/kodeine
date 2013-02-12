@@ -5,7 +5,8 @@ Kodeine Change log
 
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 2013-02-12 (5.1.2)
-+ Fix pb js chargement template editeur classique
+- Fix pb js chargement template editeur classique
+- Fix pb reset newsletter
 
 2013-02-01 (5.1.1)
 - Fix bug qd plusieurs clics sur zone editable

@@ -13,7 +13,7 @@ if($_POST['reset'] == 'do'){
 
     $app->dbQuery("UPDATE k_newsletter SET newsletterSendDate=NULL WHERE id_newsletter=".$_POST['id_newsletter']);
 
-    header("Location: analytic?id_newsletter=".$_POST['id_newsletter']);
+    header("Location: data-options?id_newsletter=".$_POST['id_newsletter']);
 }
 
 $data = $api->newsletterGet(array(
@@ -55,14 +55,23 @@ $recipUnsubRate	= number_format((@($stat['campaign']['campaingUnsubscribed'] / $
     <title>Kodeine</title>
     <?php include(COREINC.'/head.php'); ?>
     <link rel="stylesheet" type="text/css" media="all" href="ui/css/analytic.css" />
+    <link rel="stylesheet" type="text/css" media="all" href="ui/css/newsletter.css" />
 </head>
 
 <body>
 
 <header><?php
     include(COREINC.'/top.php');
-    include(dirname(dirname(__DIR__)).'/ui/menu.php')
+    include(dirname(dirname(__DIR__)).'/ui/menu.php');
+    $step = 'stats';
+    include(dirname(dirname(__DIR__)).'/ui/steps.php');
     ?></header>
+
+<div class="inject-subnav-right hide">
+    <?php if($_REQUEST['id_newsletter'] > 0){ ?>
+    <li><a href="preview?id_newsletter=<?php echo $_REQUEST['id_newsletter'] ?>" class="btn btn-small" target="_blank">Prévisualiser</a></li>
+    <?php } ?>
+</div>
 
 <div id="app"><div class="wrapper">
 
@@ -147,7 +156,7 @@ $recipUnsubRate	= number_format((@($stat['campaign']['campaingUnsubscribed'] / $
         <?php }else{ ?>
 
         <div style="font-weight:bold; font-size:14px; text-align:center; padding-top:50px; color:#808080;">
-            Cette newsletter n'a pas &eacute;t&eacute; encore envoy&eacute;, ou bien aucune statistiques ne sont encore disponibles
+            Cette newsletter n'a pas &eacute;t&eacute; encore envoy&eacute;e, ou bien aucune statistique n'est encore disponible
         </div>
 
         <?php } ?>
@@ -157,9 +166,9 @@ $recipUnsubRate	= number_format((@($stat['campaign']['campaingUnsubscribed'] / $
                 <input type="hidden"	name="id_newsletter"	value="<?php echo $data['id_newsletter'] ?>" />
                 <input type="checkbox"	name="reset"			value="do" />
 
-                Effacer toutes les statistiques et consid&eacute;rer cette newsletter comme non envoy&eacute;<br />
+                Effacer toutes les statistiques et consid&eacute;rer cette newsletter comme non envoy&eacute;e<br />
                 <input type="submit" class="btn btn-mini" value="Confirmer" />
-                Note: cette action n'impacte pas vos quota d'envois
+                Note: cette action n'impacte pas vos quotas d'envois
 
                 <br /><br />
                 * Certains clients de messagerie n'affichant pas automatiquement les images, ce nombre peut &ecirc;tre en dessous de la r&eacute;alit&eacute;.
@@ -169,6 +178,9 @@ $recipUnsubRate	= number_format((@($stat['campaign']['campaingUnsubscribed'] / $
     </div>
 </div>
 
+<?php include(COREINC.'/end.php'); ?>
+<script language="javascript" type="text/javascript" src="ui/_flot/jquery.flot.js"></script>
+<script language="javascript" type="text/javascript" src="ui/_flot/jquery.flot.pie.min.js"></script>
 
 <?php if(is_array($stat['campaign']) && $data['newsletterSendDate'] != NULL){
 
@@ -200,9 +212,6 @@ $recipUnsubRate	= number_format((@($stat['campaign']['campaingUnsubscribed'] / $
 
     ?>
 
-    <?php include(COREINC.'/end.php'); ?>
-<script language="javascript" type="text/javascript" src="ui/_flot/jquery.flot.js"></script>
-<script language="javascript" type="text/javascript" src="ui/_flot/jquery.flot.pie.min.js"></script>
 
 <script type="text/javascript">
 

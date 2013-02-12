@@ -24,8 +24,12 @@
         Etape 3 : Listes abonnés
     </a>
 
-    <a href="#" class="btn <?php echo ($step == 'send') ? 'active':'' ?>">
-        Etape 4 : Confirmation
+    <a href="<?php if($step == 'stats' || $data['newsletterSendDate'] != NULL) echo 'analytic?id_newsletter='.$_REQUEST['id_newsletter']; else echo '#'; ?>" class="btn <?php echo ($step == 'send' || $step == 'stats') ? 'active':'' ?>">
+        <?php if($step == 'stats' || $data['newsletterSendDate'] != NULL) { ?>
+            Etape 4 : Statistiques
+        <?php }else { ?>
+            Etape 4 : Confirmation
+        <?php } ?>
     </a>
 
 
