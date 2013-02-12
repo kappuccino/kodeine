@@ -4,8 +4,11 @@ Kodeine Change log
 * = Autre / Divers / Inclassable...
 
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+2013-02-12 (5.1.2)
++ Fix pb js chargement template editeur classique
+
 2013-02-01 (5.1.1)
-Fic bug qd plusieurs clics sur zone editable
+- Fix bug qd plusieurs clics sur zone editable
 
 2013-02-01 (5.1.0)
 + Installation Designer V2

@@ -3,8 +3,8 @@
 
 	<data>
 		<key>newsletter</key>
-		<version>5.1.0</version>
-        <lastMod>2013-02-04</lastMod>
+		<version>5.1.2</version>
+        <lastMod>2013-02-12</lastMod>
 
 		<name><![CDATA[Newsletter]]></name>
 		<description><![CDATA[R&eacute;diger vos newsletters et analyser leur traffic]]></description>

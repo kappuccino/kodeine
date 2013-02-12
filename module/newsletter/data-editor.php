@@ -248,7 +248,7 @@ if($_REQUEST['id_newsletter'] != NULL){
     }
 
     function loadTemplate(menu){
-        id = menu[0].options[menu.selectedIndex].value;
+        id = menu[0].options[menu[0].selectedIndex].value;
 
         if(id != null && confirm("Voulez vous remplacer le contenu et le style existant par le gabarit selectionné ?")){
             var ed = tinyMCE.get('newsletterHtml');
@@ -268,7 +268,7 @@ if($_REQUEST['id_newsletter'] != NULL){
                     });
         }
 
-        menu.selectedIndex = 0;
+        menu[0].selectedIndex = 0;
     }
 
 </script>
