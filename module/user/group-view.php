@@ -117,7 +117,7 @@
 		<tfoot>
 			<?php if(sizeof($users) > 0){ ?>
 			<tr>
-				<td colspan="3"><a href="#" onClick="remove();" class="btn btn-mini">Supprimer</a></td>
+				<td colspan="3"><!--<a href="#" onClick="applyRemove();" class="btn btn-mini">Supprimer</a>--></td>
 				<td class="pagination"><?php
 					$app->pagination($app->apiLoad('user')->total, $app->apiLoad('user')->limit, $filter['offset'], 'group-view?id_group='.$group['id_group'].'&cf&offset=%s');
 				?></td>
@@ -134,4 +134,11 @@
 </div>
 <?php include(COREINC.'/end.php'); ?>
 <script src="/app/module/core/ui/_datatables/jquery.dataTables.js"></script>
+<script>
+    function applyRemove(){
+        if(confirm("SUPPRIMER ?")){
+            $('#listing').submit();
+        }
+    }
+</script>
 </body></html>

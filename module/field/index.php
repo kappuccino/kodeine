@@ -127,7 +127,7 @@
 			<tfoot>
 				<tr>
 					<td width="30" height="25" class="check-red"><input type="checkbox" class="chk" id="chk_remove_all" onchange="cbchange($(this));" /></td>
-					<td><a onClick="remove();" class="btn btn-mini">Supprimer</a></td>
+					<td><a onClick="apply();" class="btn btn-mini">Supprimer</a></td>
 					<td align="right"><a href="asso?id_type=category" class="btn btn-mini">Relier les champs aux types</a></td>
 				</tr>
 			</tfoot>

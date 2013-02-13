@@ -9,134 +9,164 @@
 
 	#$app->pre($_GET);
 
+/*[remove] => 1
+[create] => 1
+[rename] => 1
+[move] => 1
+[upload] => 1$app->userCan('media.root')*/
+
 	switch($_REQUEST['action']){
 		case 'duplicate':
+            if($app->userCan('media.create')) {
+                $ext = substr(strtolower($src), -3);
+                $dst = substr($src, 0, -4).' - copy.'.$ext;
 
-			$ext = substr(strtolower($src), -3);
-			$dst = substr($src, 0, -4).' - copy.'.$ext;	
-
-			if(!file_exists($src)){
-				$success 	= 'false';
-				$callBack 	= "log_('DUPLICATE FAILED : $src existe pas');";
-			}else
-			if(file_exists($dst)){
-				$success 	= 'false';
-				$callBack 	= "log_('DUPLICATE FAILED : $dst existe deja');";
-			}else
-			if(!copy($src, $dst)) {
-				$success 	= 'false';
-				$callBack 	= "log_('DUPLICATE FAILED : $src > $dst');";
-			}else{
-				umask(0);
-				chmod($dst, 0755);
-				$success 	= 'true';
-				$callBack 	= "log_('DUPLICATE SUCCESS : $src > $dst');folderView();";
-			}
+                if(!file_exists($src)){
+                    $success 	= 'false';
+                    $callBack 	= "log_('DUPLICATE FAILED : $src existe pas');";
+                }else
+                if(file_exists($dst)){
+                    $success 	= 'false';
+                    $callBack 	= "log_('DUPLICATE FAILED : $dst existe deja');";
+                }else
+                if(!copy($src, $dst)) {
+                    $success 	= 'false';
+                    $callBack 	= "log_('DUPLICATE FAILED : $src > $dst');";
+                }else{
+                    umask(0);
+                    chmod($dst, 0755);
+                    $success 	= 'true';
+                    $callBack 	= "log_('DUPLICATE SUCCESS : $src > $dst');folderView();";
+                }
+            } else {
+                $success 	= 'false';
+                $callBack 	= "log_('DUPLICATE FAILED : action non autorisée');";
+            }
 		break;
 
 		case 'move':
-			$dst = $dst.'/'.basename($src);
+            if($app->userCan('media.move')) {
+                $dst = $dst.'/'.basename($src);
 
-			umask(0);
-			if(file_exists($dst)){
-				$success 	= 'false';
-				$callBack 	= "log_('MOVE FAILED : $dst existe deja');";
-			}else
-			if($app->mediaRename($src, $dst)){
-				$success	= 'true';
-				$callBack	= "log_('MOVE SUCCESS : $src > $dst')";
-				chmod($dst, 0755);
-			}else{
-				$success	= 'false';
-				$callBack	= "log_('MOVE SUCCESS API : $src > $dst')";
-			}
+                umask(0);
+                if(file_exists($dst)){
+                    $success 	= 'false';
+                    $callBack 	= "log_('MOVE FAILED : $dst existe deja');";
+                }else
+                if($app->mediaRename($src, $dst)){
+                    $success	= 'true';
+                    $callBack	= "log_('MOVE SUCCESS : $src > $dst')";
+                    chmod($dst, 0755);
+                }else{
+                    $success	= 'false';
+                    $callBack	= "log_('MOVE SUCCESS API : $src > $dst')";
+                }
 
 
-			/*if(file_exists($dst)){
-				$success 	= 'false';
-				$callBack 	= "log_('MOVE FAILED : $dst existe deja dans le dossier de destination');";
-			}else
-			if(!rename($src, $dst)) {
-				$success 	= 'false';
-				$callBack 	= "log_('MOVE FAILED : $src > $dst');";
-			}else{
-				if(is_file($dst)){
-				//	$app->mediaChangeUrl($app->mediaNoRoot($src), $app->mediaNoRoot($dst));
-				}else
-				if(is_dir($dst)){
-				//	$app->mediaUpdateFolder($app->mediaNoRoot($src), $app->mediaNoRoot($dst));
-				}
-				$success 	= 'true';
-				$callBack 	= "log_('MOVE SUCCESS : $src > $dst');";
-			}*/
+                /*if(file_exists($dst)){
+                    $success 	= 'false';
+                    $callBack 	= "log_('MOVE FAILED : $dst existe deja dans le dossier de destination');";
+                }else
+                if(!rename($src, $dst)) {
+                    $success 	= 'false';
+                    $callBack 	= "log_('MOVE FAILED : $src > $dst');";
+                }else{
+                    if(is_file($dst)){
+                    //	$app->mediaChangeUrl($app->mediaNoRoot($src), $app->mediaNoRoot($dst));
+                    }else
+                    if(is_dir($dst)){
+                    //	$app->mediaUpdateFolder($app->mediaNoRoot($src), $app->mediaNoRoot($dst));
+                    }
+                    $success 	= 'true';
+                    $callBack 	= "log_('MOVE SUCCESS : $src > $dst');";
+                }*/
+            } else {
+                $success 	= 'false';
+                $callBack 	= "log_('MOVE FAILED : action non autorisée');";
+            }
 		break;
 
 		case 'remove':
-			if($app->mediaRemove($src)){
-				$success 	= 'true';
-				if(is_file($src)){
-					$callBack = "log_('REMOVE SUCCESS FILE : $src');";
-				}else
-				if(is_dir($src)){
-					$callBack = "log_('REMOVE SUCCESS FOLDER : $src');";
-				}else{
-					$callBack = "log_('REMOVE : $src');";
-				}
+            if($app->userCan('media.remove')) {
+                if($app->mediaRemove($src)){
+                    $success 	= 'true';
+                    if(is_file($src)){
+                        $callBack = "log_('REMOVE SUCCESS FILE : $src');";
+                    }else
+                    if(is_dir($src)){
+                        $callBack = "log_('REMOVE SUCCESS FOLDER : $src');";
+                    }else{
+                        $callBack = "log_('REMOVE : $src');";
+                    }
 
-			}else{
-				$success 	= 'false';
-				$callBack 	= "log_('REMOVE FAILEDD : $src');";		
-			}
+                }else{
+                    $success 	= 'false';
+                    $callBack 	= "log_('REMOVE FAILED : $src');";
+                }
+            } else {
+                $success 	= 'false';
+                $callBack 	= "log_('REMOVE FAILED : action non autorisée');";
+            }
 
 		break;
 
 		case 'newdir':
-			umask(0);
-			
-			// -- Supression caracteres interdits
-			if($pref['urlEncode'] == 1) {
-				$srcinfo = pathinfo($src);
-				$data = $app->helperUrlEncode($srcinfo['basename']);
-				$src = $srcinfo['dirname'].'/'.$data;
-			}else {
-				$srcinfo = pathinfo($src);
-				$data = $srcinfo['basename'];				
-			}
-			// --
-			
-			if(file_exists($src)){
-				$success 	= 'false';
-				$callBack 	= "log_('NEWDIR FAILED : $src existe deja');";
-			}else
-			if(mkdir($src, 0755)){
-				$success 	= 'true';
-				$callBack 	= "log_('NEWDIR SUCCESS : $src');";
-			}else{
-				$success 	= 'false';
-				$callBack 	= "log_('NEWDIR FAILED : $src');";
-			}
+            if($app->userCan('media.create')) {
+                umask(0);
+
+                // -- Supression caracteres interdits
+                if($pref['urlEncode'] == 1) {
+                    $srcinfo = pathinfo($src);
+                    $data = $app->helperUrlEncode($srcinfo['basename']);
+                    $src = $srcinfo['dirname'].'/'.$data;
+                }else {
+                    $srcinfo = pathinfo($src);
+                    $data = $srcinfo['basename'];
+                }
+                // --
+
+                if(file_exists($src)){
+                    $success 	= 'false';
+                    $callBack 	= "log_('NEWDIR FAILED : $src existe deja');";
+                }else
+                if(mkdir($src, 0755)){
+                    $success 	= 'true';
+                    $callBack 	= "log_('NEWDIR SUCCESS : $src');";
+                }else{
+                    $success 	= 'false';
+                    $callBack 	= "log_('NEWDIR FAILED : $src');";
+                }
+            } else {
+                $success 	= 'false';
+                $callBack 	= "log_('NEWDIR FAILED : action non autorisée');";
+            }
 		break;
 		
 		case 'rename' :
-			umask(0);
-			$newFile = $dst;
-			$srcExt	 = substr(strtolower($src), -3);
-			$newExt	 = substr(strtolower($newFile), -3);;
+            if($app->userCan('media.rename')) {
+                umask(0);
+                $newFile = $dst;
+                $srcExt	 = substr(strtolower($src), -3);
+                $newExt	 = substr(strtolower($newFile), -3);;
 
-			if($srcExt != $newExt && $srcExt != NULL && $newExt != NULL && is_file($src) == 'file') $dst .= '.'.$srcExt;
+                if($srcExt != $newExt && $srcExt != NULL && $newExt != NULL && is_file($src) == 'file') $dst .= '.'.$srcExt;
 
-			if(file_exists($dst)){
-				$success 	= 'false';
-				$callBack 	= "log_('RENAME FAILED : $dst existe deja');";
-			}else
-			if($app->mediaRename($src, $dst)){
-				$success	= 'true';
-				$callBack	= "log_('RENAME SUCCESS : $src > $dst')";
-				chmod($dst, 0755);
-			}else{
-				$success	= 'false';
-				$callBack	= "log_('RENAME SUCCESS API : $src > $dst')";
-			}
+                if(file_exists($dst)){
+                    $success 	= 'false';
+                    $callBack 	= "log_('RENAME FAILED : $dst existe deja');";
+                }else
+                if($app->mediaRename($src, $dst)){
+                    $success	= 'true';
+                    $callBack	= "log_('RENAME SUCCESS : $src > $dst')";
+                    chmod($dst, 0755);
+                }else{
+                    $success	= 'false';
+                    $callBack	= "log_('RENAME SUCCESS API : $src > $dst')";
+                }
+            } else {
+                $success 	= 'false';
+                $callBack 	= "log_('RENAME FAILED : action non autorisée');";
+            }
 		break;
 
 		case 'customKeyword':

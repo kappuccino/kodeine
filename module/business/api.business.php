@@ -951,14 +951,17 @@ public function businessCmdMail($opt){
 	# Mail
 	#
 	$mail = new PHPMailer();
-	$mail->SetFrom('noreply@'.$_SERVER['HTTP_HOST']);
+    $mail->CharSet = "UTF-8";
+    if($opt['mailFrom'] != '') $mail->SetFrom($opt['mailFrom']);
+	else $mail->SetFrom('noreply@'.$_SERVER['HTTP_HOST']);
 
 	// TO
 	foreach($mailTo as $e){
 		if(filter_var($e, FILTER_VALIDATE_EMAIL) !== FALSE) $mail->AddAddress($e);
 	}
 	$mail->ClearReplyTos();
-	$mail->AddReplyTo('noreply@'.$_SERVER['HTTP_HOST']);
+    if($opt['mailReplyTo'] != '') $mail->AddReplyTo($opt['mailReplyTo']);
+    else $mail->AddReplyTo('noreply@'.$_SERVER['HTTP_HOST']);
 
 	// CC
 	foreach($mailCc as $e){
@@ -1244,6 +1247,7 @@ public function businessAccountGet($opt=array()){
     }else{
         $dbMode = 'dbMulti';
     }
+    if($opt['accountNumber'] > 0) $cond[] = "accountNumber=".$opt['accountNumber'];
 
     # Former les conditions
     #

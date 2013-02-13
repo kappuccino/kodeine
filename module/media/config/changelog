@@ -4,6 +4,12 @@ Kodeine Change log
 * = Autre / Divers / Inclassable...
 
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+2013-02-06 (5.0.10)
++ Correction pb upload : quand on cliquait sur "envoyer des fichiers" alors le dossier courant etait toujours le dossier d'upload meme si on change de dossier
+
+2013-01-31 (5.0.9)
++ Mise en place des droits du module media : dossier de depart, remove, rename, create, upload
+
 2013-01-17 (5.0.8)
 - LESS to CSS
 
@@ -14,4 +20,4 @@ Kodeine Change log
 + Gestion du .ignore pour ne pas afficher des dossier/fichiers
 
 2012-10-24
-+ Si une image est uploade en portrait, une rotation est effectu� pour la voir correctement (EXIF Orientation: 6=90deg, 8=-90deg
++ Si une image est uploade en portrait, une rotation est effectue pour la voir correctement (EXIF Orientation: 6=90deg, 8=-90deg

@@ -1,4 +1,4 @@
-function remove(){
+function applyRemove(){
 	if(confirm("SUPPRIMER ?")){
 		$('#listing').submit();
 	}

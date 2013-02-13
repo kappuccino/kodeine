@@ -279,7 +279,7 @@
             <tr>
                 <td width="30"><input type="checkbox" onchange="$$('.cb').set('checked', this.checked);" /></td>
                 <td width="30"><input type="checkbox" onchange="$$('.cs').set('checked', this.checked);" /></td>
-                <td colspan="6" height="25"><a href="#" onClick="remove();" class="button rButton"><span>Effectuer les changement sur la selection</span></a></td>
+                <td colspan="6" height="25"><a href="#" onClick="apply();" class="button rButton"><span>Effectuer les changement sur la selection</span></a></td>
                 <td colspan="<?php echo $cType['is_business'] ? '3' : '2' ?>" class="pagination"><?php $app->pagination($total, $limit, $filter['offset'], 'product.picker.php?cf&id_type='.$id_type.'&offset=%s'); ?></td>
             </tr>
         </tfoot>
@@ -295,7 +295,7 @@
         }
     }
 
-    function remove(){
+    function apply(){
         if(confirm("Confirmez-vous les changements sur la selection ?")){
             $('listing').submit();
         }

@@ -4,6 +4,15 @@ Kodeine Change log
 * = Autre / Divers / Inclassable...
 
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+2013-02-08 (5.0.20)
++ sauvegarde de l'etat de la case a cocher "generer automatiquement" pour la reecriture auto de l'url d'un contenu
+
+2013-02-01 (5.0.19)
+- Fix pbs boutons avec onclick="remove()"
+
+2013-01-23 (5.0.18)
+- Fix bouton "Effectuer les changements" dans content/index
+
 2013-01-17 (5.0.17)
 - LESS to CSS
 

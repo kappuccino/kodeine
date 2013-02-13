@@ -90,7 +90,7 @@
 			<tr>
 				<?php if(sizeof($carriage) > 0){ ?>
 				<td height="25"><input type="checkbox" id="chk-del-all" class="chk" onchange="cbchange($(this))" /></td>
-				<td><a href="#" onClick="remove();" class="btn btn-mini">Supprimer la selection</a></td>
+				<td><a href="#" onClick="apply();" class="btn btn-mini">Supprimer la selection</a></td>
 			</tr>
 			<?php }else{ ?>
 			<tr>
@@ -181,7 +181,7 @@
 		}
 	}
 	
-	function remove(){
+	function apply(){
 		if(confirm("SUPPRIMER ?")){
 			$('#listing').submit();
 		}

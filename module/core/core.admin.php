@@ -6,7 +6,7 @@ class coreAdmin extends coreApp {
 
 public function coreAdmin(){
 
-	setlocale(LC_ALL, 'fr_FR');
+    setlocale(LC_ALL, 'fr_FR.UTF8');
 
 	$this->adminZone	= true; 
 	$this->total		= 0;

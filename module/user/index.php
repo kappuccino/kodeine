@@ -153,7 +153,7 @@
 			<tr>
 			<?php if(sizeof($users) > 0){ ?>
 				<td><input id="delall" type="checkbox" class="chk" onchange="cbchange($(this));" /></td>
-				<td colspan="3"><a href="#" onClick="remove();" class="btn btn-mini">Supprimer la selection</a></td>
+				<td colspan="3"><a href="#" onClick="userRemove();" class="btn btn-mini">Supprimer la selection</a></td>
 				<td colspan="<?php echo $colspan ?>" class="pagination"><?php $app->pagination($app->apiLoad('user')->total, $app->apiLoad('user')->limit, $filter['offset'], 'index?cf&offset=%s'); ?></td>
 			<?php }else{ ?>
 				<td colspan="<?php echo (4 + $colspan) ?>">&nbsp;</td>
@@ -169,7 +169,7 @@
 <script src="/app/module/core/ui/_datatables/jquery.dataTables.js"></script>
 <script>
 
-	function remove(){
+	function userRemove(){
 		if(confirm("SUPPRIMER ?")){
 			$('#listing').submit();
 		}

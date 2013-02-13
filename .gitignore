@@ -1,6 +1,4 @@
 .DS_Store
-/media/*
-/user/*
-/.idea/*
 .idea
-/.ht*
+.ht*
+tool/stormless/stormless.json

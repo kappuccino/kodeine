@@ -35,7 +35,8 @@
 			'contentName' 				=> array('value' => $_POST['contentName'], 				'check' => '.'),
 			'contentHeadTitle' 			=> array('value' => $_POST['contentHeadTitle'], 		'null' => true),
 			'contentMetaKeywords' 		=> array('value' => $_POST['contentMetaKeywords'], 		'null' => true),
-			'contentMetaDescription'	=> array('value' => $_POST['contentMetaDescription'],	'null' => true)
+			'contentMetaDescription'	=> array('value' => $_POST['contentMetaDescription'],	'null' => true),
+            'contentUrlAuto'	        => array('value' => $_POST['contentUrlAuto'],	        'zero' => true)
 		);
 		if(!$app->formValidation($dat)) $do = false;
 
@@ -278,7 +279,7 @@
 		<ul class="do-viewer">
 		<?php foreach($type['typeFormLayout']['tab'] as $e){ ?>
 			<li class="is-tab do-view">
-				<span class="text"><?php echo utf8_decode($e['label']) ?></span>
+				<span class="text"><?php echo $e['label'] ?></span>
 				<span class="edit"></span>
 				<span class="remove"></span>
 				<span class="handle"></span>
@@ -329,7 +330,7 @@
 	<?php foreach($type['typeFormLayout']['tab'] as $id => $tab){ ?>
 	<div class="view view-tab" id="<?php echo $id ?>">
 		<div class="view-label view-label-toggle">
-			<span><?php echo utf8_decode($tab['label']) ?></span>
+			<span><?php echo $tab['label'] ?></span>
 		</div>
 		<ul class="is-sortable field-list"><?php
 			foreach($tab['field'] as $f){
@@ -395,7 +396,7 @@
 			<div class="form clearfix">
 				<input type="text" name="contentUrl" id="urlField" class="field" value="<?php echo $app->formValue($data['contentUrl'], $_POST['contentUrl']); ?>" size="100" style="width:75%; float:left;" />
 				<div style="float:left; margin-top:2px;">
-					<input type="checkbox" id="autogen" checked="checked" onclick="if(this.checked)urlCheck();" />
+					<input type="checkbox" id="autogen" value="1" name="contentUrlAuto" onclick="if(this.checked)urlCheck();"  <?php if($app->formValue($data['contentUrlAuto'], $_POST['contentUrlAuto']) || (!isset($data['contentUrlAuto']) && !isset($_POST['contentUrlAuto']))) echo "checked" ?> />
 					Générer automatiquent
 				</div>
 			</div>

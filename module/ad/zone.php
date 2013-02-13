@@ -84,7 +84,7 @@
 	<tfoot>
 		<tr>
 			<td width="30" height="25"><input type="checkbox" onchange="$$('.cb').set('checked', this.checked);" /></td>
-			<td><a href="#" onClick="remove();" class="button rButton">Supprimer la selection</a></td>
+			<td><a href="#" onClick="apply();" class="button rButton">Supprimer la selection</a></td>
 		</tr>
 	</tfoot>
 </table>
@@ -135,7 +135,7 @@
 
 <script>
 
-	function remove(){
+	function apply(){
 		if(confirm("SUPPRIMER ?")){
 			$('listing').submit();
 		}

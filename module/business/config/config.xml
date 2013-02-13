@@ -3,8 +3,8 @@
 
 	<data>
 		<key>business</key>
-		<version>5.0.8</version>
-        <lastMod>2013-01-02</lastMod>
+		<version>5.0.9</version>
+        <lastMod>2013-02-01</lastMod>
 
 		<name><![CDATA[Business]]></name>
 		<description><![CDATA[Valider les dernières commandes et régler votre boutique en ligne]]></description>

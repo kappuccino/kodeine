@@ -1,8 +1,9 @@
 <?php
 // http://forums.phpfreaks.com/topic/179477-need-help-how-to-catch-acess-of-undefined-class-properties/
 
-class dataModel extends dataSql{
+class dataModel extends coreDbQuery{
 
+private $id         = NULL;
 private $data       = array();
 private $table      = NULL;
 private $primary    = array();
@@ -10,14 +11,22 @@ private $structure  = array();
 private $query      = NULL;
 private $debug      = false;
 private $keep       = false;
-
 private $hasMany    = array();
 private $hasOne     = array();
+private $success    = NULL;
+private $valid      = true;
+
 
 /* + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + -
 + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - */
-function dataModel(){
-	$this->query = new dataSQL();
+public function __toString(){
+	return 'dataModel Object';
+}
+
+/* + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + -
++ - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - */
+public function dataModel(){
+	$this->query = new coreDbQuery();
 	return $this;
 }
 
@@ -77,6 +86,7 @@ function set($key, $value=NULL){
 		$tmp = array();
 		foreach($key as $k => $v){
 			if(!array_key_exists($k, $this->structure)) throw new Exception('Key '.$k.' is not defined in STRUCTURE');
+			if(!$this->valid($k, $v)) $this->valid(false);
 			$tmp[$k] = $v;
 		}
 		$this->data = $tmp;
@@ -84,6 +94,7 @@ function set($key, $value=NULL){
 	}else
 	if(is_string($key) && $value != ''){
 		if(!array_key_exists($key, $this->structure)) throw new Exception('Key: '.$key.' is not defined in STRUCTURE');
+		if(!$this->valid($key, $value)) $this->valid(false);
 		$this->data[$key] = $value;
 	}
 
@@ -214,10 +225,32 @@ function debug($d=NULL){
 /* + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + -
 + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - */
 function insert(){
-	$query = (string) $this->query->insert($this->table);
-	$this->dbQuery($query);
 
-	return (($this->db_insert_id > 0) ? $this->db_insert_id : false);
+	$query = (string) $this->query->insert($this->table);
+	if($this->debug()) echo $query."\n";
+
+	$success = $this->query->execute();
+
+	$this->success($success);
+	$this->insertId($this->query->db_insert_id);
+
+	return $this;
+}
+
+/* + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + -
++ - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - */
+function success($v=NULL){
+	if($v === NULL) return $this->success;
+	$this->success = $v;
+
+	return $this;
+}
+
+/* + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + -
++ - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - */
+function insertId($v=NULL){
+	if($v === NULL) return $this->id;
+	$this->id = $this->query->db_insert_id;
 }
 
 /* + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + -
@@ -268,6 +301,30 @@ function remove(){
 
 /* + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + -
 + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - */
+function valid($key=NULL, $value=NULL){
+
+	if($key == NULL && $value == NULL) return $this->valid;
+
+	if(is_bool($key) && $value == NULL){
+		$this->valid = $key;
+		return $this;
+	}
+
+	$struct  = $this->structure[$key];
+	$pattern = '#'.$struct['valid'].'#';
+
+	if(!array_key_exists('valid', $struct)) return true;
+	return preg_match($pattern, $value) == true;
+}
+
+/* + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + -
++ - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - */
+function getQuery(){
+	return $this->query;
+}
+
+/* + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + -
++ - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - */
 function toArray(){
 	$out = (array) $this->data;
 	return $out;
@@ -284,14 +341,13 @@ function toJson(){
 + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - */
 function hasOne($model){
 	$this->hasOne[] = $model;
+	return $this;
 }
 
 /* + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + -
 + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - */
 function hasMany($model){
-
 	$this->hasMany[] = $model;
-
 	return $this;
 }
 

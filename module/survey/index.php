@@ -113,7 +113,7 @@
 			<?php if(sizeof($surveys) > 0){ ?>
 			<tr>
 				<td height="25"><input type="checkbox" onchange="cbchange($(this));" /></td>
-				<td colspan="2"><a href="#" onClick="remove();" class="btn btn-mini">Supprimer la selection</a></td>
+				<td colspan="2"><a href="#" onClick="applyRemove();" class="btn btn-mini">Supprimer la selection</a></td>
 				<td class="pagination"><?php
 					$app->pagination($app->apiLoad('survey')->total, $app->apiLoad('survey')->limit, $filter['offset'], 'index?cf&offset=%s');
 				?></td>
@@ -144,7 +144,7 @@
 		}
 	}
 	
-	function remove(){
+	function applyRemove(){
 		if(confirm("SUPPRIMER ?")){
 			$('#listing').submit();
 		}

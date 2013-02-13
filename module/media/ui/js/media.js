@@ -14,6 +14,7 @@ myMedia			= '/admin/media/ui/img';
 isDrag			= false;
 hasHistory 		= false;
 scrollWidth		= '';
+root            = '/media';
 
 /* + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - 
 + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - */
@@ -178,6 +179,7 @@ function folderNavFromPosition(n){
 + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - */
 function folderView(hash){
 
+
 	$('#path').html('Chargement en cours');
 
 	var remote = $.ajax({
@@ -185,7 +187,7 @@ function folderView(hash){
 		dataType: 'json',
 		data: {
 			'factor': factor,
-			'folder': folder
+			'folder': root + folder
 		}
 	}).done(function(data) {
 		if(data != null){
@@ -598,13 +600,13 @@ function folderElementSize(myWidth, myHeight, e){
 + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - */
 function makeDragAndDrop(){
 
+
 	$('.dragme .icone').each(function(i, e){
 		
 		if ( $(e).hasClass('ui-draggable') ) {
 			return true;
 		}
-
-		$(e).draggable({
+        $(e).draggable({
 			handle: $(e).find('.icone'),
 			zIndex: 9999,
 			//helper: 'clone',
@@ -646,7 +648,9 @@ function makeDragAndDrop(){
 function viewUrl(){
 
 	var before	= '';
-	var parts 	= folder.split("\/");
+
+    var parts 	= folder.split("\/");
+
 	var str		= [];
 
 	$('#path').empty();
@@ -670,12 +674,14 @@ function viewUrl(){
 	}
 	
 	$('#path').attr('data-url', before);
+
+    uploadPath	= root + before;
 }
 
 /* + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - 
 + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - */
 function setFolder(url){
-	folder = url;
+	folder = url.replace(root,"");
 }
 
 /* + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - 
@@ -689,7 +695,7 @@ function setFile(url){
 function selectFile(file, prompt){
 
 	prompt = (prompt == null) ? detectType(file) : prompt;
-	
+
 	switch(method){
 		case 'mce'			: parent.opener.insertRichEditor(field, '<img src="'+file+'" />');	break;
 		case 'sort'			: parent.opener.mediaInsert(field, prompt+'@@'+file, 'sort'); 		break;
@@ -701,6 +707,7 @@ function selectFile(file, prompt){
 		case 'line'			: fld = parent.opener.document.getElementById(field);
 							  fld.value  = file;
 							  fld.fireEvent('change', fld);
+
 							  break;
 
 		case 'editable'		: parent.opener.editable.imageBack(file);
@@ -801,7 +808,7 @@ function actionMove(src, dstElement){
 
 	var get = $.ajax({
 		url: 'helper/action',
-		data: {'action':'move', 'src':folder+'/'+src, 'dst':dst},
+		data: {'action':'move', 'src':root + folder+'/'+src, 'dst':root + dst},
 		dataType: 'json'
 	});
 	
@@ -848,7 +855,7 @@ function actionRename(position){
 				
 				var get = $.ajax({
 					url: 'helper/action',
-					data: {'action':'rename', 'src':folder+'/'+old, 'dst':folder+'/'+$(this).val()},
+					data: {'action':'rename', 'src':root + folder+'/'+old, 'dst':root + folder+'/'+$(this).val()},
 					dataType: 'json'
 				});
 				
@@ -916,7 +923,7 @@ function actionNewDirectory(newDir){
 
 	var get = $.ajax({
 		url: 'helper/action',
-		data: {'action':'newdir', 'src':folder+'/'+newDir},
+		data: {'action':'newdir', 'src':root + folder+'/'+newDir},
 		dataType: 'json'
 	});
 	
@@ -928,7 +935,7 @@ function actionNewDirectory(newDir){
 				'name'	: newDir,
 				'tags'	: 'isDir',
 				'type'	: 'dir',
-				'url'	: folder+'/'+newDir
+				'url'	: root + folder+'/'+newDir
 			});
 			
 			last = collection[collection.length - 1];
@@ -1102,7 +1109,7 @@ function modalPref() {
 /* + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - 
 + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - */
 function modalShowUpload() {
-	
+
 /*	$('#modal-upload').fadeTo(218, 1);
 	$('#fade-wall').fadeTo(218, 1);
 	$('#modal-upload .uploadcontainer').fadeTo(218, 1);
@@ -1115,7 +1122,7 @@ function modalShowUpload() {
 	isSafariFive	= (isSafari && /version\/5/.test(navigator.userAgent.toLowerCase())) ? true : false;
 	
 	/* Mettre a jour les path d'upload si déjà chargé */
-	var uploadPath	= $('#path').attr('data-url');
+	//uploadPath	= root + $('#path').attr('data-url');
 
 	// SI ON A ACCES AU FILEREADER DU BROWSER
 	if(typeof FileReader !== 'undefined' && !isSafariFive) {
@@ -1131,14 +1138,18 @@ function modalShowUpload() {
 			$('#modal-upload .uploadcontainer #file_upload').uploadifive({
 				'buttonText'   : 'Parcourir',
 				'auto'         : true,
-				'formData'     : {'test' : 'something'},
+				'formData'     : {'f' : root + $('#path').attr('data-url')},
 				'queueID'      : 'queue',
-				'uploadScript' : 'helper/upload-action?f='+uploadPath,
+				'uploadScript' : 'helper/upload-action',
+                'onUpload' : function(){
+                    this.data('uploadifive').settings.formData = {'f' : root + $('#path').attr('data-url')};
+                },
 				'onSelect'     : function(event,ID,fileObj) {
 				},
 				'onDrop' : function(file, count) {
 				},
 				'onUploadComplete' : function(file, data) {
+                    alert($('#path').attr('data-url'));
 				},
 				'onQueueComplete' : function() {					
 					modalHideUpload();
@@ -1162,10 +1173,14 @@ function modalShowUpload() {
 	        $('#file_upload').uploadify({
 				'swf'      : '/admin/media/ui/_uploadify/uploadify.swf?phpsessid='+phpsid,
 				'auto'     : true,
-				'formData' : {'test' : 'something'},
-	            'uploader' : 'helper/upload-action?f='+$('#path').attr('data-url'),
+				'formData' : {'f' : root + $('#path').attr('data-url')},
+	            'uploader' : 'helper/upload-action',
 	            'width'    : 100,
 	            'buttonText' : 'Parcourir',
+
+                'onUploadStart' : function(file) {
+                    $("#file_upload").uploadify("settings", "formData", {'f' : root + $('#path').attr('data-url')});
+                },
 				'onUploadComplete' : function(file) {
 				},
 				'onQueueComplete' : function() {
@@ -1340,7 +1355,7 @@ function actionPdfToImage(url){
 		//	if(r.callBack != null) eval(r.callBack);
 
 			if(r.success == true){
-				folderNav(folder);
+				folderNav(root + folder);
 			}
 		}
 	}).get({
@@ -1365,7 +1380,7 @@ function distantDownload(){
 		data : {
 			'action': 	'download',
 			'data':		$('#distantUpload').val(),
-			'folder': 	folder
+			'folder': 	root + folder
 		}
 	}).done(function(data){
 

@@ -262,7 +262,7 @@
 			<tr>
 			<?php if(sizeof($list) > 0){ ?>
 				<td width="30" height="25"><input type="checkbox" onchange="$('.cb').set('checked', this.checked);" /></td>
-				<td><a href="#" onClick="remove();" class="btn btn-mini">Supprimer la selection</a></td>
+				<td><a href="#" onClick="applyRemove();" class="btn btn-mini">Supprimer la selection</a></td>
 				<td colspan="2" align="right">
 					<a href="#" onClick="purge();"	class="btn btn-mini">Purger les mails invalides</a>
 				</td>
@@ -598,7 +598,7 @@
 		}
 	}
 
-	function remove(){
+	function applyRemove(){
 		if(confirm("SUPPRIMER ?")){
 			$('#listing').submit();
 		}

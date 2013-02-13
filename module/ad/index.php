@@ -112,7 +112,7 @@
 			<tr>
 				<td height="25"><input type="checkbox" onchange="cbchange($(this));" /></td>
 				<td colspan="4">
-					<a href="#" onClick="remove();" class="button button-red">Supprimer la selection</a> 
+					<a href="#" onClick="apply();" class="button button-red">Supprimer la selection</a>
 					<span class="pagination"><?php $app->pagination($app->total, $app->limit, $filter['offset'], 'index?cf&offset=%s'); ?></span>
 				</td>
 				<td class="pagination"><?php $app->pagination($total, $limit, $filter['offset'], 'index?cf&offset=%s'); ?></td>
@@ -124,7 +124,7 @@
 	
 	<?php include(COREINC.'/end.php'); ?>
 	<script>
-		function remove(){
+		function apply(){
 			if(confirm("SUPPRIMER ?")){
 				$('#listing').submit();
 			}
