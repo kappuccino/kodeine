@@ -44,14 +44,18 @@ public function categoryGet($opt=array()){
 		foreach($opt['id_category'] as $e){
 			$list[] = $this->categoryGet(array('id_category' => $e, 'language' => $opt['language']));
 		}
+
 		if(sizeof($list) == 0) return array();
 
+		$str = NULL;
 		foreach($list as $e){
 			$str .= $e['categoryParent'].',';
 		}
+
 		$parent = explode(',', $str);
+
 		foreach($parent as $idx => $e){
-			if($e == '0') unset($parent[$idx]);
+			if($e == '0' OR $e == NULL ) unset($parent[$idx]);
 		}
 		return $parent;
 	}else
