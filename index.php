@@ -4,7 +4,7 @@
 	#
 	require(__DIR__.'/module/core/helper/app.php');
 
-	# APP (Yeah !! app is created) EOW
+	# APP (Yeah !! app is created) NOW
 	#
 	$app = new coreApp();
 
