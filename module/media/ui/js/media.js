@@ -1149,7 +1149,7 @@ function modalShowUpload() {
 				'onDrop' : function(file, count) {
 				},
 				'onUploadComplete' : function(file, data) {
-                    alert($('#path').attr('data-url'));
+                    //alert($('#path').attr('data-url'));
 				},
 				'onQueueComplete' : function() {					
 					modalHideUpload();
