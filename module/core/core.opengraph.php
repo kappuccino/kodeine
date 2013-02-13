@@ -1,6 +1,6 @@
 <?php
 
-class openGraph extends coreApp{
+class coreOpengraph extends coreApp{
 
 function openGraphVideo($view){
 
@@ -82,7 +82,7 @@ function openGraphVideo($view){
 						);
 
 					}else*/
-					
+
 					# HTML Page
 					#
 					if(strpos($contentType, 'text/') !== false){
@@ -112,7 +112,7 @@ function openGraphVideo($view){
 	}else{
 		return array();
 	}
-	
+
 	return $opengraph;
 }
 
