@@ -3,14 +3,14 @@
 	$i18n = $app->apiLoad('coreI18n')->languageSet('fr')->load('content');
 
 	if($_REQUEST['id_type'] == NULL){
-		$type = $app->apiLoad('content')->contentType(array('profile' => true));
+		$type = $app->apiLoad('type')->typeGet(array('profile' => true));
 		$goto = ($type[0]['is_gallery']) ? 'gallery.index' : 'index';
 		header("Location: content.".$goto.".php?id_type=".$type[0]['id_type']);
 	}
 
 	// Type
 	$id_type	= $_REQUEST['id_type'];
-	$cType		= $app->apiLoad('content')->contentType(array('id_type' => $id_type));
+	$cType		= $app->apiLoad('type')->typeGet(array('id_type' => $id_type));
 	if($id_type == NULL) die("APP : id_type IS NULL");
 
 ?><!DOCTYPE html>
@@ -42,7 +42,7 @@
 	
 	<div class="span5">
 		<div class="menu-inline clearfix"><?php
-			foreach($app->apiLoad('content')->contentType(array('profile' => true)) as $e){
+			foreach($app->apiLoad('type')->typeGet(array('profile' => true)) as $e){
 				echo "<div class=\"button item ".($e['id_type'] == $_REQUEST['id_type'] ? 'btn btn-mini' : 'btn btn-mini')."\">";
 				echo "<a href=\"content.".(($e['is_gallery']) ? 'gallery.index' : 'index').".php?id_type=".$e['id_type']."\" class=\"text\">".$e['typeName']."</a>";
 				echo "<a href=\"content.".(($e['is_gallery']) ? 'gallery.album' : 'data' ).".php?id_type=".$e['id_type']."\" class=\"\">&nbsp;<i class=\"icon-plus\"></i></a>";

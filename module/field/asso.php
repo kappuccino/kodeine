@@ -10,7 +10,7 @@
 	}
 	
 	if(intval($_REQUEST['id_type']) > 0){
-		$type	= $app->apiLoad('content')->contentType(array('id_type' => $_REQUEST['id_type']));
+		$type	= $app->apiLoad('type')->typeGet(array('id_type' => $_REQUEST['id_type']));
 		if($_GET['map'] == '' && $type['is_gallery']) $_GET['map'] = 'album';
 
 
@@ -84,7 +84,7 @@
 #	- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
 
 
-	$types	= $app->apiLoad('content')->contentType(array('profile'	=> true));
+	$types	= $app->apiLoad('type')->typeGet(array('profile'	=> true));
 	$field	= $app->apiLoad('field')->fieldGet($opt);
 	$use	= array_merge(array('-1'), $app->dbKey($field, 'id_field', true));
 	$not	= $app->dbMulti("SELECT * FROM k_field WHERE id_field NOT IN(".implode(',', $use).")");

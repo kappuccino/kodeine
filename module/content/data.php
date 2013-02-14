@@ -140,7 +140,7 @@
 			));
 		}
 		if($data['id_content'] == $_REQUEST['id_content']){
-			$type	= $app->apiLoad('content')->contentType(array('id_type' => $data['id_type'], 'debug' => false)); 
+			$type	= $app->apiLoad('type')->typeGet(array('id_type' => $data['id_type'], 'debug' => false));
 			$title	= $data['contentName'];
 			$tpl	= ($data['contentTemplate'] != NULL) ? $data['contentTemplate'] : $type['typeTemplate'];
 			$opt	= $app->apiLoad('template')->templateInfoGet($tpl);
@@ -150,7 +150,7 @@
 		}
 
 	}else{
-		$type		= $app->apiLoad('content')->contentType(array('id_type' => $_REQUEST['id_type'])); 
+		$type		= $app->apiLoad('type')->typeGet(array('id_type' => $_REQUEST['id_type']));
 		$title 		= "Nouveau ".$type['typeName'];
 	}
 

@@ -101,7 +101,7 @@
 		);
 
 		if($app->formValidation($def)){
-			$result  = $app->apiLoad('content')->contentTypeSet($_POST['id_type'], $def);
+			$result  = $app->apiLoad('type')->typeSet($_POST['id_type'], $def);
 			$message = ($result) ? 'OK: Enregistrement' : 'KO: Erreur APP:'.$app->db_error;
 
 			# Cache
@@ -129,7 +129,7 @@
 	}
 
 	if($_REQUEST['id_type'] != NULL){
-		$data	= $app->apiLoad('content')->contentType(array(
+		$data	= $app->apiLoad('type')->typeGet(array(
 			'id_type'			=> $_REQUEST['id_type']
 		));
 	}else{
@@ -187,7 +187,7 @@
 			
 		<ul id="items"><?php
 	
-			$types = $app->apiLoad('content')->contentType(array(
+			$types = $app->apiLoad('type')->typeGet(array(
 				'profile'	=> true,
 				'debug'		=> false
 			));

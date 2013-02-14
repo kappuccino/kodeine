@@ -16,6 +16,14 @@
 	include(__DIR__.'/menu.php')
 ?></header>
 
+<div class="inject-subnav-right hide">
+    <li>
+        <a href="module">
+	        <span><?php echo $i18n->_('Gestion des modules') ?></span>
+        </a>
+    </li>
+</div>
+
 <div id="app"><div class="wrapper">
 
 	<div class="row-fluid">

@@ -3,7 +3,7 @@
 	$i18n = $app->apiLoad('coreI18n')->languageSet('fr')->load('content');
 
 	if($_REQUEST['id_type'] == NULL){
-		$type = $app->apiLoad('content')->contentType(array('profile' => true));
+		$type = $app->apiLoad('type')->typeGet(array('profile' => true));
 		
 		(sizeof($type) > 0)
 			? header("Location: index?id_type=".$type[0]['id_type'])
@@ -25,9 +25,9 @@
 	}
 
 	// Type
-	$type 		= $app->apiLoad('content')->contentType();
+	$type 		= $app->apiLoad('type')->typeGet();
 	$id_type	= $_REQUEST['id_type'];
-	$cType		= $app->apiLoad('content')->contentType(array('id_type' => $id_type));
+	$cType		= $app->apiLoad('type')->typeGet(array('id_type' => $id_type));
 
 	// Filter (verifier content / album)
 	if($id_type == NULL)		die("APP : id_type IS NULL");
@@ -69,7 +69,7 @@
 		<div class="btn-group">
 			<a class="btn btn-mini dropdown-toggle" data-toggle="dropdown" href="#"><i class="icon-list"></i> <?php echo $cType['typeName']; ?> <span class="caret"></span></a>
 			<ul class="dropdown-menu"><?php
-			foreach($app->apiLoad('content')->contentType(array('profile' => true)) as $e){
+			foreach($app->apiLoad('type')->typeGet(array('profile' => true)) as $e){
 				echo '<li class="clearfix">';
 				echo '<a href="'.(($e['is_gallery']) ? 'gallery-index' : 'index').'?id_type='.$e['id_type'].'" class="left">'.$e['typeName'].'</a>';
 				echo '<a href="'.(($e['is_gallery']) ? 'gallery-album' : 'data' )."?id_type=".$e['id_type'].'" class="right"><i class="icon icon-plus-sign"></i></a>';

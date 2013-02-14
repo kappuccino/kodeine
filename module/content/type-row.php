@@ -1,103 +1,104 @@
 <?php
 
-$i18n = $app->apiLoad('coreI18n')->languageSet('fr')->load('content');
+	$i18n = $app->apiLoad('coreI18n')->languageSet('fr')->load('content');
 
-$limit = 3;
-if($_REQUEST['id_type'] != NULL){
-    $data	= $app->apiLoad('content')->contentType(array(
-        'id_type'			=> $_REQUEST['id_type']
-    ));
-    if($data['id_type'] == NULL)     header('Location: type');
+	$limit = 3;
+	if($_REQUEST['id_type'] != NULL){
+	    $data	= $app->apiLoad('type')->typeGet(array(
+	        'id_type' => $_REQUEST['id_type']
+	    ));
+	    if($data['id_type'] == NULL)     header('Location: type');
 
-}else{
-    header('Location: type');
-}
+	}else{
+	    header('Location: type');
+		exit();
+	}
 
-$do = false;
+	$do = false;
 
-if((isset($_GET['add']) || isset($_GET['remove']) ) && $_GET['field'] != '') {
-    $do = true;
+	if((isset($_GET['add']) || isset($_GET['remove']) ) && $_GET['field'] != '') {
+	    $do = true;
 
-    if(isset($_GET['add'])) $action = 'add';
-    else $action = 'remove';
+	    if(isset($_GET['add'])) $action = 'add';
+	    else $action = 'remove';
 
-    $used = $data['typeListLayout'];
+	    $used = $data['typeListLayout'];
 
-    foreach($used as $k=>$e) {
-        if($e['field'] == $_GET['field']) {
-            unset($used[$k]);
-        }
-    }
-    if($action == 'add') $used[] = array('field' => $_GET['field'], 'width' => 200);
-    $used = array_merge($used);
+	    foreach($used as $k=>$e) {
+	        if($e['field'] == $_GET['field']) {
+	            unset($used[$k]);
+	        }
+	    }
+	    if($action == 'add') $used[] = array('field' => $_GET['field'], 'width' => 200);
+	    $used = array_merge($used);
 
-    if(sizeof($used) > $limit && $action == 'add') {
-        $do = false;
-        $message = 'KO: Le nombre de colonnes supplémentaires est limité à '.$limit;
-    }
+	    if(sizeof($used) > $limit && $action == 'add') {
+	        $do = false;
+	        $message = 'KO: Le nombre de colonnes supplémentaires est limité à '.$limit;
+	    }
 
-}
-if(isset($_GET['pos'])) {
-    $do         = true;
+	}
+	if(isset($_GET['pos'])) {
+	    $do         = true;
 
-    $used       = $data['typeListLayout'];
+	    $used       = $data['typeListLayout'];
 
-    $pos        = explode(',', $_GET['pos']);
-    $width      = explode(',', $_GET['width']);
-    $newused    = array();
+	    $pos        = explode(',', $_GET['pos']);
+	    $width      = explode(',', $_GET['width']);
+	    $newused    = array();
 
-    $i = 0;
-    foreach($pos as $p) {
-        foreach($used as $k=>$e) {
-            if($p == $e['field']) {
-                $e['width'] = $width[$i];
-                $newused[]  = $e;
-                $i ++;
-            }
-        }
-    }
-    $newused    = array_merge($newused);
-    $used       = $newused;
-    if(sizeof($used) != sizeof($newused)) $do = false;
-}
+	    $i = 0;
+	    foreach($pos as $p) {
+	        foreach($used as $k=>$e) {
+	            if($p == $e['field']) {
+	                $e['width'] = $width[$i];
+	                $newused[]  = $e;
+	                $i ++;
+	            }
+	        }
+	    }
+	    $newused    = array_merge($newused);
+	    $used       = $newused;
+	    if(sizeof($used) != sizeof($newused)) $do = false;
+	}
 
-if($do) {
+	if($do) {
 
-    $def['k_type'] = array(
-        'typeListLayout'	=> array('value' => json_encode($used))
-    );
-    $result  = $app->apiLoad('content')->contentTypeSet($_REQUEST['id_type'], $def);
-    $message = ($result) ? 'OK: Enregistrement' : 'KO: Erreur APP:'.$app->db_error;
+	    $def['k_type'] = array(
+	        'typeListLayout'	=> array('value' => json_encode($used))
+	    );
+	    $result  = $app->apiLoad('type')->typeSet($_REQUEST['id_type'], $def);
+	    $message = ($result) ? 'OK: Enregistrement' : 'KO: Erreur APP:'.$app->db_error;
 
-    $data	= $app->apiLoad('content')->contentType(array(
-        'id_type'			=> $_REQUEST['id_type']
-    ));
-}
+	    $data	= $app->apiLoad('type')->typeGet(array(
+	        'id_type'			=> $_REQUEST['id_type']
+	    ));
+	}
 
-$opt    = array('id_type' => $_REQUEST['id_type']);
-$field	= $app->apiLoad('field')->fieldGet($opt);
-$used   = $data['typeListLayout'];
-$tmp    = array();
+	$opt    = array('id_type' => $_REQUEST['id_type']);
+	$field	= $app->apiLoad('field')->fieldGet($opt);
+	$used   = $data['typeListLayout'];
+	$tmp    = array();
 
-// Champs de k_content autorises
-$contentField = array('contentMedia', 'contentDateStart', 'contentDateEnd');
-if($data['is_business']) array_push($contentField, 'contentRef', 'contentWeight', 'contentStock');
+	// Champs de k_content autorises
+	$contentField = array('contentMedia', 'contentDateStart', 'contentDateEnd');
+	if($data['is_business']) array_push($contentField, 'contentRef', 'contentWeight', 'contentStock');
 
-// Champs utilises
-foreach($data['typeListLayout'] as $e) $tmp[] = $e['field'];
+	// Champs utilises
+	foreach($data['typeListLayout'] as $e) $tmp[] = $e['field'];
 
-// Champs de k_content(id_type) non utilises
-$not    = array();
-foreach($field as $f) {
-    if(!in_array($f['id_field'], $tmp)) $not[] = $f;
-}
+	// Champs de k_content(id_type) non utilises
+	$not    = array();
+	foreach($field as $f) {
+	    if(!in_array($f['id_field'], $tmp)) $not[] = $f;
+	}
 
-// Champs de k_content non utilises
-$notC   = array();
-foreach($contentField as $f) {
-    if(!in_array($f, $tmp)) $notC[] = $f;
-}
-//$app->pre($not, $notC);
+	// Champs de k_content non utilises
+	$notC   = array();
+	foreach($contentField as $f) {
+	    if(!in_array($f, $tmp)) $notC[] = $f;
+	}
+	//$app->pre($not, $notC);
 
 ?><!DOCTYPE html>
 <html lang="fr">
@@ -153,7 +154,7 @@ foreach($contentField as $f) {
         <div class="btn-group">
             <a class="btn btn-mini dropdown-toggle" data-toggle="dropdown" href="#"><i class="icon-list"></i> <?php echo $data['typeName']; ?> <span class="caret"></span></a>
             <ul class="dropdown-menu"><?php
-                foreach($app->apiLoad('content')->contentType(array('profile' => true)) as $e){
+                foreach($app->apiLoad('type')->typeGet(array('profile' => true)) as $e){
                     echo '<li class="clearfix">';
                     echo '<a href="'.(($e['is_gallery']) ? 'gallery-index' : 'index').'?id_type='.$e['id_type'].'" class="left">'.$e['typeName'].'</a>';
                     echo '<a href="'.(($e['is_gallery']) ? 'gallery-album' : 'data' )."?id_type=".$e['id_type'].'" class="right"><i class="icon icon-plus-sign"></i></a>';

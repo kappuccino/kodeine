@@ -135,7 +135,7 @@ public function fieldCacheBuild(){
 
 	# TYPES
 	#
-	$types	= $this->apiLoad('content')->contentType();
+	$types	= $this->apiLoad('type')->typeGet();
 	$fields	= array(
 		'type'	=> array(),
 		'item'	=> array(),
@@ -843,7 +843,7 @@ public function fieldForm($id_field, $value, $opt=array()){
 
 		// Si je demande du CONTENT
 		if($field['fieldType'] == 'content' && $field['fieldContentType'] > 0){
-			$type		= $this->apiLoad('content')->contentType(array('id_type' => $field['fieldContentType']));
+			$type		= $this->apiLoad('type')->typeGet(array('id_type' => $field['fieldContentType']));
 			/* mofifié, nx backoffice */
 			# $open		= "<a href=\"content.".(($type['is_gallery']) ? "gallery." : NULL)."index.php?id_type=".$field['fieldContentType']."\" target=\"blank\" class=\"open\">Ouvrir: ".$type['typeName']."</a>";
 			$open		= "<a href=\"".(($type['is_gallery']) ? "gallery-" : NULL)."index?id_type=".$field['fieldContentType']."\" target=\"blank\" class=\"open\">Ouvrir: ".$type['typeName']."</a>";
@@ -1143,7 +1143,7 @@ public function fieldForm($id_field, $value, $opt=array()){
 	if($field['fieldType'] == 'content-type'){
 
 		$form= "<select name=\"".$name."\" id=\"".$id."\" ".$disabled.">";
-		foreach($this->apiLoad('content')->contentType() as $e){
+		foreach($this->apiLoad('type')->typeGet() as $e){
 			$sel	= ($value == $e['id_type'])	? ' selected' : NULL;
 			$form  .= "<option value=\"".$e['id_type']."\"".$sel.">".$e['typeName']."</option>";
 		}

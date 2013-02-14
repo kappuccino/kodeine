@@ -281,7 +281,7 @@
 			<td></td>
 			<td>Type
 				<select name="fieldContentType"><?php
-					foreach($app->apiLoad('content')->contentType() as $e){
+					foreach($app->apiLoad('type')->typeGet() as $e){
 						$sel = ($app->formValue($data['fieldContentType'], $_POST['fieldContentType']) == $e['id_type']) ? ' selected' : NULL;
 						echo "<option value=\"".$e['id_type']."\"".$sel.">".$e['typeName']."</option>";
 					}

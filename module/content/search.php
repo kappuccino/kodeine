@@ -41,7 +41,7 @@
 		$title 	= "Nouvelle recherche";
 	}
 	
-	foreach($app->apiLoad('content')->contentType() as $e){
+	foreach($app->apiLoad('type')->typeGet() as $e){
 		$type[$e['id_type']] = $e['typeName'];
 	}
 

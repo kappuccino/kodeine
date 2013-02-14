@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<patch>
+
+    <job action = "createField"		table = "k_type" 			field = "typePos" 					type = "MEDIUMINT(64)" 	null = "NO"		after = "is_cp" />
+    <job action = "createField"		table = "k_type" 			field = "is_gallery"				type = "TINYINT(1)" 	null = "NO"		after = "is_album" />
+    <job action = "createField"		table = "k_type" 			field = "is_ad"						type = "TINYINT(1)" 	null = "NO"		after = "is_gallery" />
+    <job action = "createField"		table = "k_type" 			field = "use_group"					type = "TINYINT(1)" 	null = "NO"		after = "is_ad" />
+    <job action = "createField"		table = "k_type" 			field = "use_search"				type = "TINYINT(1)" 	null = "NO"		after = "use_group" />
+    <job action = "createField"		table = "k_type" 			field = "use_chapter"				type = "TINYINT(1)" 	null = "NO"		after = "use_search" />
+    <job action = "createField"		table = "k_type" 			field = "use_category"				type = "TINYINT(1)" 	null = "NO"		after = "use_chapter" />
+    <job action = "createField"		table = "k_type" 			field = "use_socialforum"			type = "TINYINT(1)" 	null = "NO"		after = "use_category" />
+    <job action = "createField"		table = "k_type" 			field = "typeListLayout"			type = "MEDIUMTEXT" 	null = "NO"		after = "typeFormLayout" />
+
+    <job action = "dropfield"		table = "k_type" 			field = "is_album" />
+
+</patch>

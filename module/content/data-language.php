@@ -92,7 +92,7 @@
 	));
 
 	if($from['id_type'] != NULL){
-		$type	= $app->apiLoad('content')->contentType(array('id_type' => $from['id_type'], 'debug' => false)); 
+		$type	= $app->apiLoad('type')->typeGet(array('id_type' => $from['id_type'], 'debug' => false));
 		$title	= $from['contentName'];
 	}else{
 		$title	= 'Document inconnu';

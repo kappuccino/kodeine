@@ -109,18 +109,6 @@
 		) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 	]]></job>
 
-<!--
-	<job action="sql"><![CDATA[
-		CREATE TABLE IF NOT EXISTS `k_typealbumfield` (
-			`id_type` mediumint(64) NOT NULL,
-			`id_field` mediumint(64) NOT NULL,
-			`order` mediumint(64) NOT NULL,
-		PRIMARY KEY  (`id_type`,`id_field`),
-		KEY `id_type` (`id_type`),
-		KEY `id_field` (`id_field`)
-		) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci
-	]]></job>
--->
 	<job action="sql"><![CDATA[
 		CREATE TABLE IF NOT EXISTS `k_contentsocialforum` (
 			`id_content` mediumint(64) NOT NULL,
@@ -175,26 +163,9 @@
 	<job action = "createField" 	table = "k_contentasso" 	field = "bUser"						type = "MEDIUMINT(64)" 	null = "YES" 	after = "bContent" />
 	<job action = "createField" 	table = "k_contentasso" 	field = "assoOrder"					type = "MEDIUMINT(64)" 	null = "NO" 	after = "bUser" />
 
-
-
-
-
 	<job action = "createIndex" 	table = "k_contentasso" 	index = "bType"		field = "bType" />
 	<job action = "createIndex" 	table = "k_contentrate" 	index = "id_user"	field = "id_user" />
 	<job action = "createIndex" 	table = "k_categorydata" 	index = "language"	field = "language" />
 	<job action = "createIndex" 	table = "k_contentdata" 	index = "language"	field = "language" />
-
-
-	<job action = "createField"		table = "k_type" 			field = "typePos" 					type = "MEDIUMINT(64)" 	null = "NO"		after = "is_cp" />
-	<job action = "createField"		table = "k_type" 			field = "is_gallery"				type = "TINYINT(1)" 	null = "NO"		after = "is_album" />
-	<job action = "createField"		table = "k_type" 			field = "is_ad"						type = "TINYINT(1)" 	null = "NO"		after = "is_gallery" />
-	<job action = "createField"		table = "k_type" 			field = "use_group"					type = "TINYINT(1)" 	null = "NO"		after = "is_ad" />
-	<job action = "createField"		table = "k_type" 			field = "use_search"				type = "TINYINT(1)" 	null = "NO"		after = "use_group" />
-	<job action = "createField"		table = "k_type" 			field = "use_chapter"				type = "TINYINT(1)" 	null = "NO"		after = "use_search" />
-	<job action = "createField"		table = "k_type" 			field = "use_category"				type = "TINYINT(1)" 	null = "NO"		after = "use_chapter" />
-	<job action = "createField"		table = "k_type" 			field = "use_socialforum"			type = "TINYINT(1)" 	null = "NO"		after = "use_category" />
-    <job action = "createField"		table = "k_type" 			field = "typeListLayout"			type = "MEDIUMTEXT" 	null = "NO"		after = "typeFormLayout" />
-
-	<job action = "dropfield"		table = "k_type" 			field = "is_album" />	
 
 </patch>

@@ -4,15 +4,15 @@
 	<data>
 		<key>content</key>
 		<version>5.0.21</version>
-        <lastMod>2013-02-13</lastMod>
+        <lastMod>2013-02-14</lastMod>
 
 		<name><![CDATA[Contenu]]></name>
 		<description><![CDATA[Gérer les pages de votre site internet, les catégories.]]></description>
-		<panelIcon>ressource/img/module-content.png</panelIcon>
 		<install>YES</install>
 	</data>
 
 	<dependencies>
+		<module>type</module>
 		<module>field</module>
 		<module>category</module>
 		<module>chapter</module>

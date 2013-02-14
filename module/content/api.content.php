@@ -98,7 +98,7 @@ public function contentGet($opt=array()){
 
 	# Trouver le TYPE
 	#
-	$type = $this->contentType(array(
+	$type = $this->apiLoad('type')->typeGet(array(
 		'id_type'	=> $opt['id_type'],
 		'typeKey'	=> $opt['typeKey']
 	));
@@ -745,7 +745,6 @@ public function contentGet($opt=array()){
 	return $content;
 }
 
-
 /* + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - 
 + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - */
 public function contentSet($opt){
@@ -761,7 +760,7 @@ public function contentSet($opt){
 	$item		= $opt['item'];
 	$album		= $opt['album'];
 
-	$type 		= $this->apiLoad('content')->contentType(array('id_type' => $id_type));
+	$type 		= $this->apiLoad('type')->typeGet(array('id_type' => $id_type));
 
 	# Core
 	if($id_content == NULL){
@@ -1102,8 +1101,7 @@ function contentSearchSQL($param, $level=0){
 	return $q;
 }
 
-
-/* + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - 
+/* + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + -
 + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - */
 public function contentDuplicate($id_content){
 
@@ -1338,7 +1336,6 @@ public function contentVersionSet($opt=array()){
 	);
 }
 
-
 /* + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - 
 + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - */
 public function contentRemove($id_type, $id_content, $language=''){
@@ -1346,7 +1343,7 @@ public function contentRemove($id_type, $id_content, $language=''){
     if(intval($id_content) == 0) return false;
 
     if($id_type > 0) {
-        $type = $this->contentType(array(
+        $type = $this->apiLoad('type')->typeGet(array(
             'id_type' => $id_type
         ));
         // Si pas de langue renseignee alors on supprime le contenu et toutes ses langues
@@ -1389,7 +1386,6 @@ public function contentRemove($id_type, $id_content, $language=''){
 
 	if($type['is_gallery']) $this->contentAlbumFamily();
 }
-
 
 /* + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - 
 + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - */
@@ -1442,7 +1438,6 @@ public function contentCacheBuild($id_content, $opt=array()){
 	
 	return true;
 }
-
 
 /* + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - 
 + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - */
@@ -1527,119 +1522,18 @@ public function contentCacheTable($id_content, $opt=array()){
 	return true;
 }
 
-
-/* + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - 
+/* + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + -
+TODO: kill this function, check usage (use type module instead)
 + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - */
 public function contentType($opt=array()){
-
-	if(BENCHME) @$GLOBALS['bench']->benchmarkMarker($bmStep='contentType() @='.json_encode($opt));
-
-	$order 		= isset($opt['order']) 		? $opt['order'] 	: 'typePos';
-	$direction	= isset($opt['direction'])	? $opt['direction']	: 'ASC';
-
-	if($opt['cp']) $cond[] = "is_cp=1";
-
-	if($opt['profile']){
-		if(strlen(trim($this->profile['type'])) == 0) return array();
-		$cond[] = "id_type IN(".$this->profile['type'].")";
-	}
-
-	if($opt['id_type'] > 0){
-		$dbMode = 'dbOne';
-		$cond[] = "id_type=".$opt['id_type'];
-	}else
-	if($opt['typeKey'] != NULL){
- 		$dbMode = 'dbOne';
-		$cond[] = "typeKey='".addslashes($opt['typeKey'])."'";
-	}else{
-		$dbMode	= 'dbMulti';
-	}
-
-	if(sizeof($cond) > 0) $sqlWhere = " WHERE ".implode(" AND ", $cond)." ";
-	
-	if($dbMode == 'dbMulti'){
-		if($order != NULL && $direction != NULL && $dbMode == 'dbMulti'){
-			$sqlOrder = "ORDER BY ".$order." ".$direction;
-		}
-	}
-
-	$type = $this->$dbMode("SELECT * FROM k_type " . $sqlWhere . $sqlOrder);
-	
-	
-	if($dbMode == 'dbOne'){
-		$type['typeFormLayout'] = json_decode($type['typeFormLayout'], true);
-
-		if(!is_array($type['typeFormLayout'])){
-
-			$type['typeFormLayout'] = array(
-				'tab' => array(
-					'view0' => array(
-						'label' => 'Défaut',
-						'field' => array()
-					)
-				),
-				'bottom' => array()
-			);
-		}
-        $type['typeListLayout'] = json_decode($type['typeListLayout'], true);
-        if(!is_array($type['typeListLayout'])) $type['typeListLayout'] = array();
-	}
-
-	if($opt['debug']) $this->pre($this->db_query, $this->db_error, $type);
-
-	if(BENCHME) @$GLOBALS['bench']->benchmarkMarker($bmStep);
-
-	return $type;
+	return $this->apiLoad('type')->typeGet($opt);
 }
 
 /* + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - 
+TODO: kill this function, check usage (use type module instead)
 + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - */
 public function contentTypeSet($id_type, $def){
-
-	if(!$this->formValidation($def)) return false;
-
-	if($id_type > 0){
-		$q = $this->dbUpdate($def)." WHERE id_type=".$id_type;
-	}else{
-		$q = $this->dbInsert($def);
-	}
-
-	@$this->dbQuery($q);
-	if($this->db_error != NULL) return false;
-	$this->id_type = ($id_type > 0) ? $id_type : $this->db_insert_id;
-	
-	if($id_type == NULL){
-
-		$pattern = "CREATE TABLE `%s` (
-			`id_content` MEDIUMINT(64) NOT NULL ,
-			`language`   CHAR(2) NOT NULL
-		) ENGINE = MYISAM CHARACTER SET utf8 COLLATE utf8_unicode_ci";
-
-		# Creation de la table pour les ITEMS
-		#
-		if($def['k_type']['is_gallery']['value']){
-
-			// album
-			$this->dbQuery(sprintf($pattern, 'k_contentalbum'.$this->id_type));
-			$this->dbQuery("ALTER TABLE `k_contentalbum".$this->id_type."` ADD PRIMARY KEY (`id_content`, `language`)");
-			$this->dbQuery("ALTER TABLE `k_contentalbum".$this->id_type."` ADD INDEX (`language`)");
-
-			// items
-			$this->dbQuery(sprintf($pattern, 'k_contentitem'.$this->id_type));
-			$this->dbQuery("ALTER TABLE `k_contentitem".$this->id_type."` ADD PRIMARY KEY (`id_content`, `language`)");
-			$this->dbQuery("ALTER TABLE `k_contentitem".$this->id_type."` ADD INDEX (`language`)");
-		}
-		
-		# Content
-		#
-		else{
-			$this->dbQuery(sprintf($pattern, 'k_content'.$this->id_type));
-			$this->dbQuery("ALTER TABLE `k_content".$this->id_type."` ADD PRIMARY KEY (`id_content`, `language`)");
-			$this->dbQuery("ALTER TABLE `k_content".$this->id_type."` ADD INDEX (`language`)");
-		}
-	}
-
-	return true;
+	return $this->apiLoad('type')->typeSet($id_type, $def);
 }
 
 /* + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - 
@@ -1769,7 +1663,6 @@ public function contentAlbumFamily(){
 	return true;
 }
 
-
 /* + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + -
 	Trouver tous les PARENTS pour un ALBUM
 + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - */
@@ -1784,7 +1677,6 @@ public function contentAlbumFamilyParent($e, $line=array()){
 		return $line;
 	}
 }
-
 
 /* + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + -
 	Trouver tous les CHILDREN pour une CATEGORY
@@ -1935,7 +1827,6 @@ public function contentAssoUserSet($id_content, $id_type, $id_field, $ids_user){
 		}
 	}
 }
-
 
 /* + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - 
  + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - */

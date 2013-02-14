@@ -80,7 +80,7 @@
 	));
 	#$app->pre($data);
 
-	$type	= $app->apiLoad('content')->contentType(array(
+	$type	= $app->apiLoad('type')->typeGet(array(
 		'id_type' => $_REQUEST['id_type']
 	)); 
 

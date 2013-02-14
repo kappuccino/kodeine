@@ -25,11 +25,11 @@
 		'raw'			=> true
 	));
 
-	$type = $app->apiLoad('content')->contentType(array(
+	$type = $app->apiLoad('type')->typeGet(array(
 		'id_type'		=> $data['id_type']
 	));
 
-	$types = $app->apiLoad('content')->contentType(array(
+	$types = $app->apiLoad('type')->typeGet(array(
 		'profile'		=> true
 	));
 	
@@ -122,7 +122,7 @@
 		<div class="btn-group">
 			<a class="btn btn-mini dropdown-toggle" data-toggle="dropdown" href="#"><?php echo $type['typeName']; ?> <span class="caret"></span></a>
 			<ul class="dropdown-menu"><?php
-			foreach($app->apiLoad('content')->contentType(array('profile' => true)) as $e){
+			foreach($app->apiLoad('type')->typeGet(array('profile' => true)) as $e){
 				echo '<li class="clearfix">';
 				echo '<a href="'.(($e['is_gallery']) ? 'gallery-index' : 'index').'?id_type='.$e['id_type'].'" class="left">'.$e['typeName'].'</a>';
 				echo '<a href="'.(($e['is_gallery']) ? 'gallery-album' : 'data' )."?id_type=".$e['id_type'].'" class="right"><i class="icon icon-plus-sign"></i></a>';

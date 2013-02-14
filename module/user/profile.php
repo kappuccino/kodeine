@@ -153,7 +153,7 @@
 				<b>Type</b><br />
 				<select name="profileRule[id_type][]" id="profileRule[id_type][]" size="4" multiple style="width:100%; height:200px"><?php
 	
-					$type	= $app->apiLoad('content')->contentType();
+					$type	= $app->apiLoad('type')->typeGet();
 					$value	= $app->formValue($data['profileRule']['id_type'], $_POST['profileRule']['id_type']);
 					$value	= is_array($value) ? $value : array();
 	

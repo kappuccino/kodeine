@@ -3,7 +3,7 @@
 	$i18n = $app->apiLoad('coreI18n')->languageSet('fr')->load('business');
 
     if($_REQUEST['id_type'] == NULL){
-        $type = $app->apiLoad('content')->contentType(array('profile' => true));
+        $type = $app->apiLoad('type')->typeGet(array('profile' => true));
         foreach($type as $e){
             if($e['is_business']){
                 header("Location: product.picker.php?id_type=".$e['id_type']);
@@ -28,9 +28,9 @@
     }
 
     // Type
-    $type       = $app->apiLoad('content')->contentType();
+    $type       = $app->apiLoad('type')->typeGet();
     $id_type    = $_REQUEST['id_type'];
-    $cType      = $app->apiLoad('content')->contentType(array('id_type' => $id_type));
+    $cType      = $app->apiLoad('type')->typeGet(array('id_type' => $id_type));
 
     // Filter (verifier content / album)
     if($id_type == NULL)        die("APP : id_type IS NULL");
@@ -65,7 +65,7 @@
 </ul>
 
 <div class="menu-inline"><?php
-    foreach($app->apiLoad('content')->contentType(array('profile' => true)) as $e){
+    foreach($app->apiLoad('type')->typeGet(array('profile' => true)) as $e){
         if($e['is_business']){
             echo "<div class=\"item ".($e['id_type'] == $_REQUEST['id_type'] ? 'me' : '')."\">";
             echo "<a href=\"product.picker.php?id_type=".$e['id_type']."\" class=\"text\">".$e['typeName']."</a>";

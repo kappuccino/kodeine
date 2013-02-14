@@ -18,8 +18,6 @@
 
 <div id="app"><div class="wrapper">
 
-	@@
-	
 </div></div>
 
 </body></html>

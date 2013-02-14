@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<element>
+
+	<data>
+		<key>type</key>
+		<version>5.0.0</version>
+        <lastMod>2013-02-14</lastMod>
+
+		<name><![CDATA[Type]]></name>
+		<install>YES</install>
+        <menu>NO</menu>
+	</data>
+
+</element>

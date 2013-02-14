@@ -87,14 +87,14 @@
 			'debug'	 		=> false
 		));
 		
-		$type		= $app->apiLoad('content')->contentType(array('id_type' => $data['id_type'])); 
+		$type		= $app->apiLoad('type')->typeGet(array('id_type' => $data['id_type']));
 		$title		= $data['contentName'];
 
 		$tpl		= ($data['contentTemplate'] != NULL) ? $data['contentTemplate'] : $type['typeTemplate'];
 		$opt		= $app->apiLoad('template')->templateInfoGet($tpl);
 		$id_album	= $data['id_album'];
 	}else{
-		$type		= $app->apiLoad('content')->contentType(array('id_type' => $_REQUEST['id_type'])); 
+		$type		= $app->apiLoad('type')->typeGet(array('id_type' => $_REQUEST['id_type']));
 		$title 		= "Nouvel album";
 		$id_album	= ($_REQUEST['id_album']) ? $_REQUEST['id_album'] : 0;
 	}

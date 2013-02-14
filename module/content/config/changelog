@@ -6,6 +6,7 @@ Kodeine Change log
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 2013-02-14 (5.0.21)
 + gestion des champs de type CODE
++ migraiton des infos sur TYPE dans le module du même nom
 
 2013-02-08 (5.0.20)
 + sauvegarde de l'etat de la case a cocher "generer automatiquement" pour la reecriture auto de l'url d'un contenu
