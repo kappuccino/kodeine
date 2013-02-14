@@ -30,15 +30,33 @@
 		$app->go("./".((isset($_POST['id_content']) ? "?id_content=".$_POST['id_content'] : "")));
 	}
 
+/* + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - */
+
+	if(isset($_GET['cf'])){
+		$app->filterSet('comment', $_GET);
+		$filter = array_merge($app->filterGet('comment'), $_GET);
+	} else {
+		$filter = $app->filterGet('comment');
+	}
+
+	$dir = ($filter['direction'] == 'ASC') ? 'DESC' : 'ASC';
+
 	if($_REQUEST['id_content'] != ''){
 		$comment = $app->apiLoad('comment')->commentGet(array(
 			'id_content'	=> $_REQUEST['id_content'],
-			'debug'			=> false
+			'debug'			=> false,
+			'offset'	    => $filter['offset'],
+			'order'		    => $filter['order'],
+			'direction'	    => $filter['direction']
 		));
 	}else{
 		$comment = $app->apiLoad('comment')->commentGet(array(
-			'debug'			=> false
+			'debug'			=> false,
+			'offset'	    => $filter['offset'],
+			'order'		    => $filter['order'],
+			'direction'	    => $filter['direction']
 		));
+
 	}
 
 ?><!DOCTYPE html>
@@ -69,13 +87,13 @@
 		<thead>
 			<tr>
 				<th width="20" class="icone"><i class="icon-remove icon-white"></i></th>
-				<th width="20" class="icone"><i class="icon-ok icon-white"></i></th>
-				<th width="140" class="icone"><i class="icon-calendar icon-white"></i></th>
-				<th width="100">Note</th>
+				<th width="20" class="icone" onClick="document.location='/admin/comment/index?cf&order=k_contentcomment.is_moderate&direction=<?php echo $dir ?>'"><i class="icon-ok icon-white"></i></th>
+				<th width="140" class="icone" onClick="document.location='/admin/comment/index?cf&orderk_contentcomment.commentDate&direction=<?php echo $dir ?>'"><i class="icon-calendar icon-white"></i></th>
+				<th width="100" onClick="document.location='/admin/comment/index?cf&order=k_contentcomment.commentAvg&direction=<?php echo $dir ?>'">Note</th>
 				<?php if($_REQUEST['id_content'] == NULL){ ?>
-				<th width="300">Contenu</th>
+				<th width="300" onClick="document.location='/admin/comment/index?cf&order=k_contentcomment.id_content&direction=<?php echo $dir ?>'">Contenu</th>
 				<?php } ?>
-				<th>Commentaire</th>
+				<th onClick="document.location='/admin/comment/index?cf&order=k_contentcomment.commentData&direction=<?php echo $dir ?>'">Commentaire</th>
 			</tr>
 		</thead>
 		<tbody><?php
