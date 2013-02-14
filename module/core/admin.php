@@ -5,12 +5,6 @@
 	define('COREINC',	MODULE.'/core/includes');
 	define('COREUI',	KPROMPT.'/admin/core/ui');
 
-	
-#	$less = @stat(MODULE.'/core/ui/css/_style.less');
-#	$css  = @stat(MODULE.'/core/ui/css/_style.css');
-
-#	define('COREONAIR',	($css['mtime'] > $less['mtime']));
-
 	function isMe($p){
 		$url = parse_url($_SERVER['REQUEST_URI']);
 		if(preg_match("#".$p."#", $url['path'])) return 'me';

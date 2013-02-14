@@ -8,7 +8,6 @@
 
 		<name><![CDATA[Utilisateur]]></name>
 		<description><![CDATA[Gérer votre communauté de membres]]></description>
-		<panelIcon>ressource/img/module-user.png</panelIcon>
 	</data>
 
 	<profile>
@@ -18,9 +17,5 @@
 		<item code="field" 		type="ALLOW_DENY" name="Champ" />
 		<item code="search"		type="ALLOW_DENY" name="Search" />
 	</profile>
-
-	<less>
-		<file>/ui/css/group.less</file>
-	</less>
 
 </element>

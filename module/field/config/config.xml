@@ -11,9 +11,4 @@
 		<menu>NO</menu>
 	</data>
 
-	<less>
-		<file>/ui/css/asso.less</file>
-		<file>/ui/css/field.less</file>
-	</less>
-
 </element>

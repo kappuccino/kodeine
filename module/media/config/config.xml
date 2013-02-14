@@ -3,18 +3,13 @@
 
 	<data>
 		<key>media</key>
-		<version>5.0.10</version>
-		<lastMod>2013-02-06</lastMod>
+		<version>5.0.11</version>
+		<lastMod>2013-02-14</lastMod>
 
 		<name><![CDATA[Gestionnaire de fichiers]]></name>
 		<description><![CDATA[Géer vos fichiers, et envoyer de nouveaux documents en ligne]]></description>
-		<panelIcon>ressource/img/module-media.png</panelIcon>
 		<install>YES</install>
 	</data>
-
-	<less>
-		<file>/ui/css/media.less</file>
-	</less>
 
 	<profile>
 		<item code="index"	type="ALLOW_DENY" name="Accessible" />

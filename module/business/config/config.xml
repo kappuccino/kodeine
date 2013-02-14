@@ -3,8 +3,8 @@
 
 	<data>
 		<key>business</key>
-		<version>5.0.9</version>
-        <lastMod>2013-02-01</lastMod>
+		<version>5.0.10</version>
+        <lastMod>2013-02-14</lastMod>
 
 		<name><![CDATA[Business]]></name>
 		<description><![CDATA[Valider les dernières commandes et régler votre boutique en ligne]]></description>
@@ -16,13 +16,8 @@
 		<module>shop</module>
 	</dependencies>
 
-	<less>
-		<file>/ui/css/business.less</file>
-	</less>
-
 	<profile>
 		<item code="index"		type="ALLOW_DENY" name="Accessible" />
-
 		<item code="coupon"		type="ALLOW_DENY" name="Coupon" />
 		<item code="account"	type="ALLOW_DENY" name="Comptes" />
 		<item code="tva"		type="ALLOW_DENY" name="TVA" />

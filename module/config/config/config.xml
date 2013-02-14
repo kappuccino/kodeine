@@ -3,8 +3,8 @@
 
 	<data>
 		<key>config</key>
-		<version>5.0.12</version>
-        <lastMod>2013-02-01</lastMod>
+		<version>5.0.13</version>
+        <lastMod>2013-02-14</lastMod>
 
 		<name><![CDATA[Configuration]]></name>
 		<description><![CDATA[Régler les différentes options de votre site internet]]></description>
@@ -14,10 +14,6 @@
 	<dependencies>
 		<module>theme</module>
 	</dependencies>
-
-	<less>
-		<file>/ui/css/field.less</file>
-	</less>
 
     <i18n>
         <file>/admin.php</file>

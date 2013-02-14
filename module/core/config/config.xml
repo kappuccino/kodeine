@@ -15,10 +15,6 @@
 		<module>user</module>
 		<module>field</module>
 	</dependencies>
-	
-	<less>
-		<file>/ui/css/_style.less</file>
-	</less>
 
 	<profile>
 		<item code="index"	 	type="ALLOW_DENY" name="Accessible" />
