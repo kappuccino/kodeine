@@ -2,10 +2,7 @@
 
 class field extends coreApp {
 
-function __clone(){}
-
-/* + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - 
-+ - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - */
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 public function fieldGet($opt=array()){
 
 	if($opt['debug']) $this->pre("OPT", $opt);
@@ -97,9 +94,7 @@ public function fieldGet($opt=array()){
 	return $field;
 }
 
-
-/* + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - 
-+ - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - */
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 public function fieldSet($id_field, $def){
 
 	if(!$this->formValidation($def)) return false;
@@ -119,8 +114,7 @@ public function fieldSet($id_field, $def){
 	return true;
 }
 
-/* + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - 
-+ - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - */
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 public function fieldRemove($id_field){
 
 	// Remove FIELD
@@ -128,14 +122,13 @@ public function fieldRemove($id_field){
 	$this->dbQuery("DELETE FROM k_fieldchoice	WHERE id_field=".$id_field);
 
 	// Remove AFFECT
-	$this->fieldAffectRemove($e);
+	$this->fieldAffectRemove($id_field);
 	
 	// Clean CACHE
 	$this->fieldCacheBuild();
 }
 
-/* + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - 
-+ - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - */
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 public function fieldCacheBuild(){
 
 	return true;
@@ -186,8 +179,7 @@ public function fieldCacheBuild(){
 	$this->configSet('field', 	'jsonCacheFieldUser',		addslashes(json_encode($user)));
 }
 
-/* + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - 
-+ - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - */
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 public function fieldChoiceGet($opt){
 
 	if($opt['id_field'] > 0){
@@ -211,9 +203,7 @@ public function fieldChoiceGet($opt){
 	return $field;
 }
 
-
-/* + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - 
-+ - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - */
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 public function fieldChoiceSet($id_field, $es){
 
 	if(sizeof($es) == 0) return true;
@@ -228,8 +218,8 @@ public function fieldChoiceSet($id_field, $es){
 		}else
 		if($id_fieldchoice == 'new'){
 
-			$last	= $this->dbOne("SELECT MAX(choiceOrder) AS dernier FROM k_fieldchoice WHERE id_field=".$id_field);
-			$last	= $dernier['dernier'] + 1;
+			$last = $this->dbOne("SELECT MAX(choiceOrder) AS dernier FROM k_fieldchoice WHERE id_field=".$id_field);
+			$last = $last['dernier'] + 1;
 
 			foreach($e as $n){
 				if(trim($n) != ''){
@@ -264,8 +254,7 @@ public function fieldChoiceSet($id_field, $es){
 	}
 }
 
-/* + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - 
-+ - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - */
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 public function fieldSaveValue($id_field, $value, $opt=array()){
 
 	$field_ 	= $this->fieldGet(array('id_field' => $id_field));
@@ -381,43 +370,40 @@ public function fieldSaveValue($id_field, $value, $opt=array()){
 	return $value;
 }
 
-
-/* + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - 
-+ - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - */
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 public function fieldTypeGet(){
 
 	$def = array(
-		'texte'			=> array('name' => 'Texte sur plusieurs lignes', 				 'view' => 'texte',			'type' => 'MEDIUMTEXT'),
-		'texte-line'	=> array('name' => 'Texte sur une seule ligne (255 caracteres)', 'view' => 'texte',			'type' => 'VARCHAR(255)'),
-		'integer'		=> array('name' => 'Nombre entier',								 'view' => 'integer',		'type' => 'MEDIUMINT(64)'),
-		'boolean'		=> array('name' => 'Booleen',									 'view' => 'boolean',		'type' => 'TINYINT(1)'),
-		'date' 			=> array('name' => 'Date',										 'view' => 'date',			'type' => 'DATE'),
-		'onechoice' 	=> array('name' => 'Menu deroulant',							 'view' => 'choice',		'type' => 'MEDIUMTEXT'),
-		'multichoice'	=> array('name' => 'Plusieurs choix selectionnables',			 'view' => 'choice', 		'type' => 'MEDIUMTEXT'),
-		'content'		=> array('name' => 'Relier un Type',							 'view' => 'content', 		'type' => 'MEDIUMTEXT'),
-		'user'			=> array('name' => 'Relier un Utilisateur',						 'view' => 'user', 			'type' => 'MEDIUMTEXT'),
-		'media'			=> array('name' => 'Media',										 'view' => 'media',			'type' => 'MEDIUMTEXT'),
-		'category'		=> array('name' => 'Categorie',									 'view' => 'category', 		'type' => 'MEDIUMINT(64)'),
-		'chapter'		=> array('name' => 'Arborescence',								 'view' => 'chapter',		'type' => 'MEDIUMINT(64)'),
-		'content-type'	=> array('name' => 'Liste des Types de contenu',				 'view' => 'contentType',	'type' => 'VARCHAR(255)'),
-		'social-forum'	=> array('name' => 'Social - Forum',							 'view' => 'socialForum',	'type' => 'MEDIUMTEXT'),
-		'dbtable'		=> array('name' => 'Table (bdd)',								 'view' => 'dbtable',		'type' => 'MEDIUMTEXT'),
-		'keyword'		=> array('name' => 'Mot cl&eacute;',							 'view' => 'dbtable',		'type' => 'MEDIUMTEXT')
+		'texte'			=> array('name' => 'Texte sur plusieurs lignes', 			 'view' => 'texte',			'type' => 'MEDIUMTEXT'),
+		'texte-line'	=> array('name' => 'Texte sur une  ligne (255 caracteres)',  'view' => 'texte',			'type' => 'VARCHAR(255)'),
+		'integer'		=> array('name' => 'Nombre entier',							 'view' => 'integer',		'type' => 'MEDIUMINT(64)'),
+		'boolean'		=> array('name' => 'Booleen',								 'view' => 'boolean',		'type' => 'TINYINT(1)'),
+		'date' 			=> array('name' => 'Date',									 'view' => 'date',			'type' => 'DATE'),
+		'onechoice' 	=> array('name' => 'Menu deroulant',						 'view' => 'choice',		'type' => 'MEDIUMTEXT'),
+		'multichoice'	=> array('name' => 'Plusieurs choix selectionnables',		 'view' => 'choice', 		'type' => 'MEDIUMTEXT'),
+		'content'		=> array('name' => 'Relier un Type',						 'view' => 'content', 		'type' => 'MEDIUMTEXT'),
+		'user'			=> array('name' => 'Relier un Utilisateur',					 'view' => 'user', 			'type' => 'MEDIUMTEXT'),
+		'media'			=> array('name' => 'Media',									 'view' => 'media',			'type' => 'MEDIUMTEXT'),
+		'category'		=> array('name' => 'Categorie',								 'view' => 'category', 		'type' => 'MEDIUMINT(64)'),
+		'chapter'		=> array('name' => 'Arborescence',							 'view' => 'chapter',		'type' => 'MEDIUMINT(64)'),
+		'content-type'	=> array('name' => 'Liste des Types de contenu',			 'view' => 'contentType',	'type' => 'VARCHAR(255)'),
+		'social-forum'	=> array('name' => 'Social - Forum',						 'view' => 'socialForum',	'type' => 'MEDIUMTEXT'),
+		'dbtable'		=> array('name' => 'Table (bdd)',							 'view' => 'dbtable',		'type' => 'MEDIUMTEXT'),
+		'keyword'		=> array('name' => 'Mot clé',   						     'view' => 'dbtable',		'type' => 'MEDIUMTEXT'),
+		'code'          => array('name' => 'Code',   						         'view' => 'code',		    'type' => 'MEDIUMTEXT')
 	);
 
 	return $def;
 }
 
-/* + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - 
-+ - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - */
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 public function fieldAffectGet($map, $id=0){
 	$def = $this->dbOne("SELECT fields FROM k_fieldaffect WHERE map='".$map."' AND id=".intval($id));
 	$def = json_decode($def['fields']);
 	return is_array($def) ? $def : array();
 }
 
-/* + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - 
-+ - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - */
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 public function fieldAffectSet($map, $fields, $id=0){
 	
 	if($map == '')			die('map is null');
@@ -437,8 +423,7 @@ public function fieldAffectSet($map, $fields, $id=0){
 	#$this->pre($this->db_query, $this->db_error);
 }
 
-/* + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - 
-+ - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - */
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 public function fieldAffectPush($map, $field, $id=0){
 
 	// Get
@@ -454,8 +439,7 @@ public function fieldAffectPush($map, $field, $id=0){
 	$this->fieldAffectSet($map, $fields, $id);
 }
 
-/* + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - 
-+ - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - */
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 public function fieldAffectPop($map, $field, $id=0){
 
 	// Get
@@ -479,8 +463,7 @@ public function fieldAffectPop($map, $field, $id=0){
 	$this->fieldAffectSet($map['map'], $tmp, $map['id']);
 }
 
-/* + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - 
-+ - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - */
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 public function fieldAffectNew($map, $id_field, $id=0){
 
 	$table = $this->fieldAffectMapToTable($map, $id);
@@ -502,11 +485,10 @@ public function fieldAffectNew($map, $id_field, $id=0){
 	return true;
 }
 
-/* + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - 
-+ - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - */
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 public function fieldAffectRemove($id_field, $map='ALL', $id=0){
 
-	#$this->pre($id_field, $map, $id);
+	#$this->pre($id_field, $map);
 
 	# On recupere les MAP ou on utilise celle passe en argument
 	#
@@ -523,7 +505,6 @@ public function fieldAffectRemove($id_field, $map='ALL', $id=0){
 
 
 	#$this->pre("On trouve ce champs", $id_field, "dans", $used);
-
 
 	# Si je n'ai aucune MAP qui utilise ce champs ...
 	#
@@ -542,21 +523,11 @@ public function fieldAffectRemove($id_field, $map='ALL', $id=0){
 		// Save in DB
 		$this->fieldAffectPop($e['map'], $id_field, $e['id']);
 	}
-
-	# Suppression des champs pour le groupe
-	#
-	if ($map == "user") {
-		$userGroups = $this->dbMulti("SELECT * FROM k_fieldaffect WHERE map = 'usergroup'");
-		foreach($userGroups as $group) {
-			$this->fieldAffectPop('usergroup', $id_field, $group['id']);
-		}
-	}
-
+	
 	return true;
 }
 
-/* + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - 
-+ - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - */
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 public function fieldAffectType($id_field, $table=NULL){
 
 	# Obtenir notre base de type de champs
@@ -613,8 +584,7 @@ public function fieldAffectType($id_field, $table=NULL){
 	return true;
 }
 
-/* + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - 
-+ - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - */
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 public function fieldAffectValue($id_field, $oldValue, $newValue){
 
 	# Trouver le FIELD
@@ -659,8 +629,7 @@ public function fieldAffectValue($id_field, $oldValue, $newValue){
 	}
 }
 
-/* + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - 
-+ - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - */
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 public function fieldAffectMapToTable($map, $id=0){
 
 	if($map == 'user'){						return 'k_userdata';			}else
@@ -688,8 +657,7 @@ public function fieldAffectMapToTable($map, $id=0){
 
 }
 
-/* + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - 
-+ - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - */
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 public function fieldAffectTableForField($id_field){
 
 	// Get
@@ -709,8 +677,7 @@ public function fieldAffectTableForField($id_field){
 	return $tables;
 }
 
-/* + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - 
-+ - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - */
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 public function fieldValidation($form){
 
 	if(sizeof($form) == 0) return true;
@@ -766,10 +733,7 @@ public function fieldValidation($form){
 	return $good;
 }
 
-
-
-/* + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - 
-+ - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - */
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 public function fieldForm($id_field, $value, $opt=array()){
 
 	# Traiter les OPTIONS
@@ -778,7 +742,6 @@ public function fieldForm($id_field, $value, $opt=array()){
 	$id			= isset($opt['name']) ? $opt['id']	 : 'form-field-'.$id_field;
 	$key		= (preg_match("#([0-9]){1,}#", $id_field)) ? '' : $id_field;
 	$disabled	= ($opt['disabled']) ? "disabled=\"disabled\"" : NULL;
-
 
 	# Recuperer le FIELD
 	#
@@ -846,6 +809,7 @@ public function fieldForm($id_field, $value, $opt=array()){
 		$value = explode($this->splitter, $value);
 		if(!is_array($value)) $value = array();
 
+		$form = '';
 		foreach($choices as $e){
 			$sel   = in_array($e['choiceValue'], $value) ? " checked=\"checked\"" : NULL;
 			$form .= "<input type=\"checkbox\" name=\"".$name."[]\" value=\"".$e['id_fieldchoice']."\" ".$sel." ".$disabled." /> ".$e['choiceValue']."<br />";
@@ -980,7 +944,7 @@ public function fieldForm($id_field, $value, $opt=array()){
 		if($field['fieldParam']['type'] == 'select'){
 			if(!is_array($selectData)) $selectData = array();
 
-			$form .= "<select name=\"".$name."[]\" id=\"".$id."\">";
+			$form  = "<select name=\"".$name."[]\" id=\"".$id."\">";
 			$form .= "<option value=\"\"></option>";
 			foreach($selectData as $d){
 				$form .= "<option value=\"".$d[$selectId]."\"".(in_array($d[$selectId], $value) ? ' selected' : '').">".$d[$selectView]."</option>";
@@ -991,7 +955,7 @@ public function fieldForm($id_field, $value, $opt=array()){
 		// Dans le cas ou l'on veut la table de donnee
 		else{
 
-			$form .= "<div class=\"contenttable-list\" id=\"contenttable-".$field['id_field']."\">";
+			$form  = "<div class=\"contenttable-list\" id=\"contenttable-".$field['id_field']."\">";
 	
 			// Up panel
 			$form .= "<div class=\"head clearfix\">";
@@ -1019,9 +983,8 @@ public function fieldForm($id_field, $value, $opt=array()){
 			if(sizeof($field['fieldParam']['id_field']) > 0){
 				foreach($field['fieldParam']['id_field'] as $colField){
 					$colField  = $this->fieldGet(array('id_field' => $colField));
-					if($moreField['id_field'] > 0){
-						$form .= "<th width=\"20%\">".$colField['fieldName']."</th>";
-					}
+
+					if($colField['id_field'] > 0) $form .= "<th width=\"20%\">".$colField['fieldName']."</th>";
 				}
 			}
 			$form .= "</tr></thead>";
@@ -1040,7 +1003,7 @@ public function fieldForm($id_field, $value, $opt=array()){
 	#
 	if($field['fieldType'] == 'media'){
 	
-		$form .= "<div class=\"media-list\">";
+		$form  = "<div class=\"media-list\">";
 		$form .= "<textarea name=\"".$name."\" id=\"".$id."\" cols=\"60\" rows=\"6\" style=\"".$opt['style']."; margin-bottom:5px;\" class=\"display-off\">".$value."</textarea>";
 		
 		// bar du haut (action)
@@ -1218,7 +1181,12 @@ public function fieldForm($id_field, $value, $opt=array()){
 	if($field['fieldType'] == 'keyword'){
 		$form = '<input name="'.$name.'" id="'.$id.'" class="'.$opt['class'].'" style="'.$opt['style'].'" value="'.$value.'" '.$disabled.' />';
 	}
-	
+
+	### CODE
+	#
+	if($field['fieldType'] == 'code'){
+		$form  = "<textarea name=\"".$name."\" id=\"".$id."\" cols=\"60\" rows=\"6\" class=\"".$opt['class']." ".$class." codemirror\" style=\"".$opt['style']."\" ".$disabled.">".$value."</textarea>";
+	}
 	
 	else{
 		$form = "Non traite : \"".$field['fieldType']."\"";
@@ -1228,8 +1196,7 @@ public function fieldForm($id_field, $value, $opt=array()){
 	return $form;
 }
 
-/* + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - 
-+ - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - */
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 public function fieldTrace($data, $e, $f=array()){
 
 	$field	= $this->fieldForm(
@@ -1266,8 +1233,7 @@ public function fieldTrace($data, $e, $f=array()){
 	echo "</li>";
 }
 
-/* + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - 
-+ - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - */
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 public function fieldFormating($opt){
 
 	if($opt['debug']) $this->pre("OPT", $opt);
@@ -1295,8 +1261,7 @@ public function fieldFormating($opt){
 	return $def;
 }
 
-/* + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - 
-+ - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - */
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 public function fieldMapping($opt){
 
 	$data		= $opt['data'];		if(sizeof($data) == 0)		return $opt['data'];
@@ -1384,4 +1349,4 @@ public function fieldMapping($opt){
 }
 
 
-} ?>
+}

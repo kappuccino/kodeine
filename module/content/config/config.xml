@@ -3,8 +3,8 @@
 
 	<data>
 		<key>content</key>
-		<version>5.0.20</version>
-        <lastMod>2013-02-08</lastMod>
+		<version>5.0.21</version>
+        <lastMod>2013-02-13</lastMod>
 
 		<name><![CDATA[Contenu]]></name>
 		<description><![CDATA[Gérer les pages de votre site internet, les catégories.]]></description>
@@ -22,17 +22,6 @@
 		<module>rate</module>
 		<module>template</module>
 	</dependencies>
-
-	<less>
-		<file>/ui/css/browse.less</file>
-		<file>/ui/css/content.less</file>
-		<file>/ui/css/data.less</file>
-		<file>/ui/css/form.less</file>
-		<file>/ui/css/gallery.less</file>
-		<file>/ui/css/safe.less</file>
-		<file>/ui/css/search.less</file>
-		<file>/ui/css/type.less</file>
-	</less>
 
 	<profile>
 		<item code="index"		type="ALLOW_DENY" name="Accessible" />

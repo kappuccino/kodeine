@@ -3,6 +3,10 @@
 * = Autre / Divers / Inclassable...
 
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+2013-02-14 (build 5.0.12)
++ Ajout de la lib codemirror
++ Ajout de la lib requirejs
+
 2013-01-31 (build 5.0.11)
 - Fix un get pour une langue qui n'est pas définit
 

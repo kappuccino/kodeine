@@ -201,14 +201,17 @@
 			<td></td>
 			<td>Ce type de champs n'a pas d'option</td>
 		</tr>
+
 		<tr class="line-type line-integer <?php echo ($fieldView == 'integer') ? '' : 'line-off' ?>">
 			<td></td>
 			<td>Ce type de champs n'a pas d'option</td>
 		</tr>
+
 		<tr class="line-type line-media <?php echo ($fieldView == 'media') ? '' : 'line-off' ?>">
 			<td></td>
 			<td>Ce type de champs n'a pas d'option</td>
 		</tr>
+
 		<tr class="line-type line-date <?php echo ($fieldView == 'date') ? '' : 'line-off' ?>">
 			<td></td>
 			<td>Ce type de champs n'a pas d'option</td>
@@ -273,6 +276,7 @@
 				</ul>
 			</td>
 		</tr>
+
 		<tr class="line-type line-content <?php echo ($fieldView == 'content') ? '' : 'line-off' ?>">
 			<td></td>
 			<td>Type
@@ -297,6 +301,7 @@
 				?></select>
 			</td>
 		</tr>
+
 		<tr class="line-type line-user <?php echo ($fieldView == 'user') ? '' : 'line-off' ?>">
 			<td></td>
 			<td><?php $fields = $app->apiLoad('field')->fieldGet(array('user' => true)); ?>
@@ -337,6 +342,7 @@
 	
 			</td>
 		</tr>
+
 		<tr class="line-type line-dbtable <?php echo ($fieldView == 'dbtable') ? '' : 'line-off' ?>">
 			<td></td>
 			<td>
@@ -383,7 +389,20 @@
 				</table>
 			</td>
 		</tr>
-		<tr>
+
+        <tr class="line-type line-code <?php echo ($fieldView == 'code') ? '' : 'line-off' ?>">
+            <td></td>
+            <td>
+                <table border="0" class="5">
+                    <tr>
+                        <td width="100">Type de code</td>
+                        <td><input type="text" name="param[type]" value="<?php echo $app->formValue($data['fieldParam']['type'], $_POST['param']['type']) ?>" /></td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+
+        <tr>
 			<td height="30"></td>
 			<td>
 				<a href="javascript:$('#data').submit();" class="btn btn-mini">Enregistrer</a>
