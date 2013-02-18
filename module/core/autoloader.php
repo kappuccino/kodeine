@@ -68,14 +68,9 @@ class autoloader{
 
 		$class = $this->classFile($api);
 
-	//	if(file_exists($class)){
-			try{
-				require_once($class);
-			}
-			catch(Exception $e){
-				throw new Exception("Class file not found : ".$api);
-			}
-	//	}
+		if(file_exists($class)){
+			require_once($class);
+		}
 
 	}
 }

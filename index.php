@@ -24,7 +24,7 @@
 	if(isset($_REQUEST['logout'])) $app->userLogout();
 	$app->userIsLoged($_REQUEST['login'], $_REQUEST['password']);
 
-	# Init (main work heere, init all process chapter, page etc...)
+	# Init (main work here, init all process chapter, page etc...)
 	#
 	$app->kodeineInit($_GET);
 
@@ -35,6 +35,7 @@
 	# Next step is in the theme file
 	#
 	$app->themeInclude('html.build.php');
+	#include(KROOT . $app->kTalk('/{T}/html.build.php'));
 
 // --------------------------------------------------------------- //
 
@@ -42,5 +43,3 @@
 	# Final bench : Profile
 	#
 	if(BENCHME) $app->benchmarkProfiling();
-
-?>
