@@ -1,6 +1,6 @@
 <?php
 
-	if(!defined('APP')) die('No direct access allowed');
+	if(!defined('COREINC')) die('Direct access not allowed');
 
 	if(!$app->apiLoad('clientftp')->configCloudCheck()) header("Location: pref.php?test");
 

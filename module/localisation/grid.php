@@ -1,5 +1,6 @@
 <?php
 
+	if(!defined('COREINC')) die('Direct access not allowed');
 	$i18n       = $app->apiLoad('coreI18n')->languageSet('fr')->load('localisation');
 
 	$country 	= $app->countryGet(array('is_used' => true));

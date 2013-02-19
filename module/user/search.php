@@ -1,8 +1,8 @@
 <?php
 
+	if(!defined('COREINC')) die('Direct access not allowed');
 	$i18n = $app->apiLoad('coreI18n')->languageSet('fr')->load('user');
-	//$app->pre($_REQUEST);
-	
+
 	if($_POST['actionParam']){
 		// pre
 		$app->apiLoad('user')->userSearchCache(array(

@@ -1,7 +1,8 @@
 <?php
 
+	if(!defined('COREINC')) die('Direct access not allowed');
 	$i18n = $app->apiLoad('coreI18n')->languageSet('fr')->load('user');
-	if($_REQUEST['id_group'] == NULL) header("Location: group");
+	if($_REQUEST['id_group'] == NULL) $app->go('group');
 	
 	$group = $app->apiLoad('user')->userGroupGet(array(
 		'id_group' => $_REQUEST['id_group']

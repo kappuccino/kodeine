@@ -1,5 +1,6 @@
 <?php
 
+	if(!defined('COREINC')) die('Direct access not allowed');
 	$i18n = $app->apiLoad('coreI18n')->languageSet('fr')->load('localisation');
 
 	if(sizeof($_POST['removeMaster']) > 0){
