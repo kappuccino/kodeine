@@ -185,15 +185,6 @@ if(is_array($tps)) {
 
 <script>
 
-    <?php
-    /*
-    <script src="/admin/core/ui/_tinymce/jscripts/tiny_mce/jquery.tinymce.js"></script>
-    <script src="/admin/core/ui/_tinymce/jscripts/tiny_mce/tiny_mce.js"></script>
-    script.src      = 'http://<?php echo $_SERVER["HTTP_HOST"]; ?>/app/module/core/ui/_jquery/jquery-1.7.2.min.js';
-    script2.src     = 'http://<?php echo $_SERVER["HTTP_HOST"]; ?>/app/module/core/ui/_jqueryui/jqui.sortable.min.js';
-    script3.src     = 'http://<?php echo $_SERVER["HTTP_HOST"]; ?>/app/module/newsletter/ui/js/designer-iframeload.js';
-    */
-    ?>
     function save() {
         $("#data").submit();
     }

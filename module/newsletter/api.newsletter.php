@@ -136,7 +136,7 @@ public function newsletterPreview($id_newsletter){
     ));
     require_once(PLUGIN.'/phpmailer/class.phpmailer.php');
     $mail = new PHPMailer();
-    $mail->Charset = "UTF-8";
+    $mail->CharSet = "UTF-8";
     $mail->SetFrom('noreply@'.$_SERVER['HTTP_HOST'], $_SERVER['HTTP_HOST']);
     $mails = explode(',', $pref['test']);
 
@@ -385,7 +385,7 @@ public function newsletterPrepareBody($id_newsletter, $data=NULL){
 
 	# Wrapp
 	#
-	if(!preg_match("#<body>#", $data) && $data['newsletterHtmlDesigner'] == ''){
+	if(!preg_match("#<body>#", $data) && $from['newsletterHtmlDesigner'] == ''){
 
 		// Image de fond
 		if($from['newsletterStyle']['backgroundImage'] != ''){

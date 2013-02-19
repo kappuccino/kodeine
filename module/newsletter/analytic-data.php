@@ -68,7 +68,7 @@
 	
 <header><?php
 	include(COREINC.'/top.php');
-	include(__DIR__.'/ui/menu.php')
+    include(__DIR__ . '/ui/menu.php')
 ?></header>
 
 <div id="app">
