@@ -134,7 +134,7 @@
 </div>
 
 <?php include(COREINC.'/end.php'); ?>
-<script src="/app/module/core/vendor/datatables/jquery.dataTables.js"></script>
+<script src="<?php echo COREVENDOR ?>/datatables/jquery.dataTables.js"></script>
 <script>
 	function apply(){
 		if(confirm("Confirmer la suppression des commandes selectionnées et la recreditation du stock ?")){
