@@ -11,8 +11,6 @@
 ?>
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="fr">
 <head>
-	<title>Kodeine</title>
-	<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
 	<?php include(ADMINUI.'/head.php'); ?>
 	<link href="/app/admin/ressource/css/newsleter.editor.css" rel="stylesheet" type="text/css">
 

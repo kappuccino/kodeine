@@ -40,9 +40,9 @@
 
 	$zone = $app->apiLoad('ad')->adZoneGet(array('debug' => false));
 
-	include(ADMINUI.'/doctype.php');
-?>
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="fr">
+
+?><!DOCTYPE html>
+<html lang="fr">
 <head>
 	<title>Kodeine</title>
 	<?php include(ADMINUI.'/head.php'); ?>

@@ -53,7 +53,7 @@ function rssItemAssign($key, $val){
 + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - */
 function rssBuild(){
 
-	$this->flux  = "<?phpxml version=\"1.0\" encoding=\"iso-8859-1\"?>\n";
+	$this->flux  = "<?phpxml version=\"1.0\" encoding=\"UTF-8\"?>\n";
 	$this->flux .= "<rss version=\"2.0\">\n";
 	$this->flux .= "<channel>\n";
 	$this->flux .= $this->chanel;

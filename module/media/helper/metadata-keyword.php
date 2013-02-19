@@ -17,9 +17,9 @@
 
 	$me		= $app->mediaParser($_REQUEST['url']);
 	$parent	= $me['clean'].'.'.$me['type'];
-?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="fr">
+
+?><!DOCTYPE html>
+<html lang="fr">
 <head>
 	<script type="text/javascript" src="<?php echo KPROMPT ?>/app/admin/ressource/js/mootools-1.2.5-core.js"></script>
 	<script type="text/javascript" src="<?php echo KPROMPT ?>/app/admin/ressource/js/mootools-1.2.4.4-more.js"></script>

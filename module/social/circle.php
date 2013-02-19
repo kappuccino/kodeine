@@ -56,14 +56,11 @@
 		'public'	=> true
 	));
 
-	include(ADMINUI.'/doctype.php');
-?>
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="fr">
+?><!DOCTYPE html>
+<html lang="fr">
 <head>
-	<title>Kodeine</title>
-	<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />	
 	<?php include(ADMINUI.'/head.php'); ?>
-	<link rel="stylesheet" type="text/css" media="all" href="/app/admin/ressource/css/social.circle.css" />
+	<link rel="stylesheet" type="text/css" media="all" href="ui/css/social.css" />
 </head>
 <body>
 <div id="pathway" class="is-edit">
