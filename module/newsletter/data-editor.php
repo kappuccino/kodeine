@@ -262,8 +262,8 @@ if($_REQUEST['id_newsletter'] != NULL){
                         ed.setContent(d.templateData);
 
                         if(typeof d.templateStyle == 'object'){
-                            $('#backgroundColor').val() = d.templateStyle.backgroundColor;
-                            $('#backgroundImage').val() = d.templateStyle.backgroundImage;
+                            $('#backgroundColor').val(d.templateStyle.backgroundColor);
+                            $('#backgroundImage').val(d.templateStyle.backgroundImage);
                         }
                     });
         }
