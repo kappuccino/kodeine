@@ -69,7 +69,6 @@
 	<a href="core.panel.php">Admin</a> &raquo;
 	<a href="social.index.php">Social</a> &raquo;
 	<a href="social.index.php">Index</a>
-	<?php include(ADMINUI.'/pathway.php'); ?>
 </div>
 
 <?php include('ressource/ui/menu.social.php'); ?>

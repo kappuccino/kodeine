@@ -129,8 +129,8 @@
 
 <?php include(COREINC.'/end.php'); ?>
 <script type="text/javascript" src="ui/js/browse.js"></script> 
-<script src="/app/module/core/ui/_bootstrap/js/bootstrap-dropdown.js"></script>
-<script src="/app/module/core/ui/_datatables/jquery.dataTables.js"></script>
+<script src="/app/module/core/vendor/bootstrap/js/bootstrap-dropdown.js"></script>
+<script src="/app/module/core/vendor/datatables/jquery.dataTables.js"></script>
 <script>
 	id_type = <?php echo $_GET['id_type'] ?>;	
 	hash 	= getHash();

@@ -308,9 +308,9 @@
 </div>
 
 <?php include(COREINC.'/end.php'); ?>
-<script src="/app/module/core/ui/_bootstrap/js/bootstrap-dropdown.js"></script>
-<script src="/app/module/core/ui/_tinymce/jscripts/tiny_mce/jquery.tinymce.js"></script>
-<script src="/app/module/core/ui/_tinymce/jscripts/tiny_mce/tiny_mce.js"></script>
+<script src="/app/module/core/vendor/bootstrap/js/bootstrap-dropdown.js"></script>
+<script src="/app/module/core/vendor/tinymce/jscripts/tiny_mce/jquery.tinymce.js"></script>
+<script src="/app/module/core/vendor/tinymce/jscripts/tiny_mce/tiny_mce.js"></script>
 <script src="ui/js/content.js"></script>
 <script type="text/javascript">
 	

@@ -222,8 +222,8 @@
 </form>
 
 <?php include(COREINC.'/end.php'); ?>
-<script src="/app/module/core/ui/_tinymce/jscripts/tiny_mce/jquery.tinymce.js"></script>
-<script src="/app/module/core/ui/_tinymce/jscripts/tiny_mce/tiny_mce.js"></script>
+<script src="/app/module/core/vendor/tinymce/jscripts/tiny_mce/jquery.tinymce.js"></script>
+<script src="/app/module/core/vendor/tinymce/jscripts/tiny_mce/tiny_mce.js"></script>
 <script src="ui/js/localisation.js"></script>
 <script>
 	languages = <?php echo json_encode($languages); ?>;

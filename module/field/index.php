@@ -415,7 +415,7 @@
 </div></div></div>
 	
 <?php include(COREINC.'/end.php'); ?>
-<script src="/app/module/core/ui/_datatables/jquery.dataTables.js"></script>
+<script src="/app/module/core/vendor/datatables/jquery.dataTables.js"></script>
 <script src="ui/js/field.js"></script>
 
 </body></html>

@@ -161,7 +161,6 @@
 				</div>-->
 			</div>
 		</div>
-		<?php include(COREINC.'/sidebar.php'); ?>
 	</div>
 	
 <?php

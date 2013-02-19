@@ -21,9 +21,9 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="fr">
 <head>
 	<title></title>
-	<script src="/admin/core/ui/_jquery/jquery-1.7.2.min.js"></script>
-	<link rel="stylesheet" type="text/css" href="/admin/core/ui/_flowplayer5/skin/functional.css" />
-	<script type="text/javascript" src="/admin/core/ui/_flowplayer5/flowplayer.min.js"></script>
+	<link rel="stylesheet" type="text/css" href="/admin/core/vendor/flowplayer/skin/functional.css" />
+	<script type="text/javascript" src="/admin/core/vendor/jquery/jquery-1.7.2.min.js"></script>
+	<script type="text/javascript" src="/admin/core/vendor/flowplayer/flowplayer.min.js"></script>
 	<style>
 		body{
 			font-family: Arial;
@@ -46,9 +46,9 @@
 </p>
 
 <script>
-	//flowplayer("player", "/admin/core/ui/_flowplayer/flowplayer-3.2.12.swf");
+	//flowplayer("player", "/admin/core/vendor/flowplayer/flowplayer-3.2.12.swf");
 	$(function() {
-		$('#player').flowplayer({ swf: "/admin/core/ui/_flowplayer5/flowplayer.swf" });
+		$('#player').flowplayer({ swf: "/admin/core/vendor/flowplayer/flowplayer.swf" });
 		function d(v){
 			document.getElementById('log').innerHTML = v;
 		}

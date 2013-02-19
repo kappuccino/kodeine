@@ -259,8 +259,7 @@
 				<?php echo $title.' &raquo; '.$data['contentName'] ?></h1>
 		</div>
 	</div>
-	<?php include(COREINC.'/sidebar.php'); ?>
-</div>	
+</div>
 
 <div class="bocontainer">
 	<div class="row-fluid">

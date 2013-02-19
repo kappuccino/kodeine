@@ -16,8 +16,7 @@
 				</h1>
 			</div>
 		</div>
-		<?php include(COREINC.'/sidebar.php'); ?>
-		
+
 	</div>
 
 <div class="bocontainer">

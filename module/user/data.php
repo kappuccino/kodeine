@@ -151,7 +151,7 @@
 	<?php include(COREINC.'/head.php'); ?>
 	<link rel="stylesheet" type="text/css" href="/admin/content/ui/css/data.css" />
 	<link rel="stylesheet" type="text/css" href="/admin/content/ui/css/dropdowns.css" />
-	<link rel="stylesheet" type="text/css" href="/admin/core/ui/_datepicker/css/datepicker.css" />
+	<link rel="stylesheet" type="text/css" href="/admin/core/vendor/datepicker/css/datepicker.css" />
 </head>
 <body>
 
@@ -352,10 +352,10 @@
 </div>
 
 <?php include(COREINC.'/end.php'); ?>
-<script src="/admin/core/ui/_tinymce/jscripts/tiny_mce/jquery.tinymce.js"></script>
-<script src="/admin/core/ui/_tinymce/jscripts/tiny_mce/tiny_mce.js"></script>
+<script src="/admin/core/vendor/tinymce/jscripts/tiny_mce/jquery.tinymce.js"></script>
+<script src="/admin/core/vendor/tinymce/jscripts/tiny_mce/tiny_mce.js"></script>
 <script src="/admin/content/ui/js/content.js"></script>
-<script type="text/javascript" src="/admin/core/ui/_datepicker/js/bootstrap-datepicker.js" charset="UTF-8"></script>
+<script type="text/javascript" src="/admin/core/vendor/datepicker/js/bootstrap-datepicker.js" charset="UTF-8"></script>
 <script type="text/javascript">
 
 	doMove  		= false;

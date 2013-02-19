@@ -88,7 +88,7 @@
 			padding:3px;
 		}
 	</style>
-	<script src="/admin/core/ui/_jquery/jquery-1.7.2.min.js" type="text/javascript"></script>
+	<script src="/admin/core/vendor/jquery/jquery-1.7.2.min.js" type="text/javascript"></script>
 </head>
 <body>
 <form method="post" action="/admin/media/helper/metadata" id="meta" name="meta">

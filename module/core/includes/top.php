@@ -1,9 +1,10 @@
 
-<?php
-	$cfg = $app->configGet('admin');
-?>
 <div id="top"><div class="wrapper clearfix">
-	<div class="logo"><?php echo ($cfg['brandName'] == '') ? 'Kodeine' : $cfg['brandName']; ?></div>
+
+	<div class="logo"><?php
+		$cfg = $app->configGet('admin');
+		echo ($cfg['brandName'] == '') ? 'Kodeine' : $cfg['brandName'];
+	?></div>
 
 	<ul class="right">
 		<li><a href="/admin/core/login?logout">Se déconnecter</a></li>

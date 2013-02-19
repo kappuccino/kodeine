@@ -165,7 +165,6 @@
 	<a href="content.index.php">Contenu</a> &raquo;
 	<a href="content.gallery.index.php?id_type=<?php echo $type['id_type'] ?>"><?php echo $type['typeName'] ?></a> &raquo;
 	<?php echo $title ?> &raquo; Import
-	<?php include(ADMINUI.'/pathway.php'); ?>
 </div>
 
 <?php include('ressource/ui/menu.content.php'); ?>

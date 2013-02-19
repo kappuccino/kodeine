@@ -207,7 +207,7 @@
 <head>
 	<?php include(COREINC.'/head.php'); ?>
     <link rel="stylesheet" type="text/css" href="ui/css/data.css" />
-	<link rel="stylesheet" type="text/css" href="../core/ui/_datepicker/css/datepicker.css" />
+	<link rel="stylesheet" type="text/css" href="../core/vendor/datepicker/css/datepicker.css" />
     <link rel="stylesheet" type="text/css" href="../core/vendor/codemirror/lib/codemirror.css" />
     <link rel="stylesheet" type="text/css" href="../core/vendor/codemirror/theme/monokai.css" />
 </head>
@@ -874,14 +874,14 @@
 </div></div>
 
 <?php include(COREINC.'/end.php'); ?>
-<script src="/app/module/core/ui/_datatables/jquery.dataTables.js"></script>
-<script src="/app/module/core/ui/_bootstrap/js/bootstrap-dropdown.js"></script>
-<script src="/admin/core/ui/_tinymce/jscripts/tiny_mce/jquery.tinymce.js"></script>
-<script src="/admin/core/ui/_tinymce/jscripts/tiny_mce/tiny_mce.js"></script>
+<script src="/app/module/core/vendor/datatables/jquery.dataTables.js"></script>
+<script src="/app/module/core/vendor/bootstrap/js/bootstrap-dropdown.js"></script>
+<script src="/admin/core/vendor/tinymce/jscripts/tiny_mce/jquery.tinymce.js"></script>
+<script src="/admin/core/vendor/tinymce/jscripts/tiny_mce/tiny_mce.js"></script>
 
 <script type="text/javascript" src="/admin/media/ui/_uploadifive/jquery.uploadifive-v1.0.js"></script>
 <script src="/admin/content/ui/js/content.js"></script>
-<script type="text/javascript" src="/admin/core/ui/_datepicker/js/bootstrap-datepicker.js" charset="UTF-8"></script>
+<script type="text/javascript" src="/admin/core/vendor/datepicker/js/bootstrap-datepicker.js" charset="UTF-8"></script>
 
 <script type="text/javascript" src="../core/vendor/codemirror/lib/codemirror.js"></script>
 <script type="text/javascript" src="../core/vendor/codemirror/mode/javascript/javascript.js"></script>

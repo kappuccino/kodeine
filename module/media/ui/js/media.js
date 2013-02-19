@@ -1423,7 +1423,7 @@ var modal = {
 
 			// build flowplayer 3.x
 			if (this.ext == 'flv') {
-				$.getScript("/admin/core/ui/_flowplayer/flowplayer-3.2.11.min.js")
+				$.getScript("/admin/core/vendor/flowplayer/flowplayer-3.2.11.min.js")
 					.done($.proxy(function(script, status) {
 						this.body = $('<a href="'+data.url+'" id="player" />').appendTo(this.frame);
 						this.show(data);
@@ -1432,7 +1432,7 @@ var modal = {
 
 			// build flowplayer 5.x
 			} else {
-				$.getScript("/admin/core/ui/_flowplayer5/flowplayer.min.js")
+				$.getScript("/admin/core/vendor/flowplayer/flowplayer.min.js")
 					.done($.proxy(function(script, status) {
 						this.body  = $('<div id="player" />').appendTo(this.frame);
 						this.video = $('<video src="'+data.url+'" />').appendTo(this.body);
@@ -1461,13 +1461,13 @@ var modal = {
 		if (data.type == 'video') {
 
 			if (this.ext == 'flv') {
-				flowplayer("player", "/admin/core/ui/_flowplayer/flowplayer-3.2.12.swf", {
+				flowplayer("player", "/admin/core/vendor/flowplayer/flowplayer-3.2.12.swf", {
 					clip : {
 						autoPlay: true
 					}
 				});
 			} else {
-				this.player = $('#player').flowplayer({ swf: "/admin/core/ui/_flowplayer5/flowplayer.swf" });
+				this.player = $('#player').flowplayer({ swf: "/admin/core/vendor/flowplayer/flowplayer.swf" });
 				this.frame.css('height', 'auto');
 			}
 		}

@@ -87,7 +87,7 @@
 	<a class="lost" onclick="toggle();"></a>
 </div>
 
-<script src="ui/_jquery/jquery-1.7.2.min.js"></script>
+<script src="vendor/jquery/jquery-1.7.2.min.js"></script>
 <script src="ui/js/login.js"></script>
 
 <body></html>

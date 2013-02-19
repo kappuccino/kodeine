@@ -13,13 +13,14 @@
 	}else{
 		$filter = $app->filterGet('hist');
 	}
+
 ?><!DOCTYPE html>
 <html lang="fr">
 <head>
 	<title>Kodeine</title>
 	<?php include(COREINC.'/head.php'); ?>
 	<link rel="stylesheet" type="text/css" href="/admin/content/ui/css/dropdowns.css" />
-	<link rel="stylesheet" type="text/css" href="/admin/core/ui/_datepicker/css/datepicker.css" />
+	<link rel="stylesheet" type="text/css" href="/admin/core/vendor/datepicker/css/datepicker.css" />
 </head>
 <body>
 
@@ -147,7 +148,7 @@
 </div></div>
 
 <?php include(COREINC.'/end.php'); ?>
-<script src="/admin/core/ui/_datatables/jquery.dataTables.js"></script>
+<script src="/admin/core/vendor/datatables/jquery.dataTables.js"></script>
 <script>
 
 	$(function() {

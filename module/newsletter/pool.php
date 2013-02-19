@@ -45,7 +45,6 @@
 	<a href="core.panel.php">Admin</a> &raquo;
 	<a href="newsletter.index.php">Newsletter</a> &raquo;
 	<a href="newsletter.pool.php">Pool</a>
-	<?php include(ADMINUI.'/pathway.php'); ?>
 </div>
 
 <?php include('ressource/ui/menu.newsletter.php'); ?>

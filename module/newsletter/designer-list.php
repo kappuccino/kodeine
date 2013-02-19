@@ -24,7 +24,6 @@
 	<a href="core.panel.php">Admin</a> &raquo;
 	<a href="newsletter.index.php">Newsletter</a> &raquo;
 	<a href="newsletter.index.php">Template</a>
-	<?php include(ADMINUI.'/pathway.php'); ?>
 </div>
 
 <?php include('ressource/ui/menu.newsletter.php'); ?>

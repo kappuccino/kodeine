@@ -52,7 +52,6 @@
 	<a href="core.panel.php">Admin</a> &raquo;
 	<a href="ad.index.php">Publicité</a> &raquo;
 	<a href="ad.zone.php">Zone</a>
-	<?php include(ADMINUI.'/pathway.php'); ?>
 </div>
 
 <?php include('ressource/ui/menu.ad.php'); ?>

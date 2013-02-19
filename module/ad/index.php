@@ -51,8 +51,7 @@
 					<a href="index">Liste</a></h1>
 			</div>
 		</div>
-		<?php include(COREINC.'/sidebar.php'); ?>
-	</div>	
+	</div>
 
 
 <div class="bocontainer">

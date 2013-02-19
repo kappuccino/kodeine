@@ -21,8 +21,8 @@
 <head>
 	<?php include(COREINC.'/head.php'); ?>
     <link rel="stylesheet" type="text/css" href="ui/css/media.css" />
-	<link rel="stylesheet" type="text/css" href="/admin/core/ui/_jqueryui/jqui.slider.css" />
-	<link rel="stylesheet" type="text/css" href="/admin/core/ui/_flowplayer5/skin/functional.css" />
+	<link rel="stylesheet" type="text/css" href="/admin/core/vendor/jqueryui/jqui.slider.css" />
+	<link rel="stylesheet" type="text/css" href="/admin/core/vendor/flowplayer/skin/functional.css" />
 </head>
 <body>
 
@@ -84,8 +84,8 @@
 <?php include(COREINC.'/end.php'); ?>
 <script type="text/javascript" src="/admin/media/ui/_uploadifive/jquery.uploadifive-v1.0.js"></script>
 <script type="text/javascript" src="/admin/media/ui/_uploadify/jquery.uploadify.js"></script>
-<script type="text/javascript" src="/admin/core/ui/_jqueryui/jqui.dragdrop.js"></script>
-<script type="text/javascript" src="/admin/core/ui/_jqueryui/jqui.slider.js"></script>
+<script type="text/javascript" src="/admin/core/vendor/jqueryui/jqui.dragdrop.js"></script>
+<script type="text/javascript" src="/admin/core/vendor/jqueryui/jqui.slider.js"></script>
 <!-- <script type="text/javascript" src="/admin/media/ui/js/jquery.history.js"></script> -->
 <script type="text/javascript" src="/admin/media/ui/js/media.js"></script>
 

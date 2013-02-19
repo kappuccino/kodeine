@@ -194,8 +194,8 @@
 
 
 <?php include(COREINC.'/end.php'); ?>
-<script src="/admin/core/ui/_tinymce/jscripts/tiny_mce/jquery.tinymce.js"></script>
-<script src="/admin/core/ui/_tinymce/jscripts/tiny_mce/tiny_mce.js"></script>
+<script src="/admin/core/vendor/tinymce/jscripts/tiny_mce/jquery.tinymce.js"></script>
+<script src="/admin/core/vendor/tinymce/jscripts/tiny_mce/tiny_mce.js"></script>
 <script>
 	tinyMCE.init({
 		mode								: 'exact',

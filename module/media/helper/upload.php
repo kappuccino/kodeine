@@ -4,7 +4,7 @@
 	<title>Envoyer des images</title>
 
 	<?php include(COREINC.'/head.php'); ?>
-	<script src="/app/module/core/ui/_jquery/jquery-1.7.2.min.js" type="text/javascript"></script>
+	<script src="/app/module/core/vendor/jquery/jquery-1.7.2.min.js" type="text/javascript"></script>
 	<script type="text/javascript" src="/admin/media/ui/_uploadifive/jquery.uploadifive-v1.0.js"></script>
 	<link rel="stylesheet" type="text/css" href="/admin/media/ui/_uploadifive/uploadifive.css">
 	<style>

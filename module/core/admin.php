@@ -2,8 +2,10 @@
 
 	# CORE (ADMIN)
 	#
-	define('COREINC',	MODULE.'/core/includes');
-	define('COREUI',	KPROMPT.'/admin/core/ui');
+	define('COREINC',	    MODULE.'/core/includes');
+
+	define('COREUI',	    KPROMPT.'/admin/core/ui');
+	define('COREVENDOR',    KPROMPT.'/admin/core/vendor');
 
 	function isMe($p){
 		$url = parse_url($_SERVER['REQUEST_URI']);

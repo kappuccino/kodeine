@@ -140,7 +140,7 @@
 </div></div>
 
 <?php include(COREINC.'/end.php'); ?>
-<script src="/admin/core/ui/_datatables/jquery.dataTables.js"></script>
+<script src="/admin/core/vendor/datatables/jquery.dataTables.js"></script>
 <script>
 	function cbchange(that) {
 		var state = that.prop('checked');
