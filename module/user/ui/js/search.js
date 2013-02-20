@@ -225,7 +225,7 @@ function newCond(line, chain){
 	sel = (chain == 'AND') ? 0 : 1;
 	menu.prop('selectedIndex', sel);
 
-	sp = $('<span>règles suivantes</span>').insertAfter(menu);
+	sp = $('<span>rÃ©gles suivantes</span>').insertAfter(menu);
 	cond = $('<ul class="is-cond" style="padding-left: 20px;"/>').appendTo(line)	
 
 	return cond;
@@ -243,7 +243,7 @@ function changeField(f, searchMode, searchValue){
 	line = f.parent().parent();
 
 	json = $.ajax({
-		url : '/admin/core/helper/search-json?id_field='+id_field,
+		url : '../core/helper/search-json?id_field='+id_field,
 		dataType : 'json'
 	});
 

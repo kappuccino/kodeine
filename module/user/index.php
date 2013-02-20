@@ -93,22 +93,22 @@
 		<thead>
 			<tr>
 				<th width="20"  class="icone"><i class="icon-remove icon-white"></i></th>
-				<th width="80"  class="order <?php if($filter['order'] == 'k_user.id_user')	echo 'order'.$dir; ?>" onClick="document.location='/admin/user/index?cf&order=k_user.id_user&direction=<?php echo $dir ?>'"><span>#</span></th>
-				<th width="110" class="order <?php if($filter['order'] == 'k_user.userDateCreate')	echo 'order'.$dir; ?>" onClick="document.location='/admin/user/index?cf&order=k_user.userDateCreate&direction=<?php echo $dir ?>'"><span>Création</span></th>
-				<th width="110" class="order <?php if($filter['order'] == 'k_user.userDateUpdate')	echo 'order'.$dir; ?>" onClick="document.location='/admin/user/index?cf&order=k_user.userDateUpdate&direction=<?php echo $dir ?>'"><span>Mise à jour</span></th>
-				<th			    class="order <?php if($filter['order'] == 'k_user.userMail')		echo 'order'.$dir; ?>" onClick="document.location='/admin/user/index?cf&order=k_user.userMail&direction=<?php echo $dir ?>'"><span>Nom</span></th>
+				<th width="80"  class="order <?php if($filter['order'] == 'k_user.id_user')	echo 'order'.$dir; ?>" onClick="document.location='./?cf&order=k_user.id_user&direction=<?php echo $dir ?>'"><span>#</span></th>
+				<th width="110" class="order <?php if($filter['order'] == 'k_user.userDateCreate')	echo 'order'.$dir; ?>" onClick="document.location='./?cf&order=k_user.userDateCreate&direction=<?php echo $dir ?>'"><span>Création</span></th>
+				<th width="110" class="order <?php if($filter['order'] == 'k_user.userDateUpdate')	echo 'order'.$dir; ?>" onClick="document.location='./?cf&order=k_user.userDateUpdate&direction=<?php echo $dir ?>'"><span>Mise à jour</span></th>
+				<th			    class="order <?php if($filter['order'] == 'k_user.userMail')		echo 'order'.$dir; ?>" onClick="document.location='./?cf&order=k_user.userMail&direction=<?php echo $dir ?>'"><span>Nom</span></th>
 				<?php
 					$colspan = 1;
 	
 					if($filter['cola'] != ''){
 						$col = $app->apiLoad('field')->fieldGet(array('id_field' => $filter['cola']));
-						echo "<th width=\"180\" class=\"order ".(($filter['order'] == 'field'.$filter['cola']) ? 'order'.$dir : '')."\" onClick=\"document.location='/admin/user/index?cf&order=field".$filter['cola']."&direction=".$dir."'\"><span>".$col['fieldName']."</span></th>";
+						echo "<th width=\"180\" class=\"order ".(($filter['order'] == 'field'.$filter['cola']) ? 'order'.$dir : '')."\" onClick=\"document.location='./?cf&order=field".$filter['cola']."&direction=".$dir."'\"><span>".$col['fieldName']."</span></th>";
 						$colspan++;
 					}
 	
 					if($filter['colb'] != ''){
 						$col = $app->apiLoad('field')->fieldGet(array('id_field' => $filter['colb']));
-						echo "<th width=\"180\" class=\"order ".(($filter['order'] == 'field'.$filter['colb']) ? 'order'.$dir : '')."\" onClick=\"document.location='/admin/user/index?cf&order=field".$filter['colb']."&direction=".$dir."'\"><span>".$col['fieldName']."</span></th>";
+						echo "<th width=\"180\" class=\"order ".(($filter['order'] == 'field'.$filter['colb']) ? 'order'.$dir : '')."\" onClick=\"document.location='./?cf&order=field".$filter['colb']."&direction=".$dir."'\"><span>".$col['fieldName']."</span></th>";
 						$colspan++;
 					}
 				?>

@@ -145,7 +145,7 @@ function galleryView(data){
 			
 			title_.html(me.contentName);
 
-			kill_	= $('<a href="javascript:;"><img src="/admin/core/ui/img/_img/media-delete.png" /></a>').appendTo(action_);
+			kill_	= $('<a href="javascript:;"><img src="../core/ui/img/_img/media-delete.png" /></a>').appendTo(action_);
 			kill_.bind('click', function() {
 				galleryActionItemRemove(me.id_content);
 			});
@@ -164,7 +164,7 @@ function galleryView(data){
 
 				// Image generique d'un dossier
 				if(me.id_poster == 0){
-					img_ = $('<img src="/admin/core/ui/img/_img/gallery-folder.png" style="margin-top:16px"/>');
+					img_ = $('<img src="../core/ui/img/_img/gallery-folder.png" style="margin-top:16px"/>');
 				}
 				// Item qui represente le dossier (poster)
 				else{
@@ -173,12 +173,12 @@ function galleryView(data){
 				}
 
 				img_.appendTo(open_);
-				editer_ = $('<a href="gallery-album?id_content='+me.id_content+'"><img src="/admin/core/ui/img/_img/media-edit.png" /></a>');
+				editer_ = $('<a href="gallery-album?id_content='+me.id_content+'"><img src="../core/ui/img/_img/media-edit.png" /></a>');
 				editer_.appendTo(action_);
 
 				if(me.contentAlbumSyncFolder != ''){
 					sync_ = $('<a href="gallery-import?id_type='+me.id_type+'&id_album='+me.id_content+'&sync='+me.contentAlbumSyncFolder+'" />');
-					sync_.html('<img src="/admin/core/ui/img/_img/media-sync.png" />');	
+					sync_.html('<img src="../core/ui/img/_img/media-sync.png" />');	
 					sync_.appendTo(action_);
 				}
 
@@ -206,7 +206,7 @@ function galleryView(data){
 						}
 					});
 					
-					eye_ = $('<a class="toggPoster '+((me.is_poster) ? 'is_poster' : 'isnot_poster')+'"><img src="/admin/core/ui/img/_img/media-star.png" /></a>');
+					eye_ = $('<a class="toggPoster '+((me.is_poster) ? 'is_poster' : 'isnot_poster')+'"><img src="../core/ui/img/_img/media-star.png" /></a>');
 					eye_.appendTo(action_).bind('click', function() {
 						var r = (me.is_poster) ? false : true;
 						galleryActionTogglePoster(me.id_content, r);
@@ -218,7 +218,7 @@ function galleryView(data){
 				//
 				if(me.contentItemType == 'video'){
 					
-					img_ = $('<img src="/admin/core/ui/img/_img/media-file_quicktime.png" height="128" width="128" style="cursor:pointer;margin-top:'+Math.round((imageZone - 128) / 2)+'" />');
+					img_ = $('<img src="../core/ui/img/_img/media-file_quicktime.png" height="128" width="128" style="cursor:pointer;margin-top:'+Math.round((imageZone - 128) / 2)+'" />');
 					img_.appendTo(icone_).bind('click', function() {
 						galleryEditItem(me.id_content);
 					});
@@ -229,7 +229,7 @@ function galleryView(data){
 				//
 				if(me.contentItemType == 'audio'){
 					
-					img_ = $('<img src="/admin/core/ui/img/_img/media-file_audio.png" height="128" width="128" style="cursor:pointer;margin-top:'+Math.round((imageZone - 128) / 2)+'" />');
+					img_ = $('<img src="../core/ui/img/_img/media-file_audio.png" height="128" width="128" style="cursor:pointer;margin-top:'+Math.round((imageZone - 128) / 2)+'" />');
 					img_.appendTo(icone_).bind('click', function() {
 						galleryEditItem(me.id_content);
 					});
@@ -240,7 +240,7 @@ function galleryView(data){
 				//
 				if(me.contentItemType == 'application' && me.contentItemMime == 'pdf'){
 					
-					img_ = $('<img src="/admin/core/ui/img/_img/media-file_pdf.png" height="128" width="128" style="cursor:pointer;margin-top:'+Math.round((imageZone - 128) / 2)+'" />');
+					img_ = $('<img src="../core/ui/img/_img/media-file_pdf.png" height="128" width="128" style="cursor:pointer;margin-top:'+Math.round((imageZone - 128) / 2)+'" />');
 					img_.appendTo(icone_).bind('click', function() {
 						galleryEditItem(me.id_content);
 					});
@@ -251,18 +251,18 @@ function galleryView(data){
 				//
 				else{
 					
-					img_ = $('<img src="/admin/core/ui/img/_img/media-file_file.png" height="128" width="128" style="cursor:pointer;margin-top:'+Math.round((imageZone - 128) / 2)+'" />');
+					img_ = $('<img src="../core/ui/img/_img/media-file_file.png" height="128" width="128" style="cursor:pointer;margin-top:'+Math.round((imageZone - 128) / 2)+'" />');
 					img_.appendTo(icone_).bind('click', function() {
 						galleryEditItem(me.id_content);
 					});
 
 				}
 
-				editer_ = $('<a href="gallery-item?id_content='+me.id_content+'&id_type='+id_type+'"><img src="/admin/core/ui/img/_img/media-edit.png" /></a>');
+				editer_ = $('<a href="gallery-item?id_content='+me.id_content+'&id_type='+id_type+'"><img src="../core/ui/img/_img/media-edit.png" /></a>');
 				editer_.appendTo(action_);
 			}
 
-			eye_ = $('<a class="toggView '+((me.contentSee == '1') ? 'view' : 'notview')+'"><img src="/admin/core/ui/img/_img/media-eye.png" /></a>');
+			eye_ = $('<a class="toggView '+((me.contentSee == '1') ? 'view' : 'notview')+'"><img src="../core/ui/img/_img/media-eye.png" /></a>');
 			eye_.appendTo(action_).bind('click', function() {
 				galleryActionToggleView(me.id_content, this.hasClass('view'));
 			});
@@ -322,7 +322,7 @@ function galleryAddAlbum(){
 + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - */
 function galleryEditAlbum(){
 	if(id_album == '0'){
-		alert('Cet album ne peut pas etre modifié');
+		alert('Cet album ne peut pas etre modifiï¿½');
 	}else{
 		document.location='content.gallery.album.php?id_type='+id_type+'&id_content='+id_album;
 	}

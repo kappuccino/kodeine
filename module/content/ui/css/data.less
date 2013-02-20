@@ -1,5 +1,4 @@
-@import "../../../core/ui/css/0-mixins.less";
-@contentui : 'admin/content/ui';
+@import      '../../../core/ui/css/0-mixins.less';
 
 // occuper toute largeur !
 #app.data{
@@ -28,12 +27,12 @@
 		float: left; width: 2%; height: 11px;
 		visibility: hidden;
 		margin: 5px 0px 0px 0px;
-		background: url('/@{contentui}/img/item-handle.png') no-repeat 5px -11px;
+		background: url('../img/item-handle.png') no-repeat 5px -11px;
 		cursor: pointer;
 		
-		&:hover{ background: url('/@{contentui}/img/handle.png') no-repeat 5px 0px; }
+		&:hover{ background: url('../img/item-handle.png') no-repeat 5px 0px; }
 	}
-	
+
 	.spacer{ // Occupe la place de handle + spacer
 		float: left;
 		width: 4%; height: 1px;
@@ -43,7 +42,7 @@
 		float: left;
 		margin: 5px 0px 0px 0px;
 		width: 2%; height: 13px;
-		background: url('/@{contentui}/img/folder.png') no-repeat 0px -13px;
+		background: url('../img/folder.png') no-repeat 0px -13px;
 		cursor: pointer;
 	}
 	
@@ -80,7 +79,7 @@
 		background: rgb(245, 245, 245);
 		
 		&.closed {
-			.toggle{ background: url('/@{contentui}/img/folder.png') no-repeat 0px 0px; }
+			.toggle{ background: url('../img/folder.png') no-repeat 0px 0px; }
 			.form, .off, .spacer{display: none;}
 		}
 
@@ -179,7 +178,7 @@
 			&.notFound span.notfound{
 				float: right; width:16px; height: 16px;
 				margin-right: 10px;
-				background: url('/@{contentui}/img/alert-tiny.png') no-repeat 0px 0px;
+				background: url('../img/alert-tiny.png') no-repeat 0px 0px;
 				cursor: pointer;
 			}
 
@@ -209,31 +208,31 @@
 				.move{
 					float: left; width: 11px; height:11px;
 					margin-top: 2px;
-					background: url('/@{contentui}/img/item-handle.png') no-repeat 0px 0px;
+					background: url('../img/item-handle.png') no-repeat 0px 0px;
 					cursor: pointer;
-					&:hover{background: url('/@{contentui}/img/item-handle.png') no-repeat 0px -11px;}
+					&:hover{background: url('../img/item-handle.png') no-repeat 0px -11px;}
 				}
 				
 				.caption{
 					display: none;
 					float: left; width:15px; height: 15px;
 					margin:1px 0px 0px 2px;
-					background: url('/@{contentui}/img/caption-media.png') no-repeat 0px 0px;
+					background: url('../img/caption-media.png') no-repeat 0px 0px;
 					cursor: pointer;
 				}
 				
 				.info{
 					float: left; width:16px; height: 16px;
 					margin-left: 10px;
-					background: url('/@{contentui}/img/info-tiny.png') no-repeat 0px 0px;
+					background: url('../img/info-tiny.png') no-repeat 0px 0px;
 					cursor: pointer;
 				}
 				
 				.remove{
 					float: right; width:14px; height: 14px;
-					background: url('/@{contentui}/img/remove-media.png') no-repeat 0px 0px;
+					background: url('../img/remove-media.png') no-repeat 0px 0px;
 					cursor: pointer;
-					&:hover{background: url('/@{contentui}/img/remove-media.png') no-repeat 0px -14px;}
+					&:hover{background: url('../img/remove-media.png') no-repeat 0px -14px;}
 				}
 			}
 		}
@@ -311,7 +310,7 @@
 
 			.kill{
 					width: 10px; height: 10px;
-					background: url('/admin/content/ui/img/key-remove.png') no-repeat left bottom;
+					background: url('../img/key-remove.png') no-repeat left bottom;
 					text-indent: -5000px;
 					display: block; float: right;
 					margin: 1px 3px 0px 5px;
@@ -319,7 +318,7 @@
 				}
 			.edit{
 					width: 10px; height: 10px;
-					background: url('/admin/content/ui/img/key-edit.png') no-repeat left bottom;
+					background: url('../img/key-edit.png') no-repeat left bottom;
 					text-indent: -5000px;
 					display: block; float: right;
 					margin: 1px 5px 0px 10px;
@@ -442,19 +441,19 @@
 			span.handle{
 				width: 11px; height: 11px;
 				margin-left: 10px;
-				background: url('/@{contentui}/img/item-handle.png') no-repeat 0px -11px;
+				background: url('../img/item-handle.png') no-repeat 0px -11px;
 			}
 
 			span.edit{
 				width: 12px; height: 12px;
 				margin-left: 5px;
-				background: url('/@{contentui}/img/tab-edit.png') no-repeat 0px 0px;
+				background: url('../img/tab-edit.png') no-repeat 0px 0px;
 			}
 
 			span.remove{
 				width: 12px; height: 12px;
 				margin-left: 5px;
-				background: url('/@{contentui}/img/tab-remove.png') no-repeat 0px 0px;
+				background: url('../img/tab-remove.png') no-repeat 0px 0px;
 			}
 		}
 	}

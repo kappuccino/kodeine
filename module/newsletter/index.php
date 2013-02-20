@@ -1,13 +1,13 @@
 <?php
 	if(isset($_REQUEST['duplicate'])){
 		$app->apiLoad('newsletter')->newsletterDuplicate($_REQUEST['duplicate']);
-		header("Location: /admin/newsletter/index");
+		$app->go('./');
 	}else
 	if(sizeof($_POST['del']) > 0){
 		foreach($_POST['del'] as $e){
 			$app->apiLoad('newsletter')->newsletterRemove($e);
 		}
-		header("Location: /admin/newsletter/index");
+		$app->go('./');
 	}
 
 	// Filter
@@ -126,7 +126,7 @@
 </div>
 
 <?php include(COREINC.'/end.php'); ?>
-<script src="/admin/core/vendor/datatables/jquery.dataTables.js"></script>
+<script src="../core/vendor/datatables/jquery.dataTables.js"></script>
 <script>
 
 	function duplicate(id){

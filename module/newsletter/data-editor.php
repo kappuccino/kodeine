@@ -202,8 +202,8 @@ if($_REQUEST['id_newsletter'] != NULL){
 </div>
 
 <?php include(COREINC.'/end.php'); ?>
-<script src="/admin/core/vendor/tinymce/jscripts/tiny_mce/jquery.tinymce.js"></script>
-<script src="/admin/core/vendor/tinymce/jscripts/tiny_mce/tiny_mce.js"></script>
+<script src="../core/vendor/tinymce/jscripts/tiny_mce/jquery.tinymce.js"></script>
+<script src="../core/vendor/tinymce/jscripts/tiny_mce/tiny_mce.js"></script>
 <script>
     //    tinymce.PluginManager.load('name', 'url');
 
@@ -230,7 +230,7 @@ if($_REQUEST['id_newsletter'] != NULL){
         setup 								: function(ed) {
             ed.addButton('mybutton', {
                 title : 'Insérer des images',
-                image : '/admin/core/ui/img/_img/myb.gif',
+                image : '../core/ui/img/_img/myb.gif',
                 onclick : function() {
                     mediaPicker(ed.id, 'mce');
                 }

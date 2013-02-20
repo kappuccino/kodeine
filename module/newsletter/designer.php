@@ -43,8 +43,8 @@
         <script type="text/javascript">var id_newsletter = '.$id_newsletter.';</script>
 <script type="text/javascript" src="http://code.jquery.com/jquery-1.9.0.js"></script>
 <script type="text/javascript" src="http://code.jquery.com/ui/1.10.0/jquery-ui.js"></script>
-        <script type="text/javascript" src="/admin/core/vendor/tinymce/jscripts/tiny_mce/tiny_mce.js"></script>
-        <script src="/admin/core/ui/js/common.js" type="text/javascript"></script>
+        <script type="text/javascript" src="../core/vendor/tinymce/jscripts/tiny_mce/tiny_mce.js"></script>
+        <script src="../core/ui/js/common.js" type="text/javascript"></script>
 
         <script type="text/javascript" src="ui/js/designer.js"></script>
 

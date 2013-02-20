@@ -7,8 +7,8 @@
 	?></div>
 
 	<ul class="right">
-		<li><a href="/admin/core/login?logout">Se déconnecter</a></li>
-		<li><a href="/admin/core/support" target="_blank">Support</a></li>
+		<li><a href="../core/login?logout">Se déconnecter</a></li>
+		<li><a href="../core/support" target="_blank">Support</a></li>
 		<li><a href="/" target="_blank">Ouvrir le site</a></li>
 	</ul>
 
@@ -17,7 +17,7 @@
 <div id="nav"><div class="wrapper clearfix">
 	<ul><?php
 
-	echo '<li class="home"><a href="/admin/"><span>Home</span></a></li>';
+	echo '<li class="home"><a href="../"><span>Home</span></a></li>';
 
 	$mods = $app->moduleList();
 	foreach($mods as $e){
@@ -28,7 +28,7 @@
 				: '/'.$e['key'].'/';
 
 			$class = isMe($class) ? 'me' : NULL;			
-			echo '<li class="'.$class.'"><a href="/admin/'.$e['key'].'/">'.$e['name'].'</a></li>';
+			echo '<li class="'.$class.'"><a href="../'.$e['key'].'/">'.$e['name'].'</a></li>';
 		}
 	}
 

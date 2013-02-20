@@ -228,7 +228,7 @@
 		}
 	
 	?>
-	<table width="100%" border="0" cellpadding="0" cellspacing="2" class="gCarrousel">
+	<table width="100%" border="0" cellpadding="0" cellspacing="2" id="gCarrousel">
 		<tr>
 			<th width="25%" 	class="previous"><a href="<?php echo ($leftLink  != '') ? $leftLink  : '#'; ?>">&#8592; Album précédente</a></th>
 			<th align="center"	class="current"	>&#8593; <?php

@@ -102,18 +102,19 @@
 </div></div>	
 
 <?php include(COREINC.'/end.php'); ?>
-<script src="/admin/core/vendor/tinymce/jscripts/tiny_mce/jquery.tinymce.js"></script>
-<script src="/admin/core/vendor/tinymce/jscripts/tiny_mce/tiny_mce.js"></script>
-<script src="/admin/core/ui/js/common.js"></script>
+<script src="../core/vendor/tinymce/jscripts/tiny_mce/jquery.tinymce.js"></script>
+<script src="../core/vendor/tinymce/jscripts/tiny_mce/tiny_mce.js"></script>
+<script src="../core/ui/js/common.js"></script>
 
 <script>
-$(function() {
-	useEditor = true;
-	textarea = 'surveyDescription';
-	MceStyleFormats = [<?php echo @file_get_contents(USER.'/config/tinymceStyleFormats.php') ?>];
-	buildRichEditor();
-});
 
-</script>
+	$(function() {
+		useEditor = true;
+		textarea = 'surveyDescription';
+		MceStyleFormats = [<?php echo @file_get_contents(USER.'/config/tinymceStyleFormats.php') ?>];
+		buildRichEditor();
+	});
+
+	</script>
 
 </body></html>

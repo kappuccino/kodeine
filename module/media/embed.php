@@ -38,7 +38,6 @@
                 <?php if($app->userCan('media.upload')) { ?>
 				<a id="button-upload" class="btn btn-mini">Envoyer des fichiers</a>
                 <?php } ?>
-				<!--<a id="button-maintenance">Maintenance</a>-->
 				<a id="button-hidepanel" class="btn btn-mini">Masquer la zone</a>
 				<a id="button-pref" class="btn btn-mini">Préférence</a>
 			</div>

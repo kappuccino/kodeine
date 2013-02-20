@@ -971,7 +971,7 @@ function richtext() {
         setup : function(ed) {
             ed.addButton('mediapicker', {
                 title : 'Insérer des images',
-                image : '/admin/core/ui/img/_img/myb.gif',
+                image : '../core/ui/img/_img/myb.gif',
                 onclick : function() {
                     mediaPicker(ed.id, 'mce');
                 }

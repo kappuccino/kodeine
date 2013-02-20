@@ -35,7 +35,7 @@
 	}
 
 	if($module == '' && $url['path'] == '/admin/'){
-		$app->go('/admin/core/login');
+		$app->go('core/login');
 	}
 
 	if(!file_exists($folder) && $module != NULL) die('module not found');
@@ -65,7 +65,7 @@
 
 	if(file_exists($file.'.php')){
 		if(!$app->userIsAdmin && !in_array($url['path'], array('/admin/core/login', '/admin/core/helper/lost'))){
-			$app->go('/admin/core/login');
+			$app->go(KPROMPT.'/admin/core/login');
 		}else{
 			header("Content-Type: text/html; charset=UTF-8");
 			include($file.'.php');

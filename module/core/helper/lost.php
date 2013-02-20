@@ -53,14 +53,19 @@
 	require_once(APP.'/plugin/phpmailer/class.phpmailer.php');
 	$mail = new PHPMailer();
     $mail->CharSet = "UTF-8";
+
 	$mail->AddReplyTo("no-reply@".$_SERVER['HTTP_HOST']);
 	$mail->SetFrom("no-reply@".$_SERVER['HTTP_HOST']);
 	$mail->AddReplyTo("no-reply@".$_SERVER['HTTP_HOST']);
 	$mail->AddAddress($_POST['email']);
 
+	$url  = "http://".$_SERVER['HTTP_HOST'];
+	$url .= dirname(dirname($_SERVER['REQUEST_URI'])).'/login';
+	$url .= "?t=".$token;
+
 	$mail->IsHTML	= false;
-	$mail->Subject	= "[kodeine] Nouveau mot de passe";
-	$mail->Body		= "Pour regenerer votre mot de passe, cliquez ici\nhttp://".$_SERVER['HTTP_HOST']."/admin/core/login?t=".$token;
+	$mail->Subject	= _("[kodeine] Nouveau mot de passe");
+	$mail->Body		= sprintf(_("Pour regenerer votre mot de passe, cliquez ici %s"), $url);
 
 	if(!$mail->Send()) die(json_encode(array('success' => false, 'reason' => $mail->ErrorInfo)));
 

@@ -57,12 +57,12 @@ function doMediaAction(e, around){
 				
 				/* /!\ ATTENTION !! On passe l'id #contentMedia a ?field
 				 * mais le # fout en l'air la variable. Exploser le premier
-				 * char de la chaine, le remettre apr�s sur embed.php
+				 * char de la chaine, le remettre après sur embed.php
 				 */
 				
 				$(e+'-choosing').attr('src', '../media/embed?field='+e.substr(1, e.length));
 				$(this).html('Fermer le navigateur de media');
-				arrow.attr('src', '/admin/core/ui/img/_img/arrow-folder-open.png');
+				arrow.attr('src', '../core/ui/img/_img/arrow-folder-open.png');
 			}else{
 				
 				choosing.css('display', 'none');

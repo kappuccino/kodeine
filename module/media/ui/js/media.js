@@ -9,8 +9,8 @@ parentFolder	= '';			// Determine (si non vide) le nom du dossier parent
 panelOpened		= false;		// Status de iframe panel
 panelView		= '';			// Ce qui est dans le panel
 sliderMove		= false;
-myPath			= '/admin/';
-myMedia			= '/admin/media/ui/img';
+myPath			= '../';
+myMedia			= 'ui/img';
 isDrag			= false;
 hasHistory 		= false;
 scrollWidth		= '';
@@ -24,7 +24,6 @@ function init(){
 	if($('#button-folder').length > 0)		$('#button-folder').bind('click', folderView);
 	if($('#button-newdir').length > 0)		$('#button-newdir').bind('click', modalPromptDir);
 	if($('#button-pref').length > 0)		$('#button-pref').bind('click', modalPref);
-//	if($('button-maintenance')) $('button-maintenance').addEvent('click', panelMaintenance);
 	if($('#button-hidepanel').length > 0)	$('#button-hidepanel').bind('click', panelHide).css('display', 'none');
 	if($('#viewModeIcon').length > 0)		$('#viewModeIcon').bind('click', function(){ modeSet('icon'); });
 	if($('#viewModeList').length > 0)		$('#viewModeList').bind('click', function(){ modeSet('list'); });
@@ -183,7 +182,7 @@ function folderView(hash){
 	$('#path').html('Chargement en cours');
 
 	var remote = $.ajax({
-		url: '/admin/media/helper/folder',
+		url: 'helper/folder',
 		dataType: 'json',
 		data: {
 			'factor': factor,
@@ -394,7 +393,7 @@ function folderlElement(el, position){
 			});
 
 			var _nfo = $('<img src="'+myMedia+'/media-nano-info.png" title="Voir les infos techniques" />').appendTo(iconeaction).bind('click', function() {
-				window.open('/admin/media/helper/player-video?url='+el.url, '', '');
+				window.open('helper/player-video?url='+el.url, '', '');
 			});
 
 			var _poster = $('<img src="'+myMedia+'/media-flip.png" title="Gérer le poster de la video" />').appendTo(iconeaction).bind('click', function() {
@@ -888,13 +887,13 @@ function actionRename(position){
 /* + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - 
 + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - */
 function actionViewVideo(url){
-	window.open('/admin/media/helper/player-video?'+url, 'audio', '');
+	window.open('helper/player-video?'+url, 'audio', '');
 }
 
 /* + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - 
 + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - */
 function actionViewAudio(url){
-	window.open('/admin/media/helper/player-audio?url='+url, 'video', '');
+	window.open('helper/player-audio?url='+url, 'video', '');
 }
 
 /* + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - 
@@ -902,7 +901,7 @@ function actionViewAudio(url){
 function actionVignette(url){
 	
 	var remote = $.ajax({
-		url: '/admin/media/helper/action',
+		url: 'helper/action',
 		dataType : 'json',
 		data : {'action':'vignette', 'src':url}
 	}).done(function(r) {
@@ -993,17 +992,17 @@ function actionLock(p){
 	icoLock = e.find('.lock')[0];
 
 	var remote = $.ajax({
-		url : '/admin/media/helper/action',
+		url : 'helper/action',
 		data : {'action':'lock', 'src':collection[p].url},
 		dataType : 'json'
 	}).done(function(data) {
 		if(data.message == 'LOCK'){
 			e.addClass('isLocked');
-			icoLock.src = '/admin/media/ui/img/media-locked.png';
+			icoLock.src = 'ui/img/media-locked.png';
 		}else
 		if(data.message == 'UNLOCK'){
 			e.removeClass('isLocked');
-			icoLock.src = '/admin/media/ui/img/media-unlocked.png';
+			icoLock.src = 'ui/img/media-unlocked.png';
 		}
 	});
 }
@@ -1100,7 +1099,7 @@ function modalPref() {
 	$('#modal-pref').fadeTo(218, 1);
 	$('#fade-wall').fadeTo(218, 1);
 	$('#modal-pref iframe').remove();
-	var frame = $('<iframe src="/admin/media/pref-embed" />').appendTo('#modal-pref').css({
+	var frame = $('<iframe src="pref-embed" />').appendTo('#modal-pref').css({
 		'width' : '100%',
 		'height' : '100%'
 	});
@@ -1171,7 +1170,7 @@ function modalShowUpload() {
 			}
 					
 	        $('#file_upload').uploadify({
-				'swf'      : '/admin/media/ui/_uploadify/uploadify.swf?phpsessid='+phpsid,
+				'swf'      : 'ui/_uploadify/uploadify.swf?phpsessid='+phpsid,
 				'auto'     : true,
 				'formData' : {'f' : root + $('#path').attr('data-url')},
 	            'uploader' : 'helper/upload-action',
@@ -1234,17 +1233,6 @@ function modalHideUpload() {
 
 /* + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - 
 + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - */
-function panelMaintenance(){
-	if(panelView != 'maintenance'){
-		panelShow(40, 'maintenance');
-		$('panelFrame').src = myPath+'ressource/lib/media.maintenance.php';
-	}else{
-		panelHide();
-	}
-}
-
-/* + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - 
-+ - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - */
 function panelPref(){
 	if(panelView != 'pref'){
 		panelShow(80, 'pref');
@@ -1280,7 +1268,7 @@ function modalMetaData(url) {
 	/*$('#modal-meta').css('left', (($(window).width() - 600) / 2));
 	$('#modal-meta').css('top', (($(window).height() - 400) / 2));*/
 	
-	var frame = $('<iframe src="/admin/media/helper/metadata?url='+url+'" />');
+	var frame = $('<iframe src="helper/metadata?url='+url+'" />');
 	frame.appendTo('#modal-meta');
 	frame.css({
 		'border' : 'none',
@@ -1374,7 +1362,7 @@ function distantDownload(){
 	$('#distantUpload').addClass('doing');
 
 	var distant = $.ajax({
-		url : '/admin/media/helper/action',
+		url : 'helper/action',
 		type: 'post',
 		dataType : 'json',
 		data : {
@@ -1423,7 +1411,7 @@ var modal = {
 
 			// build flowplayer 3.x
 			if (this.ext == 'flv') {
-				$.getScript("/admin/core/vendor/flowplayer/flowplayer-3.2.11.min.js")
+				$.getScript("../core/vendor/flowplayer/flowplayer-3.2.11.min.js")
 					.done($.proxy(function(script, status) {
 						this.body = $('<a href="'+data.url+'" id="player" />').appendTo(this.frame);
 						this.show(data);
@@ -1432,7 +1420,7 @@ var modal = {
 
 			// build flowplayer 5.x
 			} else {
-				$.getScript("/admin/core/vendor/flowplayer/flowplayer.min.js")
+				$.getScript("../core/vendor/flowplayer/flowplayer.min.js")
 					.done($.proxy(function(script, status) {
 						this.body  = $('<div id="player" />').appendTo(this.frame);
 						this.video = $('<video src="'+data.url+'" />').appendTo(this.body);
@@ -1461,13 +1449,13 @@ var modal = {
 		if (data.type == 'video') {
 
 			if (this.ext == 'flv') {
-				flowplayer("player", "/admin/core/vendor/flowplayer/flowplayer-3.2.12.swf", {
+				flowplayer("player", "../core/vendor/flowplayer/flowplayer-3.2.12.swf", {
 					clip : {
 						autoPlay: true
 					}
 				});
 			} else {
-				this.player = $('#player').flowplayer({ swf: "/admin/core/vendor/flowplayer/flowplayer.swf" });
+				this.player = $('#player').flowplayer({ swf: "../core/vendor/flowplayer/flowplayer.swf" });
 				this.frame.css('height', 'auto');
 			}
 		}

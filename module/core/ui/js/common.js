@@ -157,10 +157,10 @@ function cschange(that) {
 /* + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - 
 + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - */
 function mediaPicker(id, back){
-	window.open('/admin/media/index?popMode=1&field='+id+'&method='+back, 'pick', 'height=900;width=800;');
+	window.open('../media/index?popMode=1&field='+id+'&method='+back, 'pick', 'height=900;width=800;');
 }
 function mediaOpen(method,field){
-	window.open('/admin/media/index?field='+field+'&method='+method, 'filemanager', 'scrollbars=yes,status=yes,resizable=yes,width=950,height=800');
+	window.open('../media/index?field='+field+'&method='+method, 'filemanager', 'scrollbars=yes,status=yes,resizable=yes,width=950,height=800');
 }
 function insertRichEditor(editor_id, code){
 	tinyMCE.execInstanceCommand(editor_id, "mceInsertContent", false, code, true);
@@ -173,7 +173,7 @@ function filterToggle(mod){
 	$('.quickForm').css('display', ((open) ? '' : 'none'));
 
 	$.ajax({
-		url: '/admin/core/helper/filter-open',
+		url: '../core/helper/filter-open',
 		data: {
 			mod: mod,
 			open: open
@@ -344,7 +344,7 @@ function buildRichEditor(){
 		theme_advanced_resizing				: false,
 	
 		// Example content CSS (should be your site CSS)
-		content_css		: '/admin/core/helper/tinymce',
+		content_css		: '../core/helper/tinymce',
 
 		// Custom FORMAT
 		style_formats 	: MceStyleFormats,
@@ -358,7 +358,7 @@ function buildRichEditor(){
 		setup : function(ed) {
 		    ed.addButton('mybutton', {
 		        title : 'Insérer des images',
-		        image : '/admin/core/ui/img/_img/myb.gif',
+		        image : '../core/ui/img/_img/myb.gif',
 		        onclick : function() {
 					mediaPicker(ed.id, 'mce');
 		        }

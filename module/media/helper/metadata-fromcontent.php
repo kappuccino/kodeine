@@ -57,7 +57,7 @@
 
 	?>
 
-	<form method="post" action="helper/metadata-fromcontent" id="meta" name="meta">
+	<form method="post" action="metadata-fromcontent" id="meta" name="meta">
 
 		<input type="hidden" name="action" value="sql" />
 		<input type="hidden" name="list" value="<?php echo $_REQUEST['list'] ?>" />

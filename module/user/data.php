@@ -149,9 +149,9 @@
 <html lang="fr">
 <head>
 	<?php include(COREINC.'/head.php'); ?>
-	<link rel="stylesheet" type="text/css" href="/admin/content/ui/css/data.css" />
-	<link rel="stylesheet" type="text/css" href="/admin/content/ui/css/dropdowns.css" />
-	<link rel="stylesheet" type="text/css" href="/admin/core/vendor/datepicker/css/datepicker.css" />
+	<link rel="stylesheet" type="text/css" href="../content/ui/css/data.css" />
+	<link rel="stylesheet" type="text/css" href="../content/ui/css/dropdowns.css" />
+	<link rel="stylesheet" type="text/css" href="../core/vendor/datepicker/css/datepicker.css" />
 </head>
 <body>
 
@@ -162,7 +162,7 @@
 
 <div class="inject-subnav-right hide">
 	<li><a href="data" class="btn btn-small">Nouvel utilisateur</a></li>
-    <li><a href="/admin/user/" class="btn btn-small"><i class="icon-list"></i> Utilisateurs</a></li>
+    <li><a href="../user/" class="btn btn-small"><i class="icon-list"></i> Utilisateurs</a></li>
 	<li><a href="#" onclick="$('#data').submit();" class="btn btn-small btn-success">Enregistrer</a></li>
 </div>
 
@@ -352,10 +352,10 @@
 </div>
 
 <?php include(COREINC.'/end.php'); ?>
-<script src="/admin/core/vendor/tinymce/jscripts/tiny_mce/jquery.tinymce.js"></script>
-<script src="/admin/core/vendor/tinymce/jscripts/tiny_mce/tiny_mce.js"></script>
-<script src="/admin/content/ui/js/content.js"></script>
-<script type="text/javascript" src="/admin/core/vendor/datepicker/js/bootstrap-datepicker.js" charset="UTF-8"></script>
+<script src="../core/vendor/tinymce/jscripts/tiny_mce/jquery.tinymce.js"></script>
+<script src="../core/vendor/tinymce/jscripts/tiny_mce/tiny_mce.js"></script>
+<script src="../content/ui/js/content.js"></script>
+<script type="text/javascript" src="../core/vendor/datepicker/js/bootstrap-datepicker.js" charset="UTF-8"></script>
 <script type="text/javascript">
 
 	doMove  		= false;
