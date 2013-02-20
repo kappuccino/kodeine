@@ -1,7 +1,6 @@
 <?php
 
 	if(!defined('COREINC')) die('Direct access not allowed');
-	$i18n = $app->apiLoad('coreI18n')->languageSet('fr')->load('category');
 
 	if(sizeof($_POST['del']) > 0){
 		foreach($_POST['del'] as $e){

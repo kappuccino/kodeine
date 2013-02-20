@@ -1,7 +1,6 @@
 <?php
 
 	if(!defined('COREINC')) die('Direct access not allowed');
-	$i18n = $app->apiLoad('coreI18n')->languageSet('fr')->load('config');
 
 	function xmlList($app){
 
@@ -67,11 +66,10 @@
 ?></header>
 
 <div class="inject-subnav-right hide">
-	<li><a onclick="$('#data').submit();" class="btn btn-small btn-success"><?php echo _('Importer les pays sélectionés') ?></a></li>
+	<li><a onclick="$('#data').submit();" class="btn btn-small btn-success"><?php echo _('Import seleced countries') ?></a></li>
 </div>
 
 <div id="app"><div class="wrapper">
-	<p><?php echo _('Choisissez dans la liste ci-dessous les langues qui seront directement importées dans votre configuration') ?></p>
 
 	<form method="post" action="language-import" id="data">
 	<table width="100%" border="0" cellpadding="0" cellspacing="0" class="listing sortable__">
@@ -79,7 +77,7 @@
 			<tr>
 				<th width="30"></th>
 				<th width="100"><?php echo _('ISO') ?></th>
-				<th width="300"><?php echo _('Pays') ?></th>
+				<th width="300"><?php echo _('Country') ?></th>
 				<th width="100"><?php echo _('Locale') ?></th>
 				<th><?php echo _('Langue') ?></th>
 			</tr>

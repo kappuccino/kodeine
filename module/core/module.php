@@ -1,7 +1,6 @@
 <?php
 
 	if(!defined('COREINC')) die('Direct access not allowed');
-	$i18n = $app->apiLoad('coreI18n')->languageSet('fr')->load('core');
 
 	$modules = $app->moduleList(array(
 		'dependencies'	=> true,
@@ -22,7 +21,7 @@
 
 <div class="inject-subnav-right hide">
 	<li>
-		<a class="btn btn-small btn-success" onclick="checkRepo()"><?php echo $i18n->_('Vérifier les mise à jour') ?></a>
+		<a class="btn btn-small btn-success" onclick="checkRepo()"><?php echo _('Vérifier les mise à jour') ?></a>
 	</li>
 </div>
 
@@ -32,12 +31,12 @@
 		<thead>
 			<tr>
 				<th>Module</th>
-				<th width="100"><?php echo $i18n->_('Installé') ?></th>
-				<th width="100"><?php echo $i18n->_('Activé') ?></th>
-				<th width="100"><?php echo $i18n->_('Patch') ?></th>
+				<th width="100"><?php echo _('Installé') ?></th>
+				<th width="100"><?php echo _('Activé') ?></th>
+				<th width="100"><?php echo _('Patch') ?></th>
 
-				<th width="80"><?php echo $i18n->_('Version') ?></th>
-				<th width="80"><?php echo $i18n->_('Dernière') ?></th>
+				<th width="80"><?php echo _('Version') ?></th>
+				<th width="80"><?php echo _('Dernière') ?></th>
 				<th width="100"></th>
 			</tr>
 		</thead>
@@ -52,7 +51,7 @@
 				<td><?php
 					if($e['install'] == 'YES' && ($e['key'] != 'user' OR $e['key'] != 'core')){
 						echo ($e['config']['installed'] != 'YES')
-							? '<a onclick="install(this, \''.$e['key'].'\', '.$core.')" class="btn btn-small btn-install">'.$i18n->_('Installer').'</a>'
+							? '<a onclick="install(this, \''.$e['key'].'\', '.$core.')" class="btn btn-small btn-install">'._('Installer').'</a>'
 							: '<i class="icon-ok"></i>';
 					}
 				?></td>
@@ -67,10 +66,10 @@
 				<td><?php
 
 					if($e['needPatch']){
-						echo '<a onclick="patch(this, \''.$e['key'].'\', false, '.$core.')" class="btn btn-small btn-patch">'.$i18n->_('Patch').'</a>';
+						echo '<a onclick="patch(this, \''.$e['key'].'\', false, '.$core.')" class="btn btn-small btn-patch">'._('Patch').'</a>';
 					}else
 					if($e['rePatch']){
-						echo '<a onclick="patch(this, \''.$e['key'].'\', true, '.$core.')" class="btn btn-small btn-patch">'.$i18n->_('rePatch').'</a>';
+						echo '<a onclick="patch(this, \''.$e['key'].'\', true, '.$core.')" class="btn btn-small btn-patch">'._('rePatch').'</a>';
 					}
 				?></td>
 
@@ -92,10 +91,10 @@
 				?></td>
 				<td><?php
 					if($d['needPatch'] == 'YES'){
-						echo '<a onclick="patch(this, \''.$d['key'].'\', false, '.$core.')" class="btn btn-small btn-patch">'.$i18n->_('Patch').'</a>';
+						echo '<a onclick="patch(this, \''.$d['key'].'\', false, '.$core.')" class="btn btn-small btn-patch">'._('Patch').'</a>';
 					}else
 					if($e['rePatch']){
-						echo '<a onclick="patch(this, \''.$d['key'].'\', true, '.$core.')" class="btn btn-small btn-patch">'.$i18n->_('rePatch').'</a>';
+						echo '<a onclick="patch(this, \''.$d['key'].'\', true, '.$core.')" class="btn btn-small btn-patch">'._('rePatch').'</a>';
 					}
 				?></td>
 

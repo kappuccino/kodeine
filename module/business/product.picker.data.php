@@ -1,9 +1,9 @@
 <?php
 
-	$i18n = $app->apiLoad('coreI18n')->languageSet('fr')->load('business');
+	if(!defined('COREINC')) die('Direct access not allowed');
 
-    $language   = ($_REQUEST['language'] != NULL) ? $_REQUEST['language'] :  'fr';
-    $languages  = $app->countryGet(array('is_used' => 1));
+	$language  = ($_REQUEST['language'] != NULL) ? $_REQUEST['language'] :  'fr';
+    $languages = $app->countryGet(array('is_used' => 1));
 
     if($_POST['action']){
         $do = true;

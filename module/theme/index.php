@@ -1,7 +1,6 @@
 <?php
 
 	if(!defined('COREINC')) die('Direct access not allowed');
-	$i18n = $app->apiLoad('coreI18n')->languageSet('fr')->load('theme');
 
 	// Remove
 	if(sizeof($_POST['del']) > 0){
@@ -60,12 +59,12 @@
 ?></header>
 
 <div class="inject-subnav-right hide">
-	<li><a href="./" class="btn btn-small"><?php echo $i18n->_('Annuler') ?></a></li>
+	<li><a href="./" class="btn btn-small"><?php echo _('Cancel') ?></a></li>
 	<li>
 	<?php if(isset($_REQUEST['dofield'])){ ?>
-		<a onclick="sauver();" class="btn btn-mini"><?php echo $i18n->_('Enregistrer') ?></a>
+		<a onclick="sauver();" class="btn btn-mini"><?php echo _('Save') ?></a>
 	<?php }else{ ?>
-		<a onclick="$('#data').submit()" class="btn btn-small btn-success"><?php echo $i18n->_('Enregistrer') ?></a>
+		<a onclick="$('#data').submit()" class="btn btn-small btn-success"><?php echo _('Save') ?></a>
 	<?php } ?>
 	</li>
 </div>
@@ -77,8 +76,8 @@
 			<thead>
 				<tr>
 					<th width="30"></th>
-					<th><?php echo $i18n->_('Nom') ?></th>
-					<th width="120"><?php echo $i18n->_('Champs') ?></th>
+					<th><?php echo _('Name') ?></th>
+					<th width="120"><?php echo _('Fields') ?></th>
 				</tr>
 			</thead>
 			<tbody>
@@ -86,14 +85,14 @@
 				<tr class="<?php if($e['id_theme'] == $_REQUEST['id_theme']) echo "selected" ?>">
 					<td><input type="checkbox" name="del[]" value="<?php echo $e['id_theme'] ?>" class="del" /></td>
 					<td><a href="./?id_theme=<?php echo $e['id_theme'] ?>"><?php echo $e['themeName'] ?></a></td>
-					<td><a href="./?id_theme=<?php echo $e['id_theme'] ?>&dofield"><?php echo $i18n->_('Configurer') ?></a></td>
+					<td><a href="./?id_theme=<?php echo $e['id_theme'] ?>&dofield"><?php echo _('Configure') ?></a></td>
 				</tr>
 				<?php } ?>
 			</tbody>
 			<tfoot>
 				<tr>
 					<td width="25"><input type="checkbox" onchange="$('.listing .del').attr('checked', this.checked);" /></td>
-					<td colspan="2"><a href="#" onClick="applyRemove();" class="btn btn-mini"><?php echo $i18n->_('Supprimer la selection') ?></a> </td>
+					<td colspan="2"><a href="#" onClick="applyRemove();" class="btn btn-mini"><?php echo _('Remove selected items') ?></a> </td>
 				</tr>
 			</tfoot>
 		</table>
@@ -114,11 +113,11 @@
 
 			<table cellpadding="0" cellspacing="0" border="0" class="form">
 				<tr>
-					<td width="75"><?php echo $i18n->_('Nom') ?></td>
+					<td width="75"><?php echo _('Name') ?></td>
 					<td><input type="text" name="themeName" value="<?php echo $app->formValue($data['themeName'], $_POST['themeName']); ?>" /></td>
 				</tr>
 				<tr>
-					<td><?php echo $i18n->_('Dossier') ?></td>
+					<td><?php echo _('Folder') ?></td>
 					<td><select name="themeFolder"><?php
 						$folders = $app->fsFolder(USER.'/theme', '', FLAT);
 						foreach($folders as $e){
@@ -132,7 +131,7 @@
 		
 		<?php }else{ ?>	
 
-			<b><?php echo $i18n->_('Champs utilisés') ?></b>
+			<b><?php echo _('Used fields') ?></b>
 			<ul id="la" class="myList clearfix"><?php
 				if(sizeof($var) > 0){
 					foreach($var as $e){ ?>
@@ -141,12 +140,12 @@
 				}
 			?></ul>
 
-			<div class="mar-top-20"><b><?php echo $i18n->_('Autre champs utilisable') ?></b></div>
+			<div class="mar-top-20"><b><?php echo _('Other fields enabled') ?></b></div>
 			<ul id="lb" class="myList clearfix"><?php
 				if(sizeof($rest) > 0){
 					foreach($rest as $e){ ?>
 					<li  id="<?php echo $e['id_field'] ?>"><?php echo $e['fieldName'] ?></li>
-					<?php }
+				<?php }
 				}
 			?></ul>
 
@@ -158,6 +157,6 @@
 </div></div></div>
 
 <?php include(COREINC.'/end.php'); ?>
-<script src="/admin/theme/ui/js/theme.js"></script>
+<script src="ui/js/theme.js"></script>
 
 </body></html>

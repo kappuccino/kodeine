@@ -317,7 +317,7 @@
 <script>
 
     function apply(){
-        if(confirm("<?php echo addslashes($i18n->_('SUPPRIMER ?')) ?>")) $('#listing').submit();
+        if(confirm("<?php echo addslashes(_('SUPPRIMER ?')) ?>")) $('#listing').submit();
     }
 </script>
 

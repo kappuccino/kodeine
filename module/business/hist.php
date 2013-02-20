@@ -1,6 +1,6 @@
 <?php
 
-	$i18n = $app->apiLoad('coreI18n')->languageSet('fr')->load('business');
+	if(!defined('COREINC')) die('Direct access not allowed');
 
 	# Filter
 	if(isset($_GET['cf'])){

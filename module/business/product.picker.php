@@ -1,8 +1,8 @@
 <?php
 
-	$i18n = $app->apiLoad('coreI18n')->languageSet('fr')->load('business');
+	if(!defined('COREINC')) die('Direct access not allowed');
 
-    if($_REQUEST['id_type'] == NULL){
+	if($_REQUEST['id_type'] == NULL){
         $type = $app->apiLoad('type')->typeGet(array('profile' => true));
         foreach($type as $e){
             if($e['is_business']){

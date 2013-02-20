@@ -1,7 +1,6 @@
 <?php
 
 	if(!defined('COREINC')) die('Direct access not allowed');
-	$i18n = $app->apiLoad('coreI18n')->languageSet('fr')->load('config');
 
 	# Save
 	#
@@ -43,8 +42,8 @@
 <body>
 
 <div class="inject-subnav-right hide">
-	<li><a href="./" class="btn btn-small"><?php echo _('Annuler') ?></a></li>
-	<li><a onclick="$('#data').submit();" class="btn btn-small btn-success"><?php echo _('Enregistrer') ?></a></li>
+	<li><a href="./" class="btn btn-small"><?php echo _('Cancel') ?></a></li>
+	<li><a onclick="$('#data').submit();" class="btn btn-small btn-success"><?php echo _('Save') ?></a></li>
 </div>
 
 <header><?php

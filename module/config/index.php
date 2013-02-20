@@ -53,9 +53,9 @@
 
 	# Data
 	#
-	$db 	= $app->dbMulti("SELECT * FROM k_config WHERE configModule='boot'");
-	$ext 	= $app->dbMulti("SELECT * FROM k_config WHERE configModule='bootExt'");
-	$dom	= array();
+	$db  = $app->dbMulti("SELECT * FROM k_config WHERE configModule='boot'");
+	$ext = $app->dbMulti("SELECT * FROM k_config WHERE configModule='bootExt'");
+	$dom = array();
 	foreach($db as $e){
 		if(preg_match("#^domain:#", $e['configName'])){
 			$dom[] = json_decode(stripslashes($e['configValue']), true);
@@ -68,7 +68,7 @@
 <html lang="fr">
 <head>
 	<?php include(COREINC.'/head.php'); ?>
-    <link rel="stylesheet" type="text/css" href="/admin/content/ui/css/data.css" />
+    <link rel="stylesheet" type="text/css" href="../content/ui/css/data.css" />
 </head>
 <body>
 
@@ -78,13 +78,13 @@
 ?></header>
 
 <div class="inject-subnav-right hide">
-	<li><a href="./" class="btn btn-small"><?php echo _('Annuler') ?></a></li>
-	<li><a onclick="$('#data').submit()" class="btn btn-small btn-success"><?php echo _('Valider'); ?></a></li>
+	<li><a href="./" class="btn btn-small"><?php echo _('Cancel') ?></a></li>
+	<li><a onclick="$('#data').submit()" class="btn btn-small btn-success"><?php echo _('Save'); ?></a></li>
 </div>
 
 <div id="app"><div class="wrapper">
 
-	<?php if(isset($_GET['saved'])) echo '<div class="message messageValid">'.$i18n->_('Mise à jour des paramètre de configuration').'</div>'; ?>
+	<?php if(isset($_GET['saved'])) echo '<div class="message messageValid">'._('Configuration updated').'</div>'; ?>
 
 	<form action="./" method="post" id="data">
 	
@@ -93,40 +93,39 @@
 		<table width="100%" border="0" cellpadding="0" cellspacing="0" class="listing">
 			<thead>
 				<tr>
-					<th width="25%"><?php echo _('Paramètres') ?></th>
-					<th width="25%"><?php echo _('Valeur') ?></th>
-					<th width="50%"><?php echo _('Explication') ?></th>
+					<th width="25%"><?php echo _('Parameter') ?></th>
+					<th width="25%"><?php echo _('Value') ?></th>
+					<th width="50%"><?php echo _('Explanation') ?></th>
 				</tr>
 			</thead>
 			<tbody>
 				<tr>
-					<td><?php echo _('Destinataire du mail') ?></td>
+					<td><?php echo _('Mail recipient') ?></td>
 					<td><input type="text" name="configMailTo" value="<?php echo $app->formValue($data['configMailTo'], $_POST['configMailTo']) ?>" style="width:80%;" /></td>
 					<td><?php echo _('Destinataire des mails expédiés depuis le site') ?></td>
 				</tr>
 				<tr>
-					<td><?php echo _('Copie') ?></td>
+					<td><?php echo _('Copy') ?></td>
 					<td><input type="text" name="configMailCc" value="<?php echo $app->formValue($data['configMailCc'], $_POST['configMailCc']) ?>" style="width:80%;" /></td>
 					<td><?php echo _('Destinataire en copie des mails expédiés depuis le site') ?></td>
 				</tr>
 				<tr>
-					<td><?php echo _('Copie cachée') ?></td>
+					<td><?php echo _('Blind copy') ?></td>
 					<td><input type="text" name="configMailBcc" value="<?php echo $app->formValue($data['configMailBcc'], $_POST['configMailBcc']) ?>" style="width:80%;" /></td>
 					<td><?php echo _('Destinataire invisible des mails expédiés depuis le site') ?></td>
 				</tr>
 				<tr>
 					<td><?php echo _('Theme') ?></td>
 					<td><select name="defaultIdTheme"><?php
-						$theme = $app->dbMulti("SELECT * FROM k_theme");
-						foreach($theme as $e){
+						foreach($app->dbMulti("SELECT * FROM k_theme") as $e){
 							$sel = ($e['id_theme'] == $app->formValue($data['defaultIdTheme'], $_POST['defaultIdTheme'])) ? ' selected' : NULL;
 							echo "<option value=\"".$e['id_theme']."\"".$sel.">".$e['themeName']."</option>";
 						}
 					?></select></td>
-					<td><?php echo _('Le theme qui est choisi par défaut (il peut être changé par le chapitre et/ou le module)') ?></td>
+					<td><?php echo _('Default theme — Could be changed by chapters and/or modules') ?></td>
 				</tr>
 				<tr>
-					<td><?php echo _('Chapitre') ?></td>
+					<td><?php echo _('Chapter') ?></td>
 					<td><?php echo
 						$app->apiLoad('chapter')->chapterSelector(array(
 							'value'		=> $app->formValue($data['defaultIdChapter'], $_POST['defaultIdChapter']),
@@ -135,10 +134,10 @@
 							'one'		=> true
 						))
 					?></td>
-					<td><?php echo _('Le chapitre par défaut qui est utilisé à l\'ouverture du site') ?></td>
+					<td><?php echo _('Default chapter for homepage') ?></td>
 				</tr>
 				<tr>
-					<td><?php echo _('Langue') ?></td>
+					<td><?php echo _('Language') ?></td>
 					<td><select name="defaultLanguage"><?php
 						$language = $app->countryGet();
 						foreach($language as $e){
@@ -146,10 +145,10 @@
 							echo "<option value=\"".$e['iso']."\"".$sel.">".$e['countryLanguage']."</option>";
 						}
 					?></select></td>
-					<td><?php echo _('La langue qui est choisie par défaut à l\'ouverture du site') ?></td>
+					<td><?php echo _('Default language if not specified in the URL') ?></td>
 				</tr>
 				<tr>
-					<td><?php echo _('Format de la date') ?></td>
+					<td><?php echo _('Date format') ?></td>
 					<td><select name="dateFormat"><?php
 						$dates = array(
 							'%A %e %B %G',		// jeudi 13 fevrier 2008
@@ -165,15 +164,16 @@
 							'%b %G', 			// FEV.-06
 							'%e %b %G'  		// 9 Fev 2006
 						);
+
 						foreach($dates as $e){
 							$sel = ($e == $app->formValue($data['dateFormat'], $_POST['dateFormat'])) ? ' selected' : NULL;
 							echo "<option value=\"".$e."\"".$sel.">".strftime($e)."</option>";
 						}
 					?></select></td>
-					<td><?php echo _('Les dates seront formatées de cette manière') ?></td>
+					<td><?php echo _('Date format') ?></td>
 				</tr>
 				<tr>
-					<td><?php echo _('Format de l\'heure') ?></td>
+					<td><?php echo _('Time format') ?></td>
 					<td><select name="timeFormat"><?php
 						$times = array(
 							'%R',				// 14:10
@@ -185,28 +185,29 @@
 							echo "<option value=\"".$e."\"".$sel.">".strftime($e)."</option>";
 						}
 					?></select></td>
-					<td><?php echo _('Les heures seront formatées de cette manière') ?></td>
+					<td><?php echo _('Change time format') ?></td>
 				</tr>
 				<tr>
 					<td><?php echo _('Google Analytics') ?></td>
 					<td><input type="text" name="defautAnalytic" value="<?php echo $app->formValue($data['defautAnalytic'], $_POST['defautAnalytic']) ?>" style="width:80%;" /></td>
-					<td><?php echo _('ID Numerique du compte Google Analytics (UA-YYYYYYY-XX)') ?></td>
+					<td><?php echo _('Google Analytics ID (UA-YYYYYYY-XX)') ?></td>
 				</tr>
 			</tbody>
 		</table>
 	
 		<div class="mar-top-20"><?php
-			echo _('Il est possible de changer ponctuellement les paramères par défaut pour certaines nom de domaine<br />
-			Note, vous pouvez utiliser des expressions regulières pour définir un domaine. Exemple (*)?(.)?kappuccino.org pour satisfaire www.kappuccino.org et kappuccino.org');
+			echo _('You can change default values for a specific domain name.');
+			echo ' &nbsp; &nbsp; ';
+			echo _('Note: you can use regular expression to define a domaine name. (www\.)?kappuccino.org to match the main domain and www sub domaine');
 		?></div>
 
 		<table width="100%" border="0" cellpadding="0" cellspacing="0" class="listing mar-top-10">
 			<thead>
 				<tr>
-					<th width="20%"><?php echo _('Nom de domaine') ?></th>
-					<th width="20%"><?php echo _('Chapitre') ?></th>
-					<th width="20%"><?php echo _('Thême') ?></th>
-					<th width="20%"><?php echo _('Langue') ?></th>
+					<th width="20%"><?php echo _('Domain name') ?></th>
+					<th width="20%"><?php echo _('Chapter') ?></th>
+					<th width="20%"><?php echo _('Theme') ?></th>
+					<th width="20%"><?php echo _('Language') ?></th>
 					<th width="20%"><?php echo _('Google Analytics') ?></th>
 				</tr>
 			</thead>
@@ -267,7 +268,7 @@
 		<table cellpadding="0" cellspacing="0" border="0" class="listing form mar-top-20">
 			<thead>
 				<tr>
-					<th colspan="2"><?php echo _('Paramètres complémentaires') ?></th>
+					<th colspan="2"><?php echo _('More parameters') ?></th>
 				</tr>
 			</thead>
 			<tbody><?php
@@ -318,6 +319,4 @@
 </div></div>
 
 <?php include(COREINC.'/end.php'); ?>
-
-</body>
-</html>
+</body></html>

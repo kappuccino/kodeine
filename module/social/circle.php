@@ -1,7 +1,6 @@
 <?php
 
 	if(!defined('COREINC')) die('Direct access not allowed');
-	$i18n = $app->apiLoad('coreI18n')->languageSet('fr')->load('social');
 
 	if(sizeof($_POST['remove']) > 0){
 		foreach($_POST['remove'] as $e){

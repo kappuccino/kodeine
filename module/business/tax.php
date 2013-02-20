@@ -1,8 +1,8 @@
 <?php
 
-	$i18n = $app->apiLoad('coreI18n')->languageSet('fr')->load('business');
+	if(!defined('COREINC')) die('Direct access not allowed');
 
-    // Remove
+	// Remove
     if(sizeof($_POST['del']) > 0){
         foreach($_POST['del'] as $e){
             $app->dbQuery("DELETE FROM k_businesstax WHERE id_tax=".$e);

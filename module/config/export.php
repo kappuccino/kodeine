@@ -1,7 +1,6 @@
 <?php
 
 	if(!defined('COREINC')) die('Direct access not allowed');
-	$i18n = $app->apiLoad('coreI18n')->languageSet('fr')->load('config');
 
 	if(isset($_GET['dw'])){
 		$file = DUMPDIR.'/'.$_GET['dw'];
@@ -87,7 +86,7 @@
 	<?php if(isset($_GET['dump'])) echo "<pre>mysqldump... ended (".$r.")\n</pre>"; ?>
 
 	<div class="alert"><?php
-		echo _('Le dossier /user/dump est utilisé pour sauvegarder les exports de votre base de données, voici son contenu.');
+		echo _('Folder /user/dump is used to backup database exoprt files.');
 	?></div>
 
     <form action="export" method="post" id="listing">
@@ -97,37 +96,33 @@
                 <th width="30" class="icone"><i class="icon-remove icon-white"></th>
                 <th width="30" class="icone"><i class="icon-hdd icon-white"></th>
                 <th width="200"><?php echo _('Date') ?></th>
-                <th width="200"><?php echo _('Poids') ?>'</th>
+                <th width="200"><?php echo _('Size') ?></th>
                 <th><?php echo _('Infos') ?></th>
             </tr>
         </thead>
 	    <tbody><?php
 
 			if(sizeof($files) > 0){
+				$chkdel = 0;
 				foreach($files as $e){
 					$chkdel++;
 
 					$t += filesize($e);
 					preg_match('#export-([0-9]{1,})(-(patch))?.sql#', basename($e), $m);
+					$more = ($m[3] == 'patch') ? _('Automatic backup (patch)') : _('User export');
 
-					$more = ($m[3] == 'patch')
-						? $i18n->_('Point de sauvegarde automatique (patch)')
-						: $i18n->_('Sauvegarde effectuée manuellement par l\'utilisateur');
-
-					echo "<tr>";
-					echo "<td class=\"check-red\"><input type=\"checkbox\" name=\"del[]\" value=\"".basename($e)."\" class=\"cb chk\" id=\"chkdel".$chkdel."\" /></td>";
-					echo "<td><a href=\"export?dw=".basename($e)."\"><i class=\"icon-hdd\"></td>";
-					echo "<td><a href=\"#\" onClick=\"con('".basename($e)."');\">".date("Y-m-d H:i:s", $m[1])."</a></td>";
-					echo "<td>".round((filesize($e) / 1024 / 1024), 2)." Mo</td>";
-					echo "<td>".$more."</td>";
-					echo "</tr>";
+					echo '<tr>';
+					echo '<td class="check-red"><input type="checkbox" name="del[]" value="'.basename($e).'" class="cb chk" id="chkdel'.$chkdel.'" /></td>';
+					echo '<td><a href="export?dw='.basename($e).'"><i class="icon-hdd"></td>';
+					echo '<td><a href="#" onClick="con("'.basename($e).'");\">'.date("Y-m-d H:i:s", $m[1]).'</a></td>';
+					echo '<td>'.round((filesize($e) / 1024 / 1024), 2).' Mo</td>';
+					echo '<td>'.$more.'</td>';
+					echo '</tr>';
 				}
 			}else{
 				echo
-				"<tr>".
-				"<td colspan=\"5\" style=\"padding:40px 0px 40px 0px; text-align:center; font-weight:bold\">".
-					$i18n->_('Il n\'y a aucun backup de base de données').
-				"</td>".
+				'<tr>'.
+					'<td colspan="5" style="padding:40px 0px 40px 0px; text-align:center; font-weight:bold">'._('No backup').'</td>'.
 				"</tr>";
 			}
 
@@ -136,7 +131,7 @@
             <tfoot>
 	            <tr>
 	                <td class="check-red"><input type="checkbox" class="chk" id="delall" onchange="cbchange($(this));" /></td>
-	                <td colspan="2"><a href="#" onClick="apply();" class="btn btn-mini"><span><?php echo _('Supprimer la selection') ?></span></a></td>
+	                <td colspan="2"><a href="#" onClick="apply();" class="btn btn-mini"><span><?php echo _('Remove selected files') ?></span></a></td>
 	                <td><?php echo round(($t / 1024 / 1024), 2) ?> Mo</td>
 	                <td></td>
 	            </tr>
@@ -146,7 +141,7 @@
 	</form>
 
     <div style="margin-top:20px;">
-        <a href="export?dump" class="btn"><?php echo _('Sauvegarder la base de données') ?></a>
+        <a href="export?dump" class="btn"><?php echo _('Backup the database now') ?></a>
     </div>
 
 </div></div>
@@ -156,13 +151,13 @@
 <script>
 
     function con(f){
-        if(confirm("<?php echo addslashes($i18n->_('Voulez-vous rellement recharger la base de données a cette date ?\n\n\nCETTE FONCTION EST A EXECUTER AVEC UNE PRUDENCE EXTREME !!!')) ?>")){
+        if(confirm("<?php echo addslashes(_('Would you really reload this backup ?\n\nThis will empty your current database then load data from the selected file.\n\nUSE AT YOUR OWN RISK')) ?>")){
             document.location = 'export?reload='+f;
         }
     }
 
 	function apply(){
-		if(confirm("<?php echo _('Confirmez-vous la suppression ?') ?>")) $('#listing').submit();
+		if(confirm("<?php echo addslashes(_('Would you really want to remove those backup?')) ?>")) $('#listing').submit();
 	}
 
 </script>

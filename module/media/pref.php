@@ -1,7 +1,6 @@
 <?php
 
 	if(!defined('COREINC')) die('Direct access not allowed');
-	$i18n = $app->apiLoad('coreI18n')->languageSet('fr')->load('media');
 
 	if($_POST['action']){
 		foreach($_POST['pref'] as $k => $p){

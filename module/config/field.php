@@ -1,7 +1,6 @@
 <?php
 
 	if(!defined('COREINC')) die('Direct access not allowed');
-	$i18n = $app->apiLoad('coreI18n')->languageSet('fr')->load('config');
 
 	if(isset($_GET['apply'])){
 		foreach(explode(',', $_GET['apply']) as $idx => $e){
@@ -53,24 +52,24 @@
 ?></header>
 
 <div class="inject-subnav-right hide">
-	<li><a href="./" class="btn btn-small"><?php echo _('Annuler') ?></a></li>
-	<li><a onclick="sauver()" class="btn btn-small btn-success"><?php echo _('Enregistrer') ?></a></li>
+	<li><a href="./" class="btn btn-small"><?php echo _('Cancel') ?></a></li>
+	<li><a onclick="sauver()" class="btn btn-small btn-success"><?php echo _('Save') ?></a></li>
 </div>
 
-<div id="app"><div class="wrapper"><div class="row-fluid">
+<div id="app"><div class="wrapper">
 
-	<div class="span6">
-		<p><b><?php echo _('Champs utilisés') ?></b></p>
+	<div style="float:left; width:48%;">
+		<p><b><?php echo _('Used fields') ?></b></p>
 		<ul id="la" class="myList clearfix">
 			<?php foreach($field as $e){ ?>
 			<li id="<?php echo $e['id_field'] ?>"><?php echo $e['fieldName'].' ('.$e['fieldKey'].')' ?></li>
-			<?php } ?>
+			<?php } ?>
 		</ul>
 		<input type="hidden" id="move" size="80" value="" />
 	</div>
 
-	<div class="span6">
-		<p class="t"><b><?php echo _('Autres champs utilisables') ?></b></p>
+    <div style="float:right; width:48%;">
+		<p class="t"><b><?php echo _('Other fields enabled') ?></b></p>
 		<ul id="lb" class="myList clearfix">
 			<?php foreach($rest as $e){ ?>
 			<li id="<?php echo $e['id_field'] ?>"><?php echo $e['fieldName'].' ('.$e['fieldKey'].')' ?></li>
@@ -78,7 +77,7 @@
 		</ul>
 	</div>	
 
-</div></div></div>
+</div></div>
 
 <?php include(COREINC.'/end.php'); ?>
 <script src="ui/js/field.js" type="text/javascript"></script>

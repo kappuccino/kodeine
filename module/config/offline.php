@@ -1,9 +1,8 @@
 <?php
 
 	if(!defined('COREINC')) die('Direct access not allowed');
-	$i18n = $app->apiLoad('coreI18n')->languageSet('fr')->load('config');
 
-# Save
+	# Save
 	#
 	if($_POST['action']){
 		$keys = array(
@@ -50,8 +49,8 @@
 ?></header>
 
 <div class="inject-subnav-right hide">
-	<li><a href="./" class="btn btn-small"><?php echo _('Annuler') ?></a></li>
-	<li><a onclick="$('#data').submit();" class="btn btn-small btn-success"><?php echo _('Enregistrer') ?></a></li>
+	<li><a href="./" class="btn btn-small"><?php echo _('Cancel') ?></a></li>
+	<li><a onclick="$('#data').submit();" class="btn btn-small btn-success"><?php echo _('Save') ?></a></li>
 </div>
 
 <div id="app"><div class="wrapper">
@@ -64,7 +63,7 @@
 			<table class="listing">
 				<thead>
 					<tr>
-						<th><?php echo _('Groupes concernés') ?></th>
+						<th><?php echo _('Apply to those groups') ?></th>
 					</tr>
 				</thead>
 				<tbody>
@@ -95,9 +94,9 @@
 </div></div>
 
 <?php include(COREINC.'/end.php'); ?>
-<script src="/admin/core/vendor/tinymce/jscripts/tiny_mce/jquery.tinymce.js"></script>
-<script src="/admin/core/vendor/tinymce/jscripts/tiny_mce/tiny_mce.js"></script>
-<script src="/admin/content/ui/js/content.js"></script>
+<script src="../core/vendor/tinymce/jscripts/tiny_mce/jquery.tinymce.js"></script>
+<script src="../core/vendor/tinymce/jscripts/tiny_mce/tiny_mce.js"></script>
+<script src="../content/ui/js/content.js"></script>
 
 <script>
 	$(function() {

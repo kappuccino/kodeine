@@ -1,6 +1,6 @@
 <?php
 
-	$i18n = $app->apiLoad('coreI18n')->languageSet('fr')->load('business');
+	if(!defined('COREINC')) die('Direct access not allowed');
 	$cmd = $app->dbMulti("SELECT * FROM k_businesscart WHERE is_admin=1 AND is_cmd=0 ORDER BY id_cart ASC");
 
 ?><!DOCTYPE html>

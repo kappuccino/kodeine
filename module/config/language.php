@@ -67,9 +67,9 @@
 ?></header>
 
 <div class="inject-subnav-right hide">
-	<li><a href="language-import" class="btn btn-mini"><?php echo _('Importer des langues') ?></a></li>
-	<li><a href="./" class="btn btn-small"><?php echo _('Annuler') ?></a></li>
-	<li><a onclick="$('#data').submit();" class="btn btn-small btn-success"><?php echo _('Enregistrer') ?></a></li>
+	<li><a href="language-import" class="btn btn-mini"><?php echo _('Import more languages') ?></a></li>
+	<li><a href="./" class="btn btn-small"><?php echo _('Cancel') ?></a></li>
+	<li><a onclick="$('#data').submit();" class="btn btn-small btn-success"><?php echo _('Save') ?></a></li>
 </div>
 
 <div id="app"><div class="wrapper"><div class="row-fluid">
@@ -84,8 +84,8 @@
 			<thead>
 				<tr>
 					<th width="30" class="icone"><i class="icon-remove icon-white"></i></th>
-					<th><?php echo _('Pays') ?></th>
-					<th><?php echo _('Langue') ?></th>
+					<th><?php echo _('Country') ?></th>
+					<th><?php echo _('Language') ?></th>
 					<th width="40" class="icone"><i class="icon-globe icon-white"></i></th>
 					<th width="40" class="icone"><i class="icon-shopping-cart icon-white"></i></th>
 				</tr>
@@ -109,7 +109,7 @@
 			<tfoot>
 				<tr>
 					<td height="30"></td>
-					<td colspan="4"><a onClick="apply();" class="btn btn-mini"><?php echo _('Supprimer la selection') ?></a></td>
+					<td colspan="4"><a onClick="apply();" class="btn btn-mini"><?php echo _('Remove selected items') ?></a></td>
 				</tr>
 			</tfoot>
 		</table>
@@ -131,31 +131,31 @@
 		
 		<table cellpadding="0" cellspacing="0" border="0" class="form">
 			<tr>
-				<td width="100">Code</td>
+				<td width="100">Key</td>
 				<td><input type="text" name="iso" value="<?php echo $app->formValue($data['iso'], $_POST['iso']); ?>" />
-					<?php echo _('Utiliser par l\'URL /fr/') ?>
+					<?php echo _('Used in the URL /fr/') ?>
 				</td>
 			</tr>
 			<tr>
-				<td><?php echo _('Nom') ?></td>
+				<td><?php echo _('Name') ?></td>
 				<td><input type="text" name="countryName" value="<?php echo $app->formValue($data['countryName'], $_POST['countryName']); ?>" />
-					<?php echo _('Exemple : France, Belgique, Italie') ?>
+					<?php echo _('France, Italia, Sweden...') ?>
 				</td>
 			</tr>
 			<tr>
-				<td><?php echo _('Langue') ?></td>
+				<td><?php echo _('Language') ?></td>
 				<td><input type="text" name="countryLanguage" value="<?php echo $app->formValue($data['countryLanguage'], $_POST['countryLanguage']); ?>" />
-					<?php echo _('Exemple : Français, Anglais, Allemand') ?>
+					<?php echo _('Français, English, Dutch') ?>
 				</td>
 			</tr>
 			<tr>
-				<td><?php echo _('Variante locale') ?></td>
+				<td><?php echo _('Locale') ?></td>
 				<td><input type="text" name="countryLocale" value="<?php echo $app->formValue($data['countryLocale'], $_POST['countryLocale']); ?>" />
-					<?php echo _('Exemple: fr_FR, fr_CH, en_EN, en_US') ?>
+					<?php echo _('fr_FR, en_EN, de_DE') ?>
 				</td>
 			</tr>
 			<tr>
-				<td><?php echo _('Reférence') ?></td>
+				<td><?php echo _('Reference') ?></td>
 				<td><select name="iso_ref"><?php
 					if($data['iso'] == $data['iso_ref']) $selSame = ' selected';
 					echo "<option value=\"\"".$selSame.">Pas de référence</option>";
@@ -168,38 +168,31 @@
 				?></select></td>
 			</tr>
 			<tr>
-				<td><?php echo _('Zone') ?></td>
+				<td><?php echo _('Area') ?></td>
 				<td><select name="countryZone" id="countryZone"><?php
-
-					$zone = $app->dbMulti("SELECT DISTINCT countryZone FROM k_country");
-					
-					foreach($zone as $e){
+					foreach($app->dbMulti("SELECT DISTINCT countryZone FROM k_country") as $e){
 						$sel = ($app->formValue($data['countryZone'], $_POST['countryZone']) == $e['countryZone']) ? ' selected' : NULL;
 						echo "<option value=\"".$e['countryZone']."\"".$sel.">".$e['countryZone']."</option>";
 					}
 					
 				?></select>
-				<a href="javascript:addZone();" class="btn btn-mini"><?php echo _('Ajouter une zone') ?></a>
+				<a href="javascript:addZone();" class="btn btn-mini"><?php echo _('Add a zone') ?></a>
 				</td>
 			</tr>
 			<tr>
-				<td><?php echo _('Traduction') ?></td>
+				<td><?php echo _('Translate') ?></td>
 				<td><input type="checkbox" name="is_used" value="1" <?php echo $app->formValue($data['is_used'], $_POST['is_used']) ? ' checked' : ''; ?> />
-					<?php echo _('Permet de traduire du contenu dans cette langue (dans l\'admin)') ?>
+					<?php echo _('Enable data to be translated in the language in the back office') ?>
 				</td>
 			</tr>
 			<tr>
-				<td><?php echo _('Livraison') ?></td>
+				<td><?php echo _('Delivery') ?></td>
 				<td><input type="checkbox" name="is_delivered" value="1" <?php echo $app->formValue($data['is_delivered'], $_POST['is_delivered']) ? ' checked' : ''; ?> />
-					<?php echo _('Apparait dans la liste des pays autorisé pour livraison (eBusiness)') ?>
+					<?php echo _('Enable the country for delivery (eBusiness)') ?>
 				</td>
 			</tr>
 		</table>
-		
-		<p><?php echo _('La <u>référence</u> est la langue pour laquelle les traduction seront demandé.<br />
-		Par exemple CH (suisse) a pour référence FR (france), ce qui permet de ne pas avoir 
-		a gérer deux fois le contenu dans la même langue') ?></p>
-	
+
 		</form>
 	</div>
 	<?php } ?>

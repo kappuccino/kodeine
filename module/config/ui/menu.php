@@ -14,18 +14,18 @@
 
 		<?php if($app->userCan('config.theme')){ ?>
 		<li class="clearfix<?php echo isMe('/theme/') ? ' me':'' ?>">
-			<a href="/admin/theme/"><span><?php echo _('Thême') ?></span></a>
+			<a href="/admin/theme/"><span><?php echo _('Theme') ?></span></a>
 		</li>
 		<?php } ?>
 
 		<?php if($app->userCan('config.field')){ ?>
 		<li class="clearfix<?php echo isMe('/config/field') ? ' me':'' ?>">
-			<a href="/admin/config/field"><span><?php echo _('Champs') ?></span></a>
+			<a href="/admin/config/field"><span><?php echo _('Field') ?></span></a>
 		</li>
 		<?php } ?>
 
 		<li class="clearfix<?php echo isMe('/config/offline') ? ' me':'' ?>">
-			<a href="/admin/config/offline"><span><?php echo _('Hors ligne') ?></span></a>
+			<a href="/admin/config/offline"><span><?php echo _('Off-line') ?></span></a>
 		</li>
 
 		<?php if($app->userCan('config.robot')){ ?>
@@ -35,7 +35,7 @@
 		<?php } ?>
 
 		<li class="clearfix<?php echo isMe('/config/language') ? ' me':'' ?>">
-			<a href="/admin/config/language"><span><?php echo _('Langues') ?></span></a>
+			<a href="/admin/config/language"><span><?php echo _('Languages') ?></span></a>
 		</li>
 
 		<li class="clearfix<?php echo isMe('/config/export') ? ' me':'' ?>">
