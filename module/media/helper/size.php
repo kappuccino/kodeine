@@ -1,11 +1,13 @@
 <?php
+
 	require(dirname(dirname(dirname(dirname(__FILE__)))).'/api/core.admin.php');
 	$app = new coreAdmin();
 
 	$src  = $_GET['src'];
 	$src_ = KROOT.$src;
 
-?><html xmlns="http://www.w3.org/1999/xhtml" xml:lang="fr">
+?><!DOCTYPE html>
+<html lang="fr">
 <head>
 	<title></title>
 	<style>
@@ -58,9 +60,6 @@
 			cursor: pointer;
 		}
 	</style>
-
-	<script type="text/javascript" src="../js/mootools-1.2.4-core.js"></script> 
-	<script type="text/javascript" src="../js/mootools-1.2.4.2-more.js"></script>
 </head>
 <body>
 <div style="height:32px; background:rgb(90,90,90); color:#FFFFFF; border-bottom:1px solid #666666;">

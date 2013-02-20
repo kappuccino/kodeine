@@ -155,7 +155,7 @@
 <html lang="fr">
 <head>
 	<?php include(ADMINUI.'/head.php'); ?>
-	<link rel="stylesheet" type="text/css" media="all" href="/app/admin/ressource/css/gallery.import.css" />
+	<link rel="stylesheet" type="text/css" media="all" href="ui/css/gallery.import.css" />
 </head>
 <body>
 <div id="pathway">
@@ -276,7 +276,7 @@
 
 
 
-<script type="text/javascript" src="/app/admin/ressource/js/gallery.discover.js"></script> 
+<script type="text/javascript" src="ui/js/gallery.discover.js"></script>
 <script>
 	id_album	= <?php echo $_GET['id_album'] ?>;
 	id_type		= <?php echo $_GET['id_type'] ?>;

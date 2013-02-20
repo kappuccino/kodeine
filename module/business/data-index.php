@@ -15,11 +15,11 @@
 		<!-- BANDEAU TOP - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - --> 
 		
 		<div class="top">
-			<div a href="/admin/" class="logo">Logo</div>
+			<div a href="../" class="logo">Logo</div>
 			<div class="pathway clearfix">
 				<h1>
-					<a href="/admin/business/">Business</a> &raquo;
-					<a href="/admin/business/data-index">Commandes en cours</a>
+					<a href="../business/">Business</a> &raquo;
+					<a href="../business/data-index">Commandes en cours</a>
 				</h1>
 				<!--<div class="types clearfix">
 					<div class="button button-blue"><a href="next.php">Lien #1</a></div>

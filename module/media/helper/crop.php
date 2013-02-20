@@ -132,7 +132,7 @@
 <html lang="fr">
 <head>
 	<?php include(COREINC.'/head.php'); ?>
-	<link rel="stylesheet" type="text/css" href="/admin/media/ui/_imgareaselect/css/imgareaselect-default.css" />
+	<link rel="stylesheet" type="text/css" href="../ui/_imgareaselect/css/imgareaselect-default.css" />
 	<link rel="stylesheet" type="text/css" href="../ui/css/crop.css" />
 </head>
 
@@ -146,7 +146,7 @@
 	
 	<div class="action clearfix">
 		<div class="l">
-			<a id="crop"><img src="/admin/media/ui/img/media-crop-blue.png" height="16" width="16" /></a>
+			<a id="crop"><img src="../ui/img/media-crop-blue.png" height="16" width="16" /></a>
 
 			<div id="fields">
 				<a id="save-crop">Sauver</a>
@@ -163,8 +163,8 @@
 		</div>
 
 		<div class="r">
-			<a id="rotate-right"><img src="/admin/media/ui/img/media-rotate-right.png" height="16" width="16" /></a>
-			<a id="rotate-left"><img src="/admin/media/ui/img/media-rotate-left.png" height="16" width="16" /></a>
+			<a id="rotate-right"><img src="../ui/img/media-rotate-right.png" height="16" width="16" /></a>
+			<a id="rotate-left"><img src="../ui/img/media-rotate-left.png" height="16" width="16" /></a>
 		</div>
 	</div>
 
@@ -179,8 +179,9 @@
 </div>
 
 <?php include(COREINC.'/end.php'); ?>
-<script type="text/javascript" src="/admin/media/ui/_imgareaselect/scripts/jquery.imgareaselect.pack.js"></script>
+<script type="text/javascript" src="../ui/_imgareaselect/scripts/jquery.imgareaselect.pack.js"></script>
 <script type="text/javascript">
+
 	img = null;
 	$(document).ready(function () {
 

@@ -2,31 +2,24 @@
 
 	if(!headers_sent()) header('Content-type: text/javascript');
 
-	function encode_items(&$item, $key){
-		$item = $item;
-	}
-	
+	$prompt		= '/media';
 	$pref		= $app->configGet('media');
 	$cache		= ($pref['useCache'] == '1') ? true : false;
-	$cache		= true;
+#	$cache		= true;
 #	var_dump($cache);
 
-#	$prompt 	= (($k->userSettingGet('root') == NULL) ? KPROMPT.'/media' : $k->userSettingGet('root'));
-	$prompt		= '/media';
 
-$prompt = '/media';
+	if($app->userCan('media.root') != '') {
+	    if(file_exists(KROOT.$app->userCan('media.root'))) {
+	        $prompt = $app->userCan('media.root');
+	    }
+	}
 
-if($app->userCan('media.root') != '') {
-    if(file_exists(KROOT.$app->userCan('media.root'))) {
-        $prompt = $app->userCan('media.root');
-    }
-}
+	$debug		= isset($_GET['debug']);
 //die($prompt);
 #	$folder 	= urldecode($_GET['folder']);
 	$folder 	= rawurldecode($_GET['folder']);
-	
 
-	$debug		= isset($_GET['debug']);
 
 	$files 		= $app->fsFile(KROOT.$folder, '', FLAT_NOHIDDEN);
 	if(!is_array($files)) $files = array();
@@ -139,8 +132,13 @@ if($app->userCan('media.root') != '') {
 		$app->pre($result);
 	}else{
 		#$app->pre($result);
-		array_walk_recursive($result, 'encode_items');
-		echo json_encode($result);
+	#	array_walk_recursive($result, 'pre(');
+	#	echo json_encode($result);
+
+	#	$app->pre($result);
+
+		$json = $app->helperJsonEncode($result);
+		echo $app->helperJsonBeautifier($json);
 	}
 
 ?>

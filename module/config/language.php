@@ -101,8 +101,8 @@
 					<td class="check-red"><input type="checkbox" class="chk" name="del[]" id="chkdel<?php echo $chkdel ?>" value="<?php echo $e['iso'] ?>" /></td>
 					<td><a href="language?iso=<?php echo $e['iso'] ?>"><?php echo $e['countryName'] ?></a></td>
 					<td><?php echo $e['countryLanguage'] ?></td>
-					<td><img src="/admin/core/ui/img/_img/boxcheck<?php if($e['is_used']) 		echo "ed"; ?>.png" align="absmiddle" /></td>
-					<td><img src="/admin/core/ui/img/_img/boxcheck<?php if($e['is_delivered'])	echo "ed"; ?>.png" align="absmiddle" /></td>
+					<td><img src="../core/ui/img/_img/boxcheck<?php if($e['is_used']) 		echo "ed"; ?>.png" align="absmiddle" /></td>
+					<td><img src="../core/ui/img/_img/boxcheck<?php if($e['is_delivered'])	echo "ed"; ?>.png" align="absmiddle" /></td>
 				</tr>
 			<?php }} ?>
 			</tbody>

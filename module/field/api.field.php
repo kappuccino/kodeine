@@ -882,7 +882,7 @@ public function fieldForm($id_field, $value, $opt=array()){
 
 		// Si je demande un USER
 		if($field['fieldType'] == 'user'){
-			$open		= "<a href=\"/admin/user/index\" target=\"blank\" class=\"open\">Afficher les utilisateurs</a>";
+			$open		= "<a href=\"/user/\" target=\"blank\" class=\"open\">Afficher les utilisateurs</a>";
 			$action		= "tagSearch(".$field['id_field'].", 'user', '".$name."', '".$addType."')";
 			$search		= "<a onClick=\"".$action."\">Chercher les utilisateurs</a>";
 			$tags		= (sizeof($value) > 0)
@@ -1014,7 +1014,7 @@ public function fieldForm($id_field, $value, $opt=array()){
 
 		// edition des meta
 		$form .= "<div class=\"editing\" style=\"display:none;\">";
-		$form .= "<iframe id=\"".$id."-iframe\" src=\"/admin/media/helper/metadata-fromcontent?off\" scrolling=\"no\" frameborder=\"0\" width=\"100%\" height=\"100%\"></iframe>";
+		$form .= "<iframe id=\"".$id."-iframe\" src=\"../media/helper/metadata-fromcontent?off\" scrolling=\"no\" frameborder=\"0\" width=\"100%\" height=\"100%\"></iframe>";
 		$form .= "</div>";
 
 		// images
@@ -1039,13 +1039,13 @@ public function fieldForm($id_field, $value, $opt=array()){
 
 		// bar du bas (action)
 		$form .= "<div class=\"media-footer clearfix\">";
-		$form .= "<img src=\"/admin/core/ui/img/_img/arrow-folder-close.png\" class=\"arrow\" />";
+		$form .= "<img src=\"../core/ui/img/_img/arrow-folder-close.png\" class=\"arrow\" />";
 		$form .= "<a class=\"left media-picker-embed-choose\">Choisir des media</a>";
 		$form .= "</div>";
 
 		// choix des image par le bas...
 		$form .= "<div class=\"choosing\" style=\"display:none;\">";
-		$form .= "<iframe id=\"".$id."-choosing\" src=\"/admin/media/embed?off\" scrolling=\"no\" frameborder=\"0\" width=\"100%\" height=\"100%\"></iframe>";
+		$form .= "<iframe id=\"".$id."-choosing\" src=\"../media/embed?off\" scrolling=\"no\" frameborder=\"0\" width=\"100%\" height=\"100%\"></iframe>";
 		$form .= "</div>";
 		
 		// upload

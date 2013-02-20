@@ -160,7 +160,7 @@ function threadMe(me, level, mid_category){
 function thread(mid_category, level){
 
 	var get = $.ajax({
-		'url' : '/admin/category/helper/thread',
+		'url' : 'helper/thread',
 		'data': {'mid_category': mid_category, 'level': level}
 	});
 	

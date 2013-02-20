@@ -76,7 +76,7 @@ function newPanel(caller, index, id){
 				if(c.lan.length > 0){
 					
 					$.each(c.lan, function(i, lan){
-						$('<a class="button button-blue" href="/admin/content/language">'+lan.toUpperCase()+'</a>').appendTo(tdLan);
+						$('<a class="button button-blue" href="../content/language">'+lan.toUpperCase()+'</a>').appendTo(tdLan);
 					});
 				}
 

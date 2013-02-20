@@ -1,4 +1,5 @@
 <?php
+
 	if($_POST['action'] == 'sql'){
 		$do = true;
 
@@ -14,11 +15,10 @@
 			$result = $app->mediaDataSet($_POST['url'], $def);
 		}
 	}
+
 ?><!DOCTYPE html>
 <html lang="fr">
 <head>
-	<title></title>
-
 	<style>
 		body{
 			color:#000;
@@ -41,6 +41,7 @@
 </head>
 <body>
 <?php
+
 	if(isset($_GET['off'])){
 		echo "&nbsp;";
 	}else{
@@ -55,11 +56,11 @@
 			$infos = $app->mediaInfos($me);
 
 	?>
-	
-	<form method="post" action="/admin/media/helper/metadata-fromcontent" id="meta" name="meta">
+
+	<form method="post" action="helper/metadata-fromcontent" id="meta" name="meta">
 
 		<input type="hidden" name="action" value="sql" />
-		<input type="hidden" name="list" value="<?php echo $_REQUES['list'] ?>" />
+		<input type="hidden" name="list" value="<?php echo $_REQUEST['list'] ?>" />
 		<input type="hidden" name="url" value="<?php echo $me ?>" />
 
 		<div class="clearfix">
@@ -74,12 +75,15 @@
 			</div>
 		</div>
 
-		<a class="btn btn-mini" href="javascript:$('#meta').submit();">Enregistrer</a> ou <a class="btn btn-mini" href="javascript:parent.mediaCloseMeta('<?php echo $_REQUEST['list'] ?>');">Annuler</a>
-		
+		<a class="btn btn-mini" onclick="javascript:$('#meta').submit();">Enregistrer</a>
+		ou
+		<a class="btn btn-mini" onclick="parent.mediaCloseMeta('<?php echo $_REQUEST['list'] ?>');">Annuler</a>
+
 		&nbsp; &nbsp; Fichier: <i><?php echo $_REQUEST['url']; ?></i>
 
 	</form>
 
 <?php } } ?>
+
 <?php include(COREINC.'/end.php'); ?>
 </body></html>

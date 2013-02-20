@@ -189,7 +189,7 @@
 	</form>
 	
 	<?php include(COREINC.'/end.php'); ?>
-	<script src="/admin/content/ui/js/content.js"></script>
+	<script src="../content/ui/js/content.js"></script>
 	
 	<script type="text/javascript">
 	

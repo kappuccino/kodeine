@@ -9,7 +9,7 @@
 		
 		<!-- BANDEAU TOP - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - --> 
 		<div class="top">
-			<div class="logo"><a href="/admin/">Logo</a></div>
+			<div class="logo"><a href="../">Logo</a></div>
 			<div class="pathway clearfix">
 				<h1>Contenu &raquo; <a href="type">Type</a> &raquo; 
 					<a href="search">Recherche</a>

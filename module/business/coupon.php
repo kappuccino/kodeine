@@ -7,7 +7,7 @@
 		foreach($_POST['del'] as $e){
 			$app->dbQuery("DELETE FROM k_businesscoupon WHERE id_coupon=".$e);
 		}
-		header("Location: /admin/business/coupon");
+		$app->go('coupon');
 	}else
 	if($_POST['action']){
 		$do = true;
@@ -64,7 +64,7 @@
 <div id="app"><div class="wrapper">	
 	
 	<div class="span6">
-	<form action="/admin/business/coupon" method="post" id="listing">
+	<form action="coupon" method="post" id="listing">
 	
 	<table width="100%" border="0" cellpadding="0" cellspacing="0" class="listing sortable">
 		<thead>
@@ -83,7 +83,7 @@
 				?>
 			<tr class="<?php if($e['id_coupon'] == $_REQUEST['id_coupon']) echo "selected" ?>">
 				<td><input type="checkbox" name="del[]" id="chk-del<?php echo $countchk ?>" value="<?php echo $e['id_coupon'] ?>" class="chk" /></td>
-				<td class="sniff" colspan="2"><a href="/admin/business/coupon?id_coupon=<?php echo $e['id_coupon'] ?>"><?php echo $e['couponName'] ?></a></td>
+				<td class="sniff" colspan="2"><a href="coupon?id_coupon=<?php echo $e['id_coupon'] ?>"><?php echo $e['couponName'] ?></a></td>
 			</tr>
 			<?php }
 		}else{ ?>
@@ -114,7 +114,7 @@
 			}
 		?>
 		
-		<form action="/admin/business/coupon" method="post" id="data">
+		<form action="coupon" method="post" id="data">
 		<input type="hidden" name="action" value="1" />
 		<input type="hidden" name="id_coupon" value="<?php echo $data['id_coupon'] ?>" />
 		
@@ -157,7 +157,7 @@
 				<td></td>
 				<td>
 					<a href="javascript:$('#data').submit();" class="btn btn-mini">Enregistrer</a>
-					<a href="/admin/business/coupon" class="btn btn-mini">Nouveau</a>
+					<a href="coupon" class="btn btn-mini">Nouveau</a>
 				</td>
 			</tr>
 		</table>
@@ -168,7 +168,7 @@
 </div></div>	
 
 <?php include(COREINC.'/end.php'); ?>	
-<script src="/app/module/core/vendor/datatables/jquery.dataTables.js"></script>
+<script src="../core/vendor/datatables/jquery.dataTables.js"></script>
 <script>
 
 	function apply(){

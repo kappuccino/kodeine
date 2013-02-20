@@ -113,7 +113,7 @@
 
 	if($reload){
 		cache($app);
-		header("Location: /admin/chapter/");
+		$app->go('./');
 	}
 
 	/* + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - 
@@ -187,10 +187,10 @@
 			<div class="clearfix">	
 				<div class="left">
 					<a href="javascript:serialMe(0)" class="btn btn-mini">Enregistrer les changements</a>
-					<a href="/admin/chapter/" class="btn btn-mini">Annuler</a>
+					<a href="./" class="btn btn-mini">Annuler</a>
 				</div> 
 				<div class="right">
-					<a href="/admin/field/asso?id_type=chapter" class="btn btn-mini">Gerer les champs</a>
+					<a href="../field/asso?id_type=chapter" class="btn btn-mini">Gerer les champs</a>
 				</div>
 			</div>
 		

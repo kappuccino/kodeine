@@ -7,7 +7,7 @@
         foreach($_POST['del'] as $e){
             $app->dbQuery("DELETE FROM k_businesstax WHERE id_tax=".$e);
         }
-        header("Location: /admin/business/tax");
+        $app->go('tax');
     }else
     if($_POST['action']){
         $do = true;
@@ -72,7 +72,7 @@
 			        foreach($tax as $e){ $countchk++ ?>
 			        <tr class="<?php if($e['id_tax'] == $_REQUEST['id_tax']) echo "selected" ?>">
 			            <td class="check check-red"><input id="chkdel-<?php echo $countchk ?>" type="checkbox" name="del[]" value="<?php echo $e['id_tax'] ?>" class="cb chk" /></td>
-			            <td class="sniff" colspan="2"><a href="/admin/business/tax?id_tax=<?php echo $e['id_tax'] ?>"><?php echo $e['tax'] ?> %</a></td>
+			            <td class="sniff" colspan="2"><a href="tax?id_tax=<?php echo $e['id_tax'] ?>"><?php echo $e['tax'] ?> %</a></td>
 			        </tr>
 			        <?php }
 			    }else{ ?>
@@ -121,7 +121,7 @@
 	            <td></td>
 	            <td>
 	                <a href="javascript:$('#data').submit();" class="btn btn-mini">Enregistrer</a>
-	                <a href="/admin/business/tax" class="btn btn-mini">Nouveau</a>
+	                <a href="tax" class="btn btn-mini">Nouveau</a>
 	            </td>
 	        </tr>
 	    </table>

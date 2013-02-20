@@ -36,7 +36,7 @@
 </div></div>
 
 <?php include(COREINC.'/end.php'); ?>
-<script src="/admin/core/ui/js/dashboard.js" type="text/javascript"></script>
+<script src="ui/js/dashboard.js" type="text/javascript"></script>
 <script>
 	$(function(){
 	//	dashboardLoad('dash-data', 'content', 'last');

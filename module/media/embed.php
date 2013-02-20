@@ -21,8 +21,8 @@
 <head>
 	<?php include(COREINC.'/head.php'); ?>
     <link rel="stylesheet" type="text/css" href="ui/css/media.css" />
-	<link rel="stylesheet" type="text/css" href="/admin/core/vendor/jqueryui/jqui.slider.css" />
-	<link rel="stylesheet" type="text/css" href="/admin/media/ui/_uploadifive/uploadifive.css">
+	<link rel="stylesheet" type="text/css" href="ui/_uploadifive/uploadifive.css">
+	<link rel="stylesheet" type="text/css" href="../core/vendor/jqueryui/jqui.slider.css" />
 </head>
 <body>
 <div id="media" class="clearfix">
@@ -42,11 +42,7 @@
 				<a id="button-hidepanel" class="btn btn-mini">Masquer la zone</a>
 				<a id="button-pref" class="btn btn-mini">Préférence</a>
 			</div>
-			<div id="slider">
-				<!-- <div id="sliderLine">
-					<div id="sliderPlot"><img src="<?php echo KPROMPT ?>/app/admin/ressource/img/media-slider-small-knob.png" height="12" width="12" /></div>
-				</div> -->
-			</div>
+			<div id="slider"></div>
 			<div id="viewMode">
 				<a id="viewModeIcon">Icone</a> |
 				<a id="viewModeList">Liste</a>
@@ -68,11 +64,11 @@
 	</div>
 </div>
 <?php include(COREINC.'/end.php'); ?>
-<script type="text/javascript" src="/admin/media/ui/_uploadifive/jquery.uploadifive-v1.0.js"></script>
-<script type="text/javascript" src="/admin/media/ui/_uploadify/jquery.uploadify.js"></script>
-<script type="text/javascript" src="/admin/core/vendor/jqueryui/jqui.dragdrop.js"></script>
-<script type="text/javascript" src="/admin/core/vendor/jqueryui/jqui.slider.js"></script>
-<script type="text/javascript" src="/admin/media/ui/js/media.js"></script>
+<script type="text/javascript" src="ui/_uploadifive/jquery.uploadifive-v1.0.js"></script>
+<script type="text/javascript" src="ui/_uploadify/jquery.uploadify.js"></script>
+<script type="text/javascript" src="ui/js/media.js"></script>
+<script type="text/javascript" src="../core/vendor/jqueryui/jqui.dragdrop.js"></script>
+<script type="text/javascript" src="../core/vendor/jqueryui/jqui.slider.js"></script>
 <script>
 	$(function(){
 		paneltop = $('#action').height();

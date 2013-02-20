@@ -21,8 +21,8 @@
 <head>
 	<?php include(COREINC.'/head.php'); ?>
     <link rel="stylesheet" type="text/css" href="ui/css/media.css" />
-	<link rel="stylesheet" type="text/css" href="/admin/core/vendor/jqueryui/jqui.slider.css" />
-	<link rel="stylesheet" type="text/css" href="/admin/core/vendor/flowplayer/skin/functional.css" />
+	<link rel="stylesheet" type="text/css" href="../core/vendor/jqueryui/jqui.slider.css" />
+	<link rel="stylesheet" type="text/css" href="../core/vendor/flowplayer/skin/functional.css" />
 </head>
 <body>
 
@@ -54,11 +54,7 @@
 				<a id="button-hidepanel" class="btn btn-mini">Masquer la zone</a>
 				<a id="button-pref" class="btn btn-mini">Préférences</a>
 			</div>
-			<div id="slider">
-				<!-- <div id="sliderLine">
-					<div id="sliderPlot"><img src="<?php echo KPROMPT ?>/app/admin/ressource/img/media-slider-small-knob.png" height="12" width="12" /></div>
-				</div> -->
-			</div>
+			<div id="slider"></div>
 			<div id="viewMode">
 				<a id="viewModeIcon">Icone</a> | 
 				<a id="viewModeList">Liste</a>
@@ -66,7 +62,7 @@
 		</div>
 		
 		<div id="panel">
-			<iframe id="panelFrame" name="panelFrame" style="background:none;display: none;" src="/admin/media/index?n" height="100%" width="100%" frameborder="0"></iframe>
+			<iframe id="panelFrame" name="panelFrame" style="background:none;display: none;" src="index?n" height="100%" width="100%" frameborder="0"></iframe>
 		</div>
 	</div>
 
@@ -80,35 +76,6 @@
 	</div>
 
 </div>
-
-<?php include(COREINC.'/end.php'); ?>
-<script type="text/javascript" src="/admin/media/ui/_uploadifive/jquery.uploadifive-v1.0.js"></script>
-<script type="text/javascript" src="/admin/media/ui/_uploadify/jquery.uploadify.js"></script>
-<script type="text/javascript" src="/admin/core/vendor/jqueryui/jqui.dragdrop.js"></script>
-<script type="text/javascript" src="/admin/core/vendor/jqueryui/jqui.slider.js"></script>
-<!-- <script type="text/javascript" src="/admin/media/ui/js/jquery.history.js"></script> -->
-<script type="text/javascript" src="/admin/media/ui/js/media.js"></script>
-
-<script>
-	paneltop = <?php echo ($_REQUEST['popMode']) ? '28' : '62' ?>;
-	phpsid = "<?php echo session_id() ?>";
-	
-	$(function(){
-		init();
-	//	$('#panel').css('top', paneltop);
-	//	$('#main_').css('top', paneltop);
-	
-		method		= '<?php echo $_REQUEST['method'] ?>';		// Maniere dont l'insertion se fait
-		field		= '<?php echo $_REQUEST['field'] ?>';		// field
-		askType		= '<?php echo $askType ?>';
-		useData		= 'true';
-		myPrompt	= '<?php echo KPROMPT ?>';
-			hash 	= getHash();
-            url  	= (hash == '' || hash == '/') ? '<?php echo ($last != '') ? $last : '/media'; ?>' : hash;
-        root = '<?php echo ($last != '') ? '/media'.$root : ''; ?>';
-        folderNav(url);
-	});
-</script>
 
 <?php if(!$_GET['popMode']) echo '</div>'; ?>
 
@@ -150,5 +117,36 @@
 	<a href="#" class="btn btn-mini" id="newdir">Valider</a>
 	<a href="#" class="btn btn-mini" onclick="modalHideUpload()">Annuler</a>
 </div>
+
+<?php include(COREINC.'/end.php'); ?>
+
+<script type="text/javascript" src="../core/vendor/jqueryui/jqui.dragdrop.js"></script>
+<script type="text/javascript" src="../core/vendor/jqueryui/jqui.slider.js"></script>
+<script type="text/javascript" src="ui/_uploadifive/jquery.uploadifive-v1.0.js"></script>
+<script type="text/javascript" src="ui/_uploadify/jquery.uploadify.js"></script>
+<script type="text/javascript" src="ui/js/media.js"></script>
+
+<script>
+    paneltop    = <?php echo ($_REQUEST['popMode']) ? '28' : '62' ?>;
+    phpsid      = "<?php echo session_id() ?>";
+    method		= '<?php echo $_REQUEST['method'] ?>';		// Maniere dont l'insertion se fait
+    field		= '<?php echo $_REQUEST['field'] ?>';		// field
+    askType		= '<?php echo $askType ?>';
+    myPrompt	= '<?php echo KPROMPT ?>';
+
+    useData		= 'true';
+    hash        = getHash();
+    url         = (hash == '' || hash == '/') ? '<?php echo ($last != '') ? $last : '/media'; ?>' : hash;
+    root        = '<?php echo ($last != '') ? '/media'.$root : ''; ?>';
+
+
+    $(function(){
+        init();
+        //	$('#panel').css('top', paneltop);
+        //	$('#main_').css('top', paneltop);
+        folderNav(url);
+    });
+
+</script>
 
 </body></html>

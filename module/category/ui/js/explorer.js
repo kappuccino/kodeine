@@ -57,7 +57,7 @@ function explorerKeyAdd(xp, mode, name, id_category, html, parents){
 
 	}else{
 		if($(name)){
-			$(name).val() = id_category;
+			$(name).val(id_category);
 		}else{
 			alert('Field not found ('+name+')');
 		}
@@ -122,7 +122,7 @@ function explorer(xp, mode, name, mid_category, level, path){
 	explorerCleanRight(xp, wrapp, level);
 
 	var get = $.ajax({
-		url : '/admin/category/explorer',
+		url : 'helper/explorer',
 		data : {'mid_category':	mid_category}
 	});
 	

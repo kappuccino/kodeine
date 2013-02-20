@@ -227,12 +227,12 @@
 				<?php if($data['id_content'] > 0){ ?>
 				<li class="clearfix"><a href="data?id_content=<?php echo $data['id_content'] ?>" class="left">Recharger</a></li>
 				<li class="clearfix"><a href="data-language?id_content=<?php echo $data['id_content'] ?>&language=<?php echo $data['language'] ?>" class="left">Traduction</a></li>
-				<li class="clearfix"><a href="/admin/comment/index?id_content=<?php echo $data['id_content'] ?>" class="left">Commentaire</a></li>
+				<li class="clearfix"><a href="./?id_content=<?php echo $data['id_content'] ?>" class="left">Commentaire</a></li>
 				<li class="clearfix"><a href="parent?id_content=<?php echo $data['id_content'] ?>" class="left">Sous-contenu</a></li>
 				<?php } ?>
 		</div>
 	</li>
-	<li><a href="/admin/content/?id_type=<?php echo $type['id_type'] ?>" class="btn btn-small"><i class="icon-list"></i> <?php echo $type['typeName']; ?></a></li>
+	<li><a href="./?id_type=<?php echo $type['id_type'] ?>" class="btn btn-small"><i class="icon-list"></i> <?php echo $type['typeName']; ?></a></li>
     <li><a onclick="removeThis(<?php echo $_REQUEST['id_content'] ?>)" class="btn btn-small btn-danger">Supprimer</a></li>
 	<li><a onclick="$('#data').submit()" class="btn btn-small btn-success">Enregistrer</a></li>
 </div>
@@ -874,17 +874,17 @@
 </div></div>
 
 <?php include(COREINC.'/end.php'); ?>
-<script src="/app/module/core/vendor/datatables/jquery.dataTables.js"></script>
-<script src="/app/module/core/vendor/bootstrap/js/bootstrap-dropdown.js"></script>
-<script src="/admin/core/vendor/tinymce/jscripts/tiny_mce/jquery.tinymce.js"></script>
-<script src="/admin/core/vendor/tinymce/jscripts/tiny_mce/tiny_mce.js"></script>
+<script src="../core/vendor/datatables/jquery.dataTables.js"></script>
+<script src="../core/vendor/bootstrap/js/bootstrap-dropdown.js"></script>
+<script src="../core/vendor/tinymce/jscripts/tiny_mce/jquery.tinymce.js"></script>
+<script src="../core/vendor/tinymce/jscripts/tiny_mce/tiny_mce.js"></script>
+<script src="../core/vendor/datepicker/js/bootstrap-datepicker.js" charset="UTF-8"></script>
+<script src="../core/vendor/codemirror/lib/codemirror.js"></script>
+<script src="../core/vendor/codemirror/mode/javascript/javascript.js"></script>
 
-<script type="text/javascript" src="/admin/media/ui/_uploadifive/jquery.uploadifive-v1.0.js"></script>
-<script src="/admin/content/ui/js/content.js"></script>
-<script type="text/javascript" src="/admin/core/vendor/datepicker/js/bootstrap-datepicker.js" charset="UTF-8"></script>
+<script src="../media/ui/_uploadifive/jquery.uploadifive-v1.0.js"></script>
 
-<script type="text/javascript" src="../core/vendor/codemirror/lib/codemirror.js"></script>
-<script type="text/javascript" src="../core/vendor/codemirror/mode/javascript/javascript.js"></script>
+<script src="ui/js/content.js"></script>
 
 <script type="text/javascript">
 

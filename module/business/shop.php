@@ -185,7 +185,7 @@
 </div></div>
 
 <?php include(COREINC.'/end.php'); ?>
-<script src="/admin/core/vendor/datatables/jquery.dataTables.js"></script>
+<script src="../core/vendor/datatables/jquery.dataTables.js"></script>
 <script>
 
 	function apply(){

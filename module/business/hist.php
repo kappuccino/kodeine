@@ -18,8 +18,8 @@
 <html lang="fr">
 <head>
 	<?php include(COREINC.'/head.php'); ?>
-	<link rel="stylesheet" type="text/css" href="/admin/content/ui/css/dropdowns.css" />
-	<link rel="stylesheet" type="text/css" href="/admin/core/vendor/datepicker/css/datepicker.css" />
+	<link rel="stylesheet" type="text/css" href="../content/ui/css/dropdowns.css" />
+	<link rel="stylesheet" type="text/css" href="../core/vendor/datepicker/css/datepicker.css" />
 </head>
 <body>
 
@@ -32,7 +32,7 @@
 
 
 	<div class="clearfix">
-		<form action="/admin/business/hist" method="get">
+		<form action="hist" method="get">
 			<div class="left">
 				Date de début <input type="text" class="input-small nomargin" name="rangeStart" id="rangeStart" value="<?php echo $_GET['rangeStart'] ?>" /><i id="clearstart" class="clearfield icon-remove-sign"></i>&nbsp;
 				Date de fin <input type="text" class="input-small nomargin" name="rangeEnd" id="rangeEnd" value="<?php echo $_GET['rangeEnd'] ?>" /><i id="clearend" class="clearfield icon-remove-sign"></i>&nbsp;
@@ -48,7 +48,7 @@
 			</div>
 			
 			<div class="left margin-left" style="margin-left: 15px;">
-				<button type="submit" class="btn btn-mini">Valider</button><button href="/admin/business/hist" class="btn btn-mini">Annuler</button>
+				<button type="submit" class="btn btn-mini">Valider</button><button href="hist" class="btn btn-mini">Annuler</button>
 			</div>
 		</form>
 	</div>
@@ -123,8 +123,8 @@
 		<tbody>
 			<?php foreach($cmd as $e){ ?>
 			<tr>
-				<td><a href="/admin/business/detail?id_cart=<?php echo $e['id_cart'] ?>"><?php echo $e['id_cart'] ?></a></td>
-				<td><a href="/admin/business/detail?id_cart=<?php echo $e['id_cart'] ?>"><?php echo $e['cartDateCmd'] ?></a></td>
+				<td><a href="detail?id_cart=<?php echo $e['id_cart'] ?>"><?php echo $e['id_cart'] ?></a></td>
+				<td><a href="detail?id_cart=<?php echo $e['id_cart'] ?>"><?php echo $e['cartDateCmd'] ?></a></td>
 				<td><?php echo $e['cartDeliveryName'] ?></td>
 				<td></td>
 				<td><?php echo $e['cartStatus'] ?></td>
@@ -136,7 +136,7 @@
 		<tfoot>
 			<tr>
 				<td colspan="7">
-					<span class="pagination"><?php $app->pagination($app->total, $app->limit, $filter['offset'], '/admin/business/hist?cf&offset=%s'); ?></span>
+					<span class="pagination"><?php $app->pagination($app->total, $app->limit, $filter['offset'], 'hist?cf&offset=%s'); ?></span>
 				</td>
 			</tr>
 		</tfoot>
@@ -146,7 +146,7 @@
 </div></div>
 
 <?php include(COREINC.'/end.php'); ?>
-<script src="/admin/core/vendor/datatables/jquery.dataTables.js"></script>
+<script src="../vendor/datatables/jquery.dataTables.js"></script>
 <script>
 
 	$(function() {

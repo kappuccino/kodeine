@@ -74,7 +74,7 @@
 		foreach($types as $e){
 			echo "<div class=\"item button button-".($e['id_type'] == $_REQUEST['id_type'] ? 'green' : 'blue')."\">";
 			echo "<a href=\"browse?id_type=".$e['id_type']."\" class=\"text\">".$e['typeName']."</a>";
-			echo "<a href=\"/admin/content/".(($e['is_gallery']) ? 'gallery-album' : 'data' )."?id_type=".$e['id_type']."\" class=\"plus\"></a> | ";
+			echo "<a href=\"./".(($e['is_gallery']) ? 'gallery-album' : 'data' )."?id_type=".$e['id_type']."\" class=\"plus\"></a> | ";
 			echo "</div>";
 		}
 	?></div> -->

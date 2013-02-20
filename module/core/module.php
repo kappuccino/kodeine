@@ -109,7 +109,7 @@
 </div></div>
 
 <?php include(COREINC.'/end.php'); ?>
-<script src="/admin/core/ui/js/module.js" type="text/javascript"></script>
+<script src="ui/js/module.js" type="text/javascript"></script>
 
 </body>
 </html>

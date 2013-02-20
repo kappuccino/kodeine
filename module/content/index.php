@@ -281,7 +281,7 @@
                     // Type User
                     if($field['fieldType'] == 'user') {
                         foreach($aff as $a) {
-                            $tmp[]  =  '<a href="/admin/user/data?id_user='.$a['id_user'].'" title="ID : '.$a['id_user'].'">'.$a['userMail'].'</a>';
+                            $tmp[]  =  '<a href="../user/data?id_user='.$a['id_user'].'" title="ID : '.$a['id_user'].'">'.$a['userMail'].'</a>';
                         }
                         $aff   = implode(' , ', $tmp);
                         $islink = false;

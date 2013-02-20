@@ -117,13 +117,12 @@
                 // -- Supression caracteres interdits
                 if($pref['urlEncode'] == 1) {
                     $srcinfo = pathinfo($src);
-                    $data = $app->helperUrlEncode($srcinfo['basename']);
-                    $src = $srcinfo['dirname'].'/'.$data;
-                }else {
+                    $data    = $app->helperUrlEncode($srcinfo['basename']);
+                    $src     = $srcinfo['dirname'].'/'.$data;
+                }else{
                     $srcinfo = pathinfo($src);
-                    $data = $srcinfo['basename'];
+                    $data    = $srcinfo['basename'];
                 }
-                // --
 
                 if(file_exists($src)){
                     $success 	= 'false';

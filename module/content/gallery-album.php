@@ -190,7 +190,7 @@
 <html lang="fr">
 <head>
 	<?php include(COREINC.'/head.php'); ?>
-	<link rel="stylesheet" type="text/css" href="/admin/media/ui/css/media.css">
+	<link rel="stylesheet" type="text/css" href="../media/ui/css/media.css">
 </head>
 <body>
 	

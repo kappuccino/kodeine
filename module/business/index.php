@@ -76,7 +76,7 @@
 	</form>
 	</div>
 	
-	<form method="post" action="/admin/business/" id="listing">
+	<form method="post" action="./" id="listing">
 	<table width="100%" border="0" cellpadding="0" cellspacing="0" class="listing sortable align-left">
 		<thead>
 			<tr>
@@ -98,11 +98,11 @@
 			?>
 			<tr>
 				<td><input type="checkbox" name="del[]" class="chk" id="chk-del<?php echo $chkdel ?>" value="<?php echo $e['id_cart'] ?>" <?php echo $disabled ?> /></td>
-				<td><a href="/admin/business/detail?id_cart=<?php echo $e['id_cart'] ?>"><?php echo $e['id_cart'] ?></a></td>
-				<td><a href="/admin/business/detail?id_cart=<?php echo $e['id_cart'] ?>"><?php echo $app->helperDate($e['cartDateCmd'], '%d %B %G %Hh%M'); ?></a></td>
+				<td><a href="detail?id_cart=<?php echo $e['id_cart'] ?>"><?php echo $e['id_cart'] ?></a></td>
+				<td><a href="detail?id_cart=<?php echo $e['id_cart'] ?>"><?php echo $app->helperDate($e['cartDateCmd'], '%d %B %G %Hh%M'); ?></a></td>
 				<td><?php echo $e['cartDeliveryName'] ?></td>
 				<td></td>
-				<td><a href="/admin/business/edit?id_cart=<?php echo $e['id_cart'] ?>"><?php echo $e['cartStatus'] ?></a></td>
+				<td><a href="edit?id_cart=<?php echo $e['id_cart'] ?>"><?php echo $e['cartStatus'] ?></a></td>
 				<td><?php echo $e['cartPayment'] ?></td>
 				<td align="right"><?php echo $e['cartTotalFinal'] ?></td>
 			</tr>
@@ -119,7 +119,7 @@
 				<td colspan="5"><?php
 				if(sizeof($cmd)){ ?>
 					<a href="#" onClick="apply();" class="btn btn-mini">Supprimer les commandes selectionnés</a>
-					<span class="pagination"><?php $app->pagination($app->apiLoad('business')->total, $app->apiLoad('business')->limit, $filter['offset'], '/admin/business/index?cf&offset=%s'); ?></span>
+					<span class="pagination"><?php $app->pagination($app->apiLoad('business')->total, $app->apiLoad('business')->limit, $filter['offset'], 'index?cf&offset=%s'); ?></span>
 				<?php } ?></td>
 				<td>&nbsp;</td>
 				<td>&nbsp;</td>
@@ -133,7 +133,7 @@
 </div>
 
 <?php include(COREINC.'/end.php'); ?>
-<script src="<?php echo COREVENDOR ?>/datatables/jquery.dataTables.js"></script>
+<script src="../core/vendor/datatables/jquery.dataTables.js"></script>
 <script>
 	function apply(){
 		if(confirm("Confirmer la suppression des commandes selectionnées et la recreditation du stock ?")){

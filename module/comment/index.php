@@ -86,13 +86,13 @@
 		<thead>
 			<tr>
 				<th width="20" class="icone"><i class="icon-remove icon-white"></i></th>
-				<th width="20" class="icone" onClick="document.location='/admin/comment/index?cf&order=k_contentcomment.is_moderate&direction=<?php echo $dir ?>'"><i class="icon-ok icon-white"></i></th>
-				<th width="140" class="icone" onClick="document.location='/admin/comment/index?cf&order=k_contentcomment.commentDate&direction=<?php echo $dir ?>'"><i class="icon-calendar icon-white"></i></th>
-				<th width="100" onClick="document.location='/admin/comment/index?cf&order=k_contentcomment.commentAvg&direction=<?php echo $dir ?>'">Note</th>
+				<th width="20" class="icone" onClick="document.location='./?cf&order=k_contentcomment.is_moderate&direction=<?php echo $dir ?>'"><i class="icon-ok icon-white"></i></th>
+				<th width="140" class="icone" onClick="document.location='./?cf&order=k_contentcomment.commentDate&direction=<?php echo $dir ?>'"><i class="icon-calendar icon-white"></i></th>
+				<th width="100" onClick="document.location='./?cf&order=k_contentcomment.commentAvg&direction=<?php echo $dir ?>'">Note</th>
 				<?php if($_REQUEST['id_content'] == NULL){ ?>
-				<th width="300" onClick="document.location='/admin/comment/index?cf&order=k_contentcomment.id_content&direction=<?php echo $dir ?>'">Contenu</th>
+				<th width="300" onClick="document.location='./?cf&order=k_contentcomment.id_content&direction=<?php echo $dir ?>'">Contenu</th>
 				<?php } ?>
-				<th onClick="document.location='/admin/comment/index?cf&order=k_contentcomment.commentData&direction=<?php echo $dir ?>'">Commentaire</th>
+				<th onClick="document.location='./?cf&order=k_contentcomment.commentData&direction=<?php echo $dir ?>'">Commentaire</th>
 			</tr>
 		</thead>
 		<tbody><?php
@@ -134,7 +134,7 @@
 				<td colspan="<?php echo ($_REQUEST['id_content'] == NULL) ? '5' : '3'; ?>">
 					<a href="#" onClick="apply();" class="btn btn-mini">Effectuer les changements sur la selection</a>
 					<span class="pagination"><?php 
-						$app->pagination($total, $limit, $filter['offset'], '/admin/comment/?cf&id_content='.$_GET['id_content'].'&offset=%s');
+						$app->pagination($total, $limit, $filter['offset'], './?cf&id_content='.$_GET['id_content'].'&offset=%s');
 					?></span>
 				</td>
 			</tr>

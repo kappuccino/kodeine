@@ -60,15 +60,15 @@ function doMediaAction(e, around){
 				 * char de la chaine, le remettre apr�s sur embed.php
 				 */
 				
-				$(e+'-choosing').attr('src', '/admin/media/embed?field='+e.substr(1, e.length));
+				$(e+'-choosing').attr('src', '../media/embed?field='+e.substr(1, e.length));
 				$(this).html('Fermer le navigateur de media');
 				arrow.attr('src', '/admin/core/ui/img/_img/arrow-folder-open.png');
 			}else{
 				
 				choosing.css('display', 'none');
-				$(e+'-choosing').attr('src', '/admin/media/embed?n=1');
+				$(e+'-choosing').attr('src', '../media/embed?n=1');
 				$(this).html('Choisir des media');
-				arrow.attr('src', '/admin/core/ui/img/_img/arrow-folder-close.png');
+				arrow.attr('src', '../core/ui/img/_img/arrow-folder-close.png');
 			}
 		});
 	}
@@ -100,10 +100,10 @@ function doMediaAction(e, around){
 			reg = new RegExp('(#)', "g");
 			nohash = e.replace(reg, '');
 		
-			$(e+'-iframe').attr('src', '/admin/media/helper/metadata-fromcontent?list='+nohash+'&url='+parts[1]);
+			$(e+'-iframe').attr('src', '../media/helper/metadata-fromcontent?list='+nohash+'&url='+parts[1]);
 		}else{
 			editing.css('display', 'none');
-			$(e+'-iframe').attr('src', '/admin/media/helper/metadata-fromcontent?off');
+			$(e+'-iframe').attr('src', '../media/helper/metadata-fromcontent?off');
 		}
 	});
 	
@@ -161,10 +161,10 @@ function mediaView(view, raw){
 	}else
 	if(type == "image"){
 		var img = (view.parent().hasClass('notFound'))
-			? {'src':'/admin/content/ui/img/media-file_file.png', 		'height':128, 'width':128, 'myclass':''}
+			? {'src':'../content/ui/img/media-file_file.png', 		'height':128, 'width':128, 'myclass':''}
 			: {'src':url, 												'height':'',  'width':'',  'myClass':'shd'};
 	}else{
-		var img = {'src':'/admin/content/ui/img/media-file_file.png', 	'height':128, 'width':128, 'myclass':''};
+		var img = {'src':'../content/ui/img/media-file_file.png', 	'height':128, 'width':128, 'myclass':''};
 	}
 	
 	if(img.myClass != '') view.addClass(img.myClass);
@@ -240,7 +240,7 @@ function setRichEditor(){
 		theme_advanced_resizing				: false,
 	
 		// Example content CSS (should be your site CSS)
-		content_css		: '/admin/core/helper/tinymce',
+		content_css		: '../core/helper/tinymce',
 
 		// Custom FORMAT
 		style_formats 	: MceStyleFormats,
@@ -254,7 +254,7 @@ function setRichEditor(){
 		setup : function(ed) {
 		    ed.addButton('mybutton', {
 		        title : 'Ins�rer des images',
-		        image : '/admin/core/ui/img/_img/myb.gif',
+		        image : '../core/ui/img/_img/myb.gif',
 		        onclick : function() {
 					mediaPicker(ed.id, 'mce');
 		        }
@@ -394,7 +394,7 @@ function formLayoutSave(){
 	if($('#id_type').length > 0){
 		
 		var get = $.ajax({
-			url: '/admin/content/helper/type-layout',
+			url: '../content/helper/type-layout',
 			type: "POST",
 			data: {id_type: $('#id_type').val(), typeFormLayout: $('#typeFormLayout').val()}
 		});
@@ -409,7 +409,7 @@ function formLayoutSave(){
 	if($('#group-select').length > 0){
 
 		var get = $.ajax({
-			url: '/admin/user/helper/group-layout',
+			url: '../user/helper/group-layout',
 			type: "POST",
 			data: {id_group: $('#group-select option:selected').val(), groupFormLayout: $('#groupFormLayout').val()}
 		});
@@ -790,7 +790,7 @@ function urlCheck(){
 		: $('#language').val()
 
 	 var get = $.ajax({
-		url: '/admin/content/helper/url?id_content='+$('#id_content').val()+'&url='+url+'&language='+language,
+		url: '../content/helper/url?id_content='+$('#id_content').val()+'&url='+url+'&language='+language,
 		dataType: 'json'
 	});
 	
@@ -874,9 +874,9 @@ function tagOpen(id_type, id){
 		return false;
 	}else
 	if(id_type == 'user'){
-		var prompt = '/admin/user/data?id_user='+id;
+		var prompt = '../user/data?id_user='+id;
 	}else{
-		var prompt = '/admin/content/data?id_content='+id;
+		var prompt = '../content/data?id_content='+id;
 	}
 	
 	window.open(prompt, '', '');
@@ -977,7 +977,7 @@ function tagSearchRequest(id_field, id_type, fieldName, clean, getVar, method){
 	
 
 	var xqr = $.ajax({
-		'url'			: '/admin/field/helper/field-multitag',
+		'url'			: '../field/helper/field-multitag',
 		'dataType'		: "json",
 		'data'			: getVar
 	});
@@ -998,7 +998,7 @@ function tagSearchRequest(id_field, id_type, fieldName, clean, getVar, method){
 
 				var push = $('<td />').css('width', 25).appendTo(line);
 				
-				var anch = $('<a style="cursor:pointer;"><img src=\"/admin/core/ui/img/_img/picto-add.png\" /></a>').appendTo(push).bind('click', function() {
+				var anch = $('<a style="cursor:pointer;"><img src=\"../core/ui/img/_img/picto-add.png\" /></a>').appendTo(push).bind('click', function() {
 					tagInsert('contenttable-'+id_field, fieldName, id_field, id_type, eval('e.'+tagId), eval('e.'+tagView), method);
 				});
 				
@@ -1078,7 +1078,7 @@ function modalShowUpload() {
 				'onDrop' : function(file, count) {
 					
 				},
-				'uploadScript' : '/admin/media/helper/upload-action?auto',
+				'uploadScript' : '../media/helper/upload-action?auto',
 				'onUploadComplete' : function(file, data) {
 					data = JSON.parse(data);
 					field = $(this).parents('#modal-upload').attr('data-field');

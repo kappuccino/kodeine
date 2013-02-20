@@ -11,7 +11,7 @@
 <body>
 <div class="wrapper" style="width:600px;">
 		
-	<form action="/admin/media/pref" method="post">
+	<form action="pref" method="post">
 		<input type="hidden" name="action" value="1" />
 
 		<table border="0" cellpadding="0" cellspacing="0" class="listing">

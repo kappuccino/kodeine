@@ -89,9 +89,9 @@
 	$use	= array_merge(array('-1'), $app->dbKey($field, 'id_field', true));
 	$not	= $app->dbMulti("SELECT * FROM k_field WHERE id_field NOT IN(".implode(',', $use).")");
 	$core	= array(
-		'category'				=> array('name' => 'Catégories',				'link' => "/admin/category/index"),
-		'chapter'				=> array('name' => 'Arborescence',				'link' => "/admin/chapter/index"),
-		'user'					=> array('name' => 'Utilisateurs',				'link' => "/admin/user/index")
+		'category'				=> array('name' => 'Catégories',				'link' => "../category/"),
+		'chapter'				=> array('name' => 'Arborescence',				'link' => "../chapter/"),
+		'user'					=> array('name' => 'Utilisateurs',				'link' => "../user/")
 	);
 
 	if($app->configGet('business', 'enabled') == 'YES'){
@@ -103,7 +103,7 @@
 
 	if($app->configGet('social', 'enabled') == 'YES'){
 		$core = array_merge($core, array(
-			'socialForum'			=> array('name' => 'Social Forum',			'link' => "/admin/social/forum"),
+			'socialForum'			=> array('name' => 'Social Forum',			'link' => "../social/forum"),
 			'socialCircle'			=> array('name' => 'Social Cercle'),
 			'socialAlert'			=> array('name' => 'Social Alerte'),
 			'socialActivity'		=> array('name' => 'Social Activité'),
@@ -150,7 +150,7 @@
 		
 						echo "<li class=\"clearfix ".$class."\">";
 						echo "<a class=\"l\" href=\"asso?id_type=".$e['id_type'].$link."\">".$e['typeName'] . $more."</a>";
-						echo "<a class=\"r\" href=\"/admin/content/index?id_type=".$e['id_type']."\">Liste</a>";
+						echo "<a class=\"r\" href=\"../content/index?id_type=".$e['id_type']."\">Liste</a>";
 						echo "</li>";
 					}
 				}else{

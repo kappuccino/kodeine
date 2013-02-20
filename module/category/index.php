@@ -49,7 +49,7 @@
 		}
 	}
 
-	if(isset($reload)) header("Location: /admin/category/?".$reload.'&opened='.$_REQUEST['opened']);
+	if(isset($reload)) $app->go("./?".$reload.'&opened='.$_REQUEST['opened']);
 
 	$fields = $app->apiLoad('field')->fieldGet(array(
 		'category'	=> true,
@@ -267,7 +267,7 @@
 		</div>
 		
 		<a onclick="$('#data').submit();" class="btn btn-mini">Enregistrer</a>
-		<a href="/admin/category/" class="btn btn-mini">annuler</a>
+		<a href="./" class="btn btn-mini">annuler</a>
 	
 		</form>
 	</div>
@@ -289,13 +289,13 @@
 	$(function(){
 		boot();
 		thread(0,0);
-		explorer($('cat-explorer'), 'solo', 'mid_category', 0, 0, '<?php echo $path ?>');
+	//	explorer($('cat-explorer'), 'solo', 'mid_category', 0, 0, '<?php echo $path ?>');
 	});
 </script>
 
-<script src="/admin/core/vendor/tinymce/jscripts/tiny_mce/jquery.tinymce.js"></script>
-<script src="/admin/core/vendor/tinymce/jscripts/tiny_mce/tiny_mce.js"></script>
-<script src="/admin/category/ui/js/category.js"></script>
-<script src="/admin/content/ui/js/content.js"></script>
-<script src="/admin/category/ui/js/explorer.js"></script>
+<script src="../core/vendor/tinymce/jscripts/tiny_mce/jquery.tinymce.js"></script>
+<script src="../core/vendor/tinymce/jscripts/tiny_mce/tiny_mce.js"></script>
+<script src="../content/ui/js/content.js"></script>
+<script src="ui/js/category.js"></script>
+
 </body></html>

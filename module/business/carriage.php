@@ -7,7 +7,7 @@
 		foreach($_POST['del'] as $e){
 			$app->dbQuery("DELETE FROM k_businesscarriage WHERE id_carriage=".$e);
 		}
-		header("Location: /admin/business/carriage");
+		$app->go('carriage');
 	}else
 	if($_POST['action']){
 		$do = true;
@@ -74,7 +74,7 @@
 			foreach($carriage as $e){ $countchk++; ?>
 			<tr class="<?php if($e['id_carriage'] == $_REQUEST['id_carriage']) echo "selected" ?>">
 				<td><input type="checkbox" name="del[]" value="<?php echo $e['id_carriage'] ?>" class="cb chk" id="chk-del<?php echo $countchk ?>" /></td>
-				<td class="sniff" colspan="2"><a href="/admin/business/carriage?id_carriage=<?php echo $e['id_carriage'] ?>"><?php echo $e['carriageName'] ?></a></td>
+				<td class="sniff" colspan="2"><a href="carriage?id_carriage=<?php echo $e['id_carriage'] ?>"><?php echo $e['carriageName'] ?></a></td>
 			</tr>
 			<?php }
 		}else{ ?>
@@ -151,7 +151,7 @@
 				<td></td>
 				<td>
 					<a href="javascript:$('#data').submit();" class="btn btn-mini">Enregistrer</a>
-					<a href="/admin/business/carriage" class="btn btn-mini">Nouveau</a>
+					<a href="carriage" class="btn btn-mini">Nouveau</a>
 				</td>
 			</tr>
 		</table>
@@ -161,7 +161,7 @@
 </div></div>
 
 <?php include(COREINC.'/end.php'); ?>
-<script src="/app/module/core/vendor/datatables/jquery.dataTables.js"></script>
+<script src="../core/vendor/datatables/jquery.dataTables.js"></script>
 <script>
 	function cbchange(that) {
 		var state = that.prop('checked');

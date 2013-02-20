@@ -894,7 +894,7 @@ function actionViewVideo(url){
 /* + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - 
 + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - */
 function actionViewAudio(url){
-	window.open('/admin/media/helper/player-audio?'+url, 'video', '');
+	window.open('/admin/media/helper/player-audio?url='+url, 'video', '');
 }
 
 /* + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - 

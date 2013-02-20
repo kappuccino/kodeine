@@ -7,7 +7,7 @@
 		foreach($_POST['del'] as $e){
 			$app->dbQuery("DELETE FROM k_businessaccount WHERE id_account=".$e);
 		}
-		header("Location: /admin/business/account");
+		$app->go('account');
 	}else
 	if($_POST['action']){
 		$do = true;
@@ -74,8 +74,8 @@
 				foreach($account as $e){ $countchk++ ?>
 				<tr class="<?php if($e['id_account'] == $_REQUEST['id_account']) echo "selected" ?>">
 					<td class="check check-red"><input type="checkbox" name="del[]" value="<?php echo $e['id_account'] ?>" class="cb chk" id="chkdel-<?php echo $countchk ?>" /></td>
-					<td class="sniff" ><a href="/admin/business/account?id_account=<?php echo $e['id_account'] ?>"><?php echo $e['accountName'] ?></a></td>
-					<td class="sniff" colspan="2"><a href="/admin/business/account?id_account=<?php echo $e['id_account'] ?>"><?php echo $e['accountNumber'] ?></a></td>
+					<td class="sniff" ><a href="../business/account?id_account=<?php echo $e['id_account'] ?>"><?php echo $e['accountName'] ?></a></td>
+					<td class="sniff" colspan="2"><a href="../business/account?id_account=<?php echo $e['id_account'] ?>"><?php echo $e['accountNumber'] ?></a></td>
 				</tr>
 				<?php }
 			}else{ ?>
@@ -110,7 +110,7 @@
 			}
 		?>
 		
-		<form action="/admin/business/account" method="post" id="data">
+		<form action="../business/account" method="post" id="data">
 		<input type="hidden" name="action" value="1" />
 		<input type="hidden" name="id_account" value="<?php echo $data['id_account'] ?>" />
 		
@@ -127,7 +127,7 @@
 				<td></td>
 				<td>
 					<a href="javascript:$('#data').submit();" class="btn btn-mini">Enregistrer</a>
-					<a href="/admin/business/account" class="btn btn-mini">Nouveau</a>
+					<a href="../business/account" class="btn btn-mini">Nouveau</a>
 				</td>
 			</tr>
 		</table>
@@ -139,7 +139,7 @@
 </div></div>
 
 <?php include(COREINC.'/end.php'); ?>
-<script src="/admin/core/vendor/datatables/jquery.dataTables.js"></script>
+<script src="../core/vendor/datatables/jquery.dataTables.js"></script>
 <script>
 	function cbchange(that) {
 		var state = that.prop('checked');

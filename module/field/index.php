@@ -85,7 +85,7 @@
 
 	<?php if(sizeof($_POST['remove']) > 0 ){ ?>
 		<div class="message messageWarning alert alert-error">
-			<form action="/admin/field/index" method="post" class="nomargin">
+			<form action="../field/" method="post" class="nomargin">
 				<b>ATTENTION</b> vous êtes sur le point de supprimer un ou plusieurs champs, cette action est irrémédiable
 			
 				<?php foreach($_POST['remove'] as $e){ ?>
@@ -406,7 +406,7 @@
 			<td height="30"></td>
 			<td>
 				<a href="javascript:$('#data').submit();" class="btn btn-mini">Enregistrer</a>
-				<a href="/admin/field/index" class="btn btn-mini">Nouveau</a>
+				<a href="../field/" class="btn btn-mini">Nouveau</a>
 			</td>
 		</tr>
 	</table>
