@@ -35,8 +35,7 @@
 ?><!DOCTYPE html>
 <html lang="fr">
 <head>
-	<title>Kodeine</title>
-	<link rel="stylesheet" type="text/css" media="all" href="ressource/css/group.css" /> 
+	<link rel="stylesheet" type="text/css" media="all" href="ressource/css/group.css" />
 	<?php include(COREINC.'/head.php'); ?>
 </head>
 <body>

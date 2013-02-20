@@ -54,7 +54,6 @@
 
 ?><!DOCTYPE html>
 <head>
-	<title>Kodeine</title>
 	<?php include(COREINC.'/head.php'); ?>
 </head>
 

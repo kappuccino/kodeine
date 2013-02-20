@@ -126,7 +126,6 @@
 ?><!DOCTYPE html>
 <html lang="fr">
 <head>
-	<title>Kodeine</title>
 	<?php include(COREINC.'/head.php'); ?>
 	<link rel="stylesheet" type="text/css" media="all" href="ui/css/survey.css" />
 </head>

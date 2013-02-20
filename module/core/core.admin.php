@@ -1,7 +1,5 @@
 <?php 
 
-#require_once(dirname(dirname(dirname(__FILE__))).'/module/core/helper/app.php');
-
 class coreAdmin extends coreApp {
 
 public function coreAdmin(){
@@ -19,14 +17,14 @@ public function coreAdmin(){
 
 /* + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - 
 + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - */
-function go($url){
+public function go($url){
 	header("Location: ".$url);
 	exit();
 }
 
 /* + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - 
 + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - */
-function filterSet($mod, $value, $key=NULL){
+public function filterSet($mod, $value, $key=NULL){
 
 	$old = $this->filterGet();
 
@@ -57,7 +55,7 @@ function filterSet($mod, $value, $key=NULL){
 
 /* + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - 
 + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - */
-function filterGet($mod=NULL){
+public function filterGet($mod=NULL){
 
 	if($_COOKIE['filter'] != NULL){
 
@@ -74,7 +72,7 @@ function filterGet($mod=NULL){
 
 /* + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - 
 + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - */
-function filterReset(){
+public function filterReset(){
 	return setcookie('filter', '', (time()-(60*60*24*30)), '/');
 }
 
@@ -123,7 +121,6 @@ public function searchGet($opt=array()){
 
 	return $search;
 }
-
 
 /* + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - 
 + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - */
@@ -192,7 +189,7 @@ public function countrySet($def){
 
 /* + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - 
 + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - */
-function pagination($total, $view, $offset, $pattern){
+public function pagination($total, $view, $offset, $pattern){
 
 	if($total > $view && $view > 0){
 		$p = ceil($total / $view);
@@ -280,7 +277,7 @@ public function moduleList($opt=array()){
 
 /* + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - 
 + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - */
-function moduleData($mod, $core=true){
+public function moduleData($mod, $core=true){
 
 	$folder = ($core) ? '/app/module' : '/user/module';
 	$config = KROOT.$folder.'/'.$mod.'/config/config.xml';
@@ -301,10 +298,10 @@ function moduleData($mod, $core=true){
 		}
 	}
 
-	$less = $xpath->query('/element/less')->item(0)->childNodes;
-	if($less->length > 0){
-		foreach($less as $e){
-			$module['less'][] = $folder.'/'.$mod.$e->nodeValue;
+	$i18= $xpath->query('/element/i18n')->item(0)->childNodes;
+	if($i18->length > 0){
+		foreach($i18 as $e){
+			$module['i18n'][] = $e->nodeValue;
 		}
 	}
 	
@@ -399,4 +396,4 @@ public function loc($mod){
 }
 
 
-} ?>
+}

@@ -217,7 +217,6 @@
 ?><!DOCTYPE html>
 <html lang="fr">
 <head>
-    <title>Kodeine</title>
     <?php include(ADMINUI.'/head.php'); ?>
 
     <!-- CONTENT -->

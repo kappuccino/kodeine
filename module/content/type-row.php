@@ -1,7 +1,6 @@
 <?php
 
 	if(!defined('COREINC')) die('Direct access not allowed');
-	$i18n = $app->apiLoad('coreI18n')->languageSet('fr')->load('content');
 
 	$limit = 3;
 	if($_REQUEST['id_type'] != NULL){
@@ -104,7 +103,6 @@
 ?><!DOCTYPE html>
 <html lang="fr">
 <head>
-    <title>Kodeine</title>
     <?php include(COREINC.'/head.php'); ?>
     <style>
         table.table td {

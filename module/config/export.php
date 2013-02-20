@@ -73,7 +73,6 @@
 ?><!DOCTYPE html>
 <html lang="fr">
 <head>
-    <title>Kodeine</title>
 	<?php include(COREINC.'/head.php'); ?>
 </head>
 <body>
@@ -88,7 +87,7 @@
 	<?php if(isset($_GET['dump'])) echo "<pre>mysqldump... ended (".$r.")\n</pre>"; ?>
 
 	<div class="alert"><?php
-		echo $i18n->_('Le dossier /user/dump est utilisé pour sauvegarder les exports de votre base de données, voici son contenu.');
+		echo _('Le dossier /user/dump est utilisé pour sauvegarder les exports de votre base de données, voici son contenu.');
 	?></div>
 
     <form action="export" method="post" id="listing">
@@ -97,9 +96,9 @@
             <tr>
                 <th width="30" class="icone"><i class="icon-remove icon-white"></th>
                 <th width="30" class="icone"><i class="icon-hdd icon-white"></th>
-                <th width="200"><?php echo $i18n->_('Date') ?></th>
-                <th width="200"><?php echo $i18n->_('Poids') ?>'</th>
-                <th><?php echo $i18n->_('Infos') ?></th>
+                <th width="200"><?php echo _('Date') ?></th>
+                <th width="200"><?php echo _('Poids') ?>'</th>
+                <th><?php echo _('Infos') ?></th>
             </tr>
         </thead>
 	    <tbody><?php
@@ -137,7 +136,7 @@
             <tfoot>
 	            <tr>
 	                <td class="check-red"><input type="checkbox" class="chk" id="delall" onchange="cbchange($(this));" /></td>
-	                <td colspan="2"><a href="#" onClick="apply();" class="btn btn-mini"><span><?php echo $i18n->_('Supprimer la selection') ?></span></a></td>
+	                <td colspan="2"><a href="#" onClick="apply();" class="btn btn-mini"><span><?php echo _('Supprimer la selection') ?></span></a></td>
 	                <td><?php echo round(($t / 1024 / 1024), 2) ?> Mo</td>
 	                <td></td>
 	            </tr>
@@ -147,7 +146,7 @@
 	</form>
 
     <div style="margin-top:20px;">
-        <a href="export?dump" class="btn"><?php echo $i18n->_('Sauvegarder la base de données') ?></a>
+        <a href="export?dump" class="btn"><?php echo _('Sauvegarder la base de données') ?></a>
     </div>
 
 </div></div>
@@ -163,7 +162,7 @@
     }
 
 	function apply(){
-		if(confirm("<?php echo $i18n->_('Confirmez-vous la suppression ?') ?>")) $('#listing').submit();
+		if(confirm("<?php echo _('Confirmez-vous la suppression ?') ?>")) $('#listing').submit();
 	}
 
 </script>

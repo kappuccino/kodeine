@@ -1,7 +1,6 @@
 <?php
 
 	if(!defined('COREINC')) die('Direct access not allowed');
-	$i18n = $app->apiLoad('coreI18n')->languageSet('fr')->load('content');
 
 	if($_REQUEST['id_type'] == NULL){
 		$type = $app->apiLoad('type')->typeGet(array('profile' => true));

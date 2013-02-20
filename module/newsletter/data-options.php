@@ -111,10 +111,8 @@ if(is_array($tps)) {
 
 ?><!DOCTYPE html>
 <head>
-    <title>Kodeine</title>
     <?php include(COREINC.'/head.php'); ?>
     <link rel="stylesheet" type="text/css" media="all" href="ui/css/newsletter.css" />
-
 </head>
 
 <body>
@@ -123,7 +121,7 @@ if(is_array($tps)) {
     include(COREINC.'/top.php');
     include(__DIR__.'/ui/menu.php');
     include(__DIR__.'/ui/steps.php');
-    ?></header>
+?></header>
 
 <div class="inject-subnav-right hide">
     <?php if($data['id_newsletter'] > 0) { ?>

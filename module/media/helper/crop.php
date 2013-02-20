@@ -131,8 +131,6 @@
 ?><!DOCTYPE html>
 <html lang="fr">
 <head>
-	<title>Kodeine</title>
-
 	<?php include(COREINC.'/head.php'); ?>
 	<link rel="stylesheet" type="text/css" href="/admin/media/ui/_imgareaselect/css/imgareaselect-default.css" />
 	<link rel="stylesheet" type="text/css" href="../ui/css/crop.css" />

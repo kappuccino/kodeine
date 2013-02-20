@@ -107,10 +107,8 @@
 
 ?><!DOCTYPE html>
 <head>
-	<title>Kodeine</title>
 	<?php include(COREINC.'/head.php'); ?>
     <link rel="stylesheet" type="text/css" media="all" href="ui/css/newsletter.css" />
-
 </head>
 
 <body>
@@ -171,7 +169,7 @@
 	
     <?php
         if($data['id_newsletter'] > 0 && $data['newsletterSendDate'] == NULL) {
-            $iframeUrl = 'designer.php?id_newsletter='.$data['id_newsletter'].'';
+            $iframeUrl = 'designer?id_newsletter='.$data['id_newsletter'].'';
     ?>
 
         <iframe src="<?php echo $iframeUrl; ?>" width="100%" style="height:1200px;border-top: 1px solid #999;" border="0" id="designer-iframe"></iframe>

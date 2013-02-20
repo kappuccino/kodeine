@@ -57,7 +57,6 @@
 ?><!DOCTYPE html>
 <html lang="fr">
 <head>
-	<title>Kodeine</title>
 	<?php include(COREINC.'/head.php'); ?>
 </head>
 <body>
@@ -68,21 +67,21 @@
 ?></header>
 
 <div class="inject-subnav-right hide">
-	<li><a onclick="$('#data').submit();" class="btn btn-small btn-success"><?php echo $i18n->_('Importer les pays sélectionés') ?></a></li>
+	<li><a onclick="$('#data').submit();" class="btn btn-small btn-success"><?php echo _('Importer les pays sélectionés') ?></a></li>
 </div>
 
 <div id="app"><div class="wrapper">
-	<p><?php echo $i18n->_('Choisissez dans la liste ci-dessous les langues qui seront directement importées dans votre configuration') ?></p>
+	<p><?php echo _('Choisissez dans la liste ci-dessous les langues qui seront directement importées dans votre configuration') ?></p>
 
 	<form method="post" action="language-import" id="data">
 	<table width="100%" border="0" cellpadding="0" cellspacing="0" class="listing sortable__">
 		<thead>
 			<tr>
 				<th width="30"></th>
-				<th width="100"><?php echo $i18n->_('ISO') ?></th>
-				<th width="300"><?php echo $i18n->_('Pays') ?></th>
-				<th width="100"><?php echo $i18n->_('Locale') ?></th>
-				<th><?php echo $i18n->_('Langue') ?></th>
+				<th width="100"><?php echo _('ISO') ?></th>
+				<th width="300"><?php echo _('Pays') ?></th>
+				<th width="100"><?php echo _('Locale') ?></th>
+				<th><?php echo _('Langue') ?></th>
 			</tr>
 		</thead>
 		<tbody>

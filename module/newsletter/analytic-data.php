@@ -59,7 +59,6 @@
 
 
 <head>
-	<title>Kodeine</title>
 	<?php include(COREINC.'/head.php'); ?>
 	<link rel="stylesheet" type="text/css" media="all" href="ui/css/analytic.css" />
 </head>
@@ -68,7 +67,7 @@
 	
 <header><?php
 	include(COREINC.'/top.php');
-	include(__DIR__.'/ui/menu.php')
+    include(__DIR__ . '/ui/menu.php')
 ?></header>
 
 <div id="app">

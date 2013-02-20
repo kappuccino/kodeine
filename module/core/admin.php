@@ -7,6 +7,7 @@
 	define('COREUI',	    KPROMPT.'/admin/core/ui');
 	define('COREVENDOR',    KPROMPT.'/admin/core/vendor');
 
+
 	function isMe($p){
 		$url = parse_url($_SERVER['REQUEST_URI']);
 		if(preg_match("#".$p."#", $url['path'])) return 'me';
@@ -15,6 +16,8 @@
 # -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
 
 	$app	= new coreAdmin();
+
+	$app->apiLoad('coreI18n');
 
 	$url	= parse_url($url);
 	$part	= explode('/', substr($url['path'], 7), 2);

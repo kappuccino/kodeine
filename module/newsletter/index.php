@@ -37,7 +37,6 @@
 	$dir 	= ($filter['direction'] == 'ASC') ? 'DESC' : 'ASC';
 ?><!DOCTYPE html>
 <head>
-	<title>Kodeine</title>
 	<?php include(COREINC.'/head.php'); ?>
 </head>
 <body>

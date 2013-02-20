@@ -1,7 +1,6 @@
 <?php
 
 	if(!defined('COREINC')) die('Direct access not allowed');
-	$i18n = $app->apiLoad('coreI18n')->languageSet('fr')->load('core');
 
 	# Logout
 	if(isset($_REQUEST['logout'])){
@@ -26,7 +25,7 @@
 		$app->go('./');
 	}else
 	if($app->userIsLogged && !$app->userIsAdmin){
-		echo $i18n->_('Vous êtes identifié mais vous ne pouvez pas accéder a l\'admin : <a href=\"?logout=1\">se déconnecter</a>');
+		echo _('Vous êtes identifié mais vous ne pouvez pas accéder a l\'admin : <a href=\"?logout=1\">se déconnecter</a>');
 		die();
 	}
 

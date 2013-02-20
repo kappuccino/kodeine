@@ -1,8 +1,16 @@
 <?php
 
-	# Prevents end slash in document root path (lighttpd)
-	$DOCROOT = $_SERVER['DOCUMENT_ROOT'];
-	if(substr($DOCROOT, -1) == '/') $DOCROOT = substr($DOCROOT, 0, -1);
+	# Web Context
+	if($_SERVER['DOCUMENT_ROOT'] != ''){
+		$DOCROOT = $_SERVER['DOCUMENT_ROOT'];
+
+		// Prevents end slash in document root path (lighttpd)
+		if(substr($DOCROOT, -1) == '/') $DOCROOT = substr($DOCROOT, 0, -1);
+	}else
+	# Term Context
+	if($_SERVER['TERM'] != ''){
+		$DOCROOT = dirname(dirname(dirname(dirname(__DIR__))));
+	}
 
 	define('KROOT', 	$DOCROOT);
 	define('KPROMPT', 	str_replace($DOCROOT, NULL, KROOT));

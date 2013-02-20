@@ -49,7 +49,6 @@
 	$type = $app->apiLoad('newsletter')->newsletterTemplateGet(array('debug' => false));
 ?><!DOCTYPE html>
 <head>
-	<title>Kodeine</title>
 	<?php include(COREINC.'/head.php'); ?>
 	<link rel="stylesheet" type="text/css" media="all" href="ui/css/newsletter.css" /> 
 </head>

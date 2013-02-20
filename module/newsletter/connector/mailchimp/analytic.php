@@ -53,7 +53,6 @@ $recipUnsubRate	= number_format((@($stat['campaign']['campaingUnsubscribed'] / $
 
 
 <head>
-    <title>Kodeine</title>
     <?php include(COREINC.'/head.php'); ?>
     <link rel="stylesheet" type="text/css" media="all" href="ui/css/analytic.css" />
 </head>

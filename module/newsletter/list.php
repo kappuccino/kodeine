@@ -204,7 +204,6 @@
 	$list = $app->apiLoad('newsletter')->newsletterListGet(array('debug' => false));
 ?><!DOCTYPE html>
 <head>
-	<title>Kodeine</title>
 	<?php include(COREINC.'/head.php'); ?>
 </head>
 <body>

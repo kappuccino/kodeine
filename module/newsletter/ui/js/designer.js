@@ -32,6 +32,7 @@ $(document).ready(function() {
         // Ajout 1 item par bloc
         $(".repeat").each( function(e) {
             var item = $(this);
+
             if(item.attr("data-url")) {
                 var opt = {};
                 $.post($(this).attr("data-url"), opt, function(d) {
@@ -42,6 +43,23 @@ $(document).ready(function() {
                 });
             }else {
                 layoutAdd(getId(item));
+            }
+        });
+        // URL elements uniques
+        $(".unique").each( function(e) {
+            var item = $(this);
+            var url = $(this).attr("data-url");
+            var type = getType($(this));
+            if(url) {
+                var valeur = "";
+                if(type == "href") valeur = item.attr("href");
+                else valeur = item.html();
+                var opt = {};
+                $.post(url, opt, function(d) {
+                    if(type == "href") item.attr("href", d);
+                    else if(type == "image") item.attr("src", d);
+                    else item.html(d);
+                });
             }
         });
     }

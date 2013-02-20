@@ -1,7 +1,6 @@
 <?php
 
 	if(!defined('COREINC')) die('Direct access not allowed');
-	$i18n = $app->apiLoad('coreI18n')->languageSet('fr')->load('content');
 
 	if(isset($_GET['add'])){
 		$last = $app->dbOne("SELECT MAX(pos_parent) AS la FROM k_content WHERE id_parent=".$_GET['id_content']);
@@ -72,7 +71,6 @@
 ?><!DOCTYPE html>
 <html lang="fr">
 <head>
-	<title>Kodeine</title>
 	<?php include(COREINC.'/head.php'); ?>
 	<style>
 		table.table td {

@@ -26,7 +26,6 @@
 ?><!DOCTYPE html>
 <html lang="fr">
 <head>
-	<title>Kodeine</title>
 	<?php include(COREINC.'/head.php'); ?>
 </head>
 <body>

@@ -40,7 +40,6 @@
 ?><!DOCTYPE html>
 <html lang="fr">
 <head>
-	<title>Kodeine</title>
 	<?php include(COREINC.'/head.php'); ?>
 </head>
 <body>
@@ -51,8 +50,8 @@
 ?></header>
 
 <div class="inject-subnav-right hide">
-	<li><a href="./" class="btn btn-small"><?php echo $i18n->_('Annuler') ?></a></li>
-	<li><a onclick="$('#data').submit();" class="btn btn-small btn-success"><?php echo $i18n->_('Enregistrer') ?></a></li>
+	<li><a href="./" class="btn btn-small"><?php echo _('Annuler') ?></a></li>
+	<li><a onclick="$('#data').submit();" class="btn btn-small btn-success"><?php echo _('Enregistrer') ?></a></li>
 </div>
 
 <div id="app"><div class="wrapper">
@@ -65,7 +64,7 @@
 			<table class="listing">
 				<thead>
 					<tr>
-						<th><?php echo $i18n->_('Groupes concernés') ?></th>
+						<th><?php echo _('Groupes concernés') ?></th>
 					</tr>
 				</thead>
 				<tbody>

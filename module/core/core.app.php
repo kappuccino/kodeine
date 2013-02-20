@@ -2,7 +2,6 @@
 
 class coreApp extends coreMedia {
 
-#private $content;
 public	$splitter = '@@';
 
 #function __construct($autolog=true){
@@ -147,7 +146,6 @@ public function userLogin($login=NULL, $passwd=NULL){
 	return true;
 }
 
-
 /* + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - 
 + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - */
 public function userProfile($id_profile){
@@ -284,7 +282,6 @@ public function userProfile($id_profile){
 	return $r;
 }
 
-
 /* + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - 
 + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - */
 public function userLogout(){
@@ -332,7 +329,7 @@ public function pre(){
 
 /* + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - 
 + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - */
-function apiLoad($api, $name=NULL, $new=false){
+public function apiLoad($api, $name=NULL, $new=false){
 
 	$first = substr(strtolower($api), 0, 4);
 
@@ -461,20 +458,17 @@ public function formValidation($def, $opt=array()){
 	return (sizeof($this->formError) > 0) ? false : true;
 }
 
-
 /* + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - 
 + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - */
 public function formErrorSet($nom, $message){
 	$this->formError[$nom] = $message;
 }
 
-
 /* + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - 
 + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - */
 public function formError($nom, $message){
 	if($this->formError[$nom]) return $message;
 }
-
 
 /* + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - 
 + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - */
@@ -497,7 +491,6 @@ public function helperMessage($message){
 	return array('message', $message);
 }
 
-
 /* + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - 
 + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - */
 public function helperDate($date, $format=''){
@@ -515,7 +508,6 @@ public function helperDate($date, $format=''){
 		: strftime($format, mktime($h, $mn, $s, $m, $j, $a));
 }
 
-
 /* + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - 
  + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - */
 public function helperReplace($source, $values, $del="{}"){
@@ -528,7 +520,6 @@ public function helperReplace($source, $values, $del="{}"){
 
 	return $source;
 }
-
 
 /* + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - 
 + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - */
@@ -647,7 +638,89 @@ public function helperUrlEncode($str, $language=NULL, $id_content=NULL){
 
 /*+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-*/
-function helperNoAccent($string){
+public function helperJsonEncode($arr){
+
+	//convmap since 0x80 char codes so it takes all multibyte codes (above ASCII 127).
+	// So such characters are being "hidden" from normal json_encoding
+	array_walk_recursive($arr, function (&$item, $key) {
+		if (is_string($item)) $item = mb_encode_numericentity($item, array (0x80, 0xffff, 0, 0xffff), 'UTF-8');
+	});
+
+	return mb_decode_numericentity(json_encode($arr), array (0x80, 0xffff, 0, 0xffff), 'UTF-8');
+
+}
+
+/*+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-*/
+public function helperJsonBeautifier($json){
+
+	$tab          = "\t";
+	$new_json     = '';
+	$indent_level = 0;
+	$in_string    = false;
+	$json_obj     = json_decode($json);
+	$len          = strlen($json);
+
+	if($json_obj === false) return false;
+
+#	$json = $this->helperJsonEncode($json_obj);
+
+	for($c = 0; $c < $len; $c++){
+		$char = $json[$c];
+		switch($char){
+			case '{':
+			case '[':
+				if(!$in_string){
+					$new_json .= $char . "\n" . str_repeat($tab, $indent_level+1);
+					$indent_level++;
+				}else{
+					$new_json .= $char;
+				}
+				break;
+
+			case '}':
+			case ']':
+				if(!$in_string){
+					$indent_level--;
+					$new_json .= "\n" . str_repeat($tab, $indent_level) . $char;
+				}else{
+					$new_json .= $char;
+				}
+				break;
+
+			case ',':
+				if(!$in_string){
+					$new_json .= ",\n" . str_repeat($tab, $indent_level);
+				}else{
+					$new_json .= $char;
+				}
+				break;
+
+			case ':':
+				if(!$in_string){
+					$new_json .= ": ";
+				}else{
+					$new_json .= $char;
+				}
+				break;
+
+			case '"':
+				if($c > 0 && $json[$c-1] != '\\'){
+					$in_string = !$in_string;
+				}
+
+			default:
+				$new_json .= $char;
+				break;
+		}
+	}
+
+	return $new_json;
+}
+
+/*+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-*/
+public function helperNoAccent($string){
 
 	return str_replace(
 		array('à','á','â','ã','ä','ç','è','é','ê','ë','ì','í','î','ï','ñ','ò','ó',
@@ -665,7 +738,7 @@ function helperNoAccent($string){
 
 /*+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-*/
-function helperPipeExec($cmd, $input=''){
+public function helperPipeExec($cmd, $input=''){
 
     $proc = proc_open($cmd, array(
     	0 => array('pipe', 'r'),
@@ -693,7 +766,7 @@ function helperPipeExec($cmd, $input=''){
 
 /*+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-*/
-function helperArrayWrapp($array, $glue){
+public function helperArrayWrapp($array, $glue){
 
 	foreach($array as $n => $v){
 		$array[$n] = $glue.$v.$glue;
@@ -704,7 +777,7 @@ function helperArrayWrapp($array, $glue){
 
 /*+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-*/
-function benchmarkMarker($label){
+public function benchmarkMarker($label){
 	
 	if(array_key_exists($label, $this->benchmark['step'])){
 
@@ -726,7 +799,7 @@ function benchmarkMarker($label){
 
 /*+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-*/
-function benchmarkProfiling($detail=true){
+public function benchmarkProfiling($detail=true){
 
 	$total		= microtime(true) - $this->benchmark['time'];
 	$duration	= 0;
@@ -812,7 +885,7 @@ function benchmarkProfiling($detail=true){
 
 /* + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - 
  + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - */
-function fsFolder($folder, $mask=NULL, $options=NULL, $recursive=false){
+public function fsFolder($folder, $mask=NULL, $options=NULL, $recursive=false){
 
 	static $myFolders;
 	static $myPWD;
@@ -870,7 +943,7 @@ function fsFolder($folder, $mask=NULL, $options=NULL, $recursive=false){
 
 /* + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - 
  + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - */
-function fsFile($folder, $mask=NULL, $options=NULL, $recursive=false){
+public function fsFile($folder, $mask=NULL, $options=NULL, $recursive=false){
 
 	static $myFiles;
 	static $myPWD;
@@ -940,7 +1013,6 @@ function fsFile($folder, $mask=NULL, $options=NULL, $recursive=false){
 
 	return $myFiles;
 }
-
 
 /* + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + -
 	A utiliser au tout debut pour initialiser les valeurs (pour le site uniquement)
@@ -1168,17 +1240,9 @@ public function kodeineInit($get){
 	}
 }
 
-
-/* + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - 
-function kodeineInitFile(){
-	if($this->kodeineInitFile) $this->moduleInclude($this->kodeine['moduleFolder'], $this->kodeine['moduleFile']);
-}
-+ - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - */
-
-
 /* + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - 
 + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - */
-function moduleInclude($module=NULL, $file=NULL){
+public function moduleInclude($module=NULL, $file=NULL){
 
 	$file 	= ($file == NULL) 	? $this->kodeine['moduleFile']   : $file;
 	$module = ($module == NULL)	? $this->kodeine['moduleFolder'] : $module;
@@ -1212,10 +1276,9 @@ public function themeInclude($file, $options=NULL){
 	}
 }
 
-
 /* + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - 
 + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - */
-function countryGet($opt=array()){
+public function countryGet($opt=array()){
 
 	if(isset($opt['is_used'])) $cond[] = "is_used='".$opt['is_used']."'";
 
@@ -1250,7 +1313,6 @@ function countryGet($opt=array()){
 	return $country;
 }
 
-
 /* + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - 
 + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - */
 public function offlineMessage(){
@@ -1261,7 +1323,6 @@ public function offlineMessage(){
 	}	
 }
 
-
 /* + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - 
 + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - */
 public function robotsTxtMessage(){
@@ -1271,7 +1332,6 @@ public function robotsTxtMessage(){
 	echo $off['configValue'];
 	exit();
 }
-
 
 /* + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - 
 + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - */
@@ -1289,7 +1349,6 @@ public function configSet($module, $name, $value){
 
 	$this->dbQuery($query);
 }
-
 
 /* + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - 
 + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - */
@@ -1321,7 +1380,6 @@ public function configGet($module, $key=NULL){
 	}
 }
 
-
 /* + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - 
 + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - */
 public function kTalk($str){
@@ -1352,7 +1410,6 @@ public function kTalk($str){
 	return $str;
 }
 
-
 /* + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - 
 + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - */
 public function kTalkCheck($str){
@@ -1370,26 +1427,4 @@ public function eventTrigger($api, $fct, $arg=array()){
 	}
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-} ?>
+}

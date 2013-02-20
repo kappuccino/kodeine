@@ -1,7 +1,6 @@
 <?php
 
 	if(!defined('COREINC')) die('Direct access not allowed');
-	$i18n = $app->apiLoad('coreI18n')->languageSet('fr')->load('config');
 
 	# Save
 	#
@@ -79,8 +78,8 @@
 ?></header>
 
 <div class="inject-subnav-right hide">
-	<li><a href="./" class="btn btn-small"><?php echo $i18n->_('Annuler') ?></a></li>
-	<li><a onclick="$('#data').submit()" class="btn btn-small btn-success"><?php echo $i18n->_('Valider'); ?></a></li>
+	<li><a href="./" class="btn btn-small"><?php echo _('Annuler') ?></a></li>
+	<li><a onclick="$('#data').submit()" class="btn btn-small btn-success"><?php echo _('Valider'); ?></a></li>
 </div>
 
 <div id="app"><div class="wrapper">
@@ -94,29 +93,29 @@
 		<table width="100%" border="0" cellpadding="0" cellspacing="0" class="listing">
 			<thead>
 				<tr>
-					<th width="25%"><?php echo $i18n->_('Paramètres') ?></th>
-					<th width="25%"><?php echo $i18n->_('Valeur') ?></th>
-					<th width="50%"><?php echo $i18n->_('Explication') ?></th>
+					<th width="25%"><?php echo _('Paramètres') ?></th>
+					<th width="25%"><?php echo _('Valeur') ?></th>
+					<th width="50%"><?php echo _('Explication') ?></th>
 				</tr>
 			</thead>
 			<tbody>
 				<tr>
-					<td><?php echo $i18n->_('Destinataire du mail') ?></td>
+					<td><?php echo _('Destinataire du mail') ?></td>
 					<td><input type="text" name="configMailTo" value="<?php echo $app->formValue($data['configMailTo'], $_POST['configMailTo']) ?>" style="width:80%;" /></td>
-					<td><?php echo $i18n->_('Destinataire des mails expédiés depuis le site') ?></td>
+					<td><?php echo _('Destinataire des mails expédiés depuis le site') ?></td>
 				</tr>
 				<tr>
-					<td><?php echo $i18n->_('Copie') ?></td>
+					<td><?php echo _('Copie') ?></td>
 					<td><input type="text" name="configMailCc" value="<?php echo $app->formValue($data['configMailCc'], $_POST['configMailCc']) ?>" style="width:80%;" /></td>
-					<td><?php echo $i18n->_('Destinataire en copie des mails expédiés depuis le site') ?></td>
+					<td><?php echo _('Destinataire en copie des mails expédiés depuis le site') ?></td>
 				</tr>
 				<tr>
-					<td><?php echo $i18n->_('Copie cachée') ?></td>
+					<td><?php echo _('Copie cachée') ?></td>
 					<td><input type="text" name="configMailBcc" value="<?php echo $app->formValue($data['configMailBcc'], $_POST['configMailBcc']) ?>" style="width:80%;" /></td>
-					<td><?php echo $i18n->_('Destinataire invisible des mails expédiés depuis le site') ?></td>
+					<td><?php echo _('Destinataire invisible des mails expédiés depuis le site') ?></td>
 				</tr>
 				<tr>
-					<td><?php echo $i18n->_('Theme') ?></td>
+					<td><?php echo _('Theme') ?></td>
 					<td><select name="defaultIdTheme"><?php
 						$theme = $app->dbMulti("SELECT * FROM k_theme");
 						foreach($theme as $e){
@@ -124,10 +123,10 @@
 							echo "<option value=\"".$e['id_theme']."\"".$sel.">".$e['themeName']."</option>";
 						}
 					?></select></td>
-					<td><?php echo $i18n->_('Le theme qui est choisi par défaut (il peut être changé par le chapitre et/ou le module)') ?></td>
+					<td><?php echo _('Le theme qui est choisi par défaut (il peut être changé par le chapitre et/ou le module)') ?></td>
 				</tr>
 				<tr>
-					<td><?php echo $i18n->_('Chapitre') ?></td>
+					<td><?php echo _('Chapitre') ?></td>
 					<td><?php echo
 						$app->apiLoad('chapter')->chapterSelector(array(
 							'value'		=> $app->formValue($data['defaultIdChapter'], $_POST['defaultIdChapter']),
@@ -136,10 +135,10 @@
 							'one'		=> true
 						))
 					?></td>
-					<td><?php echo $i18n->_('Le chapitre par défaut qui est utilisé à l\'ouverture du site') ?></td>
+					<td><?php echo _('Le chapitre par défaut qui est utilisé à l\'ouverture du site') ?></td>
 				</tr>
 				<tr>
-					<td><?php echo $i18n->_('Langue') ?></td>
+					<td><?php echo _('Langue') ?></td>
 					<td><select name="defaultLanguage"><?php
 						$language = $app->countryGet();
 						foreach($language as $e){
@@ -147,10 +146,10 @@
 							echo "<option value=\"".$e['iso']."\"".$sel.">".$e['countryLanguage']."</option>";
 						}
 					?></select></td>
-					<td><?php echo $i18n->_('La langue qui est choisie par défaut à l\'ouverture du site') ?></td>
+					<td><?php echo _('La langue qui est choisie par défaut à l\'ouverture du site') ?></td>
 				</tr>
 				<tr>
-					<td><?php echo $i18n->_('Format de la date') ?></td>
+					<td><?php echo _('Format de la date') ?></td>
 					<td><select name="dateFormat"><?php
 						$dates = array(
 							'%A %e %B %G',		// jeudi 13 fevrier 2008
@@ -171,10 +170,10 @@
 							echo "<option value=\"".$e."\"".$sel.">".strftime($e)."</option>";
 						}
 					?></select></td>
-					<td><?php echo $i18n->_('Les dates seront formatées de cette manière') ?></td>
+					<td><?php echo _('Les dates seront formatées de cette manière') ?></td>
 				</tr>
 				<tr>
-					<td><?php echo $i18n->_('Format de l\'heure') ?></td>
+					<td><?php echo _('Format de l\'heure') ?></td>
 					<td><select name="timeFormat"><?php
 						$times = array(
 							'%R',				// 14:10
@@ -186,29 +185,29 @@
 							echo "<option value=\"".$e."\"".$sel.">".strftime($e)."</option>";
 						}
 					?></select></td>
-					<td><?php echo $i18n->_('Les heures seront formatées de cette manière') ?></td>
+					<td><?php echo _('Les heures seront formatées de cette manière') ?></td>
 				</tr>
 				<tr>
-					<td><?php echo $i18n->_('Google Analytics') ?></td>
+					<td><?php echo _('Google Analytics') ?></td>
 					<td><input type="text" name="defautAnalytic" value="<?php echo $app->formValue($data['defautAnalytic'], $_POST['defautAnalytic']) ?>" style="width:80%;" /></td>
-					<td><?php echo $i18n->_('ID Numerique du compte Google Analytics (UA-YYYYYYY-XX)') ?></td>
+					<td><?php echo _('ID Numerique du compte Google Analytics (UA-YYYYYYY-XX)') ?></td>
 				</tr>
 			</tbody>
 		</table>
 	
-		<div class="mar-top-20"><?php echo
-			$i18n->_('Il est possible de changer ponctuellement les paramères par défaut pour certaines nom de domaine<br />
+		<div class="mar-top-20"><?php
+			echo _('Il est possible de changer ponctuellement les paramères par défaut pour certaines nom de domaine<br />
 			Note, vous pouvez utiliser des expressions regulières pour définir un domaine. Exemple (*)?(.)?kappuccino.org pour satisfaire www.kappuccino.org et kappuccino.org');
 		?></div>
 
 		<table width="100%" border="0" cellpadding="0" cellspacing="0" class="listing mar-top-10">
 			<thead>
 				<tr>
-					<th width="20%"><?php echo $i18n->_('Nom de domaine') ?></th>
-					<th width="20%"><?php echo $i18n->_('Chapitre') ?></th>
-					<th width="20%"><?php echo $i18n->_('Thême') ?></th>
-					<th width="20%"><?php echo $i18n->_('Langue') ?></th>
-					<th width="20%"><?php echo $i18n->_('Google Analytics') ?></th>
+					<th width="20%"><?php echo _('Nom de domaine') ?></th>
+					<th width="20%"><?php echo _('Chapitre') ?></th>
+					<th width="20%"><?php echo _('Thême') ?></th>
+					<th width="20%"><?php echo _('Langue') ?></th>
+					<th width="20%"><?php echo _('Google Analytics') ?></th>
 				</tr>
 			</thead>
 			<tbody>
@@ -268,7 +267,7 @@
 		<table cellpadding="0" cellspacing="0" border="0" class="listing form mar-top-20">
 			<thead>
 				<tr>
-					<th colspan="2"><?php echo $i18n->_('Paramètres complémentaires') ?></th>
+					<th colspan="2"><?php echo _('Paramètres complémentaires') ?></th>
 				</tr>
 			</thead>
 			<tbody><?php

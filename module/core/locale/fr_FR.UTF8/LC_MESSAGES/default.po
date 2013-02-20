@@ -1,0 +1,331 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Kodeine\n"
+"POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"PO-Revision-Date: 2013-02-19 16:15+0100\n"
+"Last-Translator: Benjamin Mosnier <bm@kappuccino.org>\n"
+"Language-Team: Kappuccino <bm@kappuccino.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 1.5.5\n"
+"Language: FR\n"
+"X-Poedit-SourceCharset: UTF-8\n"
+
+#: ../../config/language.php:184
+msgid "Ajouter une zone"
+msgstr ""
+
+#: ../../config/admin.php:44 ../../config/field.php:56
+#: ../../config/index.php:82 ../../config/language.php:73
+#: ../../config/offline.php:54 ../../config/robots.php:47
+msgid "Annuler"
+msgstr ""
+
+#: ../../config/language.php:196
+msgid "Apparait dans la liste des pays autorisé pour livraison (eBusiness)"
+msgstr ""
+
+#: ../../config/field.php:73
+msgid "Autres champs utilisables"
+msgstr ""
+
+#: ../../config/ui/menu.php:11
+msgid "Back Office"
+msgstr ""
+
+#: ../../config/admin.php:69
+msgid "Brand name"
+msgstr ""
+
+#: ../../config/admin.php:57
+msgid "Ces paramètres sont communs à tous les utilisateurs de ce back office"
+msgstr ""
+
+#: ../../config/ui/menu.php:23
+msgid "Champs"
+msgstr ""
+
+#: ../../config/field.php:63
+msgid "Champs utilisés"
+msgstr ""
+
+#: ../../config/index.php:130 ../../config/index.php:208
+msgid "Chapitre"
+msgstr ""
+
+#: ../../config/ui/menu.php:6
+msgid "Configuration"
+msgstr ""
+
+#: ../../config/export.php:166
+msgid "Confirmez-vous la suppression ?"
+msgstr ""
+
+#: ../../config/index.php:109
+msgid "Copie"
+msgstr ""
+
+#: ../../config/index.php:114
+msgid "Copie cachée"
+msgstr ""
+
+#: ../../config/export.php:100
+msgid "Date"
+msgstr ""
+
+#: ../../config/index.php:106
+msgid "Destinataire des mails expédiés depuis le site"
+msgstr ""
+
+#: ../../config/index.php:104
+msgid "Destinataire du mail"
+msgstr ""
+
+#: ../../config/index.php:111
+msgid "Destinataire en copie des mails expédiés depuis le site"
+msgstr ""
+
+#: ../../config/index.php:116
+msgid "Destinataire invisible des mails expédiés depuis le site"
+msgstr ""
+
+#: ../../config/admin.php:45 ../../config/field.php:57
+#: ../../config/language.php:74 ../../config/offline.php:55
+#: ../../config/robots.php:48
+msgid "Enregistrer"
+msgstr ""
+
+#: ../../config/language.php:144
+msgid "Exemple : France, Belgique, Italie"
+msgstr ""
+
+#: ../../config/language.php:150
+msgid "Exemple : Français, Anglais, Allemand"
+msgstr ""
+
+#: ../../config/language.php:156
+msgid "Exemple: fr_FR, fr_CH, en_EN, en_US"
+msgstr ""
+
+#: ../../config/admin.php:64 ../../config/index.php:99
+msgid "Explication"
+msgstr ""
+
+#: ../../config/ui/menu.php:42
+msgid "Export"
+msgstr ""
+
+#: ../../config/index.php:177
+msgid "Format de l'heure"
+msgstr ""
+
+#: ../../config/index.php:153
+msgid "Format de la date"
+msgstr ""
+
+#: ../../config/index.php:192 ../../config/index.php:211
+msgid "Google Analytics"
+msgstr ""
+
+#: ../../config/offline.php:68
+msgid "Groupes concernés"
+msgstr ""
+
+#: ../../config/ui/menu.php:28
+msgid "Hors ligne"
+msgstr ""
+
+#: ../../config/index.php:194
+msgid "ID Numerique du compte Google Analytics (UA-YYYYYYY-XX)"
+msgstr ""
+
+#: ../../config/index.php:200
+msgid ""
+"Il est possible de changer ponctuellement les paramères par défaut pour "
+"certaines nom de domaine<br />\n"
+"\t\t\tNote, vous pouvez utiliser des expressions regulières pour définir un "
+"domaine. Exemple (*)?(.)?kappuccino.org pour satisfaire www.kappuccino.org "
+"et kappuccino.org"
+msgstr ""
+
+#: ../../config/export.php:130
+msgid "Il n'y a aucun backup de base de données"
+msgstr ""
+
+#: ../../config/language.php:72
+msgid "Importer des langues"
+msgstr ""
+
+#: ../../config/export.php:102
+msgid "Infos"
+msgstr ""
+
+#: ../../config/language.php:201
+msgid ""
+"La <u>référence</u> est la langue pour laquelle les traduction seront "
+"demandé.<br />\n"
+"\t\tPar exemple CH (suisse) a pour référence FR (france), ce qui permet de "
+"ne pas avoir \n"
+"\t\ta gérer deux fois le contenu dans la même langue"
+msgstr ""
+
+#: ../../config/index.php:150
+msgid "La langue qui est choisie par défaut à l'ouverture du site"
+msgstr ""
+
+#: ../../config/index.php:142 ../../config/index.php:210
+#: ../../config/language.php:148 ../../config/language.php:90
+msgid "Langue"
+msgstr ""
+
+#: ../../config/ui/menu.php:38
+msgid "Langues"
+msgstr ""
+
+#: ../../config/index.php:139
+msgid "Le chapitre par défaut qui est utilisé à l'ouverture du site"
+msgstr ""
+
+#: ../../config/export.php:91
+msgid ""
+"Le dossier /user/dump est utilisé pour sauvegarder les exports de votre base "
+"de données, voici son contenu."
+msgstr ""
+
+#: ../../config/admin.php:71
+msgid "Le nom qui est affiché en haut à gauche"
+msgstr ""
+
+#: ../../config/index.php:127
+msgid ""
+"Le theme qui est choisi par défaut (il peut être changé par le chapitre et/"
+"ou le module)"
+msgstr ""
+
+#: ../../config/index.php:174
+msgid "Les dates seront formatées de cette manière"
+msgstr ""
+
+#: ../../config/index.php:189
+msgid "Les heures seront formatées de cette manière"
+msgstr ""
+
+#: ../../config/language.php:194
+msgid "Livraison"
+msgstr ""
+
+#: ../../config/admin.php:51 ../../config/index.php:88
+msgid "Mise à jour des paramètre de configuration"
+msgstr ""
+
+#: ../../config/language.php:142
+msgid "Nom"
+msgstr ""
+
+#: ../../config/index.php:207
+msgid "Nom de domaine"
+msgstr ""
+
+#: ../../config/admin.php:62
+msgid "Paramètre"
+msgstr ""
+
+#: ../../config/index.php:97
+msgid "Paramètres"
+msgstr ""
+
+#: ../../config/index.php:271
+msgid "Paramètres complémentaires"
+msgstr ""
+
+#: ../../config/language.php:89
+msgid "Pays"
+msgstr ""
+
+#: ../../config/language.php:190
+msgid "Permet de traduire du contenu dans cette langue (dans l'admin)"
+msgstr ""
+
+#: ../../config/export.php:101
+msgid "Poids"
+msgstr ""
+
+#: ../../config/export.php:115
+msgid "Point de sauvegarde automatique (patch)"
+msgstr ""
+
+#: ../../config/language.php:80
+msgid "Profile insufisant"
+msgstr ""
+
+#: ../../config/language.php:219
+msgid "Quel nom voulez vous donner à cette zone ?"
+msgstr ""
+
+#: ../../config/language.php:160
+msgid "Reférence"
+msgstr ""
+
+#: ../../config/ui/menu.php:33
+msgid "Robots.txt"
+msgstr ""
+
+#: ../../config/language.php:215
+msgid "SUPPRIMER ?"
+msgstr ""
+
+#: ../../config/export.php:116
+msgid "Sauvegarde effectuée manuellement par l'utilisateur"
+msgstr ""
+
+#: ../../config/export.php:150
+msgid "Sauvegarder la base de données"
+msgstr ""
+
+#: ../../config/export.php:140 ../../config/language.php:114
+msgid "Supprimer la selection"
+msgstr ""
+
+#: ../../config/index.php:119
+msgid "Theme"
+msgstr ""
+
+#: ../../config/index.php:209 ../../config/ui/menu.php:17
+msgid "Thême"
+msgstr ""
+
+#: ../../config/language.php:188
+msgid "Traduction"
+msgstr ""
+
+#: ../../config/language.php:138
+msgid "Utiliser par l'URL /fr/"
+msgstr ""
+
+#: ../../config/admin.php:63 ../../config/index.php:98
+msgid "Valeur"
+msgstr ""
+
+#: ../../config/index.php:83
+msgid "Valider"
+msgstr ""
+
+#: ../../config/language.php:154
+msgid "Variante locale"
+msgstr ""
+
+#: ../../config/export.php:160
+msgid ""
+"Voulez-vous rellement recharger la base de données a cette date ?\\n\\n"
+"\\nCETTE FONCTION EST A EXECUTER AVEC UNE PRUDENCE EXTREME !!!"
+msgstr ""
+
+#: ../../config/language.php:173
+msgid "Zone"
+msgstr ""

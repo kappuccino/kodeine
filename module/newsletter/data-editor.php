@@ -65,7 +65,6 @@ if($_REQUEST['id_newsletter'] != NULL){
 
 ?><!DOCTYPE html>
 <head>
-    <title>Kodeine</title>
     <?php include(COREINC.'/head.php'); ?>
 
     <link rel="stylesheet" type="text/css" media="all" href="ui/css/newsletter.css" />
@@ -262,8 +261,8 @@ if($_REQUEST['id_newsletter'] != NULL){
                         ed.setContent(d.templateData);
 
                         if(typeof d.templateStyle == 'object'){
-                            $('#backgroundColor').val() = d.templateStyle.backgroundColor;
-                            $('#backgroundImage').val() = d.templateStyle.backgroundImage;
+                            $('#backgroundColor').val(d.templateStyle.backgroundColor);
+                            $('#backgroundImage').val(d.templateStyle.backgroundImage);
                         }
                     });
         }

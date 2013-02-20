@@ -53,14 +53,14 @@
 ?></header>
 
 <div class="inject-subnav-right hide">
-	<li><a href="./" class="btn btn-small"><?php echo $i18n->_('Annuler') ?></a></li>
-	<li><a onclick="sauver()" class="btn btn-small btn-success"><?php echo $i18n->_('Enregistrer') ?></a></li>
+	<li><a href="./" class="btn btn-small"><?php echo _('Annuler') ?></a></li>
+	<li><a onclick="sauver()" class="btn btn-small btn-success"><?php echo _('Enregistrer') ?></a></li>
 </div>
 
 <div id="app"><div class="wrapper"><div class="row-fluid">
 
 	<div class="span6">
-		<p><b><?php echo $i18n->_('Champs utilisés') ?></b></p>
+		<p><b><?php echo _('Champs utilisés') ?></b></p>
 		<ul id="la" class="myList clearfix">
 			<?php foreach($field as $e){ ?>
 			<li id="<?php echo $e['id_field'] ?>"><?php echo $e['fieldName'].' ('.$e['fieldKey'].')' ?></li>
@@ -70,7 +70,7 @@
 	</div>
 
 	<div class="span6">
-		<p class="t"><b><?php echo $i18n->_('Autres champs utilisables') ?></b></p>
+		<p class="t"><b><?php echo _('Autres champs utilisables') ?></b></p>
 		<ul id="lb" class="myList clearfix">
 			<?php foreach($rest as $e){ ?>
 			<li id="<?php echo $e['id_field'] ?>"><?php echo $e['fieldName'].' ('.$e['fieldKey'].')' ?></li>

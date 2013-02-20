@@ -6,43 +6,76 @@
 ?><!DOCTYPE html>
 <html lang="fr">
 <head>
-    <title>Kodeine</title>
 	<?php include(COREINC.'/head.php'); ?>
+    <link rel="stylesheet" type="text/css" href="ui/css/i18n.css" />
 </head>
 <body>
 
 <header><?php
 	include(COREINC.'/top.php');
 	include(__DIR__.'/menu.php')
-	?></header>
+?></header>
 
-<div id="app"><div class="wrapper"><?php
+<div id="app"><div class="wrapper"><div id="i18n" data-languages="fr,us">
 
-	$mods = $app->moduleList();
-	$i18n = $app->apiLoad('coreI18n');
+	<section id="modules">
+		<ul><?php
 
-	foreach($mods as $name => $mod){
-		if(count($mod['i18n']) > 0){
-
-			echo '<h2>'.$name.'</h2>';
-			echo '<ul>';
-			foreach($mod['i18n'] as $e){
-				echo '<li>';
-
-				$i18n->parse(KROOT.$e);
-
-				echo '</li>';
-			}
-			echo '</ul>';
-
+		$mods = $app->moduleList();
+		foreach($mods as $e){
+			echo '<li data-module="'.$e['key'].'">'.$e['name'].'</li>';
 		}
-	}
+
+		?></ul>
+	</section>
+
+    <section id="files">
+		<ul></ul>
+    </section>
+
+    <section id="labels">
+	    <ul></ul>
+    </section>
+
+	<section id="form">
+
+		<fieldset>
+			<label>Module</label>
+			<select id="inputModule"><?php
+				echo '<option value="core">Core</option>';
+				echo '<option value="core">--</option>';
+				foreach($mods as $e){
+					echo '<option value="'.$e['key'].'">'.$e['name'].'</option>';
+				}
+			?></select>
+		</fieldset>
+
+        <fieldset>
+            <label>Key</label>
+	        <input id="inputKey" class="form-text" />
+        </fieldset>
+
+		<div class="languages">
+	        <fieldset>
+	            <label>Value</label>
+		        <textarea id="inputValue" class="form-text"></textarea>
+	        </fieldset>
+        </div>
 
 
+        <aside>
+			<a class="btn" id="buttonValidate">Valider</a>
+		</aside>
 
-	?></div></div>
+	</section>
+
+</div></div></div>
+
 
 <?php include(COREINC.'/end.php'); ?>
+<script src="<?php echo COREVENDOR ?>/backbone/test/vendor/underscore.js"></script>
+<script src="<?php echo COREVENDOR ?>/backbone/backbone.js"></script>
+<script src="ui/js/i18n.js"></script>
 
 
 </body></html>

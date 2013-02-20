@@ -1,7 +1,6 @@
 <?php
 
 	if(!defined('COREINC')) die('Direct access not allowed');
-	$i18n = $app->apiLoad('coreI18n')->languageSet('fr')->load('content');
 
 	if($_POST['importFolder'] != ''){
 
@@ -155,7 +154,6 @@
 ?><!DOCTYPE html>
 <html lang="fr">
 <head>
-	<title>Kodeine</title>
 	<?php include(ADMINUI.'/head.php'); ?>
 	<link rel="stylesheet" type="text/css" media="all" href="/app/admin/ressource/css/gallery.import.css" />
 </head>

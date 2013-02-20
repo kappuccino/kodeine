@@ -28,7 +28,6 @@
 ?>
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="fr">
 <head>
-	<title>Kodeine</title>
 	<?php include(ADMINUI.'/head.php'); ?>
 	<link rel="stylesheet" type="text/css" media="all" href="ressource/css/newsletter.analytic.css" />
 
