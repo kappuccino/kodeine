@@ -13,7 +13,7 @@
         die('Erreur ID');
     }
     if($data['newsletterSendDate'] != NULL) {
-        die('Newsletter dÈj‡ envoyÈe');
+        die('Newsletter d√©j√† √©t√© envoy√©e');
     }
 
     $html = $data['newsletterHtmlDesigner'];
