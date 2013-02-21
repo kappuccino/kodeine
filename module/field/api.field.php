@@ -1180,7 +1180,7 @@ public function fieldForm($id_field, $value, $opt=array()){
 	#
 	if($field['fieldType'] == 'keyword'){
 		$form = '<input name="'.$name.'" id="'.$id.'" class="'.$opt['class'].'" style="'.$opt['style'].'" value="'.$value.'" '.$disabled.' />';
-	}
+	}else
 
 	### CODE
 	#

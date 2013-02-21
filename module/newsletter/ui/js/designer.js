@@ -679,7 +679,7 @@ function editorClose() {
 
     if(h < 50) h = 50;
     editor.css({'marginTop': h + 'px'});
-    editor.offset({top: h + 20});
+    editor.offset({top: h + 50});
 }
 function editorOpen() {
     editor.find(".edit-form").remove();
@@ -693,7 +693,7 @@ function editorOpen() {
     $("#overlay").show();
     editor.find(".top").hide();
     editor.css({'marginTop': h + 'px'});
-    editor.offset({top: h + 20});
+    editor.offset({top: h + 50});
     //editor.fadeIn(100);
     $(".delete, .duplicate").hide();
     sizeIframe();
@@ -701,7 +701,7 @@ function editorOpen() {
     $(document).click(function (e)
     {
         var container = $(".edit");
-        if (container.has(e.target).length === 0) {
+        if (container.has(e.target).length === 0 && $(e.target).attr('id') == 'overlay') {
             editorClose();
             $("#overlay").hide();
         }
@@ -943,7 +943,7 @@ function save() {
 function richtext() {
     tinymce.init({
         mode : "textareas",
-
+        dialog_type : "window",
         editor_selector : "mceEditor",
         editor_deselector : "mceNoEditor",
         // General options
