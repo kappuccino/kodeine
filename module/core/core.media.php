@@ -22,7 +22,6 @@ public function mediaMimeType($url){
 	if($ext == 'js'		){ return 'application/javascript';		}else
 	if($ext == 'woff'	){ return 'application/x-font-woff';	}
 
-
 	# If php provide finfo* functions
 	#
 	if(function_exists('finfo_open')){
@@ -30,29 +29,28 @@ public function mediaMimeType($url){
 		$mime  = finfo_file($finfo, $url);
 				 finfo_close($finfo);
 
-		return $mime;
+		// Double check for this odd result
+		if($mime != 'application/octet-stream') return $mime;
+	}
 
-	}else{
-	
-		if(!isset($GLOBALS['mimes-type'])){
-			$txt = file_get_contents(APP.'/helper/mime-type.txt');
-			foreach(explode("\n", $txt) as $line){
-				if(trim($line) != '' && substr_count($line, "\t") > 0){
+	if(!isset($GLOBALS['mimes-type'])){
+		$txt = file_get_contents(__DIR__.'/helper/mime-type.txt');
+		foreach(explode("\n", $txt) as $line){
+			if(trim($line) != '' && substr_count($line, "\t") > 0){
 
-					$p = explode("\t", trim($line));
-					$a = $p[0];
-					$b = strtolower($p[sizeof($p)-1]);
+				$p = explode("\t", trim($line));
+				$a = $p[0];
+				$b = strtolower($p[sizeof($p)-1]);
 
-					$GLOBALS['mimes-type'][$a] = explode(' ', $b);
-				}
+				$GLOBALS['mimes-type'][$a] = explode(' ', $b);
 			}
 		}
+	}
 
-		$myExt = strtolower(pathinfo($url, PATHINFO_EXTENSION));
+	$myExt = strtolower(pathinfo($url, PATHINFO_EXTENSION));
 
-		foreach($GLOBALS['mimes-type'] as $type => $exts){
-			if(in_array($myExt, $exts)) return $type;
-		}
+	foreach($GLOBALS['mimes-type'] as $type => $exts){
+		if(in_array($myExt, $exts)) return $type;
 	}
 
 	throw new Exception("Sorry, we can't extract MimeType.");

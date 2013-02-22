@@ -542,10 +542,10 @@ gallery.views.app            = Backbone.View.extend({
 				var cid = ui.draggable.data('cid');
 				var mod = gallery.collections.myMedia.get(cid);
 
-				console.log('Drop Event', 'me:'+me, 'to:'+to, 'cid:'+cid);
+			/*	console.log('Drop Event', 'me:'+me, 'to:'+to, 'cid:'+cid);
 				console.log('mod',      mod.toJSON());
 				console.log('instance', instance.model.toJSON());
-
+			*/
 				if(!instance.model.get('is_album') || me == to) return;
 
 				gallery.views.myView.$el.sortable('disable');
@@ -566,7 +566,7 @@ gallery.views.app            = Backbone.View.extend({
 
 	action: function(data, back){
 
-		console.log("[XHR ACTION]", 'data', data, 'back', back);
+	//	console.log("[XHR ACTION]", 'data', data, 'back', back);
 
 		var xhr = $.ajax({
 			url:        'helper/gallery-action',
@@ -582,7 +582,7 @@ gallery.views.app            = Backbone.View.extend({
 
 	saveOrder: function(albums, items){
 		var id_album = gallery.views.myView.id_album;
-		console.log("saveOrder", id_album, 'albums', albums, 'items', items);
+	//	console.log("saveOrder", id_album, 'albums', albums, 'items', items);
 
 		this.action({
 			action:     'order',
@@ -593,7 +593,7 @@ gallery.views.app            = Backbone.View.extend({
 	},
 
 	moveItem: function(cid, me, to){
-		console.log("moveItem()", "cid", cid, "me", me, "to", to);
+	//	console.log("moveItem()", "cid", cid, "me", me, "to", to);
 
 		this.action({
 			action:     'moveItem',
@@ -610,7 +610,7 @@ gallery.views.app            = Backbone.View.extend({
 	},
 
 	moveAlbum: function(cid, me, to){
-		console.log("moveAlbum()", "cid", cid, "me", me, "to", to);
+	//	console.log("moveAlbum()", "cid", cid, "me", me, "to", to);
 
 		this.action({
 			action:     'moveAlbum',
@@ -620,7 +620,7 @@ gallery.views.app            = Backbone.View.extend({
 	},
 
 	removeItem: function(cid, me){
-		console.log("Remove Item", 'cid', cid, 'me', me);
+	//	console.log("Remove Item", 'cid', cid, 'me', me);
 
 		if(confirm('???')){
 			this.action({
@@ -638,7 +638,7 @@ gallery.views.app            = Backbone.View.extend({
 	},
 
 	toggleVisibility: function(me, state){
-		console.log("Toggle visibility", me, state);
+	//	console.log("Toggle visibility", me, state);
 
 		this.action({
 			action:     'toggleView',
@@ -648,7 +648,7 @@ gallery.views.app            = Backbone.View.extend({
 	},
 
 	togglePoster: function(me, state){
-		var id_album = gallery.views.myView.id_album;
+	//	var id_album = gallery.views.myView.id_album;
 		console.log("Toggle poster", me, state);
 
 		this.action({

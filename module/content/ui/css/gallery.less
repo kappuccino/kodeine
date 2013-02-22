@@ -106,47 +106,40 @@
 		display: table-cell;
 		vertical-align: middle;
 		position: relative; z-index: 40;
+	}
 
-		.icone{
-			z-index: 2;
-			cursor: pointer;
-			text-align: center;
+	.icone{
+		z-index: 2;
+		cursor: pointer;
+		text-align: center;
 
-			img{
-				vertical-align: top;
+		img{
+			vertical-align: top;
 
-				&.responsive-height{
-					height: 100%;
-					width: auto;
-				}
+			&.responsive-height{
+				height: 100%;
+				width: auto;
+			}
 
-				&.responsive-width{
-					height: auto;
-					width: 100%;
-				}
+			&.responsive-width{
+				height: auto;
+				width: 100%;
+			}
 
-				&.shadow{
-					box-shadow: 0px 0px 3px rgba(0, 0, 0, 0.5);
-				}
+			&.shadow{
+				box-shadow: 0px 0px 3px rgba(0, 0, 0, 0.5);
+			}
 
-				&.loading{
-					background: url('@{corepath}/img/_img/media-loader-reverse.png') no-repeat center center;
-				}
+			&.loading{
+				background: url('@{corepath}/img/_img/media-loader-reverse.png') no-repeat center center;
+			}
 
-				&.posterized{
-					background: #eaedef;
-					padding: 1px;
-					border: 1px solid #FFFFFF;
-
-					&:hover{
-						background: #000;
-						border-color: #000;
-					}
-				}
+			&.posterized{
+				box-shadow: 0 0 3px #000000;
 			}
 		}
-
 	}
+
 
 	&:hover .action{
 		display: block;
@@ -175,8 +168,8 @@
 	}
 }
 
-.fly{
-	background: #f58400;
+.fly .media{
+	background: #e1e1e1;
 }
 
 #gCarrousel{
