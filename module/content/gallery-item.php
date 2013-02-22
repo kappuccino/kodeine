@@ -99,14 +99,15 @@
 	}else{
 		$album = $app->apiLoad('content')->contentGet(array(
 			'id_content'	=> $data['id_album'],
-			'id_type'		=> $_REQUEST['id_type'],
+			'id_type'		=> $data['id_type'],
 			'is_album'		=> true,
 			'language'		=> 'fr',
 			'raw'			=> true,
 			'debug'			=> false
 		));
+
 		$items = $app->apiLoad('content')->contentGet(array(
-			'id_type'		=> $_REQUEST['id_type'],
+			'id_type'		=> $data['id_type'],
 			'id_album'		=> $data['id_album'],
 			'is_item'		=> true,
 			'language'		=> 'fr',
@@ -114,6 +115,7 @@
 			'debug'			=> false,
 			'noLimit'		=> true
 		));
+
 	}
 
 	for($i=0; $i<sizeof($items); $i++){
@@ -134,12 +136,11 @@
 		$rightLink = "gallery-item?id_content=".$next['id_content'];
 	}
 
+
 	function previewMe($app, $item, $value, $link=NULL){
 
-		$url = '/'.$item['contentItemUrl'];
-
 		if($item['contentItemType'] == 'image'){
-		
+
 			$img = $app->mediaUrlData(array(
 				'url'	=> $item['contentItemUrl'],
 				'mode'	=> 'width',
@@ -147,16 +148,16 @@
 				'cache'	=> true
 			));
 
-			$img = "<a href=\"".$url."\" target=\"_blank\"><img src=\"".$img['img']."\" height=\"".$img['height']."\" width=\"".$img['width']."\" class=\"isimg\" /></a><br />";
+			$img = "<img src=\"".$img['img']."\" height=\"".$img['height']."\" width=\"".$img['width']."\" class=\"isimg\" />";
 		}else
 		if($item['contentItemType'] == 'video'){
-			$img = "<a href=\"".$url."\" target=\"_blank\"><img src=\"../media/ui/img/media-file_quicktime.png\" height=\"128\" width=\"128\" /></a><br />";
+			$img = "<img src=\"../media/ui/img/media-file_quicktime.png\" />";
 		}else
 		if($item['contentItemType'] == 'audio'){
-			$img = "<a href=\"".$url."\" target=\"_blank\"><img src=\"../media/ui/img/media-file_audio.png\" height=\"128\" width=\"128\" /></a><br />";
+			$img = "<img src=\"../media/ui/img/media-file_audio.png\" />";
 		}else
 		if($item['contentItemType'] == 'application' AND $item['contentItemMime'] == 'pdf'){
-			$img = "<a href=\"".$url."\" target=\"_blank\"><img src=\../media/img/media-file_pdf.png\" height=\"128\" width=\"128\" /></a><br />";
+			$img = "<img src=\../media/img/media-file_pdf.png\" />";
 		}else{
 			$img = NULL;
 		}
@@ -164,7 +165,7 @@
 		if(isset($link)){
 			echo "<a href=\"".$link."\">" .  $item['contentName'] . '<br /><br />' . $img . "</a>";
 		}else{
-			echo $item['contentName'] .'<br /><br />' . $img;
+			echo $item['contentName'] .'<br /><br /><a href="'.$item['contentItemUrl'].'" target="_blank">'.$img.'</a>';
 		}
 	}
 
@@ -193,10 +194,10 @@
 <div id="app">
 
 	<div class="wrapper"><?php
-			if($message != NULL){
-				list($class, $message) = $app->helperMessage($message);
-				echo "<div class=\"message message".ucfirst($class)."\">".$message."</div>";
-			}
+		if($message != NULL){
+			list($class, $message) = $app->helperMessage($message);
+			echo "<div class=\"message message".ucfirst($class)."\">".$message."</div>";
+		}
 	?></div>
 
 	<form action="gallery-item" method="post" id="data">
@@ -258,42 +259,42 @@
                 </ul>
             </div>
 	    </div>
+    </form>
 
-		<table width="100%" border="0" cellpadding="0" cellspacing="2" id="gCarrousel">
-			<tr>
-				<td colspan="3" class="current">&#8593;<?php
+	<table width="100%" border="0" cellpadding="0" cellspacing="2" id="gCarrousel">
+		<tr>
+			<td colspan="3" class="current">&#8593;<?php
 
-					echo ($data['id_album'] == 0)
-						? "<a href=\"gallery?id_type=".$type['id_type']."\">Racine</a>"
-						: "<a href=\"gallery?id_type=".$type['id_type']."#".$album['id_content']."\">Album ".$album['contentName']."</a>";
+				echo ($data['id_album'] == 0)
+					? '<a id="goToAlbum" href="gallery?id_type='.$type['id_type'].'">Racine</a>'
+					: '<a id="goToAlbum" href="gallery?id_type='.$type['id_type'].'#album/'.$album['id_content'].'">Album '.$album['contentName'].'</a>';
 
-				?></td>
-			</tr>
-			<tr>
-				<th class="previous"><a href="<?php echo ($leftLink  != '') ? $leftLink  : '#'; ?>">&#8592; Element précédent</a></th>
-				<th class="current">Element courant</th>
-				<th class="next"><a href="<?php echo ($rightLink != '') ? $rightLink : '#'; ?>">Element suivant &#8594;</a></th>
-			</tr>
-			<tr valign="top">
-				<td class="previous"><?php
+			?></td>
+		</tr>
+		<tr>
+			<th class="previous"><a href="<?php echo ($leftLink  != '') ? $leftLink  : '#'; ?>" id="goToLeft">&#8592; Element précédent</a></th>
+			<th class="current">Element courant</th>
+			<th class="next"><a href="<?php echo ($rightLink != '') ? $rightLink : '#'; ?>" id="goToRight">Element suivant &#8594;</a></th>
+		</tr>
+		<tr valign="top">
+			<td class="previous"><?php
 
-					echo ($leftLink != '')
-						? previewMe($previous, 200, $leftLink)
-						: "<br /><br /><span id=\"leftDeadEnd\" style=\"padding:5px;\">Vous êtes au debut de l'album</span>";
+				echo ($leftLink != '')
+					? previewMe($app, $previous, 200, $leftLink)
+					: "<br /><br /><span id=\"leftDeadEnd\" style=\"padding:5px;\">Vous êtes au debut de l'album</span>";
 
-				?>&nbsp;</td>
-				<td class="current"><?php previewMe($app, $data, 600); ?></td>
-				<td class="next">&nbsp;<?php
+			?>&nbsp;</td>
+			<td class="current"><?php previewMe($app, $data, 600); ?></td>
+			<td class="next">&nbsp;<?php
 
-					echo ($rightLink != '')
-						? previewMe($app, $next, 200, $rightLink)
-						: "<br /><br /><span id=\"rightDeadEnd\" style=\"padding:5px;\">Vous êtes a la fin de l'album</span>";
+				echo ($rightLink != '')
+					? previewMe($app, $next, 200, $rightLink)
+					: "<br /><br /><span id=\"rightDeadEnd\" style=\"padding:5px;\">Vous êtes a la fin de l'album</span>";
 
-				?></td>
-			</tr>
-		</table>
-	
-	</form>
+			?></td>
+		</tr>
+	</table>
+
 
 </div>
 
@@ -302,6 +303,7 @@
 <script src="/app/module/core/vendor/tinymce/jscripts/tiny_mce/jquery.tinymce.js"></script>
 <script src="/app/module/core/vendor/tinymce/jscripts/tiny_mce/tiny_mce.js"></script>
 <script src="ui/js/content.js"></script>
+<script src="ui/js/gallery.nav.js"></script>
 <script>
 
 	actionNav		= true;

@@ -172,30 +172,30 @@
 
 		<table width="100%" border="0" cellpadding="0" cellspacing="2" id="gCarrousel">
 			<tr>
-				<td class="previous"><a href="<?php echo ($leftLink  != '') ? $leftLink  : '#'; ?>">&#8592; Album précédente</a></td>
-				<td class="current"	>&#8593; <?php
+				<td class="previous"><a href="<?php echo ($leftLink  != '') ? $leftLink  : '#'; ?>" id="goToLeft">← Album précédente</a></td>
+				<td class="current"	>↑ <?php
 
 					echo ($data['id_album'] == 0)
-						? "<a href=\"gallery?id_type=".$type['id_type']."\">Racine</a>"
-						: "<a href=\"gallery?id_type=".$type['id_type']."#".$album['id_content']."\">Album ".$album['contentName']."</a>";
+						? '<a id="goToAlbum" href="gallery?id_type='.$type['id_type'].'">Racine</a>'
+						: '<a id="goToAlbum" href="gallery?id_type='.$type['id_type'].'#album/'.$album['id_content'].'">Album '.$album['contentName'].'</a>';
 
 				?></td>
-				<td width="25%" class="next"><a href="<?php echo ($rightLink != '') ? $rightLink : '#'; ?>">Album suivant &#8594;</a></td>
+				<td width="25%" class="next"><a href="<?php echo ($rightLink != '') ? $rightLink : '#'; ?>" id="goToRight">Album suivant →</a></td>
 			</tr>
 			<tr>
 				<td class="previous"><?php
 
 					echo ($leftLink != '')
 						? "<a href=\"".$leftLink."\">".$previous['contentName']."</a>"
-						: "<span id=\"leftDeadEnd\" style=\"padding:5px;\">Vous êtes au debut de l'album</span>";
+						: "Vous êtes au debut de l'album";
 
 				?>&nbsp;</td>
 				<td class="current" align="center";>Album courant: <?php echo $data['contentName']  ?></td>
-				<td class="next" align="right">&nbsp;<?php
+				<td class="next" align="right"><?php
 
 					echo ($rightLink != '')
 						? "<a href=\"".$rightLink."\">".$next['contentName']."</a>"
-						: "<span id=\"rightDeadEnd\" style=\"padding:5px;\">Vous êtes a la fin de l'album</span>";
+						: "Vous êtes a la fin de l'album";
 
 				?></td>
 			</tr>
@@ -408,6 +408,7 @@
 <script src="../core/vendor/tinymce/jscripts/tiny_mce/jquery.tinymce.js"></script>
 <script src="../core/vendor/tinymce/jscripts/tiny_mce/tiny_mce.js"></script>
 <script src="ui/js/content.js"></script>
+<script src="ui/js/gallery.nav.js"></script>
 <script>
 
 	actionNav		= true;
@@ -421,33 +422,6 @@
 	$(document).ready(function(){
 		boot();
 		checkNeedToBeFilled();
-
-		$('#data input').bind({
-			'focus' : function(){
-				actionNav = false;
-			},
-			'blur' : function(){
-				actionNav = true;
-			}
-		});
-	});
-
-	$(window).bind({
-		'keydown' : function(e){
-			if(actionNav){
-				if(e.keyCode == 37){ // left
-					link = '<?php echo $leftLink ?>';
-					if(link != '') document.location=link;
-				}else
-				if(e.keyCode == 39){ // right
-					link = '<?php echo $rightLink ?>';
-					if(link != '') document.location=link;
-				}else
-				if(e.keyCode == 38){ // up
-					document.location='gallery?id_type=<?php echo $type['id_type'] ?>#<?php echo $album['id_content'] ?>';
-				}
-			}
-		}
 	});
 
 </script>
