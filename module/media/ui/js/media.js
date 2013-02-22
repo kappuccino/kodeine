@@ -1326,11 +1326,11 @@ function sizeInit(url){
 	}).inject(pp);
 
 }
-	function sizeKill(){
+
+function sizeKill(){
 		$('overSize').destroy();
 		$('mbOverlay').destroy();
 	}
-
 
 /* + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - 
 + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - */

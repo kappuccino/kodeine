@@ -752,7 +752,7 @@ public function fieldForm($id_field, $value, $opt=array()){
 			? $this->fieldGet(array('debug' => false, 'fieldKey'	=> $key))
 			: $this->fieldGet(array('debug' => false, 'id_field'	=> $id_field));
 
-		if($field['id_field'] == NULL) return "Impossble de trouver le champ";
+		if($field['id_$field'] == NULL) return "Impossble de trouver le champ";
 		$field['fieldParam'] = json_decode($field['fieldParam'], true);
 	}
 
@@ -1180,12 +1180,12 @@ public function fieldForm($id_field, $value, $opt=array()){
 	#
 	if($field['fieldType'] == 'keyword'){
 		$form = '<input name="'.$name.'" id="'.$id.'" class="'.$opt['class'].'" style="'.$opt['style'].'" value="'.$value.'" '.$disabled.' />';
-	}
+	}else
 
 	### CODE
 	#
 	if($field['fieldType'] == 'code'){
-		$form  = "<textarea name=\"".$name."\" id=\"".$id."\" cols=\"60\" rows=\"6\" class=\"".$opt['class']." ".$class." codemirror\" style=\"".$opt['style']."\" ".$disabled.">".$value."</textarea>";
+		$form  = '<textarea name="'.$name.'" id="'.$id.'" cols="60" rows="6" class="'.$opt['class'].' '.$class.' codemirror" style="'.$opt['style'].'" '.$disabled.'>'.$value.'</textarea>';
 	}
 	
 	else{

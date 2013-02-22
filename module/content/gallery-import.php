@@ -2,6 +2,9 @@
 
 	if(!defined('COREINC')) die('Direct access not allowed');
 
+	$id_album	= ($_REQUEST['id_album'] > 0) ? $_REQUEST['id_album'] : 0;
+	$id_type    = $_REQUEST['id_type'];
+
 	if($_POST['importFolder'] != ''){
 
 		$folder = KROOT.$_POST['importFolder'];
@@ -99,317 +102,137 @@
 					unset($height, $width, $type, $mime, $weight, $name);
 				}
 
-				header("Location: content.gallery.index.php?id_type=".$_REQUEST['id_type'].'#'.$_REQUEST['id_album']);
+				$app->go("gallery?id_type=".$_REQUEST['id_type'].'#album/'.$_REQUEST['id_album']);
 			}
 		}
 	}
 
-	if($_REQUEST['id_album'] > 0){
-	
+	if($id_album > 0){
 		$data = $app->apiLoad('content')->contentGet(array(
 			'id_content' 	=> $_REQUEST['id_album'],
 			'is_album'		=> true,
 			'language'		=> 'fr',
-			'debug'	 		=> false,
 			'raw'			=> true
 		));
+
+		$title = $data['contentName'];
+	}else{
+		$title = 'Racine';
 	}
-
-
-	# Path Way
-	$id_album	= $_GET['id_album'];
-	$type		= $app->apiLoad('type')->typeGet(array(
-		'id_type'	=> $_REQUEST['id_type'],
-		'debug'		=> false
-	)); 
-
-	if($id_album > 0){
-		$touched = ($id_album == '0');
-		$loop	 = 0;
-
-		while(!$touched && $loop < 50){
-			$me = $app->apiLoad('content')->contentGet(array(
-				'raw'			=> true,
-				'id_type'		=> $type['id_type'],
-				'id_content'	=> $id_album,
-				'is_album'		=> true,
-				'debug'			=> false
-			));
-
-			$pathway[]	= "<a href=\"content.gallery.index.php?id_type=".$me['id_type']."#".$me['id_content']."\">".$me['contentName']."</a>";
-			$id_album	= $me['id_album'];			
-
-			if($me['id_album'] == '0'){
-				$touched	= true;
-				$loop		= 60;
-			}
-			
-			$loop++;
-		}
-	}
-
-	$pathway[] 	= "/<a href=\"content.gallery.index.php?id_type=".$type['id_type']."\">Racine</a>";
-	$title		= implode('/', array_reverse($pathway)).$title;
 
 ?><!DOCTYPE html>
 <html lang="fr">
 <head>
-	<?php include(ADMINUI.'/head.php'); ?>
-	<link rel="stylesheet" type="text/css" media="all" href="ui/css/gallery.import.css" />
+	<?php include(COREINC.'/head.php'); ?>
+	<link rel="stylesheet" type="text/css" media="all" href="ui/css/gallery.css" />
 </head>
 <body>
-<div id="pathway">
-	<a href="core.panel.php">Admin</a> &raquo;
-	<a href="content.index.php">Contenu</a> &raquo;
-	<a href="content.gallery.index.php?id_type=<?php echo $type['id_type'] ?>"><?php echo $type['typeName'] ?></a> &raquo;
-	<?php echo $title ?> &raquo; Import
+
+<header><?php
+	include(COREINC.'/top.php');
+	include(__DIR__.'/ui/menu.php');
+?></header>
+
+<div class="inject-subnav-right hide">
+    <li><a href="gallery?id_type=<?php echo $id_type ?>#album/<?php echo $id_album ?>" class="btn btn-small"><?php echo _('Back to album'); ?></a></li>
+	<?php if($id_album > 0){ ?>
+    <li><a href="gallery-album?id_content=<?php echo $id_album ?>" class="btn btn-small"><?php echo _('Edit'); ?></a></li>
+	<?php } ?>
 </div>
 
-<?php include('ressource/ui/menu.content.php'); ?>
+<div class="app"><div class="wrapper" id="import">
 
-<div class="app">
-<?php
-	if($message != NULL){
-		list($class, $message) = $app->helperMessage($message);
-		echo "<div class=\"message message".ucfirst($class)."\">".$message."</div>";
-	}
-?>
+	<?php
+		if($message != NULL){
+			list($class, $message) = $app->helperMessage($message);
+			echo "<div class=\"message message".ucfirst($class)."\">".$message."</div>";
+		}
+	?>
 
-<form action="content.gallery.import.php" method="post" id="data1">
+	<h1 style="float:none;"><?php printf(_('Current album <i>%s</i>'), $title) ?></h1>
 
-	<input type="hidden" name="action"		value="1" />
-	<input type="hidden" name="id_type"		value="<?php echo $type['id_type'] ?>" />
-	<input type="hidden" name="language"	value="fr" />
-	<input type="hidden" name="id_album"	value="<?php echo ($_REQUEST['id_album']) ? $_REQUEST['id_album'] : 0 ?>" />
+	<section>
+		<form action="gallery-import" method="post">
 
-	<h2>Importer une image ou un dossier</h2>
-	<input type="text" name="importFolder" id="importFolder" size="70" />
-	<a href="#" onclick="mediaOpen('line', 'importFolder')">choisir</a>
-	<a href="javascript:$('data1').submit()" class="button rButton">Valider</a>
+			<input type="hidden" name="action"		value="1" />
+			<input type="hidden" name="language"	value="fr" />
+			<input type="hidden" name="id_type"		value="<?php echo $id_type ?>" />
+			<input type="hidden" name="id_album"	value="<?php echo $id_album ?>" />
 
-</form>
+			<h2><?php echo _('Import item from /media folder') ?></h2>
+			<input type="text" name="importFolder" id="importFolder" style="width:80%" />
 
+			<div class="btn-group" style="clear:left; margin-top:20px;">
+				<a onclick="mediaOpen('line', 'importFolder')" class="btn"><?php echo _('Pick'); ?></a>
+				<a onclick="$(this).parents('form').submit();" class="btn"><?php echo _('Validate') ?></a>
+			</div>
 
-<br /><br /><br />
+		</form>
+    </section>
 
+    <section>
+        <form action="gallery-import" method="post" enctype="multipart/form-data">
 
-<form action="content.gallery.import.php" method="post" id="data2">
+            <h2><?php echo _('Upload to this album'); ?></h2>
 
-	<input type="hidden" name="action"		value="1" />
-	<input type="hidden" name="id_type"		value="<?php echo $type['id_type'] ?>" />
-	<input type="hidden" name="language"	value="fr" />
-	<input type="hidden" name="id_album"	value="<?php echo ($_REQUEST['id_album']) ? $_REQUEST['id_album'] : 0 ?>" />
+            <input id="file_upload" name="file_upload" type="file" multiple="true" />
+            <div id="queue" class="clearfix"></div>
 
+        </form>
+    </section>
 
-	<h2>Générer une arborescence</h2>
-	<p>
-		<input type="radio" id="inside" name="sel" value="inside" checked="checked" /> Insérer les elements dans le dossier <?php echo strip_tags($title) ?><br />
-		<input type="radio" id="create" name="sel" value="create" /> Créer un album dans <?php echo strip_tags($title) ?> porant le nom du dossier choisi
-	</p>
-	<input type="text" name="discoverFolder" id="discoverFolder" size="70" value="<?php echo $_GET['sync'] ?>" />
-	<a href="#" onclick="mediaOpen('line', 'discoverFolder')">choisir</a>
-	<a href="#" onclick="discoverInit();" class="button rButton">Valider</a>
+    <section class="mass">
+        <form action="gallery-import" method="post" id="mass">
 
-	<div id="log"></div>
-</form>
-
-<br /><br /><br />
-
-<form action="ressource/lib/gallery.upaction.php?id_album=<?php echo $_REQUEST['id_album'] ?>" method="post" enctype="multipart/form-data" id="form-demo">
-
-	<h2>Envoyer des fichiers</h2>
-
-	<fieldset id="demo-fallback">
-		<legend>File Upload</legend>
-		<p>This form is just an example fallback for the unobtrusive behaviour of FancyUpload. If this part is not changed, something must be wrong with your code.</p>
-		<label for="demo-photoupload">
-			Upload a Photo:
-			<input type="file" name="Filedata" />
-			<input type="submit" />
-		</label>
-	</fieldset>
-
-	<div id="demo-status" class="hide">
-
-		<a href="#" id="demo-browse">Parcourir</a> -
-		<a href="#" id="demo-clear">Nettoyer la liste</a> -
-		<a href="#" id="demo-upload">Envoyer</a> - 
-		<a href="content.gallery.index.php?id_type=<?php echo $_GET['id_type'] ?>#<?php echo $_GET['id_album'] ?>">Afficher l'album</a>
-
-		<div style="margin-top:10px;">
-			<strong class="overall-title"></strong><br />
-			<img src="ressource/plugin/fancyupload/assets/bar.gif" class="progress overall-progress" />
-		</div>
-
-		<div style="margin-top:10px;">
-			<strong class="current-title"></strong><br />
-			<img src="ressource/plugin/fancyupload/assets/bar.gif" class="progress current-progress" />
-		</div>
-		<div class="current-text">&nbsp;</div>
-
-	</div>
-
-	<div id="demo-list-holder">
-		<ul id="demo-list"></ul>
-	</div>
-
-</form>
+            <input type="hidden" name="action"		value="1" />
+            <input type="hidden" name="language"	value="fr" />
+            <input type="hidden" name="id_type"		value="<?php echo $type['id_type'] ?>" />
+            <input type="hidden" name="id_album"	value="<?php echo ($_REQUEST['id_album']) ? $_REQUEST['id_album'] : 0 ?>" />
 
 
+            <h2><?php echo _('Create folder and sub folders') ?></h2>
+
+            <input type="text" name="discoverFolder" id="discoverFolder" value="<?php echo $_GET['sync'] ?>" style="width:80%" />
+
+	        <br />
+
+            <input type="radio" name="sel" value="inside" checked="checked" />
+	        <?php echo _('Insert data into this album'); ?>
+
+	        <br />
+
+	        <input type="radio" name="sel" value="create" />
+	        <?php echo _('Create a new ablum  into this album'); ?>
+
+            <br />
+
+            <div class="btn-group" style="clear:left; margin-top:20px;">
+		        <a onclick="mediaOpen('line', 'discoverFolder')" class="btn"><?php echo _('Pick') ?></a>
+	            <a onclick="discoverInit();" class="btn"><?php echo _('Validate') ?></a>
+	        </div>
+
+            <div class="progress" id="progress" style="width: 82%; margin: 10px 0 10px 0;">
+                <div class="bar" style="width: 5%;"></div>
+            </div>
+
+            <div id="log"></div>
 
 
+        </form>
+    </section>
+
+</div>
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+<?php include(COREINC.'/end.php'); ?>
+<script type="text/javascript" src="../media/ui/_uploadifive/jquery.uploadifive-v1.0.js"></script>
 
 <script type="text/javascript" src="ui/js/gallery.discover.js"></script>
-<script>
-	id_album	= <?php echo $_GET['id_album'] ?>;
-	id_type		= <?php echo $_GET['id_type'] ?>;
+<script type="text/javascript" src="ui/js/gallery.upload.js"></script>
+
+	<script>
+    id_album = <?php echo $_REQUEST['id_album'] ?>;
+    id_type	 = <?php echo $_REQUEST['id_type'] ?>;
 </script>
 
-
-
-
-<script type="text/javascript" src="ressource/plugin/fancyupload/source/Swiff.Uploader.js"></script>
-<script type="text/javascript" src="ressource/plugin/fancyupload/source/Fx.ProgressBar.js"></script>
-<script type="text/javascript" src="ressource/plugin/fancyupload/source/FancyUpload2.js"></script>
-
-<script>
-document.addEvent('domready', function(){
-
-
-	up = new FancyUpload2($('demo-status'), $('demo-list'), {
-		verbose: true,					// we console.log infos, remove that in production!!
-		url: $('form-demo').action,		// url is read from the form, so you just have to change one place
-		
-		
-		path: 'ressource/plugin/fancyupload/source/Swiff.Uploader.swf',	// path to the SWF file
-		
-		// remove that line to select all files, or edit it, add more items
-		typeFilter: {
-		//	'Images (*.jpg, *.jpeg, *.gif, *.png)': '*.jpg; *.jpeg; *.gif; *.png'
-		},
-		
-		// this is our browse button, *target* is overlayed with the Flash movie
-		target: 'demo-browse',
-		
-		// graceful degradation, onLoad is only called if all went well with Flash
-		onLoad: function() {
-			$('demo-status').removeClass('hide'); 	// we show the actual UI
-			$('demo-fallback').destroy(); 			// ... and hide the plain form
-			
-			// We relay the interactions with the overlayed flash to the link
-			this.target.addEvents({
-				click: function() {
-					return false;
-				},
-				mouseenter: function() {
-					this.addClass('hover');
-				},
-				mouseleave: function() {
-					this.removeClass('hover');
-					this.blur();
-				},
-				mousedown: function() {
-					this.focus();
-				}
-			});
-
-			// Interactions for the 2 other buttons
-
-			$('demo-clear').addEvent('click', function() {
-				up.remove(); // remove all files
-				return false;
-			});
-
-			$('demo-upload').addEvent('click', function() {
-				up.start(); // start upload
-				return false;
-			});
-		},
-		
-		// Edit the following lines, it is your custom event handling
-		
-		/**
-		* Is called when files were not added, "files" is an array of invalid File classes.
-		* 
-		* This example creates a list of error elements directly in the file list, which
-		* hide on click.
-		**/
-		onSelectFail: function(files) {
-			files.each(function(file) {
-				new Element('li', {
-					'class': 'validation-error',
-					html: file.validationErrorMessage || file.validationError,
-					title: MooTools.lang.get('FancyUpload', 'removeTitle'),
-					events: {
-						click: function() {
-							this.destroy();
-						}
-					}
-				}).inject(this.list, 'top');
-			}, this);
-		},
-		
-		/**
-		* This one was directly in FancyUpload2 before, the event makes it
-		* easier for you, to add your own response handling (you probably want
-		* to send something else than JSON or different items).
-		**/
-		onFileSuccess: function(file, response) {
-			var json = new Hash(JSON.decode(response, true) || {});
-
-			if(json.get('status') == '1') {
-				file.remove();
-			//	file.element.addClass('file-success');
-			//	file.info.set('html', 'Fichier en ligne');
-			}else{
-				file.element.addClass('file-failed');
-				file.info.set('html', 'Erreur (' + (json.get('error') ? (json.get('error') + ' #' + json.get('code')) : response));
-			}
-		},
-		
-		/**
-		* onFail is called when the Flash movie got bashed by some browser plugin
-		* like Adblock or Flashblock.
-		**/
-		onFail: function(error) {
-			switch (error) {
-				case 'hidden': // works after enabling the movie and clicking refresh
-					alert('To enable the embedded uploader, unblock it in your browser and refresh (see Adblock).');
-					break;
-				case 'blocked': // This no *full* fail, it works after the user clicks the button
-					alert('To enable the embedded uploader, enable the blocked Flash movie (see Flashblock).');
-					break;
-				case 'empty': // Oh oh, wrong path
-					alert('A required file was not found, please be patient and we fix this.');
-					break;
-				case 'flash': // no flash 9+ :(
-					alert('To enable the embedded uploader, install the latest Adobe Flash plugin.')
-			}
-		},
-
-		onComplete:function(){	
-		}
-
-	});
-	
-});
-</script>
-
-</div></body></html>
+</body></html>

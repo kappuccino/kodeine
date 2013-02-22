@@ -1,7 +1,11 @@
-#galleyPath{
+@import      '../../../core/ui/css/0-mixins.less';
+
+#galleryPath{
 	position: absolute;
-	top:175px; right: 0px; left: 251px;
+	top:120px; right: 0px; left: 251px; height: 22px;
 	background: rgb(200,200,200);
+
+	margin: 0; padding: 0;
 
 	li{
 		float: left;
@@ -9,92 +13,70 @@
 		list-style-type: none;
 		padding-left: 5px;
 		color: #333;
-
-		a{
-			color: #333;
-			text-decoration: none;
-		}
-	}
-}
-
-#galleyPathAction{
-	position: absolute;
-	right: 5px; left: 5px;
-
-	a{
-		color: #fff;
-		display: block;
-		float: left;
-		text-decoration: none;
 		cursor: pointer;
-		margin-right: 5px;
-	}
-
-	div{
-		float: left;
-		padding-top: 3px;
 	}
 }
 
 #galleryTree{
 	position: absolute;
-	top:175px; left: 0px; bottom: 0px;
+	top:120px; left: 0px; bottom: 0px;
 	width: 250px;
-	background: #DDD;
+	background: #404040;
 	overflow-y: auto;
 	padding: 0px; margin: 0px;
-
-	li{
-		list-style-type: none;
-		padding: 0px;
-		margin: 0px;
-	}
 
 	li          > ul{ display: none;  }
 	li.opened   > ul{ display: block; }
 
-	li		    > .item .toggle{	background: url(../img/arrow-folder-close.png) no-repeat left top; }
-	li.opened   > .item .toggle{	background: url(../img/arrow-folder-open.png) no-repeat left top; }
-
+	li		    > .item .toggle{	background: url('@{corepath}/img/_img/arrow-folder-close.png') no-repeat left top; }
+	li.opened   > .item .toggle{	background: url('@{corepath}/img/_img/arrow-folder-open.png')  no-repeat left top; }
 
 	li{
+		list-style-type: none;
+		padding: 0; margin: 0;
+
+
+
 		.item{
 			background: #E1E1E1;
 			border-bottom: 1px solid #FFFFFF;
 			padding: 3px;
-		}
-		.toggle{
-			display: block;
-			float: left;
-			width: 16px; height: 16px;
 			cursor: pointer;
-		}
-		.name{
-			display: block;
-			float: left;
-			cursor: pointer;
-			text-decoration: none;
-			color: #515151;
+
+			.toggle{
+				display: block;
+				float: left;
+				width: 16px; height: 16px;
+				cursor: pointer;
+			}
+			.name{
+				display: block;
+				float: left;
+				cursor: pointer;
+				text-decoration: none;
+				color: #515151;
+			}
 		}
 	}
 
 	ul{
-		padding-left: 0px;
+		margin: 0; padding: 0;
 	}
 }
 
 #galleryView{
 	position: absolute;
-	top:198px; right:0px; bottom: 0px; left: 251px;
-	background: #DDD;
+	top:143px; right:0px; bottom: 0px; left: 251px;
+	background: url(../img/background.png);
 	padding: 0px; margin: 0px;
 	overflow-y: auto;
 
 	li, .dragging{
 		list-style-type: none;
 		float: left;
-		height: 200px; width: 160px;
-		margin: 5px;
+	//	height: 200px;
+		width: 160px;
+		margin: 15px;
 	}
 
 	li.nothing{
@@ -107,80 +89,101 @@
 	}
 }
 
-#galleryInfo{
-	position: absolute;
-	left: 0px; bottom: 0px;
-	height: 150px; width: 250px;
-	background: rgb(200,200,200);
-	display: none;
-}
-
 .gItem{
+	position: relative;
+
 	.title{
-		height: 20px;
-		text-align: center; color:#FFFFFF; line-height: 22px; font-size: 10px;
-		background: #515151;
+		color:#FFFFFF; line-height: 26px; font-size: 11px;
 		overflow: hidden;
-		-moz-border-radius-topleft:4px;		-webkit-border-top-left-radius:4px;
-		-moz-border-radius-topright:4px;	-webkit-border-top-right-radius:4px;
+		text-overflow: ellipsis;
+		white-space: nowrap;
 	}
 
-	.icone{
-		height: 160px; width: 160px;
-		background: #666;
-		text-align: center;
+	.media{
+		height: 150px; width: 150px; padding: 5px;
+		background: rgba(0, 0, 0, .1);
 
-		img.shadow{
-			-moz-box-shadow: 0px 0px 3px rgba(0, 0, 0, 0.5); 	-webkit-box-shadow: 0px 0px 3px rgba(0, 0, 0, 0.5);
-		}
+		display: table-cell;
+		vertical-align: middle;
+		position: relative; z-index: 40;
 
-		img.loading{
-			background: url(../img/media-loader-reverse.png) no-repeat center center;
-		}
+		.icone{
+			z-index: 2;
+			cursor: pointer;
+			text-align: center;
 
-		img.isPoster{
-			background: #eaedef;
-			padding: 2px;
-			border: 1px solid #FFFFFF;
-			-moz-box-shadow: 0px 0px 4px rgba(0, 0, 0, 0.5); 	-webkit-box-shadow: 0px 0px 4px rgba(0, 0, 0, 0.5);
-			-moz-border-radius:2px; 							-webkit-border-radius:2px;
-			&:hover{
-				background: #000;
-				border-color: #000;
+			img{
+				vertical-align: top;
+
+				&.responsive-height{
+					height: 100%;
+					width: auto;
+				}
+
+				&.responsive-width{
+					height: auto;
+					width: 100%;
+				}
+
+				&.shadow{
+					box-shadow: 0px 0px 3px rgba(0, 0, 0, 0.5);
+				}
+
+				&.loading{
+					background: url('@{corepath}/img/_img/media-loader-reverse.png') no-repeat center center;
+				}
+
+				&.posterized{
+					background: #eaedef;
+					padding: 1px;
+					border: 1px solid #FFFFFF;
+
+					&:hover{
+						background: #000;
+						border-color: #000;
+					}
+				}
 			}
+		}
+
+	}
+
+	&:hover .action{
+		display: block;
+	}
+
+	&.ui-sortable-helper{
+		.title, .action{
+			display: none;
 		}
 	}
 
 	.action{
-		height: 24px;
-		text-align: center;
-		background: #515151;
-		-moz-border-radius-bottomleft:4px;	-webkit-border-bottom-left-radius:4px;
-		-moz-border-radius-bottomright:4px;	-webkit-border-bottom-right-radius:4px;
+		display: none;
+		position: absolute; z-index: 50;
+		top: 0; right: 0; padding:3px 0 3px 0;
+		background: rgba(0, 0, 0, 0.5);
 
-		span{
-			font-size: 10px;
-			display: block;
-			padding-top: 4px;
-		}
-
-		a{
-			color:#FFF;
-			text-decoration: none;
-			padding: 0px 2px 0px 2px;
+		img{
 			cursor: pointer;
 		}
 
-		a.view,     a.is_poster{	opacity: 1;		}
-		a.notview, 	a.isnot_poster{ opacity: 0.2;	}
+		.visibility.off,
+		    .poster.off{
+			opacity: .25;
+		}
 	}
+}
+
+.fly{
+	background: #f58400;
 }
 
 #gCarrousel{
 	margin-top: 20px;
 
 	a{
-		color:#666666;
+		color:#666666; font-weight: bold;
 		text-decoration: none;
 	}
 
@@ -214,3 +217,58 @@
 	}
 	
 }
+
+#import{
+	margin-top: 40px;
+
+	section{
+		float: left;
+		width: 33%;
+
+		&:first-child{
+			margin-right: 6px;
+		}
+
+		&:last-child{
+			float:right;
+		}
+
+		h2{
+		}
+	}
+
+	#log{
+		height: 30px;
+	}
+}
+
+#queue{
+	min-height: 600px;
+	background: pink;
+
+	.uploadifive-queue-item{
+		background: #e1e1e1;
+		padding: 5px;
+		margin-bottom: 5px;
+
+		.close{
+
+		}
+
+		.filename{
+
+		}
+
+		.fileinfo{
+
+		}
+
+		.progress{
+
+			.progress-bar{
+
+			}
+		}
+	}
+}
+

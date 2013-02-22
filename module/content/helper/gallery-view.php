@@ -1,10 +1,20 @@
 <?php
+
+	header("Content-Type: text/plain");
+
+	$data = array();
+
 	// Album
 	if($_GET['id_album'] > 0){
 		$album = $app->apiLoad('content')->contentGet(array(
 			'raw'			=> true,
 			'id_content'	=> $_GET['id_album'],
 		));
+
+		$id_poster = $album['id_poster'];
+	}else{
+		$id_poster = NULL;
+
 	}
 
 	// Albums
@@ -20,35 +30,36 @@
 		'debug'		=> isset($_GET['pre'])
 	));
 
-	if(sizeof($albums) > 0){
-		foreach($albums as $idx => $e){
+	foreach($albums as $idx => $e){
 
-			// Verifier le poster du dossier
-			if($e['id_poster'] > 0){
+		$tmp = array(
+			'is_album'      => true,
+			'id_content'    => $e['id_content'],
+			'contentName'   => $e['contentName'],
+			'contentSee'    => $e['contentSee'],
+		);
 
-				$poster = $app->apiLoad('content')->contentGet(array(
-					'id_content'=> $e['id_poster'],
-					'raw'		=> true,
-					'debug'		=> false,
-				));
+		// Verifier le poster du dossier
+		if($e['id_poster'] > 0){
 
-				if(file_exists(KROOT.$poster['contentItemUrl']) && is_file(KROOT.$poster['contentItemUrl'])){
-					$preview = $app->mediaUrlData(array(
-						'url'		=> $poster['contentItemUrl'],
-						'mode'		=> (($poster['contentItemWidth'] > $poster['contentItemHeight']) ? 'width' : 'height'),
-						'value'		=> $_GET['size']
-					));
-	
-					$albums[$idx]['poster'] = array('preview' => array(
-						'contentItemUrl'	=> $preview['img'],
-						'contentItemWidth'	=> $preview['width'],
-						'contentItemHeight'	=> $preview['height'],
-					));
-				}else{
-					$albums[$idx]['id_poster'] = 0;
-				}
+			$poster = $app->apiLoad('content')->contentGet(array(
+				'id_content'=> $e['id_poster'],
+				'raw'		=> true
+			));
+
+			if(file_exists(KROOT.$poster['contentItemUrl']) && is_file(KROOT.$poster['contentItemUrl'])){
+				$tmp['preview'] = array(
+					'url'	    => $poster['contentItemUrl'],
+					'width'	    => intval($poster['contentItemWidth']),
+					'height'	=> intval($poster['contentItemHeight']),
+				);
+			}else{
+				$albums[$idx]['id_poster'] = 0;
 			}
 		}
+
+		$data[] = $tmp;
+
 	}
 
 	// Items
@@ -60,38 +71,43 @@
 		'is_item'	=> true,
 		'order'		=> 'contentItemPos',
 		'direction'	=> 'ASC',
-		'noLimit'	=> true,
-#		'debug'		=> isset($_GET['pre'])
+		'noLimit'	=> true
 	));
-#	die($app->pre("#2", $items));
 
 	foreach($items as $i => $e){
-		if($e['contentItemType'] == 'image'){
-			$preview = $app->mediaUrlData(array(
-				'url'	=> $e['contentItemUrl'],
-				'mode'	=> (($e['contentItemWidth'] > $e['contentItemHeight']) ? 'width' : 'height'),
-				'value'	=> $_GET['size']
-			));
 
-			$items[$i]['preview'] = array(
-				'contentItemUrl'	=> $preview['img'],
-				'contentItemWidth'	=> $preview['width'],
-				'contentItemHeight'	=> $preview['height'],
+		$tmp = array(
+			'is_item'           => true,
+			'is_poster'         => ($id_poster == $e['id_content']),
+			'id_content'        => $e['id_content'],
+			'contentName'       => $e['contentName'],
+			'contentSee'        => $e['contentSee'],
+			'contentItemType'   => $e['contentItemType'],
+
+		);
+
+		if($e['contentItemType'] == 'image'){
+			$tmp['preview'] = array(
+				'url'	    => $e['contentItemUrl'],
+				'width'	    => intval($e['contentItemWidth']),
+				'height'	=> intval($e['contentItemHeight']),
 			);
 		}
+
+		$data[] = $tmp;
 	}
 
-	$content = array_merge($albums, $items);
+	//$content = array_merge($albums, $items);
 
 	// Subs
-	foreach($content as $idx => $e){
+	/*foreach($content as $idx => $e){
 		$content[$idx]['is_album']	= ($e['is_album']) ? true : false;
 		$content[$idx]['is_item']	= ($e['is_item'])  ? true : false;
 		$content[$idx]['is_poster']	= ($album['id_poster'] == $e['id_content']) ? true : false;
-	}
+	}*/
 
 	// Path
-	function parents($app, $id_content, &$path){
+	/*function parents($app, $id_content, &$path){
 		$p = $app->dbOne("
 			SELECT * FROM k_contentalbum
 			INNER JOIN k_contentdata ON k_contentalbum.id_content = k_contentdata.id_content
@@ -107,9 +123,10 @@
 	$path = array();#$_GET['id_album']);
 	if($_GET['id_album'] != 0) parents($app, $_GET['id_album'], $path);
 
-	$data['path']	= array_reverse($path);	
-	$data['items']	= $content;
-	
+	$data['path']	= array_reverse($path);*/
+#	$data['items']	= $content;
+
+/*
 	foreach($data['path'] as $idx => $e){
 		$data['path'][$idx]['contentName'] = $e['contentName'];
 	}
@@ -117,11 +134,8 @@
 	foreach($data['items'] as $idx => $e){
 		$data['items'][$idx]['contentName'] = $e['contentName'];
 	}
-	
+*/
 
-	if(isset($_GET['pre'])){
-		$app->pre($data);
-	}else{
-		echo json_encode($data);	
-	}
-?>
+	// Sortie
+	$json = $app->helperJsonEncode($data);
+	echo $app->helperJsonBeautifier($json);

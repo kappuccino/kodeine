@@ -118,145 +118,90 @@
 		}
 	}
 
+	if(is_array($previous)){
+		$leftLink = "gallery-album?id_content=".$previous['id_content'];
+	}
+
+	if(is_array($next)){
+		$rightLink = "gallery-album?id_content=".$next['id_content'];
+	}
+
+
 	$fields = $app->apiLoad('field')->fieldGet(array(
 		'id_type'		=> $type['id_type'],
 		'albumField'	=> true,
 		'fieldShowForm'	=> true,
 		'debug'			=> false
 	));
-	
-	# Path Way
-	$pathway = array("/<a href=\"gallery-index?id_type=".$type['id_type']."\">Racine</a>");
-	if($id_album > 0 && sizeof($data['contentAlbumParent']) > 0	){
-
-		$parents = $app->apiLoad('content')->contentGet(array(
-			'raw'			=> true,
-			'id_type'		=> $type['id_type'],
-			'id_content'	=> explode(',', $data['contentAlbumParent']),
-			'is_album'		=> true,
-			'debug'			=> false
-		));
-
-		foreach($parents as $p){
-			$pathway_[]	= "<a href=\"gallery-index?id_type=".$type['id_type']."#".$p['id_content']."\">".$p['contentName']."</a>";
-		}
-
-		$pathway_ = array_reverse($pathway_);
-		$pathway  = array_merge($pathway, $pathway_);
-	}
-
-	$title = implode('/', $pathway).' &raquo; '.$title;
-
-
-	/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
-
-	function fieldTrace($app, $data, $e, $f){
-	
-		#$app->pre($data);
-		$field = $app->apiLoad('field')->fieldForm(
-			$e['id_field'],
-			$app->formValue($data['field'.$e['id_field']], $_POST['field'][$e['id_field']]),
-			array(
-				'style' => 'width:99%; '.$e['fieldStyle']
-			)
-		);
-
-		if(preg_match("#richtext#", $field)) 	$GLOBALS['textarea'][]	= 'form-field-'.$e['id_field'];
-		if(preg_match("#media\-list#", $field)) $GLOBALS['mediaList'][]	= "'form-field-".$e['id_field']."'";
-		if(preg_match("#datePicker#", $field))  $GLOBALS['datePick'][]	= "'form-field-".$e['id_field']."'";
-
-		echo "<li class=\"clearfix ".$app->formError('field'.$e['id_field'], 'needToBeFilled')." form-item\" id=\"field".$e['id_field']."\">";
-		echo "<div class=\"hand\">&nbsp;</div>";
-		echo "<div class=\"toggle toggle-hidden\">&nbsp;</div>";
-
-			echo "<label>".$e['fieldName'];
-				if($e['is_needed']) echo ' *';
-				if(preg_match("#richtext#", $field)){
-					echo "<br /><a href=\"javascript:toggleEditor('form-field-".$e['id_field']."');\">Activer/Désactiver l'éditeur</a>";
-				}
-
-			echo "</label>";
-
-			echo "<div class=\"form\">".$field."</div>";
-
-			if($e['fieldInstruction']){
-				echo "<div class=\"instruction off\">".$e['fieldInstruction']."</div>";
-			}
-
-		echo "</li>";
-	}
 
 ?><!DOCTYPE html>
 <html lang="fr">
 <head>
 	<?php include(COREINC.'/head.php'); ?>
+	<link rel="stylesheet" type="text/css" href="ui/css/gallery.css">
 	<link rel="stylesheet" type="text/css" href="../media/ui/css/media.css">
+    <link rel="stylesheet" type="text/css" href="../content/ui/css/data.css" />
+	<link rel="stylesheet" type="text/css" href="../core/vendor/datepicker/css/datepicker.css" />
+	<link rel="stylesheet" type="text/css" href="../core/vendor/codemirror/lib/codemirror.css" />
+	<link rel="stylesheet" type="text/css" href="../core/vendor/codemirror/theme/monokai.css" />
 </head>
 <body>
 	
 <header><?php
 	include(COREINC.'/top.php');
 	include(__DIR__.'/ui/menu.php');
-?>
-</header>	
-	
+?></header>
+
+<div class="inject-subnav-right hide">
+    <li><a onclick="$('#data').submit()" class="btn btn-small btn-success">Enregistrer</a></li>
+	<?php if($data['id_content'] > 0){ ?>
+	<li><a href="gallery?id_type=<?php echo $data['id_type'] ?>#<?php echo $data['id_content'] ?>" class="button button-blue">Afficher l'album en image</a></li>
+	<?php } ?>
+</div>
+
 <div id="app">
 	<div class="wrapper">
-	
-	<?php
-		if(isset($_GET['message'])) $message = urldecode($_GET['message']);
-		if($message != NULL){
-			list($class, $message) = $app->helperMessage($message);
-			echo "<div class=\"message message".ucfirst($class)."\">".$message."</div>";
-		}
-	?>
-	
-		<div>
-			<a href="javascript:$('#data').submit()" class="button button-blue">Enregistrer</a>
-			<?php if($data['id_content'] > 0){ ?>
-			<a href="gallery-index?id_type=<?php echo $data['id_type'] ?>#<?php echo $data['id_content'] ?>" class="button button-blue">Afficher l'album en image</a>
-			<?php } ?>
-		</div>
-	
-	<?php
-		if(is_array($previous)){
-			$leftLink = "gallery-album?id_content=".$previous['id_content']."&id_type=".$type['id_type'];
-		}
-	
-		if(is_array($next)){
-			$rightLink = "gallery-album?id_content=".$next['id_content']."&id_type=".$type['id_type'];
-		}
-	
-	?>
-	<table width="100%" border="0" cellpadding="0" cellspacing="2" id="gCarrousel">
-		<tr>
-			<th width="25%" 	class="previous"><a href="<?php echo ($leftLink  != '') ? $leftLink  : '#'; ?>">&#8592; Album précédente</a></th>
-			<th align="center"	class="current"	>&#8593; <?php
-				echo ($data['id_album'] == 0)
-					? "<a href=\"gallery-index?id_type=".$type['id_type']."\">Racine</a>"
-					: "<a href=\"gallery-index?id_type=".$type['id_type']."#".$album['id_content']."\">Album ".$album['contentName']."</a>";
-			?></th>
-			<th width="25%" 	class="next"	><a href="<?php echo ($rightLink != '') ? $rightLink : '#'; ?>">Album suivant &#8594;</a></th>
-		</tr>
-		<tr valign="top" align="left">
-			<td class="previous"><?php
-				if($leftLink != ''){
-					echo "<a href=\"".$leftLink."\">".$previous['contentName']."</a>";
-				}else{
-					echo "<span id=\"leftDeadEnd\" style=\"padding:5px;\">Vous êtes au debut de l'album</span>";
-				}
-			?>&nbsp;</td>
-			<td class="current" align="center";>Album courant: <?php echo $data['contentName']  ?></td>
-			<td class="next" align="right">&nbsp;<?php
-				if($rightLink != ''){
-					echo "<a href=\"".$rightLink."\">".$next['contentName']."</a>";
-				}else{
-					echo "<span id=\"rightDeadEnd\" style=\"padding:5px;\">Vous êtes a la fin de l'album</span>";	
-				}
-			?></td>
-		</tr>
-	</table>
-	
+
+		<?php
+			if(isset($_GET['message'])) $message = urldecode($_GET['message']);
+			if($message != NULL){
+				list($class, $message) = $app->helperMessage($message);
+				echo "<div class=\"message message".ucfirst($class)."\">".$message."</div>";
+			}
+		?>
+
+		<table width="100%" border="0" cellpadding="0" cellspacing="2" id="gCarrousel">
+			<tr>
+				<td class="previous"><a href="<?php echo ($leftLink  != '') ? $leftLink  : '#'; ?>">&#8592; Album précédente</a></td>
+				<td class="current"	>&#8593; <?php
+
+					echo ($data['id_album'] == 0)
+						? "<a href=\"gallery?id_type=".$type['id_type']."\">Racine</a>"
+						: "<a href=\"gallery?id_type=".$type['id_type']."#".$album['id_content']."\">Album ".$album['contentName']."</a>";
+
+				?></td>
+				<td width="25%" class="next"><a href="<?php echo ($rightLink != '') ? $rightLink : '#'; ?>">Album suivant &#8594;</a></td>
+			</tr>
+			<tr>
+				<td class="previous"><?php
+
+					echo ($leftLink != '')
+						? "<a href=\"".$leftLink."\">".$previous['contentName']."</a>"
+						: "<span id=\"leftDeadEnd\" style=\"padding:5px;\">Vous êtes au debut de l'album</span>";
+
+				?>&nbsp;</td>
+				<td class="current" align="center";>Album courant: <?php echo $data['contentName']  ?></td>
+				<td class="next" align="right">&nbsp;<?php
+
+					echo ($rightLink != '')
+						? "<a href=\"".$rightLink."\">".$next['contentName']."</a>"
+						: "<span id=\"rightDeadEnd\" style=\"padding:5px;\">Vous êtes a la fin de l'album</span>";
+
+				?></td>
+			</tr>
+		</table>
+    </div>
+
 	<form action="gallery-album" method="post" id="data">
 	
 		<input type="hidden" name="action" value="1" />
@@ -444,7 +389,8 @@
 	
 					<?php
 						foreach($fields as $e){
-							fieldTrace($app, $data, $e, $f);
+							$app->apiLoad('field')->fieldTrace($data, $e, $f);
+						//	fieldTrace($app, $data, $e, $f);
 						}
 					?>
 	
@@ -454,13 +400,13 @@
 	
 	</form>
 	
-	</div>
 </div>
 
 </body>
+
 <?php include(COREINC.'/end.php'); ?>
-<script src="/app/module/core/vendor/tinymce/jscripts/tiny_mce/jquery.tinymce.js"></script>
-<script src="/app/module/core/vendor/tinymce/jscripts/tiny_mce/tiny_mce.js"></script>
+<script src="../core/vendor/tinymce/jscripts/tiny_mce/jquery.tinymce.js"></script>
+<script src="../core/vendor/tinymce/jscripts/tiny_mce/tiny_mce.js"></script>
 <script src="ui/js/content.js"></script>
 <script>
 
@@ -488,52 +434,22 @@
 
 	$(window).bind({
 		'keydown' : function(e){
-			console.log(e);
 			if(actionNav){
 				if(e.keyCode == 37){ // left
 					link = '<?php echo $leftLink ?>';
-					if(link != ''){
-						document.location=link;
-					}
+					if(link != '') document.location=link;
 				}else
 				if(e.keyCode == 39){ // right
 					link = '<?php echo $rightLink ?>';
-					if(link != ''){
-						document.location=link;
-					}
-				}else{
-				if(e.keyCode == 38) // up
-					document.location='gallery-index?id_type=<?php echo $type['id_type'] ?>#<?php echo $album['id_content'] ?>';
+					if(link != '') document.location=link;
+				}else
+				if(e.keyCode == 38){ // up
+					document.location='gallery?id_type=<?php echo $type['id_type'] ?>#<?php echo $album['id_content'] ?>';
 				}
 			}
 		}
 	});
 
-	/*MooTools.lang.setLanguage("fr-FR");
-
-		calCrea = new CalendarEightysix('contentDateCreation', {
-			'startMonday':true, 'alignX':'middle', 'alignY':'top', 'format':'%Y-%m-%d'
-		});
-	
-		calUpd = new CalendarEightysix('contentDateUpdate', {
-			'startMonday':true, 'alignX':'middle', 'alignY':'bottom', 'format':'%Y-%m-%d'
-		});
-	
-		calStr = new CalendarEightysix('contentDateStart', {
-			'startMonday':true, 'alignX':'middle', 'alignY':'top', 'format':'%Y-%m-%d',
-		});
-		if(!$('contentDateStartDo').checked) $('contentDateStart').value = '';
-		$('contentDateStartDo').addEvent('click', function(){
-			$('contentDateStart').value = ($('contentDateStartDo').checked) ? '<?php echo date("Y-m-d") ?>' : '';
-		});
-	
-		calEnd = new CalendarEightysix('contentDateEnd', {
-			'startMonday':true, 'alignX':'middle', 'alignY':'bottom', 'format':'%Y-%m-%d',
-		});
-		if(!$('contentDateEndDo').checked) $('contentDateEnd').value = '';
-		$('contentDateEndDo').addEvent('click', function(){
-			$('contentDateEnd').value = ($('contentDateEndDo').checked) ? '<?php echo date("Y-m-d") ?>' : '';
-		});*/
 </script>
 
 </html>

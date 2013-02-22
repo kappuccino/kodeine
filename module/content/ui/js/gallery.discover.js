@@ -1,80 +1,86 @@
+var folders = [],
+	total = 0,
+	done = 0,
+	percent= 0,
+	into = $('input[name="sel"]:checked').val(),
+	root = $('#discoverFolder').val(),
+	log = $('#log'),
+	id_type,
+	id_album;
+
 function discoverInit(){
 
-	folders	= [];
-	total	= 0;
-	done	= 0;
-	size	= $('discoverFolder').getCoordinates().width;
-
-	var into	= $('inside').checked ? 'inside' : 'create';
-	var root	= $('discoverFolder').value;
-
 	if(root == ''){
-		$('log').set('html', 'Le champ est vide');
+		log.html('Le champ est vide');
 		return false;
 	}else{
-		$('log').set('html', 'A la d�couvert de '+root+' : <b>patienter quelques instans</b> creation de l\'arborescence en cours...');
+		log.html('A la découverte de '+root+'...<br /><b>patienter quelques instants</b><br />Création de l\'arborescence en cours...');
 	}
 
-	$('discoverFolder').setStyles({
-		'background' : 'url(ressource/img/gallery-field-loader.gif) no-repeat -800px 0px'
-	});
-
-	new Request.JSON({
-		url: 'ressource/lib/gallery.discover.php',
-		onComplete:function(r){
-			if(r.success){
-
-				folders = r.data;
-				total	= folders.length;
-				step	= size / total;
-	
-				if(folders.length > 0){
-					discover(0);
-				}else{
-					$('log').set('html', 'Rien a faire le dossier est vide');
-				}
-
-			}else{
-				$('log').set('html', 'Erreur '+ r.error);
-			}
+	var xhr = $.ajax({
+		url:       'helper/gallery-discover',
+		dataType: 'json',
+		data: {
+			'action':   'folder',
+			'id_type':   id_type,
+			'id_album':  id_album,
+			'into':      into,
+			'folder':    root
 		}
-	}).post({
-		'action' 	: 'folder',
-		'id_type'	: id_type,
-		'id_album'	: id_album,
-		'into'		: into,
-		'folder'	: root
 	});
+
+	xhr.done(function(r){
+		if(r.success){
+
+			folders = r.data;
+			total	= folders.length;
+
+			if(total > 0){
+				discover(0);
+			}else{
+				log.html('Rien a faire le dossier est vide');
+			}
+
+		}else{
+			log.html('Erreur '+ r.error);
+		}
+	});
+
 }
 
+
 function discover(idx){
+
 	if(idx >= total){
-		$('log').set('html', 'Indexation termin�e <a href="content.gallery.index.php?id_type='+id_type+'#'+id_album+'">Afficher</a>');
-		$('discoverFolder').setStyle('background', '');
+		log.html('Indexation terminée <a href="gallery?id_type='+id_type+'#album/'+id_album+'">Afficher</a>');
 		return true;
 	}
 
+	var me = folders[idx];
 	done++;
-	me = folders[idx];
 
-	$('log').set('html', 'Indexation de '+done+'/'+total+' ('+ me.folder +')');
-	
-	$('discoverFolder').setStyles({
-		'background' : 'url(ressource/img/gallery-field-loader.gif) no-repeat '+(-800 + (done * step))+'px 0px'
-	});
+	$('#progress .bar').css('width',  Math.round((done/total)*100) +'%');
+	log.html('Indexation de '+done+'/'+total+' ('+ me.folder +')');
 
-	new Request.JSON({
-		url: 'ressource/lib/gallery.discover.php',
-		onComplete:function(r){
-			$('log').set('html', $('log').get('html')+' : '+r.data+' element(s)');
-			(function(){
-				discover(idx+1);
-			}).delay(500);
+	var xhr = $.ajax({
+		url:       'helper/gallery-discover',
+		dataType: 'json',
+		data: {
+			'action' 	: 'item',
+			'id_type'	: id_type,
+			'id_album'	: me.id_album,
+			'folder'	: me.folder
 		}
-	}).get({
-		'action' 	: 'item',
-		'folder'	: me.folder,
-		'id_type'	: id_type,
-		'id_album'	: me.id_album
 	});
+
+	xhr.done(function(r){
+		log.html(
+			log.html()+' : '+r.data+' élement(s)'
+		);
+
+		setTimeout(function(){
+			discover(idx+1);
+		}, 500);
+	});
+
 }

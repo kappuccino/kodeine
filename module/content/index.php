@@ -31,7 +31,7 @@
 
 	// Filter (verifier content / album)
 	if($id_type == NULL)		die("APP : id_type IS NULL");
-	if($cType['is_gallery'])	header("Location: gallery-index?id_type=".$cType['is_type']);
+	if($cType['is_gallery'])	header("Location: gallery?id_type=".$cType['is_type']);
 
 	// Filter
 	if(isset($_GET['cf'])){
@@ -71,7 +71,7 @@
 			<ul class="dropdown-menu"><?php
 			foreach($app->apiLoad('type')->typeGet(array('profile' => true)) as $e){
 				echo '<li class="clearfix">';
-				echo '<a href="'.(($e['is_gallery']) ? 'gallery-index' : 'index').'?id_type='.$e['id_type'].'" class="left">'.$e['typeName'].'</a>';
+				echo '<a href="'.(($e['is_gallery']) ? 'gallery' : 'index').'?id_type='.$e['id_type'].'" class="left">'.$e['typeName'].'</a>';
 				echo '<a href="'.(($e['is_gallery']) ? 'gallery-album' : 'data' )."?id_type=".$e['id_type'].'" class="right"><i class="icon icon-plus-sign"></i></a>';
 				echo '</li>';
 			}
@@ -429,8 +429,8 @@
 </div>
 
 <?php include(COREINC.'/end.php'); ?>
-<script src="/app/module/core/vendor/datatables/jquery.dataTables.js"></script>
-<script src="/app/module/core/vendor/bootstrap/js/bootstrap-dropdown.js"></script>
+<script src="../core/vendor/datatables/jquery.dataTables.js"></script>
+<script src="../core/vendor/bootstrap/js/bootstrap-dropdown.js"></script>
 
 <script>
 

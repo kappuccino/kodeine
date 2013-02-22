@@ -1,618 +1,698 @@
-imageZone	= 160
-imageSize	= imageZone - 15;
-mode		= 'sort';
-treeReload	= [];
+'use strict';
 
-$(function(){
-	$('#buttonAddAlbum').bind('click',	galleryAddAlbum);
-	$('#buttonEdit').bind('click', 		galleryEditAlbum);
-	$('#buttonImport').bind('click', 	galleryAddItem);
+var gallery = {
+	id_type:'',
+	models: {},
+	views: {},
+	collections: {},
+	router: {}
+};
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// MODELS
+
+gallery.models.media         = Backbone.Model.extend({
+
+	defaults: {
+		opened: false
+	},
+
+	initialize: function() {
+	}
+
 });
 
-/* + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - 
-+ - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - */
-function galleryTree(id, level, where){
 
-	var album = $.ajax({
-		url: 'helper/gallery-album',
-		data: {'id_type': id_type, 'id_album': id},
-		dataType: 'json'
-	});
-	
-	album.done(function(data) {
-		galleryTreeBuild(where, level, data);
-	});
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// COLLECTIONS
 
-}
-/* + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - 
-+ - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - */
-function galleryTreeBuild(where, level, data){
+gallery.collections.media    = Backbone.Collection.extend({
 
-	if(data.length == 0) return true;
-	
-	where.empty();
+	model: gallery.models.media,
 
-	$.each(data, function(i, d){
-		
-		var li_ 	= $('<li />').appendTo(where);
-		var item_	= $('<div id="'+d.id_content+'" class="item clearfix dropme"/>').appendTo(li_);
-		var act_	= $('<span class="toggle" style="margin-left:'+(level * 16)+'px" />').appendTo(item_).bind('click', function() {
+	url: 'helper/gallery-view'
 
-			if($(this).parent('li').hasClass('opened')){
-				galleryTreeClose($(this));
-			}else{
-				galleryTreeOpen(d.id_content, (level+1), $(this));
-			}
-		});
+});
 
-		$('<a class="name" href="#'+d.id_content+'">'+d.contentName+'</a>').appendTo(item_).bind('click', function() {
-			galleryAlbum(d.id_content, false);
-		});
-		
-		$('<ul />').appendTo(li_);
+gallery.collections.tree     = Backbone.Collection.extend({
 
-		console.log(treeReload);
-		//// Reload tree
-		if(treeReload.length > 0){
-			treeReload.some(function(item, index){
-				if(item == d.id_content) act_.trigger('click');
-			});
-		}	
-	});
-}
+	model: gallery.models.media,
 
-function galleryTreeOpen(id, level, me){
-	var li_ = me.parent('li');
-	var ul_ = li_.find('ul');
-	
-	li_.addClass('opened');
-	
-	galleryTree(id, level, ul_);
-}
+	url: 'helper/gallery-album'
 
-function galleryTreeClose(me){
-	var li_ = me.parent('li');
-	var ul_ = li_.find('ul');
+});
 
-	li_.removeClass('opened');
-}
+gallery.collections.path     = Backbone.Collection.extend({
 
-/* + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - 
-+ - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - */
-function galleryAlbum(id, loadTree){
+	model: gallery.models.media,
 
-	id_album = id;
+	url: 'helper/gallery-path'
 
-	var get = $.ajax({
-		url: 'helper/gallery-view',
-		dataType: 'json',
-		data: {'id_type': id_type, 'id_album': id_album, 'size': imageSize}
-	});
-	
-	get.done(function(data) {
-		
-		galleryView(data.items);
-		galleryPath(data.path);
+});
 
-		(mode == 'sort')
-			? makeSort()
-			: makeMove();
 
-		if(loadTree){
-			$.each(data.path, function(i, p){
-				treeReload.push(p.id_content);
-			});
-			
-			galleryTree(0, 0, $('#galleryTree'));
-		}
-	});
-	
-	console.log('galleryAlbum : DONE');
-}
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// VIEWS
 
-/* + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - 
-+ - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - */
-function galleryPict(me, isPoster){
-	var top		= (isPoster) ? 6 : 0;
-	
-	var img_	= $('<img src="'+me.preview.contentItemUrl+'" height="'+me.preview.contentItemHeight+'" width="'+me.preview.contentItemWidth+'" class="loading" />');
-		img_.css({'cursor' : 'pointer', 'margin-top' : Math.round((imageZone - me.preview.contentItemHeight - top) / 2)});
-		img_.onload = function() {
-			this.addClass('shadow').removeClass('loading');
-		}
+gallery.views.view           = Backbone.View.extend({
 
-	return img_;
-}
+	el: $('#galleryView'),
 
-/* + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - 
-+ - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - */
-function galleryView(data){
-	
-	var v = (id_album == '0') ? 'none' : '';
-	$('#buttonEdit').css('display',   v);
-//	$('buttonImport').setStyle('display', v);
+	initialize:function(){
+		this.listenTo(gallery.collections.myMedia, 'reset',  this.fill);
+		this.id_album = this.$el.data('id_album') || 0;
+		this.order = [];
+	},
 
-	$('#galleryView').empty();
-	
-	if(data.length > 0){
-		$.each(data, function(i, me){
-			
-			li_ 	= $('<li id="'+me.id_content+'" class="gItem dragme">').appendTo('#galleryView');
-			title_ 	= $('<div class="title" />').appendTo(li_);
-			icone_	= $('<div class="icone" />').appendTo(li_);
-			action_ = $('<div class="action"/>').appendTo(li_);
-			action_ = $('<span />').appendTo(action_);
-			
-			title_.html(me.contentName);
+	clear: function(){
+		this.$el.sortable('destroy');
+		this.$el.empty();
+	},
 
-			kill_	= $('<a href="javascript:;"><img src="../core/ui/img/_img/media-delete.png" /></a>').appendTo(action_);
-			kill_.bind('click', function() {
-				galleryActionItemRemove(me.id_content);
-			});
-			
-			// Ceci est un ALBUM
-			//
-			if(me.is_album){
-				console.log('album !')
-				
-				li_.addClass('dropme');
+	fill: function(){
+		this.clear();
+		gallery.collections.myMedia.each(this.fillItem, this);
+		this.makeSortable();
+	},
 
-				open_ = $('<a href="#'+me.id_content+'" />').appendTo(icone_);
-				open_.bind('click', function() {
-					galleryAlbum(me.id_content, false);
-				});
+	fillItem: function(m){
+		var view  = new gallery.views.viewItem({model: m});
+		this.$el.append(view.render().el);
+		view.postRender();
+	},
 
-				// Image generique d'un dossier
-				if(me.id_poster == 0){
-					img_ = $('<img src="../core/ui/img/_img/gallery-folder.png" style="margin-top:16px"/>');
-				}
-				// Item qui represente le dossier (poster)
-				else{
-					img_ = galleryPict(me.poster, true);
-					img_.addClass('isPoster');
-				}
+	//////////////
 
-				img_.appendTo(open_);
-				editer_ = $('<a href="gallery-album?id_content='+me.id_content+'"><img src="../core/ui/img/_img/media-edit.png" /></a>');
-				editer_.appendTo(action_);
+	nav: function(id){
+		this.id_album = id;
+		this.load();
 
-				if(me.contentAlbumSyncFolder != ''){
-					sync_ = $('<a href="gallery-import?id_type='+me.id_type+'&id_album='+me.id_content+'&sync='+me.contentAlbumSyncFolder+'" />');
-					sync_.html('<img src="../core/ui/img/_img/media-sync.png" />');	
-					sync_.appendTo(action_);
-				}
+		gallery.views.myPath.load();
+		gallery.myRouter.navigate('album/'+this.id_album, {trigger: false});
+	},
 
-			}
-			// Ceci est un ITEM de gallery
-			//
-			else{
-				
-				me.contentItemHeight = parseInt(me.contentItemHeight);
-				me.contentItemWidth  = parseInt(me.contentItemWidth);
-				
-				// Image
-				//
-				if(me.contentItemType == 'image'){
-					
-					var img = galleryPict(me, false);
+	load: function(){
+		gallery.collections.myMedia.fetch({data: {
+			'id_album': this.id_album,
+			'id_type':  gallery.id_type
+		}});
+	},
 
-					var wra = $('<a href="gallery-item?id_content='+me.id_content+'&id_type='+me.id_type+'" />');
-						wra.appendTo(icone_);
-					
-					img.appendTo(wra).bind('click', function(e) {
-						if(!e.meta){
-							ev.preventDefault();
-							galleryEditItem(me.id_content);
-						}
-					});
-					
-					eye_ = $('<a class="toggPoster '+((me.is_poster) ? 'is_poster' : 'isnot_poster')+'"><img src="../core/ui/img/_img/media-star.png" /></a>');
-					eye_.appendTo(action_).bind('click', function() {
-						var r = (me.is_poster) ? false : true;
-						galleryActionTogglePoster(me.id_content, r);
-					});
-					
-				}else
+	//////////////
 
-				// Video
-				//
-				if(me.contentItemType == 'video'){
-					
-					img_ = $('<img src="../core/ui/img/_img/media-file_quicktime.png" height="128" width="128" style="cursor:pointer;margin-top:'+Math.round((imageZone - 128) / 2)+'" />');
-					img_.appendTo(icone_).bind('click', function() {
-						galleryEditItem(me.id_content);
-					});
+	makeSortable: function(){
+		var self = this;
 
-				}else
+		this.$el.disableSelection();
 
-				// Audio
-				//
-				if(me.contentItemType == 'audio'){
-					
-					img_ = $('<img src="../core/ui/img/_img/media-file_audio.png" height="128" width="128" style="cursor:pointer;margin-top:'+Math.round((imageZone - 128) / 2)+'" />');
-					img_.appendTo(icone_).bind('click', function() {
-						galleryEditItem(me.id_content);
-					});
+		this.$el.sortable({
+			distance: 30,
+			helper: 'clone',
+			appendTo: 'body',
+			items: "> li",
+			cursorAt: { left: -30 },
 
-				}else
-
-				// Audio
-				//
-				if(me.contentItemType == 'application' && me.contentItemMime == 'pdf'){
-					
-					img_ = $('<img src="../core/ui/img/_img/media-file_pdf.png" height="128" width="128" style="cursor:pointer;margin-top:'+Math.round((imageZone - 128) / 2)+'" />');
-					img_.appendTo(icone_).bind('click', function() {
-						galleryEditItem(me.id_content);
-					});
-
-				}
-				
-				// Generique
-				//
-				else{
-					
-					img_ = $('<img src="../core/ui/img/_img/media-file_file.png" height="128" width="128" style="cursor:pointer;margin-top:'+Math.round((imageZone - 128) / 2)+'" />');
-					img_.appendTo(icone_).bind('click', function() {
-						galleryEditItem(me.id_content);
-					});
-
-				}
-
-				editer_ = $('<a href="gallery-item?id_content='+me.id_content+'&id_type='+id_type+'"><img src="../core/ui/img/_img/media-edit.png" /></a>');
-				editer_.appendTo(action_);
-			}
-
-			eye_ = $('<a class="toggView '+((me.contentSee == '1') ? 'view' : 'notview')+'"><img src="../core/ui/img/_img/media-eye.png" /></a>');
-			eye_.appendTo(action_).bind('click', function() {
-				galleryActionToggleView(me.id_content, this.hasClass('view'));
-			});
-
-		});
-
-	}else{
-		nothing = $('<li class="nothing">Il n\'y a aucun element a afficher</li>').appendTo('#galleryView');
-	}
-}
-
-console.log('galleryView : DONE');
-
-
-/* + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - 
-+ - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - */
-function galleryPath(path){
-
-	$('#galleyPathAlbum').empty();
-
-	li_ = $('<li />').appendTo('#galleyPathAlbum');
-	a_  = $('<a href="#0" id="0" class="dropme">Racine</a>').appendTo(li_).bind('click', function() {
-		galleryAlbum(0, false);
-	});
-
-	if(path.length > 0){
-		
-		$.each(path, function(i, me){
-			
-			li_ = $('<li>&raquo;</li>').appendTo('#galleyPathAlbum');
-			li_ = $('<li></li>').appendTo('#galleyPathAlbum');
-
-			$('<a id="'+me.id_content+'" class="dropme">'+me.contentName+'</a>').appendTo(li_).bind('click', function() {
-				galleryAlbum(me.id_content, false);
-			});
-			
-		});
-	}
-}
-
-
-/* + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - 
-+ - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - */
-function galleryEditItem(id_content){
-	document.location = 'content.gallery.item.php?id_content='+id_content+'&id_type='+id_type;
-}
-
-
-/* + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - 
-+ - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - */
-function galleryAddAlbum(){
-	document.location = 'content.gallery.album.php?id_type='+id_type+'&id_album='+id_album;
-}
-
-
-/* + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - 
-+ - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - */
-function galleryEditAlbum(){
-	if(id_album == '0'){
-		alert('Cet album ne peut pas etre modifi�');
-	}else{
-		document.location='content.gallery.album.php?id_type='+id_type+'&id_content='+id_album;
-	}
-}
-
-
-/* + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - 
-+ - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - */
-function galleryAddItem(){
-	document.location = 'content.gallery.import.php?id_type='+id_type+'&id_album='+id_album;
-}
-
-
-/* + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - 
-+ - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - */
-function galleryActionItemRemove(id_content){
-
-	if(confirm("Voulez vous supprimer cet element ?")){
-		new Request.JSON({
-			url: 'ressource/lib/gallery.action.php',
-			onComplete: function(data){
-				if(data.message == 'OK'){
-					$(id_content).destroy();
-					resetPosition();
-				}else{
-					alert(data.message);
-				}
-			}
-		}).get({
-			'action'		: 'remove',
-			'id_type'		: id_type,
-			'id_album'		: id_album,
-			'id_content'	: id_content
-		});
-	}
-
-}
-
-/* + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - 
-+ - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - */
-function galleryActionAlbumMove(src, dst){
-
-	var remote = new Request.JSON({
-		url: 'ressource/lib/gallery.action.php',
-		onComplete:function(r){
-			$(src).destroy();
-			resetPosition();
-		}
-	}).get({
-		'action'	: 'moveAlbum',
-		'id_album'	: id_album,
-		'me'		: src,
-		'goto'		: dst
-	});
-
-}
-
-
-/* + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - 
-+ - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - */
-function galleryActionItemMove(src, dst){
-
-	var remote = new Request.JSON({
-		url: 'ressource/lib/gallery.action.php',
-		onComplete:function(r){
-			$(src).destroy();
-			resetPosition();
-		}
-	}).get({
-		'action'	: 'moveItem',
-		'id_album'	: id_album,
-		'me'		: src,
-		'goto'		: dst
-	});
-
-}
-
-
-/* + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - 
-+ - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - */
-function galleryActionToggleView(id_content, view){
-
-	var remote = new Request.JSON({
-		url: 'ressource/lib/gallery.action.php',
-		onComplete:function(r){
-
-			var ico = $('galleryView').getElement('li[id='+r.id_content+'] .toggView');
-
-			ico.removeClass('notview').removeClass('view');
-			
-			var d = (r.newContentSee == '1') ? 'view' : 'notview';
-			ico.addClass(d);
-		}
-	}).get({
-		'action'	: 'toggleView',
-		'id_content': id_content,
-		'contentSee': ((view) ? false : true)
-	});
-
-}
-
-
-/* + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - 
-+ - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - */
-function galleryActionTogglePoster(id_content, is_poster){
-
-	var remote = new Request.JSON({
-		url: 'ressource/lib/gallery.action.php',
-		onComplete: function(r){
-
-			// all
-			$$('.toggPoster').removeClass('is_poster').addClass('isnot_poster');
-			
-			// me
-			var ico = $(r.id_content).getElement('.toggPoster');
-			ico.removeClass('is_poster').removeClass('isnot_poster');
-			
-			var d = (r.is_poster) ? 'is_poster' : 'isnot_poster';
-			ico.addClass(d);
-
-		}
-	}).get({
-		'action'		: 'togglePoster',
-		'id_album'		: id_album,
-		'id_content'	: id_content,
-		'is_poster'		: is_poster
-	});
-
-}
-
-
-/* + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - 
-+ - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - */
-function getHash(){
-	var href = top.location.href;
-	var pos = href.indexOf('#') + 1;
-	return (pos) ? href.substr(pos) : '';
-}
-
-
-/* + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - 
-+ - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - */
-function makeSort(){
-
-	mode = 'sort';
-
-//	if($$('#galleryView li').length <= 1) return false;
-
-	$('.dragme').css({
-		'left' : '',
-		'top' : ''
-	});
-
-	$('#galleryView').sortable({
-		handle: '.icone',
-		stop: function(e, u) {
-			items = $(this);
-			var f = [];
-			var d = [];
-			
-			for(i=0; i<items.length; i++){
-				($(items).eq(i).hasClass('dropme')) ? d.push($(items).eq(i).attr('id')) : f.push($(items).eq(i).attr('id'));
-			}
-			
-			var get = $.ajax({
-				url: 'helper/gallery-action.php',
-				data: {	'action': 'positions',
-						'id_album': id_album,
-						'items': f.join(','),
-						'albums': d.join(',')}
-			});
-			
-			get.done(function(){
-				console.log('je suis un ajax tout seul');
-			});
-		}		
-	});
-	
-	mySortables = {};
-	
-	/*mySortables = new Sortables('', {
-		constrain: false,
-		clone: true,
-		revert: false,
-		onComplete: function(e){
-			items = this.serialize();
-			var f = [];
-			var d = [];
-			
-			
-			for(i=0; i<items.length; i++){
-				($(items[i]).hasClass('dropme')) ? d.push($(items[i]).id) : f.push($(items[i]).id);
-			}
-			
-			var remote = new Request.JSON({
-				url: 'ressource/lib/gallery.action.php'
-			}).get({
-				'action'	: 'positions',
-				'id_album'	: id_album,
-				'items'		: f.join(','),
-				'albums'	: d.join(',')
-			});
-		}
-	});*/
-	
-}
-
-
-/* + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - 
-+ - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - */
-function makeMove(){
-
-	mode = 'move';
-	mySortables.detach();
-
-	$$('.dragme').each(function(e){
-		
-		if(e.dd != undefined) e.dd.detach().stop();
-
-		e.dd = new Drag.Move(e, {
-			chain: 'cancel',
-			handle: e.getElements('.icone'),
-			droppables: $$('.dropme'),
-			
-		    onDrop: function(element, droppable){
-
-				if(droppable){
-			    	if(element.id != droppable.id && element.id != null && droppable.id != null){
-						if(element.hasClass('dropme')){
-					 		galleryActionAlbumMove(element.id, droppable.id);
-						}else{
-						//	if(droppable.id > 0){
-					 			galleryActionItemMove(element.id, droppable.id);
-					 	//	}else{
-					 	//		alert("Vous ne pouvez pas mettre des images a la racines");
-					 	//	}
-						}
-					}
-				}
+			create: function(){
+				self.order = self.$el.sortable('toArray', {attribute : 'data-idc'});
 			},
 
-			onStart: function() {
-				this.elementOrg	= this.element;
-				this.element 	= this.element.clone().addClass('dragging').setStyles({
-					'position' 	: 'absolute',
-					'opacity'	: 0.6
-				}).set('id', this.element.id).injectInside(document.body);
+			stop: function() {
+				var serial  = self.$el.sortable('toArray', {attribute : 'data-idc'});
 
-				/*this.element.clone().addClass('dragging').setStyles({
-					'position' : 'absolute'
-				}).set('id', this.element.id).injectInside(document.body);*/
-			},
+				if(self.order.toString() != serial.toString()){
+					self.order = serial;
+					var items  = [], albums = [], mod = {};
+					var lis    = $(self.$el.sortable('option', 'items'), self.$el.sortable());
 
-			onComplete: function() {
-				$$('.dragging').destroy();
+					_.each(lis, function(e){
+						mod = gallery.collections.myMedia.get($(e).data('cid'));
 
-				$$('.dragme').setStyles({
-					'position' : 'static'
-				});
+						(mod.get('is_album'))
+							? albums.push(mod.get('id_content'))
+							:  items.push(mod.get('id_content'));
+					});
 
-				resetPosition();
-
-				this.element.destroy();
-				this.element 	= this.elementOrg;
-				this.elementOrg = null;
+					gallery.views.myApp.saveOrder(albums, items);
+				}
 			}
 		});
-		
-		
-		// Super important !
-		e.setStyles({'position': ''});
 
-	});
-}
-
-
-function resetPosition(){
-
-	if(mode == 'move'){
-		$$('.dragme').each(function(d){
-			var cor = d.getCoordinates();
-			d.setStyles({
-				'position'	: '',
-				'left'		: cor.left+'px',
-				'top'		: cor.top+'px'
-			});
-		});
 	}
 
-}
+});
+
+gallery.views.viewItem       = Backbone.View.extend({
+
+	tagName:    'li',
+	className:  'gItem',
+
+	initialize: function(){
+		this.listenTo(this.model, 'remove', this.destroy);
+
+		this.html = '';
+	},
+
+	events: {
+		'click .icone':         'nav',
+		'click .delete':        'kill',
+		'click .visibility':    'visibility',
+		'click .poster':        'poster'
+	},
+
+	//////////////
+
+	nav: function(){
+		if(this.model.get('dragging')) return;
+		if(this.model.get('is_album')){
+			gallery.views.myView.nav(this.model.get('id_content'));
+		}
+	},
+
+	kill: function(e){
+		e.stopPropagation();
+
+		var cid = this.$el.data('cid');
+		var idc = this.model.get('id_content');
+
+		gallery.views.myApp.removeItem(cid, idc);
+	},
+
+	visibility: function(e){
+		e.stopPropagation();
+		var target  = $(e.target);
+		var state   = target.hasClass('off') ? 'OFF' : 'ON';
+		gallery.views.myApp.toggleVisibility(this.model.get('id_content'), state);
+
+		target.toggleClass('off');
+	},
+
+	poster: function(e){
+		e.stopPropagation();
+
+		var target  = $(e.target);
+		var state   = target.hasClass('off') ? 'OFF' : 'ON';
+		gallery.views.myApp.togglePoster(this.model.get('id_content'), state);
+
+		target.toggleClass('off');
+	},
+
+	//////////////
+
+	templateAlbum: _.template($('#view-album').html()),
+	templateItem:  _.template($('#view-item').html()),
+
+	render: function() {
+		var data    = this.model.toJSON();
+
+		if(data.is_album){
+			this.html = this.templateAlbum(data)
+		}else{
+			this.html = this.templateItem(data);
+		}
+
+		this.$el.html(this.html);
+		this.html = '';
+
+		return this;
+	},
+
+	postRender: function(){
+		this.$el.attr('data-idc', this.model.get('id_content'));
+		this.$el.attr('data-cid', this.model.cid);
+
+		this.icone();
+		//console.log('makeDroppable() pour viewItem');
+		gallery.views.myApp.makeDroppable(this);
+
+	},
+
+	destroy: function(){
+		console.log('remove model, remove view');
+		this.remove();
+	},
+
+	//////////////
+
+	icone: function(){
+		var preview = this.model.get('preview');
+		if(preview == undefined) return;
+
+		var icone   = $('.icone', this.$el);
+		var respon  = (preview.height > preview.width) ? 'height' : 'width';
+		var img     = $('<img />').addClass('responsive-'+respon);
+
+		img.attr('src', preview.url);
+
+		if(this.model.get('is_album')){
+			img.addClass('posterized');
+		}
+
+		icone.empty().append(img);
+	}
+
+});
+
+gallery.views.tree           = Backbone.View.extend({
+
+	initialize:function(options){
+
+		options         = options || {};
+		this.level      = options.level || 1;
+		this.el         = options.el  || $('#galleryTree');
+		this.$el        = $(this.el);
+		this.collection = options.collection || gallery.collections.myTree;
+
+		this.listenTo(this.collection, 'reset',  this.fill);
+
+		this.id_album   = this.$el.data('id_album') || 0;
+	},
+
+	dynEl: function(){
+		return this.$el;
+	//	return ((this.$el.attr('id') == 'galleryTree') ? $('section', this.$el) : this.$el)
+	},
+
+	clear: function(){
+		this.dynEl().empty();
+	},
+
+	fill: function(){
+		this.clear();
+		this.collection.each(this.fillItem, this);
+	},
+
+	fillItem: function(m){
+		var view  = new gallery.views.treeItem({model: m, level: this.level});
+		this.dynEl().append(view.render().el);
+		view.postRender();
+	},
+
+	//////////////
+
+	load: function(root){
+		root = root || false;
+
+		gallery.collections.myTree.fetch({data: {
+			root:     root,
+			id_album: this.id_album,
+			id_type:  gallery.id_type
+		}});
+	}
+
+});
+
+gallery.views.treeItem       = Backbone.View.extend({
+
+	tagName:    'li',
+
+	initialize: function(options){
+		options     = options || {};
+		this.level  = options.level || 0;
+	},
+
+	events: {
+		'click .toggle':    'toggle',
+		'click .item':      'nav'
+	},
+
+	//////////////
+
+	toggle: function(e){
+		e.stopPropagation();
+
+		var ul = this.item.next('ul');
+
+		if(this.model.get('opened')){
+			this.model.set('opened', false);
+			this.$el.removeClass('opened');
+			return;
+		}else{
+			this.model.set('opened', true);
+			this.$el.addClass('opened');
+		}
+
+		// Creation d'une nouvelle COLLECTION + VIEW
+		this.col = new gallery.collections.tree;
+		this.vue = new gallery.views.tree({
+			level:      (this.level+1),
+			el:         ul,
+			collection: this.col
+		});
+
+		this.$el.append(this.vue.el);
+
+		// Déclenche le chargement pour la vue/collection avec le model courant
+		this.col.fetch({data: {
+			'id_album': this.model.get('id_content'),
+			'id_type':  gallery.id_type
+		}});
+	},
+
+	nav: function(e){
+		e.stopPropagation();
+		gallery.views.myView.nav(this.model.get('id_content'));
+	},
+
+	//////////////
+
+	padding: function(){
+		var padding = this.level * 10
+		this.item.css('padding-left', padding+'px');
+	},
+
+	template: _.template($('#tree-item').html()),
+
+	render: function() {
+		var data    = this.model.toJSON();
+		var html    = this.template(data)
+
+		this.$el.html(html);
+		return this;
+	},
+
+	postRender: function(){
+		this.$el.attr('data-idc', this.model.get('id_content'));
+
+		this.item = $('.item', this.$el);
+		this.padding();
+
+	//	console.log('makeDroppable() pour treeItem');
+		gallery.views.myApp.makeDroppable(this);
+	}
+
+});
+
+gallery.views.path           = Backbone.View.extend({
+
+	el: $('#galleryPath'),
+
+	initialize:function(){
+		this.listenTo(gallery.collections.myPath, 'reset',  this.fill);
+	},
+
+	events: {
+	},
+
+	clear: function(){
+		this.$el.empty();
+	},
+
+	fill: function(){
+		this.clear();
+		var path = gallery.collections.myPath;
+		var max  = path.length
+
+		for(var i=0; i<max; i++){
+			var item = new gallery.views.pathItem({model: path.models[i]});
+			this.$el.append(item.render().el);
+			item.postRender();
+
+			if(i < max-1){
+				var sep = new gallery.views.pathItem({sep: true});
+				this.$el.append(sep.render().el);
+			}
+		}
+
+	},
+
+	//////////////
+
+	nav: function(id){
+		this.id_album = id;
+		this.load();
+		gallery.myRouter.navigate('album/'+this.id_album, {trigger: false});
+	},
+
+	load: function(){
+		gallery.collections.myPath.fetch({data: {
+			'id_album': gallery.views.myView.id_album,
+			'id_type':  gallery.id_type
+		}});
+	}
+
+});
+
+gallery.views.pathItem       = Backbone.View.extend({
+
+	tagName:    'li',
+	className:  'clearfix',
+
+	initialize: function(options){
+		options     = options || {};
+		this.sep    = options.sep || false;
+	},
+
+	events: {
+		'click .name': 'nav'
+	},
+
+	//////////////
+
+	nav: function(e){
+		e.stopPropagation();
+		gallery.views.myView.nav(this.model.get('id_content'));
+	},
+
+	//////////////
+
+	templateItem:   _.template($('#path-item').html()),
+	templateSep:    _.template($('#path-sep').html()),
+
+	render: function() {
+		var html    = (this.sep)
+			? this.templateSep({})
+			: this.templateItem(this.model.toJSON());
+
+		this.$el.html(html);
+		return this;
+	},
+
+	postRender: function(){
+		this.$el.attr('data-idc', this.model.get('id_content'));
+
+	//	console.log('makeDroppable() pour pathItem');
+		gallery.views.myApp.makeDroppable(this);
+	}
+
+});
+
+/////////////////////////////
+
+gallery.views.app            = Backbone.View.extend({
+
+	el: $('body'),
+
+	initialize: function(){
+		gallery.id_type = this.$el.data('id_type');
+
+		// Collections
+		gallery.collections.myMedia     = new gallery.collections.media;
+		gallery.collections.myTree      = new gallery.collections.tree;
+		gallery.collections.myPath      = new gallery.collections.path;
+
+		// Views
+		gallery.views.myView   = new gallery.views.view;
+		gallery.views.myTree   = new gallery.views.tree;
+		gallery.views.myPath   = new gallery.views.path;
+
+		// Routeur
+		gallery.myRouter = new gallery.router;
+		Backbone.history.start();
+
+		// Load Tree
+		gallery.views.myTree.load(true);
+
+		this.buttonEdit = this.$('#buttonEdit');
+	},
+
+	events: {
+		'click #buttonAdd':     'addAlbum',
+		'click #buttonEdit':    'editAlbum',
+		'click #buttonImport':  'importAlbum'
+	},
+
+	addAlbum: function(){
+		document.location = 'gallery-album?id_type=' + this.id_type;
+	},
+
+	editAlbum: function(){
+		var id_album = gallery.views.myView.id_album
+		if(id_album > 0) document.location = 'gallery-album?id_content=' + id_album;
+	},
+
+	importAlbum: function(){
+		var id_album = gallery.views.myView.id_album
+		document.location = 'gallery-import?id_album='+id_album+'&id_type='+gallery.id_type;
+	},
+
+	/////////
+
+	makeDroppable: function(instance){
+
+		var self = this;
+
+		instance.$el.droppable({
+			hoverClass: 'fly',
+			tolerance: 'pointer',
+			greedy: true,
+			drop: function(e, ui) {
+
+				var me  = ui.draggable.data('idc');
+				var to  = instance.$el.data('idc');
+				var cid = ui.draggable.data('cid');
+				var mod = gallery.collections.myMedia.get(cid);
+
+				console.log('Drop Event', 'me:'+me, 'to:'+to, 'cid:'+cid);
+				console.log('mod',      mod.toJSON());
+				console.log('instance', instance.model.toJSON());
+
+				if(!instance.model.get('is_album') || me == to) return;
+
+				gallery.views.myView.$el.sortable('disable');
+
+				(mod.get('is_album'))
+					? self.moveAlbum(cid, me, to)
+					:  self.moveItem(cid, me, to);
+
+				gallery.views.myView.$el.sortable('enable');
+			},
+
+			over: function(e, ui) {
+			}
+		});
+	},
+
+	/////////
+
+	action: function(data, back){
+
+		console.log("[XHR ACTION]", 'data', data, 'back', back);
+
+		var xhr = $.ajax({
+			url:        'helper/gallery-action',
+			dataType:   'json',
+			data:       data
+		});
+
+		xhr.done(function(js){
+			if(typeof back == 'function') back(js);
+		});
+
+	},
+
+	saveOrder: function(albums, items){
+		var id_album = gallery.views.myView.id_album;
+		console.log("saveOrder", id_album, 'albums', albums, 'items', items);
+
+		this.action({
+			action:     'order',
+			id_album:   id_album,
+			items:      items.join('.'),
+			albums:     albums.join('.')
+		})
+	},
+
+	moveItem: function(cid, me, to){
+		console.log("moveItem()", "cid", cid, "me", me, "to", to);
+
+		this.action({
+			action:     'moveItem',
+			id_album:   to,
+			id_content: me
+		}, function(js){
+
+			if(js.success){
+				gallery.collections.myMedia.get(cid).destroy();
+				gallery.views.myView.makeSortable();
+			}
+
+		})
+	},
+
+	moveAlbum: function(cid, me, to){
+		console.log("moveAlbum()", "cid", cid, "me", me, "to", to);
+
+		this.action({
+			action:     'moveAlbum',
+			id_album:   to,
+			id_content: me
+		})
+	},
+
+	removeItem: function(cid, me){
+		console.log("Remove Item", 'cid', cid, 'me', me);
+
+		if(confirm('???')){
+			this.action({
+				action:     'remove',
+				id_content: me
+			}, function(js){
+
+				if(js.success){
+					gallery.collections.myMedia.get(cid).destroy();
+					gallery.views.myView.makeSortable(); // reset ?
+				}
+
+			})
+		}
+	},
+
+	toggleVisibility: function(me, state){
+		console.log("Toggle visibility", me, state);
+
+		this.action({
+			action:     'toggleView',
+			id_content: me,
+			state:      state
+		})
+	},
+
+	togglePoster: function(me, state){
+		var id_album = gallery.views.myView.id_album;
+		console.log("Toggle poster", me, state);
+
+		this.action({
+			action:     'togglePoster',
+			id_album:   id_album,
+			id_content: me,
+			state:      state
+		})
+
+	}
+
+});
 
 
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// ROUTEUR
 
+gallery.router               = Backbone.Router.extend({
+
+	routes: {
+		'album/:id': 'album',
+		'*path':     'defaut'
+	},
+
+	initialize: function(){
+
+		/*this.on('route:album', function(id) {
+		 gallery.views.myView.nav(id);
+		 });*/
+	},
+
+	album: function(id){
+		gallery.views.myView.nav(id);
+	},
+
+	defaut: function(){
+		gallery.views.myView.nav(gallery.views.myView.id_album);
+	}
+
+});
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+$(function(){
+	gallery.views.myApp = new gallery.views.app;
+});

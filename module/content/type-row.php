@@ -155,7 +155,7 @@
             <ul class="dropdown-menu"><?php
                 foreach($app->apiLoad('type')->typeGet(array('profile' => true)) as $e){
                     echo '<li class="clearfix">';
-                    echo '<a href="'.(($e['is_gallery']) ? 'gallery-index' : 'index').'?id_type='.$e['id_type'].'" class="left">'.$e['typeName'].'</a>';
+                    echo '<a href="'.(($e['is_gallery']) ? 'gallery' : 'index').'?id_type='.$e['id_type'].'" class="left">'.$e['typeName'].'</a>';
                     echo '<a href="'.(($e['is_gallery']) ? 'gallery-album' : 'data' )."?id_type=".$e['id_type'].'" class="right"><i class="icon icon-plus-sign"></i></a>';
                     echo '</li>';
                 }
