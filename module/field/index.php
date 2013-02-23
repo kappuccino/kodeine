@@ -65,7 +65,6 @@
 	$fieldType	= $app->formValue($data['fieldType'], $_POST['fieldType']);
 	$types		= $app->apiLoad('field')->fieldTypeGet();
 	$fieldView	= $types[$fieldType]['view'];
-
 	$val		= $app->formValue($data['fieldParam']['type'], $_POST['param']['type']);
 
 ?><!DOCTYPE html>
@@ -85,28 +84,29 @@
 
 	<?php if(sizeof($_POST['remove']) > 0 ){ ?>
 		<div class="message messageWarning alert alert-error">
-			<form action="../field/" method="post" class="nomargin">
-				<b>ATTENTION</b> vous êtes sur le point de supprimer un ou plusieurs champs, cette action est irrémédiable
+			<form action="./" method="post" class="nomargin">
+				<?php echo _('<b>WARNING</b> you are about to remove some fields, you will not be able to cancel this operation'); ?>
 			
 				<?php foreach($_POST['remove'] as $e){ ?>
 				<input type="hidden" name="killme[]" value="<?php echo $e ?>" />
 				<?php } ?>
 				
-				<button type="submit" class="btn btn-mini">Confirmer la suppression</button>
+				<button type="submit" class="btn btn-mini"><?php echo _('I really want to remove thoses fields'); ?></button>
 			</form>
 		</div>
 		<br style="clear: both;" />
 	<?php } ?>
 <div class="row-fluid">
+
 <form action="./" method="post" id="listing" class="span6">
 		<table border="0" cellpadding="0" cellspacing="0" class="listing">
 			<thead>
 				<tr>
 					<th width="20" class="icone"></th>
-					<th width="50%">Nom</th>
+					<th width="50%"><?php echo _('Name'); ?></th>
 					<th class="filter">
-						<span>Code</span>
-						<input type="text" id="filter" class="input-small" placeholder="Filtrer..." />
+						<span><?php echo _('Code'); ?></span>
+						<input type="text" id="filter" class="input-small" placeholder="<?php echo _('Filter'); ?>" />
 					</th>
 				</tr>
 			</thead>
@@ -119,7 +119,7 @@
 				</tr>
 			<?php } }else{ ?>
 				<tr>
-					<td colspan="5" class="noData">Aucun champ</td>
+					<td colspan="5" class="noData"><?php echo _('No field'); ?></td>
 				</tr>
 			<?php } ?>
 			</tbody>
@@ -127,8 +127,8 @@
 			<tfoot>
 				<tr>
 					<td width="30" height="25" class="check-red"><input type="checkbox" class="chk" id="chk_remove_all" onchange="cbchange($(this));" /></td>
-					<td><a onClick="apply();" class="btn btn-mini">Supprimer</a></td>
-					<td align="right"><a href="asso?id_type=category" class="btn btn-mini">Relier les champs aux types</a></td>
+					<td><a onClick="apply();" class="btn btn-mini"><?php echo _('Remove'); ?></a></td>
+					<td align="right"><a href="asso?id_type=category" class="btn btn-mini"><?php echo _('Match fields & types'); ?></a></td>
 				</tr>
 			</tfoot>
 			<?php } ?>
@@ -149,46 +149,46 @@
 	
 	<table cellpadding="0" cellspacing="0" border="0" class="form">
 		<tr>
-			<td width="75">Recherche</td>
+			<td width="75"><?php echo _('Searchable'); ?></td>
 			<td><input type="checkbox" name="is_search" value="1" <?php if($app->formValue($data['is_search'], $_POST['is_search'])) echo " checked" ?> /></td>
 		</tr>
 		<tr>
-			<td>Obligatoire</td>
+			<td><?php echo _('Mandatory'); ?></td>
 			<td><input type="checkbox" name="is_needed" value="1" <?php if($app->formValue($data['is_needed'], $_POST['is_needed'])) echo " checked" ?> /></td>
 		</tr>
 		<tr>
-			<td>Visible</td>
+			<td><?php echo _('Visible'); ?></td>
 			<td><input type="checkbox" name="fieldShowForm" value="1" <?php if($app->formValue($data['fieldShowForm'], $_POST['fieldShowForm'])) echo " checked" ?> /></td>
 		</tr>
 		<tr>
-			<td>Nom</td>
+			<td><?php echo _('Name'); ?></td>
 			<td><input type="text" name="fieldName" value="<?php echo $app->formValue($data['fieldName'], $_POST['fieldName']); ?>" /></td>
 		</tr>
 		<tr>
-			<td>Code</td>
+			<td><?php echo _('Code'); ?></td>
 			<td><input type="text" name="fieldKey" value="<?php echo $app->formValue($data['fieldKey'], $_POST['fieldKey']); ?>" /></td>
 		</tr>
 		<tr>
 			<td></td>
-			<td><i>Utilisé pour nommer un champ dans le code, n'utiliser que des lettres. 
-			Changer le contenu de ce champ pourrait provoquer des problèmes sur le site</i></td>
+			<td><i><?php echo _('Used to name a field in PHP code. Used only letters, no space or special caracters.
+			Change this value could make troubles. Please take care.'); ?></i></td>
 		</tr>
 		<tr valign="top">
-			<td>Instruction</td>
+			<td><?php echo _('Instruction'); ?></td>
 			<td><textarea name="fieldInstruction" rows="5" cols="40"><?php echo $app->formValue($data['fieldInstruction'], $_POST['fieldInstruction']); ?></textarea></td>
 		</tr>
 		<tr valign="top">
-			<td>Style</td>
+			<td><?php echo _('Style'); ?></td>
 			<td>
 				<textarea name="fieldStyle" rows="4" cols="40"><?php echo $app->formValue($data['fieldStyle'], $_POST['fieldStyle']) ?></textarea><br />
-				<i>styles appliqués au champ (format css en ligne)</i><br /><br />
+				<i><?php echo _('Inline CSS applieds to form field'); ?></i><br /><br />
 				<input type="checkbox" class="chk" id="chk_tinymce" name="is_editor" value="1" <?php if($app->formValue($data['is_editor'], $_POST['is_editor'])) echo " checked"; ?> />
-				Utiliser un editeur de texte enrichi
+				<?php echo _('Used rich text editor'); ?>
 				<br /><br /><br /><br />
 			</td>
 		</tr>
 		<tr valign="top">
-			<td>Type</td>
+			<td><?php echo _('Type'); ?></td>
 			<td><select name="fieldType" id="fieldType" onChange="changeType()"><?php
 				foreach($types as $k => $e){	
 					$sel = ($fieldType == $k) ? ' selected' : NULL;
@@ -199,59 +199,59 @@
 
 		<tr class="line-type line-texte-line <?php echo ($fieldView == 'texte-line') ? '' : 'line-off' ?>">
 			<td></td>
-			<td>Ce type de champs n'a pas d'option</td>
+			<td><?php echo _('No options available'); ?></td>
 		</tr>
 
 		<tr class="line-type line-integer <?php echo ($fieldView == 'integer') ? '' : 'line-off' ?>">
 			<td></td>
-			<td>Ce type de champs n'a pas d'option</td>
+            <td><?php echo _('No options available'); ?></td>
 		</tr>
 
 		<tr class="line-type line-media <?php echo ($fieldView == 'media') ? '' : 'line-off' ?>">
 			<td></td>
-			<td>Ce type de champs n'a pas d'option</td>
+            <td><?php echo _('No options available'); ?></td>
 		</tr>
 
 		<tr class="line-type line-date <?php echo ($fieldView == 'date') ? '' : 'line-off' ?>">
 			<td></td>
-			<td>Ce type de champs n'a pas d'option</td>
+            <td><?php echo _('No options available'); ?></td>
 		</tr>
 	
 		<tr class="line-type line-content-type <?php echo ($fieldView == 'contentType') ? '' : 'line-off' ?>">
 			<td></td>
-			<td>Ce type de champs n'a pas d'option</td>
+            <td><?php echo _('No options available'); ?></td>
 		</tr>
 	
 		<tr class="line-type line-category <?php echo ($fieldView == 'category') ? '' : 'line-off' ?>">
 			<td></td>
-			<td>Type
+			<td><?php echo _('Type'); ?>
 				<select name="param[type]"><?php
 					if($val == '') $val = 'solor';
 	
 					$tps = array(
-						'solo'		=> 'Un seul choix possible',
-						'multi'		=> 'Plusieurs choix possible'
+						'solo'		=> _('One choice available'),
+						'multi'		=> _('Many choices avalaibles')
 					);
 					
 					foreach($tps as $k => $v){
 						echo "<option value=\"".$k."\"".(($k == $val) ? ' selected' : '').">".$v."</option>";
 					}
 				?></select>
-				<i>Le changement de type (solo / multi) influ sur le type de champ de la base de donn&eacute;es et peu entrainer des perte de donn&eacute;es</i>
+				<i><?php echo _('Change the type, change database field definition and could lost some data'); ?></i>
 	
 			</td>
 		</tr>
 	
 		<tr class="line-type line-social-forum <?php echo ($fieldView == 'socialForum') ? '' : 'line-off' ?>">
 			<td></td>
-			<td>Type
+			<td><?php echo _('Type'); ?>
 				<select name="param[type]"><?php
 					if($val == '') $val = 'multi';
 	
 					$tps = array(
-						'multi'		=> 'Plusieurs choix possible',
-						'solo'		=> 'Un seul choix possible',
-					#	'select'	=> 'Un seul choix possible (menu deroulant)'
+						'solo'		=> _('One choice available'),
+						'multi'		=> _('Many choices avalaibles')
+					#	'select'	=> _('One choice available, (dropdown menu)')
 					);
 					
 					foreach($tps as $k => $v){
@@ -264,7 +264,7 @@
 		<tr class="line-type line-multichoice line-onechoice <?php echo ($fieldView == 'choice') ? '' : 'line-off' ?>">
 			<td></td>
 			<td><?php $choices = $app->apiLoad('field')->fieldChoiceGet(array('id_field' => $data['id_field'])); ?>
-				<a href="javascript:addChoice()" class="button button-green">Ajouter un élement</a><br style="clear:both" />
+				<a href="javascript:addChoice()" class="button button-green"><?php echo _('Add a choice'); ?></a><br style="clear:both" />
 				<ul id="choices">
 					<?php foreach($choices as $e){ ?>
 					<li id="<?php echo $e['id_fieldchoice'] ?>">
@@ -290,9 +290,9 @@
 					if($val == '') $val = 'multi';
 	
 					$tps = array(
-						'multi'		=> 'Plusieurs choix possible',
-						'solo'		=> 'Un seul choix possible',
-						'select'	=> 'Un seul choix possible (menu deroulant)'
+						'solo'		=> _('One choice available'),
+						'multi'		=> _('Many choices avalaibles'),
+						'select'	=> _('One choice available, (dropdown menu)')
 					);
 					
 					foreach($tps as $k => $v){
@@ -313,9 +313,9 @@
 								if($val == '') $val = 'multi';
 	
 								$tps = array(
-									'multi'		=> 'Plusieurs choix possible',
-									'solo'		=> 'Un seul choix possible',
-									'select'	=> 'Un seul choix possible (menu deroulant)'
+									'solo'		=> _('One choice available'),
+									'multi'		=> _('Many choices avalaibles'),
+									'select'	=> _('One choice available, (dropdown menu)')
 								);
 	
 								foreach($tps as $k => $v){
@@ -326,7 +326,7 @@
 					</tr>
 					<tr>
 						<td></td>
-						<td>Champs</td>
+						<td><?php echo _('Fields'); ?></td>
 					</tr>
 					<?php
 						$selected = $app->formValue($data['fieldParam'], $_POST['param']);
@@ -348,15 +348,15 @@
 			<td>
 				<table border="0" class="5">
 					<tr>
-						<td width="100">Table</td>
+						<td width="100"><?php echo _('Table'); ?></td>
 						<td><input type="text" name="param[table]" value="<?php echo $app->formValue($data['fieldParam']['table'], $_POST['param']['table']) ?>" /></td>
 					</tr>
 					<tr>
-						<td>ID Maitre</td>
+						<td><?php echo _('Primary Key/ID'); ?></td>
 						<td><input type="text" name="param[id]" value="<?php echo $app->formValue($data['fieldParam']['id'], $_POST['param']['id']) ?>" /></td>
 					</tr>
 					<tr>
-						<td>Champ visible</td>
+						<td><?php echo _('Visible field'); ?></td>
 						<td><input type="text" name="param[field]" value="<?php echo $app->formValue($data['fieldParam']['field'], $_POST['param']['field']) ?>" /></td>
 					</tr>
 					<tr>
@@ -377,7 +377,7 @@
 						</td>
 					</tr>
 					<tr>
-						<td colspan="2">Condition WHERE</td>
+						<td colspan="2"><?php echo _('SQL "WHERE" statements'); ?></td>
 					</tr>
 					<tr>
 						<td colspan="2">
@@ -395,7 +395,7 @@
             <td>
                 <table border="0" class="5">
                     <tr>
-                        <td width="100">Type de code</td>
+                        <td width="100"><?php echo _('Language (JS, JSON, XML...)'); ?></td>
                         <td><input type="text" name="param[type]" value="<?php echo $app->formValue($data['fieldParam']['type'], $_POST['param']['type']) ?>" /></td>
                     </tr>
                 </table>
@@ -405,8 +405,8 @@
         <tr>
 			<td height="30"></td>
 			<td>
-				<a href="javascript:$('#data').submit();" class="btn btn-mini">Enregistrer</a>
-				<a href="../field/" class="btn btn-mini">Nouveau</a>
+				<a href="javascript:$('#data').submit();" class="btn btn-mini"><?php echo _('Validate'); ?></a>
+				<a href="/" class="btn btn-mini"><?php echo _('New'); ?></a>
 			</td>
 		</tr>
 	</table>

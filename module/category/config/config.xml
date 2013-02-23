@@ -3,12 +3,14 @@
 
 	<data>
 		<key>category</key>
-		<version>5.0.6</version>
-        <lastMod>2013-02-19</lastMod>
-
-		<name><![CDATA[Catégorie]]></name>
-		<description><![CDATA[]]></description>
+		<version>5.1.0</version>
+        <lastMod>2013-02-23</lastMod>
 		<menu>NO</menu>
+		<name><![CDATA[Catégorie]]></name>
 	</data>
+
+    <i18n>
+        <file>index.php</file>
+    </i18n>
 
 </element>

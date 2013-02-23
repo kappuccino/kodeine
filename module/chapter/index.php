@@ -116,23 +116,6 @@
 		$app->go('./');
 	}
 
-	/* + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - 
-	+ - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - */
-	function fieldTrace($app, $lan, $copy, $data, $e){
-		$field	= $app->apiLoad('field')->fieldForm(
-			$e['id_field'],
-			$data,
-			array(
-				'name'		=> 'lan['.$lan.'][field]['.$e['id_field'].']',
-				'class'		=> 'item-'.$lan,
-				'style' 	=> 'width:99%; '.$e['__fieldStyle__'],
-				'disabled'	=> (($copy) ? 'disabled' : '')
-			)
-		);
-
-		echo $field;
-	}
-
 ?><!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -156,8 +139,8 @@
 						<th width="20" class="icone"><i class="icon-remove icon-white"></i></th>
 						<th width="15">&nbsp;</th>
 						<th class="filter">
-							<span>Nom</span>
-							<input type="text" id="filter" class="input-small" onkeyup="recherche($(this))" placeholder="Filtrer..." />
+							<span><?php echo _('Name'); ?></span>
+							<input type="text" id="filter" class="input-small" onkeyup="recherche($(this))" placeholder="<?php echo _('Filter'); ?>" />
 						</th>
 					</tr>
 				</thead>
@@ -186,11 +169,11 @@
 		
 			<div class="clearfix">	
 				<div class="left">
-					<a href="javascript:serialMe(0)" class="btn btn-mini">Enregistrer les changements</a>
-					<a href="./" class="btn btn-mini">Annuler</a>
+					<a href="javascript:serialMe(0)" class="btn btn-mini"><?php echo _('Save'); ?></a>
+					<a href="./" class="btn btn-mini"><?php echo _('Cancel'); ?></a>
 				</div> 
 				<div class="right">
-					<a href="../field/asso?id_type=chapter" class="btn btn-mini">Gerer les champs</a>
+					<a href="../field/asso?id_type=chapter" class="btn btn-mini"><?php echo _('Manage fields'); ?></a>
 				</div>
 			</div>
 		
@@ -214,7 +197,7 @@
 	
 		<table cellpadding="0" cellspacing="0" border="0" class="form">
 			<tr>
-				<td width="120">Chapitre parent</td>
+				<td width="120"><?php echo _('Parent chapter'); ?></td>
 				<td><?php
 					$chapter = $app->apiLoad('chapter')->chapterGet(array(
 						'language'		=> 'fr',
@@ -233,7 +216,7 @@
 				?></td>
 			</tr>
 			<tr>
-				<td>Forcer un theme</td>
+				<td><?php echo _('Force a theme'); ?></td>
 				<td>
 					<select name="id_theme"><option></option><?php
 					foreach($app->dbMulti("SELECT * FROM k_theme") as $e){
@@ -262,45 +245,48 @@
 			
 							if($i == 0){
 								echo "<input type=\"hidden\" name=\"ref\" value=\"".$iso."\" /> ";
-								echo "<div class=\"alert\">Cette langue est la version de référence</div>";
+								echo "<div class=\"alert\">";
+								echo _('This is reference language');
+								echo "</div>";
 							}else{
 								$copy = ($data['lan'][$iso]['is_copy'] && $i > 0) ? true : false;
 								$chk  = ($copy) ? ' checked' : NULL;
 			
 								echo "<input type=\"hidden\"   name=\"lan[".$iso."][copy]\" value=\"0\" />";
-								echo "<div class=\"alert\"><input type=\"checkbox\" name=\"lan[".$iso."][copy]\" value=\"1\" ".$chk." id=\"copy-".$iso."\" onChange=\"toggleCopy('".$iso."')\" /> Identique à la version de référence";
+								echo "<div class=\"alert\"><input type=\"checkbox\" name=\"lan[".$iso."][copy]\" value=\"1\" ".$chk." id=\"copy-".$iso."\" onChange=\"toggleCopy('".$iso."')\" />";
+								echo _('Same as reference');
 							}
 												
 						?></td>
 					</tr>
 					<tr>
-						<td width="100" class="<?php echo $app->formError('chapterName-'.$iso, 'alertNeedToCheck') ?>">Nom</td>
+						<td width="100" class="<?php echo $app->formError('chapterName-'.$iso, 'alertNeedToCheck') ?>"><?php echo _('Name'); ?></td>
 						<td>
 							<input type="text" name="lan[<?php echo $iso ?>][chapterName]" id="chapterName-<?php echo $iso ?>" value="<?php echo $app->formValue($data['lan'][$iso]['chapterName'], $_POST['lan'][$iso]['chapterName']); ?>" <?php if($copy) echo "disabled=\"disabled\""; ?> class="item-<?php echo $iso ?>" style="width:90%" />
 							<input type="checkbox" id="transform-<?php echo $iso ?>" />
 						</td>
 					</tr>
 					<tr>
-						<td class="<?php echo $app->formError('chapterUrl-'.$iso, 'alertNeedToCheck') ?>">Url</td>
+						<td class="<?php echo $app->formError('chapterUrl-'.$iso, 'alertNeedToCheck') ?>"><?php echo _('Url'); ?></td>
 						<td><input type="text" name="lan[<?php echo $iso ?>][chapterUrl]" id="chapterUrl-<?php echo $iso ?>" value="<?php echo $app->formValue($data['lan'][$iso]['chapterUrl'], $_POST['lan'][$iso]['chapterUrl']); ?>" <?php if($copy) echo "disabled=\"disabled\""; ?> class="item-<?php echo $iso ?>" style="width:90%;" /></td>	
 					</tr>
 					<tr>
 						<td></td>
-						<td><span id="alert-<?php echo $iso ?>" style="display:none;">Doublon - Changer de nom</span>&nbsp;</td>
+						<td><span id="alert-<?php echo $iso ?>" style="display:none;"><?php echo _('Duplicate - change name'); ?></span>&nbsp;</td>
 					</tr>
 					<tr>
-						<td>Module</td>
+						<td><?php echo _('Module'); ?></td>
 						<td><input type="text" name="lan[<?php echo $iso ?>][chapterModule]" id="chapterModule-<?php echo $iso ?>" value="<?php echo $app->formValue($data['lan'][$iso]['chapterModule'], $_POST['lan'][$iso]['chapterModule']); ?>" <?php if($copy) echo "disabled=\"disabled\""; ?> class="item-<?php echo $iso ?>" style="width:75%" /></td>
 					</tr>
 					<tr>
-						<td>Image</td>
+						<td><?php echo _('Media'); ?></td>
 						<td>
 							<input type="text" name="lan[<?php echo $iso ?>][chapterMedia]" id="chapterMedia-<?php echo $iso ?>" value="<?php echo $app->formValue($data['lan'][$iso]['chapterMedia'], $_POST['lan'][$iso]['chapterMedia']); ?>" <?php if($copy) echo "disabled=\"disabled\""; ?> class="item-<?php echo $iso ?>" style="width:75%" />
 							<a href="#" onclick="mediaOpen('line', 'chapterMedia-<?php echo $iso ?>')">choisir</a>
 						</td>
 					</tr>
 					<tr valign="top">
-						<td>Description</td>
+						<td><?php echo _('Description'); ?></td>
 						<td><textarea name="lan[<?php echo $iso ?>][chapterDescription]" id="chapterDescription-<?php echo $iso ?>" <?php if($copy) echo "disabled=\"disabled\""; ?> class="item-<?php echo $iso ?>" style="width:99%; height:70px;"><?php echo $app->formValue($data['lan'][$iso]['chapterDescription'], $_POST['lan'][$iso]['chapterDescription']); ?></textarea></td>
 					</tr>
 					<?php if(sizeof($fields) > 0){ ?>
@@ -311,8 +297,10 @@
 					<tr valign="top">
 						<td><?php echo $f['fieldName'] ?></td>
 						<td><?php
+
 							$tmp = $app->formValue($data['lan'][$iso]['field'][$f['fieldKey']], $_POST['lan'][$iso]['field'][$f['id_field']]);
-							fieldTrace($app, $iso, $copy, $tmp, $f);
+							$app->apiLoad('field')->fieldTrace($iso, $copy, $tmp, $f);
+
 						?></td>
 					</tr>
 					<?php }} ?>
@@ -321,8 +309,8 @@
 			<?php } ?>
 		</div>
 
-		<a onclick="$('#data').submit();" class="btn btn-mini">Enregistrer</a>
-		<a href="./" class="btn btn-mini">annuler</a>
+		<a onclick="$('#data').submit();" class="btn btn-mini"><?php echo _('Validate'); ?></a>
+		<a href="./" class="btn btn-mini"><?php echo _('Cancel'); ?></a>
 	
 	</form>
 
@@ -330,6 +318,7 @@
 
 <?php include(COREINC.'/end.php'); ?>
 <script type="text/javascript" src="ui/js/chapter.js"></script> 
+
 <script>
 	languages = [<?php echo implode(',', $isoJS) ?>];
 	function recherche(f){
@@ -345,6 +334,5 @@
 		});
 	}
 </script>
-
 
 </body></html>

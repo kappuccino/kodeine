@@ -3,12 +3,16 @@
 
 	<data>
 		<key>field</key>
-		<version>5.0.8</version>
-        <lastMod>2013-02-14</lastMod>
+		<version>5.0.9</version>
+        <lastMod>2013-02-23</lastMod>
+		<menu>NO</menu>
 
 		<name><![CDATA[Champs]]></name>
-		<description><![CDATA[]]></description>
-		<menu>NO</menu>
 	</data>
+
+    <i18n>
+        <file>index.php</file>
+        <file>asso.php</file>
+    </i18n>
 
 </element>

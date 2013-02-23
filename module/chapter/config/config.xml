@@ -3,12 +3,15 @@
 
 	<data>
 		<key>chapter</key>
-		<version>5.0.5</version>
-        <lastMod>2013-02-14</lastMod>
+		<version>5.0.6</version>
+        <lastMod>2013-02-23</lastMod>
+		<menu>NO</menu>
 
 		<name><![CDATA[Arborescence]]></name>
-		<description><![CDATA[]]></description>
-		<menu>NO</menu>
 	</data>
+
+    <i18n>
+        <file>index.php</file>
+    </i18n>
 
 </element>

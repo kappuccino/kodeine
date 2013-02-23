@@ -82,23 +82,6 @@
 		$title = 'Nouvelle catégorie';
 	}
 
-	/* + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - 
-	+ - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - */
-	function fieldTrace($app, $lan, $copy, $data, $e){
-		$field	= $app->apiLoad('field')->fieldForm(
-			$e['id_field'],
-			$data,
-			array(
-				'name'		=> 'lan['.$lan.'][field]['.$e['id_field'].']',
-				'id'		=> 'lan-'.$lan.'-field-'.$e['id_field'],
-				'class'		=> 'item-'.$lan,
-				'style' 	=> 'width:99%; '.$e['__fieldStyle__'],
-				'disabled'	=> (($copy) ? 'disabled' : '')
-			)
-		);
-
-		echo $field;
-	}
 ?><!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -121,7 +104,7 @@
 				<thead>
 					<th width="5"></th>
 					<th width="30"><i class="icon-remove icon-white"></i></th>
-					<th>Nom</th>
+					<th><?php echo _('Name'); ?></th>
 				</thead>
 			</table>
 			<div id="category">
@@ -131,17 +114,16 @@
 
 		<div class="clearfix">
 			<div class="left">
-				<a onclick="removeSelection()" class="btn btn-mini">Supprimer la selection</a>
-				<a href="./" class="btn btn-mini">Annuler</a>
+				<a onclick="removeSelection()" class="btn btn-mini"><?php echo _('Remove selected items'); ?></a>
+				<a href="./" class="btn btn-mini"><?php echo _('Cancel'); ?></a>
 			</div>
 			<div class="right">
-				<a href="../field/asso?id_type=category" class="btn btn-mini">Gérer les champs</a>
+				<a href="../field/asso?id_type=category" class="btn btn-mini"><?php echo _('Manage fields'); ?></a>
 			</div>
 		</div>
 	</div>
 
-	<div class="span6">
-	<?php
+	<div class="span6"><?php
 	
 		if(!isset($message) && isset($_GET['message'])) $message = $_GET['message'];
 		if($message != NULL){
@@ -158,7 +140,7 @@
 	
 		<table border="0" cellspacing="0" cellpadding="0" class="form">
 			<tr>
-				<td width="150">Catégorie parente</td>
+				<td width="150"><?php echo _('Parent category'); ?></td>
 				<td><?php
 					$category = $app->apiLoad('category')->categoryGet(array(
 						'language' 			=> 'fr',
@@ -177,7 +159,7 @@
 				?></td>
 			</tr>
 			<tr>
-				<td>Mise en page</td>
+				<td><?php echo _('Template'); ?></td>
 				<td><?php
 					echo $app->apiLoad('template')->templateSelector(array(
 						'name'		=> 'categoryTemplate',
@@ -206,47 +188,48 @@
 						<td colspan="2" class="view-split"><?php
 							if($i == 0){
 								echo "<input type=\"hidden\" name=\"ref\" value=\"".$iso."\" /> ";
-								echo "Cette langue est la version de référence";
+								echo _('This is reference language');
 							}else{
 								$copy = ($data['lan'][$iso]['is_copy'] == '1' && $i > 0) ? true : false;
 								$chk  = ($copy || $_REQUEST['id_category'] == '') ? ' checked' : NULL;
 	
 								echo "<input type=\"hidden\"   name=\"lan[".$iso."][copy]\" value=\"0\" />";
-								echo "<input type=\"checkbox\" name=\"lan[".$iso."][copy]\" value=\"1\" ".$chk." id=\"copy-".$iso."\" onChange=\"toggleCopy('".$iso."')\" /> Identique à la version de référence";
+								echo "<input type=\"checkbox\" name=\"lan[".$iso."][copy]\" value=\"1\" ".$chk." id=\"copy-".$iso."\" onChange=\"toggleCopy('".$iso."')\" /> ";
+								echo _('Same as reference');
 							}
 						?></td>
 					</tr>
 					<tr>
-						<td width="100" class="<?php echo $app->formError('categoryName-'.$iso, 'alertNeedToCheck') ?>">Nom</td>
+						<td width="100" class="<?php echo $app->formError('categoryName-'.$iso, 'alertNeedToCheck') ?>"><?php echo _('Name'); ?></td>
 						<td>
 							<input type="text" name="lan[<?php echo $iso ?>][categoryName]" id="categoryName-<?php echo $iso ?>" value="<?php echo $app->formValue($data['lan'][$iso]['categoryName'], $_POST['lan'][$iso]['categoryName']); ?>" <?php if($copy) echo "disabled=\"disabled\""; ?> class="item-<?php echo $iso ?>" style="width:90%" />
 							<input type="checkbox" id="transform-<?php echo $iso ?>" />
 						</td>
 					</tr>
 					<tr>
-						<td class="<?php echo $app->formError('categoryUrl-'.$iso, 'alertNeedToCheck') ?>">Url</td>
+						<td class="<?php echo $app->formError('categoryUrl-'.$iso, 'alertNeedToCheck') ?>"><?php echo _('Url'); ?></td>
 						<td><input type="text" name="lan[<?php echo $iso ?>][categoryUrl]" id="categoryUrl-<?php echo $iso ?>" value="<?php echo $app->formValue($data['lan'][$iso]['categoryUrl'], $_POST['lan'][$iso]['categoryUrl']); ?>" <?php if($copy) echo "disabled=\"disabled\""; ?> class="item-<?php echo $iso ?>" style="width:90%;" /></td>	
 					</tr>
 					<tr>
 						<td></td>
-						<td><span id="alert-<?php echo $iso ?>" style="display:none;">Doublon - Changer de nom</span>&nbsp;</td>
+						<td><span id="alert-<?php echo $iso ?>" style="display:none;"><?php echo _('Duplicate - change name'); ?></span>&nbsp;</td>
 					</tr>
 					<tr>
-						<td>Image</td>
+						<td><?php echo _('Media'); ?></td>
 						<td>
 							<input type="text" name="lan[<?php echo $iso ?>][categoryMedia]" id="categoryMedia-<?php echo $iso ?>" value="<?php echo $app->formValue($data['lan'][$iso]['categoryMedia'], $_POST['lan'][$iso]['categoryMedia']); ?>" <?php if($copy) echo "disabled=\"disabled\""; ?> class="item-<?php echo $iso ?>" style="width:75%" />
-							<a href="#" onclick="mediaOpen('line', 'categoryMedia-<?php echo $iso ?>')">choisir</a>
+							<a href="#" onclick="mediaOpen('line', 'categoryMedia-<?php echo $iso ?>')"><?php echo _('Pick'); ?></a>
 						</td>
 					</tr>
 					<tr valign="top">
-						<td>Description</td>
+						<td><?php echo _('Description'); ?></td>
 						<td><textarea name="lan[<?php echo $iso ?>][categoryDescription]" id="<?php echo 'categoryDescription-'.$iso ?>" <?php if($copy) echo "disabled=\"disabled\""; ?> class="item-<?php echo $iso ?>" style="width:90%; height:80px;"><?php
 							echo $app->formValue($data['lan'][$iso]['categoryDescription'], $_POST['lan'][$iso]['categoryDescription']);
 						?></textarea></td>
 					</tr>
 					<?php if(sizeof($fields) > 0){ ?>
 					<tr>
-						<td colspan="2" class="view-split">Paramètres supplémentaires</td>
+						<td colspan="2" class="view-split"><?php echo _('More parameters'); ?></td>
 					</tr>
 					<?php foreach($fields as $f){ ?>
 					<tr valign="top">
@@ -255,7 +238,7 @@
 	
 							$tmp = $app->formValue($data['lan'][$iso]['field'][$f['fieldKey']], $_POST['lan'][$iso]['field'][$f['id_field']]);
 							
-							fieldTrace($app, $iso, $copy, $tmp, $f);
+							$app->apiLoad('field')->fieldTrace($iso, $copy, $tmp, $f);
 	
 						?></div></td>
 					</tr>
@@ -266,8 +249,8 @@
 			<?php } ?>
 		</div>
 		
-		<a onclick="$('#data').submit();" class="btn btn-mini">Enregistrer</a>
-		<a href="./" class="btn btn-mini">annuler</a>
+		<a onclick="$('#data').submit();" class="btn btn-mini"><?php echo _('Validate'); ?></a>
+		<a href="./" class="btn btn-mini"><?php echo _('Cancel'); ?></a>
 	
 		</form>
 	</div>
