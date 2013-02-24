@@ -5,10 +5,9 @@
 		<key>core</key>
 		<version>5.1.0</version>
 		<lastMod>2013-02-24</lastMod>
+		<hidden>YES</hidden>
 
 		<name><![CDATA[Core]]></name>
-		<description><![CDATA[]]></description>
-		<hidden>YES</hidden>
 	</data>
 
 	<dependencies>

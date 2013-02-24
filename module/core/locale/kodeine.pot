@@ -15,299 +15,1052 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: ../../config/language.php:184
-msgid "Ajouter une zone"
+#: ../../content/data.php:302
+msgid "%s version avalaible"
 msgstr ""
 
-#: ../../config/admin.php:44 ../../config/field.php:56 ../../config/index.php:82 ../../config/language.php:73 ../../config/offline.php:54 ../../config/robots.php:47
-msgid "Annuler"
+#: ../../field/asso.php:140
+msgid "(Album)"
 msgstr ""
 
-#: ../../config/language.php:196
-msgid "Apparait dans la liste des pays autorisé pour livraison (eBusiness)"
+#: ../../field/asso.php:141
+msgid "(eBusiness)"
 msgstr ""
 
-#: ../../config/field.php:73
-msgid "Autres champs utilisables"
+#: ../../content/type.php:162
+msgid "<b>WARNING</b> you are about to remove data, this action not cancelable (Database table destruction)"
+msgstr ""
+
+#: ../../field/index.php:88
+msgid "<b>WARNING</b> you are about to remove some fields, you will not be able to cancel this operation"
+msgstr ""
+
+#: ../../field/asso.php:167
+msgid ""
+"<b>WARNING</b> you have removed a field. If you save this page, this field will be\n"
+"\t\timmediately removed and all data stored inside it will be lost.\n"
+"\t\t<b>You will not be able to cancel this operation</b>"
+msgstr ""
+
+#: ../../content/data.php:734
+msgid "A percentage to give more weight to this banner"
+msgstr ""
+
+#: ../../content/data-language.php:187 ../../content/data.php:224
+msgid "Actions"
+msgstr ""
+
+#: ../../core/module.php:35
+msgid "Activated"
+msgstr ""
+
+#: ../../content/type.php:257 ../../content/type.php:270
+msgid "Ad"
+msgstr ""
+
+#: ../../content/data.php:702
+msgid "Ad URL"
+msgstr ""
+
+#: ../../content/data.php:757
+msgid "Ad code"
+msgstr ""
+
+#: ../../content/parent.php:168 ../../content/type-row.php:197 ../../content/type-row.php:204
+msgid "Add"
+msgstr ""
+
+#: ../../content/index.php:79
+msgid "Add a %s"
+msgstr ""
+
+#: ../../field/index.php:267
+msgid "Add a choice"
+msgstr ""
+
+#: ../../content/data.php:292
+msgid "Add a tab"
+msgstr ""
+
+#: ../../field/asso.php:149
+msgid "Add a type"
+msgstr ""
+
+#: ../../config/language.php:179
+msgid "Add a zone"
+msgstr ""
+
+#: ../../field/asso.php:13 ../../field/asso.php:18
+msgid "Album"
+msgstr ""
+
+#: ../../content/gallery-album.php:230
+msgid "Album URL"
+msgstr ""
+
+#: ../../content/index.php:127
+msgid "Alle"
+msgstr ""
+
+#: ../../content/data.php:357
+msgid "Always visible"
+msgstr ""
+
+#: ../../config/offline.php:66
+msgid "Apply to those groups"
+msgstr ""
+
+#: ../../config/language.php:171
+msgid "Area"
+msgstr ""
+
+#: ../../content/data.php:402
+msgid "Auto generate"
+msgstr ""
+
+#: ../../config/export.php:112
+msgid "Automatic backup (patch)"
 msgstr ""
 
 #: ../../config/ui/menu.php:11
 msgid "Back Office"
 msgstr ""
 
-#: ../../config/admin.php:69
+#: ../../content/type.php:275
+msgid "Back office view"
+msgstr ""
+
+#: ../../content/data-language.php:191
+msgid "Back to full form"
+msgstr ""
+
+#: ../../config/export.php:144
+msgid "Backup the database now"
+msgstr ""
+
+#: ../../config/index.php:113
+msgid "Blind copy"
+msgstr ""
+
+#: ../../config/admin.php:53
 msgid "Brand name"
 msgstr ""
 
-#: ../../config/admin.php:57
-msgid "Ces paramètres sont communs à tous les utilisateurs de ce back office"
+#: ../../content/type.php:249 ../../content/type.php:262
+msgid "Business"
 msgstr ""
 
-#: ../../config/ui/menu.php:23
-msgid "Champs"
+#: ../../field/asso.php:92
+msgid "Business cart"
 msgstr ""
 
-#: ../../config/field.php:63
-msgid "Champs utilisés"
+#: ../../field/asso.php:93
+msgid "Business cart (ligne)"
 msgstr ""
 
-#: ../../config/index.php:130 ../../config/index.php:208
-msgid "Chapitre"
+#: ../../content/data.php:781
+msgid "Buyable"
+msgstr ""
+
+#: ../../content/data.php:773
+msgid "Buyers"
+msgstr ""
+
+#: ../../category/index.php:118 ../../category/index.php:253 ../../chapter/index.php:173 ../../chapter/index.php:313 ../../config/admin.php:30 ../../config/field.php:55 ../../config/index.php:81 ../../config/language.php:71 ../../config/offline.php:52 ../../config/robots.php:45 ../../content/index.php:134 ../../content/parent.php:186 ../../content/type-row.php:229 ../../content/type.php:229 ../../field/asso.php:199
+msgid "Cancel"
+msgstr ""
+
+#: ../../field/asso.php:170
+msgid "Cancel remove"
+msgstr ""
+
+#: ../../content/data.php:460
+msgid "Carriage"
+msgstr ""
+
+#: ../../field/asso.php:85
+msgid "Categories"
+msgstr ""
+
+#: ../../content/data.php:611 ../../content/gallery-album.php:298 ../../content/index.php:98
+msgid "Category"
+msgstr ""
+
+#: ../../field/index.php:240
+msgid "Change the type, change database field definition and could lost some data"
+msgstr ""
+
+#: ../../config/index.php:188
+msgid "Change time format"
+msgstr ""
+
+#: ../../config/index.php:128 ../../config/index.php:208
+msgid "Chapter"
+msgstr ""
+
+#: ../../content/data.php:591 ../../content/gallery-album.php:283 ../../field/asso.php:86
+msgid "Chapters"
+msgstr ""
+
+#: ../../core/module.php:24
+msgid "Check update"
+msgstr ""
+
+#: ../../core/login.php:75
+msgid "Check your mail, you will receive a link to reset your password"
+msgstr ""
+
+#: ../../content/data.php:721
+msgid "Click Limit"
+msgstr ""
+
+#: ../../field/index.php:108 ../../field/index.php:168
+msgid "Code"
+msgstr ""
+
+#: ../../content/type.php:212
+msgid "Columns"
+msgstr ""
+
+#: ../../content/type-row.php:226
+msgid "Columns for type"
+msgstr ""
+
+#: ../../content/data.php:521 ../../content/data.php:785
+msgid "Comment"
+msgstr ""
+
+#: ../../content/data.php:230
+msgid "Comments"
 msgstr ""
 
 #: ../../config/ui/menu.php:6
 msgid "Configuration"
 msgstr ""
 
-#: ../../config/export.php:166
-msgid "Confirmez-vous la suppression ?"
+#: ../../config/admin.php:37 ../../config/index.php:87
+msgid "Configuration updated"
 msgstr ""
 
-#: ../../config/index.php:109
-msgid "Copie"
+#: ../../field/asso.php:132
+msgid "Contents"
 msgstr ""
 
-#: ../../config/index.php:114
-msgid "Copie cachée"
+#: ../../config/index.php:108
+msgid "Copy"
 msgstr ""
 
-#: ../../config/export.php:100
+#: ../../config/language.php:87
+msgid "Country"
+msgstr ""
+
+#: ../../content/index.php:392
+msgid "Create a new %s"
+msgstr ""
+
+#: ../../content/browse.php:100 ../../content/data.php:547 ../../content/gallery-album.php:354 ../../content/index.php:357
+msgid "Created"
+msgstr ""
+
+#: ../../content/gallery-album.php:193
+msgid "Current album: %s"
+msgstr ""
+
+#: ../../content/gallery-item.php:271
+msgid "Current item"
+msgstr ""
+
+#. ($data['contentRateAvg'])
+#: ../../content/data.php:535
+msgid "Current note: "
+msgstr ""
+
+#: ../../config/export.php:98
 msgid "Date"
 msgstr ""
 
-#: ../../config/index.php:106
+#: ../../config/index.php:151 ../../config/index.php:173
+msgid "Date format"
+msgstr ""
+
+#: ../../content/data.php:543 ../../content/gallery-album.php:350
+msgid "Dates"
+msgstr ""
+
+#: ../../config/index.php:137
+msgid "Default chapter for homepage"
+msgstr ""
+
+#: ../../config/index.php:148
+msgid "Default language if not specified in the URL"
+msgstr ""
+
+#: ../../config/index.php:125
+msgid "Default theme — Could be changed by chapters and/or modules"
+msgstr ""
+
+#: ../../config/language.php:189
+msgid "Delivery"
+msgstr ""
+
+#: ../../category/index.php:225 ../../chapter/index.php:289 ../../content/data-language.php:290
+msgid "Description"
+msgstr ""
+
+#: ../../content/data.php:428
+msgid "Description (seo)"
+msgstr ""
+
+#: ../../config/index.php:105
 msgid "Destinataire des mails expédiés depuis le site"
 msgstr ""
 
-#: ../../config/index.php:104
-msgid "Destinataire du mail"
-msgstr ""
-
-#: ../../config/index.php:111
+#: ../../config/index.php:110
 msgid "Destinataire en copie des mails expédiés depuis le site"
 msgstr ""
 
-#: ../../config/index.php:116
+#: ../../config/index.php:115
 msgid "Destinataire invisible des mails expédiés depuis le site"
 msgstr ""
 
-#: ../../config/admin.php:45 ../../config/field.php:57 ../../config/language.php:74 ../../config/offline.php:55 ../../config/robots.php:48
-msgid "Enregistrer"
+#: ../../content/index.php:65
+msgid "Display settings"
 msgstr ""
 
-#: ../../config/language.php:144
-msgid "Exemple : France, Belgique, Italie"
+#: ../../content/data-language.php:178
+msgid "Do not forget to save this page, before duplicate it"
 msgstr ""
 
-#: ../../config/language.php:150
-msgid "Exemple : Français, Anglais, Allemand"
+#: ../../config/index.php:207
+msgid "Domain name"
 msgstr ""
 
-#: ../../config/language.php:156
-msgid "Exemple: fr_FR, fr_CH, en_EN, en_US"
+#: ../../category/index.php:215 ../../chapter/index.php:275
+msgid "Duplicate - change name"
 msgstr ""
 
-#: ../../config/admin.php:64 ../../config/index.php:99
-msgid "Explication"
+#: ../../content/data-language.php:171
+msgid "Duplicate data to this language"
+msgstr ""
+
+#: ../../content/gallery.php:45 ../../content/parent.php:205
+msgid "Edit"
+msgstr ""
+
+#: ../../content/data.php:293
+msgid "Edits tabs"
+msgstr ""
+
+#: ../../config/language.php:185
+msgid "Enable data to be translated in the language in the back office"
+msgstr ""
+
+#: ../../config/language.php:191
+msgid "Enable the country for delivery (eBusiness)"
+msgstr ""
+
+#: ../../content/data.php:570 ../../content/gallery-album.php:377
+msgid "Ends"
+msgstr ""
+
+#: ../../core/login.php:59 ../../core/login.php:68
+msgid "Enter your"
+msgstr ""
+
+#: ../../content/data.php:524 ../../content/data.php:531
+msgid "Every body"
+msgstr ""
+
+#: ../../config/admin.php:48 ../../config/index.php:98
+msgid "Explanation"
 msgstr ""
 
 #: ../../config/ui/menu.php:42
 msgid "Export"
 msgstr ""
 
-#: ../../config/index.php:177
-msgid "Format de l'heure"
+#: ../../config/ui/menu.php:23 ../../content/type-row.php:183
+msgid "Field"
 msgstr ""
 
-#: ../../config/index.php:153
-msgid "Format de la date"
+#: ../../field/index.php:329
+msgid "Fields"
 msgstr ""
 
-#: ../../config/index.php:192 ../../config/index.php:211
-msgid "Google Analytics"
+#: ../../chapter/index.php:143 ../../content/index.php:133 ../../field/index.php:109
+msgid "Filter"
 msgstr ""
 
-#: ../../config/offline.php:68
-msgid "Groupes concernés"
+#: ../../config/export.php:89
+msgid "Folder /user/dump is used to backup database exoprt files."
 msgstr ""
 
-#: ../../config/ui/menu.php:28
-msgid "Hors ligne"
+#: ../../chapter/index.php:219
+msgid "Force a theme"
 msgstr ""
 
-#: ../../config/index.php:194
-msgid "ID Numerique du compte Google Analytics (UA-YYYYYYY-XX)"
-msgstr ""
-
-#: ../../config/index.php:200
-msgid ""
-"Il est possible de changer ponctuellement les paramères par défaut pour certaines nom de domaine<br />\n"
-"\t\t\tNote, vous pouvez utiliser des expressions regulières pour définir un domaine. Exemple (*)?(.)?kappuccino.org pour satisfaire www.kappuccino.org et kappuccino.org"
-msgstr ""
-
-#: ../../config/export.php:130
-msgid "Il n'y a aucun backup de base de données"
-msgstr ""
-
-#: ../../config/language.php:72
-msgid "Importer des langues"
-msgstr ""
-
-#: ../../config/export.php:102
-msgid "Infos"
-msgstr ""
-
-#: ../../config/language.php:201
-msgid ""
-"La <u>référence</u> est la langue pour laquelle les traduction seront demandé.<br />\n"
-"\t\tPar exemple CH (suisse) a pour référence FR (france), ce qui permet de ne pas avoir \n"
-"\t\ta gérer deux fois le contenu dans la même langue"
-msgstr ""
-
-#: ../../config/index.php:150
-msgid "La langue qui est choisie par défaut à l'ouverture du site"
-msgstr ""
-
-#: ../../config/index.php:142 ../../config/index.php:210 ../../config/language.php:148 ../../config/language.php:90
-msgid "Langue"
-msgstr ""
-
-#: ../../config/ui/menu.php:38
-msgid "Langues"
-msgstr ""
-
-#: ../../config/index.php:139
-msgid "Le chapitre par défaut qui est utilisé à l'ouverture du site"
-msgstr ""
-
-#: ../../config/export.php:91
-msgid "Le dossier /user/dump est utilisé pour sauvegarder les exports de votre base de données, voici son contenu."
-msgstr ""
-
-#: ../../config/admin.php:71
-msgid "Le nom qui est affiché en haut à gauche"
-msgstr ""
-
-#: ../../config/index.php:127
-msgid "Le theme qui est choisi par défaut (il peut être changé par le chapitre et/ou le module)"
-msgstr ""
-
-#: ../../config/index.php:174
-msgid "Les dates seront formatées de cette manière"
-msgstr ""
-
-#: ../../config/index.php:189
-msgid "Les heures seront formatées de cette manière"
-msgstr ""
-
-#: ../../config/language.php:194
-msgid "Livraison"
-msgstr ""
-
-#: ../../config/admin.php:51 ../../config/index.php:88
-msgid "Mise à jour des paramètre de configuration"
+#: ../../content/data.php:672
+msgid "Forum (Social)"
 msgstr ""
 
 #: ../../config/language.php:142
-msgid "Nom"
+msgid "France, Italia, Sweden..."
 msgstr ""
 
-#: ../../config/index.php:207
-msgid "Nom de domaine"
+#: ../../config/language.php:148
+msgid "Français, English, Dutch"
 msgstr ""
 
-#: ../../config/admin.php:62
-msgid "Paramètre"
+#: ../../content/data.php:439 ../../content/gallery-album.php:243
+msgid "Front office view"
 msgstr ""
 
-#: ../../config/index.php:97
-msgid "Paramètres"
+#: ../../content/type.php:253 ../../content/type.php:266
+msgid "Gallery"
 msgstr ""
 
-#: ../../config/index.php:271
-msgid "Paramètres complémentaires"
+#: ../../core/index.php:20
+msgid "Gestion des modules"
 msgstr ""
 
-#: ../../config/language.php:89
-msgid "Pays"
+#: ../../config/index.php:191 ../../config/index.php:211
+msgid "Google Analytics"
 msgstr ""
 
-#: ../../config/language.php:190
-msgid "Permet de traduire du contenu dans cette langue (dans l'admin)"
+#: ../../config/index.php:193
+msgid "Google Analytics ID (UA-YYYYYYY-XX)"
 msgstr ""
 
-#: ../../config/export.php:101
-msgid "Poids"
+#: ../../content/data.php:632 ../../content/gallery-album.php:315
+msgid "Groups"
 msgstr ""
 
-#: ../../config/export.php:115
-msgid "Point de sauvegarde automatique (patch)"
+#: ../../field/index.php:94
+msgid "I really want to remove thoses fields"
 msgstr ""
 
-#: ../../config/language.php:80
+#: ../../content/gallery.php:44
+msgid "Import"
+msgstr ""
+
+#: ../../config/language.php:70
+msgid "Import more languages"
+msgstr ""
+
+#: ../../config/export.php:100
+msgid "Infos"
+msgstr ""
+
+#: ../../content/index.php:129
+msgid "Inheritance"
+msgstr ""
+
+#: ../../field/index.php:184
+msgid "Inline CSS applieds to form field"
+msgstr ""
+
+#: ../../core/module.php:54
+msgid "Install"
+msgstr ""
+
+#: ../../core/module.php:34
+msgid "Installed"
+msgstr ""
+
+#: ../../field/index.php:177
+msgid "Instruction"
+msgstr ""
+
+#: ../../field/asso.php:13 ../../field/asso.php:18
+msgid "Item"
+msgstr ""
+
+#: ../../content/type.php:293
+msgid "Key"
+msgstr ""
+
+#: ../../content/data-language.php:284
+msgid "Key words"
+msgstr ""
+
+#: ../../content/data.php:421
+msgid "Key words (seo)"
+msgstr ""
+
+#: ../../config/index.php:140 ../../config/index.php:210 ../../config/language.php:146 ../../config/language.php:88 ../../content/index.php:119
+msgid "Language"
+msgstr ""
+
+#: ../../field/index.php:398
+msgid "Language (JS, JSON, XML...)"
+msgstr ""
+
+#: ../../content/data.php:323
+msgid "Language of this document"
+msgstr ""
+
+#: ../../config/ui/menu.php:38
+msgid "Languages"
+msgstr ""
+
+#: ../../core/module.php:39
+msgid "Last"
+msgstr ""
+
+#: ../../content/index.php:95
+msgid "Limit"
+msgstr ""
+
+#: ../../field/asso.php:159
+msgid "List"
+msgstr ""
+
+#: ../../config/language.php:152
+msgid "Locale"
+msgstr ""
+
+#: ../../content/data.php:741
+msgid "Location"
+msgstr ""
+
+#: ../../config/index.php:103
+msgid "Mail recipient"
+msgstr ""
+
+#: ../../content/index.php:135
+msgid "Manage columns"
+msgstr ""
+
+#: ../../category/index.php:121 ../../chapter/index.php:176 ../../content/type.php:211 ../../content/type.php:233 ../../field/asso.php:122
+msgid "Manage fields"
+msgstr ""
+
+#: ../../field/asso.php:123
+msgid "Manage types"
+msgstr ""
+
+#: ../../field/index.php:156
+msgid "Mandatory"
+msgstr ""
+
+#: ../../field/index.php:233 ../../field/index.php:253 ../../field/index.php:294 ../../field/index.php:317
+msgid "Many choices avalaibles"
+msgstr ""
+
+#: ../../field/index.php:131
+msgid "Match fields & types"
+msgstr ""
+
+#: ../../category/index.php:218 ../../chapter/index.php:282 ../../content/data.php:852
+msgid "Media"
+msgstr ""
+
+#: ../../content/data.php:524 ../../content/data.php:531
+msgid "Members only"
+msgstr ""
+
+#: ../../chapter/index.php:278
+msgid "Module"
+msgstr ""
+
+#: ../../category/index.php:232 ../../config/index.php:271
+msgid "More parameters"
+msgstr ""
+
+#: ../../category/index.php:107 ../../category/index.php:203 ../../chapter/index.php:142 ../../chapter/index.php:263 ../../config/language.php:140 ../../content/browse.php:102 ../../content/data-language.php:261 ../../content/data.php:389 ../../content/gallery-album.php:221 ../../content/gallery-item.php:214 ../../content/index.php:364 ../../content/parent.php:153 ../../content/type.php:183 ../../content/type.php:289 ../../field/index.php:106 ../../field/index.php:164
+msgid "Name"
+msgstr ""
+
+#: ../../content/gallery.php:46 ../../content/type.php:309 ../../field/index.php:409
+msgid "New"
+msgstr ""
+
+#: ../../content/data-language.php:189 ../../content/data.php:226
+msgid "New document"
+msgstr ""
+
+#: ../../content/gallery-album.php:183
+msgid "Next album"
+msgstr ""
+
+#: ../../content/gallery-item.php:272
+msgid "Next item"
+msgstr ""
+
+#: ../../config/export.php:125
+msgid "No backup"
+msgstr ""
+
+#: ../../content/browse.php:107
+msgid "No content"
+msgstr ""
+
+#: ../../content/data.php:315 ../../content/index.php:391
+msgid "No data"
+msgstr ""
+
+#: ../../content/data-language.php:159 ../../content/data.php:262
+msgid "No document found"
+msgstr ""
+
+#: ../../content/data-language.php:152 ../../content/data.php:254
+msgid "No document found in this language, other available languages: "
+msgstr ""
+
+#: ../../field/index.php:122
+msgid "No field"
+msgstr ""
+
+#: ../../content/gallery-album.php:198
+msgid "No more album"
+msgstr ""
+
+#: ../../content/gallery-item.php:287
+msgid "No more item"
+msgstr ""
+
+#: ../../field/index.php:202 ../../field/index.php:207 ../../field/index.php:212 ../../field/index.php:217 ../../field/index.php:222
+msgid "No options available"
+msgstr ""
+
+#: ../../content/gallery-album.php:190
+msgid "No previous album"
+msgstr ""
+
+#: ../../content/gallery-item.php:279
+msgid "No previous item"
+msgstr ""
+
+#: ../../content/data.php:784
+msgid "Normal price"
+msgstr ""
+
+#: ../../field/asso.php:174
+msgid "Not used fields"
+msgstr ""
+
+#: ../../config/index.php:201
+msgid "Note: you can use regular expression to define a domaine name. (www\\.)?kappuccino.org to match the main domain and www sub domaine"
+msgstr ""
+
+#: ../../config/ui/menu.php:28
+msgid "Off-line"
+msgstr ""
+
+#: ../../content/type.php:243
+msgid "Once a type crated, you will not be able to change business, ad, or gallery settings"
+msgstr ""
+
+#: ../../field/index.php:232 ../../field/index.php:252 ../../field/index.php:293 ../../field/index.php:316
+msgid "One choice available"
+msgstr ""
+
+#: ../../field/index.php:254 ../../field/index.php:295 ../../field/index.php:318
+msgid "One choice available, (dropdown menu)"
+msgstr ""
+
+#: ../../content/index.php:128
+msgid "Ordered"
+msgstr ""
+
+#: ../../config/field.php:72
+msgid "Other fields enabled"
+msgstr ""
+
+#: ../../config/admin.php:46 ../../config/index.php:96
+msgid "Parameter"
+msgstr ""
+
+#: ../../category/index.php:143
+msgid "Parent category"
+msgstr ""
+
+#: ../../chapter/index.php:200
+msgid "Parent chapter"
+msgstr ""
+
+#: ../../core/module.php:36 ../../core/module.php:69 ../../core/module.php:94
+msgid "Patch"
+msgstr ""
+
+#: ../../category/index.php:221 ../../content/gallery-item.php:230
+msgid "Pick"
+msgstr ""
+
+#: ../../content/gallery-album.php:175
+msgid "Previous album"
+msgstr ""
+
+#: ../../content/gallery-item.php:270
+msgid "Previous item"
+msgstr ""
+
+#: ../../content/data.php:782
+msgid "Price"
+msgstr ""
+
+#: ../../content/data.php:783
+msgid "Price with taxes"
+msgstr ""
+
+#: ../../field/index.php:355
+msgid "Primary Key/ID"
+msgstr ""
+
+#: ../../config/language.php:78
 msgid "Profile insufisant"
 msgstr ""
 
-#: ../../config/language.php:219
+#: ../../config/language.php:210
 msgid "Quel nom voulez vous donner à cette zone ?"
 msgstr ""
 
-#: ../../config/language.php:160
-msgid "Reférence"
+#: ../../config/language.php:158 ../../content/data.php:446 ../../content/index.php:361
+msgid "Reference"
+msgstr ""
+
+#: ../../content/data.php:585 ../../content/gallery-album.php:279 ../../content/type.php:279
+msgid "Relationships"
+msgstr ""
+
+#: ../../core/module.php:38
+msgid "Release"
+msgstr ""
+
+#: ../../content/data.php:228
+msgid "Reload"
+msgstr ""
+
+#: ../../content/data-language.php:190
+msgid "Reload the page"
+msgstr ""
+
+#: ../../content/data-language.php:196 ../../content/data.php:236 ../../content/parent.php:204 ../../content/type-row.php:249 ../../field/index.php:130
+msgid "Remove"
+msgstr ""
+
+#: ../../config/export.php:134
+msgid "Remove selected files"
+msgstr ""
+
+#: ../../category/index.php:117 ../../config/language.php:112
+msgid "Remove selected items"
+msgstr ""
+
+#: ../../content/browse.php:116 ../../content/index.php:410
+msgid "Remove selected lines"
+msgstr ""
+
+#: ../../content/type.php:228
+msgid "Remove selection"
+msgstr ""
+
+#: ../../content/data.php:536
+msgid "Reset notes"
 msgstr ""
 
 #: ../../config/ui/menu.php:33
 msgid "Robots.txt"
 msgstr ""
 
-#: ../../config/language.php:215
+#: ../../content/gallery-album.php:179 ../../content/gallery-item.php:264
+msgid "Root"
+msgstr ""
+
+#: ../../field/index.php:380
+msgid "SQL \"WHERE\" statements"
+msgstr ""
+
+#: ../../config/language.php:206 ../../content/type.php:322
 msgid "SUPPRIMER ?"
 msgstr ""
 
-#: ../../config/export.php:116
-msgid "Sauvegarde effectuée manuellement par l'utilisateur"
+#: ../../category/index.php:198 ../../chapter/index.php:257
+msgid "Same as reference"
 msgstr ""
 
-#: ../../config/export.php:150
-msgid "Sauvegarder la base de données"
+#: ../../chapter/index.php:172 ../../config/admin.php:31 ../../config/field.php:56 ../../config/index.php:82 ../../config/language.php:72 ../../config/offline.php:53 ../../config/robots.php:46 ../../content/data.php:237 ../../content/gallery-album.php:156 ../../content/gallery-item.php:186 ../../content/type.php:308 ../../field/asso.php:198
+msgid "Save"
 msgstr ""
 
-#: ../../config/export.php:140 ../../config/language.php:114
-msgid "Supprimer la selection"
+#: ../../content/data.php:294
+msgid "Save tabs"
 msgstr ""
 
-#: ../../config/index.php:119
+#: ../../content/parent.php:185 ../../content/type-row.php:228
+msgid "Save this order"
+msgstr ""
+
+#: ../../content/index.php:92
+msgid "Search"
+msgstr ""
+
+#: ../../field/index.php:152
+msgid "Searchable"
+msgstr ""
+
+#: ../../content/data.php:291
+msgid "See all"
+msgstr ""
+
+#: ../../content/data.php:829 ../../content/index.php:109
+msgid "Shop"
+msgstr ""
+
+#: ../../config/export.php:99
+msgid "Size"
+msgstr ""
+
+#: ../../content/data.php:652 ../../content/gallery-album.php:331
+msgid "Smart groups"
+msgstr ""
+
+#: ../../field/asso.php:102
+msgid "Social Activity"
+msgstr ""
+
+#: ../../field/asso.php:101
+msgid "Social Alert"
+msgstr ""
+
+#: ../../field/asso.php:100
+msgid "Social Circle"
+msgstr ""
+
+#: ../../field/asso.php:103
+msgid "Social Event"
+msgstr ""
+
+#: ../../field/asso.php:104
+msgid "Social Event (user)"
+msgstr ""
+
+#: ../../field/asso.php:99
+msgid "Social Forum"
+msgstr ""
+
+#: ../../content/data.php:555 ../../content/gallery-album.php:362
+msgid "Starts"
+msgstr ""
+
+#: ../../field/index.php:181
+msgid "Style"
+msgstr ""
+
+#: ../../content/data.php:231
+msgid "Sub-content"
+msgstr ""
+
+#: ../../content/gallery-album.php:251
+msgid "Sync"
+msgstr ""
+
+#: ../../field/asso.php:153
+msgid "System items"
+msgstr ""
+
+#: ../../field/index.php:351
+msgid "Table"
+msgstr ""
+
+#: ../../category/index.php:162 ../../content/data.php:483 ../../content/gallery-album.php:263 ../../content/type.php:297
+msgid "Template"
+msgstr ""
+
+#: ../../config/index.php:118 ../../config/index.php:209 ../../config/ui/menu.php:17
 msgid "Theme"
 msgstr ""
 
-#: ../../config/index.php:209 ../../config/ui/menu.php:17
-msgid "Thême"
+#: ../../content/gallery-album.php:255
+msgid "This album is synced with folder"
 msgstr ""
 
-#: ../../config/language.php:188
-msgid "Traduction"
+#: ../../content/data-language.php:251
+msgid "This document is not translated in this language"
 msgstr ""
 
-#: ../../config/language.php:138
-msgid "Utiliser par l'URL /fr/"
+#: ../../category/index.php:191 ../../chapter/index.php:249
+msgid "This is reference language"
 msgstr ""
 
-#: ../../config/admin.php:63 ../../config/index.php:98
-msgid "Valeur"
+#: ../../content/gallery-album.php:158
+msgid "Thumbnails view"
 msgstr ""
 
-#: ../../config/index.php:83
-msgid "Valider"
+#: ../../config/index.php:176
+msgid "Time format"
 msgstr ""
 
-#: ../../config/language.php:154
-msgid "Variante locale"
+#: ../../content/data-language.php:279
+msgid "Title"
+msgstr ""
+
+#: ../../content/data.php:413
+msgid "Title (seo)"
+msgstr ""
+
+#: ../../config/admin.php:55
+msgid "Top left name, default Kodeine"
+msgstr ""
+
+#: ../../config/language.php:183
+msgid "Translate"
+msgstr ""
+
+#: ../../content/data.php:229
+msgid "Translation"
+msgstr ""
+
+#: ../../field/index.php:191 ../../field/index.php:227 ../../field/index.php:247
+msgid "Type"
+msgstr ""
+
+#: ../../content/browse.php:101 ../../content/data.php:563 ../../content/gallery-album.php:370 ../../content/index.php:358
+msgid "Updated"
+msgstr ""
+
+#: ../../category/index.php:210 ../../chapter/index.php:270 ../../content/data-language.php:268 ../../content/data.php:397 ../../content/gallery-item.php:226
+msgid "Url"
+msgstr ""
+
+#: ../../content/data.php:490 ../../content/gallery-album.php:266
+msgid "Use default template"
+msgstr ""
+
+#: ../../config/field.php:62 ../../field/asso.php:186
+msgid "Used fields"
+msgstr ""
+
+#: ../../config/language.php:136
+msgid "Used in the URL /fr/"
+msgstr ""
+
+#: ../../field/index.php:186
+msgid "Used rich text editor"
+msgstr ""
+
+#: ../../field/index.php:173
+msgid ""
+"Used to name a field in PHP code. Used only letters, no space or special caracters.\n"
+"\t\t\tChange this value could make troubles. Please take care."
+msgstr ""
+
+#: ../../config/export.php:112
+msgid "User export"
+msgstr ""
+
+#: ../../field/asso.php:87
+msgid "Users"
+msgstr ""
+
+#: ../../category/index.php:252 ../../chapter/index.php:312 ../../content/data-language.php:177 ../../content/data-language.php:199 ../../field/index.php:408
+msgid "Validate"
+msgstr ""
+
+#: ../../config/admin.php:47 ../../config/index.php:97
+msgid "Value"
+msgstr ""
+
+#: ../../content/data.php:297
+msgid "Versioning"
+msgstr ""
+
+#: ../../content/type.php:210
+msgid "View"
+msgstr ""
+
+#: ../../content/data.php:711
+msgid "View limit"
+msgstr ""
+
+#: ../../content/data.php:436 ../../content/gallery-album.php:240 ../../content/gallery-item.php:241
+msgid "Visibility"
+msgstr ""
+
+#: ../../content/data.php:780 ../../field/index.php:160
+msgid "Visible"
+msgstr ""
+
+#: ../../field/index.php:359
+msgid "Visible field"
+msgstr ""
+
+#: ../../core/login.php:28
+msgid "Vous êtes identifié mais vous ne pouvez pas accéder a l'admin : <a href=\\\"?logout=1\\\">se déconnecter</a>"
+msgstr ""
+
+#: ../../content/data.php:453
+msgid "Weight"
+msgstr ""
+
+#: ../../content/data.php:731
+msgid "Weighting"
+msgstr ""
+
+#: ../../core/login.php:53
+msgid "Welcome,<br />login-in"
+msgstr ""
+
+#: ../../config/export.php:154
+msgid "Would you really reload this backup ?\\n\\nThis will empty your current database then load data from the selected file.\\n\\nUSE AT YOUR OWN RISK"
 msgstr ""
 
 #: ../../config/export.php:160
-msgid "Voulez-vous rellement recharger la base de données a cette date ?\\n\\n\\nCETTE FONCTION EST A EXECUTER AVEC UNE PRUDENCE EXTREME !!!"
+msgid "Would you really want to remove those backup?"
 msgstr ""
 
-#: ../../config/language.php:173
-msgid "Zone"
+#: ../../config/index.php:199
+msgid "You can change default values for a specific domain name."
+msgstr ""
+
+#: ../../content/type.php:173
+msgid "You can not add, see, browse data while there is no type defined"
+msgstr ""
+
+#: ../../content/type.php:220
+msgid "You need to create a type to create new contents"
+msgstr ""
+
+#: ../../core/login.php:70 ../../core/login.php:82
+msgid "and"
+msgstr ""
+
+#: ../../core/login.php:61
+msgid "and your"
+msgstr ""
+
+#: ../../core/login.php:63
+msgid "connect you"
+msgstr ""
+
+#: ../../core/login.php:69
+msgid "email"
+msgstr ""
+
+#: ../../core/login.php:80
+msgid "enter your new "
+msgstr ""
+
+#: ../../config/language.php:154
+msgid "fr_FR, en_EN, de_DE"
+msgstr ""
+
+#: ../../core/login.php:60
+msgid "login"
+msgstr ""
+
+#: ../../core/login.php:62 ../../core/login.php:81
+msgid "password"
+msgstr ""
+
+#: ../../core/module.php:72 ../../core/module.php:97
+msgid "rePatch"
+msgstr ""
+
+#: ../../core/login.php:71
+msgid "reset your password"
+msgstr ""
+
+#: ../../core/login.php:83
+msgid "save it"
 msgstr ""

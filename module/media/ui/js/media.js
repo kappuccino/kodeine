@@ -24,7 +24,6 @@ function init(){
 	if($('#button-folder').length > 0)		$('#button-folder').bind('click', folderView);
 	if($('#button-newdir').length > 0)		$('#button-newdir').bind('click', modalPromptDir);
 	if($('#button-pref').length > 0)		$('#button-pref').bind('click', modalPref);
-	if($('#button-hidepanel').length > 0)	$('#button-hidepanel').bind('click', panelHide).css('display', 'none');
 	if($('#viewModeIcon').length > 0)		$('#viewModeIcon').bind('click', function(){ modeSet('icon'); });
 	if($('#viewModeList').length > 0)		$('#viewModeList').bind('click', function(){ modeSet('list'); });
 	

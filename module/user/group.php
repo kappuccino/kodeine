@@ -68,11 +68,11 @@
 
 <div class="inject-subnav-right hide">
 <?php if(isset($_GET['sort'])){ ?>
-	<li><a href="group?id_group=<?php echo $_REQUEST['id_group'] ?>" class="btn btn-small">Annuler</a></li>
-	<li><a onclick="sauver();" class="btn btn-mini btn-success">Enregistrer</a></li>
+	<li><a href="group?id_group=<?php echo $_REQUEST['id_group'] ?>" class="btn btn-small"><?php echo _('Cancel'); ?></a></li>
+	<li><a onclick="sauver();" class="btn btn-mini btn-success"><?php echo _('Save'); ?></a></li>
 <?php }else{ ?>
-	<li><a href="group" class="btn btn-small">Nouveau</a></li>
-	<li><a onclick="$('#data').submit();" class="btn btn-mini btn-success">Enregistrer</a></li>
+	<li><a href="group" class="btn btn-small"><?php echo _('New'); ?></a></li>
+	<li><a onclick="$('#data').submit();" class="btn btn-mini btn-success"><?php echo _('Save'); ?></a></li>
 <?php } ?>
 </div>
 
@@ -85,7 +85,7 @@
 				<tr>
 					<th width="30" class="icone"><i class="icon-remove icon-white"></i></th>
 					<th width="15">&nbsp;</th>
-					<th align="left">Nom</th>
+					<th align="left"><?php echo _('Name'); ?></th>
 				</tr>
 			</thead>
 		</table>
@@ -117,8 +117,8 @@
 	
 		<br style="clear:both;" />
 	
-		<a href="#" onclick="$('#listing').submit()" class="btn btn-mini">Effectuer les changements</a>
-		<a href="group" class="btn btn-mini">Annuler</a>
+		<a onclick="$('#listing').submit()" class="btn btn-mini"><?php echo _('Save changes'); ?></a>
+		<a href="group" class="btn btn-mini"><?php echo _('Cancel'); ?></a>
 	
 		<input type="hidden" id="serialized" name="serialized" />
 	
@@ -140,11 +140,11 @@
 	
 		<table cellpadding="5">
 			<tr>
-				<td>Nom</td>
+				<td><?php echo _('Name'); ?></td>
 				<td><input type="text" name="groupName" value="<?php echo $app->formValue($data['groupName'], $_POST['groupName']); ?>" /></td>	
 			</tr>
 			<tr>
-				<td>Parent</td>
+				<td><?php echo _('Parent group'); ?></td>
 				<td><?php
 					$group = $app->apiLoad('user')->userGroupGet(array(
 						'mid_group'			=> 0,
@@ -191,14 +191,14 @@
 			<input type="hidden" name="sort" value="" />
 		
 		
-			<p><b>Champs visibles pour ce groupe</b></p>
+			<p><b><?php echo _('Used fields'); ?></b></p>
 			<ul id="la" class="myList mylistleft clearfix">
 				<?php foreach($field as $e){ ?>
 				<li id="<?php echo $e['id_field'] ?>" class="in-place"><?php echo $e['fieldName'] ?></li>
 				<?php } ?>
 			</ul>
 		
-			<p><b>Autre champs</b></p>
+			<p><b><?php echo _('Other fields'); ?></b></p>
 			<ul id="lb" class="myList mylistleft clearfix">
 				<?php foreach($not as $e){ ?>
 				<li  id="<?php echo $e['id_field'] ?>"><?php echo $e['fieldName'] ?></li>
@@ -220,11 +220,9 @@
 
 <?php include(COREINC.'/end.php'); ?>
 <script src="ui/js/group.js" type="text/javascript"></script>
+
 <script>
-
 	id_group = <?php echo $_REQUEST['id_group'] ?>;
-
 </script>
-
 
 </body></html>

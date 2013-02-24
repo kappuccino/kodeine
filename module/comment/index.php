@@ -26,9 +26,7 @@
 		$reload = true;
 	}
 
-	if($reload){
-		$app->go("./".((isset($_POST['id_content']) ? "?id_content=".$_POST['id_content'] : "")));
-	}
+	if($reload) $app->go("./".((isset($_POST['id_content']) ? "?id_content=".$_POST['id_content'] : "")));
 
 /* + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - */
 
@@ -77,7 +75,7 @@
 
 	<?php if($_REQUEST['id_content'] != NULL){ ?>
 	<div class="mar-top-20 mar-bot-20">
-		<a href="../content/data?id_content=<?php echo $_REQUEST['id_content'] ?>" class="btn btn-mini">Revenir à la page</a>
+		<a href="../content/data?id_content=<?php echo $_REQUEST['id_content'] ?>" class="btn btn-mini"><?php echo _('Back to content'); ?></a>
 		<input type="hidden" name="id_content" value="<?php echo $_REQUEST['id_content'] ?>" />
 	</div>
 	<?php } ?>
@@ -88,11 +86,11 @@
 				<th width="20" class="icone"><i class="icon-remove icon-white"></i></th>
 				<th width="20" class="icone" onClick="document.location='./?cf&order=k_contentcomment.is_moderate&direction=<?php echo $dir ?>'"><i class="icon-ok icon-white"></i></th>
 				<th width="140" class="icone" onClick="document.location='./?cf&order=k_contentcomment.commentDate&direction=<?php echo $dir ?>'"><i class="icon-calendar icon-white"></i></th>
-				<th width="100" onClick="document.location='./?cf&order=k_contentcomment.commentAvg&direction=<?php echo $dir ?>'">Note</th>
+				<th width="100" onClick="document.location='./?cf&order=k_contentcomment.commentAvg&direction=<?php echo $dir ?>'"><?php echo _('Note'); ?></th>
 				<?php if($_REQUEST['id_content'] == NULL){ ?>
-				<th width="300" onClick="document.location='./?cf&order=k_contentcomment.id_content&direction=<?php echo $dir ?>'">Contenu</th>
+				<th width="300" onClick="document.location='./?cf&order=k_contentcomment.id_content&direction=<?php echo $dir ?>'"><?php echo _('Content'); ?></th>
 				<?php } ?>
-				<th onClick="document.location='./?cf&order=k_contentcomment.commentData&direction=<?php echo $dir ?>'">Commentaire</th>
+				<th onClick="document.location='./?cf&order=k_contentcomment.commentData&direction=<?php echo $dir ?>'"><?php echo _('Comment'); ?></th>
 			</tr>
 		</thead>
 		<tbody><?php
@@ -121,7 +119,7 @@
 		}else{ ?>
 			<tr>
 				<td colspan="<?php echo ($_REQUEST['id_content'] == NULL) ? '6' : '5'; ?>" class="noData">
-					Pas de commentaire
+					<?php echo _('No comment'); ?>
 				</td>
 			</tr>
 		<?php } ?>
@@ -132,7 +130,7 @@
 				<td><input type="checkbox" onchange="$$('.cb').set('checked', this.checked);" /></td>
 				<td><input type="checkbox" onchange="$$('.cm').set('checked', this.checked);" /></td>
 				<td colspan="<?php echo ($_REQUEST['id_content'] == NULL) ? '5' : '3'; ?>">
-					<a href="#" onClick="apply();" class="btn btn-mini">Effectuer les changements sur la selection</a>
+					<a href="#" onClick="apply();" class="btn btn-mini"><?php echo _('Remove/Change selected items'); ?></a>
 					<span class="pagination"><?php 
 						$app->pagination($total, $limit, $filter['offset'], './?cf&id_content='.$_GET['id_content'].'&offset=%s');
 					?></span>

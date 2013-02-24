@@ -51,8 +51,8 @@
 ?></header>
 
 <div class="inject-subnav-right hide">
-	<li><a onclick="filterToggle('user');" class="btn btn-small">Affichage</a></li>
-	<li><a href="data" class="btn btn-small btn-success">Nouvel utilisateur</a></li>
+	<li><a onclick="filterToggle('user');" class="btn btn-small"><?php echo _('Display settings'); ?></a></li>
+	<li><a href="data" class="btn btn-small btn-success"><?php echo _('New user'); ?></a></li>
 </div>
 
 <div id="app">
@@ -62,13 +62,13 @@
 			<input type="hidden" name="filter[open]"	value="1" />
 			<input type="hidden" name="filter[offset]"	value="0" />
 	
-			Recherche
+			<?php echo _('Search'); ?>
 			<input type="text" name="filter[q]" value="<?php echo $filter['q'] ?>" class="input-small" />
 
-			Combien
+			<?php echo _('Limit'); ?>
 			<input type="text" name="filter[limit]" value="<?php echo $filter['limit'] ?>" size="3" class="input-small" />
 
-			Colonne #1
+			<?php echo _('Column 1'); ?>
 			<select name="filter[cola]"><?php
 				echo "<option value=\"\"></option>";
 				foreach($fields as $f){
@@ -76,7 +76,7 @@
 				} ?>
 			</select>
 
-			Colonne #2
+			<?php echo _('Column 2'); ?>
 			<select name="filter[colb]"><?php
 				echo "<option value=\"\"></option>";
 				foreach($fields as $f){
@@ -84,7 +84,7 @@
 				}?>
 			</select>
 
-			<button class="btn btn-mini" type="submit">Filtrer les résultats</button>
+			<button class="btn btn-mini" type="submit"><?php echo _('Filter'); ?></button>
 		</form>
 	</div>
 	
@@ -94,9 +94,9 @@
 			<tr>
 				<th width="20"  class="icone"><i class="icon-remove icon-white"></i></th>
 				<th width="80"  class="order <?php if($filter['order'] == 'k_user.id_user')	echo 'order'.$dir; ?>" onClick="document.location='./?cf&order=k_user.id_user&direction=<?php echo $dir ?>'"><span>#</span></th>
-				<th width="110" class="order <?php if($filter['order'] == 'k_user.userDateCreate')	echo 'order'.$dir; ?>" onClick="document.location='./?cf&order=k_user.userDateCreate&direction=<?php echo $dir ?>'"><span>Création</span></th>
-				<th width="110" class="order <?php if($filter['order'] == 'k_user.userDateUpdate')	echo 'order'.$dir; ?>" onClick="document.location='./?cf&order=k_user.userDateUpdate&direction=<?php echo $dir ?>'"><span>Mise à jour</span></th>
-				<th			    class="order <?php if($filter['order'] == 'k_user.userMail')		echo 'order'.$dir; ?>" onClick="document.location='./?cf&order=k_user.userMail&direction=<?php echo $dir ?>'"><span>Nom</span></th>
+				<th width="110" class="order <?php if($filter['order'] == 'k_user.userDateCreate')	echo 'order'.$dir; ?>" onClick="document.location='./?cf&order=k_user.userDateCreate&direction=<?php echo $dir ?>'"><span><?php echo _('Created'); ?></span></th>
+				<th width="110" class="order <?php if($filter['order'] == 'k_user.userDateUpdate')	echo 'order'.$dir; ?>" onClick="document.location='./?cf&order=k_user.userDateUpdate&direction=<?php echo $dir ?>'"><span><?php echo _('Updated'); ?></span></th>
+				<th			    class="order <?php if($filter['order'] == 'k_user.userMail')		echo 'order'.$dir; ?>" onClick="document.location='./?cf&order=k_user.userMail&direction=<?php echo $dir ?>'"><span><?php echo _('Name'); ?></span></th>
 				<?php
 					$colspan = 1;
 	
@@ -143,7 +143,7 @@
 			}else{ ?>
 			<tr>
 				<td colspan="<?php echo (4 + $colspan) ?>" style="text-align:center; font-weight:bold; padding:30px 0px 30px 0px;">
-					Aucun résultat avec cette recherche
+					<?php echo _('No date'); ?>
 				</td>
 			</tr>
 		<?php } ?>
@@ -152,7 +152,7 @@
 			<tr>
 			<?php if(sizeof($users) > 0){ ?>
 				<td><input id="delall" type="checkbox" class="chk" onchange="cbchange($(this));" /></td>
-				<td colspan="3"><a href="#" onClick="userRemove();" class="btn btn-mini">Supprimer la selection</a></td>
+				<td colspan="3"><a href="#" onClick="userRemove();" class="btn btn-mini"><?php echo _('Remove selected items'); ?></a></td>
 				<td colspan="<?php echo $colspan ?>" class="pagination"><?php $app->pagination($app->apiLoad('user')->total, $app->apiLoad('user')->limit, $filter['offset'], 'index?cf&offset=%s'); ?></td>
 			<?php }else{ ?>
 				<td colspan="<?php echo (4 + $colspan) ?>">&nbsp;</td>
@@ -165,7 +165,7 @@
 </div>	
 
 <?php include(COREINC.'/end.php'); ?>
-<script src="/app/module/core/vendor/datatables/jquery.dataTables.js"></script>
+<script src="../core/vendor/datatables/jquery.dataTables.js"></script>
 <script>
 
 	function userRemove(){

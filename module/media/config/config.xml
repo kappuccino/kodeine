@@ -3,13 +3,19 @@
 
 	<data>
 		<key>media</key>
-		<version>5.0.11</version>
+		<version>5.1.0</version>
 		<lastMod>2013-02-14</lastMod>
+		<install>YES</install>
 
 		<name><![CDATA[Gestionnaire de fichiers]]></name>
-		<description><![CDATA[Géer vos fichiers, et envoyer de nouveaux documents en ligne]]></description>
-		<install>YES</install>
 	</data>
+
+    <i18n>
+        <file>index.php</file>
+        <file>embed.php</file>
+        <file>pref.php</file>
+        <file>pref-embed.php</file>
+    </i18n>
 
 	<profile>
 		<item code="index"	type="ALLOW_DENY" name="Accessible" />

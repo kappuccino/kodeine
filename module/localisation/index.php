@@ -117,8 +117,8 @@
 				<tr>
 					<td height="20"></td>
 					<td colspan="2"><div class="clearfix">
-						<a onclick="remove('master');" class="btn btn-mini left">Supprimer la selection</a>
-						<a onclick="addLabel();" class="btn btn-mini right">Ajouter un label</a>
+						<a onclick="remove('master');" class="btn btn-mini left"><?php echo _('Remove selected items'); ?></a>
+						<a onclick="addLabel();" class="btn btn-mini right"><?php echo _('Add a label'); ?></a>
 					</div></td>
 				</tr>
 			</tfoot>
@@ -143,7 +143,7 @@
 			<tfoot>
 				<tr>
 					<td height="20"></td>
-					<td><a href="javascript:remove('slave');" class="btn btn-mini">Supprimer la selection</a></td>
+					<td><a href="javascript:remove('slave');" class="btn btn-mini"><?php echo _('Remove seleced items'); ?></a></td>
 				</tr>
 			</tfoot>
 		</table>
@@ -182,8 +182,8 @@
 
 					"<div class=\"top clearfix\">".
 						"<span class=\"left\">".$languages[$e['language']]."</span>".
-						"<a class=\"btn btn-mini right toggle\" onclick=\"on('".$e['language']."')\">Activer/Désactiver l'éditeur de texte</a>".
-						"<a class=\"btn btn-mini right\" onclick=\"kill('".$e['language']."');\" style=\"margin-right:10px;\">Supprimer cette version</a>".
+						"<a class=\"btn btn-mini right toggle\" onclick=\"on('".$e['language']."')\">"._('Toggle rich text editor')."</a>".
+						"<a class=\"btn btn-mini right\" onclick=\"kill('".$e['language']."');\" style=\"margin-right:10px;\">"._('Remove this language')."</a>".
 					"</div>".
 					
 					"<div class=\"textarea\">".
@@ -197,7 +197,9 @@
 			echo '<div class="add clearfix">';
 			if(sizeof($plus) > 0){
 				foreach($plus as $e){
-					echo '<a onClick="setup(\''.$e.'\', $(this));" class="btn btn-mini">Ajouter '.$languages[$e].'</a>';
+					echo '<a onClick="setup(\''.$e.'\', $(this));" class="btn btn-mini">';
+					printf(_('Add %s', $languages[$e]));
+					echo '</a>';
 				}
 			}
 			echo '</div>';
@@ -205,8 +207,8 @@
 			?>
 
 			<div class="clearfix">
-				<a onclick="$('#label').submit()" class="btn btn-mini">Valider</a>
-				<a onclick="searchInTheme('<?php echo $_REQUEST['master'].'_'.$_REQUEST['slave'] ?>')" class="btn btn-mini">Localiser ce label dans les fichiers</a>
+				<a onclick="$('#label').submit()" class="btn btn-mini"><?php echo _('Validate'); ?></a>
+				<a onclick="searchInTheme('<?php echo $_REQUEST['master'].'_'.$_REQUEST['slave'] ?>')" class="btn btn-mini"><?php echo _('Find this label in theme folder'); ?></a>
 			</div>
 		
 			<ul class="searchResult"></ul>
@@ -222,9 +224,10 @@
 </form>
 
 <?php include(COREINC.'/end.php'); ?>
-<script src="/app/module/core/vendor/tinymce/jscripts/tiny_mce/jquery.tinymce.js"></script>
-<script src="/app/module/core/vendor/tinymce/jscripts/tiny_mce/tiny_mce.js"></script>
+<script src="../core/vendor/tinymce/jscripts/tiny_mce/jquery.tinymce.js"></script>
+<script src="../core/vendor/tinymce/jscripts/tiny_mce/tiny_mce.js"></script>
 <script src="ui/js/localisation.js"></script>
+
 <script>
 	languages = <?php echo json_encode($languages); ?>;
 </script>

@@ -22,8 +22,8 @@
 		<module>template</module>
 	</dependencies>
 
-
     <i18n>
+        <file>ui/menu.php</file>
         <file>browse.php</file>
         <file>data-language.php</file>
         <file>data.php</file>
@@ -38,13 +38,10 @@
 
 	<profile>
 		<item code="index"		type="ALLOW_DENY" name="Accessible" />
-
 		<item code="chapter"	type="ALLOW_DENY" name="Arborescence" />
 		<item code="type"		type="ALLOW_DENY" name="Type" />
 		<item code="field"		type="ALLOW_DENY" name="Champs" />
-
 		<item code="search"		type="ALLOW_DENY" name="Recherche" />
-
 	</profile>
 	
 </element>

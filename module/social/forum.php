@@ -60,23 +60,6 @@
 		$title = 'Nouveau forum';
 	}
 
-	/* + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - 
-	+ - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - */
-	function fieldTrace($app, $lan, $copy, $data, $e){
-		$field	= $app->apiLoad('field')->fieldForm(
-			$e['id_field'],
-			$data,
-			array(
-				'name'		=> 'field['.$e['id_field'].']',
-				'id'		=> 'field-'.$e['id_field'],
-				'style' 	=> 'width:99%; '.$e['__fieldStyle__'],
-				'disabled'	=> (($copy) ? 'disabled' : '')
-			)
-		);
-
-		echo $field;
-	}
-
 	$fields = $app->apiLoad('field')->fieldGet(array(
 		'socialForum'	=> true,
 		'debug'			=> false	
@@ -107,11 +90,11 @@
 
 	<div class="clearfix" style="margin:20px 0px 20px 0;">
 		<div style="float:left;">
-			<a href="javascript:removeSelection()" class="btn btn-mini">Supprimer la selection</a> ou
-			<a href="forum" class="btn btn-mini">Annuler</a>
+			<a href="javascript:removeSelection()" class="btn btn-mini"><?php echo _('Remove selected items'); ?></a>
+			<a href="forum" class="btn btn-mini">Cancel</a>
 		</div>
 		<div style="float:right;">
-			<a href="../field/asso?id_type=socialForum" class="btn btn-mini">Gérer les champs</a>
+			<a href="../field/asso?id_type=socialForum" class="btn btn-mini"><?php echo _('Manage fields'); ?></a>
 		</div>
 	</div>
 
@@ -135,7 +118,7 @@
 
 	<table border="0" cellpadding="3" cellspacing="0" width="100%">
 		<tr>
-			<td width="100">Parent</td>
+			<td width="100"><?php echo _('Parent forum'); ?></td>
 			<td><?php
 				echo $app->apiLoad('socialForum')->socialForumSelector(array(
 					'one'		=> true,
@@ -147,14 +130,14 @@
 			?></td>
 		</tr>
 		<tr>
-			<td class="<?php echo $app->formError('socialForumName', 'alertNeedToCheck') ?>">Nom</td>
+			<td class="<?php echo $app->formError('socialForumName', 'alertNeedToCheck') ?>"><?php echo _('Name'); ?></td>
 			<td><input type="text" name="socialForumName" value="<?php echo $app->formValue($data['socialForumName'], $_POST['socialForumName']); ?>" style="width:90%" /></td>
 		</tr>
 		<tr>
 			<td>Image</td>
 			<td>
 				<input type="text" name="socialForumMedia" id="socialForumMedia" value="<?php echo $app->formValue($data['socialForumMedia'], $_POST['socialForumMedia']); ?>" style="width:75%" />
-				<a href="#" onclick="mediaOpen('line', 'socialForumMedia')">choisir</a>
+				<a href="#" onclick="mediaOpen('line', 'socialForumMedia')"><?php echo _('Pick'); ?></a>
 			</td>
 		</tr>
 		<tr>
@@ -162,7 +145,7 @@
 		</tr>
 		<?php if(sizeof($fields) > 0){ ?>
 		<tr>
-			<td colspan="2" style="background:#A6B5BE; font-weight:bold; padding:4px; height:18px;">Paramètres supplémentaires</td>
+			<td colspan="2" style="background:#A6B5BE; font-weight:bold; padding:4px; height:18px;"><?php echo _('More parameters'); ?></td>
 		</tr>
 		<?php foreach($fields as $f){ ?>
 		<tr valign="top">
@@ -170,7 +153,7 @@
 			<td><div class="field-list"><?php
 
 				$tmp = $app->formValue($data['field'][$f['fieldKey']], $_POST['field'][$f['id_field']]);
-				fieldTrace($app, $iso, $copy, $tmp, $f);
+				$app->apiLoad('field')->fieldTrace($iso, $copy, $tmp, $f);
 
 			?></div></td>
 		</tr>
@@ -179,8 +162,8 @@
 	</table>
 
 	<div style="margin:20px 0px 20px 0;">
-		<a class="btn" onclick="$('#data').submit();">Enregistrer</a> ou
-		<a href="./forum" class="button rButton">annuler</a>
+		<a class="btn" onclick="$('#data').submit();"><?php echo _('Save'); ?></a>
+		<a href="./forum" class="button rButton"><?php echo _('Cancel'); ?></a>
 	</div>
 
 	</form>

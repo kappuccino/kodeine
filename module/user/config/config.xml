@@ -3,12 +3,17 @@
 
 	<data>
 		<key>user</key>
-		<version>5.0.12</version>
-        <lastMod>2013-02-01</lastMod>
+		<version>5.1.0</version>
+        <lastMod>2013-02-24</lastMod>
 
 		<name><![CDATA[Utilisateur]]></name>
-		<description><![CDATA[Gérer votre communauté de membres]]></description>
 	</data>
+
+    <i18n>
+        <file>index.php</file>
+        <file>group.php</file>
+        <file>profile.php</file>
+    </i18n>
 
 	<profile>
 		<item code="index" 		type="ALLOW_DENY" name="Accessible" />

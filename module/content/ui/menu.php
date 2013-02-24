@@ -3,47 +3,47 @@
 
 	<ul class="left">
 		<li class="<?php echo isMe('/content/(index)?$') ? 'me':'' ?>">
-			<a href="../content/"><span>Liste</span></a>
+			<a href="../content/"><span><?php echo _('List'); ?></span></a>
 		</li>
 
 		<li class="<?php echo isMe('/content/browse') ? 'me':'' ?>">
-			<a href="../content/browse"><span>Parcourir</span></a>
+			<a href="../content/browse"><span><?php echo _('Browse'); ?></span></a>
 		</li>
 
 		<li class="<?php echo isMe('/category/') ? 'me':'' ?>">
-			<a href="../category/"><span>Cat&eacute;gories</span></a>
+			<a href="../category/"><span><?php echo _('Category'); ?></span></a>
 		</li>
 		
 		<?php if($app->userCan('content.chapter')){ ?>
 		<li class="<?php echo isMe('/chapter/') ? 'me':'' ?>">
-			<a href="../chapter/"><span>Arborescence</span></a>
+			<a href="../chapter/"><span><?php echo _('Chapter'); ?></span></a>
 		</li>
 		<?php }  ?>
 
 		<?php if($app->userCan('content.type')){ ?>
 		<li class="<?php echo isMe('/content/type') ? 'me':'' ?>">
-			<a href="../content/type"><span>Type</span></a>
+			<a href="../content/type"><span><?php echo _('Type'); ?></span></a>
 		</li>
 		<?php }  ?>
 
 		<?php if($app->userCan('content.field')){ ?>
 		<li class="<?php echo isMe('/field/.*') ? 'me':'' ?>">
-			<a href="../field/asso"><span>Champs</span></a>
+			<a href="../field/asso"><span><?php echo _('Fields'); ?></span></a>
 		</li>
 		<?php }  ?>
 
 		<li class="<?php echo isMe('/comment/') ? 'me':'' ?>">
-			<a href="../comment/"><span>Commentaire</span></a>
+			<a href="../comment/"><span><?php echo _('Comments'); ?></span></a>
 		</li>
 
 		<?php if($app->userCan('content.search')){ ?>
 		<li class="<?php echo isMe('/content/search') ? 'me':'' ?>">
-			<a href="../content/search"><span>Recherche</span></a>
+			<a href="../content/search"><span><?php echo _('Search'); ?></span></a>
 		</li>
 		<?php }  ?>
 
 		<li class="<?php echo isMe('/localisation/') ? 'me':'' ?>">
-			<a href="../localisation/"><span>Traduction</span></a>
+			<a href="../localisation/"><span><?php echo _('Translate'); ?></span></a>
 		</li>
 	</ul>
 

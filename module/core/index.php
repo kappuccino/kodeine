@@ -17,7 +17,7 @@
 <div class="inject-subnav-right hide">
     <li>
         <a href="module">
-	        <span><?php echo _('Gestion des modules') ?></span>
+	        <span><?php echo _('Module manager') ?></span>
         </a>
     </li>
 </div>

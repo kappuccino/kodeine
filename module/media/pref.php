@@ -23,7 +23,6 @@
 	include(__DIR__.'/ui/menu.php')
 ?></header>
 
-
 <div id="app"><div class="wrapper">
 		
 	<form action="pref" method="post">
@@ -32,33 +31,33 @@
 		<table border="0" cellpadding="0" cellspacing="0" class="listing">
 			<thead>
 				<tr>
-					<th width="20%">Paramètre</th>
-					<th width="30%">Valeur</th>
+					<th width="20%"><?php echo _('Parameter'); ?></th>
+					<th width="30%"><?php echo _('Value'); ?></th>
 					<th width="50%">&nbsp;</th>
 				</tr>
 			</thead>
 			<tbody>
 				<tr>
-					<td>Utiliser la cache</td>
+					<td><?php echo _('Use cache'); ?></td>
 					<td class="check-green">
-						<input type="hidden" 	name="pref[useCache]" value="0" />
-						<input type="checkbox" name="pref[useCache]" value="1" <?php if($pref['useCache']) echo 'checked' ?> id="usecache"></input>
+						<input type="hidden"   name="pref[useCache]" value="0" />
+						<input type="checkbox" name="pref[useCache]" value="1" <?php if($pref['useCache']) echo 'checked' ?> id="usecache" />
 					</td>
-					<td>Ne pas utiliser la cache peut ralentir l'affiche des grosses images.</td>
+					<td><?php echo _('Disable cache may cause slowness for large images.'); ?></td>
 				</tr>
 				<tr>
-					<td>R&eacute;&eacute;criture automatique</td>
+					<td><?php echo _('Automatique URL Rewriting'); ?></td>
 					<td>
 						<input type="hidden" 	name="pref[urlEncode]" value="0" />
 						<input type="checkbox" 	name="pref[urlEncode]" value="1" <?php if($pref['urlEncode']) echo 'checked' ?> />
 					</td>
-					<td>Formatage des noms de fichiers et de dossiers (suppression des espaces et caractères sp&eacute;ciaux)</td>
+					<td><?php echo _('Remove special caracters for new folder and uploaded items (no white space, accentuated letters ...)'); ?></td>
 				</tr>
 			</tbody>
 			<tfoot>
 				<tr>
 					<td colspan="3">
-						<button type="submit" class="btn btn-mini">Enregistrer</button>
+						<button type="submit" class="btn btn-mini"><?php echo _('Save'); ?></button>
 					</td>
 				</tr>
 			</tfoot>

@@ -58,10 +58,9 @@
 	include(__DIR__.'/ui/menu.php')
 ?></header>
 
-
 <div class="inject-subnav-right hide">
-	<li><a href="profile" class="btn btn-mini">Nouveau</a></li>
-	<li><a onclick="$('#data').submit();" class="btn btn-mini btn-success">Valider</a></li>
+	<li><a href="profile" class="btn btn-mini"><?php echo _('New'); ?></a></li>
+	<li><a onclick="$('#data').submit();" class="btn btn-mini btn-success"><?php echo _('Validate'); ?></a></li>
 </div>
 
 <div id="app"><div class="wrapper"><div class="row-fluid">
@@ -72,7 +71,7 @@
 			<thead>
 				<tr>
 					<th width="30"></th>
-					<th>Nom</th>
+					<th><?php echo _('Name'); ?></th>
 				</tr>
 			</thead>
 			<tbody>
@@ -86,7 +85,7 @@
 			<tfoot>
 				<tr>
 					<td height="30"></td>
-					<td><a href="javascript:$('#listing').submit();" class="btn btn-mini">Supprimer la selection</a></td>
+					<td><a href="javascript:$('#listing').submit();" class="btn btn-mini"><?php echo _('Remove selected items'); ?></a></td>
 				</tr>
 			</tfoot>
 		</table>
@@ -107,7 +106,7 @@
 		<input type="hidden" name="id_profile" value="<?php echo $data['id_profile'] ?>" />
 
 		<div class="row-fluid" style="margin-bottom:10px;">
-			<div class="span3">Nom du profil</div>
+			<div class="span3"><?php echo _('Profile name'); ?></div>
 			<div class="span9">
 				<input type="text" name="profileName" value="<?php echo $app->formValue($data['profileName'], $_POST['profileName']); ?>" style="width:99%;" />
 			</div>
@@ -115,7 +114,7 @@
 		
 		<div class="row-fluid">
 			<div class="span3">
-				<b>Arborescence</b><br /> <?php echo
+				<b><?php echo _('Chapter'); ?></b><br /> <?php echo
 				$app->apiLoad('chapter')->chapterSelector(array(
 					'name'		=> 'profileRule[id_chapter][]',
 					'multi' 	=> true,
@@ -126,7 +125,7 @@
 			?></div>
 	
 			<div class="span3">
-				<b>Catégorie</b><br /> <?php echo
+				<b><?php echo _('Category'); ?></b><br /> <?php echo
 				$app->apiLoad('category')->categorySelector(array(
 					'name'		=> 'profileRule[id_category][]',
 					'language'	=> 'fr',
@@ -138,7 +137,7 @@
 			?></div>
 	
 			<div class="span3">
-				<b>Groupe</b><br /> <?php echo
+				<b><?php echo _('Group'); ?></b><br /> <?php echo
 				$app->apiLoad('user')->userGroupSelector(array(
 					'name'		=> 'profileRule[id_group][]',
 					'multi' 	=> true,
@@ -149,7 +148,7 @@
 			?></div>
 
 			<div class="span3">
-				<b>Type</b><br />
+				<b><?php echo _('Type'); ?></b><br />
 				<select name="profileRule[id_type][]" id="profileRule[id_type][]" size="4" multiple style="width:100%; height:200px"><?php
 	
 					$type	= $app->apiLoad('type')->typeGet();

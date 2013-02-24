@@ -5,8 +5,9 @@
 		<key>config</key>
 		<version>5.0.13</version>
         <lastMod>2013-02-14</lastMod>
-		<name><![CDATA[Configuration]]></name>
 		<install>YES</install>
+
+		<name><![CDATA[Configuration]]></name>
 	</data>
 
 	<dependencies>

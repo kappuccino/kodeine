@@ -21,7 +21,7 @@ $app = new coreAdmin();
 
 echo "> Recherche des fichiers a traduire... ";
 
-$modules = $app->moduleList();
+$modules = $app->moduleList(array('all' => true));
 $files = array();
 
 foreach($modules as $mod){

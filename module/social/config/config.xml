@@ -3,14 +3,16 @@
 
     <data>
         <key>social</key>
-        <version>5.0.4</version>
-        <lastMod>2013-01-17</lastMod>
+        <version>5.1.0</version>
+        <lastMod>2013-02-24</lastMod>
+        <install>YES</install>
 
         <name><![CDATA[Social network]]></name>
-        <description></description>
-        <panelIcon></panelIcon>
-        <install>YES</install>
     </data>
+
+    <i18n>
+        <file>forum.php</file>
+    </i18n>
 
     <profile>
         <item code="index"		type="ALLOW_DENY" name="Accessible" />

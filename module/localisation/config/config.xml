@@ -3,12 +3,16 @@
 
 	<data>
 		<key>localisation</key>
-		<version>5.0.5</version>
-        <lastMod>2013-02-14</lastMod>
+		<version>5.1.0</version>
+        <lastMod>2013-02-24</lastMod>
+		<menu>NO</menu>
 
 		<name><![CDATA[Traduction]]></name>
-		<description><![CDATA[]]></description>
-		<menu>NO</menu>
 	</data>
+
+    <i18n>
+        <file>index.php</file>
+        <file>grid.php</file>
+    </i18n>
 
 </element>

@@ -1,4 +1,5 @@
 <?php
+
 	$folder = KROOT.'/user/theme';
 	$files	= $app->fsFile($folder, '*.php');
 	$label	= $_GET['label'];
