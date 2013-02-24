@@ -21,7 +21,7 @@
 
 <div class="inject-subnav-right hide">
 	<li>
-		<a class="btn btn-small btn-success" onclick="checkRepo()"><?php echo _('Vérifier les mise à jour') ?></a>
+		<a class="btn btn-small btn-success" onclick="checkRepo()"><?php echo _('Check update') ?></a>
 	</li>
 </div>
 
@@ -31,12 +31,12 @@
 		<thead>
 			<tr>
 				<th>Module</th>
-				<th width="100"><?php echo _('Installé') ?></th>
-				<th width="100"><?php echo _('Activé') ?></th>
+				<th width="100"><?php echo _('Installed') ?></th>
+				<th width="100"><?php echo _('Activated') ?></th>
 				<th width="100"><?php echo _('Patch') ?></th>
 
-				<th width="80"><?php echo _('Version') ?></th>
-				<th width="80"><?php echo _('Dernière') ?></th>
+				<th width="80"><?php echo _('Release') ?></th>
+				<th width="80"><?php echo _('Last') ?></th>
 				<th width="100"></th>
 			</tr>
 		</thead>
@@ -51,7 +51,7 @@
 				<td><?php
 					if($e['install'] == 'YES' && ($e['key'] != 'user' OR $e['key'] != 'core')){
 						echo ($e['config']['installed'] != 'YES')
-							? '<a onclick="install(this, \''.$e['key'].'\', '.$core.')" class="btn btn-small btn-install">'._('Installer').'</a>'
+							? '<a onclick="install(this, \''.$e['key'].'\', '.$core.')" class="btn btn-small btn-install">'._('Install').'</a>'
 							: '<i class="icon-ok"></i>';
 					}
 				?></td>

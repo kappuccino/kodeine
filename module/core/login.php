@@ -50,35 +50,37 @@
 <body>
 
 <div id="login">
-	<h1>Bienvenue,<br />identifiez-vous</h1>
-	<? if($app->userIsExpired){ echo "EXPIRED"; } ?>
+	<h1><?php echo _('Welcome,<br />login-in'); ?></h1>
+	<?php if($app->userIsExpired){ echo "EXPIRED"; } ?>
 
 	<div class="line">
 		<div class="form">
 			<form method="post" action="login">
-				Renseignez votre
-				<input type="email" name="login" class="field" autocomplete="off" placeholder="identifiant" value="<?php echo $usr['userMail'] ?>" />
-				et votre
-				<input type="password" name="password" class="field" autocomplete="off" placeholder="mot de passe" />
-				pour vous <a href="#" onclick="$('form').submit()">connecter</a>
+				<?php echo _('Enter your'); ?>
+				<input type="email" name="login" class="field" autocomplete="off" placeholder="<?php echo _('login'); ?>" value="<?php echo $usr['userMail'] ?>" />
+				<?php echo _('and your'); ?>
+				<input type="password" name="password" class="field" autocomplete="off" placeholder="<?php echo _('password'); ?>" />
+				and <a href="#" onclick="$('form').submit()"><?php echo _('connect you'); ?></a>
 			</form>
 		</div>
 
 		<div>
-			Renseignez votre
-			<input type="email" name="lost" class="field" autocomplete="off" placeholder="identifiant" />
-			et demandez un <a onclick="lostPwd();">nouveau mot de passe</a>
+			<?php echo _('Enter your'); ?>
+			<input type="email" name="lost" class="field" autocomplete="off" placeholder="<?php echo _('email'); ?>" />
+			<?php echo _('and'); ?>
+			<a onclick="lostPwd();"><?php echo _('reset your password'); ?></a>
 		</div>
 
 		<div>
-			Vous allez recevoir un email avec la proc&eacute;dure pour changer votre mot de passe
+			<?php echo _('Check your mail, you will receive a link to reset your password'); ?>
 		</div>
 
 		<?php if($regen){ ?>
 		<div class="regen">
-			<?php echo $usr['userMail'] ?>, indiquez votre nouveau 
-			<input type="password" name="regen" class="field" autocomplete="off" placeholder="mot de passe" />
-			et <a href="#" onclick="rgx('<?php echo $_GET['t'] ?>')">valider le</a>
+			<?php echo $usr['userMail'] ?>, <?php echo _('enter your new '); ?>
+			<input type="password" name="regen" class="field" autocomplete="off" placeholder="<?php echo _('password'); ?>" />
+            <?php echo _('and'); ?>
+			<a href="#" onclick="rgx('<?php echo $_GET['t'] ?>')"><?php echo _('save it'); ?></a>
 		</div>
 		<?php } ?>
 	</div>
