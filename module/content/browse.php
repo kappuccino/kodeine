@@ -3,10 +3,7 @@
 	if(!defined('COREINC')) die('Direct access not allowed');
 	$types = $app->apiLoad('type')->typeGet(array('profile' => true));
 
-	if(sizeof($types) == 0){
-		header("Location: type?noData");
-		exit();
-	}
+	if(count($types) == 0) $app->go('type?noData');
 
 	$type 		= $app->apiLoad('type')->typeGet();
 	$id_type	= $_REQUEST['id_type'];
@@ -16,23 +13,23 @@
 		foreach($_POST['remove'] as $e){
 			$app->apiLoad('content')->contentRemove($_POST['id_type'], $e, $_POST['language']);
 		}
-		header("Location: browse?id_type=".$_POST['id_type']."#".$_POST['hash']);
+		$app->go("browse?id_type=".$_POST['id_type']."#".$_POST['hash']);
 	}else
 	if(sizeof($_POST['see']) > 0){
 		foreach($_POST['see'] as $e => $v){
 			$app->dbQuery("UPDATE k_content SET contentSee=".$v." WHERE id_content=".$e);
 		}
-		header("Location: browse?id_type=".$_POST['id_type']."#".$_POST['hash']);
+		$app->go("browse?id_type=".$_POST['id_type']."#".$_POST['hash']);
 	}else
 	if($_GET['duplicate'] != NULL && $_GET['id_type'] != NULL){
 		$app->apiLoad('content')->contentDuplicate($_GET['duplicate']);
-		header("Location: browse?id_type=".$_GET['id_type']."#".$_GET['hash']);
+		$app->go("browse?id_type=".$_GET['id_type']."#".$_GET['hash']);
 	}else
 	if($_GET['hash'] != NULL){
-		header("Location: browse?id_type=".$types[0]['id_type']."#".$_GET['hash']);
+		$app->go("browse?id_type=".$types[0]['id_type']."#".$_GET['hash']);
 	}else
 	if($_REQUEST['id_type'] == NULL){
-		header("Location: browse?id_type=".$types[0]['id_type']);
+		$app->go("Location: browse?id_type=".$types[0]['id_type']);
 	}
 
 ?><!DOCTYPE html>
@@ -100,14 +97,14 @@
 					<th width="30"  class="icone"><i class="icon-tags icon-white"></i></th>
 					<th width="90"  class="icone"><i class="icon-globe icon-white"</th>
 					<th width="60" 	class="order">#</th>
-					<th width="100" class="order">Création</th>
-					<th width="100" class="order">Mise à jour</th>
-					<th 			class="order">Nom</th>
+					<th width="100" class="order"><?php echo _('Created'); ?></th>
+					<th width="100" class="order"><?php echo _('Updated'); ?></th>
+					<th 			class="order"><?php echo _('Name'); ?></th>
 				</tr>
 			</thead>
 			<tbody id="noData">
 				<tr>
-					<td colspan="8" style="text-align:center; font-weight:bold; padding:40px 0px 40px 0px;">Aucun document</td>
+					<td colspan="8" style="text-align:center; font-weight:bold; padding:40px 0px 40px 0px;"><?php echo _('No content'); ?></td>
 				</tr>
 			</tbody>
 			<tbody id="hasData">
@@ -116,7 +113,7 @@
 				<tr>
 					<td width="30"><input type="checkbox" onchange="$('.cb').prop('checked', $(this).prop('checked'));" /></td>
 					<td width="30"><input type="checkbox" onchange="$('.cs').prop('checked', $(this).prop('checked'));" /></td>
-					<td colspan="6" height="25"><a href="#" onClick="remove();" class="btn btn-mini"><span>Effectuer les changement sur la selection</span></a></td>
+					<td colspan="6" height="25"><a href="#" onClick="remove();" class="btn btn-mini"><span><?php echo _('Remove selected lines'); ?></span></a></td>
 				</tr>
 			</tfoot>
 		</table>
@@ -128,9 +125,9 @@
 </div>
 
 <?php include(COREINC.'/end.php'); ?>
-<script type="text/javascript" src="ui/js/browse.js"></script> 
-<script src="/app/module/core/vendor/bootstrap/js/bootstrap-dropdown.js"></script>
-<script src="/app/module/core/vendor/datatables/jquery.dataTables.js"></script>
+<script src="../core/vendor/bootstrap/js/bootstrap-dropdown.js"></script>
+<script src="../core/vendor/datatables/jquery.dataTables.js"></script>
+<script type="text/javascript" src="ui/js/browse.js"></script>
 <script>
 	id_type = <?php echo $_GET['id_type'] ?>;	
 	hash 	= getHash();

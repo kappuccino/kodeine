@@ -3,12 +3,11 @@
 
 	<data>
 		<key>content</key>
-		<version>5.0.21</version>
-        <lastMod>2013-02-14</lastMod>
+		<version>5.1.0</version>
+        <lastMod>2013-02-24</lastMod>
+		<install>YES</install>
 
 		<name><![CDATA[Contenu]]></name>
-		<description><![CDATA[Gérer les pages de votre site internet, les catégories.]]></description>
-		<install>YES</install>
 	</data>
 
 	<dependencies>
@@ -22,6 +21,20 @@
 		<module>rate</module>
 		<module>template</module>
 	</dependencies>
+
+
+    <i18n>
+        <file>browse.php</file>
+        <file>data-language.php</file>
+        <file>data.php</file>
+        <file>gallery-album.php</file>
+        <file>gallery-item.php</file>
+        <file>gallery.php</file>
+        <file>index.php</file>
+        <file>parent.php</file>
+        <file>type-row.php</file>
+        <file>type.php</file>
+    </i18n>
 
 	<profile>
 		<item code="index"		type="ALLOW_DENY" name="Accessible" />

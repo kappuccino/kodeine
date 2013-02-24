@@ -150,8 +150,8 @@
 			<thead>
 				<tr>
 					<th width="60">#</th>
-					<th>Nom</th>
-					<th width="80">Utiliser</th>
+					<th><?php echo _('Name'); ?></th>
+					<th width="80"></th>
 				</tr>
 			</thead>
 			
@@ -165,7 +165,7 @@
 				<tr>
 					<td><?php echo $e['id_content'] ?></td>
 					<td><a href="data?id_content=<?php echo $e['id_content'] ?>"><?php echo $e['contentName'] ?></a></td>
-					<td><a class="btn btn-mini" href="parent?id_content=<?php echo $_GET['id_content'] ?>&id_type=<?php echo $id_type ?>&add=<?php echo $e['id_content'] ?>">Ajouter</a></td>
+					<td><a class="btn btn-mini" href="parent?id_content=<?php echo $_GET['id_content'] ?>&id_type=<?php echo $id_type ?>&add=<?php echo $e['id_content'] ?>"><?php echo _('Add'); ?></a></td>
 				</tr>
 				<?php } ?>
 			</tbody>
@@ -182,8 +182,8 @@
 	<div class="span6">
 	
 		<div style="margin-bottom:10px;" class="clearfix">
-			<a href="javascript:sauver();" class="btn btn-mini">Enregister le nouvel ordre</a>
-			<a href="parent?id_content=<?php echo $_GET['id_content'] ?>" class="btn btn-mini">Annuler</a>
+			<a href="javascript:sauver();" class="btn btn-mini"><?php echo _('Save this order'); ?></a>
+			<a href="parent?id_content=<?php echo $_GET['id_content'] ?>" class="btn btn-mini"><?php echo _('Cancel'); ?></a>
 		</div>
 	
 		<ul id="used" class="clearfix"><?php
@@ -201,8 +201,8 @@
 					));
 		
 					echo "<li id=\"".$e."\">".$content['contentName']."<br />";
-						echo "<a href=\"parent?id_content=".$_GET['id_content']."&remove=".$e."\" class=\"btn btn-mini\">Supprimer</a> ";
-						echo "<a href=\"data?id_content=".$e."\" class=\"btn btn-mini\">Editer</a>";
+						echo "<a href=\"parent?id_content=".$_GET['id_content']."&remove=".$e."\" class=\"btn btn-mini\">"._('Remove')."</a> ";
+						echo "<a href=\"data?id_content=".$e."\" class=\"btn btn-mini\">"._('Edit')."</a>";
 					echo "</li>";
 				}
 			}
@@ -211,8 +211,8 @@
 	
 	
 	<?php include(COREINC.'/end.php'); ?>
-	<script src="/app/module/core/vendor/datatables/jquery.dataTables.js"></script>
-	<script src="/app/module/core/vendor/bootstrap/js/bootstrap-dropdown.js"></script>
+	<script src="../core/vendor/datatables/jquery.dataTables.js"></script>
+	<script src="../core/vendor/bootstrap/js/bootstrap-dropdown.js"></script>
 	
 	<script>
 		var mySortables = $('#used').sortable({

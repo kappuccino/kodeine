@@ -149,15 +149,14 @@
 			$more = $app->dbMulti("SELECT * FROM k_contentdata WHERE id_content='".$_REQUEST['id_content']."'");
 	
 			if(sizeof($more)){
-				echo "<p>Aucun document ne correspond dans cette langue.</p>";
-				echo "<p>Autre langue disponible : ";
+				echo "<p>"._('No document found in this language, other available languages: ').": ";
 				foreach($more as $e){
 					$iso = $app->countryGet(array('iso' => $e['language'], 'debug' => false));
 					echo "<a href=\"data?id_content=".$e['id_content']."&language=".$e['language']."\">".$iso['countryLanguage']."</a>";
 				}
 				echo "</p>";
 			}else{
-				echo "<p>Aucun document ne correspond</p>";
+				echo "<p>"._('No document found')."</p>";
 			}
 		?></div>
 	
@@ -169,36 +168,35 @@
 				<input type="hidden" name="id_content"	value="<?php echo $_REQUEST['id_content'] ?>" />
 				<input type="hidden" name="from" 		value="<?php echo $_REQUEST['language'] ?>" />
 		
-				Recopier les données de cette langue vers
+				<?php echo _('Duplicate data to this language'); ?>
 				<select name="copy" class="select-small nomargin"><?php
 					foreach($unset as $e){
 						echo "<option value=\"".$e['iso']."\">".$e['countryLanguage']."</option>";
 					}
 				?></select>
-				<button type="submit" name="valider" class="button button-green" style="float: none;">Valider</button>
-				(Pensez à enregistrer cette langue avant de la recopier)
+				<button type="submit" name="valider" class="button button-green" style="float: none;"><?php echo _('Validate'); ?></button>
+				(<?php echo _('Do not forget to save this page, before duplicate it'); ?>)
 			</form>
 		</div>
 	<?php } ?>
 
 
 	<div class="inject-subnav-right hide">
-        
 		<li>
 			<div class="btn-group">
-				<a class="btn btn-mini dropdown-toggle" data-toggle="dropdown" href="#">Autres actions <span class="caret"></span></a>
+				<a class="btn btn-mini dropdown-toggle" data-toggle="dropdown" href="#"><?php echo _('Actions'); ?> <span class="caret"></span></a>
 				<ul class="dropdown-menu">
-					<li class="clearfix"><a href="data?id_type=<?php echo $type['id_type'] ?>" class="left">Nouveau document (<?php echo $type['typeName'] ?>)</a></li>
-					<li class="clearfix"><a href="data?id_content=<?php echo $data['id_content'] ?>" class="left">Recharger le formulaire</a></li>
-					<li class="clearfix"><a href="data?id_content=<?php echo $_REQUEST['id_content'] ?>" class="left">Retour au formulaire complet</a></li>
+					<li class="clearfix"><a href="data?id_type=<?php echo $type['id_type'] ?>" class="left"><?php echo _('New document'); ?> (<?php echo $type['typeName'] ?>)</a></li>
+					<li class="clearfix"><a href="data?id_content=<?php echo $data['id_content'] ?>" class="left"><?php echo _('Reload the page'); ?></a></li>
+					<li class="clearfix"><a href="data?id_content=<?php echo $_REQUEST['id_content'] ?>" class="left"><?php echo _('Back to full form'); ?></a></li>
 				</ul>
 			</div>
 		</li>
 		<li>
-			<a onclick="removeThis('<?php echo $_REQUEST['language'] ?>', <?php echo $_REQUEST['id_content'] ?>)" class="btn btn-small btn-danger">Supprimer</a>
+			<a onclick="removeThis('<?php echo $_REQUEST['language'] ?>', <?php echo $_REQUEST['id_content'] ?>)" class="btn btn-small btn-danger"><?php echo _('Remove'); ?></a>
 		</li>
 		<li>
-			<a onclick="$('#data').submit()" class="btn btn-small btn-success">Enregistrer</a>
+			<a onclick="$('#data').submit()" class="btn btn-small btn-success"><?php echo _('Validate'); ?></a>
 		</li>
 	</div>
 
@@ -206,9 +204,9 @@
 	<form action="data-language" method="post" id="data">
 	
 	<input type="hidden" name="action" value="1" />
-	<input type="hidden" name="id_type" id="id_type" value="<?php echo $from['id_type'] ?>" />
-	<input type="hidden" name="id_content" id="id_content" value="<?php echo $from['id_content'] ?>" />
-	<input type="hidden" name="language" id="language" value="<?php echo $_REQUEST['language'] ?>" />
+	<input type="hidden" name="id_type"     id="id_type"    value="<?php echo $from['id_type'] ?>" />
+	<input type="hidden" name="id_content"  id="id_content" value="<?php echo $from['id_content'] ?>" />
+	<input type="hidden" name="language"    id="language"   value="<?php echo $_REQUEST['language'] ?>" />
 	
 	<div class="tabset">
 	
@@ -222,8 +220,7 @@
 
 				echo "<li class=\"is-tab ".$class."\"><a href=\"data-language?id_content=".$_REQUEST['id_content']."&language=".$e['iso']."\">".$lan."</a></li>";
 			}
-		?>
-
+			?>
 			<li class="right right-select">
 				Archiver
 				<input type="checkbox" name="is_version" value="1" <?php if($app->formValue($data['is_version'], $_POST['is_version'])) echo "checked" ?> /><?php
@@ -251,7 +248,7 @@
 		<div class="view view-tab">
 			<?php if($empty){ ?>
 			<div class="view-label view-label-toggle">
-				<span>Cette page n'est pas traduite dans cette langue</span>
+				<span><?php echo _('This document is not translated in this language'); ?></span>
 			</div>
 			<?php } ?>
 		
@@ -261,14 +258,14 @@
 					<div class="toggle">&nbsp;</div>
 			
 					<span class="<?php echo $app->formError('contentName', 'needToBeFilled') ?> clearfix">
-						<label>Nom</label>
+						<label><?php echo _('Name'); ?></label>
 						<div class="form"><input type="text" name="contentName" id="contentNameField" value="<?php echo $app->formValue($data['contentName'], $_POST['contentName']); ?>" size="100" style="width:99%;" /></div>
 					</span>
 					
 					<div class="spacer">&nbsp;</div>
 			
 					<span class="<?php echo $app->formError('contentUrl', 'needToBeFilled') ?>">
-						<label class="off">Url</label>
+						<label class="off"><?php echo _('Url'); ?></label>
 						<div class="form"><input type="text" name="contentUrl" id="urlField" value="<?php echo $app->formValue($data['contentUrl'], $_POST['contentUrl']); ?>" size="100" style="width:99%;" /></div>
 					</span>
 					
@@ -279,18 +276,18 @@
 					<div class="toggle">&nbsp;</div>
 			
 					<span class="clearfix">
-						<label>Titre</label>
+						<label><?php echo _('Title'); ?></label>
 						<div class="form"><input type="text" name="contentHeadTitle" value="<?php echo $app->formValue($data['contentHeadTitle'], $_POST['contentHeadTitle']); ?>" size="100" style="width:99%;" /></div>
 					</span>
 					<div class="spacer">&nbsp;</div>
 					<span>
-						<label class="off">Mots-clés</label>
+						<label class="off"><?php echo _('Key words'); ?></label>
 						<div class="form"><input type="text" name="contentMetaKeywords" value="<?php echo $app->formValue($data['contentMetaKeywords'], $_POST['contentMetaKeywords']); ?>" size="100" style="width:99%;" /></div>
 					</span>
 					<br style="clear:both" /> 
 					<div class="spacer">&nbsp;</div>
 					<span>
-						<label class="off">Description</label>
+						<label class="off"><?php echo _('Description'); ?></label>
 						<div class="form"><input type="text" name="contentMetaDescription" value="<?php echo $app->formValue($data['contentMetaDescription'], $_POST['contentMetaDescription']); ?>" size="100" style="width:99%;" /></div>
 					</span>
 				</li>
@@ -308,9 +305,9 @@
 </div>
 
 <?php include(COREINC.'/end.php'); ?>
-<script src="/app/module/core/vendor/bootstrap/js/bootstrap-dropdown.js"></script>
-<script src="/app/module/core/vendor/tinymce/jscripts/tiny_mce/jquery.tinymce.js"></script>
-<script src="/app/module/core/vendor/tinymce/jscripts/tiny_mce/tiny_mce.js"></script>
+<script src="../core/vendor/bootstrap/js/bootstrap-dropdown.js"></script>
+<script src="../core/vendor/tinymce/jscripts/tiny_mce/jquery.tinymce.js"></script>
+<script src="../core/vendor/tinymce/jscripts/tiny_mce/tiny_mce.js"></script>
 <script src="ui/js/content.js"></script>
 <script type="text/javascript">
 	

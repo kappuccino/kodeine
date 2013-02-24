@@ -62,9 +62,7 @@
 
 <div class="inject-subnav-right hide">
 	
-	<li><a onclick="filterToggle('content<?php echo $id_type ?>');" class="btn btn-small">Affichage</a></li>
-
-
+	<li><a onclick="filterToggle('content<?php echo $id_type ?>');" class="btn btn-small"><?php echo _('Display settings'); ?></a></li>
 	<li>
 		<div class="btn-group">
 			<a class="btn btn-mini dropdown-toggle" data-toggle="dropdown" href="#"><i class="icon-list"></i> <?php echo $cType['typeName']; ?> <span class="caret"></span></a>
@@ -77,8 +75,8 @@
 			}
 			?></ul>
 		</div>
-
-	</li><li><a href="<?php echo (($e['is_gallery']) ? 'gallery-album' : 'data' )."?id_type=".$id_type; ?>" class="btn btn-small btn-success">Ajouter <?php echo $cType['typeName']; ?> </a></li>
+	</li>
+	<li><a href="<?php echo (($e['is_gallery']) ? 'gallery-album' : 'data' )."?id_type=".$id_type; ?>" class="btn btn-small btn-success"><?php printf(_('Add a %s'), $cType['typeName']); ?> </a></li>
 
 </div>
 
@@ -91,13 +89,13 @@
 		<input type="hidden" name="filter[open]"	value="1" />
 		<input type="hidden" name="filter[offset]"	value="0" />
 
-        <label class="control-label" for="prependedInput">Chercher</label>
+        <label class="control-label"><?php echo _('Search'); ?></label>
         <input type="text" name="filter[q]" class="input-small" placeholder="" value="<?php echo $filter['q'] ?>" size="5" />
 
-        <label class="control-label" for="prependedInput">Combien</label>
+        <label class="control-label"><?php echo _('Limit'); ?></label>
         <input type="text" name="filter[limit]" class="input-small" placeholder="" value="<?php echo $filter['limit'] ?>" size="3" />
 
-		<label class="control-label" for="prependedInput">Catégorie</label>
+		<label class="control-label"><?php echo _('Category'); ?></label>
 		<?php
 			echo $app->apiLoad('category')->categorySelector(array(
 				'name'		=> 'filter[id_category]',
@@ -108,7 +106,7 @@
 			)); ?>
 
 		<?php if($cType['is_business'] == '1'){ ?>
-		<label class="control-label" for="prependedInput">Shop</label>
+		<label class="control-label"><?php echo _('Shop'); ?></label>
 		<select name="filter[id_shop]">
 			<option></option><?php
 			$shop = $app->apiLoad('shop')->shopGet();
@@ -118,7 +116,7 @@
 		?></select>
 		<?php } ?>
 		
-		<label class="control-label" for="prependedInput">Langue</label>
+		<label class="control-label"><?php echo _('Language'); ?></label>
 		<select name="filter[language]"><?php
 			foreach($app->countryGet(array('is_used' => 1)) as $e){
 				$sel = ($e['iso'] == $filter['language']) ? ' selected' : NULL;
@@ -126,15 +124,15 @@
 			}		
 		?></select>
 
-		&nbsp;Tous 		<input type="radio" 	name="filter[viewChildren]" 	value="0" <?php if(!$filter['viewChildren']) echo ' checked'; ?> />
-		&nbsp;Ordonner 	<input type="radio" 	name="filter[viewChildren]" 	value="1" <?php if( $filter['viewChildren']) echo ' checked'; ?> />
-		&nbsp;Héritage 	<input type="hidden" 	name="filter[categoryThrough]" 	value="0" />
+		&nbsp;<?php echo _('Alle'); ?> 		    <input type="radio"  name="filter[viewChildren]" 	value="0" <?php if(!$filter['viewChildren']) echo ' checked'; ?> />
+		&nbsp;<?php echo _('Ordered'); ?> 	    <input type="radio"  name="filter[viewChildren]" 	value="1" <?php if( $filter['viewChildren']) echo ' checked'; ?> />
+		&nbsp;<?php echo _('Inheritance'); ?> 	<input type="hidden" name="filter[categoryThrough]" value="0" />
 
 		<input type="checkbox" name="filter[categoryThrough]" value="1" <?php if($filter['categoryThrough']) echo ' checked'; ?> />
 
-		<button class="btn btn-mini" type="submit">Filter les résultats</button>
-        <button class="btn btn-mini">Annuler</button>
-        <a href="type-row?id_type=<?php echo $id_type; ?>" class="btn btn-mini">Gérer les colonnes</a>
+		<button class="btn btn-mini" type="submit"><?php echo _('Filter'); ?></button>
+        <button class="btn btn-mini"><?php echo _('Cancel'); ?></button>
+        <a href="type-row?id_type=<?php echo $id_type; ?>" class="btn btn-mini"><?php echo _('Manage columns'); ?></a>
 	</form>
 	</div>	
 
@@ -356,17 +354,14 @@
 					<!--<th width="20" class="icone"><i class="icon-comment icon-white"></i></th>-->
 					<th width="<?php echo 20 + (sizeof($lang) * 20) ?>"class="icone"><i class="icon-globe icon-white"></i></th>
 					<th width="60" 	class="order <?php if($filter['order'] == 'k_content.id_content') echo 'order'.$dir; ?>" onClick="document.location='index?id_type=<?php echo $_REQUEST['id_type'] ?>&cf&order=k_content.id_content&direction=<?php echo $dir ?>'"><span>#</span></th>
-					<th width="115" class="order <?php if($filter['order'] == 'k_content.contentDateCreation')  echo 'order'.$dir; ?>" onClick="document.location='index?id_type=<?php echo $_REQUEST['id_type'] ?>&cf&order=k_content.contentDateCreation&direction=<?php echo $dir ?>'"><span>Création</span></th>
-					<th width="115" class="order <?php if($filter['order'] == 'k_content.contentDateUpdate') 	echo 'order'.$dir; ?>" onClick="document.location='index?id_type=<?php echo $_REQUEST['id_type'] ?>&cf&order=k_content.contentDateUpdate&direction=<?php echo $dir ?>'"><span>Mise à jour</span></th>
+					<th width="115" class="order <?php if($filter['order'] == 'k_content.contentDateCreation')  echo 'order'.$dir; ?>" onClick="document.location='index?id_type=<?php echo $_REQUEST['id_type'] ?>&cf&order=k_content.contentDateCreation&direction=<?php echo $dir ?>'"><span><?php echo _('Created'); ?></span></th>
+					<th width="115" class="order <?php if($filter['order'] == 'k_content.contentDateUpdate') 	echo 'order'.$dir; ?>" onClick="document.location='index?id_type=<?php echo $_REQUEST['id_type'] ?>&cf&order=k_content.contentDateUpdate&direction=<?php echo $dir ?>'"><span><?php echo _('Updated'); ?></span></th>
 						
 					<?php if($cType['is_business']){ ?>
-					<th width="200" class="order <?php if($filter['order'] == 'k_content.contentRef') echo 'order'.$dir; ?>" onClick="document.location='index?id_type=<?php echo $_REQUEST['id_type'] ?>&cf&order=k_content.contentRef&direction=<?php echo $dir ?>'"><span>R&eacute;f&eacute;rence</span></th>
+					<th width="200" class="order <?php if($filter['order'] == 'k_content.contentRef') echo 'order'.$dir; ?>" onClick="document.location='index?id_type=<?php echo $_REQUEST['id_type'] ?>&cf&order=k_content.contentRef&direction=<?php echo $dir ?>'"><span><?php echo _('Reference'); ?></span></th>
 					<?php } ?>
 
-					<th class="filter order <?php if($filter['order'] == 'k_contentdata.contentName') echo 'order'.$dir; ?>" onClick="document.location='index?id_type=<?php echo $_REQUEST['id_type'] ?>&cf&order=k_contentdata.contentName&direction=<?php echo $dir ?>'">
-						<span>Nom</span>
-						<!--<input type="text" class="input-small" placeholder="filtrer..." id="filter"/>-->
-					</th>
+					<th class="filter order <?php if($filter['order'] == 'k_contentdata.contentName') echo 'order'.$dir; ?>" onClick="document.location='index?id_type=<?php echo $_REQUEST['id_type'] ?>&cf&order=k_contentdata.contentName&direction=<?php echo $dir ?>'"><span><?php echo _('Name'); ?></span></th>
                     <?php
                         if(is_array($cType['typeListLayout'])) {
                             foreach($cType['typeListLayout'] as $e) {
@@ -393,8 +388,8 @@
 			<?php if(sizeof($content) == 0){ ?>
 				<tr>
 					<td colspan="10" style="padding:40px 0px 40px 0px; text-align:center; font-weight:bold">
-						Aucun contenu disponible<br /><br />
-						<a href="data?id_type=<?php echo $id_type ?>">Ajouter une page : <?php echo $cType['typeName'] ?></a>
+						<?php echo _('No data'); ?><br /><br />
+						<a href="data?id_type=<?php echo $id_type ?>"><?php printf(_('Create a new %s'), $cType['typeName']) ?></a>
 					</td>
 				</tr>	
 			<?php }else{
@@ -412,7 +407,7 @@
 				<tr>
 					<td><input type="checkbox" onchange="cbchange($(this));" class="chk" id="chk_remove_all" /></td>
 					<td><input type="checkbox" onchange="cschange($(this));" class="chk" id="chk_see_all" /></td>
-					<td colspan="5" height="25"><a href="#" onClick="apply();" class="btn btn-mini"><span>Effectuer les changements sur la selection</span></a></td>
+					<td colspan="5" height="25"><a href="#" onClick="apply();" class="btn btn-mini"><span><?php echo _('Remove selected lines'); ?></span></a></td>
                     <?php
                         $cs = $cType['is_business'] ? 2 : 1;
                         $cs += sizeof($cType['typeListLayout']);
@@ -433,17 +428,6 @@
 <script src="../core/vendor/bootstrap/js/bootstrap-dropdown.js"></script>
 
 <script>
-
-	/*function showOpt() {
-		shown = $('.menu-inline-left .form-horizontal').css('display');
-		if (shown == 'block') {
-			$('.menu-inline-left .form-horizontal').css('display', 'none');
-			$('.showopt i').attr('class', 'icon-chevron-down icon-white');
-		} else {
-			$('.menu-inline-left .form-horizontal').fadeTo(218, 1);
-			$('.showopt i').attr('class', 'icon-chevron-up icon-white');
-		}
-	}*/
 
 	function duplicate(id){
 		if(confirm("DUPLIQUER ?")){

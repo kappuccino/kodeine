@@ -159,7 +159,7 @@
 
 	<?php if(sizeof($_POST['remove']) > 0 ){ ?>
 	<div class="message messageWarning">
-		<p><b>ATTENTION</b> vous êtes sur le point de supprimer un ou plusieurs contenus, cette action est irrémédiable (destruction de tables)</p>
+		<p><?php echo _('<b>WARNING</b> you are about to remove data, this action not cancelable (Database table destruction)') ?></p>
 		
 		<form action="type" method="post">
 			<?php foreach($_POST['remove'] as $e){ ?>
@@ -170,7 +170,7 @@
 	</div>
 	<?php }else if(isset($_GET['noData'])){ ?>
 	<div class="message messageWarning">
-		Vous ne pouvez pas ajouter, voir ou parcourir du contenu tant qu'il n'existe aucun type.
+		<?php echo _('You can not add, see, browse data while there is no type defined'); ?>
 	</div>
 	<?php } ?>
 
@@ -180,7 +180,7 @@
 			<thead>
 				<tr>
 					<th width="20" class="icone"><i class="icon-remove icon-white"></i></th>
-					<th>Nom</th>
+					<th><?php echo _('Name'); ?></th>
 				</tr>
 			</thead>
 		</table>
@@ -207,28 +207,30 @@
 						echo '</div>';
 
 						echo '<div class="content">';
-						echo '<a href="./?id_type='.$e['id_type'].'">Afficher</a> &nbsp; &nbsp; ';
-                        echo '<a href="../field/asso?id_type='.$e['id_type'].'">Gérer les champs</a> &nbsp; &nbsp; ';
-                        echo '<a href="type-row?id_type='.$e['id_type'].'">Colonnes</a>';
+						echo '<a href="./?id_type='.$e['id_type'].'">'._('View').'</a> &nbsp; &nbsp; ';
+                        echo '<a href="../field/asso?id_type='.$e['id_type'].'">'._('Manage fields').'</a> &nbsp; &nbsp; ';
+                        echo '<a href="type-row?id_type='.$e['id_type'].'">'._('Columns').'</a>';
 						echo '</div>';
 
 					echo '</div></li>';
 				}
 			
 			}else{
-				echo '<div class="noType">Vous devez créer au minimum un type pour créer de nouveau contenu</div>';
+				echo '<div class="noType">';
+				echo _('You need to create a type to create new contents');
+				echo '</div>';
 			}
 		?></ul>
 	
 		<div class="clearfix">
 			<div class="left">
 				<?php if(sizeof($types) > 0){ ?>
-				<a onclick="apply();" class="btn btn-mini">Supprimer la selection</a>
-				<a href="type" class="btn btn-mini">Annuler</a>
+				<a onclick="apply();" class="btn btn-mini"><?php echo _('Remove selection'); ?></a>
+				<a href="type" class="btn btn-mini"><?php echo _('Cancel'); ?></a>
 				<?php } ?>
 			</div>
 			<div class="right">
-                <a href="../field/" class="nomargin btn btn-mini">Gérer tous les champs</a>
+                <a href="../field/" class="nomargin btn btn-mini"><?php echo _('Manage fields'); ?></a>
 			</div>
 		</div>
 	</form>
@@ -238,43 +240,43 @@
 		<input type="hidden" name="id_type" value="<?php echo $data['id_type'] ?>" />
 		
 		<?php if($data['id_type'] == NULL){ ?>
-			<div class="alert message messageWarning">Une fois le type créé, vous ne pouvez plus modifier Business ou Galerie</div>
+			<div class="alert message messageWarning"><?php echo _('Once a type crated, you will not be able to change business, ad, or gallery settings'); ?></div>
 		<?php } ?>
 	
 		<table cellpadding="0" cellspacing="0" border="0" class="form">
 			<?php if($data['id_type'] == NULL){ ?>
 			<tr valign="top">
-				<td>Business</td>
+				<td><?php echo _('Business'); ?></td>
 				<td><input type="checkbox" name="is_business" value="1" <?php if($app->formValue($data['is_business'], $_POST['is_business'])) echo " checked" ?>/></td>
 			</tr>
 			<tr valign="top">
-				<td>Galerie</td>
+				<td><?php echo _('Gallery'); ?></td>
 				<td><input type="checkbox" name="is_gallery" value="1" <?php if($app->formValue($data['is_galery'], $_POST['is_gallery'])) echo " checked" ?>/></td>
 			</tr>
 			<tr valign="top">
-				<td>Publicité</td>
+				<td><?php echo _('Ad'); ?></td>
 				<td><input type="checkbox" name="is_ad" value="1" <?php if($app->formValue($data['is_ad'], $_POST['is_ad'])) echo " checked" ?> /></td>
 			</tr>
 			<?php }else{ ?>
 			<tr valign="top">
-				<td width="100">Business</td>
+				<td width="100"><?php echo _('Business'); ?></td>
 				<td><?php echo ($data['is_business']) ? "Oui" : "Non" ?>	<input type="hidden" name="is_business" value="<?php echo $data['is_business'] ?>" /></td>
 			</tr>
 			<tr valign="top">
-				<td>Galerie</td>
+                <td><?php echo _('Gallery'); ?></td>
 				<td><?php echo ($data['is_gallery']) ? "Oui" : "Non" ?>		<input type="hidden" name="is_gallery" value="<?php echo $data['is_gallery'] ?>" /></td>
 			</tr>
 			<tr valign="top">
-				<td>Publicité</td>
+                <td><?php echo _('Ad'); ?></td>
 				<td><?php echo ($data['is_ad']) 	 ? "Oui" : "Non" ?>		<input type="hidden" name="is_ad" value="<?php echo $data['is_ad'] ?>" /></td>
 			</tr>
 			<?php } ?>
 			<tr valign="top">
-				<td width="150">Visible sur le CP</td>
+				<td width="150"><?php echo _('Back office view'); ?></td>
 				<td><input type="checkbox" name="is_cp" value="1" <?php if($app->formValue($data['is_cp'], $_POST['is_cp'])) echo " checked" ?> /></td>
 			</tr>
 			<tr valign="top">
-				<td>Utiliser</td>
+				<td><?php echo _('Relationships'); ?></td>
 				<td>
 					<input type="checkbox" name="use_group"			value="1" <?php if($app->formValue($data['use_group'], 			$_POST['use_group'])) 			echo "checked" ?> /> Les groupes<br />
 					<input type="checkbox" name="use_search"		value="1" <?php if($app->formValue($data['use_search'],			$_POST['use_search'])) 			echo "checked" ?> /> Les groupes intelligents<br />
@@ -284,15 +286,15 @@
 				</td>
 			</tr>
 			<tr>
-				<td>Nom</td>
+				<td><?php echo _('Name'); ?></td>
 				<td><input type="text" name="typeName" value="<?php echo $app->formValue($data['typeName'], $_POST['typeName']); ?>" /></td>
 			</tr>
 			<tr>
-				<td>Key</td>
+				<td><?php echo _('Key'); ?></td>
 				<td><input type="text" name="typeKey" value="<?php echo $app->formValue($data['typeKey'], $_POST['typeKey']); ?>" /></td>
 			</tr>
 			<tr>
-				<td>Template</td>
+				<td><?php echo _('Template'); ?></td>
 				<td><?php
 					echo $app->apiLoad('template')->templateSelector(array(
 						'name'	=> 'typeTemplate',
@@ -303,8 +305,8 @@
 			<tr>
 				<td></td>
 				<td>
-					<a onclick="$('#data').submit()" class="btn btn-mini">Enregistrer</a>
-					<a href="type" class="btn btn-mini">Nouveau</a>
+					<a onclick="$('#data').submit()" class="btn btn-mini"><?php echo _('Save'); ?></a>
+					<a href="type" class="btn btn-mini"><?php echo _('New'); ?></a>
 				</td>
 			</tr>
 		</table>

@@ -128,13 +128,8 @@
 		}
 	}
 
-	if(is_array($previous)){
-		$leftLink = "gallery-item?id_content=".$previous['id_content'];
-	}
-
-	if(is_array($next)){
-		$rightLink = "gallery-item?id_content=".$next['id_content'];
-	}
+	if(is_array($previous)) $leftLink  = "gallery-item?id_content=".$previous['id_content'];
+	if(is_array($next))     $rightLink = "gallery-item?id_content=".$next['id_content'];
 
 
 	function previewMe($app, $item, $value, $link=NULL){
@@ -188,7 +183,7 @@
 ?></header>
 
 <div class="inject-subnav-right hide">
-	<li><a onclick="$('#data').submit()" class="btn btn-small btn-success">Enregistrer</a></li>
+	<li><a onclick="$('#data').submit()" class="btn btn-small btn-success"><?php echo _('Save'); ?></a></li>
 </div>
 
 <div id="app">
@@ -202,10 +197,10 @@
 
 	<form action="gallery-item" method="post" id="data">
 	
-		<input type="hidden" name="action" value="1" />
-		<input type="hidden" name="id_type" value="<?php echo $_REQUEST['id_type'] ?>" />
-		<input type="hidden" name="id_content" id="id_content" value="<?php echo $data['id_content'] ?>" />
-		<input type="hidden" name="language" value="fr" />
+		<input type="hidden" name="action"      value="1" />
+		<input type="hidden" name="id_type"     value="<?php echo $_REQUEST['id_type'] ?>" />
+		<input type="hidden" name="id_content"  value="<?php echo $data['id_content'] ?>" id="id_content" />
+		<input type="hidden" name="language"    value="fr" />
 
         <div class="tabset">
             <div class="view view-tab">
@@ -216,7 +211,7 @@
                         <div class="toggle toggle-hidden">&nbsp;</div>
 
 						<span class="<?php echo $app->formError('contentName', 'needToBeFilled') ?> clearfix">
-							<label>Nom</label>
+							<label><?php echo _('Name'); ?></label>
 							<div class="form">
                                 <input type="text" name="contentName" id="contentNameField" value="<?php echo $app->formValue($data['contentName'], $_POST['contentName']); ?>" size="100" style="width:99%;" />
                             </div>
@@ -227,12 +222,12 @@
                         <div class="hand">&nbsp;</div>
                         <div class="toggle toggle-hidden">&nbsp;</div>
 
-						<span class="<?php echo $app->formError('contentName', 'needToBeFilled') ?> clearfix">
-							<label>Url</label>
+						<span class="<?php echo $app->formError('contentItemUrlInput', 'needToBeFilled') ?> clearfix">
+							<label><?php echo _('Url'); ?></label>
 							<div class="form">
                                 <input type="text" id="contentItemUrlInput" name="contentItemUrl" value="<?php echo $app->formValue($data['contentItemUrl'], $_POST['contentItemUrl']); ?>" style="width:90%;" />
 								&nbsp;
-                                <a class="btn btn-mini" onclick="mediaOpen('line', 'urlField')">Choisir</a>
+                                <a class="btn btn-mini" onclick="mediaOpen('line', 'contentItemUrlInput')"><?php echo _('Pick'); ?></a>
                             </div>
 						</span>
                     </li>
@@ -243,7 +238,7 @@
                         <div class="toggle toggle-hidden">&nbsp;</div>
 
 						<span class="<?php echo $app->formError('contentName', 'needToBeFilled') ?> clearfix">
-							<label>Visibilité</label>
+							<label><?php echo _('Visibility'); ?></label>
 							<div class="form">
                                 <input type="checkbox" name="contentSee" id="contentSeeChkbox" value="1" <?php if ($app->formValue($data['contentSee'], $_POST['contentSee'])) echo "checked"; ?> />
                             </div>
@@ -266,22 +261,22 @@
 			<td colspan="3" class="current">&#8593;<?php
 
 				echo ($data['id_album'] == 0)
-					? '<a id="goToAlbum" href="gallery?id_type='.$type['id_type'].'">Racine</a>'
+					? '<a id="goToAlbum" href="gallery?id_type='.$type['id_type'].'">'._('Root').'</a>'
 					: '<a id="goToAlbum" href="gallery?id_type='.$type['id_type'].'#album/'.$album['id_content'].'">Album '.$album['contentName'].'</a>';
 
 			?></td>
 		</tr>
 		<tr>
-			<th class="previous"><a href="<?php echo ($leftLink  != '') ? $leftLink  : '#'; ?>" id="goToLeft">&#8592; Element précédent</a></th>
-			<th class="current">Element courant</th>
-			<th class="next"><a href="<?php echo ($rightLink != '') ? $rightLink : '#'; ?>" id="goToRight">Element suivant &#8594;</a></th>
+			<th class="previous"><a href="<?php echo ($leftLink  != '') ? $leftLink  : '#'; ?>" id="goToLeft">← <?php echo _('Previous item'); ?></a></th>
+			<th class="current"><?php echo _('Current item'); ?></th>
+			<th class="next"><a href="<?php echo ($rightLink != '') ? $rightLink : '#'; ?>" id="goToRight"><?php echo _('Next item'); ?> →</a></th>
 		</tr>
 		<tr valign="top">
 			<td class="previous"><?php
 
 				echo ($leftLink != '')
 					? previewMe($app, $previous, 200, $leftLink)
-					: "<br /><br /><span id=\"leftDeadEnd\" style=\"padding:5px;\">Vous êtes au debut de l'album</span>";
+					: _('No previous item');
 
 			?>&nbsp;</td>
 			<td class="current"><?php previewMe($app, $data, 600); ?></td>
@@ -289,7 +284,7 @@
 
 				echo ($rightLink != '')
 					? previewMe($app, $next, 200, $rightLink)
-					: "<br /><br /><span id=\"rightDeadEnd\" style=\"padding:5px;\">Vous êtes a la fin de l'album</span>";
+					: _('No more item');
 
 			?></td>
 		</tr>
@@ -300,8 +295,8 @@
 
 
 <?php include(COREINC.'/end.php'); ?>
-<script src="/app/module/core/vendor/tinymce/jscripts/tiny_mce/jquery.tinymce.js"></script>
-<script src="/app/module/core/vendor/tinymce/jscripts/tiny_mce/tiny_mce.js"></script>
+<script src="../core/vendor/tinymce/jscripts/tiny_mce/jquery.tinymce.js"></script>
+<script src="../core/vendor/tinymce/jscripts/tiny_mce/tiny_mce.js"></script>
 <script src="ui/js/content.js"></script>
 <script src="ui/js/gallery.nav.js"></script>
 <script>

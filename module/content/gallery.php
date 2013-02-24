@@ -41,9 +41,9 @@
 			?></ul>
         </div>
 	</li>
-    <li><a id="buttonImport" class="btn btn-small">Importer</a></li>
-    <li><a id="buttonEdit" class="btn btn-small">Editer</a></li>
-    <li><a id="buttonAdd" class="btn btn-small">Nouveau</a></li>
+    <li><a id="buttonImport" class="btn btn-small"><?php echo _('Import'); ?></a></li>
+    <li><a id="buttonEdit" class="btn btn-small"><?php echo _('Edit'); ?></a></li>
+    <li><a id="buttonAdd" class="btn btn-small"><?php echo _('New'); ?></a></li>
 </div>
 
 <div id="gallery">

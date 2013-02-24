@@ -117,7 +117,7 @@
 
 		$title = $data['contentName'];
 	}else{
-		$title = 'Racine';
+		$title = _('Root');
 	}
 
 ?><!DOCTYPE html>

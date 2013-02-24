@@ -180,8 +180,8 @@
             <table width="100%" border="0" cellpadding="0" cellspacing="0" class="listing sortable" style="margin-top:10px;">
                 <thead>
                 <tr>
-                    <th>Champ</th>
-                    <th width="80">Utiliser</th>
+                    <th><?php echo _('Field'); ?></th>
+                    <th width="80"></th>
                 </tr>
                 </thead>
 
@@ -194,16 +194,16 @@
                 foreach($not as $e){ ?>
                 <tr>
                     <td><?php echo $e['fieldName']. '(' . $e['fieldKey'] . ')' ?></td>
-                    <td><a class="btn btn-mini" href="type-row?id_type=<?php echo $_REQUEST['id_type'] ?>&field=<?php echo $e['id_field'] ?>&add">Ajouter</a></td>
+                    <td><a class="btn btn-mini" href="type-row?id_type=<?php echo $_REQUEST['id_type'] ?>&field=<?php echo $e['id_field'] ?>&add"><?php echo _('Add'); ?></a></td>
                 </tr>
-                    <?php } ?>
+                    <?php } ?>
                 <?php
                 foreach($notC as $e){ ?>
                 <tr>
                     <td><b><?php echo $e; ?></b></td>
-                    <td><a class="btn btn-mini" href="type-row?id_type=<?php echo $_REQUEST['id_type'] ?>&field=<?php echo $e ?>&add">Ajouter</a></td>
+                    <td><a class="btn btn-mini" href="type-row?id_type=<?php echo $_REQUEST['id_type'] ?>&field=<?php echo $e ?>&add"><?php echo _('Add'); ?></a></td>
                 </tr>
-                    <?php } ?>
+                    <?php } ?>
 			</tbody>
 			<tfoot>
             <tr>
@@ -223,10 +223,10 @@
             }
             ?>
 
-            <p><b>Colonnes du type <?php echo $data['typeName']; ?></b></p>
+            <p><b><?php printf(_('Columns for type'), $data['typeName']); ?></b></p>
             <div style="margin-bottom:10px;" class="clearfix">
-                <a href="javascript:sauver();" class="btn btn-mini">Enregister le nouvel ordre</a>
-                <a href="parent?id_content=<?php echo $_GET['id_content'] ?>" class="btn btn-mini">Annuler</a>
+                <a onclick="sauver();" class="btn btn-mini"><?php echo _('Save this order'); ?></a>
+                <a href="parent?id_content=<?php echo $_GET['id_content'] ?>" class="btn btn-mini"><?php echo _('Cancel'); ?></a>
             </div>
 
             <ul id="used" class="clearfix"><?php
@@ -246,7 +246,7 @@
                         }
                         echo "<li id=\"".$id_field."\" style=\"height: 75px;\">". $fieldName . "<br />";
                         echo "Largeur <input type=\"text\" size=\"2\" id=\"w" . $id_field . "\" value=\"".$e['width']."\"><br />";
-                        echo "<a href=\"type-row?id_type=".$_REQUEST['id_type']."&field=".$id_field."&remove\" class=\"btn btn-mini\">Supprimer</a> ";
+                        echo "<a href=\"type-row?id_type=".$_REQUEST['id_type']."&field=".$id_field."&remove\" class=\"btn btn-mini\">"._('Remove')."</a>";
                         echo "</li>";
                     }
                 }
@@ -255,8 +255,8 @@
 
 
             <?php include(COREINC.'/end.php'); ?>
-            <script src="/app/module/core/vendor/datatables/jquery.dataTables.js"></script>
-            <script src="/app/module/core/vendor/bootstrap/js/bootstrap-dropdown.js"></script>
+            <script src="../core/vendor/datatables/jquery.dataTables.js"></script>
+            <script src="../core/vendor/bootstrap/js/bootstrap-dropdown.js"></script>
 
             <script>
                 var mySortables = $('#used').sortable({

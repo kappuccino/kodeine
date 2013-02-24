@@ -153,9 +153,9 @@
 ?></header>
 
 <div class="inject-subnav-right hide">
-    <li><a onclick="$('#data').submit()" class="btn btn-small btn-success">Enregistrer</a></li>
+    <li><a onclick="$('#data').submit()" class="btn btn-small btn-success"><?php echo _('Save'); ?></a></li>
 	<?php if($data['id_content'] > 0){ ?>
-	<li><a href="gallery?id_type=<?php echo $data['id_type'] ?>#<?php echo $data['id_content'] ?>" class="button button-blue">Afficher l'album en image</a></li>
+	<li><a href="gallery?id_type=<?php echo $data['id_type'] ?>#<?php echo $data['id_content'] ?>" class="button button-blue"><?php echo _('Thumbnails view'); ?></a></li>
 	<?php } ?>
 </div>
 
@@ -172,30 +172,30 @@
 
 		<table width="100%" border="0" cellpadding="0" cellspacing="2" id="gCarrousel">
 			<tr>
-				<td class="previous"><a href="<?php echo ($leftLink  != '') ? $leftLink  : '#'; ?>" id="goToLeft">← Album précédente</a></td>
+				<td class="previous"><a href="<?php echo ($leftLink  != '') ? $leftLink  : '#'; ?>" id="goToLeft">← <?php echo _('Previous album'); ?></a></td>
 				<td class="current"	>↑ <?php
 
 					echo ($data['id_album'] == 0)
-						? '<a id="goToAlbum" href="gallery?id_type='.$type['id_type'].'">Racine</a>'
+						? '<a id="goToAlbum" href="gallery?id_type='.$type['id_type'].'">'._('Root').'</a>'
 						: '<a id="goToAlbum" href="gallery?id_type='.$type['id_type'].'#album/'.$album['id_content'].'">Album '.$album['contentName'].'</a>';
 
 				?></td>
-				<td width="25%" class="next"><a href="<?php echo ($rightLink != '') ? $rightLink : '#'; ?>" id="goToRight">Album suivant →</a></td>
+				<td width="25%" class="next"><a href="<?php echo ($rightLink != '') ? $rightLink : '#'; ?>" id="goToRight"><?php echo _('Next album'); ?> →</a></td>
 			</tr>
 			<tr>
 				<td class="previous"><?php
 
 					echo ($leftLink != '')
 						? "<a href=\"".$leftLink."\">".$previous['contentName']."</a>"
-						: "Vous êtes au debut de l'album";
+						: _('No previous album');
 
 				?>&nbsp;</td>
-				<td class="current" align="center";>Album courant: <?php echo $data['contentName']  ?></td>
+				<td class="current" align="center";><?php printf(_('Current album: %s'), $data['contentName']); ?></td>
 				<td class="next" align="right"><?php
 
 					echo ($rightLink != '')
 						? "<a href=\"".$rightLink."\">".$next['contentName']."</a>"
-						: "Vous êtes a la fin de l'album";
+						: _('No more album');
 
 				?></td>
 			</tr>
@@ -204,11 +204,11 @@
 
 	<form action="gallery-album" method="post" id="data">
 	
-		<input type="hidden" name="action" value="1" />
-		<input type="hidden" name="id_type" value="<?php echo $type['id_type'] ?>" />
-		<input type="hidden" name="id_content" id="id_content" value="<?php echo $data['id_content'] ?>" />
-		<input type="hidden" name="language" value="fr" />
-		<input type="hidden" name="id_album" value="<?php echo $id_album; ?>" />
+		<input type="hidden" name="action"      value="1" />
+		<input type="hidden" name="id_type"     value="<?php echo $type['id_type'] ?>" />
+		<input type="hidden" name="id_content"  value="<?php echo $data['id_content'] ?>" id="id_content" />
+		<input type="hidden" name="language"    value="fr" />
+		<input type="hidden" name="id_album"    value="<?php echo $id_album; ?>" />
 	
 		<div class="tabset">
 			<div class="view view-tab">
@@ -218,7 +218,7 @@
 						<div class="toggle toggle-hidden">&nbsp;</div>
 						
 						<span class="<?php echo $app->formError('contentName', 'needToBeFilled') ?> clearfix">
-							<label>Nom</label>
+							<label><?php echo _('Name'); ?></label>
 							<div class="form">
 								<input type="text" name="contentName" id="contentNameField" value="<?php echo $app->formValue($data['contentName'], $_POST['contentName']); ?>" size="100" style="width:99%;" />
 							</div>
@@ -227,7 +227,7 @@
 						<div class="spacer">&nbsp;</div>
 	
 						<span class="<?php echo $app->formError('contentUrl', 'needToBeFilled') ?>">
-							<label>Url de l'album</label>
+							<label><?php echo _('Album URL'); ?></label>
 							<div class="form">
 								<input type="text" name="contentUrl" id="urlField" value="<?php echo $app->formValue($data['contentUrl'], $_POST['contentUrl']); ?>" size="100" style="width:99%;" />
 							</div>
@@ -237,10 +237,10 @@
 					<li class="clearfix form-item">
 						<div class="hand">&nbsp;</div>
 						<div class="toggle toggle-hidden">&nbsp;</div>
-						<label>Visibilité</label>
+						<label><?php echo _('Visibility'); ?></label>
 						<div class="form">
 							<input type="checkbox" name="contentSee" id="contentSee" value="1" <?php if($app->formValue($data['contentSee'], $_POST['contentSee'])) echo "checked"; ?> />
-							Indique que cet album est visible sur le site
+							<?php echo _('Front office view'); ?>
 						</div>
 					</li>
 	
@@ -248,11 +248,11 @@
 					<li class="clearfix form-item">
 						<div class="hand">&nbsp;</div>
 						<div class="toggle toggle-hidden">&nbsp;</div>
-						<label>Synchro</label>
+						<label><?php echo _('Sync'); ?></label>
 						<div class="form">
 							<input type="hidden" 	name="removeSync" value="0" />
 							<input type="checkbox"	name="removeSync" value="1" checked="checked" />
-							Cet album est synchronisé avec le dossier <b><?php echo $data['contentAlbumSyncFolder'] ?></b>
+							<?php echo _('This album is synced with folder').' <b>'.$data['contentAlbumSyncFolder'].'</b>' ?>
 						</div>
 					</li>
 					<? } ?>
@@ -260,10 +260,10 @@
 					<li class="clearfix form-item">
 						<div class="hand">&nbsp;</div>
 						<div class="toggle toggle-hidden">&nbsp;</div>
-						<label>Template</label>
+						<label><?php echo _('Template'); ?></label>
 						<div class="form">
 							<select name="contentTemplate">
-								<option value="">Utiliser la template par defaut</option><?php
+								<option value=""><?php echo _('Use default template'); ?></option><?php
 								foreach($app->fsFolder(TEMPLATE, '', FLAT) as $e){
 									$e	 = basename($e);
 									$sel = ($app->formValue($data['contentTemplate'], $_POST['contentTemplate']) == $e) ? ' selected' : NULL;
@@ -276,11 +276,11 @@
 					<li class="clearfix form-item">
 						<div class="hand">&nbsp;</div>
 						<div class="toggle toggle-hidden">&nbsp;</div>
-						<label>Liaisons</label>
+						<label><?php echo _('Relationships'); ?></label>
 						<div class="form">
 							<div style="width:25%;" class="panelItem">
 								<span class="panelLabel">
-									Arborescence
+									<?php echo _('Chapters'); ?>
 								</span>
 								<div class="panelBody" style="width:95%;"><?php echo 
 									$app->apiLoad('chapter')->chapterSelector(array(
@@ -295,7 +295,7 @@
 							</div>
 							<div style="width:25%;" class="panelItem">
 								<span class="panelLabel">
-									Cat&eacute;gories
+									<?php echo _('Category'); ?>
 								</span>
 								<div class="panelBody" style="width:95%;"><?php echo 
 									$app->apiLoad('category')->categorySelector(array(
@@ -312,7 +312,7 @@
 							<?php if(!$type['is_business']){ ?>
 							<div style="width:25%;" class="panelItem">
 								<span class="panelLabel">
-									Groupes
+									<?php echo _('Groups'); ?>
 								</span>
 								<div class="panelBody" style="width:95%;"><?php echo 
 									$app->apiLoad('user')->userGroupSelector(array(
@@ -328,7 +328,7 @@
 							<?php } ?>
 							<div style="width:25%;" class="panelItem">
 								<span class="panelLabel">
-									Groupes intelligents
+									<?php echo _('Smart groups'); ?>
 								</span>
 								<div class="panelBody" style="width:95%;"><?php echo 
 									$app->searchSelector(array(
@@ -347,20 +347,19 @@
 					<li id="contentDate" class="clearfix form-item">
 						<div class="hand">&nbsp;</div>
 						<div class="toggle toggle-hidden">&nbsp;</div>
-						<label>Dates</label>
+						<label><?php echo _('Dates'); ?></label>
 						<div class="form">
 							<table>
 								<tr>
-									<td width="80 ">Creation</td>
-									<td width="200">
-										<?php
+									<td width="80 "><?php echo _('Created'); ?></td>
+									<td width="200"><?php
 											$v = $app->formValue($data['contentDateCreation'], $_POST['contentDateCreation']);
 											if(!is_array($v)) $v = explode(' ', $v);
 										?>
 										<input type="text" name="contentDateCreation[0]" id="contentDateCreation" value="<?php echo $v[0] ?>" size="12" style="text-align:center;" />
 										<input type="text" name="contentDateCreation[1]" 						  value="<?php echo $v[1] ?>" size="7"  style="text-align:center;" />
 									</td>
-									<td width="50">Debut</td>
+									<td width="50"><?php echo _('Starts'); ?></td>
 									<td width="200">
 										<?php $v = $app->formValue($data['contentDateStart'], $_POST['contentDateStart']); ?>
 										<input type="checkbox" name="contentDateStartDo" id="contentDateStartDo" value="1" <?php if($v != '') echo "checked" ?> />
@@ -368,17 +367,15 @@
 									</td>
 								</tr>
 								<tr>
-									<td>Mise a jour</td>
-									<td>
-										<?php
+									<td><?php echo _('Updated'); ?></td>
+									<td><?php
 											$v = $app->formValue($data['contentDateUpdate'], $_POST['contentDateUpdate']);
 											if(!is_array($v)) $v = explode(' ', $v);
 										?>
 										<input type="text" name="contentDateUpdate[0]" id="contentDateUpdate" value="<?php echo $v[0] ?>" size="12" style="text-align:center;" />
 										<input type="text" name="contentDateUpdate[1]" 						  value="<?php echo $v[1] ?>" size="7"  style="text-align:center;" />
-									<td>Fin</td>
-									<td>
-										<?php $v = $app->formValue($data['contentDateEnd'], $_POST['contentDateEnd']); ?>
+									<td><?php echo _('Ends'); ?></td>
+									<td><?php $v = $app->formValue($data['contentDateEnd'], $_POST['contentDateEnd']); ?>
 										<input type="checkbox" name="contentDateEndDo" id="contentDateEndDo" value="1" <?php if($v != '') echo "checked" ?> />
 										<input type="text" name="contentDateEnd" id="contentDateEnd" value="<?php echo $v ?>" size="12" style="text-align:center;" />
 									</td>
@@ -390,7 +387,6 @@
 					<?php
 						foreach($fields as $e){
 							$app->apiLoad('field')->fieldTrace($data, $e, $f);
-						//	fieldTrace($app, $data, $e, $f);
 						}
 					?>
 	

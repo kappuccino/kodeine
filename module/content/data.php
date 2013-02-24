@@ -221,20 +221,20 @@
 <div class="inject-subnav-right hide">
 	<li>
 		<div class="btn-group">
-			<a class="btn btn-mini dropdown-toggle" data-toggle="dropdown" href="#">Actions <span class="caret"></span></a>
+			<a class="btn btn-mini dropdown-toggle" data-toggle="dropdown" href="#"><?php echo _('Actions'); ?> <span class="caret"></span></a>
 			<ul class="dropdown-menu">
-				<li class="clearfix"><a href="data?id_type=<?php echo $type['id_type'] ?>" class="left">Nouveau</a>
+				<li class="clearfix"><a href="data?id_type=<?php echo $type['id_type'] ?>" class="left"><?php echo _('New document'); ?></a>
 				<?php if($data['id_content'] > 0){ ?>
-				<li class="clearfix"><a href="data?id_content=<?php echo $data['id_content'] ?>" class="left">Recharger</a></li>
-				<li class="clearfix"><a href="data-language?id_content=<?php echo $data['id_content'] ?>&language=<?php echo $data['language'] ?>" class="left">Traduction</a></li>
-				<li class="clearfix"><a href="./?id_content=<?php echo $data['id_content'] ?>" class="left">Commentaire</a></li>
-				<li class="clearfix"><a href="parent?id_content=<?php echo $data['id_content'] ?>" class="left">Sous-contenu</a></li>
+				<li class="clearfix"><a href="data?id_content=<?php echo $data['id_content'] ?>" class="left"><?php echo _('Reload'); ?></a></li>
+				<li class="clearfix"><a href="data-language?id_content=<?php echo $data['id_content'] ?>&language=<?php echo $data['language'] ?>" class="left"><?php echo _('Translation'); ?></a></li>
+				<li class="clearfix"><a href="./?id_content=<?php echo $data['id_content'] ?>" class="left"><?php echo _('Comments'); ?></a></li>
+				<li class="clearfix"><a href="parent?id_content=<?php echo $data['id_content'] ?>" class="left"><?php echo _('Sub-content'); ?></a></li>
 				<?php } ?>
 		</div>
 	</li>
 	<li><a href="./?id_type=<?php echo $type['id_type'] ?>" class="btn btn-small"><i class="icon-list"></i> <?php echo $type['typeName']; ?></a></li>
-    <li><a onclick="removeThis(<?php echo $_REQUEST['id_content'] ?>)" class="btn btn-small btn-danger">Supprimer</a></li>
-	<li><a onclick="$('#data').submit()" class="btn btn-small btn-success">Enregistrer</a></li>
+    <li><a onclick="removeThis(<?php echo $_REQUEST['id_content'] ?>)" class="btn btn-small btn-danger"><?php echo _('Remove'); ?></a></li>
+	<li><a onclick="$('#data').submit()" class="btn btn-small btn-success"><?php echo _('Save'); ?></a></li>
 </div>
 
 <div id="app" class="data"><?php
@@ -251,8 +251,7 @@
 			$more = $app->dbMulti("SELECT * FROM k_contentdata WHERE id_content='".$_REQUEST['id_content']."'");
 	
 			if(sizeof($more)){
-				echo "Aucun document ne correspond dans cette langue<br />";
-				echo "Autre langue disponible : ";
+				echo "<p>"._('No document found in this language, other available languages: ').": ";
 				foreach($more as $e){
 					$iso = $app->countryGet(array('iso' => $e['language'], 'debug' => false));
 
@@ -260,7 +259,7 @@
 				}
 				echo "</p>";
 			}else{
-				echo "Aucun document ne correspond";
+				echo "<p>"._('No document found')."</p>";
 			}
 		?></div>
 
@@ -289,18 +288,18 @@
 		<?php } ?>
 		</ul>
 
-		<li class="do-wiew view-all"><a class="text">Tout afficher</a></li>
-		<li class="hide" id="action-add-tab"><a onclick="addTab($('.tabset')[0])">Ajouter un onglet</a></li>
-		<li class="" id="action-move-on"><a onclick="enableMove()">Modifier les onglets</a></li>
-		<li class="hide" id="action-move-off"><a onclick="disableMove()">Fin de modifications</a></li>
+		<li class="do-wiew view-all"><a class="text"><?php echo _('See all'); ?></a></li>
+		<li class="hide" id="action-add-tab"><a onclick="addTab($('.tabset')[0])"><?php echo _('Add a tab'); ?></a></li>
+		<li class="" id="action-move-on"><a onclick="enableMove()"><?php echo _('Edits tabs'); ?></a></li>
+		<li class="hide" id="action-move-off"><a onclick="disableMove()"><?php echo _('Save tabs'); ?></a></li>
 
 		<li class="right right-select">
-			Archiver
+			<?php echo _('Versioning'); ?>
 			<input type="checkbox" name="is_version" value="1" <?php if($app->formValue($data['is_version'], $_POST['is_version'])) echo "checked" ?> />
 	
 			<select onChange="version(this)" class="select-small nomargin"><?php
 			if($data['id_content'] != NULL){
-				echo "<option value=\"\">".sizeof($versions)." version(s) disponible(s)</option>";
+				echo "<option value=\"\">".sprintf(_('%s version avalaible'), count($versions))."</option>";
 				$versions = $app->apiLoad('content')->contentVersionGet(array(
 					'id_content'	=> $data['id_content'],
 					'language'		=> $data['language'],
@@ -309,11 +308,11 @@
 				if(sizeof($versions) > 0){
 					foreach($versions as $vrs){
 						$sel = ($_REQUEST['reloadFromVersion'] == $vrs['id_version']) ? ' selected' : NULL;
-						echo "<option value=\"".$vrs['id_version']."\"".$sel.">Afficher la version du : ".$app->helperDate($vrs['versionDate'], '%e %b %G � %Hh %Mm %S')."</option>";
+						echo "<option value=\"".$vrs['id_version']."\"".$sel.">Afficher la version du : ".$app->helperDate($vrs['versionDate'], '%e %b %G à %Hh %Mm %S')."</option>";
 					}
 				}
 			}else{
-				echo "<option value=\"\">Aucune version disponible</option>";	
+				echo "<option value=\"\">"._('No data')."</option>";
 			}
 		?></select>
 		</li>
@@ -321,7 +320,8 @@
 
 	<?php if($_REQUEST['id_content'] == NULL && sizeof($languages) > 1){ ?>
 	<div class="view-label view-label-colored">
-		Langue du document <select name="language" id="language" onchange="urlCheck();"><?php
+		<?php echo _('Language of this document'); ?>
+		<select name="language" id="language" onchange="urlCheck();"><?php
 			foreach($languages as $l){
 				$sel = ($language == $l['iso']) ? ' selected' : NULL;
 				echo "<option value=\"".$l['iso']."\"".$sel.">".$l['countryLanguage']."</option>\n";
@@ -354,7 +354,7 @@
 
 	<div class="view">
 		<div class="view-label">
-			<span>Toujours visible</span>
+			<span><?php echo _('Always visible'); ?></span>
 		</div>
 		<ul class="is-sortable field-list field-list-bottom"><?php
 			foreach($type['typeFormLayout']['bottom'] as $f){
@@ -386,7 +386,7 @@
 		<div class="toggle"></div>
 
 		<span class="<?php echo $app->formError('contentName', 'needToBeFilled'); ?>">
-			<label>Nom</label>
+			<label><?php echo _('Name'); ?></label>
 			<div class="form"><input type="text" class="field" name="contentName" id="contentNameField" value="<?php echo $app->formValue($data['contentName'], $_POST['contentName']); ?>" autocomplete="off" style="width:99%;" /></div>
 		</span>
 		
@@ -394,12 +394,12 @@
 		<div class="spacer"></div>
 
 		<span class="<?php echo $app->formError('contentUrl', 'needToBeFilled') ?>">
-			<label class="off">Url</label>
+			<label class="off"><?php echo _('Url'); ?></label>
 			<div class="form clearfix">
 				<input type="text" name="contentUrl" id="urlField" class="field" value="<?php echo $app->formValue($data['contentUrl'], $_POST['contentUrl']); ?>" size="100" style="width:75%; float:left;" />
 				<div style="float:left; margin-top:2px;">
 					<input type="checkbox" id="autogen" value="1" name="contentUrlAuto" onclick="if(this.checked)urlCheck();"  <?php if($app->formValue($data['contentUrlAuto'], $_POST['contentUrlAuto']) || (!isset($data['contentUrlAuto']) && !isset($_POST['contentUrlAuto']))) echo "checked" ?> />
-					Générer automatiquent
+					<?php echo _('Auto generate'); ?>
 				</div>
 			</div>
 		</span>
@@ -410,7 +410,7 @@
 		<div class="toggle"></div>
 
 		<span class="">
-			<label>Titre réf.</label>
+			<label><?php echo _('Title (seo)'); ?></label>
 			<div class="form"><input type="text" class="field" name="contentHeadTitle" value="<?php echo $app->formValue($data['contentHeadTitle'], $_POST['contentHeadTitle']); ?>" size="100" style="width:99%;" /></div>
 		</span>
 
@@ -418,14 +418,14 @@
 		<div class="spacer"></div>
 		
 		<span>
-			<label class="off">Mots-clés réf.</label>
+			<label class="off"><?php echo _('Key words (seo)'); ?></label>
 			<div class="form"><input type="text" name="contentMetaKeywords" class="field" value="<?php echo $app->formValue($data['contentMetaKeywords'], $_POST['contentMetaKeywords']); ?>" size="100" style="width:99%;" /></div>
 		</span>
 		
 		<br style="clear:both" />
 		<div class="spacer"></div>
 		<span>
-			<label class="off">Description réf.</label>
+			<label class="off"><?php echo _('Description (seo)'); ?></label>
 			<div class="form"><input type="text" name="contentMetaDescription" class="field" value="<?php echo $app->formValue($data['contentMetaDescription'], $_POST['contentMetaDescription']); ?>" size="100" style="width:99%;" /></div>
 		</span>
 	</li>
@@ -433,31 +433,31 @@
 	<li id="contentSee" class="clearfix form-item">
 		<div class="hand"></div>
 		<div class="toggle"></div>
-		<label for="contentSeeBx">Visibilité</label>
+		<label for="contentSeeBx"><?php echo _('Visibility'); ?></label>
 		<div class="form" style="padding-top:3px;">
 			<input type="checkbox" name="contentSee" id="contentSeeBx" value="1" <?php if($app->formValue($data['contentSee'], $_POST['contentSee'])) echo "checked"; ?> />
-			Indique que ce document est visible sur le site
+			<?php echo _('Front office view'); ?>
 		</div>
 	</li>
 
 	<li id="contentRef" class="clearfix form-item <?php echo $app->formError('contentRef', 'needToBeFilled') ?>">
 		<div class="hand"></div>
 		<div class="toggle"></div>
-		<label>Référence</label>
+		<label><?php echo _('Reference'); ?></label>
 		<div class="form"><input type="text" name="contentRef" class="input-thin" value="<?php echo $app->formValue($data['contentRef'], $_POST['contentRef']); ?>" size="100" style="width:99%;" /></div>
 	</li>
 
 	<li id="contentWeight" class="clearfix form-item">
 		<div class="hand"></div>
 		<div class="toggle"></div>
-		<label>Poids</label>
+		<label><?php echo _('Weight'); ?></label>
 		<div class="form"><input type="text" name="contentWeight" class="input-thin" value="<?php echo $app->formValue($data['contentWeight'], $_POST['contentWeight']); ?>" size="8" /> en gramme</div>
 	</li>
 
 	<li id="contentCarriage" class="clearfix form-item">
 		<div class="hand"></div>
 		<div class="toggle"></div>
-		<label>Livraison</label>
+		<label><?php echo _('Carriage'); ?></label>
 		<div class="form"><select name="id_carriage"><?php
 			$carriage = $app->apiLoad('business')->businessCarriageGet();
 			foreach($carriage as $e){
@@ -480,14 +480,14 @@
 	<li id="contentTemplate" class="clearfix form-item">
 		<div class="hand"></div>
 		<div class="toggle"></div>
-		<label>Mise en page</label>
+		<label><?php echo _('Template'); ?></label>
 		<div class="form"><?php
 		
 			echo $app->apiLoad('template')->templateSelector(array(
 				'name'		=> 'contentTemplate',
 				'value'		=> $app->formValue($data['contentTemplate'], $_POST['contentTemplate']),
 				'empty'		=> true,
-				'emptyText'	=> 'Utiliser la mise en page par défaut'
+				'emptyText'	=> _('Use default template')
 			));
 			
 			if(sizeof($opt['options']) > 0){
@@ -518,42 +518,41 @@
 	<li id="contentComment" class="clearfix form-item">
 		<div class="hand"></div>
 		<div class="toggle"></div>
-		<label>Commentaires</label>
+		<label><?php echo _('Comment'); ?></label>
 		<div class="form">
 			<select name="contentComment"><?php
-				foreach(array(''=>'', 'ALL'=>'Tout le monde', 'USER'=>'Uniquement les membres') as $k => $e){
+				foreach(array(''=>'', 'ALL'=>_('Every body'), 'USER'=>_('Members only')) as $k => $e){
 					echo "<option value=\"".$k."\"".(($app->formValue($data['contentComment'], $_POST['contentComment']) == $k) ? ' selected' : NULL).">".$e."</option>\n";
 				}
 			?></select>
 
 			et note
 			<select name="contentRate"><?php
-				foreach(array(''=>'', 'ALL'=>'Tout le monde', 'USER'=>'Uniquement les membres') as $k => $e){
+				foreach(array(''=>'', 'ALL'=>_('Every body'), 'USER'=>_('Members only')) as $k => $e){
 					echo "<option value=\"".$k."\"".(($app->formValue($data['contentRate'], $_POST['contentRate']) == $k) ? ' selected' : NULL).">".$e."</option>\n";
 				}
 			?></select>
-			<?php if($data['id_content'] > 0) echo "(note actuelle : ".$data['contentRateAvg'].")"; ?>
-			<input type="checkbox" name="resetRating" value="1" /> Remettre à zero les notes.
+			<?php if($data['id_content'] > 0) echo '('.     _("Current note: ".$data['contentRateAvg'])  .")"; ?>
+			<input type="checkbox" name="resetRating" value="1" /> <?php echo _('Reset notes'); ?>.
 		</div>
 	</li>
 
 	<li id="contentDate" class="clearfix form-item">
 		<div class="hand"></div>
 		<div class="toggle"></div>
-		<label>Dates</label>
+		<label><?php echo _('Dates'); ?></label>
 		<div class="form">
 			<table>
 				<tr>
-					<td width="80 ">Creation</td>
-					<td width="200">
-						<?php
+					<td width="80 "><?php echo _('Created'); ?></td>
+					<td width="200"><?php
 							$v = $app->formValue($data['contentDateCreation'], $_POST['contentDateCreation']);
 							if(!is_array($v)) $v = explode(' ', $v);
 						?>
 						<input type="text" class="input-small input-thin" name="contentDateCreation[0]" id="contentDateCreation" value="<?php echo $v[0] ?>" size="12" style="text-align:center;" />
 						<input type="text" class="input-small input-thin" name="contentDateCreation[1]" 						  value="<?php echo $v[1] ?>" size="7"  style="text-align:center;" />
 					</td>
-					<td width="50">Debut</td>
+					<td width="50"><?php echo _('Starts'); ?></td>
 					<td width="200">
 						<?php $v = $app->formValue($data['contentDateStart'], $_POST['contentDateStart']); ?>
 						<input type="checkbox" class="input-small" name="contentDateStartDo" id="contentDateStartDo" value="1" <?php if($v != '') echo "checked" ?> />
@@ -561,15 +560,14 @@
 					</td>
 				</tr>
 				<tr>
-					<td>Mise aà jour</td>
-					<td>
-						<?php
+					<td><?php echo _('Updated'); ?></td>
+					<td><?php
 							$v = $app->formValue($data['contentDateUpdate'], $_POST['contentDateUpdate']);
 							if(!is_array($v)) $v = explode(' ', $v);
 						?>
 						<input type="text" class="input-small input-thin" name="contentDateUpdate[0]" id="contentDateUpdate" value="<?php echo $v[0] ?>" size="12" style="text-align:center;" />
 						<input type="text" class="input-small input-thin" name="contentDateUpdate[1]" 						  value="<?php echo $v[1] ?>" size="7"  style="text-align:center;" />
-					<td>Fin</td>
+					<td><?php echo _('Ends'); ?></td>
 					<td>
 						<?php $v = $app->formValue($data['contentDateEnd'], $_POST['contentDateEnd']); ?>
 						<input type="checkbox" name="contentDateEndDo" id="contentDateEndDo" value="1" <?php if($v != '') echo "checked" ?> />
@@ -584,13 +582,13 @@
 	<li id="contentAssociation" class="clearfix form-item">
 		<div class="hand"></div>
 		<div class="toggle"></div>
-		<label>Liaisons</label>
+		<label><?php echo _('Relationships'); ?></label>
 		<div class="form">
 
 			<?php if($type['use_chapter']){ ?>
 			<div style="width:<?php echo $usePercent ?>%;" class="panelItem">
 				<span class="panelLabel clearfix">
-					<span class="name">Arborescence</span>
+					<span class="name"><?php echo _('Chapters'); ?></span>
 					<span class="action">
 						<a onclick="sizer('#id_chapter', 100, 100)"><i class="icon-plus"></i></a>
 						<a onclick="sizer('#id_chapter', 100,-100)"><i class="icon-minus"></i></a>
@@ -610,7 +608,7 @@
 			<?php } if($type['use_category']){ ?>
 			<div style="width:<?php echo $usePercent ?>%;" class="panelItem">
 				<span class="panelLabel clearfix">
-					<span class="name">Catégorie</span>
+					<span class="name"><?php echo _('Category'); ?></span>
 					<span class="action">
 						<a onclick="sizer('#id_category', 100, 100)"><i class="icon-plus"></i></a>
 						<a onclick="sizer('#id_category', 100,-100)"><i class="icon-minus"></i></a>
@@ -631,7 +629,7 @@
 			<?php } if($type['use_group'] && !$type['is_business']){ ?>
 			<div style="width:<?php echo $usePercent ?>%;" class="panelItem">
 				<span class="panelLabel clearfix">
-					<span class="name">Groupes</span>
+					<span class="name"><?php echo _('Groups'); ?></span>
 					<span class="action">
 						<a onclick="sizer('#id_group', 100, 100)"><i class="icon-plus"></i></a>
 						<a onclick="sizer('#id_group', 100,-100)"><i class="icon-minus"></i></a>
@@ -651,7 +649,7 @@
 			<?php } if($type['use_search']){ ?>
 			<div style="width:<?php echo $usePercent ?>%;" class="panelItem">
 				<span class="panelLabel clearfix">
-					<span class="name">Groupes intelligents</span>
+					<span class="name"><?php echo _('Smart groups'); ?></span>
 					<span class="action">
 						<a onclick="sizer('#id_search', 100, 100)"><i class="icon-plus"></i></a>
 						<a onclick="sizer('#id_search', 100,-100)"><i class="icon-minus"></i></a>
@@ -671,7 +669,7 @@
 			<?php } if($type['use_socialforum']){ ?>
 			<div style="width:<?php echo $usePercent ?>%;" class="panelItem">
 				<span class="panelLabel clearfix">
-					<span class="name">Forum (Social)</span>
+					<span class="name"><?php echo _('Forum (Social)'); ?></span>
 					<span class="action">
 						<a onclick="sizer('#id_socialforum', 100, 100)"><i class="icon-plus"></i></a>
 						<a onclick="sizer('#id_socialforum', 100,-100)"><i class="icon-minus"></i></a>
@@ -701,7 +699,7 @@
 		<div class="toggle"></div>
 
 		<span class="<?php echo $app->formError('contentAdUrl', 'needToBeFilled'); ?> clearfix">
-			<label>Publicité Url</label>
+			<label><?php echo _('Ad URL'); ?></label>
 			<div class="form">
 				<input type="text" name="contentAdUrl" value="<?php echo $app->formValue($data['contentAdUrl'], $_POST['contentAdUrl']); ?>" size="100" autocomplete="off" style="width:99%;" />
 			</div>
@@ -710,7 +708,7 @@
 		<div class="spacer"></div>
 
 		<span class="clearfix">
-			<label class="off">Limite vue</label>
+			<label class="off"><?php echo _('View limit'); ?></label>
 			<div class="form clearfix">
 				<input type="text" name="contentAdStockView" value="<?php echo $app->formValue($data['contentAdStockView'], $_POST['contentAdStockView']); ?>" size="10" autocomplete="off" />
 				<?php if($data['contentAdCacheView'] >= 0) echo '<i>Actuellement '.$data['contentAdCacheView'].'</i>'; ?> 
@@ -720,7 +718,7 @@
 		<div class="spacer"></div>
 
 		<span class="clearfix">
-			<label class="off">Limite click</label>
+			<label class="off"><?php echo _('Click Limit'); ?></label>
 			<div class="form clearfix">
 				<input type="text" name="contentAdStockClick" value="<?php echo $app->formValue($data['contentAdStockClick'], $_POST['contentAdStockClick']); ?>" size="10" autocomplete="off" />
 				<?php if($data['contentAdCacheClick'] >= 0) echo '<i>Actuellement '.$data['contentAdCacheClick'].'</i>'; ?> 
@@ -730,17 +728,17 @@
 		<div class="spacer"></div>
 
 		<span class="clearfix">
-			<label class="off">Pondération</label>
+			<label class="off"><?php echo _('Weighting'); ?></label>
 			<div class="form clearfix">
 				<input type="text" name="contentAdPriority" value="<?php echo $app->formValue($data['contentAdPriority'], $_POST['contentAdPriority']); ?>" size="10" autocomplete="off" />
-				<i>pourcentage servant a donner plus de poids a une bannière</i>
+				<i><?php echo _('A percentage to give more weight to this banner'); ?></i>
 			</div>
 		</span>
 
 		<div class="spacer"></div>
 
 		<span>
-			<label class="off">Emplacement</label>
+			<label class="off"><?php echo _('Location'); ?></label>
 			<div class="form clearfix">
 				<select name="id_adzone"><?php
 					foreach($app->apiLoad('ad')->adZoneGet() as $e){
@@ -756,7 +754,7 @@
 		<div class="hand"></div>
 		<div class="toggle"></div>
 
-		<label>Publicité Code</label>
+		<label><?php echo _('Ad code'); ?></label>
 		<div class="form">
 			<textarea name="contentAdCode" style="width:99%; height:100px;"><?php
 				echo $app->formValue($data['contentAdCode'], $_POST['contentAdCode']);
@@ -772,19 +770,19 @@
 	<li id="contentGroup" class="clearfix form-item">
 		<div class="hand"></div>
 		<div class="toggle"></div>
-		<label>Cibles</label>
+		<label><?php echo _('Buyers'); ?></label>
 		<div class="form">
 			<?php $groups = $app->apiLoad('content')->contentGroupGet($data['id_content']); ?>
 			<table border="0" cellpadding="0" cellspacing="0" width="100%" class="listing">
 				<thead>
 					<tr>
 						<th width="200">Nom</th>
-						<th width="75" style="text-align:center;">Visible</th>
-						<th width="75" style="text-align:center;">Achetable</th>
-						<th width="75" style="text-align:right;">Prix HT</th>
-						<th width="75" style="text-align:right;">Prix TTC</th>
-						<th width="75" style="text-align:right;">Prix Normal</th>
-						<th style="padding-left:50px;">Comment</th>
+						<th width="75" style="text-align:center;"><?php echo _('Visible'); ?></th>
+						<th width="75" style="text-align:center;"><?php echo _('Buyable'); ?></th>
+						<th width="75" style="text-align:right;"><?php echo _('Price'); ?></th>
+						<th width="75" style="text-align:right;"><?php echo _('Price with taxes'); ?></th>
+						<th width="75" style="text-align:right;"><?php echo _('Normal price'); ?></th>
+						<th style="padding-left:50px;"><?php echo _('Comment'); ?></th>
 					</tr>
 				</thead>
 				<tbody>
@@ -828,7 +826,7 @@
 			</table>
 
 			<span class="panelLabel clearfix">
-				<span class="name">Shop</span>
+				<span class="name"><?php echo _('Shop'); ?></span>
 				<span class="action">
 					<a onclick="sizer('#id_shop', 100, 100)"><i class="icon-plus"></i></a>
 					<a onclick="sizer('#id_shop', 100,-100)"><i class="icon-minus"></i></a>
@@ -851,7 +849,7 @@
 	<li id="contentMediaBox" class="clearfix form-item">
 		<div class="hand"></div>
 		<div class="toggle"></div>
-		<label>Media</label>
+		<label><?php echo _('Media'); ?></label>
 		<div class="form"><?php echo
 			$app->apiLoad('field')->fieldForm(
 				NULL,
