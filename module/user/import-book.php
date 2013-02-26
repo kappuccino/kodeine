@@ -32,23 +32,23 @@
     }
     
     $fields = array(
-        'addressbookTitle'              => 'Titre de l\'adresse',
-        'addressbookCivility'           => 'Civilité',
-        'addressbookLastName'           => 'Nom',
-        'addressbookFirstName'          => 'Prénom',
-        'addressbookEmail'              => 'Email',
-        'addressbookCompanyName'        => 'Raison sociale',
-        'addressbookCompanyFonction'    => 'Fonction',
-        'addressbookAddresse1'          => 'Adresse 1',
-        'addressbookAddresse2'          => 'Adresse 2',
-        'addressbookAddresse3'          => 'Adresse 3',
-        'addressbookCityCode'           => 'Code postal',
-        'addressbookCityName'           => 'Ville',
-        'addressbookCountryCode'        => 'Pays',
-        'addressbookStateName'          => 'Etat',
-        'addressbookPhone1'             => 'Téléphone 1',
-        'addressbookPhone2'             => 'Téléphone 2',
-        'addressbookTVAIntra'           => 'TVA Intra'
+        'addressbookTitle'              => _('Adress title'),
+        'addressbookCivility'           => _('Civility'),
+        'addressbookLastName'           => _('Name'),
+        'addressbookFirstName'          => _('Last name'),
+        'addressbookEmail'              => _('Email'),
+        'addressbookCompanyName'        => _('Company'),
+        'addressbookCompanyFonction'    => _('Fonction'),
+        'addressbookAddresse1'          => _('Adress 1'),
+        'addressbookAddresse2'          => _('Adress 2'),
+        'addressbookAddresse3'          => _('Adress 3'),
+        'addressbookCityCode'           => _('Zip Code'),
+        'addressbookCityName'           => _('City'),
+        'addressbookCountryCode'        => _('Country'),
+        'addressbookStateName'          => _('State'),
+        'addressbookPhone1'             => _('Phone 1'),
+        'addressbookPhone2'             => _('Phone 2'),
+        'addressbookTVAIntra'           => _('TVA Intra')
     );
 	
     foreach($fields as $k=>$v){

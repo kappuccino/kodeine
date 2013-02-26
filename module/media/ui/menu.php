@@ -13,8 +13,6 @@
 			<li><a id="button-upload"><?php echo _('Upload'); ?></a></li>
 	        <?php } ?>
 
-			<li><a id="button-hidepanel">Hide panel</a></li>
-
 			<li class="clearfix<?php echo isMe('/media/pref') ? ' me':'' ?>">
 				<a href="pref" target="_blank"><?php echo _('Settings'); ?></a>
 			</li>
@@ -28,7 +26,7 @@
 	</ul>
 	
 	<div class="right">
-		<div id="slider"></div>
+		<input type="range" id="slider" value="150" min="150" max="300" step="10"  />
 	</div>
 	
 </div></div>

@@ -1,1490 +1,732 @@
-viewMode		= 'icon';		// Mode icon|list determine la maniere dont les images sont affiches
-factor			= 0.65;			// Facteur entre minH et miniW
-minH			= 200;			// La hauteur minimum autorisee
-minW			= minH*factor;	// La largeur minimum autorisee
-folder			= ''; 			// Dossier courant
-file			= ''; 			// Fichier courant
-collection		= ''; 			// La dernier resultat de la rechercher de dossier
-parentFolder	= '';			// Determine (si non vide) le nom du dossier parent
-panelOpened		= false;		// Status de iframe panel
-panelView		= '';			// Ce qui est dans le panel
-sliderMove		= false;
-myPath			= '../';
-myMedia			= 'ui/img';
-isDrag			= false;
-hasHistory 		= false;
-scrollWidth		= '';
-root            = '/media';
+'use strict';
 
-/* + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - 
-+ - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - */
-function init(){
+var media = {
+	models:         {},
+	views:          {},
+	collections:    {},
+	router:         {}
+};
 
-	if($('#button-upload').length > 0)		$('#button-upload').bind('click', modalShowUpload);
-	if($('#button-folder').length > 0)		$('#button-folder').bind('click', folderView);
-	if($('#button-newdir').length > 0)		$('#button-newdir').bind('click', modalPromptDir);
-	if($('#button-pref').length > 0)		$('#button-pref').bind('click', modalPref);
-	if($('#viewModeIcon').length > 0)		$('#viewModeIcon').bind('click', function(){ modeSet('icon'); });
-	if($('#viewModeList').length > 0)		$('#viewModeList').bind('click', function(){ modeSet('list'); });
-	
-	var body = $('body')[0];
-	
-	$('#fade-wall').on('click', function() {
-		modalHideUpload();
-	});
-	
-	$(document).keyup(function (e) {
-		//console.log(e);
-		if (e.keyCode == 27 && $('#modal-upload').css('display') == 'block') {
-			modalHideUpload();
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// MODELS
+
+media.models.media          = Backbone.Model.extend({
+
+	defaults: {
+		path: ''
+	}
+
+});
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// COLLECTIONS
+
+media.collections.media     = Backbone.Collection.extend({
+
+	model: media.models.media,
+
+	url: 'helper/folder'
+
+});
+
+media.collections.path      = Backbone.Collection.extend({
+
+	model: media.models.media,
+
+	url: 'helper/path'
+
+});
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// VIEWS
+
+media.views.view            = Backbone.View.extend({
+
+	el: $('#view'),
+
+	initialize:function(){
+		this.listenTo(media.collections.myMedia, 'reset',  this.fill);
+		this.folder = '';
+	},
+
+	clear: function(){
+		this.$el.sortable('destroy');
+		this.$el.empty();
+	},
+
+	fill: function(){
+		this.clear();
+		media.collections.myMedia.each(this.fillItem, this);
+	},
+
+	fillItem: function(m){
+		var view  = new media.views.viewItem({model: m});
+		this.$el.append(view.render().el);
+		view.postRender();
+		media.views.myApp.size();
+	},
+
+	//////////////
+
+	nav: function(folder){
+		this.folder = folder;
+		this.load();
+
+		media.views.myPath.load();
+		media.myRouter.navigate('/'+this.folder, {trigger: false});
+	},
+
+	navTo: function(folder){
+		var goto = this.folder + '/' + folder;
+		this.nav(goto);
+	},
+
+	load: function(){
+		media.collections.myMedia.fetch({data: {
+			'folder': this.folder
+		}});
+	}
+
+});
+
+media.views.viewItem        = Backbone.View.extend({
+
+	tagName:    'li',
+	className:  'item',
+
+	initialize: function(){
+		this.listenTo(this.model, 'remove', this.destroy);
+		this.html = '';
+	},
+
+	events: {
+		'click .icone':         'nav',
+		'click .delete':        'kill',
+		'click .duplicate':     'duplicate',
+		'click .lock':          'lock',
+		'click .pdfCover':      'pdfCover',
+		'click .fullsize':      'fullsize',
+		'keyup .title input':   'renameOnEnter',
+		'blur  .title input':   'resetTitle'
+	},
+
+	//////////////
+
+	nav: function(){
+		if(this.model.get('dragging')) return;
+		if(this.model.get('is_folder')){
+			media.views.myView.navTo(this.model.get('url'));
 		}
-	});
-	
-	document.addEventListener('dragleave', function(e) {
-		// Stop FireFox from opening the dropped file(s)
-		// console.log('leave');
-		
-		if (e.pageX === 0) {
-			modalHideUpload();
-			isDrag = false;
-		}		
+	},
 
-		e.preventDefault();
+	kill: function(e){
 		e.stopPropagation();
-	}, false);
 
-	document.addEventListener('dragenter', function(e) {
-		// Stop FireFox from opening the dropped file(s)
-		if (isDrag) return;		
-		isDrag = true;
-		
-		modalShowUpload();
-		e.preventDefault();
+		var mod = media.collections.myMedia.get(this.model.cid)
+		var me  = media.views.myView.folder + '/'+ mod.get('url');
+
+		media.views.myApp.remove(me, mod);
+	},
+
+	duplicate: function(e){
 		e.stopPropagation();
-	}, false);
 
-	document.addEventListener('dragover', function(e) {
-		// Stop FireFox from opening the dropped file(s)
-		e.preventDefault();
+		var mod = media.collections.myMedia.get(this.model.cid)
+		var me  = media.views.myView.folder + '/'+ mod.get('url');
+
+		media.views.myApp.duplicate(me);
+	},
+
+	lock: function(e){
 		e.stopPropagation();
-	}, false);
+		this.lockIcon.toggleClass('locked');
 
-	scrollWidth = getScrollbarWidth();
-	$(window).resize(function() {
-		spreadGrid();
-	});
+		var mod = media.collections.myMedia.get(this.model.cid)
+		var me  = media.views.myView.folder + '/'+ mod.get('url');
 
-	modeSet(viewMode);
-}
+		media.views.myApp.lock(me);
+	},
 
-function getScrollbarWidth() 
-{
-    var div = $('<div style="width:50px;height:50px;overflow:hidden;position:absolute;top:-200px;left:-200px;"><div style="height:100px;"></div></div>'); 
-    $('body').append(div); 
-    var w1 = $('div', div).innerWidth(); 
-    
-    div.css('overflow-y', 'auto'); 
-    var w2 = $('div', div).innerWidth(); 
-    $(div).remove(); 
-    return (w1 - w2);
-}
+	pdfCover: function(e){
+		e.stopPropagation();
 
-function spreadGrid() {
-	
-	if (typeof($('.dragme .cnt').attr('style')) == 'undefined') {
-		$('.dragme .cnt').css('width', '208px');
-	}
-	
-	mainWidth = $('#main').width() - scrollWidth;
-	rowNB = ( mainWidth / ($('.dragme .cnt').outerWidth() + 10) );
-	rowNB = rowNB.toString().split('.')[0]; // nb d'elements par row
-	
-	percent = 100/rowNB;
+		var mod = media.collections.myMedia.get(this.model.cid)
+		var me  = media.views.myView.folder + '/'+ mod.get('url');
 
-	// si pas assez d'éléments dans la ligne
-	if (rowNB > $('.dragme').length) {
-		rowNB = $('.dragme').length;
-		if (percent > 25) percent = 25;
-	}
-	
-	$('.dragme').width(percent+'%');
-}
+		media.views.myApp.pdfCover(me);
+	},
 
-function sliderInit(){
-	mySlider = $('#slider').slider({
-		step: 1,
-		min: minH,
-		max: (minH+300),
-		stop: function(e, ui) {
-			
-			if(sliderMove) folderElementResizeReload();
-
-			folderElementSize(ui.value, (ui.value*factor));
-			spreadGrid();
-			
-			if(!sliderMove) sliderMove = true;
+	resetTitle: function(e){
+		if(this.titleField.data('blur') == 'NO'){
+			this.titleField.removeAttr('data-blur');
+			return;
 		}
-	});
-	
-}
 
-/* + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - 
-+ - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - */
-function modeSet(m,s){
+		this.titleField.val(this.model.get('url'));
+		if(e == undefined) this.titleField.blur();
+	},
 
-	viewMode = m;
-	$('#viewMode a').removeClass('me');
-	$('#main').removeClass('mode-icon').removeClass('mode-list');
+	renameOnEnter: function(e){
+		if(e.keyCode == 27){
+			this.resetTitle();
+		}else
+		if(e.keyCode == 13){
+			var src = media.views.myView.folder + '/' + this.model.get('url');
+			var dst = media.views.myView.folder + '/' + this.titleField.val();
 
-	if(viewMode == 'icon'){
-		$('#viewModeIcon').addClass('me');
-		$('#main').addClass('mode-icon');
-		minH = 200;
-		
-		$('.iconeaction').css({'display':'none', 'opacity':0});
-	}else
-	if(viewMode == 'list'){
-		$('#viewModeList').addClass('me');
-		$('#main').addClass('mode-list');
-		minH = 40;
-	}
+			this.titleField.attr('data-blur', 'NO').blur();
 
-	minW = minH*factor;
-	
-	sliderInit();
-	
-	if(collection.length > 0){
-		folderDisplay();
-		folderElementResizeReload();
-	}
-}
-
-/* + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - 
-+ - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - */
-function folderNav(url){
-	setFolder(url);
-	folderView(url);
-}
-
-/* + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - 
-+ - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - */
-function folderNavFromPosition(n){
-	setFolder(collection[n].url);
-	folderView();
-}
-
-/* + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - 
-+ - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - */
-function folderView(hash){
-
-
-	$('#path').html('Chargement en cours');
-
-	var remote = $.ajax({
-		url: 'helper/folder',
-		dataType: 'json',
-		data: {
-			'factor': factor,
-			'folder': root + folder
+			media.views.myApp.rename(src, dst);
 		}
-	}).done(function(data) {
-		if(data != null){
+	},
 
-			collection 		=  data.files;
-			parentFolder	= (data.parent != null) ? data.parent : null; 
+	fullsize: function(e){
+		e.stopPropagation();
+		this.lockIcon.toggleClass('locked');
 
-			folderDisplay();
-			viewUrl();
-			makeDragAndDrop();
-			spreadGrid();
-			//window.History.pushState({state:1}, "State 1", "");
-		}
-	});
-	
-	if(hash != false) document.location='#'+folder;
-}
+		var mod = media.collections.myMedia.get(this.model.cid)
+		var me  = media.views.myView.folder + '/'+ mod.get('url');
 
-/* + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - 
-+ - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - */
-function folderDisplay(){
+		media.views.myApp.fullSize(me);
+	},
 
-	$('#main').empty();
+	//////////////
 
-	if(collection.length > 0){
+	templateFolder: _.template($('#view-folder').html()),
+	templateItem:   _.template($('#view-item').html()),
 
-		$.each(collection, function(position, el){
-			folderlElement(el, position).appendTo('#main');
-		});
+	render: function() {
+		var data = this.model.toJSON();
 
-		makeDragAndDrop();
-		maskByClass();
-	}
-}
-
-/* + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - 
-+ - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - */
-function folderlElement(el, position){
-	
-	// Largeur desiree !!
-	var width 		= mySlider.slider("value");
-	var height		= width * factor;
-	
-	// Objet a insert (image + fonction)
-	var	insert		= {'src':'','class':''};
-
-	// Tous les objects utilises dans e
-	var container = $('<div id="'+el.name+'" class="e dragme clearfix imgResize '+el.tag+' '+viewMode+'"/>');
-		container.bind({
-			'mouseenter' : function(e) {$(this).addClass('colored')},
-			'mouseleave' : function(e) {$(this).removeClass('colored')}
-		});
-	
-	var content = $('<div class="cnt" />').appendTo(container);
-	var top = $('<div class="top clearfix">&nbsp;</div>').prependTo(content);
-	var icone = $('<div class="icone loader"/>').appendTo(content).bind({
-		'mouseenter' : function(e) {
-			if(typeof iconeaction != 'undefined' && viewMode == 'icon')	$(this).find('.iconeaction').css('opacity', 1);
-		},
-		'mouseleave' : function(e) {
-			if(typeof iconeaction != 'undefined' && viewMode == 'icon') $(this).find('.iconeaction').css('opacity', 0);
-		}
-	});
-	
-	var tools = $('<div class="tools" />').appendTo(content);
-	var name  = $('<div class="name" />').insertAfter(icone);
-	var nameField = $('<input type="text" class="field" value="'+el.name+'" readonly="readonly" />').appendTo(name).bind({
-		'click' : function() {actionRename(position);},
-		'focus' : function(e) {$(this).addClass('fieldFocus');}
-	});
-
-	if(viewMode == 'icon' && el.type == 'file'){
-		
-		var iconeaction = $('<div class="iconeaction" style="display:none;opacity:0" />').appendTo(icone).fadeTo()
-		/*var iconeaction = new Element('div', {
-			'class'		: 'iconeaction',
-			'styles'	: {
-				'display' : 'none',
-				'opacity' : '0'
-			}
-		}).set('morph', {duration:150}).inject(icone);*/
-		
-	}else
-	if(viewMode == 'list'){
-		var iconeaction = $('<div class="iconeaction" />').prependTo(name);
-	}
-	
-	var remove = $('<img src="'+myMedia+'/media-delete.png" class="remove" title="supprimer" />').appendTo(tools).bind({
-		'click' : function() {actionDelete(position)}
-	})
-
-	if(el.type == 'dir'){
-
-		if(el.locked){
-			container.addClass('isLocked');
-			var lockSrc = myMedia+'/media-locked.png';
+		if(this.model.get('is_folder')){
+			this.html = this.templateFolder(data)
 		}else{
-			container.removeClass('isLocked');
-			var lockSrc = myMedia+'/media-unlocked.png';
+			this.html = this.templateItem(data);
 		}
 
-		var locked = $('<img src="'+lockSrc+'" class="lock" title="Protection contre la suppression" />').appendTo(tools).bind({
-			'click' : function() {actionLock(position);}
+		this.$el.html(this.html);
+		this.html = '';
+
+		return this;
+	},
+
+	postRender: function(){
+		this.$el.attr('data-cid', this.model.cid);
+
+		this.titleField = $('.title input', this.$el);
+		this.lockIcon   = $('.lock', this.$el);
+
+		this.icone();
+		this.makeDraggable();
+
+		media.views.myApp.makeDroppable(this);
+	},
+
+	destroy: function(){
+		console.log('remove model, remove view');
+		this.remove();
+	},
+
+	//////////////
+
+	makeDraggable: function(){
+		var self = this;
+
+		this.$el.disableSelection();
+
+		this.$el.draggable({
+			distance: 30,
+			helper: 'clone',
+			appendTo: 'body',
+			cursorAt: { left: -30 },
+			stop: function(e, ui) {
+				ui.helper.remove();
+			}
 		});
+
+	},
+
+	icone: function(){
+
+		var preview = this.model.get('preview');
+		if(preview == undefined) return;
+
+		var icone  = $('.icone', this.$el);
+		var respon = (preview.height > preview.width) ? 'height' : 'width';
+		var img    = $('<img />').addClass('responsive-'+respon);
+
+		img.attr('src', preview.url);
+
+		icone.empty().append(img);
 	}
 
-	// Fixer a la main la largeur et hauteur de CONTAINER
-	icone.css({'width':width, 'height':height});
-	
-	if(viewMode == 'icon'){
-		container.css({'width':(width+8)+'px'});
+});
+
+media.views.path            = Backbone.View.extend({
+
+	el: $('#path'),
+
+	initialize:function(){
+		this.listenTo(media.collections.myPath, 'reset',  this.fill);
+	},
+
+	events: {
+	},
+
+	clear: function(){
+		this.$el.empty();
+	},
+
+	fill: function(){
+		this.clear();
+
+		var myPath  = media.collections.myPath;
+		var max     = myPath.length;
+		var path    = '';
+		var mod     = {};
+		var item    = {};
+
+		for(var i=0; i<max; i++){
+			if(i < max){
+				var sep = new media.views.pathItem({sep: true});
+				this.$el.append(sep.render().el);
+			}
+
+			mod  = myPath.models[i];
+			path = path + '/' + mod.get('url');
+			mod.set('path', path);
+
+			item = new media.views.pathItem({model: mod});
+			this.$el.append(item.render().el);
+			item.postRender();
+		}
+	},
+
+	//////////////
+
+	nav: function(id){
+		this.id_album = id;
+		this.load();
+		media.myRouter.navigate('album/'+this.id_album, {trigger: false});
+	},
+
+	load: function(){
+		media.collections.myPath.fetch({data: {
+			'folder': media.views.myView.folder
+		}});
 	}
 
-/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+});
 
-	// Si l'element est un dossier
-	if(el.type == 'dir'){
-		container.addClass('dropme');
-		
-		if(viewMode == 'icon'){
-			top.css('background', 'url('+myMedia+'/media-nano-folder.png) no-repeat 4px center');
-		}
+media.views.pathItem        = Backbone.View.extend({
 
-		if(field != '' && method != ''){
-			
-			var _select = $('<img src="'+myMedia+'/media-select.png" />').appendTo(tools).bind({
-				'click' : function() {selectFile(el.url, 'folder');}
-			});
-		}
-		
-		var insert = $('<img src="'+myMedia+'/media-folder.png" height="32" width="32" />');
-		
-	}else
+	tagName:    'li',
+	className:  'clearfix',
 
-/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+	initialize: function(options){
+		options     = options || {};
+		this.sep    = options.sep || false;
+	},
 
-	if(el.type == 'file'){
+	events: {
+		'click .name': 'nav'
+	},
 
-		if(viewMode == 'icon'){
-			top.css('background', 'url('+myMedia+'/media-nano-file.png) no-repeat 4px center');
-		}
+	//////////////
 
-		// Ajouter l'action en ajout 'ajouter'
-		$('<a>Insérer</a>').bind('click', function() {
-			selectFile(el.url);
-		}).appendTo(top);
+	nav: function(e){
+		e.stopPropagation();
+		media.views.myView.nav(this.model.get('path'));
+	},
 
-		// Legende
-		var _meta = $('<img src="'+myMedia+'/media-t.png" title="Légende" />').appendTo(iconeaction).bind('click', function() {
-			actionMetadata(el.url);
-		});
+	//////////////
 
-		// Url
-		var _link = $('<img src="'+myMedia+'/media-copy.png" title="Afficher le chemin d\'accès" />').appendTo(iconeaction).bind('click', function() {
-			actionClipBoard(el.url);
-		});
+	templateItem:   _.template($('#path-item').html()),
+	templateSep:    _.template($('#path-sep').html()),
 
-		var _dup = $('<img src="'+myMedia+'/media-duplicate.png" title="Dupliquer l\'image" />').appendTo(iconeaction).bind('click', function() {
-			actionDuplicate(el.url);
-		});
+	render: function() {
+		var html    = (this.sep)
+				? this.templateSep({})
+				: this.templateItem(this.model.toJSON());
 
-		/******************************/
-		// PDF
-		if(el.kind == 'pdf'){
+		this.$el.html(html);
+		return this;
+	},
 
-			if(viewMode == 'icon'){
-				top.css('background', 'url('+myMedia+'/media-nano-pdf.png) no-repeat 4px center');
-			}
+	postRender: function(){
+		this.$el.attr('data-cid', this.model.cid);
 
-			// Full Size Pop Up
-			var _full = $('<img src="'+myMedia+'/media-fullsize.png" title="Afficher le fichier" />').appendTo(iconeaction).bind('click', function() {
-				window.open(el.url);
-			});
-			
-			var _play = $('<img src="'+myMedia+'/media-flip.png" />').appendTo(iconeaction).bind('click', function() {
-				actionPdfToImage(el.url);
-			});
-		}else
-
-		/******************************/
-		// AUDIO
-		if(el.kind == 'audio'){
-
-			if(viewMode == 'icon'){
-				top.css('background', 'url('+myMedia+'/media-nano-audio.png) no-repeat 4px center');
-			}
-
-			var _play = $('<img src="'+myMedia+'/media-play.png" />').appendTo(iconeaction).bind('click', function() {
-				actionViewAudio(el.url);
-			});
-
-		}else
-
-		/******************************/
-		// VIDEO
-		if(el.kind == 'video'){
-
-			if(viewMode == 'icon'){
-				top.css('background', 'url('+myMedia+'/media-nano-video.png) no-repeat 4px center');
-			}
-
-			var _play = $('<img src="'+myMedia+'/media-play.png" title="Lire la vidéo" />').appendTo(iconeaction).bind('click', function() {
-				modal.open({ type : 'video', url : el.url });
-			});
-
-			var _nfo = $('<img src="'+myMedia+'/media-nano-info.png" title="Voir les infos techniques" />').appendTo(iconeaction).bind('click', function() {
-				window.open('helper/player-video?url='+el.url, '', '');
-			});
-
-			var _poster = $('<img src="'+myMedia+'/media-flip.png" title="Gérer le poster de la video" />').appendTo(iconeaction).bind('click', function() {
-				var url = el.url;
-				window.open('helper/video-poster?url='+url, '', '');
-			});
-
-		}else
-
-		/******************************/
-		// PICTURE
-		if(el.kind == 'picture'){
-			
-			if(viewMode == 'icon'){
-				top.css('background', 'url('+myMedia+'/media-nano-image.png) no-repeat 4px center');
-			}
-			
-			container.addClass('isPicture');
-		//	if(el.height > minH || el.width > minW) container.addClass('imgResize');
-			if(el.thumbnail.exists){
-				var insert = $('<img src="'+decodeURIComponent(el.thumbnail.url)+'" height="'+el.thumbnail.height+'" width="'+el.thumbnail.width+'" />'); 
-			}else{
-				parentHeight = icone.height();
-				//var insert = $('<img src="'+el.url+'" height="'+el.height+'" width="'+el.width+'" />');
-				var insert = $('<img src="'+el.url+'" height="'+parentHeight+'" />');
-			}
-			var _class = ((el.height > el.width) ? 'portrait' : 'landscape');
-			insert.attr('class', _class);
-
-			// Full Size Pop Up
-			var _full = $('<img src="'+myMedia+'/media-fullsize.png" title="Afficher en grand" />').appendTo(iconeaction).bind('click', function() {
-				window.open(el.url);
-			});
-
-			// Size
-			var _size = $('<img src="'+myMedia+'/media-size.png" title="Manipuler la taille" />').appendTo(iconeaction).bind('click', function() {
-				var url = el.url;
-				window.open('helper/crop?url='+url, '', '');
-			});
-		} 
-
-
-		/******************************/
-
-		// GENERIQUE
-		if(insert.src == ''){
-
-			var insert = $('<img src="'+myMedia+'/media-file_'+el.kind+'.png" height="128" width="128" />');
-
-		}
+		media.views.myApp.makeDroppable(this);
 	}
 
+});
 
-	//
-	// Insertion de l'image de l'element (generique, dossier ou autre)
-	//
-	if(insert.attr('src') != ''){
 
-		var _image = $('<img />');
-		var _image = $('<img />');
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-		_image.attr('src', insert.attr('src'));
-		
-		_image.css('display', 'none');
-		_image.addClass('img');
-		
-		_image.load(function(){
-			// Pffff (hack ie?)
-			//	this.alt = insert.src;
+media.views.app             = Backbone.View.extend({
 
-			var ratio = (insert.width() > insert.height())
-				? (insert.width()  < 140) ? 1 : (140 / insert.width())
-				: (insert.height() < 140) ? 1 : (140 / insert.height());
+	el: $('body'),
 
-			// Ajouter les evenement relies a cette image
-			//if(typeof insert.events == 'object') $(this).click(folderNavFromPosition(position));
-			if(insert.length > 0 && el.type == 'dir') $(this).click(function(){folderNavFromPosition(position)});
+	initialize: function(){
 
-			// Injection de l'image
-			if (typeof iconeaction != 'undefined') {
-				$(this).appendTo(icone, 'bottom')
-			} else {
-				$(this).appendTo(icone);
-			}
-			// Remettre la bonne taille
-			//console.log(this);
-			$(this).css('display', '');
-			folderElementSize(mySlider.slider("value"), (mySlider.slider("value") * factor), container);
-			$(this).parent('div.e').find('.loader').removeClass('loader');
+		// Position
+		var path    = $('#path');
+		var pos     = path.position();
+		var height  = path.height();
+		var top     = pos.top + height;
+		$('#view').css('top', top);
 
-			// Ajouter le class
-			if(typeof insert.attr('class') != 'undefined') $(this).addClass(insert.attr('class'));
-		});
-	}
+		// Collections
+		media.collections.myMedia   = new media.collections.media;
+		media.collections.myPath    = new media.collections.path;
 
-	return container;
-}
+		// Views
+		media.views.myView          = new media.views.view;
+		media.views.myPath          = new media.views.path;
 
-/* + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - 
-+ - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - */
-/*function folderElementResizeReload(){
-	//console.log("resize !")
-	return true;
+		// Routeur
+		media.myRouter = new media.router;
+		Backbone.history.start();
 
-	$$('.imgResize img.img').each(function(img){
-	//	img.getParent('.icone').addClass('loader');
+		// Upload
+		this.uploadInit();
 
-		if(img.src.test('/w:([0-9]*)/')){
-			var wi = new RegExp('/w:([0-9]*)/');
-			var wi = wi.exec(img.src);
-		
-			if(wi[1] < mySlider.slider("value")){
-				img.src = img.src.replace(wi[0], '/w:'+Math.round(mySlider.slider("value"))+'/');
-			//	img.alt = img.src;
-			}
-		}else
-		if(img.src.test('/h:([0-9]*)/')){
-			var he = new RegExp('/h:([0-9]*)/');
-			var he = he.exec(img.src);
+		this.slider         = $('#slider');
 
-			if(he[1] < (mySlider.slider("value") * factor)){
-				img.src = img.src.replace(he[0], '/h:'+Math.round(mySlider.slider("value") * factor)+'/');
-			//	img.alt = img.src;
-			}
-		}
+		this.buttonNewDir   = $('#newDir');
+		this.buttonCancelDir= $('#cancelDir');
 
-	});
-}*/
+		this.modalNewDir    = $('#modal-newdir');
+		this.modalUpload    = $('#modal-upload');
+		this.wall           = $('#fade-wall');
 
-/* + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - 
-+ - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - */
-function folderElementSize(myWidth, myHeight, e){
+		this.inputNewFolder = $('#modal-newdir input');
+	},
 
-	// Soit TOUS soit JUSTE MOI
-	job = (e == null) ? $('#main .e') : [e];
-	if(job.length == 0) return false;
+	events: {
+		'click #button-folder':         'refresh',
+		'click #button-newdir':         'newDir',
+		'click #button-upload':         'upload',
+		'click #fade-wall':             'clearModal',
+		'click #cancelDir':             'clearModal',
+		'keydown':                      'keydown',
+		'click #newDir':                'newFolder',
+		'keydown #modal-newdir input':  'newFolderOnEnter',
+		'click #distantDownload':       'download',
+		'change #slider':               'size'
+	},
 
-	for(var i=0; i<job.length; i++){
-		e = $(job[i]);
+	/////////
 
-		// Pointeur sur les sous element de "e"
-		var ico = e.find('.icone');
-		var iac = e.find('.iconeaction');
-		var img	= e.find('.img');
-		var nam	= e.find('.name');
-		var too	= e.find('.tools');
-		
-		ico.css({
-			'width'		: myWidth  + 'px',
-			'height'	: myHeight + 'px'
-		});
+	keydown: function(e){
+		if(e.keyCode == 27) this.clearModal();
+	},
 
-		if(e.hasClass('imgResize') ){
-			var ratioH  = myHeight / img.height();
-			var ratioW  = myWidth  / img.width()
-			var ratio	= (ratioH > ratioW) ? ratioW : ratioH;
+	clearModal: function(e){
+		if(e != undefined) e.stopPropagation();
 
-			img.css({
-				'height'	: Math.floor((img.height() * ratio) * 0.95)+'px',
-				'width'		: Math.floor((img.width() * ratio) * 0.95)+'px'
+		this.wall.css('display', 'none');
+		this.modalNewDir.css('display', 'none');
+		this.modalUpload.css('display', 'none');
+	},
+
+	wallShow: function(){
+		this.wall.css('display', 'block');
+	},
+
+	refresh: function(){
+		media.views.myView.load();
+	},
+
+	newDir : function(){
+		this.clearModal();
+		this.wallShow();
+		this.modalNewDir.css('display', 'block');
+		this.inputNewFolder.focus();
+	},
+
+	upload: function(){
+		var self = this;
+
+		this.clearModal();
+		this.wallShow();
+		this.modalUpload.css('display', 'block');
+
+		var isSafari		= (/safari/.test(navigator.userAgent.toLowerCase()))                    ? true : false;
+		var isSafariFive	= (isSafari && /version\/5/.test(navigator.userAgent.toLowerCase()))    ? true : false;
+
+		if(typeof($('#file_upload').data('uploadifive')) !== "undefined") return;
+
+		// SI ON A ACCES AU FILEREADER DU BROWSER
+		if(typeof FileReader !== 'undefined' && !isSafariFive) {
+
+			$('#file_upload').uploadifive({
+				'buttonText'    : 'Parcourir',
+				'auto'          : true,
+				'formData'      : {'f' : media.views.myView.folder },
+				'queueID'       : 'queue',
+				'uploadScript'  : 'helper/upload',
+				'onUpload'      : function(){
+				//	this.data('uploadifive').settings.formData = {'f' : root + $('#path').attr('data-url')};
+				},
+				'onSelect'      : function(event, ID, fileObj){
+
+				},
+				'onDrop'            : function(file, count){
+
+				},
+				'onUploadComplete'  : function(file, data){
+
+				},
+				'onQueueComplete'   : function() {
+					$('#queue').empty();
+					self.clearModal();
+					self.refresh();
+					self.isDrag = false;
+				}
 			});
-			
-			img.height = img.height();
-			img.width  = img.width();
-		}
-		
-		// Centrer l'image verticalement
-		mt = myHeight - img.height;
-		mt = (mt > 0) ? mt / 2 : 0;
-		img.css({'margin-top' : mt+'px'});
 
-		// Mise a jour de la largeur du container
-		if(viewMode == 'icon'){
-			e.children('.cnt').css({'width': myWidth+8+'px'});
-			nam.css({'width': myWidth + 'px'});
 		}else{
-			e.children('.cnt').css({'width' : 'auto'});
-			nam.css({'width': ''});
-		}
-		
-		if(iac.length > 0 && viewMode == 'icon'){
-			iac.css({
-			//	'width' 	: '180px',
-				'width' 	: (myWidth - 10),
-			//	'height'	: myHeight,
-				'display'	: 'block',
-				'visibility': 'hidden'
-			});
-			
-			var tmpCoo = iac.position();
-			
-			iac.css({
-				'margin-top'	: Math.round(Math.abs(myHeight - iac.height()) / 2) +'px',
-				'margin-left'	: Math.round(Math.abs(myWidth  - iac.width())  / 2) +'px',
-				'visibility'	: 'visible'
-			});
+			alert('En raison d\'un bug inhérent à la version de votre navigateur, l\'upload de fichiers est' +
+			'indisponible. Merci de mettre à jour votre navigateur.');
+			this.clearModal();
 		}
 
-	}
-}
+	},
 
-/* + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - 
-+ - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - */
-function makeDragAndDrop(){
+	/////////
 
+	uploadInit: function(){
+		var self = this;
 
-	$('.dragme .icone').each(function(i, e){
-		
-		if ( $(e).hasClass('ui-draggable') ) {
-			return true;
-		}
-        $(e).draggable({
-			handle: $(e).find('.icone'),
-			zIndex: 9999,
-			//helper: 'clone',
-			stack : '.icon',
-			revert: true,
-			cursorAt: { left: 20, top: 20},
-			distance: 5,
-			containment : 'window',
-			appendTo : '#media',
-			
-			start: function(e, u) {
-				$(e.currentTarget).fadeTo(218, 0.5);
+		document.addEventListener('dragleave', function(e) {
+			// Stop FireFox from opening the dropped file(s)
+			e.preventDefault(); e.stopPropagation();
+
+			if (e.pageX === 0) {
+				self.clearModal();
+				self.isDrag = false;
+			}
+
+		}, false);
+
+		document.addEventListener('dragenter', function(e) {
+			// Stop FireFox from opening the dropped file(s)
+			e.preventDefault(); e.stopPropagation();
+
+			if (self.isDrag) return;
+			self.isDrag = true;
+			self.upload();
+
+		}, false);
+
+		document.addEventListener('dragover', function(e) {
+			// Stop FireFox from opening the dropped file(s)
+			e.preventDefault(); e.stopPropagation();
+
+		}, false);
+	},
+
+	makeDroppable: function(instance){
+		var self = this;
+
+		instance.$el.droppable({
+			hoverClass: 'fly',
+			tolerance: 'pointer',
+			greedy: true,
+			drop: function(e, ui) {
+
+				var folder  = media.views.myView.folder;
+
+				var me      = ui.draggable.data('cid');
+				var to      = instance.$el.data('cid');
+
+				var me_     = media.collections.myMedia.get(me);
+				var src     = folder+'/'+me_.get('url');
+
+				if(instance.$el.parents('ul').attr('id') == 'path'){
+					var to_ = media.collections.myPath.get(to);
+					var dst = to_.get('path');
+				}else{
+					var to_ = media.collections.myMedia.get(to);
+					var dst = folder+'/'+to_.get('url');
+				}
+
+				if(me == to) return;
+				if(to_.get('is_file')) return;
+				if(to_.get('path') == folder) return;
+
+				self.moveTo(src, dst, ui);
 			},
-			
-			stop: function(e, u) {
-				$(e.target).fadeTo(218, 1);
+
+			over: function(e, ui) {
 			}
-			
+		});
+	},
+
+	size: function(){
+		var value  = parseInt(this.slider.val());
+		$('.item').css('width', value+20);
+		$('.item .media').css({
+			'height':  value,
+			'width':   value
+		});
+	},
+
+	/////////
+
+	action: function(data, back){
+		console.log("[XHR ACTION]", 'data', data, 'back', back);
+
+		var xhr = $.ajax({
+			url:        'helper/action',
+			dataType:   'json',
+			data:       data
 		});
 
-	});	
-	
-	$('.dropme').droppable({
-		hoverClass: 'orange',
-		tolerance : 'pointer',
-		drop : function(e, ui) {
-			el = $(ui.draggable);
-			actionMove(el.parents('.dragme').attr('id'), $(this));				
-		},
-		over : function(e, ui) {
-			//console.log("OVER !");
-		}
-		
-	});
-}
-
-/* + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - 
-+ - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - */
-function viewUrl(){
-
-	var before	= '';
-
-    var parts 	= folder.split("\/");
-
-	var str		= [];
-
-	$('#path').empty();
-
-	$('<span>/</span>').appendTo('#path');
-
-	for(i=1; i<parts.length; i++){
-		
-		var a = $('<a class="parent" id="'+before+'/'+parts[i]+'">'+parts[i]+'</a>').appendTo('#path').bind('click', function() {
-			folderNav($(this).attr('id'));
+		xhr.done(function(js){
+			if(typeof back == 'function') back(js);
 		});
-		
-		if(i < parts.length-1){
 
-			a.addClass('dropme');
-			$('<span>/</span>').appendTo('#path');		
+	},
 
-		}
-
-		before 	= before+'/'+parts[i];
-	}
-	
-	$('#path').attr('data-url', before);
-
-    uploadPath	= root + before;
-}
-
-/* + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - 
-+ - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - */
-function setFolder(url){
-	folder = url.replace(root,"");
-}
-
-/* + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - 
-+ - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - */
-function setFile(url){
-	file = url;
-}
-
-/* + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - 
-+ - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - */
-function selectFile(file, prompt){
-
-	prompt = (prompt == null) ? detectType(file) : prompt;
-
-	switch(method){
-		case 'mce'			: parent.opener.insertRichEditor(field, '<img src="'+file+'" />');	break;
-		case 'sort'			: parent.opener.mediaInsert(field, prompt+'@@'+file, 'sort'); 		break;
-		case 'sort-embed'	: parent.mediaInsert(field, prompt+'@@'+file, 'sort'); 		break;
-
-	//	case 'fck'			: parent.opener.insertContent('<img src=\"'+file+'\" border=\"0\" alt=\"\" />', field); break;
-	//	case 'multiline'	: parent.opener.document.getElementById(field).value += prompt + file+"\n"; break;
-
-		case 'line'			: fld = parent.opener.document.getElementById(field);
-							  fld.value  = file;
-							  fld.fireEvent('change', fld);
-
-							  break;
-
-		case 'editable'		: parent.opener.editable.imageBack(file);
-
-	//	default				: log_('Insert : '+ file);
-	}
-}
-
-/* + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - 
-+ - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - */
-function detectType(file){
-
-	ext = file.substr(file.lastIndexOf(".")+1).toLowerCase();
-	arr = ['mov', 'avi', 'm4v', 'mp4', 'mpg', 'mpeg', 'wmv', 'flv'];
-	
-	if(ext == 'ppt'){
-		return 'powerpoint';
-	}else
-	if(ext == 'swf'){
-		return 'flash';
-	}else
-	if(ext == 'pdf'){
-		return 'pdf';
-	}else
-	if(ext == 'doc' || ext == 'txt'){
-		return 'word';
-	}else
-	if(ext == 'mp3' || ext == 'aif' || ext == 'aiff' || ext == 'wav'){
-		return 'audio';
-	}else
-	if(ext == 'xls' || ext == 'xlm' || ext == 'xlt'){
-		return 'excel';
-	}else
-	if( $.inArray(ext, arr) !== -1 ){
-		return 'video';
-	}else
-	if(ext == 'htm' || ext == 'html' || ext == 'php' || ext ==  'php3' || ext == 'php4' || ext == 'php5'){
-		return 'html';
-	}else
-	if(ext == 'png' || ext == 'gif' || ext == 'jpeg' || ext == 'jpg' || ext == 'tiff' || ext == 'tif' || ext == 'psd' || ext == 'bmp'){
-		return 'image';
-	}else
-	if(ext == 'zip' || ext == 'tar' || ext == 'tgz' || ext == 'sit' || ext == 'rar' || ext == 'arj' || ext == 'sitx' || ext == 'sea' || ext == 'lha' || ext == 'lzh' || ext == 'bin' || ext == 'hqx' || ext == 'gz' || ext == 'tbz' || ext == 'z' || ext == 'taz'){
-		return 'archive';
-	}else{
-		return 'unknown';
-	}
-}
-
-/* + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - 
-+ - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - */
-function actionDelete(p){
-	src = collection[p].name;
-	
-	if($('#'+src).hasClass('isLocked')){
-		alert("Ce dossier est protégé contre la suppression");
-		return false;
-	}
-
-	message = $('#'+src).hasClass('isDir')
-		? "Voulez vous supprimer ce dosssier et TOUT son contenu ?"
-		: "Voulez vous supprimer ce fichier ?";
-
-	if(!confirm(message)){
-		//log_("REMOVE CANCELED BY USER");
-		return false;
-	}
-	
-	var get = $.ajax({
-		url: 'helper/action',
-		dataType: 'json',
-		data: {'action':'remove', 'src':collection[p].url}
-	});
-	
-	get.done(function(r) {
-//		if(r.callBack != null) eval(r.callBack);
-		if(r.success == 'true'){
-			$('div[id="'+src+'"]').fadeTo(218,0, function() {
-				$(this).remove();
-			});
-			makeDragAndDrop();
-		}
-	});
-}
-
-/* + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - 
-+ - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - */
-function actionClipBoard(url){
-	prompt("URL du media : ", url);
-}
-
-/* + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - 
-+ - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - */
-function actionMove(src, dstElement){
-	
-	// Si parent alors URL = ID si non URL = DOSSIER + ID
-	dst = dstElement.hasClass('parent') ? dstElement.attr('id') : folder+'/'+dstElement.attr('id');
-
-	var get = $.ajax({
-		url: 'helper/action',
-		data: {'action':'move', 'src':root + folder+'/'+src, 'dst':root + dst},
-		dataType: 'json'
-	});
-	
-	get.done(function(r) {
-	//	if(r.message  != null) console.log(r.message);
-	//	if(r.callBack != null) eval(r.callBack);
-		if(r.success == 'true'){
-			$('#'+src).remove();
-			makeDragAndDrop();
-			setTimeout(function() {
-				folderView(true);
-			}, 100)
-		} else {
-			$('#folderWay').append('<div class="no-move">Impossible de déplacer ce fichier ici.</span>');
-			setTimeout(function() {
-				$('#folderWay .no-move').fadeTo(218, 0, function() {
-					$(this).remove();
-				});
-			}, 3000)		
-		}
-	});
-
-}
-
-/* + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - 
-+ - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - */
-function actionRename(position){
-	
-	var e		= collection[position].name;
-	
-	$e = $('div[id="'+e+'"]');
-	var field	= $e.find('div.name input.field');
-	var old		= field.val();
-	var changed	= false;
-
-	field.removeAttr('readonly');
-	
-	field.unbind('keydown');
-	field.unbind('blur');
-
-	field.bind({
-		'keydown' : function(e){
-			if(e.keyCode == '13'){ // ENTER
-				
-				var get = $.ajax({
-					url: 'helper/action',
-					data: {'action':'rename', 'src':root + folder+'/'+old, 'dst':root + folder+'/'+$(this).val()},
-					dataType: 'json'
-				});
-				
-				get.done(function(r) {
-					
-					changed = true;
-					//	if(r.message  != null) log_(r.message);
-					//	if(r.callBack != null) eval(r.callBack);
-						if(r.success == 'true'){
-							field.parent().parent().attr('id', field.val()); 
-							field.prop('readonly', 'readonly');
-							collection[position].url = collection[position].url.replace(/\\/g,'/').replace(/\/[^\/]*\/?$/, '') + '/' + field.val();
-						}
-				});
-			}else
-			if(e.key == 'esc'){
-				field.val(old);
-				field.removeClass('fieldFocus');
-				//log_('RENAME ANNULE PAR L\'UTILISATEUR (ESCAPE)');
-			}
-		},
-		'blur' : function(e){
-			if(!changed) field.val(old);
-			field.removeClass('fieldFocus');
-			//log_('RENAME ANNULE PAR L\'UTILISATEUR (PERTE DE FOCUS)');
-		}
-	});	
-}
-
-/* + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - 
-+ - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - */
-function actionViewVideo(url){
-	window.open('helper/player-video?'+url, 'audio', '');
-}
-
-/* + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - 
-+ - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - */
-function actionViewAudio(url){
-	window.open('helper/player-audio?url='+url, 'video', '');
-}
-
-/* + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - 
-+ - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - */
-function actionVignette(url){
-	
-	var remote = $.ajax({
-		url: 'helper/action',
-		dataType : 'json',
-		data : {'action':'vignette', 'src':url}
-	}).done(function(r) {
-		//if(r.callBack != null) eval(r.callBack);
-	});
-	
-}
-
-/* + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - 
-+ - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - */
-function actionNewDirectory(newDir){
-
-//	var newDir = prompt("Nom du nouveau dossier : ");
-	if(newDir == null){
-	//	log_("NEWDIR CANCELED BY USER");
-		return false;
-	}
-
-	var get = $.ajax({
-		url: 'helper/action',
-		data: {'action':'newdir', 'src':root + folder+'/'+newDir},
-		dataType: 'json'
-	});
-	
-	get.done(function(r){
-		
-		if(r.success == 'true'){
-
-			collection.push({
-				'name'	: newDir,
-				'tags'	: 'isDir',
-				'type'	: 'dir',
-				'url'	: root + folder+'/'+newDir
-			});
-			
-			last = collection[collection.length - 1];
-			nd  = folderlElement(last, (collection.length-1));
-			gtp = $('#main div.parent');
-
-			if(gtp.length > 0){
-				nd.appendTo(gtp.eq(0));
-			}else{
-				nd.prependTo('#main');
-			}
-			spreadGrid();
-			makeDragAndDrop();
-			folderView(true);
-		}
-	});
-
-}
-
-/* + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - 
-function actionWide(icn, url){
-
-	var icone 	= $(icn).getElement('.img').setStyle('display', 'none');
-	var image	= new Image();
-
-	image.onload = function(){
-		icone.src = url;
-		icone.setStyles('display', '');
-
-		$(icn).addClass('imgResize');
-		folderElementSize(mySlider.step, (mySlider.step * factor), $(icn));
-
-	//	icone.alt = icone.src;
-	}
-
-	image.src = url;
-}
-+ - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - */
-
-
-/* + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - 
-+ - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - */
-function actionMetadata(url){
-	modalMetaData(url);
-	//panelMetaData(url);
-}
-
-/* + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - 
-+ - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - */
-function actionLock(p){
-	
-	src = collection[p].name;
-	e = $('#'+src);
-	
-	icoLock = e.find('.lock')[0];
-
-	var remote = $.ajax({
-		url : 'helper/action',
-		data : {'action':'lock', 'src':collection[p].url},
-		dataType : 'json'
-	}).done(function(data) {
-		if(data.message == 'LOCK'){
-			e.addClass('isLocked');
-			icoLock.src = 'ui/img/media-locked.png';
-		}else
-		if(data.message == 'UNLOCK'){
-			e.removeClass('isLocked');
-			icoLock.src = 'ui/img/media-unlocked.png';
-		}
-	});
-}
-
-/* + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - 
-+ - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - */
-function actionDuplicate(url){
-	if(confirm("Voulez vous dupliquer ce fichier ?")){
-		
-		var ajax = $.ajax({
-			url : 'helper/action',
-			data : {'action':'duplicate', 'src':url},
-			dataType :'json'	
-		}).done(function() {
-			folderView(true);
+	moveTo: function(me, to, ui){
+		this.action({
+			action: 'move',
+			src:    me,
+			dst:    to
+		}, function(d){
+			if(d.success) ui.draggable.remove();
 		})
-	}
-}
-
-/* + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - 
-+ - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - */
-function panelShow(to, name){
-
-	panelView = name;
-	$('#panel, #action').css({'height' : to+'px', 'display' : 'block', 'opacity' : '0'});
-	
-	$('#main_').animate({
-		'top' : (paneltop + to)
-	}, 218, function() {
-		$('#panel, #action').fadeTo(150, 1);
-	});
-
-	$('#button-hidepanel').css('display', '');
-	
-}
-
-/* + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - 
-+ - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - */
-function panelHide(){
-	panelView = '';
-	$('#panel').fadeTo(218, 0);
-	$('#main_').animate({
-		'top': panelTop
-	}, 218);
-	
-	$('#button-hidepanel').css('display', 'none');
-}
-
-/* + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - 
-+ - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - */
-function panelUpload(){
-	
-	if ($('#modal-upload').css('display') == 'none') {
-		modalShowUpload();
-	} else {
-		modalHideUpload();
-	}
-	/*if(panelView != 'upload'){
-		$('#action .controls').css('display', 'none');
-		panelShow(150, 'upload');
-		$('#panelFrame').attr('src', 'helper/upload?f='+folder);
-	}else{
-		$('#action .controls').css('display', 'block');
-		panelHide();
-	}*/
-}
-
-/* + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - 
-+ - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - */
-function modalPromptDir() {
-	$('#modal-newdir').fadeTo(218, 1, function() {
-		$('#modal-newdir').children('input').focus();
-	});
-	$('#fade-wall').fadeTo(218, 1);
-	/*$('#modal-newdir').css('left', (($(window).width() - 600) / 2));
-	$('#modal-newdir').css('top', (($(window).height() - 400) / 2));*/
-	
-	$('#modal-newdir input').on('keydown', function(e) {
-		if (e.keyCode == 13) {
-			modalHideUpload();
-			actionNewDirectory($('#modal-newdir input').val());
-		}
-	});
-		
-	$('#modal-newdir #newdir').on('click', function(e) {
-		modalHideUpload();
-		actionNewDirectory($('#modal-newdir input').val());
-	});
-}
-
-/* + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - 
-+ - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - */
-function modalPref() {
-	$('#modal-pref').fadeTo(218, 1);
-	$('#fade-wall').fadeTo(218, 1);
-	$('#modal-pref iframe').remove();
-	var frame = $('<iframe src="pref-embed" />').appendTo('#modal-pref').css({
-		'width' : '100%',
-		'height' : '100%'
-	});
-}
-
-/* + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - 
-+ - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - */
-function modalShowUpload() {
-
-/*	$('#modal-upload').fadeTo(218, 1);
-	$('#fade-wall').fadeTo(218, 1);
-	$('#modal-upload .uploadcontainer').fadeTo(218, 1);
-*/
-
-	$('#modal-upload, #fade-wall, #modal-upload .uploadcontainer').fadeTo(218, 1);
-
-	// Ban safari 5
-	isSafari		= (/safari/.test(navigator.userAgent.toLowerCase())) ? true : false;
-	isSafariFive	= (isSafari && /version\/5/.test(navigator.userAgent.toLowerCase())) ? true : false;
-	
-	/* Mettre a jour les path d'upload si déjà chargé */
-	//uploadPath	= root + $('#path').attr('data-url');
-
-	// SI ON A ACCES AU FILEREADER DU BROWSER
-	if(typeof FileReader !== 'undefined' && !isSafariFive) {
-		
-		// NE PAS LANCER PLUSIEURES INSTANCES
-		if (typeof($('#modal-upload .uploadcontainer #file_upload').data('uploadifive')) === "undefined") {
-			
-			// SI LA MODAL EST ACTIVEE SUR UPLOADIFY ALORS QU'ON DROP, DESTROY
-			if(typeof($('#modal-upload .uploadcontainer #file_upload').data('uploadify')) === "object") {
-				$('#modal-upload .uploadcontainer #file_upload').uploadify('destroy');
-			}
-			
-			$('#modal-upload .uploadcontainer #file_upload').uploadifive({
-				'buttonText'   : 'Parcourir',
-				'auto'         : true,
-				'formData'     : {'f' : root + $('#path').attr('data-url')},
-				'queueID'      : 'queue',
-				'uploadScript' : 'helper/upload-action',
-                'onUpload' : function(){
-                    this.data('uploadifive').settings.formData = {'f' : root + $('#path').attr('data-url')};
-                },
-				'onSelect'     : function(event,ID,fileObj) {
-				},
-				'onDrop' : function(file, count) {
-				},
-				'onUploadComplete' : function(file, data) {
-                    //alert($('#path').attr('data-url'));
-				},
-				'onQueueComplete' : function() {					
-					modalHideUpload();
-					folderView(true);
-					isDrag = false;
-					$('#queue').empty();
-				}
-			});
-		}
-	}else
-	if(!isSafariFive) {
-		// SUCKERS
-		// NE PAS LANCER PLUSIEURES INSTANCES
-		if (typeof($('#modal-upload .uploadcontainer #file_upload').data('uploadify')) === "undefined") {
-		
-			// SI LA MODAL EST ACTIVEE SUR UPLOADIFIVE ALORS QU'ON DROP, DESTROY
-			if (typeof($('#modal-upload .uploadcontainer #file_upload').data('uploadifive')) === "object") {
-				$('#modal-upload .uploadcontainer #file_upload').uploadifive('destroy');
-			}
-					
-	        $('#file_upload').uploadify({
-				'swf'      : 'ui/_uploadify/uploadify.swf?phpsessid='+phpsid,
-				'auto'     : true,
-				'formData' : {'f' : root + $('#path').attr('data-url')},
-	            'uploader' : 'helper/upload-action',
-	            'width'    : 100,
-	            'buttonText' : 'Parcourir',
-
-                'onUploadStart' : function(file) {
-                    $("#file_upload").uploadify("settings", "formData", {'f' : root + $('#path').attr('data-url')});
-                },
-				'onUploadComplete' : function(file) {
-				},
-				'onQueueComplete' : function() {
-					modalHideUpload();
-					folderView(true);
-					isDrag = false;
-					$('#queue').empty();
-				},
-				'onUploadSuccess' : function(file, data, response) {
-				},
-				'onInit' : function(instance) {
-					// déplacer la queue dans le container
-					$('#'+instance.settings.queueID).appendTo("#queue");
-				},
-				'onUploadError' : function(file, errorCode, errorMsg, errorString) {
-				}
-	        });
-		}
-
-	}else{
-		alert('En raison d\'un bug inhérent à la version de votre navigateur, l\'upload de fichiers est indisponible. Merci de mettre à jour votre navigateur.');
-		modalHideUpload();
-	}
-}
-
-/* + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - 
-+ - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - */
-function modalHideUpload() {
-	
-	//console.log('hello !')
-	
-	$('#fade-wall').fadeTo(218, 0, function() {
-		$('#fade-wall').css('display', 'none');
-	});
-	$('#modal-upload').fadeTo(218, 0, function() {
-		$('#modal-upload').css('display', 'none');
-	});
-	$('#modal-meta').fadeTo(218, 0, function() {
-		$('#modal-meta').empty();
-		$('#modal-meta').css('display', 'none');
-	});
-	
-	$('#modal-newdir').fadeTo(218, 0, function() {
-		$('#modal-newdir').css('display', 'none');
-	});
-	
-	$('#modal-pref').fadeTo(218, 0, function() {
-		$('#modal-pref').css('display', 'none');
-	});
-}
-
-/* + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - 
-+ - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - */
-function panelPref(){
-	if(panelView != 'pref'){
-		panelShow(80, 'pref');
-		$('panelFrame').src = myPath+'ressource/lib/media.pref.php';
-	}else{
-		panelHide();
-	}
-}
-
-/* + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - 
-+ - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - */
-function panelAnalyse(url){
-	if(panelView != 'analyse'){
-		panelShow(80, 'analyse');
-		$('panelFrame').src = myPath+'ressource/lib/media.analyse.php?folder='+url;
-	}else{
-		panelHide();
-	}
-}
-
-/* + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - 
-+ - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - */
-function panelMetaData(url){
-	panelView = 'metadata';
-	panelShow(220, 'meta');
-	$('panelFrame').src = myPath+'ressource/lib/media.metadata.php?url='+url;
-}
-
-function modalMetaData(url) {
-
-	$('#modal-meta').fadeTo(218, 1);
-	$('#fade-wall').fadeTo(218, 1);
-	/*$('#modal-meta').css('left', (($(window).width() - 600) / 2));
-	$('#modal-meta').css('top', (($(window).height() - 400) / 2));*/
-	
-	var frame = $('<iframe src="helper/metadata?url='+url+'" />');
-	frame.appendTo('#modal-meta');
-	frame.css({
-		'border' : 'none',
-		'height' : $('#modal-meta').innerHeight()+'px',
-		'width' : $('#modal-meta').innerWidth()+'px'
-	});
-}
-
-/* + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - 
-+ - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - */
-function panelMetaDataClose(){
-	panelView = '';
-	panelShow({'height' : '10px'});
-	$('panelFrame').src='index.php?n';
-}
-
-/* + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - 
-+ - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - */
-function maskByClass(){
-
-	$('#action .filter').each(function(i, chk){	
-		v = ($(chk).prop('checked')) ? 'none' : '';
-		$('.'+chk.val()).css('display', v);
-	});
-}
-
-/* + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - 
-+ - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - */
-function getHash() {
-	var href = top.location.href;
-	var pos = href.indexOf('#') + 1;
-	return (pos) ? href.substr(pos) : '';
-}
-
-/* + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - 
-+ - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - */
-function sizeInit(url){
-
-	overlay = new Element('div', {
-		'id':'mbOverlay',
-		'styles':{ 'opacity': 0.75 },
-		'events':{ 'click'  : sizeKill }
-	}).inject($(document.body));
-
-	pp = new Element('div', {
-		'id' : 'overSize',
-		'class' : 'overlayPanel'
-	}).inject($(document.body));
-
-	ii = new Element('iframe', {
-		'src'			: myPath+'ressource/lib/media.size.php?src='+url,
-		'height'		: '100%',
-		'width'			: '100%',
-		'frameborder'	: '0'
-	}).inject(pp);
-
-}
-
-function sizeKill(){
-		$('overSize').destroy();
-		$('mbOverlay').destroy();
-	}
-
-/* + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - 
-+ - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - */
-function actionPdfToImage(url){
-
-	var remote = new Request.JSON({
-		url: myPath+'ressource/lib/media.action.php',
-		onComplete:function(r){
-		//	if(r.message  != null) log_(r.message);
-		//	if(r.callBack != null) eval(r.callBack);
-
-			if(r.success == true){
-				folderNav(root + folder);
-			}
-		}
-	}).get({
-		'action'	: 'pdfToImage',
-		'src'		: url
-	});
-
-}
-
-
-/* + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - 
-+ - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - */
-function distantDownload(){
-
-	if($('#distantUpload').hasClass('doing')) return false;	
-	$('#distantUpload').addClass('doing');
-
-	var distant = $.ajax({
-		url : 'helper/action',
-		type: 'post',
-		dataType : 'json',
-		data : {
-			'action': 	'download',
-			'data':		$('#distantUpload').val(),
-			'folder': 	root + folder
-		}
-	}).done(function(data){
-
-		$('#distantUpload').val('').removeClass('doing');
-		modalHideUpload();
-		folderView(true);
-
-	}).fail(function(data){
-		$('#distantUpload').removeClass('doing');
-		alert("Fichier impossible a récupérer");
-	});
-
-}
-
-/* Modal generator
-* modal.open({ type : 'video', url : el.url });
-* */
-var modal = {
-
-	open : function(data) {
-		if (data.type == 'video') {
-			this.frame = this.buildFrame(data);
-			this.buildBody(data);
-		}
 	},
 
-	buildFrame : function(data) {
-		var _class = 'genericmodal';
-		if (typeof data.class !== 'undefined') {
-			_class = data.class;
-		}
+	remove: function(me, mod){
+		if(!confirm('Supprimer ?')) return;
 
-		return $('<div id="modal-'+data.type+'" class="'+_class+'" style="display:none;" />');
+		this.action({
+			action: 'remove',
+			src:    me
+		}, function(d){
+			if(d.success) mod.destroy();
+		})
 	},
 
-	buildBody : function(data) {
+	duplicate: function(me){
+		var self = this;
+		this.action({
+			action: 'duplicate',
+			src:    me
+		}, function(d){
+			if(d.success) self.refresh();
+		})
+	},
 
-		if (data.type == 'video') {
-			this.ext = this.getExt(data.url);
+	lock: function(me){
+		var self = this;
 
-			// build flowplayer 3.x
-			if (this.ext == 'flv') {
-				$.getScript("../core/vendor/flowplayer/flowplayer-3.2.11.min.js")
-					.done($.proxy(function(script, status) {
-						this.body = $('<a href="'+data.url+'" id="player" />').appendTo(this.frame);
-						this.show(data);
-					}, this ));
+		this.action({
+			action: 'lock',
+			src:    me
+		}, function(d){
+		})
+	},
 
+	pdfCover: function(me){
+		var self = this;
 
-			// build flowplayer 5.x
-			} else {
-				$.getScript("../core/vendor/flowplayer/flowplayer.min.js")
-					.done($.proxy(function(script, status) {
-						this.body  = $('<div id="player" />').appendTo(this.frame);
-						this.video = $('<video src="'+data.url+'" />').appendTo(this.body);
-						this.show(data);
-					}, this ));
+		this.action({
+			action: 'pdfCover',
+			src:    me
+		}, function(d){
+			self.refresh();
+		})
+	},
+
+	newFolder: function(){
+		var self  = this;
+		if(this.inputNewFolder.val() == '') return;
+
+		this.action({
+			'action': 'newdir',
+			'src'   : media.views.myView.folder + '/' + this.inputNewFolder.val()
+		}, function(){
+			self.inputNewFolder.val('');
+			self.clearModal();
+			self.refresh();
+		})
+	},
+
+	newFolderOnEnter: function(e){
+		if(e.keyCode == 13) this.newFolder();
+	},
+
+	rename: function(src, dst){
+		this.action({
+			action: 'rename',
+			src:    src,
+			dst:    dst
+		});
+	},
+
+	download: function(e){
+		var self = this;
+
+		var xhr = $.ajax({
+			url:        'helper/action',
+			dataType:   'json',
+			type:       'POST',
+			data:       {
+				action: 'download',
+				src:    media.views.myView.folder,
+				data:   $('#distantUpload').val()
 			}
-		}
+		});
 
+		xhr.done(function(){
+			self.clearModal();
+			self.refresh();
+		});
+	},
+
+	fullSize: function(me){
+		window.open(me);
+	}
+});
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// ROUTEUR
+
+media.router                = Backbone.Router.extend({
+
+	routes: {
+		'':       'first',
+		'*path':  'folder'
 
 	},
 
-	show : function(data) {
-
-		$('#fade-wall').fadeTo(218, 1);
-		this.frame.appendTo('body').css('display', 'block');
-
-		$(document).on('keydown', $.proxy(function(e) {
-			if (e.keyCode == 27) {
-				this.hide(data);
-			}
-		}, this ));
-		$('#fade-wall').on('click', $.proxy(function() {
-			this.hide(data);
-		}, this ));
-
-		if (data.type == 'video') {
-
-			if (this.ext == 'flv') {
-				flowplayer("player", "../core/vendor/flowplayer/flowplayer-3.2.12.swf", {
-					clip : {
-						autoPlay: true
-					}
-				});
-			} else {
-				this.player = $('#player').flowplayer({ swf: "../core/vendor/flowplayer/flowplayer.swf" });
-				this.frame.css('height', 'auto');
-			}
-		}
+	initialize: function(){
 	},
 
-	hide : function(data) {
-		if (data.type == 'video') {
-			if (this.ext == 'flv') {
-				$f().stop();
-				$f().unload();
-			} else {
-				this.player.data('flowplayer').stop();
-				this.player.data('flowplayer').unload();
-			}
-		}
-
-		this.frame.remove();
-		$('#fade-wall').hide();
+	folder: function(){
+		var f = '/'+Backbone.history.fragment;
+		media.views.myView.nav(f);
 	},
 
-	getExt : function(filename) {
-		return filename.split('.').pop();
+	first: function(){
+		media.views.myView.nav('/media');
 	}
 
-}
+});
 
 
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+$(function(){
+	media.views.myApp = new media.views.app;
+});
 
-
-
-
-
+// The End Bro'

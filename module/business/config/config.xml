@@ -5,16 +5,33 @@
 		<key>business</key>
 		<version>5.0.10</version>
         <lastMod>2013-02-14</lastMod>
+		<install>YES</install>
 
 		<name><![CDATA[Business]]></name>
-		<description><![CDATA[Valider les dernières commandes et régler votre boutique en ligne]]></description>
-		<panelIcon>ressource/img/module-business.png</panelIcon>
-		<install>YES</install>
 	</data>
 
 	<dependencies>
 		<module>shop</module>
 	</dependencies>
+
+    <i18n>
+    </i18n>
+
+    <todo>
+        <file>account.php</file>
+        <file>carraige.php</file>
+        <file>config.php</file>
+        <file>coupon.php</file>
+        <file>data-index.php</file>
+        <file>detail.php</file>
+        <file>edit.php</file>
+        <file>hist.php</file>
+        <file>index.php</file>
+        <file>product.picker.data.php</file>
+        <file>product.picker.php</file>
+        <file>shop.php</file>
+        <file>tax.php</file>
+    </todo>
 
 	<profile>
 		<item code="index"		type="ALLOW_DENY" name="Accessible" />

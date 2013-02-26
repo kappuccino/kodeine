@@ -282,10 +282,13 @@ public function mediaRename($src, $dst){
 	$cacheSrc	= str_replace('/media/', '/media/.cache/', $src_);
 	$cacheDst	= str_replace('/media/', '/media/.cache/', $dst_);
 
+	umask(0);
 	if(is_dir($src)){
 		$r = rename($src, $dst);
 
 		if($r){
+			chmod($dst, 0755);
+
 			$media = $this->dbMulti("SELECT * FROM k_media WHERE mediaUrl LIKE '".$src_."%'");
 			foreach($media as $e){
 				$this->dbQuery("UPDATE k_media SET mediaUrL='".str_replace($src_, $dst_, $e['mediaUrl'])."' WHERE mediaUrl='".$e['mediaUrl']."'");
@@ -295,7 +298,6 @@ public function mediaRename($src, $dst){
 			if(file_exists(KROOT.$cacheSrc) && is_dir(KROOT.$cacheSrc) && ! file_exists(KROOT.$cacheDst)){
 
 				if(!file_exists(dirname(KROOT.$cacheDst))){
-					umask(0);
 					mkdir(dirname(KROOT.$cacheDst), 0755, true);
 				}
 
@@ -321,6 +323,8 @@ public function mediaRename($src, $dst){
 		$r = copy($src, $dst);
 
 		if($r){
+			chmod($dst, 0755);
+
 			# Verifier dans la base de media si je dois bouger des choses
 			#
 			$media = $this->dbOne("SELECT * FROM k_media WHERE mediaUrl='".$src_."'");
@@ -337,10 +341,10 @@ public function mediaRename($src, $dst){
 
 			if(file_exists(KROOT.$cacheSrc) && is_file(KROOT.$cacheSrc) && !file_exists(KROOT.$cacheDst)){
 				if(!file_exists(dirname(KROOT.$cacheDst))){
-					umask(0);
 					mkdir(dirname(KROOT.$cacheDst), 0755, true);
 				}
 				rename(KROOT.$cacheSrc, KROOT.$cacheDst);
+
 				$this->dbQuery("UPDATE k_cachemedia SET cacheSource='".$dst_."',  cacheUrl   ='".$cacheDst."' WHERE cacheSource='".$src_."'");
 			}
 

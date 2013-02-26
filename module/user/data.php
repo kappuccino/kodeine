@@ -44,10 +44,10 @@
 				'field'			=> $_POST['field']
 			));
 
-			$message = ($result) ? 'OK: Enregistrement en base' : 'KO: Erreur, APP : <br />'.$app->apiLoad('user')->db_query.' '.$app->apiLoad('user')->db_error;
-			if($result) header("Location: data?id_user=".$app->apiLoad('user')->id_user);
+			$message = ($result) ? 'OK: '._('Saved') : 'KO: Error : <br />'.$app->apiLoad('user')->db_query.' '.$app->apiLoad('user')->db_error;
+			if($result) $app->go("data?id_user=".$app->apiLoad('user')->id_user);
 		}else{
-			$message = 'WA: Merci de compléter les champs correctement';
+			$message = 'WA: '._('Please, fill the form correctly');
 		}
 	}
 
@@ -57,16 +57,12 @@
 			'useField'	=> false
 		));
 		
-		$title	= "Modification ".$data['userMail'];
 		$group	= $app->apiLoad('user')->userGroupGet(array('id_group' => $data['id_group']));
 	}else{
-		$title 	= "Nouveau user";
 		$group	= $app->apiLoad('user')->userGroupGet();
 		$group	= $group[0];
 		$group['groupFormLayout'] = json_decode($group['groupFormLayout'], true);
 	}
-	
-	#$app->pre($group);
 
 	if($group['groupFormLayout'] == ''){
 		$group['groupFormLayout'] = array(
@@ -115,35 +111,6 @@
 			$group['groupFormLayout']['tab']['view0']['field'][] = array('field' => $e);
 		}
 
-	function fieldTrace($app, $data, $e, $f){
-		$closed = ($f['close']) ? 'closed' : '';
-
-		echo "<li class=\"clearfix ".$closed." ".$app->formError('field'.$e['id_field'], 'needToBeFilled')." form-item\" id=\"field".$e['id_field']."\">";
-		echo "<div class=\"hand\">&nbsp;</div>";
-		echo "<div class=\"toggle\">&nbsp;</div>";
-		
-			echo "<label>".$e['fieldName'];
-				if($e['is_needed']) echo ' *';
-			echo "</label>";
-
-			echo "<div class=\"form\">";
-				$field = $app->apiLoad('field')->fieldForm(
-					$e['id_field'],
-					$app->formValue($data['field'.$e['id_field']], $_POST['field'][$e['id_field']]),
-					array(
-						'style' => 'width:100%'
-					)
-				);
-	
-				if(preg_match("#richtext#", $field)) 	$GLOBALS['textarea'][]	= 'form-field-'.$e['id_field'];
-				if(preg_match("#media\-list#", $field)) $GLOBALS['mediaList'][]	= "'form-field-".$e['id_field']."'";
-				#if(preg_match("#datePicker#", $field))  $GLOBALS['datePick'][]	= "'form-field-".$e['id_field']."'";
-			
-
-				echo $field;
-			echo "</div>";
-		echo "</li>";
-	}
 
 ?><!DOCTYPE html>
 <html lang="fr">
@@ -188,10 +155,10 @@
 			<li class="is-tab do-view"><span class="text"><?php echo $e['label'] ?></span><span class="edit"></span><span class="remove"></span><span class="handle"></span></li>
 			<?php } ?>
 		
-			<li class="light do-wiew view-all"><span class="text">Tout afficher</span></li>
-			<li class="light" id="action-add-tab" class="hide"><a href="#" onclick="addTab($('.tabset')[0])">Ajouter un onglet</a></li>
-			<li id="action-move-on"><a href="#" onclick="enableMove()">Modifier les onglets</a></li>
-			<li id="action-move-off" class="hide"><a href="#" onclick="disableMove()">Fin de modifications</a></li>
+			<li class="light do-wiew view-all"><span class="text"><?php echo _('See all'); ?></span></li>
+			<li class="light" id="action-add-tab" class="hide"><a href="#" onclick="addTab($('.tabset')[0])"><?php echo _('Add a tab'); ?></a></li>
+			<li id="action-move-on"><a href="#" onclick="enableMove()"><?php echo _('Edit tabs'); ?></a></li>
+			<li id="action-move-off" class="hide"><a href="#" onclick="disableMove()"><?php echo _('Save tabs'); ?></a></li>
 		</ul>
 	</div>
 
@@ -207,7 +174,7 @@
 				$e 		= $fieldId[$name];
 
 				if(is_array($e)){
-					fieldTrace($app, $data, $e, $f);
+					$app->apiLoad('field')->fieldTrace($data, $e, $f);
 				}else{
 					echo "<div id=\"replace-".$name."\" class=\"replace".(($f['close']) ? ' closed' : '')."\"></div>";
 					$replace[] = '#'.$name;
@@ -219,7 +186,7 @@
 
 	<div class="view">
 		<div class="view-label">
-			<span>Toujours visible</span>
+			<span><?php echo _('Always visible'); ?></span>
 		</div>
 		<ul class="is-sortable field-list field-list-bottom"><?php
 			foreach($group['groupFormLayout']['bottom'] as $f){
@@ -243,30 +210,30 @@
 	<li id="userMail" class="clearfix form-item <?php echo $app->formError('userMail', 'needToBeFilled') ?>">
 		<div class="hand">&nbsp;</div>
 		<div class="toggle">&nbsp;</div>
-		<label>Identifiant</label>
+		<label><?php echo _('Login/eMail'); ?></label>
 		<div class="form"><input type="text" name="userMail" value="<?php echo $app->formValue($data['userMail'], $_POST['userMail']); ?>" /></div>
 	</li>
 	<li id="userPasswd" class="clearfix form-item <?php echo $app->formError('userPasswd', 'needToBeFilled') ?>">
 		<div class="hand">&nbsp;</div>
 		<div class="toggle">&nbsp;</div>
-		<label>Mot de passe</label>
+		<label><?php echo _('Password'); ?></label>
 		<div class="form">
-			<input type="text" name="userPasswd" value="<?php echo $app->formValue('', $_POST['userPasswd']); ?>" /> confirmation
-			<input type="text" name="confPasswd" value="<?php echo $app->formValue('', $_POST['confPasswd']); ?>" /> (laisser les 2 champs vides pour ne pas changer le mot de passe)
+			<input type="text" name="userPasswd" value="<?php echo $app->formValue('', $_POST['userPasswd']); ?>" /> <?php echo _('confirm'); ?>
+			<input type="text" name="confPasswd" value="<?php echo $app->formValue('', $_POST['confPasswd']); ?>" /> <?php echo _('Let both fields empty to keep the current password'); ?>
 		</div>
 	</li>
 	<li id="userDate" class="clearfix form-item">
 		<div class="hand">&nbsp;</div>
 		<div class="toggle">&nbsp;</div>
-		<label>Date</label>
+		<label><?php echo _('Dates'); ?></label>
 		<div class="form">
 			<table border="0">
 				<tr>
-					<td width="60">Creation</td>
+					<td width="60"><?php echo _('Created'); ?></td>
 					<td width="120"><input type="text" name="userDateCreate" id="userDateCreate" value="<?php echo $app->formValue($data['userDateCreate'], $_POST['userDateCreate']); ?>" size="10" /><i class="icon-remove-sign clear"></i></td>
-					<td width="70">Mise a jour</td>
+					<td width="70"><?php echo _('Updated'); ?></td>
 					<td width="120"><input type="text" name="userDateUpdate" id="userDateUpdate" value="<?php echo $app->formValue($data['userDateUpdate'], $_POST['userDateUpdate']); ?>" size="10" /><i class="icon-remove-sign clear"></i></td>
-					<td width="70">Expiration</td>
+					<td width="70"><?php echo _('Expired'); ?></td>
 					<td width="120"><input type="text" name="userDateExpire" id="userDateExpire" value="<?php echo $app->formValue($data['userDateExpire'], $_POST['userDateExpire']); ?>" size="10" /><i class="icon-remove-sign clear"></i></td>
 				</tr>
 			</table>
@@ -276,7 +243,7 @@
 	<li id="id_profile" class="clearfix form-item">
 		<div class="hand">&nbsp;</div>
 		<div class="toggle">&nbsp;</div>
-		<label>Profile</label>
+		<label><?php echo _('Profile'); ?></label>
 		<div class="form">
 			<select name="id_profile"><?php
 				echo "<option value=\"0\">Aucun profile</option>";
@@ -286,7 +253,7 @@
 				}
 			?></select>
 		
-			Autoriser l'accès à l'administration 
+			<?php echo _('Back office access'); ?>
 			<input type="checkbox" name="is_admin" value="1" <?php if($app->formValue($data['is_admin'], $_POST['is_admin'])) echo " checked"; ?> />
 		</div>
 	</li>
@@ -294,27 +261,27 @@
 	<li id="is_active" class="clearfix form-item">
 		<div class="hand">&nbsp;</div>
 		<div class="toggle">&nbsp;</div>
-		<label>Actif</label>
+		<label><?php echo _('Active'); ?></label>
 		<div class="form">
 			<input type="checkbox" name="is_active" value="1" <?php if($app->formValue($data['is_active'], $_POST['is_active'])) echo " checked"; ?> />
-			Autorisation de connection
+			<?php echo _('Allow this user to log in'); ?>
 		</div>
 	</li>
 
 	<li id="userNewsletter" class="clearfix form-item">
 		<div class="hand">&nbsp;</div>
 		<div class="toggle">&nbsp;</div>
-		<label>Newsletter</label>
+		<label><?php echo _('Newsletter'); ?></label>
 		<div class="form">
 			<input type="checkbox" name="userNewsletter" value="1" <?php if($app->formValue($data['userNewsletter'], $_POST['userNewsletter'])) echo " checked"; ?> />
-			Accepte de recevoir des newsletter
+			<?php echo _('Accept to receive newsletter'); ?>
 		</div>
 	</li>
 
 	<li id="id_group" class="clearfix form-item">
 		<div class="hand">&nbsp;</div>
 		<div class="toggle">&nbsp;</div>
-		<label>Group</label>
+		<label><?php echo _('Group'); ?></label>
 		<div class="form">
 			<select name="id_group" id="group-select"><?php
 				echo "<option></option>";
@@ -329,7 +296,7 @@
 	<li id="userMediaBox" class="clearfix form-item">
 		<div class="hand">&nbsp;</div>
 		<div class="toggle">&nbsp;</div>
-		<label>Media</label>
+		<label><?php echo _('Media'); ?></label>
 		<div class="form"><?php echo
 			$app->apiLoad('field')->fieldForm(
 				NULL,

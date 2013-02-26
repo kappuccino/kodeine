@@ -2,23 +2,19 @@
 
 	if(!headers_sent()) header('Content-type: text/javascript');
 
+	$debug		= isset($_GET['debug']);
+	$folder     = rawurldecode($_GET['folder']);
 	$prompt		= '/media';
+
 	$pref		= $app->configGet('media');
 	$cache		= ($pref['useCache'] == '1') ? true : false;
-#	$cache		= true;
-#	var_dump($cache);
-
-
 	if($app->userCan('media.root') != '') {
-	    if(file_exists(KROOT.$app->userCan('media.root'))) {
-	        $prompt = $app->userCan('media.root');
-	    }
+	    if(file_exists(KROOT.$app->userCan('media.root'))) $prompt = $app->userCan('media.root');
 	}
 
-	$debug		= isset($_GET['debug']);
-//die($prompt);
-#	$folder 	= urldecode($_GET['folder']);
-	$folder 	= rawurldecode($_GET['folder']);
+	$folder 	= ($_GET['folder'] == NULL) ? $prompt : $folder;
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
 	$files 		= $app->fsFile(KROOT.$folder, '', FLAT_NOHIDDEN);
@@ -32,42 +28,45 @@
 
 	sort($elements);
 
-	if($folder != $prompt){
-		$result['parent'] = dirname($folder);
-	}
+	if($folder != $prompt) $result['parent'] = dirname($folder);
 
 	$ignore = file_exists(KROOT.$folder.'/.ignore')
 		? array_map('trim', explode("\n", trim(file_get_contents(KROOT.$folder.'/.ignore'))))
 		: array();
 
-	$result['files'] = array();
+	$result = array();
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 
 	foreach($elements as $n => $el){ unset($tmp);
 		if(!in_array(basename($el), $ignore)){
 
-			$tmp['url'] 	= str_replace(KROOT, '', $el);
-			$tmp['name'] 	= basename(str_replace(KROOT, '', $el));
+			$tmp['url'] 	= basename($el); //str_replace(KROOT, '', $el);
+		//	$tmp['name'] 	= basename(str_replace(KROOT, '', $el));
 			$tmp['cache']	= $cache;
 
 			if(is_dir($el)){
-				$tmp['type'] 		= 'dir';
-				$tmp['tag']			= 'isDir';
-				$tmp['locked']		= file_exists($el.'/.lock') ? true : false;
+				$tmp['is_folder']   = true;
+				$tmp['is_file'] 	= false;
+				$tmp['is_locked']	= file_exists($el.'/.lock') ? true : false;
 			}else
 			if(is_file($el)){
-				$tmp['type'] 		= 'file';
-				$tmp['locked']		= false;
+				$tmp['is_folder']   = false;
+				$tmp['is_file'] 	= true;
+				$tmp['is_locked']	= false;
+
 				$tmp['kind']		= $app->mediaType($el);
 				$tmp['weight']		= filesize($el);
-				$ext 				= $app->mediaParser($el);
 
-				if(strtolower($ext['type']) == 'pdf'){
+				$ext = strtolower(pathinfo($el, PATHINFO_EXTENSION));
+
+				if($ext['type'] == 'pdf'){
 					$tmp['kind']	= 'pdf';
-					$tmp['tag']		= 'isFil';
 				}else
 				if($tmp['kind'] == 'picture'){
 	
-					$size			= getimagesize($el);
+					$size = getimagesize($el);
 					$tmp['width']  	= $size[0];
 					$tmp['height'] 	= $size[1];
 					$tmp['mime']   	= $size['mime'];
@@ -81,64 +80,32 @@
 					
 					$test = $app->mediaDataGet($opt['url']);
 					
-					if($tmp['width'] > 300 OR $tmp['height'] > 300){
-						if($tmp['width'] >= $tmp['height']){
-							$data = $app->mediaUrlData(array_merge($opt, array(
-								'mode'	=> 'width',
-								'value'	=> 300
-							#	'value'	=> $_GET['width']
-							)));
-							$tag = 'w';
-						}else{
-							$tag = 'h';
-							$data = $app->mediaUrlData(array_merge($opt, array(
-								'mode'	=> 'height',
-								'value'	=> round(300 * $_GET['factor'])
-							#	'value'	=> $_GET['height']
-							)));
-						}
-							/*$app->pre(array_merge($opt, array(
-								'mode'	=> 'height',
-								'value'	=> round(300 * $_GET['factor'])
-							#	'value'	=> $_GET['height']
-							)));*/
-							
-						$tmp['thumbnail'] = array(
-							'exists'	=> true,
-							'tag'		=> $tag,
-							'url' 		=> $data['img'],
-							'height'	=> $data['height'],
-							'width'		=> $data['width']
-						);
-	
+					if($tmp['width'] >= $tmp['height']){
+						$data = $app->mediaUrlData(array_merge($opt, array(
+							'mode'	=> 'width',
+							'value'	=> 300
+						)));
 					}else{
-						$tmp['thumbnail'] = array(
-							'exists'	=> false
-						);
+						$data = $app->mediaUrlData(array_merge($opt, array(
+							'mode'	=> 'height',
+							'value'	=> 300
+						)));
 					}
-	
-					$tmp['tag'] .= ' isOrg';
-				}else{
-					$tmp['tag']	= 'isFil';
+
+					$tmp['preview'] = array(
+						'url' 		=> $data['img'],
+						'height'	=> $data['height'],
+						'width'		=> $data['width']
+					);
 				}
 			}
 
-			$result['files'][] = $tmp;
+			$result[] = $tmp;
 		}
 	}
 
-	if($debug){
-		echo "DEBUG RESULT\n";
-		$app->pre($result);
-	}else{
-		#$app->pre($result);
-	#	array_walk_recursive($result, 'pre(');
-	#	echo json_encode($result);
 
-	#	$app->pre($result);
+	// Sortie
+	$json = $app->helperJsonEncode($result);
+	echo $app->helperJsonBeautifier($json);
 
-		$json = $app->helperJsonEncode($result);
-		echo $app->helperJsonBeautifier($json);
-	}
-
-?>
