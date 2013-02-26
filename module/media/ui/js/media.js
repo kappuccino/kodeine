@@ -18,6 +18,13 @@ media.models.media          = Backbone.Model.extend({
 
 });
 
+media.models.meta           = Backbone.Model.extend({
+
+	defaults: {
+	}
+
+});
+
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // COLLECTIONS
@@ -35,6 +42,14 @@ media.collections.path      = Backbone.Collection.extend({
 	model: media.models.media,
 
 	url: 'helper/path'
+
+});
+
+media.collections.meta      = Backbone.Collection.extend({
+
+	model: media.models.meta,
+
+	url: 'helper/meta'
 
 });
 
@@ -109,7 +124,11 @@ media.views.viewItem        = Backbone.View.extend({
 		'click .pdfCover':      'pdfCover',
 		'click .fullsize':      'fullsize',
 		'keyup .title input':   'renameOnEnter',
-		'blur  .title input':   'resetTitle'
+		'blur  .title input':   'resetTitle',
+		'click .playAudio':     'playAudio',
+		'click .playVideo':     'playVideo',
+		'click .poster':        'videoPoster',
+		'click .meta':          'meta'
 	},
 
 	//////////////
@@ -142,11 +161,7 @@ media.views.viewItem        = Backbone.View.extend({
 	lock: function(e){
 		e.stopPropagation();
 		this.lockIcon.toggleClass('locked');
-
-		var mod = media.collections.myMedia.get(this.model.cid)
-		var me  = media.views.myView.folder + '/'+ mod.get('url');
-
-		media.views.myApp.lock(me);
+		media.views.myApp.lock(this.helperUrl());
 	},
 
 	pdfCover: function(e){
@@ -184,12 +199,49 @@ media.views.viewItem        = Backbone.View.extend({
 
 	fullsize: function(e){
 		e.stopPropagation();
-		this.lockIcon.toggleClass('locked');
+		media.views.myApp.fullSize(this.helperUrl());
+	},
 
+	playAudio: function(e){
+		e.stopPropagation();
+		media.views.myApp.playAudio(this.helperUrl());
+	},
+
+	playVideo: function(e){
+		e.stopPropagation();
+		media.views.myApp.playVideo(this.helperUrl());
+	},
+
+	videoPoster: function(e){
+		e.stopPropagation();
+		media.views.myApp.videoPoster(this.helperUrl());
+	},
+
+	meta: function(e){
+		e.stopPropagation();
+
+		if(this.panelView != undefined){
+			console.log('deja');
+			return;
+		}
+
+		this.panelView = new media.views.meta({
+			item:   this,
+			url:    this.helperUrl()
+		});
+
+		this.$el.append(this.panelView.render().el);
+
+		this.panelView.postRender();
+
+	},
+
+	//////////////
+
+	helperUrl: function(){
 		var mod = media.collections.myMedia.get(this.model.cid)
 		var me  = media.views.myView.folder + '/'+ mod.get('url');
-
-		media.views.myApp.fullSize(me);
+		return me;
 	},
 
 	//////////////
@@ -363,6 +415,96 @@ media.views.pathItem        = Backbone.View.extend({
 
 });
 
+media.views.meta            = Backbone.View.extend({
+
+	tagName:    'div',
+	className:  'floating-meta',
+
+	initialize:function(options){
+		options = options || {};
+
+		this.url        = options.url;
+		this.item       = options.item;
+		this.collection = new media.collections.meta;
+
+		this.listenTo(this.collection, 'reset',  this.fill);
+
+		this.collection.fetch({data: {
+			'url': this.url
+		}});
+	},
+
+	events: {
+		'click .save':      'save',
+		'click .close':     'close'
+	},
+
+	//////////////
+
+	save: function(){
+		this.model.set('title',     this.inputTitle.val());
+		this.model.set('caption',   this.inputCaption.val());
+
+		this.model.save();
+	},
+
+	close: function(){
+		delete this.item.panelView;
+		this.$el.remove();
+	},
+
+	//////////////
+
+	clear: function(){
+		this.inputTitle.val('');
+		this.inputDescription.val('');
+	},
+
+	fill: function(){
+		var mod = this.collection.models[0];
+		this.model = mod;
+
+		console.log(mod);
+
+		this.inputCaption.val(this.model.get('caption'));
+		  this.inputTitle.val(this.model.get('title'));
+	},
+
+	//////////////
+
+	template: _.template($('#modal-meta').html()),
+
+	render: function(){
+		var html = this.template({});
+		this.$el.html(html);
+		return this;
+	},
+
+	postRender: function(el){
+		this.position(el);
+
+		this.inputTitle   = $('textarea[name="title"]',       this.$el);
+		this.inputCaption = $('textarea[name="caption"]', this.$el);
+	},
+
+	position: function(){
+
+		var itemOff     = this.item.$el.offset();
+		var itemWidth   = this.item.$el.width();
+		var floatWidth  = this.$el.width();
+		var length      = (itemOff.left + itemWidth) + floatWidth;
+
+		(length > $(window).width())
+			? this.$el.removeClass('left').addClass('right')
+			: this.$el.removeClass('right').addClass('left');
+
+	//	this.$el.css('height', $('#slider').val());
+		media.views.myApp.size();
+	}
+
+
+});
+
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -394,16 +536,13 @@ media.views.app             = Backbone.View.extend({
 		// Upload
 		this.uploadInit();
 
-		this.slider         = $('#slider');
-
-		this.buttonNewDir   = $('#newDir');
-		this.buttonCancelDir= $('#cancelDir');
-
+		// UI Item
 		this.modalNewDir    = $('#modal-newdir');
 		this.modalUpload    = $('#modal-upload');
-		this.wall           = $('#fade-wall');
-
+		this.modalMeta      = $('#modal-meta');
 		this.inputNewFolder = $('#modal-newdir input');
+		this.wall           = $('#fade-wall');
+		this.slider         = $('#slider');
 	},
 
 	events: {
@@ -431,6 +570,7 @@ media.views.app             = Backbone.View.extend({
 		this.wall.css('display', 'none');
 		this.modalNewDir.css('display', 'none');
 		this.modalUpload.css('display', 'none');
+		this.modalMeta.css('display', 'none');
 	},
 
 	wallShow: function(){
@@ -569,11 +709,18 @@ media.views.app             = Backbone.View.extend({
 
 	size: function(){
 		var value  = parseInt(this.slider.val());
+
 		$('.item').css('width', value+20);
+
 		$('.item .media').css({
 			'height':  value,
 			'width':   value
 		});
+
+		$('.item .floating-meta').css({
+			'height':  (value + 10)
+		});
+
 	},
 
 	/////////
@@ -693,7 +840,20 @@ media.views.app             = Backbone.View.extend({
 
 	fullSize: function(me){
 		window.open(me);
+	},
+
+	videoPoster: function(me){
+		window.open('helper/poster?url='+me);
+	},
+
+	playVideo: function(me){
+		window.open('helper/player-video?url='+me);
+	},
+
+	playAudio: function(me){
+		window.open('helper/player-audio?url='+me);
 	}
+
 });
 
 

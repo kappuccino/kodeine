@@ -22,8 +22,6 @@
 <head>
 	<title></title>
 	<link rel="stylesheet" type="text/css" href="../../core/vendor/flowplayer/skin/functional.css" />
-	<script type="text/javascript" src="../../core/vendor/jquery/jquery-1.7.2.min.js"></script>
-	<script type="text/javascript" src="../../core/vendor/flowplayer/flowplayer.min.js"></script>
 	<style>
 		body{
 			font-family: Arial;
@@ -39,8 +37,11 @@
 
 <p style="text-align:center">
 	<?php echo basename($url) ?> &#8212; <?php echo $duree ?> &#8212; <?php echo $width.'x'.$height ?> &#8212; <?php echo round(filesize(KROOT.$url) / 1024 / 1024, 2); ?> Mo
-	<a href="video-poster?url=<?php echo $url ?>">Modifier le Poster</a>
+	<a href="poster?url=<?php echo $url ?>">Modifier le Poster</a>
 </p>
+
+<script type="text/javascript" src="../../core/vendor/jquery/jquery-1.7.2.min.js"></script>
+<script type="text/javascript" src="../../core/vendor/flowplayer/flowplayer.min.js"></script>
 
 <script>
 	$(function() {

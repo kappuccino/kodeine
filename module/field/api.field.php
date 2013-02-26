@@ -752,7 +752,7 @@ public function fieldForm($id_field, $value, $opt=array()){
 			? $this->fieldGet(array('debug' => false, 'fieldKey'	=> $key))
 			: $this->fieldGet(array('debug' => false, 'id_field'	=> $id_field));
 
-		if($field['id_$field'] == NULL) return "Impossble de trouver le champ";
+		if($field['id_field'] == NULL) return "Impossible de trouver le champ";
 		$field['fieldParam'] = json_decode($field['fieldParam'], true);
 	}
 
@@ -1045,7 +1045,7 @@ public function fieldForm($id_field, $value, $opt=array()){
 
 		// choix des image par le bas...
 		$form .= "<div class=\"choosing\" style=\"display:none;\">";
-		$form .= "<iframe id=\"".$id."-choosing\" src=\"../media/embed?off\" scrolling=\"no\" frameborder=\"0\" width=\"100%\" height=\"100%\"></iframe>";
+		$form .= "<iframe id=\"".$id."-choosing\" src=\"../media/index?embed&off\" scrolling=\"no\" frameborder=\"0\" width=\"100%\" height=\"100%\"></iframe>";
 		$form .= "</div>";
 		
 		// upload

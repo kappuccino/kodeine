@@ -24,7 +24,7 @@
 	<link rel="stylesheet" type="text/css" href="../core/vendor/jqueryui/jqui.slider.css" />
 	<link rel="stylesheet" type="text/css" href="../core/vendor/flowplayer/skin/functional.css" />
 </head>
-<body class="<?php if($_GET['popMode']) echo 'popMode'; ?>">
+<body class="<?php if($_GET['popMode']) echo 'popMode '; if(isset($_GET['embed'])) echo 'embed '; ?>">
 
 <header><?php
 	include(COREINC.'/top.php');
@@ -32,11 +32,8 @@
 ?></header>
 
 <div id="app">
-
 	<ul id="path" class="clearfix"></ul>
-
 	<ul id="view" class="clearfix"></ul>
-
 </div>
 
 <!-- /// /// /// /// /// /// /// /// /// /// /// /// /// /// /// /// /// /// /// /// /// /// /// /// /// /// /// /// -->
@@ -60,10 +57,6 @@
 
 	</form>
 </div>
-
-<div id="modal-meta" style="display:none;"></div>
-
-<div id="modal-pref" style="display:none;"></div>
 
 <div id="modal-newdir">
 	<p><?php echo _('Create a new folder'); ?></p>
@@ -105,12 +98,22 @@
         </div>
     </div>
     <div class="action">
-        <img class="delete"     src="ui/img/media-delete.png" />
-        <img class="duplicate"  src="ui/img/media-duplicate.png" />
+        <img class="delete" src="ui/img/media-delete.png" />
+        <img class="duplicate" src="ui/img/media-duplicate.png" />
+        <img class="fullsize" src="ui/img/media-wide.png" />
+        <img class="meta" src="ui/img/media-rename.png" />
+
 		<% if(kind == 'pdf'){ %>
-        <img class="pdfCover"  src="ui/img/media-flip.png" />
+				<img class="pdfCover" src="ui/img/media-flip.png" />
+	    <% }else
+	       if(kind == 'video'){ %>
+				<img class="poster" src="ui/img/media-flip.png" />
+				<img class="playVideo" src="ui/img/media-play.png" />
+	    <% }else
+		   if(kind == 'audio'){ %>
+				<img class="playAudio" src="ui/img/media-play.png" />
 	    <% } %>
-        <img class="fullsize" src="ui/img/media-fullsize.png" />
+
     </div>
     <div class="title">
         <input type="text" value="<%- url %>" />
@@ -134,6 +137,25 @@
 
 <script type="text/template" id="path-sep">
     <span class="name">/</span>
+</script>
+
+<script type="text/template" id="modal-meta">
+
+    <div class="data">
+        Titre
+        <div class="wrapp"><textarea name="title"></textarea></div>
+
+        Description
+        <div class="wrapp"><textarea name="caption"></textarea></div>
+
+	    <div class="group">
+		    <div class="btn-group">
+				<a class="btn save">Sauver</a>
+				<a class="btn close">Fermer</a>
+		    </div>
+	    </div>
+    </div>
+
 </script>
 
 

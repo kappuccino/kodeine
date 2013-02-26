@@ -121,12 +121,12 @@
 			}			
 		}
 
-		$app->go('video-poster?url='.$_GET['url']);
+		$app->go('poster?url='.$_GET['url']);
 	}
 	
 	if(file_exists(KROOT.$poster) && isset($_GET['noPoster'])){
 		unlink(KROOT.$poster);
-		$app->go('video-poster?url='.$_GET['url']);
+		$app->go('poster?url='.$_GET['url']);
 	}
 
 ?><!DOCTYPE html> 
@@ -237,13 +237,13 @@
 
 	function pick(n) {
 		if(confirm("Garder cette image comme poster de la vidéo ?")) {
-		   document.location = 'video-poster?&url=<?php echo $_GET['url'] ?>&pick='+n;
+		   document.location = 'poster?&url=<?php echo $_GET['url'] ?>&pick='+n;
 		}
 	}
 
 	function posterRemove(){
 		if(confirm("Supprimer ce poster ?")) {
-		   document.location = 'video-poster?&url=<?php echo $_GET['url'] ?>&noPoster';
+		   document.location = 'poster?&url=<?php echo $_GET['url'] ?>&noPoster';
 		}
 	}
 
@@ -251,14 +251,14 @@
 		$('#log').html('Generation en cours des images : NE PAS FERMER CETTE FENETRE');
 
 		$.ajax({
-			url: 'video-poster',
+			url: 'poster',
 			type: 'get',
 			data: {
 				'generate': true,
 				'url': '<?php echo $_GET['url'] ?>'
 			}
 		}).done(function(data){
-		  	document.location = 'video-poster?&url=<?php echo $_GET['url'] ?>';
+		  	document.location = 'poster?&url=<?php echo $_GET['url'] ?>';
 		});
 	}
 

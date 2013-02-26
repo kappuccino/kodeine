@@ -851,6 +851,7 @@
 		<div class="toggle"></div>
 		<label><?php echo _('Media'); ?></label>
 		<div class="form"><?php echo
+
 			$app->apiLoad('field')->fieldForm(
 				NULL,
 				$app->formValue($data['contentMedia'], $_POST['contentMedia']),
@@ -863,6 +864,7 @@
 					),
 				)
 			);
+
 		?></div>
 	</li>
 

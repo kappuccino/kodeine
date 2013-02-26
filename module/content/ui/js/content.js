@@ -60,13 +60,13 @@ function doMediaAction(e, around){
 				 * char de la chaine, le remettre après sur embed.php
 				 */
 				
-				$(e+'-choosing').attr('src', '../media/embed?field='+e.substr(1, e.length));
+				$(e+'-choosing').attr('src', '../media/index?embed&field='+e.substr(1, e.length));
 				$(this).html('Fermer le navigateur de media');
 				arrow.attr('src', '../core/ui/img/_img/arrow-folder-open.png');
 			}else{
 				
 				choosing.css('display', 'none');
-				$(e+'-choosing').attr('src', '../media/embed?n=1');
+				$(e+'-choosing').attr('src', '../media/index&emed?n=1');
 				$(this).html('Choisir des media');
 				arrow.attr('src', '../core/ui/img/_img/arrow-folder-close.png');
 			}
