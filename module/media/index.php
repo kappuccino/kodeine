@@ -75,6 +75,7 @@
     <div class="action">
         <img class="delete" src="ui/img/media-delete.png" />
         <span class="lock <% if(is_locked){ %>locked<% } %>"></span>
+        <img class="select" src="ui/img/media-select.png" />
     </div>
     <div class="title">
 	    <input type="text" value="<%- url %>" />
@@ -114,6 +115,7 @@
 				<img class="playAudio" src="ui/img/media-play.png" />
 	    <% } %>
 
+        <img class="select" src="ui/img/media-select.png" />
     </div>
     <div class="title">
         <input type="text" value="<%- url %>" />

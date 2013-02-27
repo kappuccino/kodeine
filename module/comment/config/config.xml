@@ -3,13 +3,16 @@
 
 	<data>
 		<key>comment</key>
-		<version>5.1.0</version>
-        <lastMod>2013-02-24</lastMod>
+		<version>5.2.0</version>
+        <lastMod>2013-02-27</lastMod>
 		<menu>NO</menu>
 		<install>YES</install>
-
-		<name><![CDATA[Commentaire]]></name>
+		<name><![CDATA[Comment]]></name>
 	</data>
+
+    <locale language="fr_FR">
+		<name><![CDATA[Commentaire]]></name>
+    </locale>
 
     <i18n>
         <file>index.php</file>

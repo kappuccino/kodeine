@@ -128,7 +128,8 @@ media.views.viewItem        = Backbone.View.extend({
 		'click .playAudio':     'playAudio',
 		'click .playVideo':     'playVideo',
 		'click .poster':        'videoPoster',
-		'click .meta':          'meta'
+		'click .meta':          'meta',
+		'click .select':        'select'
 	},
 
 	//////////////
@@ -234,6 +235,14 @@ media.views.viewItem        = Backbone.View.extend({
 
 		this.panelView.postRender();
 
+	},
+
+	select: function(e){
+		if(this.model.get('is_folder')){
+			media.views.myApp.select(this.helperUrl(), 'folder');
+		}else{
+			media.views.myApp.select(this.helperUrl());
+		}
 	},
 
 	//////////////
@@ -508,7 +517,7 @@ media.views.meta            = Backbone.View.extend({
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-media.views.app             = Backbone.View.extend({
+media.views.app             = Backbone.View.extend(!{
 
 	el: $('body'),
 
@@ -721,6 +730,46 @@ media.views.app             = Backbone.View.extend({
 			'height':  (value + 10)
 		});
 
+	},
+
+	/////////
+
+	select: function(file, prompt){
+		prompt = prompt || this.detectType(file);
+
+		switch(method){
+			case 'editable':    parent.opener.editable.imageBack(file);
+			case 'mce':         parent.opener.insertRichEditor(field, '<img src="'+file+'" />'); break;
+			case 'sort':        parent.opener.mediaInsert(field, prompt+'@@'+file, 'sort'); break;
+			case 'sort-embed':  parent.mediaInsert(field, prompt+'@@'+file, 'sort'); break;
+			case 'line':
+				var fld = parent.opener.document.getElementById(field);
+				fld.value  = file;
+				fld.fireEvent('change', fld);
+				break;
+		}
+	},
+
+	detectType: function(file){
+		var ext = file.substr(file.lastIndexOf(".") + 1).toLowerCase();
+		var def = {
+			'image':        ['png', 'gif', 'jpeg', 'jpg', 'tiff', 'tif', 'psd', 'bmp'],
+			'flash':        ['swf', 'fla'],
+			'powerpoint':   ['ppt'],
+			'excel':        ['xls', 'xlm', 'xlt'],
+			'pdf':          ['pdf'],
+			'doc':          ['doc', 'docx', 'txt'],
+			'audio':        ['mp3', 'aif', 'aiff', 'wav'],
+			'video':        ['mov', 'avi', 'm4v', 'mp4', 'mpg', 'mpeg', 'wmv', 'flv'],
+			'html':         ['htm', 'html', 'php', 'php3', 'php4', 'php5'],
+			'archive':      ['zip', 'tar', 'tgz', 'sit', 'rar', 'arj', 'sitx', 'sea', 'lha', 'lzh', 'bin', 'hqx', 'gz', 'tbz', 'z', 'taz']
+		};
+
+		for(var type in def){
+			if($.inArray(ext, def[type]) !== -1) return type;
+		}
+
+		return 'unknown';
 	},
 
 	/////////

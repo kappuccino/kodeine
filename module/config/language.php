@@ -75,7 +75,7 @@
 <div id="app"><div class="wrapper"><div class="row-fluid">
 			
 	<?php if(!$app->userCan('core.language')){ ?>
-		<div class="message messageError"><?php echo _('Profile insufisant') ?></div>
+		<div class="message messageError"><?php echo _('Enough privileges') ?></div>
 	<?php }else{ ?>
 
 	<div class="span6">
@@ -203,11 +203,11 @@
 <script>
 
 	function apply(){
-		if(confirm("<?php echo addslashes(_('SUPPRIMER ?')) ?>")) $('#form').submit();
+		if(confirm("<?php echo addslashes(_('Would you really want to remove this language ?')) ?>")) $('#form').submit();
 	}
 	
 	function addZone(){
-		zone = prompt("<?php echo addslashes(_('Quel nom voulez vous donner à cette zone ?')) ?>");
+		zone = prompt("<?php echo addslashes(_('Give this zone a name')) ?>");
 
 		if(zone.length > 0){
 			$('#countryZone').append('<option value="'+zone+'" selected="selected">'+zone+'</option>');

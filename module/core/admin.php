@@ -17,8 +17,6 @@
 
 	$app	= new coreAdmin();
 
-	$app->apiLoad('coreI18n');
-
 	$url	= parse_url($url);
 	$part	= explode('/', substr($url['path'], 7), 2);
 

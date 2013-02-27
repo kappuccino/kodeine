@@ -3,14 +3,15 @@
 
 	<data>
 		<key>survey</key>
-		<version>5.0.2</version>
-		<lastMod>2013-02-01</lastMod>
-
-		<name><![CDATA[Enquête]]></name>
-		<description><![CDATA[Géer vos questionnaire]]></description>
-		<panelIcon>ressource/img/module-survey.png</panelIcon>
+		<version>5.2.0</version>
+		<lastMod>2013-02-27</lastMod>
 		<install>YES</install>
+		<name><![CDATA[Survey]]></name>
 	</data>
+
+    <locale language="fr_FR">
+        <name><![CDATA[Enquête]]></name>
+    </locale>
 
 	<profile>
 		<item code="index"	type="ALLOW_DENY" name="Accessible" />

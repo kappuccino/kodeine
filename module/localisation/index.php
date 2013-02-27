@@ -143,7 +143,7 @@
 			<tfoot>
 				<tr>
 					<td height="20"></td>
-					<td><a href="javascript:remove('slave');" class="btn btn-mini"><?php echo _('Remove seleced items'); ?></a></td>
+					<td><a href="javascript:remove('slave');" class="btn btn-mini"><?php echo _('Remove selected items'); ?></a></td>
 				</tr>
 			</tfoot>
 		</table>

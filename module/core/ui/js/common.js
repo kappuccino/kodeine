@@ -157,7 +157,7 @@ function cschange(that) {
 /* + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - 
 + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - */
 function mediaPicker(id, back){
-	window.open('../media/index?popMode=1&field='+id+'&method='+back, 'pick', 'height=900;width=800;');
+	window.open('../media/index?popMode=1&field='+id+'&method='+back, 'pick', 'height=600,width=550;');
 }
 function mediaOpen(method,field){
 	window.open('../media/index?field='+field+'&method='+method, 'filemanager', 'scrollbars=yes,status=yes,resizable=yes,width=950,height=800');

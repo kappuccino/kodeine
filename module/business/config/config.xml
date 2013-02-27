@@ -3,14 +3,17 @@
 
 	<data>
 		<key>business</key>
-		<version>5.0.10</version>
-        <lastMod>2013-02-14</lastMod>
+		<version>5.2.0</version>
+        <lastMod>2013-02-27</lastMod>
 		<install>YES</install>
-
-		<name><![CDATA[Business]]></name>
+		<name><![CDATA[eBusiness]]></name>
 	</data>
 
-	<dependencies>
+    <locale language="fr_FR">
+        <name><![CDATA[eCommerce]]></name>
+    </locale>
+
+    <dependencies>
 		<module>shop</module>
 	</dependencies>
 

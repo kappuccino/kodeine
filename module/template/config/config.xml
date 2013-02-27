@@ -3,12 +3,14 @@
 
 	<data>
 		<key>template</key>
-		<version>5.0.1</version>
-		<lastMod>2012-10-21</lastMod>
-
-		<name><![CDATA[Mise en page]]></name>
-		<description><![CDATA[]]></description>
+		<version>5.2.0</version>
+		<lastMod>2013-02-27</lastMod>
 		<menu>NO</menu>
+		<name><![CDATA[Gabarits]]></name>
 	</data>
+
+    <locale language="fr_FR">
+		<name><![CDATA[Templates]]></name>
+    </locale>
 
 </element>

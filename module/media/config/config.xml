@@ -3,12 +3,15 @@
 
 	<data>
 		<key>media</key>
-		<version>5.1.0</version>
-		<lastMod>2013-02-14</lastMod>
+		<version>5.2.0</version>
+		<lastMod>2013-02-27</lastMod>
 		<install>YES</install>
-
-		<name><![CDATA[Gestionnaire de fichiers]]></name>
+        <name><![CDATA[File Manager]]></name>
 	</data>
+
+    <locale language="fr_FR">
+		<name><![CDATA[Gestionnaire de fichiers]]></name>
+    </locale>
 
     <i18n>
         <file>index.php</file>

@@ -4,9 +4,21 @@ class coreAdmin extends coreApp {
 
 public function coreAdmin(){
 
-    setlocale(LC_ALL, 'fr_FR.UTF8');
+	$language = $this->filterGet('core', 'language');
+	$lang     = $language['language'];
+	$lang     = ($lang == '') ? 'fr_FR.utf-8' : $lang;
 
-	$this->adminZone	= true; 
+	$GLOBALS['language'] = $lang; // FixMe
+
+	putenv('LC_ALL='.$lang);
+	setlocale(LC_ALL, $lang);
+
+	$folder = MODULE.'/core/locale';
+
+	bindtextdomain('default', $folder);
+	textdomain('default');
+
+	$this->adminZone	= true;
 	$this->total		= 0;
 	$this->limit		= 0;
 	$this->apiContext	= 'admin';
@@ -151,7 +163,7 @@ public function searchSelector($opt){
 	if($opt['multi']){
 		$value = is_array($opt['value']) ? $opt['value'] : array();
 
-		$form .= "<select name=\"".$opt['name']."\" id=\"".$opt['id']."\" size=\"".$opt['size']."\" multiple style=\"".$opt['style']."\">";
+		$form = "<select name=\"".$opt['name']."\" id=\"".$opt['id']."\" size=\"".$opt['size']."\" multiple style=\"".$opt['style']."\">";
 		foreach($search as $e){
 			$selected = in_array($e['id_search'], $value) ? ' selected' : NULL;
 			$form .= "<option value=\"".$e['id_search']."\"".$selected.">".$e['searchName']."</option>";
@@ -161,7 +173,7 @@ public function searchSelector($opt){
 	if($opt['one']){
 		$value = is_array($opt['value']) ? $opt['value'][0] : $opt['value'];
 
-		$form .= "<select name=\"".$opt['name']."\" id=\"".$opt['id']."\" style=\"".$opt['style']."\">";
+		$form  = "<select name=\"".$opt['name']."\" id=\"".$opt['id']."\" style=\"".$opt['style']."\">";
 		foreach($search as $e){
 			$selected = ($e['id_search'] == $value) ? ' selected' : NULL;
 			$form .= "<option value=\"".$e['id_search']."\"".$selected.">".$e['searchName']."</option>";
@@ -295,6 +307,20 @@ public function moduleData($mod, $core=true){
 	if($data->length > 0){
 		foreach($data as $e){
 			$module[$e->nodeName] = $e->nodeValue;
+		}
+	}
+
+	list($myLang) = explode('.', $GLOBALS['language']);
+	$locale = $xpath->query('/element/locale');
+	if($locale->length > 0){
+		foreach($locale as $e){
+			if($e->getAttributeNode('language')->nodeValue == $myLang){
+				if($e->childNodes->length > 0){
+					foreach($e->childNodes as $e){
+						$module[$e->nodeName] = $e->nodeValue;
+					}
+				}
+			}
 		}
 	}
 

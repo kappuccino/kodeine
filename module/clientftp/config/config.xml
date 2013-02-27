@@ -3,12 +3,14 @@
 
 	<data>
 		<key>clientftp</key>
-		<version>5.0.3</version>
-        <lastMod>2013-02-01</lastMod>
-
-		<name><![CDATA[Client FTP]]></name>
-		<description><![CDATA[G&eacute;rer les acc&egrave;s FTP suppl&eacute;mentaires]]></description>
+		<version>5.2.3</version>
+        <lastMod>2013-02-27</lastMod>
+		<name><![CDATA[FTP Client]]></name>
 	</data>
+
+    <locale language="fr_FR">
+        <name><![CDATA[Client FTP]]></name>
+    </locale>
 
 	<profile>
 		<item code="index" type="ALLOW_DENY" name="Accessible" />

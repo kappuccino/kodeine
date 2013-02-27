@@ -2,6 +2,16 @@
 
 	if(!defined('COREINC')) die('Direct access not allowed');
 
+	if(isset($_GET['language'])){
+		$app->filterSet('core', $_GET['language'], 'language');
+		$app->go('./');
+	}
+
+	$languages = array(
+		'fr_FR.utf-8'   => 'Français',
+		'en_EN'         => 'English'
+	);
+
 ?><!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -16,10 +26,18 @@
 
 <div class="inject-subnav-right hide">
     <li>
-        <a href="module">
-	        <span><?php echo _('Module manager') ?></span>
-        </a>
+        <a href="module"><span><?php echo _('Module manager') ?></span></a>
     </li>
+	<li>
+		<div class="btn-group">
+            <a class="btn btn-mini dropdown-toggle" data-toggle="dropdown" href="#"><i class="icon-flag"></i> <?php echo _('Change language') ?> <span class="caret"></span></a>
+            <ul class="dropdown-menu"><?php
+				foreach($languages as $loc => $n){
+					echo '<li><a href="./?language='.$loc.'">'.$n.'</a></li>';
+				}
+			?></ul>
+		</div>
+	</li>
 </div>
 
 <div id="app"><div class="wrapper">
@@ -36,7 +54,9 @@
 </div></div>
 
 <?php include(COREINC.'/end.php'); ?>
+<script src="../core/vendor/bootstrap/js/bootstrap-dropdown.js"></script>
 <script src="ui/js/dashboard.js" type="text/javascript"></script>
+
 <script>
 	$(function(){
 	//	dashboardLoad('dash-data', 'content', 'last');

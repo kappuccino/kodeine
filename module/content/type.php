@@ -159,7 +159,7 @@
 
 	<?php if(sizeof($_POST['remove']) > 0 ){ ?>
 	<div class="message messageWarning">
-		<p><?php echo _('<b>WARNING</b> you are about to remove data, this action not cancelable (Database table destruction)') ?></p>
+		<p><?php echo _('<b>WARNING</b> you are about to remove data, this action is not cancelable (Database table destruction)') ?></p>
 		
 		<form action="type" method="post">
 			<?php foreach($_POST['remove'] as $e){ ?>

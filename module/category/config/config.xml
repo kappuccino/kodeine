@@ -1,13 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <element>
 
-	<data>
-		<key>category</key>
-		<version>5.1.0</version>
-        <lastMod>2013-02-23</lastMod>
-		<menu>NO</menu>
-		<name><![CDATA[Catégorie]]></name>
-	</data>
+    <data>
+        <key>category</key>
+        <version>5.2.0</version>
+        <lastMod>2013-02-27</lastMod>
+        <menu>NO</menu>
+        <name><![CDATA[Category]]></name>
+    </data>
+
+    <locale language="fr_FR">
+        <name><![CDATA[Catégorie]]></name>
+    </locale>
 
     <i18n>
         <file>index.php</file>

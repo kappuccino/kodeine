@@ -25,7 +25,7 @@
 		$app->go('./');
 	}else
 	if($app->userIsLogged && !$app->userIsAdmin){
-		echo _('Vous êtes identifié mais vous ne pouvez pas accéder a l\'admin : <a href=\"?logout=1\">se déconnecter</a>');
+		echo _('You are logged in, but you do not have enought privileges to use the back office. <a href=\"?logout=1\">Logout</a>');
 		die();
 	}
 

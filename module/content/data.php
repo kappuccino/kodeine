@@ -290,7 +290,7 @@
 
 		<li class="do-wiew view-all"><a class="text"><?php echo _('See all'); ?></a></li>
 		<li class="hide" id="action-add-tab"><a onclick="addTab($('.tabset')[0])"><?php echo _('Add a tab'); ?></a></li>
-		<li class="" id="action-move-on"><a onclick="enableMove()"><?php echo _('Edits tabs'); ?></a></li>
+		<li class="" id="action-move-on"><a onclick="enableMove()"><?php echo _('Edit tabs'); ?></a></li>
 		<li class="hide" id="action-move-off"><a onclick="disableMove()"><?php echo _('Save tabs'); ?></a></li>
 
 		<li class="right right-select">

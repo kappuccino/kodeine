@@ -3,12 +3,15 @@
 
 	<data>
 		<key>localisation</key>
-		<version>5.1.0</version>
-        <lastMod>2013-02-24</lastMod>
+		<version>5.2.0</version>
+        <lastMod>2013-02-27</lastMod>
 		<menu>NO</menu>
-
-		<name><![CDATA[Traduction]]></name>
+        <name><![CDATA[Translate]]></name>
 	</data>
+
+    <locale language="fr_FR">
+		<name><![CDATA[Traduction]]></name>
+    </locale>
 
     <i18n>
         <file>index.php</file>

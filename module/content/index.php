@@ -124,7 +124,7 @@
 			}		
 		?></select>
 
-		&nbsp;<?php echo _('Alle'); ?> 		    <input type="radio"  name="filter[viewChildren]" 	value="0" <?php if(!$filter['viewChildren']) echo ' checked'; ?> />
+		&nbsp;<?php echo _('All'); ?> 		    <input type="radio"  name="filter[viewChildren]" 	value="0" <?php if(!$filter['viewChildren']) echo ' checked'; ?> />
 		&nbsp;<?php echo _('Ordered'); ?> 	    <input type="radio"  name="filter[viewChildren]" 	value="1" <?php if( $filter['viewChildren']) echo ' checked'; ?> />
 		&nbsp;<?php echo _('Inheritance'); ?> 	<input type="hidden" name="filter[categoryThrough]" value="0" />
 

@@ -102,17 +102,17 @@
 				<tr>
 					<td><?php echo _('Mail recipient') ?></td>
 					<td><input type="text" name="configMailTo" value="<?php echo $app->formValue($data['configMailTo'], $_POST['configMailTo']) ?>" style="width:80%;" /></td>
-					<td><?php echo _('Destinataire des mails expédiés depuis le site') ?></td>
+					<td><?php echo _('Website\'s email recipient') ?></td>
 				</tr>
 				<tr>
 					<td><?php echo _('Copy') ?></td>
 					<td><input type="text" name="configMailCc" value="<?php echo $app->formValue($data['configMailCc'], $_POST['configMailCc']) ?>" style="width:80%;" /></td>
-					<td><?php echo _('Destinataire en copie des mails expédiés depuis le site') ?></td>
+					<td><?php echo _('Website\'s carbon copy email recipient') ?></td>
 				</tr>
 				<tr>
 					<td><?php echo _('Blind copy') ?></td>
 					<td><input type="text" name="configMailBcc" value="<?php echo $app->formValue($data['configMailBcc'], $_POST['configMailBcc']) ?>" style="width:80%;" /></td>
-					<td><?php echo _('Destinataire invisible des mails expédiés depuis le site') ?></td>
+					<td><?php echo _('Website\'s blind copy email recipient') ?></td>
 				</tr>
 				<tr>
 					<td><?php echo _('Theme') ?></td>

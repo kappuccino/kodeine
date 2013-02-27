@@ -3,11 +3,14 @@
 
 	<data>
 		<key>user</key>
-		<version>5.1.0</version>
-        <lastMod>2013-02-24</lastMod>
-
-		<name><![CDATA[Utilisateur]]></name>
+		<version>5.2.0</version>
+        <lastMod>2013-02-27</lastMod>
+        <name><![CDATA[User]]></name>
 	</data>
+
+    <locale language="fr_FR">
+		<name><![CDATA[Utilisateur]]></name>
+    </locale>
 
     <i18n>
         <file>index.php</file>

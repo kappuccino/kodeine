@@ -7,9 +7,9 @@
 	?></div>
 
 	<ul class="right">
-		<li><a href="../core/login?logout">Se déconnecter</a></li>
-		<li><a href="../core/support" target="_blank">Support</a></li>
-		<li><a href="/" target="_blank">Ouvrir le site</a></li>
+		<li><a href="../core/login?logout"><?php echo _('Logout') ?></a></li>
+		<li><a href="../core/support" target="_blank"><?php echo _('Support'); ?></a></li>
+		<li><a href="/" target="_blank"><?php echo _('Front office'); ?></a></li>
 	</ul>
 
 </div></div>
@@ -27,7 +27,7 @@
 				? '/('.implode('|', array_merge(array($e['key']), $e['dependencies'])).'){1,}/'
 				: '/'.$e['key'].'/';
 
-			$class = isMe($class) ? 'me' : NULL;			
+			$class = isMe($class) ? 'me' : NULL;
 			echo '<li class="'.$class.'"><a href="../'.$e['key'].'/">'.$e['name'].'</a></li>';
 		}
 	}

@@ -3,12 +3,14 @@
 
 	<data>
 		<key>rss</key>
-		<version>5.0.0</version>
-		<lastMod>2012-11-08</lastMod>
-
-		<name><![CDATA[RSS]]></name>
-		<description><![CDATA[]]></description>
+		<version>5.2.0</version>
+		<lastMod>2013-02-27</lastMod>
 		<hidden>YES</hidden>
+		<name><![CDATA[RSS]]></name>
 	</data>
+
+    <locale language="fr_FR">
+        <name><![CDATA[RSS]]></name>
+    </locale>
 
 </element>

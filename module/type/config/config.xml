@@ -3,12 +3,15 @@
 
 	<data>
 		<key>type</key>
-		<version>5.0.0</version>
-        <lastMod>2013-02-14</lastMod>
-
-		<name><![CDATA[Type]]></name>
+		<version>5.2.0</version>
+        <lastMod>2013-02-27</lastMod>
 		<install>YES</install>
         <menu>NO</menu>
+		<name><![CDATA[Type]]></name>
 	</data>
+
+    <locale language="fr_FR">
+        <name><![CDATA[Type]]></name>
+    </locale>
 
 </element>
