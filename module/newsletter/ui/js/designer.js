@@ -3,10 +3,12 @@
 var idx     = 0;
 var editor  = $(".edit");
 var data    = new Object();
+var curlayout = $("");
 
 // Apres le chargement de la page
 $(document).ready(function() {
 
+    editorClose();
     // Init du compteur de layouts
     $(".layout").each( function(e) {
         if($(this).attr("data-idx")) {
@@ -170,19 +172,21 @@ function bindEvents() {
         e.preventDefault();
         e.stopImmediatePropagation();
     });
+
     sizeIframe();
 }
 
 function layoutEdit(layout) {
-    var editable    = layout.find(".editable");
-    var id_layout   = layout.attr("data-idx");
-    var id_type     = layout.attr("data-id_type");
-    var id_content  = layout.attr("data-id_content");
-    var user        = layout.attr("data-user");
-    var id_user     = layout.attr("data-id_user");
+    curlayout = layout;
+    var editable    = curlayout.find(".editable");
+    var id_layout   = curlayout.attr("data-idx");
+    var id_type     = curlayout.attr("data-id_type");
+    var id_content  = curlayout.attr("data-id_content");
+    var user        = curlayout.attr("data-user");
+    var id_user     = curlayout.attr("data-id_user");
 
     $(".layoutActive").removeClass("layoutActive");
-    layout.addClass("layoutActive");
+    curlayout.addClass("layoutActive");
 
     editorOpen();
     //editor.html('<div class="edit-header"><a class="btn save">Enregistrer</a><a class="btn close">Annuler</a></div>');
@@ -192,14 +196,18 @@ function layoutEdit(layout) {
         e.preventDefault();
         e.stopImmediatePropagation();
     });
+    console.log(id_layout);
     $('.save').click( function(e){
-        layoutSave(layout);
+        console.log('--save--');
+        console.log(id_layout);
+        console.log('--/ save--');
+        layoutSave(curlayout);
         e.preventDefault();
         e.stopImmediatePropagation();
     });
 
     // Menu deroulant changement layout
-    var layouts = layoutList(layout.parent(".repeat"));
+    var layouts = layoutList(curlayout.parent(".repeat"));
     if(layouts.length > 1) {
         editor.append('<div class="edit-form">Changer de mise en forme : <select id="layoutChange"></select><hr></div>');
         layouts.each( function() {
@@ -210,7 +218,7 @@ function layoutEdit(layout) {
         $("#layoutChange option[value='" + getId(layout) + "']").attr('selected','selected');
 
         $("#layoutChange").change( function(e) {
-            layoutChange(layout, $(this).val());
+            layoutChange(curlayout, $(this).val());
         });
     }
 
@@ -241,7 +249,7 @@ function layoutEdit(layout) {
                     $('#results').fadeOut(200);
 
                     if($("#select_id_content").val() > 0) {
-                        layoutApplyContent(layout, $("#select_id_content").val());
+                        layoutApplyContent(curlayout, $("#select_id_content").val());
                     }
                     e.preventDefault();
                     e.stopImmediatePropagation();
@@ -251,7 +259,10 @@ function layoutEdit(layout) {
 
         $(".btn.apply").click( function() {
             if($("#select_id_content").val() > 0) {
-                layoutApplyContent(layout, $("#select_id_content").val());
+                layoutApplyContent(curlayout, $("#select_id_content").val());
+                setTimeout(function() {
+                    layoutEdit(curlayout);
+                }, 1000);
             }
         });
 
@@ -312,7 +323,9 @@ function layoutApplyContent(layout, id_content) {
         //console.log(content);
         layoutInit(layout, content);
         editorClose();
-        layoutEdit(layout);
+        setTimeout(function() {
+            layoutEdit(curlayout);
+        }, 1000);
     });
     sizeIframe();
 
@@ -321,6 +334,8 @@ function layoutApplyContent(layout, id_content) {
 function layoutSave(layout) {
     var editable    = layout.find(".editable");
     var id_layout   = layout.attr("data-idx");
+
+    console.log('save: ' + id_layout);
     data[id_layout] = {};
 
     ed_length = editable.length - 1;
@@ -409,6 +424,7 @@ function layoutDuplicate(layout) {
     newLayout.find(".delete, .duplicate").hide();
     newLayout.fadeIn(200);
     //layoutInit(newLayout);
+
     bindEvents();
 }
 
@@ -425,7 +441,7 @@ function layoutInit(layout, content) {
     }
     layoutControl += '<a class="btn delete">Supprimer</a>';
 
-    layout.prepend(layoutControl);
+    layout.prepend('<!--TEMPLATE-->' + layoutControl + '<!--/TEMPLATE-->');
 
     var editable    = layout.find(".editable");
 
@@ -679,7 +695,7 @@ function editorClose() {
 
     if(h < 50) h = 50;
     editor.css({'marginTop': h + 'px'});
-    editor.offset({top: h + 20});
+    editor.offset({top: h + 50});
 }
 function editorOpen() {
     editor.find(".edit-form").remove();
@@ -693,7 +709,7 @@ function editorOpen() {
     $("#overlay").show();
     editor.find(".top").hide();
     editor.css({'marginTop': h + 'px'});
-    editor.offset({top: h + 20});
+    editor.offset({top: h + 50});
     //editor.fadeIn(100);
     $(".delete, .duplicate").hide();
     sizeIframe();
@@ -701,7 +717,7 @@ function editorOpen() {
     $(document).click(function (e)
     {
         var container = $(".edit");
-        if (container.has(e.target).length === 0) {
+        if (container.has(e.target).length === 0 && $(e.target).attr('id') == 'overlay') {
             editorClose();
             $("#overlay").hide();
         }
@@ -896,7 +912,7 @@ function search(el, id) {
 }
 
 function sizeIframe() {
-    var h = $(document).outerHeight(true) + 50;
+    var h = $(document).outerHeight() + 68;
 
     var ifra = parent.document.getElementById("designer-iframe");
     if(ifra) ifra.style.height = h+"px";
@@ -919,6 +935,8 @@ function topBar() {
 //-----------------------
 
 function save() {
+    editorClose();
+
     var html = document.documentElement.outerHTML;
     //var out = $("<out>" + html + "</out>");
     /*out.find("template").remove();
@@ -943,12 +961,12 @@ function save() {
 function richtext() {
     tinymce.init({
         mode : "textareas",
-
+        dialog_type : "modal",
         editor_selector : "mceEditor",
         editor_deselector : "mceNoEditor",
         // General options
         theme : "advanced",
-        plugins : "pagebreak,style,layer,table,save,advhr,advimage,advlink,emotions,iespell,inlinepopups,insertdatetime,preview,media,searchreplace,print,contextmenu,paste,directionality,fullscreen,noneditable,visualchars,nonbreaking,xhtmlxtras,template",
+        plugins : "pagebreak,style,layer,table,save,advhr,advimage,advlink,emotions,iespell,insertdatetime,preview,media,searchreplace,print,contextmenu,paste,directionality,fullscreen,noneditable,visualchars,nonbreaking,xhtmlxtras,template",
 
         // Theme options
         theme_advanced_buttons1 : "mediapicker,bold,italic,underline,|,link,unlink,|,pasteword",

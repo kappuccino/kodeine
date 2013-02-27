@@ -53,6 +53,14 @@ public function commentGet($opt=array()){
 + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - */
 public function commentSet($id_comment, $def){
 
+	## escape user inputs
+	if (isset($def["k_contentcomment"]['commentData'])) {
+		$def["k_contentcomment"]['commentData'] = addslashes($def["k_contentcomment"]['commentData']);
+	}
+	if (isset($def["k_contentcomment"]['commentUsername'])) {
+		$def["k_contentcomment"]['commentUsername'] = addslashes($def["k_contentcomment"]['commentUsername']);
+	}
+
 	if($id_comment > 0){
 		$q = $this->dbUpdate($def)." WHERE id_comment=".$id_comment;
 	}else{

@@ -24,8 +24,8 @@
 			foreach($_POST['data'] as $language => $value){
 				$exists = $app->dbOne("SELECT 1 FROM k_localisation WHERE language='".$language."' AND label='".$_POST['label']."'");
 				$query	= ($exists[1])
-					? "UPDATE k_localisation SET translation='".addslashes($value)."' WHERE language='".$language."' AND label='".$_POST['label']."'"
-					: "INSERT INTO k_localisation (language, label, translation) VALUES ('".$language."', '".$_POST['label']."', '".addslashes($value)."')";
+					? "UPDATE k_localisation SET translation='".$value."' WHERE language='".$language."' AND label='".$_POST['label']."'"
+					: "INSERT INTO k_localisation (language, label, translation) VALUES ('".$language."', '".$_POST['label']."', '".$value."')";
 					
 				$app->dbQuery($query);
 			}

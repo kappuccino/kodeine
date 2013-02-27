@@ -106,7 +106,7 @@
 			<tr>
 				<td><input type="checkbox"	name="remove[]" value="<?php echo $e['id_comment'] ?>" class="cb" /></td>
 				<td><input type="hidden" 	name="moderate[<?php echo $e['id_comment'] ?>]" value="0" />
-					<input type="checkbox"  name="moderate[<?php echo $e['id_comment'] ?>]" value="1" <?php if($e['is_moderate']) echo " checked" ?> class="cm" />
+					<input type="checkbox"  name="moderate[<?php echo $e['id_comment'] ?>]" value="1" <?php if($e['is_moderate']) echo " checked" ?> class="cs" />
 				</td>
 				<td><?php echo $app->helperDate($e['commentDate'], '%e %B %G %Hh%M') ?></td>
 				<td><?php echo $e['commentAvg'] ?></td>
@@ -127,8 +127,8 @@
 		<tfoot>
 			<?php if(sizeof($comment) > 0){ ?>
 			<tr>
-				<td><input type="checkbox" onchange="$$('.cb').set('checked', this.checked);" /></td>
-				<td><input type="checkbox" onchange="$$('.cm').set('checked', this.checked);" /></td>
+				<td><input type="checkbox" onchange="cbchange($(this));" /></td>
+				<td><input type="checkbox" onchange="cschange($(this));" /></td>
 				<td colspan="<?php echo ($_REQUEST['id_content'] == NULL) ? '5' : '3'; ?>">
 					<a href="#" onClick="apply();" class="btn btn-mini"><?php echo _('Remove/Change selected items'); ?></a>
 					<span class="pagination"><?php 

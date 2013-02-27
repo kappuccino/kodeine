@@ -6,6 +6,7 @@
         'language'      => ($_REQUEST['language'] != '') ? $_REQUEST['language'] : 'fr',
         'useChapter'    => false,
         'useGroup'      => false,
+        'assoCategory'  => true,
         'contentSee'    => 'ALL',
         'debug'         => false
     ));
