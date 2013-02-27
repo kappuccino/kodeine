@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Kodeine\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2013-02-27 14:23+0100\n"
+"PO-Revision-Date: 2013-02-27 15:32+0100\n"
 "Last-Translator: Benjamin Mosnier <bm@kappuccino.org>\n"
 "Language-Team: Kappuccino <bm@kappuccino.org>\n"
 "Language: Français\n"
@@ -32,11 +32,11 @@ msgstr "(eCommerce)"
 
 #: ../../content/type.php:162
 msgid ""
-"<b>WARNING</b> you are about to remove data, this action not cancelable "
+"<b>WARNING</b> you are about to remove data, this action is not cancelable "
 "(Database table destruction)"
 msgstr ""
-"<b>ATTENTION</b> vous êtes sur le point de supprimer des données, cette "
-"action est irréversible (Suppression de tables dans la base de donnée)"
+"<b>ATTENTION</b> vous êtes sur le point de supprimer des données, vous ne "
+"pourrez pas revenir en arrière (Destruction de table dans la base de données)"
 
 #: ../../field/index.php:88
 msgid ""
@@ -270,6 +270,10 @@ msgstr "Catégories"
 #: ../../user/profile.php:128
 msgid "Category"
 msgstr "Catégorie"
+
+#: ../../core/index.php:33
+msgid "Change language"
+msgstr "Changer de langue"
 
 #: ../../field/index.php:240
 msgid ""
@@ -571,6 +575,10 @@ msgstr "France, Italia, Sweden..."
 msgid "Français, English, Dutch"
 msgstr "Français, English, Dutch"
 
+#: ../../core/includes/top.php:12
+msgid "Front office"
+msgstr "Ouvrir le site"
+
 #: ../../content/data.php:439 ../../content/gallery-album.php:243
 msgid "Front office view"
 msgstr "Visible sur le site"
@@ -707,6 +715,10 @@ msgstr "Emplacement"
 msgid "Login/eMail"
 msgstr "Identifiant/eMail"
 
+#: ../../core/includes/top.php:10
+msgid "Logout"
+msgstr "Se déconnecter"
+
 #: ../../config/index.php:103
 msgid "Mail recipient"
 msgstr "Destinataire des mails"
@@ -751,7 +763,7 @@ msgstr "Membres seulement"
 msgid "Module"
 msgstr "Module"
 
-#: ../../core/index.php:20
+#: ../../core/index.php:29
 msgid "Module manager"
 msgstr "Gestionnaire de modules"
 
@@ -1169,6 +1181,10 @@ msgstr "Style"
 #: ../../content/data.php:231
 msgid "Sub-content"
 msgstr "Sous contenu"
+
+#: ../../core/includes/top.php:11
+msgid "Support"
+msgstr "Support"
 
 #: ../../content/gallery-album.php:251
 msgid "Sync"

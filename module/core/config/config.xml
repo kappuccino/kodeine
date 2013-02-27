@@ -18,6 +18,7 @@
         <file>index.php</file>
         <file>login.php</file>
         <file>module.php</file>
+        <file>includes/top.php</file>
     </i18n>
 
     <profile>

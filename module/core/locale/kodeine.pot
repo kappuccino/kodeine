@@ -28,7 +28,7 @@ msgid "(eBusiness)"
 msgstr ""
 
 #: ../../content/type.php:162
-msgid "<b>WARNING</b> you are about to remove data, this action not cancelable (Database table destruction)"
+msgid "<b>WARNING</b> you are about to remove data, this action is not cancelable (Database table destruction)"
 msgstr ""
 
 #: ../../field/index.php:88
@@ -241,6 +241,10 @@ msgstr ""
 
 #: ../../content/data.php:611 ../../content/gallery-album.php:298 ../../content/index.php:98 ../../content/ui/menu.php:14 ../../user/profile.php:128
 msgid "Category"
+msgstr ""
+
+#: ../../core/index.php:33
+msgid "Change language"
 msgstr ""
 
 #: ../../field/index.php:240
@@ -528,6 +532,10 @@ msgstr ""
 msgid "Français, English, Dutch"
 msgstr ""
 
+#: ../../core/includes/top.php:12
+msgid "Front office"
+msgstr ""
+
 #: ../../content/data.php:439 ../../content/gallery-album.php:243
 msgid "Front office view"
 msgstr ""
@@ -660,6 +668,10 @@ msgstr ""
 msgid "Login/eMail"
 msgstr ""
 
+#: ../../core/includes/top.php:10
+msgid "Logout"
+msgstr ""
+
 #: ../../config/index.php:103
 msgid "Mail recipient"
 msgstr ""
@@ -700,7 +712,7 @@ msgstr ""
 msgid "Module"
 msgstr ""
 
-#: ../../core/index.php:20
+#: ../../core/index.php:29
 msgid "Module manager"
 msgstr ""
 
@@ -1070,6 +1082,10 @@ msgstr ""
 
 #: ../../content/data.php:231
 msgid "Sub-content"
+msgstr ""
+
+#: ../../core/includes/top.php:11
+msgid "Support"
 msgstr ""
 
 #: ../../content/gallery-album.php:251

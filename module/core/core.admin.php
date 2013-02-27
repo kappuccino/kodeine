@@ -4,19 +4,19 @@ class coreAdmin extends coreApp {
 
 public function coreAdmin(){
 
-	$language = $this->filterGet('core', 'language');
-	$lang     = $language['language'];
-	$lang     = ($lang == '') ? 'fr_FR.utf-8' : $lang;
+	if(function_exists('bindtextdomain')){
+		$language = $this->filterGet('core', 'language');
+		$lang     = $language['language'];
+		$lang     = ($lang == '') ? 'fr_FR.utf-8' : $lang;
 
-	$GLOBALS['language'] = $lang; // FixMe
+		$GLOBALS['language'] = $lang; // FixMe
 
-	putenv('LC_ALL='.$lang);
-	setlocale(LC_ALL, $lang);
+		putenv('LC_ALL='.$lang);
+		setlocale(LC_ALL, $lang);
 
-	$folder = MODULE.'/core/locale';
-
-	bindtextdomain('default', $folder);
-	textdomain('default');
+		bindtextdomain('default', __DIR__.'/locale');
+		textdomain('default');
+	}
 
 	$this->adminZone	= true;
 	$this->total		= 0;
