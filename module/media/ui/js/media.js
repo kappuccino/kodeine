@@ -613,24 +613,24 @@ media.views.app             = Backbone.View.extend({
 		if(typeof FileReader !== 'undefined' && !isSafariFive) {
 
 			$('#file_upload').uploadifive({
-				'buttonText'    : 'Parcourir',
-				'auto'          : true,
-				'formData'      : {'f' : media.views.myView.folder },
-				'queueID'       : 'queue',
-				'uploadScript'  : 'helper/upload',
-				'onUpload'      : function(){
-				//	this.data('uploadifive').settings.formData = {'f' : root + $('#path').attr('data-url')};
+				'buttonText':       'Parcourir',
+				'auto':             true,
+				'formData':         {'f' : media.views.myView.folder },
+				'queueID':          'queue',
+				'uploadScript':     'helper/upload',
+				'onUpload':         function(){
+					this.data('uploadifive').settings.formData = {'f' : media.views.myView.folder};
 				},
-				'onSelect'      : function(event, ID, fileObj){
+				'onSelect':         function(event, ID, fileObj){
 
 				},
-				'onDrop'            : function(file, count){
+				'onDrop':           function(file, count){
 
 				},
-				'onUploadComplete'  : function(file, data){
+				'onUploadComplete': function(file, data){
 
 				},
-				'onQueueComplete'   : function() {
+				'onQueueComplete':  function() {
 					$('#queue').empty();
 					self.clearModal();
 					self.refresh();

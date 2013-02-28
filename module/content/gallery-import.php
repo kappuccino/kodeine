@@ -226,11 +226,10 @@
 
 <?php include(COREINC.'/end.php'); ?>
 <script type="text/javascript" src="../media/ui/_uploadifive/jquery.uploadifive-v1.0.js"></script>
-
 <script type="text/javascript" src="ui/js/gallery.discover.js"></script>
 <script type="text/javascript" src="ui/js/gallery.upload.js"></script>
 
-	<script>
+<script>
     id_album = <?php echo $_REQUEST['id_album'] ?>;
     id_type	 = <?php echo $_REQUEST['id_type'] ?>;
 </script>

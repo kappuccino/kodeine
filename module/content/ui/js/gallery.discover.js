@@ -2,13 +2,14 @@ var folders = [],
 	total = 0,
 	done = 0,
 	percent= 0,
-	into = $('input[name="sel"]:checked').val(),
-	root = $('#discoverFolder').val(),
 	log = $('#log'),
 	id_type,
 	id_album;
 
 function discoverInit(){
+
+	var root = $('#discoverFolder').val();
+	var into = $('input[name="sel"]:checked').val();
 
 	if(root == ''){
 		log.html('Le champ est vide');

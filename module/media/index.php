@@ -24,7 +24,7 @@
 	<link rel="stylesheet" type="text/css" href="../core/vendor/jqueryui/jqui.slider.css" />
 	<link rel="stylesheet" type="text/css" href="../core/vendor/flowplayer/skin/functional.css" />
 </head>
-<body class="<?php if($_GET['popMode']) echo 'popMode '; if(isset($_GET['embed'])) echo 'embed '; ?>">
+<body class="pictued <?php if($_GET['popMode']) echo 'popMode '; if(isset($_GET['embed'])) echo 'embed '; ?>">
 
 <header><?php
 	include(COREINC.'/top.php');

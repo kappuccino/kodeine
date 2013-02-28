@@ -227,7 +227,6 @@ gallery.views.viewItem       = Backbone.View.extend({
 	},
 
 	destroy: function(){
-		console.log('remove model, remove view');
 		this.remove();
 	},
 
@@ -512,7 +511,7 @@ gallery.views.app            = Backbone.View.extend({
 	},
 
 	addAlbum: function(){
-		document.location = 'gallery-album?id_type=' + this.id_type;
+		document.location = 'gallery-album?id_type=' + gallery.id_type;
 	},
 
 	editAlbum: function(){
@@ -648,8 +647,7 @@ gallery.views.app            = Backbone.View.extend({
 	},
 
 	togglePoster: function(me, state){
-	//	var id_album = gallery.views.myView.id_album;
-		console.log("Toggle poster", me, state);
+		var id_album = gallery.views.myView.id_album;
 
 		this.action({
 			action:     'togglePoster',

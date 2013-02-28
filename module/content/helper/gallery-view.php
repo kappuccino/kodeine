@@ -87,11 +87,34 @@
 		);
 
 		if($e['contentItemType'] == 'image'){
-			$tmp['preview'] = array(
-				'url'	    => $e['contentItemUrl'],
-				'width'	    => intval($e['contentItemWidth']),
-				'height'	=> intval($e['contentItemHeight']),
-			);
+
+			if(file_exists(KROOT.$e['contentItemUrl'])){
+
+				$opt  = array(
+					'url'	=> $e['contentItemUrl'],
+					'admin'	=> true,
+					'debug'	=> false,
+					'cache'	=> true
+				);
+
+				if($e['contentItemWidth'] >= $e['contentItemHeight']){
+					$preview = $app->mediaUrlData(array_merge($opt, array(
+						'mode'	=> 'width',
+						'value'	=> 300
+					)));
+				}else{
+					$preview = $app->mediaUrlData(array_merge($opt, array(
+						'mode'	=> 'height',
+						'value'	=> 300
+					)));
+				}
+
+				$tmp['preview'] = array(
+					'url'       => $preview['img'],
+					'width'     => intval($preview['width']),
+					'height'    => intval($preview['height']),
+				);
+			}
 		}
 
 		$data[] = $tmp;
