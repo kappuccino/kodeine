@@ -175,6 +175,10 @@ msgstr ""
 msgid "Back office view"
 msgstr ""
 
+#: ../../content/gallery-import.php:137
+msgid "Back to album"
+msgstr ""
+
 #: ../../comment/index.php:78
 msgid "Back to content"
 msgstr ""
@@ -347,12 +351,24 @@ msgstr ""
 msgid "Create a new %s"
 msgstr ""
 
+#: ../../content/gallery-import.php:205
+msgid "Create a new ablum  into this album"
+msgstr ""
+
 #: ../../media/index.php:62
 msgid "Create a new folder"
 msgstr ""
 
+#: ../../content/gallery-import.php:193
+msgid "Create folder and sub folders"
+msgstr ""
+
 #: ../../content/browse.php:100 ../../content/data.php:547 ../../content/gallery-album.php:354 ../../content/index.php:357 ../../user/data.php:232 ../../user/index.php:97
 msgid "Created"
+msgstr ""
+
+#: ../../content/gallery-import.php:152
+msgid "Current album <i>%s</i>"
 msgstr ""
 
 #: ../../content/gallery-album.php:193
@@ -436,7 +452,7 @@ msgstr ""
 msgid "Duplicate data to this language"
 msgstr ""
 
-#: ../../content/gallery.php:45 ../../content/parent.php:205
+#: ../../content/gallery-import.php:139 ../../content/gallery.php:45 ../../content/parent.php:205
 msgid "Edit"
 msgstr ""
 
@@ -576,6 +592,10 @@ msgstr ""
 msgid "Import"
 msgstr ""
 
+#: ../../content/gallery-import.php:162
+msgid "Import item from /media folder"
+msgstr ""
+
 #: ../../config/language.php:70
 msgid "Import more languages"
 msgstr ""
@@ -590,6 +610,10 @@ msgstr ""
 
 #: ../../field/index.php:184
 msgid "Inline CSS applieds to form field"
+msgstr ""
+
+#: ../../content/gallery-import.php:200
+msgid "Insert data into this album"
 msgstr ""
 
 #: ../../core/module.php:54
@@ -884,7 +908,7 @@ msgstr ""
 msgid "Phone 2"
 msgstr ""
 
-#: ../../category/index.php:221 ../../content/gallery-item.php:230 ../../social/forum.php:140
+#: ../../category/index.php:221 ../../content/gallery-import.php:166 ../../content/gallery-import.php:210 ../../content/gallery-item.php:230 ../../social/forum.php:140
 msgid "Pick"
 msgstr ""
 
@@ -984,7 +1008,7 @@ msgstr ""
 msgid "Robots.txt"
 msgstr ""
 
-#: ../../content/gallery-album.php:179 ../../content/gallery-item.php:264
+#: ../../content/gallery-album.php:179 ../../content/gallery-import.php:120 ../../content/gallery-item.php:264
 msgid "Root"
 msgstr ""
 
@@ -1164,6 +1188,10 @@ msgstr ""
 msgid "Updated"
 msgstr ""
 
+#: ../../content/gallery-import.php:176
+msgid "Upload to this album"
+msgstr ""
+
 #: ../../category/index.php:210 ../../chapter/index.php:270 ../../content/data-language.php:268 ../../content/data.php:397 ../../content/gallery-item.php:226
 msgid "Url"
 msgstr ""
@@ -1202,7 +1230,7 @@ msgstr ""
 msgid "Users"
 msgstr ""
 
-#: ../../category/index.php:252 ../../chapter/index.php:312 ../../content/data-language.php:177 ../../content/data-language.php:199 ../../field/index.php:408 ../../localisation/index.php:210 ../../media/index.php:64 ../../user/profile.php:63
+#: ../../category/index.php:252 ../../chapter/index.php:312 ../../content/data-language.php:177 ../../content/data-language.php:199 ../../content/gallery-import.php:167 ../../content/gallery-import.php:211 ../../field/index.php:408 ../../localisation/index.php:210 ../../media/index.php:64 ../../user/profile.php:63
 msgid "Validate"
 msgstr ""
 

@@ -32,6 +32,7 @@
         <file>data.php</file>
         <file>gallery-album.php</file>
         <file>gallery-item.php</file>
+        <file>gallery-import.php</file>
         <file>gallery.php</file>
         <file>index.php</file>
         <file>parent.php</file>

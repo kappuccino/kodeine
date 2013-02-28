@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Kodeine\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2013-02-27 15:32+0100\n"
+"PO-Revision-Date: 2013-02-28 11:53+0100\n"
 "Last-Translator: Benjamin Mosnier <bm@kappuccino.org>\n"
 "Language-Team: Kappuccino <bm@kappuccino.org>\n"
 "Language: Français\n"
@@ -191,6 +191,10 @@ msgstr "Accès à l'administration"
 #: ../../content/type.php:275
 msgid "Back office view"
 msgstr "Visible sur le back office"
+
+#: ../../content/gallery-import.php:137
+msgid "Back to album"
+msgstr "Revenir à l'album"
 
 #: ../../comment/index.php:78
 msgid "Back to content"
@@ -383,15 +387,28 @@ msgstr "Pays"
 msgid "Create a new %s"
 msgstr "Créer un nouveau"
 
+#: ../../content/gallery-import.php:205
+msgid "Create a new ablum  into this album"
+msgstr "Créer un nouvel album dans cet ablum"
+
 #: ../../media/index.php:62
 msgid "Create a new folder"
 msgstr "Créer un nouveau dossier"
+
+#: ../../content/gallery-import.php:193
+msgid "Create folder and sub folders"
+msgstr "Créer les dossiers et sous dossiers"
 
 #: ../../content/browse.php:100 ../../content/data.php:547
 #: ../../content/gallery-album.php:354 ../../content/index.php:357
 #: ../../user/data.php:232 ../../user/index.php:97
 msgid "Created"
 msgstr "Création"
+
+#: ../../content/gallery-import.php:152
+#, fuzzy
+msgid "Current album <i>%s</i>"
+msgstr "Album courant: %s"
 
 #: ../../content/gallery-album.php:193
 msgid "Current album: %s"
@@ -476,7 +493,8 @@ msgstr "Doublon - changer de nom"
 msgid "Duplicate data to this language"
 msgstr "Doublon pour cette langue"
 
-#: ../../content/gallery.php:45 ../../content/parent.php:205
+#: ../../content/gallery-import.php:139 ../../content/gallery.php:45
+#: ../../content/parent.php:205
 msgid "Edit"
 msgstr "Editer"
 
@@ -621,6 +639,10 @@ msgstr ""
 msgid "Import"
 msgstr "Importer"
 
+#: ../../content/gallery-import.php:162
+msgid "Import item from /media folder"
+msgstr "Importer depuis le dossier /media"
+
 #: ../../config/language.php:70
 msgid "Import more languages"
 msgstr "Importer plus de langage"
@@ -636,6 +658,10 @@ msgstr "Héritage"
 #: ../../field/index.php:184
 msgid "Inline CSS applieds to form field"
 msgstr "Style CSS en ligne appliqués au champ"
+
+#: ../../content/gallery-import.php:200
+msgid "Insert data into this album"
+msgstr "Insérer les données dans cet album"
 
 #: ../../core/module.php:54
 msgid "Install"
@@ -962,7 +988,8 @@ msgstr "Téléphone 1"
 msgid "Phone 2"
 msgstr "Téléphone 2"
 
-#: ../../category/index.php:221 ../../content/gallery-item.php:230
+#: ../../category/index.php:221 ../../content/gallery-import.php:166
+#: ../../content/gallery-import.php:210 ../../content/gallery-item.php:230
 #: ../../social/forum.php:140
 msgid "Pick"
 msgstr "Choisir"
@@ -1074,7 +1101,8 @@ msgstr "Remettre à zéro la note"
 msgid "Robots.txt"
 msgstr "Robotx.txt"
 
-#: ../../content/gallery-album.php:179 ../../content/gallery-item.php:264
+#: ../../content/gallery-album.php:179 ../../content/gallery-import.php:120
+#: ../../content/gallery-item.php:264
 msgid "Root"
 msgstr "Racine"
 
@@ -1268,6 +1296,10 @@ msgstr "Type"
 msgid "Updated"
 msgstr "Mise à jour"
 
+#: ../../content/gallery-import.php:176
+msgid "Upload to this album"
+msgstr "Envoyer dans cet album"
+
 #: ../../category/index.php:210 ../../chapter/index.php:270
 #: ../../content/data-language.php:268 ../../content/data.php:397
 #: ../../content/gallery-item.php:226
@@ -1316,6 +1348,7 @@ msgstr "Utilisateurs"
 
 #: ../../category/index.php:252 ../../chapter/index.php:312
 #: ../../content/data-language.php:177 ../../content/data-language.php:199
+#: ../../content/gallery-import.php:167 ../../content/gallery-import.php:211
 #: ../../field/index.php:408 ../../localisation/index.php:210
 #: ../../media/index.php:64 ../../user/profile.php:63
 msgid "Validate"
