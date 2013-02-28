@@ -517,7 +517,7 @@ media.views.meta            = Backbone.View.extend({
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-media.views.app             = Backbone.View.extend(!{
+media.views.app             = Backbone.View.extend({
 
 	el: $('body'),
 
