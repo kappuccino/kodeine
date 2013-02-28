@@ -48,11 +48,38 @@
 			));
 
 			if(file_exists(KROOT.$poster['contentItemUrl']) && is_file(KROOT.$poster['contentItemUrl'])){
+
+				$opt = array(
+					'url'	=> $poster['contentItemUrl'],
+					'admin'	=> true,
+					'debug'	=> false,
+					'cache'	=> true
+				);
+
+				if($poster['contentItemWidth'] >= $poster['contentItemHeight']){
+					$preview = $app->mediaUrlData(array_merge($opt, array(
+						'mode'	=> 'width',
+						'value'	=> 300
+					)));
+				}else{
+					$preview = $app->mediaUrlData(array_merge($opt, array(
+						'mode'	=> 'height',
+						'value'	=> 300
+					)));
+				}
+
 				$tmp['preview'] = array(
+					'url'       => $preview['img'],
+					'width'     => intval($preview['width']),
+					'height'    => intval($preview['height']),
+				);
+
+				/*$tmp['preview'] = array(
 					'url'	    => $poster['contentItemUrl'],
 					'width'	    => intval($poster['contentItemWidth']),
 					'height'	=> intval($poster['contentItemHeight']),
-				);
+				);*/
+
 			}else{
 				$albums[$idx]['id_poster'] = 0;
 			}
