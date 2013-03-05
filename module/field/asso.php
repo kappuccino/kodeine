@@ -195,7 +195,7 @@
 	</div>
 
 	<div class="span8 clearfix">
-		<a onclick="sauver();" class="btn btn-mini"><?php echo _('Save'); ?>></a>
+		<a onclick="sauver();" class="btn btn-mini"><?php echo _('Save'); ?></a>
 		<a href="asso?id_type=<?php echo $_GET['id_type'] ?>" class="btn btn-mini"><?php echo _('Cancel'); ?></a>
 	</div>
 	
