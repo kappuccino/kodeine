@@ -237,8 +237,10 @@
 						<td><div class="field-list"><?php
 	
 							$tmp = $app->formValue($data['lan'][$iso]['field'][$f['fieldKey']], $_POST['lan'][$iso]['field'][$f['id_field']]);
-							
-							$app->apiLoad('field')->fieldTrace($iso, $copy, $tmp, $f);
+
+                            #$app->apiLoad('field')->fieldTrace($iso, $f, $copy, $tmp);
+                            $app->apiLoad('field')->fieldTrace($data['lan'][$iso], $f, $tmp);
+
 	
 						?></div></td>
 					</tr>
