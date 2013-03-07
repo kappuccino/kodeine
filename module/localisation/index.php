@@ -118,7 +118,7 @@ foreach($country as $e){
             <tr>
                 <td height="20"></td>
                 <td colspan="2"><div class="clearfix">
-                    <a onclick="remove('master');" class="btn btn-mini left"><?php echo _('Remove selected items'); ?></a>
+                    <a onclick="applyRemove('master');" class="btn btn-mini left"><?php echo _('Remove selected items'); ?></a>
                     <a onclick="addLabel();" class="btn btn-mini right"><?php echo _('Add a label'); ?></a>
                 </div></td>
             </tr>
@@ -144,7 +144,7 @@ foreach($country as $e){
             <tfoot>
             <tr>
                 <td height="20"></td>
-                <td><a href="javascript:remove('slave');" class="btn btn-mini"><?php echo _('Remove selected items'); ?></a></td>
+                <td><a href="javascript:applyRemove('slave');" class="btn btn-mini"><?php echo _('Remove selected items'); ?></a></td>
             </tr>
             </tfoot>
         </table>

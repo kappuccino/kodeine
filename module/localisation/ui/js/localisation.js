@@ -56,7 +56,7 @@ function searchInTheme(label){
 	});
 }
 
-function remove(f){
+function applyRemove(f){
 	if(confirm("Voulez vous effectuer la suppression ?")){
 		$('#form-'+f).submit();
 	}
