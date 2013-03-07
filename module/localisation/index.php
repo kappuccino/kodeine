@@ -22,11 +22,12 @@
 	if($_POST['action'] && $_POST['label'] != NULL){
 		if(sizeof($_POST['data']) > 0){
 			foreach($_POST['data'] as $language => $value){
+                $value = addslashes($value);
 				$exists = $app->dbOne("SELECT 1 FROM k_localisation WHERE language='".$language."' AND label='".$_POST['label']."'");
 				$query	= ($exists[1])
 					? "UPDATE k_localisation SET translation='".$value."' WHERE language='".$language."' AND label='".$_POST['label']."'"
 					: "INSERT INTO k_localisation (language, label, translation) VALUES ('".$language."', '".$_POST['label']."', '".$value."')";
-					
+
 				$app->dbQuery($query);
 			}
 		}
@@ -198,7 +199,7 @@
 			if(sizeof($plus) > 0){
 				foreach($plus as $e){
 					echo '<a onClick="setup(\''.$e.'\', $(this));" class="btn btn-mini">';
-					printf(_('Add %s', $languages[$e]));
+					printf(_('Add %s'), $languages[$e]);
 					echo '</a>';
 				}
 			}
