@@ -965,6 +965,9 @@ function richtext() {
         editor_selector : "mceEditor",
         editor_deselector : "mceNoEditor",
         // General options
+        elements : "absurls",
+        relative_urls : false,
+        remove_script_host : false,
         theme : "advanced",
         plugins : "pagebreak,style,layer,table,save,advhr,advimage,advlink,emotions,iespell,insertdatetime,preview,media,searchreplace,print,contextmenu,paste,directionality,fullscreen,noneditable,visualchars,nonbreaking,xhtmlxtras,template",
 
