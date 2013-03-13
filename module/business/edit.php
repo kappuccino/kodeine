@@ -24,7 +24,8 @@
 		# EVENT TRIGGER
 		$mailSent = $app->eventTrigger('business', 'businessCmdPaymentMail', array(
 			'id_cart'		=> $_POST['id_cart'],
-			'cartStatus'	=> $myCmd['cartStatus']
+			'cartStatus'	=> $myCmd['cartStatus'],
+			'newStatus'     => $_POST['cartStatus']
 		));
 		
 		$reload = true;		
