@@ -21,8 +21,8 @@
 		<?php }  ?>
 
 		<?php if($app->userCan('content.type')){ ?>
-		<li class="<?php echo isMe('/content/type') ? 'me':'' ?>">
-			<a href="../content/type"><span><?php echo _('Type'); ?></span></a>
+		<li class="<?php echo isMe('/type/') ? 'me':'' ?>">
+			<a href="../type/"><span><?php echo _('Type'); ?></span></a>
 		</li>
 		<?php }  ?>
 

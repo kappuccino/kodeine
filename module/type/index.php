@@ -5,7 +5,7 @@
 	# Suppresion du TYPE (suppression de toute les donnes reliees)
 	#
 	if(sizeof($_POST['killme']) > 0){
-		include(CONFIG.'/config.php');
+		include(CONFIG . '/config.php');
 
 		foreach($_POST['killme'] as $e){
 
@@ -76,7 +76,7 @@
 
 		$app->apiLoad('field')->fieldCacheBuild();
 
-		header("Location: type");
+		header("Location: index");
 
 	}else
 	
@@ -121,7 +121,7 @@
 					)
 				));
 
-				header("Location: type?id_type=".$app->apiLoad('content')->id_type);
+				header("Location: ./?id_type=".$app->apiLoad('content')->id_type);
 			}
 		}else{
 			$message = 'KO: Validation failed';
@@ -145,14 +145,14 @@
 ?><!DOCTYPE html>
 <html lang="fr">
 <head>
-	<?php include(COREINC.'/head.php'); ?>
+	<?php include(COREINC . '/head.php'); ?>
     <link rel="stylesheet" type="text/css" href="ui/css/type.css" />
 </head>
 <body>
 
 <header><?php
-	include(COREINC.'/top.php');
-	include(dirname(__DIR__).'/content/ui/menu.php')
+	include(COREINC . '/top.php');
+	include(dirname(__DIR__) . '/content/ui/menu.php')
 ?></header>
 
 <div id="app"><div class="wrapper"><div class="row-fluid">
@@ -161,7 +161,7 @@
 	<div class="message messageWarning">
 		<p><?php echo _('<b>WARNING</b> you are about to remove data, this action is not cancelable (Database table destruction)') ?></p>
 		
-		<form action="type" method="post">
+		<form action="./" method="post">
 			<?php foreach($_POST['remove'] as $e){ ?>
 			<input type="text" name="killme[]" value="<?php echo $e ?>" />
 			<?php } ?>
@@ -174,7 +174,7 @@
 	</div>
 	<?php } ?>
 
-	<form action="type" method="post" id="listing" class="span6">
+	<form action="./" method="post" id="listing" class="span6">
 
 		<table border="0" cellspacing="0" cellpadding="0" class="listing">
 			<thead>
@@ -207,9 +207,9 @@
 						echo '</div>';
 
 						echo '<div class="content">';
-						echo '<a href="./?id_type='.$e['id_type'].'">'._('View').'</a> &nbsp; &nbsp; ';
+						echo '<a href="../content/?id_type='.$e['id_type'].'">'._('View').'</a> &nbsp; &nbsp; ';
                         echo '<a href="../field/asso?id_type='.$e['id_type'].'">'._('Manage fields').'</a> &nbsp; &nbsp; ';
-                        echo '<a href="type-row?id_type='.$e['id_type'].'">'._('Columns').'</a>';
+                        echo '<a href="../type/row?id_type='.$e['id_type'].'">'._('Columns').'</a>';
 						echo '</div>';
 
 					echo '</div></li>';
@@ -235,7 +235,7 @@
 		</div>
 	</form>
 
-	<form action="type" method="post" id="data" class="span6">
+	<form action="./" method="post" id="data" class="span6">
 		<input type="hidden" name="action" value="1" />
 		<input type="hidden" name="id_type" value="<?php echo $data['id_type'] ?>" />
 		
@@ -306,7 +306,7 @@
 				<td></td>
 				<td>
 					<a onclick="$('#data').submit()" class="btn btn-mini"><?php echo _('Save'); ?></a>
-					<a href="type" class="btn btn-mini"><?php echo _('New'); ?></a>
+					<a href="./" class="btn btn-mini"><?php echo _('New'); ?></a>
 				</td>
 			</tr>
 		</table>
@@ -315,7 +315,7 @@
 </div></div></div>
 
 <?php include(COREINC.'/end.php'); ?>
-<script src="ui/js/type.js" type="text/javascript"></script>
+<script src="../content/ui/js/type.js" type="text/javascript"></script>
 <script>
 
     function apply(){

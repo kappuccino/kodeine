@@ -132,7 +132,7 @@
 
 		<button class="btn btn-mini" type="submit"><?php echo _('Filter'); ?></button>
         <button class="btn btn-mini"><?php echo _('Cancel'); ?></button>
-        <a href="type-row?id_type=<?php echo $id_type; ?>" class="btn btn-mini"><?php echo _('Manage columns'); ?></a>
+        <a href="../type/row?id_type=<?php echo $id_type; ?>" class="btn btn-mini"><?php echo _('Manage columns'); ?></a>
 	</form>
 	</div>	
 

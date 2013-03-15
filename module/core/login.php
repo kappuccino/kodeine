@@ -60,7 +60,8 @@
 				<input type="email" name="login" class="field" autocomplete="off" placeholder="<?php echo _('login'); ?>" value="<?php echo $usr['userMail'] ?>" />
 				<?php echo _('and your'); ?>
 				<input type="password" name="password" class="field" autocomplete="off" placeholder="<?php echo _('password'); ?>" />
-				and <a href="#" onclick="$('form').submit()"><?php echo _('connect you'); ?></a>
+				<?php echo _('and') ?>
+				<a href="#" onclick="$('form').submit()"><?php echo _('connect you'); ?></a>
 			</form>
 		</div>
 

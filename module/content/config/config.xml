@@ -3,8 +3,8 @@
 
 	<data>
 		<key>content</key>
-		<version>5.2.0</version>
-        <lastMod>2013-02-27</lastMod>
+		<version>5.2.1</version>
+        <lastMod>2013-03-15</lastMod>
 		<install>YES</install>
 		<name><![CDATA[Contents]]></name>
 	</data>
@@ -36,8 +36,6 @@
         <file>gallery.php</file>
         <file>index.php</file>
         <file>parent.php</file>
-        <file>type-row.php</file>
-        <file>type.php</file>
     </i18n>
 
 	<profile>

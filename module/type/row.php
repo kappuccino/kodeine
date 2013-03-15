@@ -103,7 +103,7 @@
 ?><!DOCTYPE html>
 <html lang="fr">
 <head>
-    <?php include(COREINC.'/head.php'); ?>
+    <?php include(COREINC . '/head.php'); ?>
     <style>
         table.table td {
             padding: 2px 0 2px 7px;
@@ -144,9 +144,9 @@
 <body>
 
 <header><?php
-    include(COREINC.'/top.php');
-    include(dirname(__DIR__).'/content/ui/menu.php')
-    ?></header>
+    include(COREINC . '/top.php');
+	include(dirname(__DIR__) . '/content/ui/menu.php')
+?></header>
 
 <div class="inject-subnav-right hide">
     <li>
@@ -170,11 +170,9 @@
 
 </div>
 
-<div id="app">
+<div id="app"><div class="wrapper">
 
-    <div class="row-fluid">
-
-
+    <div class="row">
         <div class="span4">
 
             <table width="100%" border="0" cellpadding="0" cellspacing="0" class="listing sortable" style="margin-top:10px;">
@@ -194,14 +192,14 @@
                 foreach($not as $e){ ?>
                 <tr>
                     <td><?php echo $e['fieldName']. '(' . $e['fieldKey'] . ')' ?></td>
-                    <td><a class="btn btn-mini" href="type-row?id_type=<?php echo $_REQUEST['id_type'] ?>&field=<?php echo $e['id_field'] ?>&add"><?php echo _('Add'); ?></a></td>
+                    <td><a class="btn btn-mini" href="row?id_type=<?php echo $_REQUEST['id_type'] ?>&field=<?php echo $e['id_field'] ?>&add"><?php echo _('Add'); ?></a></td>
                 </tr>
                     <?php } ?>
                 <?php
                 foreach($notC as $e){ ?>
                 <tr>
                     <td><b><?php echo $e; ?></b></td>
-                    <td><a class="btn btn-mini" href="type-row?id_type=<?php echo $_REQUEST['id_type'] ?>&field=<?php echo $e ?>&add"><?php echo _('Add'); ?></a></td>
+                    <td><a class="btn btn-mini" href="row?id_type=<?php echo $_REQUEST['id_type'] ?>&field=<?php echo $e ?>&add"><?php echo _('Add'); ?></a></td>
                 </tr>
                     <?php } ?>
 			</tbody>
@@ -213,7 +211,6 @@
                 <?php } ?>
             </table>
         </div>
-
 
         <div class="span8">
             <?php
@@ -246,7 +243,7 @@
                         }
                         echo "<li id=\"".$id_field."\" style=\"height: 75px;\">". $fieldName . "<br />";
                         echo "Largeur <input type=\"text\" size=\"2\" id=\"w" . $id_field . "\" value=\"".$e['width']."\"><br />";
-                        echo "<a href=\"type-row?id_type=".$_REQUEST['id_type']."&field=".$id_field."&remove\" class=\"btn btn-mini\">"._('Remove')."</a>";
+                        echo "<a href=\"row?id_type=".$_REQUEST['id_type']."&field=".$id_field."&remove\" class=\"btn btn-mini\">"._('Remove')."</a>";
                         echo "</li>";
                     }
                 }
@@ -280,14 +277,15 @@
                         w.push($('#w'+ordreA[i]).val());
                     }
                     width = w.join(',');
-                    document.location='type-row?id_type=<?php echo $_REQUEST['id_type'] ?>&pos='+ordre+'&width='+width;
+                    document.location='row?id_type=<?php echo $_REQUEST['id_type'] ?>&pos='+ordre+'&width='+width;
                 }
 
             </script>
 
         </div>
     </div>
-</div>
+
+</div></div>
 
 </body>
 </html>
