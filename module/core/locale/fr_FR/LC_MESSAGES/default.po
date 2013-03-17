@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Kodeine\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2013-03-15 19:37+0100\n"
+"PO-Revision-Date: 2013-03-17 12:23+0100\n"
 "Last-Translator: Benjamin Mosnier <bm@kappuccino.org>\n"
 "Language-Team: Kappuccino <bm@kappuccino.org>\n"
 "Language: Français\n"
@@ -78,7 +78,7 @@ msgstr "URL de la publicité"
 msgid "Ad code"
 msgstr "Code de la publicité"
 
-#: ../../content/parent.php:168 ../../type/row.php:197 ../../type/row.php:204
+#: ../../content/parent.php:168 ../../type/row.php:195 ../../type/row.php:202
 msgid "Add"
 msgstr "Ajouter"
 
@@ -166,6 +166,10 @@ msgstr "Sauvegarde automatique (patch)"
 msgid "Automatique URL Rewriting"
 msgstr "Réécriture d'URL automatique"
 
+#: ../../media/ui/menu.php:23
+msgid "Back"
+msgstr "Retour"
+
 #: ../../config/ui/menu.php:11
 msgid "Back Office"
 msgstr "Administration"
@@ -229,7 +233,7 @@ msgstr "Acheter"
 #: ../../config/offline.php:52 ../../config/robots.php:45
 #: ../../content/index.php:134 ../../content/parent.php:186
 #: ../../field/asso.php:199 ../../media/index.php:65
-#: ../../social/forum.php:166 ../../theme/index.php:62 ../../type/row.php:229
+#: ../../social/forum.php:166 ../../theme/index.php:62 ../../type/row.php:226
 #: ../../user/group.php:121 ../../user/group.php:71
 msgid "Cancel"
 msgstr "Annuler"
@@ -311,7 +315,7 @@ msgstr "Colonne 1"
 msgid "Column 2"
 msgstr "Colonne 2"
 
-#: ../../type/row.php:226
+#: ../../type/row.php:223
 msgid "Columns for type"
 msgstr "Colonnes pour le type"
 
@@ -379,9 +383,8 @@ msgid "Created"
 msgstr "Création"
 
 #: ../../content/gallery-import.php:152
-#, fuzzy
 msgid "Current album <i>%s</i>"
-msgstr "Album courant: %s"
+msgstr "Album courant: <i>%s</i>"
 
 #: ../../content/gallery-album.php:193
 msgid "Current album: %s"
@@ -516,7 +519,7 @@ msgstr "Expliquation"
 msgid "Export"
 msgstr "Export"
 
-#: ../../config/ui/menu.php:23 ../../type/row.php:183
+#: ../../config/ui/menu.php:23 ../../type/row.php:181
 msgid "Field"
 msgstr "Champ"
 
@@ -785,6 +788,10 @@ msgstr "Nouveau"
 msgid "New document"
 msgstr "Nouveau document"
 
+#: ../../media/ui/menu.php:9
+msgid "New folder"
+msgstr "Nouveau dossier"
+
 #: ../../user/index.php:55
 msgid "New user"
 msgstr "Nouvel utilisateur"
@@ -986,6 +993,10 @@ msgstr "Nom du profil"
 msgid "Reference"
 msgstr "Référence"
 
+#: ../../media/ui/menu.php:6
+msgid "Refresh"
+msgstr "Rafraichir"
+
 #: ../../content/data.php:585 ../../content/gallery-album.php:279
 msgid "Relationships"
 msgstr "Relations"
@@ -1008,7 +1019,7 @@ msgstr "URL distante"
 
 #: ../../content/data-language.php:196 ../../content/data.php:236
 #: ../../content/parent.php:204 ../../field/index.php:130
-#: ../../type/row.php:249
+#: ../../type/row.php:246
 msgid "Remove"
 msgstr "Supprimer"
 
@@ -1083,7 +1094,7 @@ msgstr "Sauver les changements"
 msgid "Save tabs"
 msgstr "Sauver les onglets"
 
-#: ../../content/parent.php:185 ../../type/row.php:228
+#: ../../content/parent.php:185 ../../type/row.php:225
 msgid "Save this order"
 msgstr "Sauver cet ordre"
 
@@ -1103,6 +1114,10 @@ msgstr "Recherchable"
 #: ../../content/data.php:291 ../../user/data.php:158
 msgid "See all"
 msgstr "Tout voir"
+
+#: ../../media/ui/menu.php:17
+msgid "Settings"
+msgstr "Préférences"
 
 #: ../../content/data.php:829 ../../content/index.php:109
 msgid "Shop"
@@ -1241,6 +1256,10 @@ msgstr "Type"
 #: ../../user/data.php:234 ../../user/index.php:98
 msgid "Updated"
 msgstr "Mise à jour"
+
+#: ../../media/ui/menu.php:13
+msgid "Upload"
+msgstr "Envoyer"
 
 #: ../../content/gallery-import.php:176
 msgid "Upload to this album"
@@ -1430,53 +1449,3 @@ msgstr "réinitialiser votre mot de passe"
 #: ../../core/login.php:84
 msgid "save it"
 msgstr "et sauver le"
-
-#~ msgid ""
-#~ "<b>WARNING</b> you are about to remove data, this action is not "
-#~ "cancelable (Database table destruction)"
-#~ msgstr ""
-#~ "<b>ATTENTION</b> vous êtes sur le point de supprimer des données, vous ne "
-#~ "pourrez pas revenir en arrière (Destruction de table dans la base de "
-#~ "données)"
-
-#~ msgid "Ad"
-#~ msgstr "Publicité"
-
-#~ msgid "Back office view"
-#~ msgstr "Visible sur le back office"
-
-#~ msgid "Business"
-#~ msgstr "eCommerce"
-
-#~ msgid "Columns"
-#~ msgstr "Colonnes"
-
-#~ msgid "Gallery"
-#~ msgstr "Galerie"
-
-#~ msgid "Key"
-#~ msgstr "Clé"
-
-#~ msgid ""
-#~ "Once a type crated, you will not be able to change business, ad, or "
-#~ "gallery settings"
-#~ msgstr ""
-#~ "Une fois le type créé, vous ne pourrez plus changer le régalge business, "
-#~ "publicité ou galerie."
-
-#~ msgid "Remove selection"
-#~ msgstr "Supprimer la selection"
-
-#~ msgid "SUPPRIMER ?"
-#~ msgstr "Remove ?"
-
-#~ msgid "View"
-#~ msgstr "Vue"
-
-#~ msgid "You can not add, see, browse data while there is no type defined"
-#~ msgstr ""
-#~ "Vous ne pouvez ajouter, afficher ou parcourir du contenu temps qu'il n'y "
-#~ "a aucun type de défini"
-
-#~ msgid "You need to create a type to create new contents"
-#~ msgstr "Vous devez créer un type avant d'ajouter du contenu"

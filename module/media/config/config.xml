@@ -15,9 +15,8 @@
 
     <i18n>
         <file>index.php</file>
-        <file>embed.php</file>
         <file>pref.php</file>
-        <file>pref-embed.php</file>
+        <file>ui/menu.php</file>
     </i18n>
 
 	<profile>

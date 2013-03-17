@@ -66,7 +66,7 @@ msgstr ""
 msgid "Ad code"
 msgstr ""
 
-#: ../../content/parent.php:168 ../../type/row.php:197 ../../type/row.php:204
+#: ../../content/parent.php:168 ../../type/row.php:195 ../../type/row.php:202
 msgid "Add"
 msgstr ""
 
@@ -154,6 +154,10 @@ msgstr ""
 msgid "Automatique URL Rewriting"
 msgstr ""
 
+#: ../../media/ui/menu.php:23
+msgid "Back"
+msgstr ""
+
 #: ../../config/ui/menu.php:11
 msgid "Back Office"
 msgstr ""
@@ -210,7 +214,7 @@ msgstr ""
 msgid "Buyers"
 msgstr ""
 
-#: ../../category/index.php:118 ../../category/index.php:255 ../../chapter/index.php:173 ../../chapter/index.php:313 ../../config/admin.php:30 ../../config/field.php:55 ../../config/index.php:81 ../../config/language.php:71 ../../config/offline.php:52 ../../config/robots.php:45 ../../content/index.php:134 ../../content/parent.php:186 ../../field/asso.php:199 ../../media/index.php:65 ../../social/forum.php:166 ../../theme/index.php:62 ../../type/row.php:229 ../../user/group.php:121 ../../user/group.php:71
+#: ../../category/index.php:118 ../../category/index.php:255 ../../chapter/index.php:173 ../../chapter/index.php:313 ../../config/admin.php:30 ../../config/field.php:55 ../../config/index.php:81 ../../config/language.php:71 ../../config/offline.php:52 ../../config/robots.php:45 ../../content/index.php:134 ../../content/parent.php:186 ../../field/asso.php:199 ../../media/index.php:65 ../../social/forum.php:166 ../../theme/index.php:62 ../../type/row.php:226 ../../user/group.php:121 ../../user/group.php:71
 msgid "Cancel"
 msgstr ""
 
@@ -282,7 +286,7 @@ msgstr ""
 msgid "Column 2"
 msgstr ""
 
-#: ../../type/row.php:226
+#: ../../type/row.php:223
 msgid "Columns for type"
 msgstr ""
 
@@ -479,7 +483,7 @@ msgstr ""
 msgid "Export"
 msgstr ""
 
-#: ../../config/ui/menu.php:23 ../../type/row.php:183
+#: ../../config/ui/menu.php:23 ../../type/row.php:181
 msgid "Field"
 msgstr ""
 
@@ -727,6 +731,10 @@ msgstr ""
 msgid "New document"
 msgstr ""
 
+#: ../../media/ui/menu.php:9
+msgid "New folder"
+msgstr ""
+
 #: ../../user/index.php:55
 msgid "New user"
 msgstr ""
@@ -915,6 +923,10 @@ msgstr ""
 msgid "Reference"
 msgstr ""
 
+#: ../../media/ui/menu.php:6
+msgid "Refresh"
+msgstr ""
+
 #: ../../content/data.php:585 ../../content/gallery-album.php:279
 msgid "Relationships"
 msgstr ""
@@ -935,7 +947,7 @@ msgstr ""
 msgid "Remote URL"
 msgstr ""
 
-#: ../../content/data-language.php:196 ../../content/data.php:236 ../../content/parent.php:204 ../../field/index.php:130 ../../type/row.php:249
+#: ../../content/data-language.php:196 ../../content/data.php:236 ../../content/parent.php:204 ../../field/index.php:130 ../../type/row.php:246
 msgid "Remove"
 msgstr ""
 
@@ -995,7 +1007,7 @@ msgstr ""
 msgid "Save tabs"
 msgstr ""
 
-#: ../../content/parent.php:185 ../../type/row.php:228
+#: ../../content/parent.php:185 ../../type/row.php:225
 msgid "Save this order"
 msgstr ""
 
@@ -1013,6 +1025,10 @@ msgstr ""
 
 #: ../../content/data.php:291 ../../user/data.php:158
 msgid "See all"
+msgstr ""
+
+#: ../../media/ui/menu.php:17
+msgid "Settings"
 msgstr ""
 
 #: ../../content/data.php:829 ../../content/index.php:109
@@ -1145,6 +1161,10 @@ msgstr ""
 
 #: ../../content/browse.php:101 ../../content/data.php:563 ../../content/gallery-album.php:370 ../../content/index.php:358 ../../user/data.php:234 ../../user/index.php:98
 msgid "Updated"
+msgstr ""
+
+#: ../../media/ui/menu.php:13
+msgid "Upload"
 msgstr ""
 
 #: ../../content/gallery-import.php:176
