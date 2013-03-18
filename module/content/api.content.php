@@ -272,11 +272,11 @@ public function contentGet($opt=array()){
 		$join[] = "INNER JOIN k_contentad ON ".$jTable.".id_content = k_contentad.id_content";
 		$cond[] = "k_contentad.language='".$language."'";
 	}
-	
-	
-	/*if($opt['assoUser']){
-		$join[] = "INNER JOIN k_user ON k_content.id_user = k_user.id_user";
-	}*/
+
+	if($opt['assoUser'] == true){
+		$join[] = "INNER JOIN k_user     ON k_content.id_user = k_user.id_user";
+		$join[] = "INNER JOIN k_userdata ON k_user.id_user = k_userdata.id_user";
+	}
 
 	# Search
 	#
@@ -1525,14 +1525,14 @@ public function contentCacheTable($id_content, $opt=array()){
 /* + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + -
 TODO: kill this function, check usage (use type module instead)
 + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - */
-public function contentType($opt=array()){
+public function contentType($opt=array()){ // DEPRECATED
 	return $this->apiLoad('type')->typeGet($opt);
 }
 
 /* + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - 
 TODO: kill this function, check usage (use type module instead)
 + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - */
-public function contentTypeSet($id_type, $def){
+public function contentTypeSet($id_type, $def){ // DEPRECATED
 	return $this->apiLoad('type')->typeSet($id_type, $def);
 }
 
