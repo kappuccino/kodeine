@@ -20,7 +20,7 @@
 
     <?php } ?>
 
-    <a href="/data-list?id_newsletter=<?php echo $_REQUEST['id_newsletter']; ?>" class="btn <?php echo isMe('/newsletter/data-list') ? 'active':'' ?>">
+    <a href="data-list?id_newsletter=<?php echo $_REQUEST['id_newsletter']; ?>" class="btn <?php echo isMe('/newsletter/data-list') ? 'active':'' ?>">
         Etape 3 : Listes abonnés
     </a>
 
