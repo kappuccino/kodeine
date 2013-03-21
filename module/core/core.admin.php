@@ -82,9 +82,18 @@ public function filterGet($mod=NULL){
 	}
 }
 
-/* + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - 
-+ - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - */
-public function filterReset(){
+//-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -
+//-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -
+public function filterReset($mod=NULL){
+
+	if($mod != NULL){
+		$old = $this->filterGet();
+		if(array_key_exists($mod, $old)) unset($old[$mod]);
+
+		$value = serialize($old);
+		return setcookie('filter', $value, (time()+(60*60*24*30)), '/');
+	}
+
 	return setcookie('filter', '', (time()-(60*60*24*30)), '/');
 }
 

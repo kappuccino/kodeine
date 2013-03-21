@@ -12,7 +12,7 @@
 	#
 	require(__DIR__.'/module/core/helper/url.php');
 
-	# Post action file (BEFORESTART must be inited in /user/conf/app.php
+	# Post action file (BEFORESTART must be inited in /user/config/app.php
 	#
 	if(defined('BEFORESTART') && is_file(BEFORESTART)) include(BEFORESTART);
 
@@ -27,6 +27,10 @@
 	# Init (main work here, init all process chapter, page etc...)
 	#
 	$app->kodeineInit($_GET);
+
+	# Post action file (AFTERINIT must be inited in /user/config/app.php
+	#
+	if(defined('AFTERINIT') && is_file(AFTERINIT)) include(AFTERINIT);
 
 	# Offline message
 	#

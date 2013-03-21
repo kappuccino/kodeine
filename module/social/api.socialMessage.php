@@ -5,8 +5,8 @@ class socialMessage extends social{
 function __clone(){}
 function socialMessage(){}
 
-/* + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - 
-+ - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - */
+//-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -
+//-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -
 function socialMessageGet($opt=array()){
 
 	if($opt['debug']) $this->pre("[OPT]", $opt);
@@ -42,10 +42,10 @@ function socialMessageGet($opt=array()){
 	// GET mid_socialmessage
 	if(array_key_exists('mid_socialmessage', $opt)){
 
-		if(intval($opt['mid_socialmessage']) > 0){
+		if(intval($opt['mid_socialmessage']) >= 0){
 			$cond[] = "k_socialmessage.mid_socialmessage=".$opt['mid_socialmessage'];
 		}else{
-			if($opt['debug']) $this->pre("ERROR: MID_SOCIALMESSAGE (NUMERIC > 0)", "GIVEN", var_export($opt['id_socialmessage'], true));
+			if($opt['debug']) $this->pre("ERROR: MID_SOCIALMESSAGE (NUMERIC >= 0)", "GIVEN", var_export($opt['mid_socialmessage'], true));
 			return array();
 		}
 
@@ -112,67 +112,13 @@ function socialMessageGet($opt=array()){
 	if(sizeof($messages) > 0){
 		if($flip) $messages = array($messages);
 
-		# JSON
-		#		
-		foreach($messages as $n => $e){
-			$messages[$n]['socialMessageFlat']		= ($e['socialMessageFlat'] != '')		? json_decode($e['socialMessageFlat'], true)		: array();
-			$messages[$n]['socialMessageThread']	= ($e['socialMessageThread'] != '')		? json_decode($e['socialMessageThread'], true)		: array();
-			$messages[$n]['socialMessageOpenGraph']	= ($e['socialMessageOpenGraph'] != '')	? json_decode($e['socialMessageOpenGraph'], true)	: array();
-			$messages[$n]['socialMessageRecipient']	= ($e['socialMessageRecipient'] != '')	? json_decode($e['socialMessageRecipient'], true)	: array();
-		}
-
-		# WITH USER
-		if($opt['withAuthor']){
-			foreach($messages as $n => $e){
-				$id_users[] = $e['id_user'];
-				$messages[$n]['user'] = NULL;
-			}
-			if(sizeof($id_users) > 0){
-				$users = $this->apiLoad('user')->userGet(array(
-					'id_user'	=> $id_users,
-					'useMedia'	=> true
-				));
-				foreach($users as $u){
-					$uids[$u['id_user']] = $u;
-				}
-				foreach($messages as $n => $e){
-					$messages[$n]['author'] = $uids[$e['id_user']];
-				}
-			}
-		}
-
-		
-		# RECIPIENT
-		if($opt['withRecipient'] == true){
-			foreach($messages as $n => $e){
-				if(sizeof($e['socialMessageRecipient']) > 0){
-					$users = $this->apiLoad('user')->userGet(array(
-						'debug'		=> false,
-						'id_user'	=> $e['socialMessageRecipient'],
-						'useMedia'	=> true,
-						'useField'	=> true,
-					));
-
-					$messages[$n]['socialMessageRecipient'] = $users;
-				}
-			}
-		}
-
-		# MEDIA TRANSLATION
-		if($opt['human']){
-			foreach($messages as $n => $m){
-				$messageMedia = json_decode(stripslashes($m['socialMessageMedia']), true);
-				if(sizeof($messageMedia) > 0){
-					foreach($messageMedia as $e){
-						$media[$e['type']][] = $this->mediaInfos($e['url']);
-					}
-					$messages[$n]['socialPostMedia'] = $media;
-				}else{
-					$messages[$n]['socialPostMedia'] = array();
-				}
-				unset($media);
-			}		
-		}
+		$messages = $this->socialMessageMapping(array(
+			'messages'      => $messages,
+			'fields'	    => $this->apiLoad('field')->fieldGet(array('socialMessage' => true)),
+			'human'         => $opt['human'],
+			'withAuthor'    => $opt['withAuthor'],
+			'withRecipient' => $opt['withRecipient']
+		));
 
 		if($flip) $messages = $messages[0];
 	}
@@ -180,15 +126,14 @@ function socialMessageGet($opt=array()){
 	return $messages;
 }
 
-
-/* + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - 
-+ - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - */
+//-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -
+//-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -
 function socialMessageSet($opt){
 
 	# NEW !
 	#
 	if($opt['id_socialmessage'] == NULL){
-		$this->dbQuery("INSERT INTO k_socialmessage (socialMessageDate) VALUES (NOW())");
+		$this->dbQuery("INSERT INTO k_socialmessage (socialMessageDate, socialMessageDateLast) VALUES (NOW(), NOW())");
 		$id_socialmessage = $this->db_insert_id;
 		if($opt['debug']) $this->pre($this->db_query, $this->db_error);
 	}else{
@@ -202,6 +147,10 @@ function socialMessageSet($opt){
 	if(intval($opt['replyTo']) > 0 && intval($opt['thread']) > 0){
 		$opt['core']['mid_socialmessage'] 	   = array('value' => $opt['replyTo']);
 		$opt['core']['id_socialmessagethread'] = array('value' => $opt['thread']);
+
+		$this->dbQuery("UPDATE k_socialmessage SET socialMessageDateLast=NOW() WHERE id_socialmessage=".$opt['thread']);
+		if($opt['debug']) $this->pre($this->db_query, $this->db_error);
+
 	}else{
 		$opt['core']['id_socialmessagethread'] = array('value' => $id_socialmessage);
 	}
@@ -221,30 +170,68 @@ function socialMessageSet($opt){
 	if($opt['debug']) $this->pre($this->db_query, $this->db_error);
 
 
+	# FIELD
+	#
+	if(sizeof($opt['field']) > 0){
+
+		# Si on utilise le KEY au lieu des ID
+		$fields = $this->apiLoad('field')->fieldGet(array('socialMessage' => true));
+		foreach($fields as $e){
+			$fieldsKey[$e['fieldKey']] = $e;
+		} $fields = $fieldsKey;
+
+		unset($def);
+		$apiField = $this->apiLoad('field');
+
+		foreach($opt['field'] as $id_field => $value){
+			if(!is_integer($id_field)) $id_field = $fields[$id_field]['id_field'];
+			$value = $apiField->fieldSaveValue($id_field, $value);
+			$def['k_socialmessage']['field'.$id_field] = array('value' => $value);
+		}
+
+		$this->dbQuery($this->dbUpdate($def)." WHERE id_socialmessage=".$id_socialmessage);
+		if($opt['debug']) $this->pre($this->db_query, $this->db_error);
+	}
+
+
 	# BUILD CACHE
 	#
-#	if(intval($opt['replyTo']) > 0 && intval($opt['thread']) > 0){
 	$this->socialMessageBuild(array(
 		'debug'						=> $opt['debug'],
 		'id_socialmessagethread'	=> $opt['core']['id_socialmessagethread']['value']
 	));
-#	}
 
 
-	# SEND TO ...
+	# SEND TO ... NEW POST
 	#
 	if(is_array($opt['sendTo']) && sizeof($opt['sendTo']) > 0){
 		$addu[] = "(".$id_socialmessage.", ".$opt['core']['id_user']['value'].", 1)";
+		$rcpt[] = intval($opt['core']['id_user']['value']);
 
 		foreach($opt['sendTo'] as $idu){
 			$addu[] = "(".$id_socialmessage.", ".$idu.", 0)";
 			$rcpt[]	= intval($idu);
 		}
 
-		$this->dbQuery("INSERT INTO k_socialmessageuser (id_socialmessage, id_user, is_read) VALUES ".implode(', ', $addu));
+		$this->dbQuery("UPDATE k_socialmessage SET socialMessageRecipient='".json_encode($rcpt)."' WHERE id_socialmessage=".$id_socialmessage);
 		if($opt['debug']) $this->pre($this->db_query, $this->db_error);
 
-		$this->dbQuery("UPDATE k_socialmessage SET socialMessageRecipient='".json_encode($rcpt)."' WHERE id_socialmessage=".$id_socialmessage);
+	}else
+
+	# SEND TO ... REPLY
+	#
+	if(intval($opt['thread']) > 0){
+		$thread = $this->socialMessageGet(array(
+			'id_socialmessage' => $opt['thread']
+		));
+
+		foreach($thread['socialMessageRecipient'] as $idu){
+			if($idu != $opt['core']['id_user']['value']) $addu[] = "(".$id_socialmessage.", ".$idu.", 0)";
+		}
+	}
+
+	if(count($addu) > 0){
+		$this->dbQuery("INSERT INTO k_socialmessageuser (id_socialmessage, id_user, is_read) VALUES ".implode(', ', $addu));
 		if($opt['debug']) $this->pre($this->db_query, $this->db_error);
 	}
 
@@ -254,6 +241,120 @@ function socialMessageSet($opt){
 		'type' 	=> 'message',
 		'id' 	=> $id_socialmessage
 	));
+}
+
+//-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -
+//-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -
+function socialMessageMapping($opt){
+
+	$messages = $opt['messages'];
+
+	foreach($messages as $n => $e){
+
+		# FIELD
+		if(sizeof($opt['fields']) > 0){
+			foreach($opt['fields'] as $f){
+
+				$v = $e['field'.$f['id_field']];
+
+				if($f['fieldType'] == 'media'){
+					$v = json_decode($v, true); unset($media);
+					if(sizeof($v) > 0 && is_array($v)){
+						foreach($v as $e){
+							$e_ = $this->mediaInfos($e['url']);
+							$e_['caption'] = $e['caption'];
+							$media[$e['type']][] = $e_;
+						}
+						$messages[$n]['field'][$f['fieldKey']] = $media;
+					}
+				}else
+
+				if(is_array($v) && $f['fieldType'] == 'user'){
+					unset($tmp);
+					foreach($v as $id_user){
+						$tmp[] = $this->dbOne("SELECT * FROM k_user WHERE id_user=".$id_user);
+					}
+					$messages[$n]['field'][$f['fieldKey']] = $tmp;
+				}else
+
+				if(is_array($v) && $f['fieldType'] == 'content'){
+					unset($tmp);
+					foreach($v as $id_content){
+						$tmp[] = $this->dbOne("SELECT * FROM k_contentdata WHERE id_content=".$id_content);
+					}
+					$messages[$n]['field'][$f['fieldKey']] = $tmp;
+				}else
+
+				if(in_array($f['fieldType'], array('onechoice', 'multichoice')) && substr($v, 0, 2) == $this->splitter && substr($v, -2) == $this->splitter && $v != $this->splitter){
+					$part = explode($this->splitter, substr($v, 2, -2));
+					$messages[$n]['field'][$f['fieldKey']] = implode("<br />", $part);
+
+				}else{
+					$messages[$n]['field'][$f['fieldKey']] = $v;
+				}
+
+				unset($messages[$n]['field'.$f['id_field']]);
+			}
+		}
+
+		# JSON
+		$messages[$n]['socialMessageFlat']		= ($e['socialMessageFlat'] != '')		? json_decode($e['socialMessageFlat'], true)		: array();
+		$messages[$n]['socialMessageThread']	= ($e['socialMessageThread'] != '')		? json_decode($e['socialMessageThread'], true)		: array();
+		$messages[$n]['socialMessageOpenGraph']	= ($e['socialMessageOpenGraph'] != '')	? json_decode($e['socialMessageOpenGraph'], true)	: array();
+		$messages[$n]['socialMessageRecipient']	= ($e['socialMessageRecipient'] != '')	? json_decode($e['socialMessageRecipient'], true)	: array();
+
+		# WITH USER (1)
+		if($opt['withAuthor']){
+			$id_users[] = $e['id_user'];
+			$messages[$n]['user'] = NULL;
+		}
+
+		# RECIPIENT
+		if($opt['withRecipient'] == true){
+			if(sizeof($e['socialMessageRecipient']) > 0){
+				$users = $this->apiLoad('user')->userGet(array(
+					'debug'		=> false,
+					'id_user'	=> $e['socialMessageRecipient'],
+					'useMedia'	=> true,
+					'useField'	=> true,
+				));
+
+				$messages[$n]['socialMessageRecipient'] = $users;
+			}
+		}
+
+		# MEDIA TRANSLATION
+		if($opt['human']){
+			$messageMedia = json_decode(stripslashes($e['socialMessageMedia']), true);
+			if(sizeof($messageMedia) > 0){
+				foreach($messageMedia as $e){
+					$media[$e['type']][] = $this->mediaInfos($e['url']);
+				}
+				$messages[$n]['socialPostMedia'] = $media;
+			}else{
+				$messages[$n]['socialPostMedia'] = array();
+			}
+			unset($media, $messageMedia);
+		}
+	}
+
+	# WITH USER (2)
+	if($opt['withAuthor'] && sizeof($id_users) > 0){
+		$users = $this->apiLoad('user')->userGet(array(
+			'id_user'	=> $id_users,
+			'useMedia'	=> true
+		));
+
+		foreach($users as $u){
+			$uids[$u['id_user']] = $u;
+		}
+
+		foreach($messages as $n => $e){
+			$messages[$n]['author'] = $uids[$e['id_user']];
+		}
+	}
+
+	return $messages;
 }
 
 /* + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - 
@@ -367,42 +468,4 @@ function socialMessageMarkRead($opt){
 #	$this->pre($this->db_query, $this->db_error);
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-} ?>
+}
