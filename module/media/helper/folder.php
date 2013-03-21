@@ -61,7 +61,7 @@
 
 				$ext = strtolower(pathinfo($el, PATHINFO_EXTENSION));
 
-				if($ext['type'] == 'pdf'){
+				if($tmp['type'] == 'pdf'){
 					$tmp['kind']	= 'pdf';
 				}else
 				if($tmp['kind'] == 'picture'){
