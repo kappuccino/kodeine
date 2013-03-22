@@ -1,78 +1,93 @@
 <?php
+//-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -
+// KODEINE ADMIN PROXY
+//-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -
 
-	# CORE (ADMIN)
-	#
 	define('COREINC',	    MODULE.'/core/includes');
-
 	define('COREUI',	    KPROMPT.'/admin/core/ui');
 	define('COREVENDOR',    KPROMPT.'/admin/core/vendor');
-
 
 	function isMe($p){
 		$url = parse_url($_SERVER['REQUEST_URI']);
 		if(preg_match("#".$p."#", $url['path'])) return 'me';
 	}
 
-# -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
+//-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -
 
 	$app	= new coreAdmin();
 
 	$url	= parse_url($url);
 	$part	= explode('/', substr($url['path'], 7), 2);
-
 	$module	= $part[0];
-	$file_	= ($part[1] == '') ? 'index' : trim($part[1]);
 
-	$folder	= USER.'/module/'.$module;
-	$file	= $folder.'/'.$file_;
-
-	// Verifier s'il existe le module dans le dossier USER/module
-	if(!file_exists($folder)){
-		$folder = APP.'/module/'.$module;
-		$file	= $folder.'/'.$file_;
-	}
+//-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -
 
 	if($module == '' && $url['path'] == '/admin/'){
 		$app->go('core/login');
 	}
 
-	if(!file_exists($folder) && $module != NULL) die('module not found');
+//-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -
 
-	$ext = strtolower(pathinfo($file, PATHINFO_EXTENSION));
-	if($ext == 'php') $file = substr($file, 0, -4);
-
+	# /admin/module/file
 	#
-	# != '.php ' ???
+	if(strpos($part[1], '/') === false){
+		$folder	= '/module/'.$module;
+		$file_  = ($part[1] == '') ? 'index' : trim($part[1]);
+	}else
+
+	# /admin/module/folder/
 	#
-	/*if(in_array($ext, array('less', 'css', 'js', 'png', 'gif', 'jpg', 'jpeg', 'eot', 'woff', 'tff', 'svg', 'swf'))){
-		if(file_exists($file)){
+	if(substr($part[1], -1) == '/'){
+		$folder	= '/module/'.$module.'/'.substr($part[1], 0, -1);
+		$file_  = 'index';
+	}
 
-			$mime = $app->mediaMimeType($file);
-			header("Content-Type: ".$mimie);
-			echo file_get_contents($file);
-			exit();
+	# /admin/module/folder/file
+	#
+	else{
+		$folder	= '/module/'.$module.'/'.dirname($part[1]);
+		$file_  = ($part[1] == '') ? 'index' : basename(trim($part[1]));
+	}
 
-		#	header("Location: ".str_replace(KROOT, NULL, $file));
-		#	$app->go(str_replace(KROOT, NULL, $file));
-		#	exit();
-		}else{
-			header("HTTP/1.0 404 Not Found");
-			echo 'module file not found: '.$file;
-			exit();
-		}*/
+	$file = $folder.'/'.$file_;
+	$ext  = strtolower(pathinfo($file, PATHINFO_EXTENSION));
+	if($ext == ''){
+		$ext   = 'php';
+		$file .= '.'.$ext;
+	}
 
-	if(file_exists($file.'.php')){
+#	echo 'MODULE='.$module.'<br />';
+#	echo 'FOLDER='.$folder.'<br />';
+#	echo 'FILE_ ='.$file_.'<br />';
+#	echo 'FILE  ='.$file.'<br />';
+#	die();
+
+//-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -
+
+	// Verifier s'il existe le module dans le dossier USER/module
+	if(file_exists(USER.$file)){
+		$file = USER.$file;
+	}else
+	// Verifier s'il existe le module dans le dossier APP/module
+	if(file_exists(APP.$file)){
+		$file = APP.$file;
+	}
+	// Si j'ai ni l'un ni l'autre...
+	else{
+		die('module not found');
+	}
+
+//-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -
+
+	if(file_exists($file) && $ext == 'php'){
 		if(!$app->userIsAdmin && !in_array($url['path'], array('/admin/core/login', '/admin/core/helper/lost'))){
 			$app->go(KPROMPT.'/admin/core/login');
 		}else{
 			header("Content-Type: text/html; charset=UTF-8");
-			include($file.'.php');
+			include($file);
 		}
 	}else
 	if(file_exists($file)){
-	#	header("HTTP/1.1 301 Moved Permanently");
-	#	header("Location: ".str_replace(KROOT, NULL, $file));
-	#	exit();
 
 		$stat = stat($file);
 		$etag = sprintf('%x-%x-%x', $stat['ino'], $stat['size'], $stat['mtime'] * 1000000);
@@ -101,15 +116,6 @@
 		readfile($file);
 		exit();
 
-
-		#header("Content-Type: ".$mimie);
-		#echo file_get_contents($file);
-		#exit();
-
-	#	header("Location: ".str_replace(KROOT, NULL, $file));
-	#	$app->go(str_replace(KROOT, NULL, $file));
-	#	exit();
-	
 	}else{
 		die('module file not found: '.$file);
 	}
