@@ -912,7 +912,7 @@ public function contentSet($opt){
 				$def[$table]['field'.$id_field] = array('value' => $value);
 			}
 		}
-		
+
 		if(sizeof($def) > 0){
 			$this->dbQuery($this->dbUpdate($def)." WHERE language='".$language."' AND id_content=".$this->id_content);
 			if($opt['debug']) $this->pre($this->db_query, $this->db_error);
@@ -1011,6 +1011,10 @@ public function contentSet($opt){
 	$isAlbum = $this->dbOne("SELECT id_content FROM k_contentalbum WHERE id_content=".$this->id_content);
 	if($isAlbum['id_content'] > 0) $this->contentAlbumFamily();
 
+	@$this->eventTrigger('content', 'contentSet', array(
+		'opt'        => $opt,
+		'id_content' => $this->id_content,
+	));
 
 	return true;
 }
