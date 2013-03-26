@@ -5,12 +5,17 @@
 
 class user extends coreApp {
 
-function __clone(){}
-public function user(){}
+/* + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + -
++ - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - */
+public  function __clone(){}
+
+/* + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + -
++ - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - */
+public  function user(){}
 
 /* + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - 
 + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - */
-public function userGet($opt=array()){
+public  function userGet($opt=array()){
 
 	if(BENCHME) @$GLOBALS['bench']->benchmarkMarker($bmStep='userGet() @='.json_encode($opt));
 
@@ -212,7 +217,7 @@ public function userGet($opt=array()){
 
 /* + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - 
 + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - */
-public function userSet($opt){
+public  function userSet($opt){
 
 	if($opt['debug']) $this->pre("[opt]", $opt);
 
@@ -311,7 +316,7 @@ public function userSet($opt){
 
 /* + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - 
 + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - */
-public function userRemove($id_user){
+public  function userRemove($id_user){
 
 	if($id_user == NULL) return false;
 
@@ -326,10 +331,9 @@ public function userRemove($id_user){
 	return true;
 }
 
-
 /* + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - 
 + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - */
-public function userFieldSet($id_field, $def){
+public  function userFieldSet($id_field, $def){
 
 	if(!$this->formValidation($def)) return false;
 
@@ -353,7 +357,7 @@ public function userFieldSet($id_field, $def){
 
 /* + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + -
 + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - */
-public function userMediaLink($opt){
+public  function userMediaLink($opt){
 
 	if(!is_array($opt['url'])) $opt['url'] = array($opt['url']);
 
@@ -423,10 +427,9 @@ public function userMediaLink($opt){
 	return false;
 }
 
-
 /* + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + -
 + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - */
-public function userMapping($opt){
+public  function userMapping($opt){
 
 	$users	= $opt['data'];
 	$fields	= $opt['fields'];
@@ -504,7 +507,7 @@ public function userMapping($opt){
 
 /* + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - 
 + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - */
-public function userSearchCache($opt){
+public  function userSearchCache($opt){
 
 	# update pour 1 USER
 	#	
@@ -585,7 +588,7 @@ public function userSearchCache($opt){
 
 /* + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - 
 + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - */
-public function userSearch($opt){
+public  function userSearch($opt){
 
 	$search = $this->dbOne("SELECT * FROM k_search WHERE id_search=".$opt['id_search']);
 	$search['searchParam'] = unserialize($search['searchParam']);
@@ -621,7 +624,7 @@ public function userSearch($opt){
 
 /* + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - 
 + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - */
-function userSearchSQL($param, $level=0){
+public  function userSearchSQL($param, $level=0){
 #$this->pre($param);
 
 	$prompt  = str_repeat("\t", $level);
@@ -661,10 +664,9 @@ function userSearchSQL($param, $level=0){
 	
 }
 
-
 /* + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - 
 + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - */
-public function userProfileGet($opt=array()){
+public  function userProfileGet($opt=array()){
 
 	if($opt['id_profile'] > 0){
 		$dbMode = 'dbOne';
@@ -703,7 +705,7 @@ public function userProfileGet($opt=array()){
 
 /* + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - 
 + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - */
-public function userProfileSet($id_profile, $def){
+public  function userProfileSet($id_profile, $def){
 
 	if($id_profile > 0){
 		$q = $this->dbUpdate($def)." WHERE id_profile=".$id_profile;
@@ -721,7 +723,7 @@ public function userProfileSet($id_profile, $def){
 
 /* + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - 
 + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - */
-public function userProfileCheckChapter($chapter){
+public  function userProfileCheckChapter($chapter){
 
 	if(!is_array($chapter)) return array();
 	
@@ -749,10 +751,9 @@ public function userProfileCheckChapter($chapter){
 	return is_array($rest) ? $rest : array();
 }
 
-
 /* + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - 
 + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - */
-public function userProfileCheckCategory($category){
+public  function userProfileCheckCategory($category){
 
 	if(!is_array($category)) return array();
 	
@@ -782,7 +783,7 @@ public function userProfileCheckCategory($category){
 
 /* + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - 
 + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - */
-public function userProfileCheckGroup($group){
+public  function userProfileCheckGroup($group){
 
 	if(!is_array($group)) return array();
 	
@@ -807,9 +808,9 @@ public function userProfileCheckGroup($group){
 	return is_array($rest) ? $rest : array();
 }
 
-/* + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - 
+/* + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + -
 + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - */
-public function userGroupGet($opt=array()){
+public  function userGroupGet($opt=array()){
 
 	if($opt['distinctParent'] && is_array($opt['id_group'])){
 		foreach($opt['id_group'] as $e){
@@ -947,10 +948,9 @@ public function userGroupGet($opt=array()){
 	return $group;
 }
 
-
 /* + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - 
 + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - */
-public function userGroupSet($id_group, $def){
+public  function userGroupSet($id_group, $def){
 
 	if(!$this->formValidation($def)) return false;
 
@@ -973,13 +973,13 @@ public function userGroupSet($id_group, $def){
 
 /* + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - 
 + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - */
-public function userGroupRemove($id_group){
+public  function userGroupRemove($id_group){
 	$this->dbQuery("DELETE FROM k_group WHERE id_group=".$id_group);
 }
 
 /* + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - 
 + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - */
-public function userGroupSelector($opt){
+public  function userGroupSelector($opt){
 
 	$form  = '';
 	$group = $this->userGroupGet(array(
@@ -1015,7 +1015,7 @@ public function userGroupSelector($opt){
 /* + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + -
 	Mettre a jour les PARENT et CHILDREN et les sauver en base
 + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - */
-public function userGroupFamily(){
+public  function userGroupFamily(){
 
 	$group = $this->userGroupGet(array(
 		'threadFlat'	=> true,
@@ -1037,11 +1037,10 @@ public function userGroupFamily(){
 	}
 }
 
-
 /* + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + -
 	Trouver tous les PARENTS pour un GROUP
 + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - */
-public function userGroupFamilyParent($e, $line=array()){
+public  function userGroupFamilyParent($e, $line=array()){
 
 	if(abs(intval($e['mid_group'])) > 0){
 		$next = $this->userGroupGet(array(
@@ -1055,11 +1054,10 @@ public function userGroupFamilyParent($e, $line=array()){
 	}
 }
 
-
 /* + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + -
 	Trouver tous les CHILDREN pour un GROUP
 + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - */
-public function userGroupFamilyChildren($e, &$line=array()){
+public  function userGroupFamilyChildren($e, &$line=array()){
 
 	$children = $this->userGroupGet(array(
 		'mid_group' => $e['id_group']
@@ -1073,10 +1071,9 @@ public function userGroupFamilyChildren($e, &$line=array()){
 	return $line;
 }
 
-
 /* + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - 
  - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + */
-function userAddressBookCheck($id_user){
+public  function userAddressBookCheck($id_user){
 
 	$books = $this->userAddressBookGet(array('id_user' => $id_user), false);
 
@@ -1104,7 +1101,7 @@ function userAddressBookCheck($id_user){
 
 /* + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - 
 + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - */
-public function userAddressBookGet($opt=array(), $check=true){
+public  function userAddressBookGet($opt=array(), $check=true){
 
 	if($opt['id_user'] == NULL) return array();
 	if($check) $this->userAddressBookCheck($opt['id_user']);
@@ -1134,10 +1131,9 @@ public function userAddressBookGet($opt=array(), $check=true){
 	return $ab;
 }
 
-
 /* + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - 
  - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + */
-function userAddressBookSet($opt=array()){
+public  function userAddressBookSet($opt=array()){
 
 	$id_user		= $opt['id_user'];
 	$id_addressbook	= $opt['id_addressbook'];
@@ -1162,9 +1158,9 @@ function userAddressBookSet($opt=array()){
 	return true;
 }
 
-/*+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-*/
-function userAddressBookDefine($id_user, $id_addressbook, $field, $value, $erase=true){
+/* + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + -
++ - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - */
+public  function userAddressBookDefine($id_user, $id_addressbook, $field, $value, $erase=true){
 
 	if($erase){
 		$this->dbQuery("UPDATE ".$this->tableUserAddressBook." SET ".$field."=0 WHERE id_user=".$id_user);
@@ -1173,9 +1169,9 @@ function userAddressBookDefine($id_user, $id_addressbook, $field, $value, $erase
 	$this->dbQuery("UPDATE ".$this->tableUserAddressBook." SET ".$field."=".$value." WHERE id_user=".$id_user." AND id_addressbook=".$id_addressbook);
 }
 
-/*+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-*/
-function userAddressBookFormat($data, $opt=array()){
+/* + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + -
++ - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - */
+public function userAddressBookFormat($data, $opt=array()){
 
 	if($opt['name']){
 		$out = $data['addressbookCivility'].' '.$data['addressbookFirstName'].' '.$data['addressbookLastName']."\n";
@@ -1196,7 +1192,7 @@ function userAddressBookFormat($data, $opt=array()){
 
 /* + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + -
 + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - */
-public function userImportCSV($file, $post=NULL){
+public  function userImportCSV($file, $post=NULL){
 
 
 	$headers 		= $post['headers'];
@@ -1354,10 +1350,7 @@ public function userImportCSV($file, $post=NULL){
 
 /* + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + -
 + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - */
-public function userImportAddressBookCSV($file, $post=NULL){
-
-
-
+public  function userImportAddressBookCSV($file, $post=NULL){
 
     $headers        = $post['headers'];
     $id_group       = $post['id_group'];
@@ -1568,7 +1561,7 @@ public function userImportAddressBookCSV($file, $post=NULL){
 
 /* + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - 
 + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - */
-public function userAssoGet($id_user, $id_field, $id_type){
+public  function userAssoGet($id_user, $id_field, $id_type){
 
 	$asso = $this->dbMulti("
 		SELECT * FROM k_userasso
@@ -1582,10 +1575,9 @@ public function userAssoGet($id_user, $id_field, $id_type){
 	return is_array($r) ? $r : array();
 }
 
-
-/* + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - 
+/* + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + -
  + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - */
-public function userAssoSet($id_user, $id_field, $id_type, $value){
+public  function userAssoSet($id_user, $id_field, $id_type, $value){
 
 	if(!is_array($value)) $value = array();
 	$this->dbQuery("DELETE FROM k_userasso WHERE id_user=".$id_user." AND id_field=".$id_field);
@@ -1607,7 +1599,7 @@ public function userAssoSet($id_user, $id_field, $id_type, $value){
 
 /* + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - 
 + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - */
-public function userAssoUserGet($id_user, $id_field){
+public  function userAssoUserGet($id_user, $id_field){
 
 	$asso = $this->dbMulti("SELECT * FROM k_userasso WHERE id_user=".$id_user." AND id_field=".$id_field);
 
@@ -1620,7 +1612,7 @@ public function userAssoUserGet($id_user, $id_field){
 
 /* + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - 
  + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - */
-public function userAssoUserSet($id_user, $id_field, $ids_user){
+public  function userAssoUserSet($id_user, $id_field, $ids_user){
 
 	$this->dbQuery("DELETE FROM k_userasso WHERE id_user=".$id_user." AND id_field=".$id_field);
 	#$this->pre($this->db_query, $this->db_error);
@@ -1639,7 +1631,7 @@ public function userAssoUserSet($id_user, $id_field, $ids_user){
 
 /* + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - 
  + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - */
-function userSocialCircle($id_user){
+public  function userSocialCircle($id_user){
 
 	# Security
 	#
@@ -1696,7 +1688,4 @@ function userSocialCircle($id_user){
 
 }
 
-
-
-
-} ?>
+}

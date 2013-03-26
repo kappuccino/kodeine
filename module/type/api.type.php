@@ -2,8 +2,9 @@
 
 class type extends coreApp {
 
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-	public function typeGet($opt=array()){
+//-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -
+//-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -
+	public  function typeGet($opt=array()){
 
 		if(BENCHME) @$GLOBALS['bench']->benchmarkMarker($bmStep='typeGet() @='.json_encode($opt));
 
@@ -65,8 +66,9 @@ class type extends coreApp {
 		return $type;
 	}
 
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-	public function typeSet($id_type, $def){
+//-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -
+//-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -
+	public  function typeSet($id_type, $def){
 
 		if(!$this->formValidation($def)) return false;
 
@@ -114,5 +116,96 @@ class type extends coreApp {
 		return true;
 	}
 
+//-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -
+//-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -
+	public  function typeSetProfile($id_type){
 
+		$id_pro  = intval($this->user['id_profile']);
+		$profile = $this->dbOne("SELECT profileRule FROM k_userprofile WHERE id_profile=".$id_pro);
+		$rules	 = unserialize($profile['profileRule']);
+
+		$ids   = $rules['id_type'];
+		$ids[] = $id_type;
+		$ids   = array_values(array_unique($ids));
+
+		$rules['id_type'] = $ids;
+
+		$this->apiLoad('user')->userProfileSet($this->user['id_profile'], array(
+			'k_userprofile' => array(
+				'profileRule' => array('value' => serialize($rules))
+			)
+		));
+	}
+
+//-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -
+//-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -
+	public  function typeRemove($id_type){
+
+		if(intval($id_type) == 0) return false;
+
+		# Remove CONTENTS
+		#
+		$ids = $this->dbMulti("SELECT id_content FROM k_content WHERE id_type=".$id_type);
+		if(sizeof($ids) > 0){
+			$ids_ = implode(',', $this->dbKey($ids, 'id_content', true));
+
+			// Supprimer tous les contents de ce type			
+			$this->dbQuery("DELETE FROM k_content			    WHERE id_type=".$id_type);
+
+			// Supprimer les valeurs des content
+			$this->dbQuery("DELETE FROM k_content			    WHERE id_content IN(".$ids_.")");
+			$this->dbQuery("DELETE FROM k_contentdata 		    WHERE id_content IN(".$ids_.")");
+			$this->dbQuery("DELETE FROM k_contentcomment 	    WHERE id_content IN(".$ids_.")");
+			$this->dbQuery("DELETE FROM k_contentgroup		    WHERE id_content IN(".$ids_.")");
+			$this->dbQuery("DELETE FROM k_contentversion        WHERE id_content IN(".$ids_.")");
+			$this->dbQuery("DELETE FROM k_contentitem		    WHERE id_content IN(".$ids_.")");
+			$this->dbQuery("DELETE FROM k_contentalbum		    WHERE id_content IN(".$ids_.")");
+
+			// Supprimer les associations
+			$this->dbQuery("DELETE FROM k_contentsearch		    WHERE id_content IN(".$ids_.")");
+			$this->dbQuery("DELETE FROM k_contentgroup		    WHERE id_content IN(".$ids_.")");
+			$this->dbQuery("DELETE FROM k_contentgroupbusiness  WHERE id_content IN(".$ids_.")");
+			$this->dbQuery("DELETE FROM k_contentchapter        WHERE id_content IN(".$ids_.")");
+			$this->dbQuery("DELETE FROM k_contentcategory       WHERE id_content IN(".$ids_.")");
+		}
+
+		# Remome TYPE
+		#
+		$this->dbQuery("DELETE FROM k_type			WHERE id_type=".$id_type);
+		$this->dbQuery("DELETE FROM k_fieldaffect	WHERE id=".$id_type); // ID equivaut a ID_TYPE
+
+		# Update TABLES
+		#
+		$this->dbQuery("DROP TABLE IF EXISTS k_content".$id_type);
+		$this->dbQuery("DROP TABLE IF EXISTS k_contentitem".$id_type);
+		$this->dbQuery("DROP TABLE IF EXISTS k_contentalbum".$id_type);
+
+		# Update CACHE
+		#
+		$this->apiLoad('field')->fieldCacheBuild();
+
+		return true;
+	}
+
+//-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -
+//-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -
+	public  function typeRemoveProfile($id_type){
+
+		$id_pro  = intval($this->user['id_profile']);
+		$profile = $this->dbOne("SELECT profileRule FROM k_userprofile WHERE id_profile=".$id_pro);
+		$rules	 = unserialize($profile['profileRule']);
+
+		$ids = $rules['id_type'];
+		foreach($ids as $n => $id){
+			if($id == $id_type) unset($ids[$n]);
+		}
+		$ids = array_values(array_unique($ids));
+		$rules['id_type'] = $ids;
+
+		$this->apiLoad('user')->userProfileSet($id_pro, array(
+			'k_userprofile' => array(
+				'profileRule' => array('value' => serialize($rules))
+			)
+		));
+	}
 }

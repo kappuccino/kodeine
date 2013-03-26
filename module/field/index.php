@@ -80,6 +80,10 @@
 	include(dirname(__DIR__).'/content/ui/menu.php')
 ?></header>
 
+<div class="inject-subnav-right hide">
+	<li><a href="asso?id_type=category" class="btn btn-mini"><?php echo _('Match fields & types'); ?></a></li>
+</div>
+
 <div id="app"><div class="wrapper">
 
 	<?php if(sizeof($_POST['remove']) > 0 ){ ?>
@@ -128,7 +132,7 @@
 				<tr>
 					<td width="30" height="25" class="check-red"><input type="checkbox" class="chk" id="chk_remove_all" onchange="cbchange($(this));" /></td>
 					<td><a onClick="apply();" class="btn btn-mini"><?php echo _('Remove'); ?></a></td>
-					<td align="right"><a href="asso?id_type=category" class="btn btn-mini"><?php echo _('Match fields & types'); ?></a></td>
+					<td></td>
 				</tr>
 			</tfoot>
 			<?php } ?>
