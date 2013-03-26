@@ -19,6 +19,7 @@
 	}else
 	if(isset($_GET['dump'])){
 		$sql = DUMPDIR.'/export-'.time().'.sql';
+		if(!file_exists(DUMPDIR)) mkdir(DUMPDIR, 0755, true);
 
 		require(USER.'/config/config.php');
 
