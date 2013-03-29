@@ -218,12 +218,15 @@
             "<span class=\"date\">".$app->helperDate($e['contentDateUpdate'], '%d.%m.%G')."</span> ".
             "<span class=\"time\">".$app->helperDate($e['contentDateUpdate'], '%Hh%M')."</span>".
             "</a>".
-            "</td>".
-            "<td style=\"padding-left:".(5 + ($level * 15))."px;\" ".$colspan."><a href=\"".$link."\" style=\"width:100%;display:block;\">".$e['contentName']."</a></td>";
+            "</td>";
 
         if($cType['is_business']){
             echo "<td><a href=\"".$link."\" style=\"width:100%;display:block;\">".$e['contentRef']."</a></td>";
         }
+
+        echo
+            "<td style=\"padding-left:".(5 + ($level * 15))."px;\" ".$colspan."><a href=\"".$link."\" style=\"width:100%;display:block;\">".$e['contentName']."</a></td>";
+
 
         viewRow($app, $cType, $filter, $e, $level, $count);
 
