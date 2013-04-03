@@ -4,80 +4,12 @@
 
 	# Suppresion du TYPE (suppression de toute les donnes reliees)
 	#
-	if(sizeof($_POST['killme']) > 0){
-		include(CONFIG . '/config.php');
-
-		foreach($_POST['killme'] as $e){
-
-			$id = array();
-			$fo = false;
-			$ts = $app->dbMulti("SHOW TABLES");
-
-			foreach($ts as $t){
-				if($t['Tables_in_'.$database] == 'k_content'.$t) $fo = true;
-			}
-
-			if($fo) $ids = $app->dbMulti("SELECT id_content FROM k_contentdata".$e);
-
-			if(sizeof($ids) > 0){
-				foreach($ids as $id){
-					$ids_[] = $id['id_content'];
-				}
-
-				$ids_ = implode(',', $ids_);
-
-				$app->dbQuery("DELETE FROM k_content			WHERE id_type=".$e);
-
-				# Supprimer les valeurs des content
-				$app->dbQuery("DELETE FROM k_content			WHERE id_content IN(".$ids_.")");
-				$app->dbQuery("DELETE FROM k_contentdata 		WHERE id_content IN(".$ids_.")");
-				$app->dbQuery("DELETE FROM k_contentcomment 	WHERE id_content IN(".$ids_.")");
-				$app->dbQuery("DELETE FROM k_content 			WHERE id_content IN(".$ids_.")");
-				$app->dbQuery("DELETE FROM k_contentgroup		WHERE id_content IN(".$ids_.")");
-				$app->dbQuery("DELETE FROM k_contentversion		WHERE id_content IN(".$ids_.")");
-				$app->dbQuery("DELETE FROM k_contentitem		WHERE id_content IN(".$ids_.")");
-				$app->dbQuery("DELETE FROM k_contentalbum		WHERE id_content IN(".$ids_.")");
-
-				# Supprimer les associations
-				$app->dbQuery("DELETE FROM k_contentsearch		WHERE id_content IN(".$ids_.")");
-				$app->dbQuery("DELETE FROM k_contentgroup		WHERE id_content IN(".$ids_.")");
-				$app->dbQuery("DELETE FROM k_contentchapter		WHERE id_content IN(".$ids_.")");
-				$app->dbQuery("DELETE FROM k_contentcategory	WHERE id_content IN(".$ids_.")");
-			}
-
-			# Supprimer les types
-			$app->dbQuery("DELETE FROM k_type			WHERE id_type=".$e);
-			$app->dbQuery("DELETE FROM k_fieldaffect	WHERE id=".$e);
-
-			# Supprimer les tables
-			$app->dbQuery("DROP TABLE IF EXISTS k_content".$e);
-			$app->dbQuery("DROP TABLE IF EXISTS k_contentitem".$e);
-			$app->dbQuery("DROP TABLE IF EXISTS k_contentalbum".$e);
+	if(count($_POST['killme']) > 0){
+		foreach($_POST['killme'] as $id_type){
+			$app->apiLoad('type')->typeRemove($id_type);
+			$app->apiLoad('type')->typeRemoveProfile($id_type);
 		}
-
-		# Suppression dans le profile
-		$profile		= $app->dbOne("SELECT profileRule FROM k_userprofile WHERE id_profile=".$app->user['id_profile']);
-		$profileRule	= unserialize($profile['profileRule']);
-
-	#	$app->pre('killme', $_POST['killme'], 'prof', $profileRule['id_type']);
-
-		foreach($profileRule['id_type'] as $idx => $e){
-			if(in_array($e, $_POST['killme'])) unset($profileRule['id_type'][$idx]);
-		}
-
-		$profileRule['id_type'] = array_values($profileRule['id_type']);
-	#	$app->pre($profileRule['id_type']);
-
-		$app->apiLoad('user')->userProfileSet($app->user['id_profile'], array(
-			'k_userprofile' 	=> array(
-				'profileRule'	=> array('value' => serialize($profileRule))
-			)
-		));
-
-		$app->apiLoad('field')->fieldCacheBuild();
-
-		header("Location: index");
-
+		$app->go("./");
 	}else
 	
 	# Gerer le TYPE
@@ -94,7 +26,6 @@
 			'use_chapter'		=> array('value' => $_POST['use_chapter'],			'zero' 	=> true),
 			'use_category'		=> array('value' => $_POST['use_category'],			'zero' 	=> true),
 			'use_socialforum'	=> array('value' => $_POST['use_socialforum'],		'zero' 	=> true),
-
 			'typeName'			=> array('value' => $_POST['typeName'], 			'check'	=> '.'),
 			'typeKey' 			=> array('value' => $_POST['typeKey'], 				'check'	=> '.'),
 			'typeTemplate'		=> array('value' => $_POST['typeTemplate'])
@@ -102,38 +33,25 @@
 
 		if($app->formValidation($def)){
 			$result  = $app->apiLoad('type')->typeSet($_POST['id_type'], $def);
+			$id_type = $app->apiLoad('type')->id_type;
 			$message = ($result) ? 'OK: Enregistrement' : 'KO: Erreur APP:'.$app->db_error;
 
-			# Cache
-			if($result) $app->apiLoad('field')->fieldCacheBuild();
-
-			// Ajouter au profile le TYPE que l'on vient de creer
-			if($result && $_POST['id_type'] == NULL){
-				$profile		= $app->dbOne("SELECT profileRule FROM k_userprofile WHERE id_profile=".$app->user['id_profile']);
-				$profileRule	= unserialize($profile['profileRule']);
-
-				$profileRule['id_type'][] = $app->apiLoad('content')->id_type;
-				$profileRule['id_type']   = array_unique($profileRule['id_type']);
-
-				$app->apiLoad('user')->userProfileSet($app->user['id_profile'], array(
-					'k_userprofile' 	=> array(
-						'profileRule'	=> array('value' => serialize($profileRule))
-					)
-				));
-
-				header("Location: ./?id_type=".$app->apiLoad('content')->id_type);
+			if($result){
+				$app->apiLoad('field')->fieldCacheBuild();
+				if($_POST['id_type'] == NULL) $app->apiLoad('type')->typeSetProfile($id_type);
+				$app->go("./?id_type=".$id_type);
 			}
 		}else{
-			$message = 'KO: Validation failed';
+			$message = 'KO:'._('Validation failed');
 		}
 	}
 
 	if($_REQUEST['id_type'] != NULL){
-		$data	= $app->apiLoad('type')->typeGet(array(
-			'id_type'			=> $_REQUEST['id_type']
+		$data = $app->apiLoad('type')->typeGet(array(
+			'id_type' => $_REQUEST['id_type']
 		));
 	}else{
-		$data	= array(
+		$data = array(
 			'is_cp'				=> true,
 			'use_group'			=> true,
 			'use_search'		=> false,
@@ -142,6 +60,7 @@
 			'use_socialforum'	=> false
 		);
 	}
+
 ?><!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -203,13 +122,13 @@
 						echo '<div class="handle"><i class="icon-move"></i></div>';
 
 						echo '<div class="data">';
-						echo '<a href="type?id_type='.$e['id_type'].'">'.$e['typeName'].'</a>';
+						echo '<a href="./?id_type='.$e['id_type'].'">'.$e['typeName'].'</a>';
 						echo '</div>';
 
 						echo '<div class="content">';
 						echo '<a href="../content/?id_type='.$e['id_type'].'">'._('View').'</a> &nbsp; &nbsp; ';
                         echo '<a href="../field/asso?id_type='.$e['id_type'].'">'._('Manage fields').'</a> &nbsp; &nbsp; ';
-                        echo '<a href="../type/row?id_type='.$e['id_type'].'">'._('Columns').'</a>';
+                        echo '<a href="row?id_type='.$e['id_type'].'">'._('Columns').'</a>';
 						echo '</div>';
 
 					echo '</div></li>';
