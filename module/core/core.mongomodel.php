@@ -221,6 +221,9 @@ class coreMongoModel extends coreMongo {
 					if(is_callable($set)){
 						$v = call_user_func($set, $v);
 					}
+				}else
+				if($model['integer'] === true){
+					$v = intval($v);
 				}
 
 				$this->valid($k, $v);
