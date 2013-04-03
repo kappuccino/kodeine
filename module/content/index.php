@@ -76,7 +76,7 @@
 			?></ul>
 		</div>
 	</li>
-	<li><a href="<?php echo (($e['is_gallery']) ? 'gallery-album' : 'data' )."?id_type=".$id_type; ?>" class="btn btn-small btn-success"><?php printf(_('Add a %s'), $cType['typeName']); ?> </a></li>
+	<li><a href="<?php echo (($cType['is_gallery']) ? 'gallery-album' : 'data' )."?id_type=".$id_type; ?>" class="btn btn-small btn-success"><?php printf(_('Add a %s'), $cType['typeName']); ?> </a></li>
 
 </div>
 
