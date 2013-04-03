@@ -105,15 +105,23 @@
 		border-bottom: 1px solid @tab-strong-color;
 	}
 
-	&.editing{
-		.view-label{
-			-webkit-animation: progress-bar-stripes 1s linear infinite;
-		}
+	&.editing .view-label{
+		-webkit-animation: progress-bar-stripes 1s linear infinite;
 	}
+
+	&.loading .view-label{
+		-webkit-animation: progress-bar-stripes-reverse 1s linear infinite;
+	}
+
 }
 
 
 @-webkit-keyframes progress-bar-stripes {
 	from  { background-position: 40px 0; }
 	to    { background-position: 0 0; }
+}
+
+@-webkit-keyframes progress-bar-stripes-reverse {
+	from  { background-position: 0 0; }
+	to    { background-position: 40px 0; }
 }
