@@ -331,7 +331,9 @@ function socialCircleRemove($id_socialcircle){
 	));
 
 	foreach($posts as $p){
-		$this->apiLoad('socialPost')->socialPostRemove($p['id_socialpost']);
+		$this->apiLoad('socialPost')->socialPostHide(array(
+			'id_socialpost' => $p['id_socialpost']
+		));
 	}
 }
 

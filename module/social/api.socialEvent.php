@@ -4,8 +4,8 @@ class socialEvent extends social{
 
 function __clone(){}
 
-/* + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - 
-+ - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - */
+//-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -
+//-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -
 function socialEventGet($opt=array()){
 
 	if(BENCHME) @$GLOBALS['bench']->benchmarkMarker($bmStep='socialEventGet() @='.json_encode($opt));
@@ -15,6 +15,7 @@ function socialEventGet($opt=array()){
 	# Gerer les OPTIONS
 	#
 	$dbMode		= 'dbMulti';
+	$cond[]     = 'k_socialevent.socialEventHide=0';
 	$searchLink	= ($opt['searchLink'] != '') ? $opt['searchLink'] : 'OR';
 
 	// GET id_socialevent
@@ -38,7 +39,6 @@ function socialEventGet($opt=array()){
 		if(intval($opt['id_user']) > 0){
 			if($opt['is_into']){
 				$cond[] = "(k_socialeventuser.id_user=".$opt['id_user']." OR k_socialevent.id_user=".$opt['id_user'].")";
-
 				$join[] = "INNER JOIN k_socialeventuser ON k_socialevent.id_socialevent = k_socialeventuser.id_socialevent";
 			}else
 			if($opt['public']){
@@ -52,12 +52,6 @@ function socialEventGet($opt=array()){
 			return array();
 		}
 	}
-	
-	// GET withAutor ?
-	#if($opt['withOwner'] == true){
-	#	$join[] = "INNER JOIN k_user ON k_socialevent.id_user = k_user.id_user";
-	#	$join[] = "INNER JOIN k_userdata ON k_user.id_user = k_userdata.id_user";
-	#}
 
 
 	# FIELD
@@ -146,7 +140,6 @@ function socialEventGet($opt=array()){
 
 	return $events;
 }
-
 
 /* + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - 
 + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - */
@@ -324,7 +317,9 @@ function socialEventRemove($id_socialevent){
 		'noLimit'			=> true
 	));
 	foreach($posts as $p){
-		$this->apiLoad('socialPost')->socialPostRemove($p['id_socialpost']);
+		$this->apiLoad('socialPost')->socialPostHide(array(
+			'id_socialpost' => $p['id_socialpost']
+		));
 	}
 
 	// REMOVE
@@ -337,9 +332,41 @@ function socialEventRemove($id_socialevent){
 	$this->dbQuery("DELETE FROM k_socialsandbox 		WHERE socialSandboxId=".$id_socialevent." AND socialSandboxType='id_socialevent'");
 }
 
+//-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -
+//-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -
+function socialEventHide($opt){
+
+	$id_socialevent = $opt['id_socialevent'];
+	if(intval($id_socialevent) == 0) return false;
+
+	// USER
+	$users = $this->dbMulti("SELECT id_user FROM k_socialeventuser WHERE id_socialevent=".$id_socialevent);
+	$users = $this->dbKey($users, 'id_user');
+	foreach($users as $e){
+		$this->socialUserCacheClean($e);
+	}
+
+	// POST -> HIDE
+	$posts = $this->apiLoad('socialPost')->socialPostGet(array(
+		'id_socialevent'	=> $id_socialevent,
+		'noLimit'			=> true
+	));
+	foreach($posts as $p){
+		$this->apiLoad('socialPost')->socialPostHide(array(
+			'id_socialpost' => $p['id_socialpost']
+		));
+	}
+
+	// HIDE
+	$this->dbQuery("UPDATE k_socialevent SET socialEventHide=1 WHERE id_socialevent=".$id_socialevent);
+
+	// REMOVE
+	$this->dbQuery("DELETE FROM k_socialsandbox WHERE socialSandboxId=".$id_socialevent." AND socialSandboxType='id_socialevent'");
+}
+
 /* + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + -
 + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - */
-public function socialEventMediaLink($opt){
+function socialEventMediaLink($opt){
 
 	if(!is_array($opt['url'])) $opt['url'] = array($opt['url']);
 
@@ -920,19 +947,4 @@ function socialEventUserDataSet($opt){
 	return true;
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-} ?>
+}
