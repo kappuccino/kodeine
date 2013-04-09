@@ -5,16 +5,18 @@ class socialPost extends social{
 function __clone(){}
 function socialPost(){}
 
-/* + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - 
-+ - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - */
+//-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -
+//-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -
 function socialPostGet($opt=array()){
-if($opt['debug']) $this->pre("[OPT]", $opt);
+
+	if($opt['debug']) $this->pre("[OPT]", $opt);
 
 	if(BENCHME) @$GLOBALS['bench']->benchmarkMarker($bmStep='socialPostGet() @='.json_encode($opt));
 	$dbMode = 'dbMulti';
+	$cond[] = "k_socialpost.socialPostHide=0";
 
 	// GET mid_socialpost
-	if(array_key_exists('mid_socialpost', $opt)){
+	if(array_key_exists('mid_socialpost', $opt) && $opt['mid_socialpost'] != '*'){
 		if(intval($opt['mid_socialpost']) >= 0){
 			$cond[] = "k_socialpost.mid_socialpost=".$opt['mid_socialpost'];
 		}else{
@@ -22,7 +24,7 @@ if($opt['debug']) $this->pre("[OPT]", $opt);
 			return array();
 		}
 	}else
-	if(!array_key_exists('id_socialpost', $opt)){
+	if(!array_key_exists('id_socialpost', $opt) && $opt['mid_socialpost'] != '*'){
 		$cond[] = "k_socialpost.mid_socialpost=0";
 	}
 
@@ -128,7 +130,7 @@ if($opt['debug']) $this->pre("[OPT]", $opt);
 
 	# Former les CONDITIONS
 	#
-	if(sizeof($or)	 > 0) $or	 = " OR (\n\t".implode("\n\tAND\n\t", $or)."\n)";
+//	if(sizeof($or)	 > 0) $or	 = " OR (\n\t".implode("\n\tAND\n\t", $or)."\n)";
 	if(sizeof($cond) > 0) $where = "\nWHERE\n(\n\t".implode("\n\tAND\n\t", $cond)."\n)".$or."\n";
 	if(sizeof($join) > 0) $join	 = "\n".implode("\n", $join)."\n";
 
@@ -403,7 +405,6 @@ function socialPostSet($opt){
 }
 
 /* + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - 
-+ - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - */
 function socialPostRemove($id_socialpost){
 
 	$post = $this->socialPostGet(array(
@@ -411,6 +412,7 @@ function socialPostRemove($id_socialpost){
 	));
 
 	if($post['id_socialpost'] == NULL) return false;
+
 	$del[] = $post['id_socialpost'];
 	$sub[] = $post['id_user'];
 
@@ -426,19 +428,16 @@ function socialPostRemove($id_socialpost){
 	// Decrementer les CERCLES ou je me trouvais
 	if(sizeof($post['socialPostCircle']) > 0){
 		$this->dbQuery("UPDATE k_socialcircle SET socialCirclePostCount=socialCirclePostCount-1 WHERE id_socialcircle IN(".implode(',', $post['socialPostCircle']).")");
-		if($opt['debug']) $this->pre($this->db_query, $this->db_error);
 	}
 
 	// Decrementer les FORUMS ou je me trouvais
 	if(sizeof($post['socialPostForum']) > 0){
 		$this->dbQuery("UPDATE k_socialforum SET socialForumPostCount=socialForumPostCount-1 WHERE id_socialforum IN(".implode(',', $post['socialPostForum']).")");
-		if($opt['debug']) $this->pre($this->db_query, $this->db_error);
 	}
 
 	// Decrementer les EVENTS ou je me trouvais
 	if(sizeof($post['socialPostEvent']) > 0){
 		$this->dbQuery("UPDATE k_socialforum SET socialEventPostCount=socialEventPostCount-1 WHERE id_socialforum IN(".implode(',', $post['socialPostEvent']).")");
-		if($opt['debug']) $this->pre($this->db_query, $this->db_error);
 	}
 
 	// Killer les ENFANTS
@@ -481,6 +480,93 @@ function socialPostRemove($id_socialpost){
 
 	return true;
 }
++ - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - */
+
+//-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -
+//-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -
+function socialPostHide($opt){
+
+	$id_socialpost = $opt['id_socialpost'];
+
+	$post = $this->socialPostGet(array(
+		'id_socialpost' => $id_socialpost
+	));
+
+	if($post['id_socialpost'] == NULL) return false;
+
+	$del[] = $post['id_socialpost'];
+	$sub[] = $post['id_user'];
+
+	if($post['id_socialpostthread'] > 0){
+		$thread = $this->socialPostGet(array(
+			'id_socialpost' => $post['id_socialpostthread']
+		));
+
+		$sub = array_merge($sub, $thread['socialPostSubscribed']);
+		$sub = array_values(array_unique($sub));
+	}
+
+	// Decrementer les CERCLES ou je me trouvais
+	if(sizeof($post['socialPostCircle']) > 0){
+		$this->dbQuery("UPDATE k_socialcircle SET socialCirclePostCount=socialCirclePostCount-1 WHERE id_socialcircle IN(".implode(',', $post['socialPostCircle']).")");
+		if($opt['debug']) $this->pre($this->db_query, $this->db_error);
+	}
+
+	// Decrementer les FORUMS ou je me trouvais
+	if(sizeof($post['socialPostForum']) > 0){
+		$this->dbQuery("UPDATE k_socialforum SET socialForumPostCount=socialForumPostCount-1 WHERE id_socialforum IN(".implode(',', $post['socialPostForum']).")");
+		if($opt['debug']) $this->pre($this->db_query, $this->db_error);
+	}
+
+	// Decrementer les EVENTS ou je me trouvais
+	if(sizeof($post['socialPostEvent']) > 0){
+		$this->dbQuery("UPDATE k_socialforum SET socialEventPostCount=socialEventPostCount-1 WHERE id_socialforum IN(".implode(',', $post['socialPostEvent']).")");
+		if($opt['debug']) $this->pre($this->db_query, $this->db_error);
+	}
+
+	// Killer les ENFANTS
+	if($post['socialPostFlat'] != '' && $opt['delete']){
+		foreach($post['socialPostFlat'] as $id){ $del[] = $id; }
+	}
+
+	if($opt['delete']){
+		$this->dbQuery("DELETE FROM k_socialpost 		WHERE id_socialpost IN(".implode(',', $del).")");
+		$this->dbQuery("DELETE FROM k_socialpostcircle 	WHERE id_socialpost IN(".implode(',', $del).")");
+		$this->dbQuery("DELETE FROM k_socialpostforum 	WHERE id_socialpost IN(".implode(',', $del).")");
+		$this->dbQuery("DELETE FROM k_socialpostevent 	WHERE id_socialpost IN(".implode(',', $del).")");
+
+		$this->dbQuery("DELETE FROM k_socialactivity 	WHERE socialActivityThread IN(".implode(',', $del).") AND socialActivityKey='id_socialpost'");
+		$this->dbQuery("DELETE FROM k_socialsandbox 	WHERE socialSandboxId IN(".implode(',', $del).") AND socialSandboxType='id_socialpost'");
+	}else{
+		$this->dbQuery("UPDATE k_socialpost SET socialPostHide=1 WHERE id_socialpost IN(".implode(',', $del).")");
+	}
+
+	// Reconstruire le CACHE pour ce post (flat + thread)
+	$this->socialPostBuild($post['id_socialpostthread']);
+
+	// Updater les USER-CACHE pour tous les SUBSCRIBER pour tous les POST (POST + REPLY)
+	foreach($sub as $u){
+		foreach($del as $p){
+			// ... post
+			$this->socialPostUserUpdate(array(
+				'debug'			=> false,
+				'id_socialpost'	=> $p,
+				'id_user'		=> $u,
+				'undo'			=> true,
+			));
+			// ... reply
+			$this->socialPostUserUpdate(array(
+				'debug'			=> false,
+				'id_socialpost'	=> $p,
+				'id_user'		=> $u,
+				'reply'			=> true,
+				'undo'			=> true,
+			));
+		}
+	}
+
+	return true;
+}
 
 /* + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - 
 + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - */
@@ -501,14 +587,13 @@ function socialPostBuild($id_socialpostthread){
 	$this->socialPostBuildSubscribed($id_socialpostthread);
 }
 
-
-/* + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - 
-+ - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - */
+//-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -
+//-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -
 function socialPostBuildFlat($starter){
 
 	$all = $this->dbMulti("
 		SELECT * FROM k_socialpost
-		WHERE id_socialpostthread=".$starter." AND id_socialpost != ".$starter."
+		WHERE id_socialpostthread=".$starter." AND id_socialpost != ".$starter." AND socialPostHide=0
 		ORDER BY id_socialpost"
 	);
 
@@ -521,13 +606,13 @@ function socialPostBuildFlat($starter){
 	return $tmp;
 }
 
-/* + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - 
-+ - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - */
+//-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -
+//-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -
 function socialPostBuildThread($thread, $mid_socialpost){
 
 	$children = $this->dbMulti("
 		SELECT id_socialpost FROM k_socialpost
-		WHERE id_socialpostthread=".$thread." AND mid_socialpost=".$mid_socialpost."
+		WHERE id_socialpostthread=".$thread." AND mid_socialpost=".$mid_socialpost." AND socialPostHide=0
 		ORDER BY id_socialpost
 	");
 
@@ -544,11 +629,11 @@ function socialPostBuildThread($thread, $mid_socialpost){
 	}
 }
 
-/* + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - 
-+ - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - */
+//-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -
+//-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -
 function socialPostBuildSubscribed($id_socialpost){
 
-	$all = $this->dbMulti("SELECT * FROM k_socialpost WHERE id_socialpostthread=".$id_socialpost);
+	$all = $this->dbMulti("SELECT * FROM k_socialpost WHERE id_socialpostthread=".$id_socialpost." AND socialPostHide=0");
 	$usr = array();
 
 	foreach($all as $u){
@@ -575,8 +660,8 @@ function socialPostBuildSubscribed($id_socialpost){
 #	$this->pre($this->db_query, $this->db_error);
 }
 
-/* + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - 
-+ - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - */
+//-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -
+//-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -
 function socialPostRateForUser($id_user){
 
 	$empty = array('plus' => array(), 'minus' => array());
@@ -628,7 +713,6 @@ function socialPostRateUserUpdate($id_user, $id_socialpost, $field, $action){
 	$this->dbQuery($query);
 	#$this->pre("UPDATE USER", $query, $this->db_error);
 }
-
 
 /* + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - 
 + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - */
