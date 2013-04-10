@@ -44,6 +44,7 @@
 	<form id="uploadembed">
 		<?php echo _('Drag & drop files here to upload them.'); ?><br />
 		<?php echo _('If your browser do not support this features, click "Browse" button.'); ?>
+
 		<input id="file_upload" name="file_upload" type="file" multiple="true">
         <div id="queue" class="clearfix"></div>
 		<!-- <a class="btn" href="javascript:$('#file_upload').uploadify('upload')">Envoyer les fichiers</a> -->

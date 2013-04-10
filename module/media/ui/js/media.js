@@ -598,14 +598,14 @@ media.views.app             = Backbone.View.extend({
 	},
 
 	upload: function(){
-		var self = this;
 
 		this.clearModal();
 		this.wallShow();
 		this.modalUpload.css('display', 'block');
 
-		var isSafari		= (/safari/.test(navigator.userAgent.toLowerCase()))                    ? true : false;
-		var isSafariFive	= (isSafari && /version\/5/.test(navigator.userAgent.toLowerCase()))    ? true : false;
+		var self         = this;
+		var isSafari     = (/safari/.test(navigator.userAgent.toLowerCase())) ? true : false;
+		var isSafariFive = (isSafari && /version\/5/.test(navigator.userAgent.toLowerCase())) ? true : false;
 
 		if(typeof($('#file_upload').data('uploadifive')) !== "undefined") return;
 
@@ -617,18 +617,38 @@ media.views.app             = Backbone.View.extend({
 				'auto':             true,
 				'formData':         {'f' : media.views.myView.folder },
 				'queueID':          'queue',
+
 				'uploadScript':     'helper/upload',
 				'onUpload':         function(){
 					this.data('uploadifive').settings.formData = {'f' : media.views.myView.folder};
 				},
-				'onSelect':         function(event, ID, fileObj){
+				'onQueueComplete':  function() {
+					$('#queue').empty();
+					self.clearModal();
+					self.refresh();
+					self.isDrag = false;
+				}
 
-				},
-				'onDrop':           function(file, count){
+				/*'onSelect':         function(event, ID, fileObj){ },
+				'onDrop':           function(file, count){ },
+				'onUploadComplete': function(file, data){ },*/
+			});
 
-				},
-				'onUploadComplete': function(file, data){
+		}else{
+			/*alert('En raison d\'un bug inhérent à la version de votre navigateur, l\'upload de fichiers est '+
+			'indisponible. Merci de mettre à jour votre navigateur.');
+			this.clearModal();*/
 
+			$('#file_upload').uploadify({
+				'buttonText':       'Parcourir',
+				'auto':             true,
+				'formData':         {'f' : media.views.myView.folder },
+				'queueID':          'queue',
+				'uploader':         'helper/upload',
+
+				'swf':              'ui/_uploadify/uploadify.swf',
+				'onUploadStart':    function(){
+					$('#file_upload').data('uploadify').settings.formData = {'f' : media.views.myView.folder};
 				},
 				'onQueueComplete':  function() {
 					$('#queue').empty();
@@ -637,11 +657,6 @@ media.views.app             = Backbone.View.extend({
 					self.isDrag = false;
 				}
 			});
-
-		}else{
-			alert('En raison d\'un bug inhérent à la version de votre navigateur, l\'upload de fichiers est' +
-			'indisponible. Merci de mettre à jour votre navigateur.');
-			this.clearModal();
 		}
 
 	},

@@ -1,6 +1,6 @@
 <?php
 
-	$uploadDir  = $_REQUEST['f'];
+	$uploadDir  = urldecode($_REQUEST['f']);
 	$pref       = $app->configGet('media');
 
 	if(isset($_GET['auto'])){
