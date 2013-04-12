@@ -750,7 +750,8 @@ media.views.app             = Backbone.View.extend({
 	/////////
 
 	select: function(file, prompt){
-		prompt = prompt || this.detectType(file);
+		var prompt = prompt || this.detectType(file);
+		var file   = decodeURIComponent(file);
 
 		switch(method){
 			case 'editable':    parent.opener.editable.imageBack(file);
