@@ -21,15 +21,15 @@ class socialClean extends social{
 			'noLimit'        => true
 		));
 
-		echo "POST: ".count($posts)."\n";
+		if($opt['trace']) echo "POST: ".count($posts)."\n";
 		foreach($posts as $e){
-			echo "- HIDE POST ".$e['id_socialpost']."\n";
+			if($opt['trace']) echo "- HIDE POST ".$e['id_socialpost']."\n";
 
 			$this->apiLoad('socialPost')->socialPostHide(array(
 				'id_socialpost' => $e['id_socialpost'],
 			));
 		}
-		echo "\n";
+		if($opt['trace']) echo "\n";
 
 
 		// EVENT ////////////////////////////////////////////////////////////////////
@@ -38,28 +38,28 @@ class socialClean extends social{
 			'id_socialevent'	=> $me['userSocialEventMember']
 		));
 
-			echo "EVENTS PLAYER: ".count($events_player)."\n";
+			if($opt['trace']) echo "EVENTS PLAYER: ".count($events_player)."\n";
 			foreach($events_player as $e){
-				echo "- LEAVE ".$e['id_socialevent']."\n";
+				if($opt['trace']) echo "- LEAVE ".$e['id_socialevent']."\n";
 				$this->apiLoad('socialEvent')->socialEventMemberRemove(array(
 					'id_socialevent' => $e['id_socialevent'],
 					'user'           => $id_user
 				));
 			}
-			echo "\n";
+			if($opt['trace']) echo "\n";
 
 		$events_owner = $this->apiLoad('socialEvent')->socialEventGet(array(
 			'id_user' => $me['id_user']
 		));
 
-			echo "EVENTS OWNER: ".count($events_owner)."\n";
+			if($opt['trace']) echo "EVENTS OWNER: ".count($events_owner)."\n";
 			foreach($events_owner as $e){
-				echo "- REMOVE ".$e['id_socialevent']."\n";
+				if($opt['trace']) echo "- REMOVE ".$e['id_socialevent']."\n";
 				$this->apiLoad('socialEvent')->socialEventHide(array(
 					'id_socialevent' => $e['id_socialevent']
 				));
 			}
-			echo "\n";
+			if($opt['trace']) echo "\n";
 
 
 		// CIRCLE ///////////////////////////////////////////////////////////////////
@@ -68,25 +68,25 @@ class socialClean extends social{
 			'id_socialcircle' => $me['userSocialCircleMember']
 		));
 
-			echo "CIRCLE PLAYER: ".count($circles_player)."\n";
+			if($opt['trace']) echo "CIRCLE PLAYER: ".count($circles_player)."\n";
 			foreach($circles_player as $e){
-				echo "- LEAVE ".$e['id_socialcircle']."\n";
-				/*$this->apiLoad('socialCircle')->socialCircleMemberRemove(array(
+				if($opt['trace']) echo "- LEAVE ".$e['id_socialcircle']."\n";
+				$this->apiLoad('socialCircle')->socialCircleMemberRemove(array(
 					'id_socialcircle'	=> $e['id_socialcircle'],
 					'user'				=> $id_user
-				));*/
+				));
 			}
-			echo "\n";
+			if($opt['trace']) echo "\n";
 
 		$circles_owner = $this->apiLoad('socialCircle')->socialCircleGet(array(
 			'id_user' => $id_user
 		));
 
-			echo "CIRCLE OWNER: ".count($circles_owner)."\n";
+			if($opt['trace']) echo "CIRCLE OWNER: ".count($circles_owner)."\n";
 			foreach($circles_owner as $e){
-				echo "- REMOVE ".$e['id_socialcircle']."\n";
+				if($opt['trace']) echo "- REMOVE ".$e['id_socialcircle']."\n";
 			}
-			echo "\n";
+			if($opt['trace']) echo "\n";
 
 
 		// HOOK /////////////////////////////////////////////////////////////////////

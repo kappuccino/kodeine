@@ -424,31 +424,30 @@ function socialPostHide($opt){
 			'id_socialpost' => $post['id_socialpostthread']
 		));
 
-		$sub = array_merge($sub, $thread['socialPostSubscribed']);
-		$sub = array_values(array_unique($sub));
+		$sub = array_values(array_unique(array_merge($sub, $thread['socialPostSubscribed'])));
 	}
 
 	// Decrementer les CERCLES ou je me trouvais
-	if(sizeof($post['socialPostCircle']) > 0){
+	if(count($post['socialPostCircle']) > 0){
 		$this->dbQuery("UPDATE k_socialcircle SET socialCirclePostCount=socialCirclePostCount-1 WHERE id_socialcircle IN(".implode(',', $post['socialPostCircle']).")");
 		if($opt['debug']) $this->pre($this->db_query, $this->db_error);
 	}
 
 	// Decrementer les FORUMS ou je me trouvais
-	if(sizeof($post['socialPostForum']) > 0){
+	if(count($post['socialPostForum']) > 0){
 		$this->dbQuery("UPDATE k_socialforum SET socialForumPostCount=socialForumPostCount-1 WHERE id_socialforum IN(".implode(',', $post['socialPostForum']).")");
 		if($opt['debug']) $this->pre($this->db_query, $this->db_error);
 	}
 
 	// Decrementer les EVENTS ou je me trouvais
-	if(sizeof($post['socialPostEvent']) > 0){
+	if(count($post['socialPostEvent']) > 0){
 		$this->dbQuery("UPDATE k_socialforum SET socialEventPostCount=socialEventPostCount-1 WHERE id_socialforum IN(".implode(',', $post['socialPostEvent']).")");
 		if($opt['debug']) $this->pre($this->db_query, $this->db_error);
 	}
 
 	// Killer les ENFANTS
 	if($post['socialPostFlat'] != '' && $opt['delete']){
-		foreach($post['socialPostFlat'] as $id){ $del[] = $id; }
+		$del = array_merge($del, $post['socialPostFlat']);
 	}
 
 	if($opt['delete']){
@@ -456,7 +455,6 @@ function socialPostHide($opt){
 		$this->dbQuery("DELETE FROM k_socialpostcircle 	WHERE id_socialpost IN(".implode(',', $del).")");
 		$this->dbQuery("DELETE FROM k_socialpostforum 	WHERE id_socialpost IN(".implode(',', $del).")");
 		$this->dbQuery("DELETE FROM k_socialpostevent 	WHERE id_socialpost IN(".implode(',', $del).")");
-
 		$this->dbQuery("DELETE FROM k_socialactivity 	WHERE socialActivityThread IN(".implode(',', $del).") AND socialActivityKey='id_socialpost'");
 		$this->dbQuery("DELETE FROM k_socialsandbox 	WHERE socialSandboxId IN(".implode(',', $del).") AND socialSandboxType='id_socialpost'");
 	}else{
@@ -471,14 +469,12 @@ function socialPostHide($opt){
 		foreach($del as $p){
 			// ... post
 			$this->socialPostUserUpdate(array(
-				'debug'			=> false,
 				'id_socialpost'	=> $p,
 				'id_user'		=> $u,
 				'undo'			=> true,
 			));
 			// ... reply
 			$this->socialPostUserUpdate(array(
-				'debug'			=> false,
 				'id_socialpost'	=> $p,
 				'id_user'		=> $u,
 				'reply'			=> true,
