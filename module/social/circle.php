@@ -4,9 +4,9 @@
 
 	if(sizeof($_POST['remove']) > 0){
 		foreach($_POST['remove'] as $e){
-			$app->apiLoad('social')->socialCircleRemove($e);
+			$app->apiLoad('social')->socialCircleHide(array('id_socialcircle' => $e));
 		}
-		header("Location: social.circle.php");
+		$app->go('circle.php');
 	}else
 	if($_POST['action'] == 'circle'){
 		$do		= true;

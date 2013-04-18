@@ -298,8 +298,8 @@ function socialEventMapping($opt){
 	return $data;
 }
 
-/* + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - 
-+ - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - */
+//-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -
+//-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -
 function socialEventRemove($id_socialevent){
 
 	if(intval($id_socialevent) == 0) return false;
@@ -341,15 +341,14 @@ function socialEventHide($opt){
 
 	// USER
 	$users = $this->dbMulti("SELECT id_user FROM k_socialeventuser WHERE id_socialevent=".$id_socialevent);
-	$users = $this->dbKey($users, 'id_user');
 	foreach($users as $e){
-		$this->socialUserCacheClean($e);
+		$this->socialUserCacheClean($e['id_user']);
 	}
 
 	// POST -> HIDE
 	$posts = $this->apiLoad('socialPost')->socialPostGet(array(
-		'id_socialevent'	=> $id_socialevent,
-		'noLimit'			=> true
+		'id_socialevent' => $id_socialevent,
+		'noLimit'        => true
 	));
 	foreach($posts as $p){
 		$this->apiLoad('socialPost')->socialPostHide(array(

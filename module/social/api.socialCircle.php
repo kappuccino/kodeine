@@ -4,8 +4,8 @@ class socialCircle extends social{
 
 function __clone(){}
 
-/* + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - 
-+ - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - */
+//-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -
+//-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -
 function socialCircleGet($opt=array()){
 
 	if(BENCHME) @$GLOBALS['bench']->benchmarkMarker($bmStep='socialCircleGet() @='.json_encode($opt));
@@ -15,6 +15,7 @@ function socialCircleGet($opt=array()){
 	# Gerer les OPTIONS
 	#
 	$dbMode		= 'dbMulti';
+	$cond[]     = 'k_socialcircle.socialCircleHide=0';
 	$searchLink	= ($opt['searchLink'] != '') ? $opt['searchLink'] : 'OR';
 
 	// GET id_socialcircle
@@ -337,9 +338,42 @@ function socialCircleRemove($id_socialcircle){
 	}
 }
 
+//-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -
+//-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -
+function socialCircleHide($opt){
+
+	$id_socialcircle = $opt['id_socialcircle'];
+	if(intval($id_socialcircle) == 0) return false;
+
+	// Cache cleaning
+	$users = $this->dbMulti("SELECT id_user FROM k_socialcircleuser WHERE id_socialcircle=".$id_socialcircle);
+	foreach($users as $e){
+		$this->socialUserCacheClean($e['id_user']);
+	}
+
+	// Suppression des data CIRCLE/USER
+	$this->dbQuery("DELETE FROM k_socialcirclepending 	WHERE id_socialcircle=".$id_socialcircle);
+	$this->dbQuery("DELETE FROM k_socialcircleuser 		WHERE id_socialcircle=".$id_socialcircle);
+
+	// Masquer le CIRCLE
+	$this->dbQuery("UPDATE k_socialcircle SET socialCircleHide=1 WHERE id_socialcircle=".$id_socialcircle);
+
+	// Supprime les POST relier a ce CIRCLE
+	$posts = $this->apiLoad('socialPost')->socialPostGet(array(
+		'id_socialcircle'	=> $id_socialcircle,
+		'noLimit'			=> true
+	));
+
+	foreach($posts as $p){
+		$this->apiLoad('socialPost')->socialPostHide(array(
+			'id_socialpost' => $p['id_socialpost']
+		));
+	}
+}
+
 /* + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + -
 + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - */
-public function socialCircleMediaLink($opt){
+function socialCircleMediaLink($opt){
 
 	if(!is_array($opt['url'])) $opt['url'] = array($opt['url']);
 

@@ -14,7 +14,7 @@ class autoloader{
 		spl_autoload_register(array(new self, 'autoload'), true, $prepend);
 	}
 
-	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	public function classFile($api){
 
@@ -27,13 +27,14 @@ class autoloader{
 		if($first == 'core'){
 			$class	= APP.'/module/core/core.'.substr(strtolower($api), 4).'.php';
 			$alter	= USER.'/api/core.'.substr(strtolower($api), 4).'.php';
-		}else
+		/*else
 		if($first == 'data'){
 			$parts	= array_map('strtolower', explode(' ', preg_replace('/(?!^)[[:upper:]]/',' \0', $api)));
 			$file   = lcfirst(substr(implode('', array_map('ucfirst', $parts)), 4));
 
 			$class	= APP.'/module/core/data.'.$file.'.php';
 			$alter	= USER.'/api/data.'.$file.'.php';
+		}*/
 		}else{
 			$parts	= array_map('strtolower', explode(' ', preg_replace('/(?!^)[[:upper:]]/',' \0', $api)));
 			$mod   	= $parts[0];
