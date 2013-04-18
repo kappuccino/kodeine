@@ -2,89 +2,83 @@
 
 class coreAdmin extends coreApp {
 
-public function coreAdmin(){
+	public function __construct(){
 
-	if(function_exists('bindtextdomain')){
-		$language = $this->filterGet('core', 'language');
-		$lang     = $language['language'];
-		$lang     = ($lang == '') ? 'fr_FR.utf-8' : $lang;
+		if(function_exists('bindtextdomain')){
+			$language = $this->filterGet('core', 'language');
+			$lang     = $language['language'];
+			$lang     = ($lang == '') ? 'fr_FR.utf-8' : $lang;
 
-		$GLOBALS['language'] = $lang; // FixMe
+			$GLOBALS['language'] = $lang; // FixMe
 
-		putenv('LC_ALL='.$lang);
-		setlocale(LC_ALL, $lang);
+			putenv('LC_ALL='.$lang);
+			setlocale(LC_ALL, $lang);
 
-		bindtextdomain('default', __DIR__.'/locale');
-		textdomain('default');
+			bindtextdomain('default', __DIR__.'/locale');
+			textdomain('default');
+		}
+
+		$this->adminZone	= true;
+		$this->total		= 0;
+		$this->limit		= 0;
+		$this->apiContext	= 'admin';
+
+		parent::__construct();
+	//	$this->coreApp();
+		$this->userIsLoged();
 	}
 
-	$this->adminZone	= true;
-	$this->total		= 0;
-	$this->limit		= 0;
-	$this->apiContext	= 'admin';
+//-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -
+//-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -
+	public  function filterSet($mod, $value, $key=NULL){
 
-	$this->coreApp();
-	$this->userIsLoged();
-}
+		$old = $this->filterGet();
 
-/* + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - 
-+ - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - */
-public function go($url){
-	header("Location: ".$url);
-	exit();
-}
+		if(is_array($value)) unset($value['id_type'], $value['cf']);
 
-/* + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - 
-+ - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - */
-public function filterSet($mod, $value, $key=NULL){
+		if($key != NULL){
+			if(!is_array($old[$mod])) $old[$mod] = array();
 
-	$old = $this->filterGet();
-
-	if(is_array($value)) unset($value['id_type'], $value['cf']);
-
-	if($key != NULL){
-		if(!is_array($old[$mod])) $old[$mod] = array();
-
-		if($value == NULL && isset($old[$mod][$key])){
-			unset($old[$mod][$key]);
-		}else{
-			$old[$mod][$key] = $value;
-		}
-	}else{
-		foreach($value as $k => $v){
-			if($v == NULL){
-				if(isset($old[$mod][$k])) unset($old[$mod][$k]);
+			if($value == NULL && isset($old[$mod][$key])){
+				unset($old[$mod][$key]);
 			}else{
-				$old[$mod][$k] = $v;
+				$old[$mod][$key] = $value;
+			}
+		}else{
+			foreach($value as $k => $v){
+				if($v == NULL){
+					if(isset($old[$mod][$k])) unset($old[$mod][$k]);
+				}else{
+					$old[$mod][$k] = $v;
+				}
 			}
 		}
+
+		$value = serialize($old);
+
+		return setcookie('filter', $value, (time()+(60*60*24*30)), '/');
 	}
-	
-	$value = serialize($old);
-
-	return setcookie('filter', $value, (time()+(60*60*24*30)), '/');
-}
-
-/* + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - 
-+ - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - */
-public function filterGet($mod=NULL){
-
-	if($_COOKIE['filter'] != NULL){
-
-		$cookie = unserialize(stripslashes($_COOKIE['filter']));
-
-		return ($mod == NULL)
-			? (is_array($cookie) 		? $cookie 		: array()) 
-			: (is_array($cookie[$mod])	? $cookie[$mod] : array());
-
-	}else{
-		return array(); #($mod == NULL) ? array() : array($mod => array());
-	}
-}
 
 //-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -
 //-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -
-public function filterReset($mod=NULL){
+	public  function filterGet($mod=NULL){
+
+		if($_COOKIE['filter'] != NULL){
+
+			$cookie = unserialize(stripslashes($_COOKIE['filter']));
+
+			return ($mod == NULL)
+				? (is_array($cookie) 		? $cookie 		: array())
+				: (is_array($cookie[$mod])	? $cookie[$mod] : array());
+
+		}else{
+			return array(); #($mod == NULL) ? array() : array($mod => array());
+		}
+	}
+
+//-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -
+//-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -
+	public  function filterReset($mod=NULL){
 
 	if($mod != NULL){
 		$old = $this->filterGet();
@@ -95,102 +89,6 @@ public function filterReset($mod=NULL){
 	}
 
 	return setcookie('filter', '', (time()-(60*60*24*30)), '/');
-}
-
-/* + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - 
-+ - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - */
-public function searchGet($opt=array()){
-
-	# Gérer les options
-	#
-	$limit		= isset($opt['limit']) 		? $opt['limit']			: 30;
-	$offset		= isset($opt['offet']) 		? $opt['offset']		: 0;
-
-	if($opt['id_search'] > 0){
-		$dbMode = 'dbOne';
-		$cond[] = "k_search.id_search=".$opt['id_search'];
-	}else{
-		$dbMode = 'dbMulti';
-	}
-
-	if($opt['searchType'] != '') $cond[] = "searchType='".$opt['searchType']."'";
-
-	# Former les conditions
-	#
-	if($opt['type'] == 'user') 		$cond[] = "searchType ='user'";
-	if($opt['type'] == 'content')	$cond[] = "searchType!='user'";
-	if(sizeof($cond) > 0) $where = "WHERE ".implode(" AND ", $cond);
-
-	# SEARCH
-	#
-	$search = $this->$dbMode("SELECT * FROM k_search\n". $where);
-
-	#  PARAM
-	#
-	if($dbMode == 'dbMulti'){
-		foreach($search as $idx => $c){
-			$search[$idx]['searchParam'] = unserialize($search[$idx]['searchParam']);
-			if(!is_array($search[$idx]['searchParam'])) $search[$idx]['searchParam'] = array();
-		}
-	}else
-	if($dbMode == 'dbOne'){
-		$search['searchParam'] = unserialize($search['searchParam']);
-		if(!is_array($search['searchParam'])) $search['searchParam'] = array();
-	}
-
-	if($opt['debug']) $this->pre($this->db_query, $this->db_error, $search);
-
-	return $search;
-}
-
-/* + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - 
-+ - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - */
-public function searchSet($id_search, $def){
-
-	if($id_search > 0){
-		$q = $this->dbUpdate($def)." WHERE id_search=".$id_search;
-	}else{
-		$q = $this->dbInsert($def);
-	}
-
-	@$this->dbQuery($q);
-	if($this->db_error != NULL) return false;
-
-	$this->id_search = ($id_search > 0) ? $id_search : $this->db_insert_id;
-
-	return true;
-}
-
-/* + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - 
-+ - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - */
-public function searchSelector($opt){
-
-	$search = $this->searchGet(array(
-		'searchType'	=> $opt['searchType']
-	));
-
-	if($opt['multi']){
-		$value = is_array($opt['value']) ? $opt['value'] : array();
-
-		$form = "<select name=\"".$opt['name']."\" id=\"".$opt['id']."\" size=\"".$opt['size']."\" multiple style=\"".$opt['style']."\">";
-		foreach($search as $e){
-			$selected = in_array($e['id_search'], $value) ? ' selected' : NULL;
-			$form .= "<option value=\"".$e['id_search']."\"".$selected.">".$e['searchName']."</option>";
-		}
-		$form .= "</select>";
-	}else
-	if($opt['one']){
-		$value = is_array($opt['value']) ? $opt['value'][0] : $opt['value'];
-
-		$form  = "<select name=\"".$opt['name']."\" id=\"".$opt['id']."\" style=\"".$opt['style']."\">";
-		foreach($search as $e){
-			$selected = ($e['id_search'] == $value) ? ' selected' : NULL;
-			$form .= "<option value=\"".$e['id_search']."\"".$selected.">".$e['searchName']."</option>";
-		}
-		$form .= "</select>";
-	}
-	
-	return $form;
 }
 
 /* + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - 

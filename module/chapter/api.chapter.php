@@ -5,13 +5,7 @@
 
 class chapter extends coreApp {
 
-/* + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - 
-+ - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - */
-public function __construct(){
-//	$this->coreApp();
-}
-
-/* + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - 
+/* + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + -
 + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - */
 function chapterGet($opt=array()){
 
@@ -334,7 +328,6 @@ public function chapterFamily(){
 	}
 }
 
-
 /* + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + -
 	Trouver tous les PARENTS pour un CHAPITRE
 + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - */
@@ -347,7 +340,6 @@ public function chapterFamilyParent($e, &$line=array()){
 		return $line;
 	}
 }
-
 
 /* + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + -
 	Trouver tous les CHILDREN pour un CHAPITRE
@@ -367,7 +359,6 @@ public function chapterFamilyChildren($e, $line=array()){
 	return $line;
 }
 
-
 /* + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - 
 + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - */
 public function chapterUpdatePos($chapter){
@@ -376,7 +367,6 @@ public function chapterUpdatePos($chapter){
 		if(is_array($e['sub'])) $this->chapterUpdatePos($e['sub']);
 	}
 }
-
 
 /* + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - 
 + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - */
@@ -414,7 +404,6 @@ public function chapterSelector($opt){
 	return $form;
 }
 
-
 /* + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - 
 + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - */
 public function chapterProfile($id_chapter){
@@ -433,5 +422,4 @@ public function chapterProfile($id_chapter){
 	$this->profile = $this->apiLoad('user')->userProfile($id_profile);
 }
 
-
-} ?>
+}

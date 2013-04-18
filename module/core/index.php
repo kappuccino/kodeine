@@ -8,8 +8,8 @@
 	}
 
 	$languages = array(
-		'fr_FR.utf-8'   => 'Français',
-		'en_EN'         => 'English'
+		'fr_FR.utf-8' => 'Français',
+		'en_EN'       => 'English'
 	);
 
 ?><!DOCTYPE html>
@@ -55,7 +55,7 @@
 
 <?php include(COREINC.'/end.php'); ?>
 <script src="../core/vendor/bootstrap/js/bootstrap-dropdown.js"></script>
-<script src="ui/js/dashboard.js" type="text/javascript"></script>
+<script src="ui/js/dashboard.js"></script>
 
 <script>
 	$(function(){

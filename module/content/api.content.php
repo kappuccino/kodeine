@@ -1,7 +1,4 @@
 <?php
-/* + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - 
-	Last release		2012.01.13
-+ - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - */
 
 class content extends coreApp {
 
@@ -1069,7 +1066,7 @@ public function contentSearch($opt){
 
 /* + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - 
 + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - */
-function contentSearchSQL($param, $level=0){
+public function contentSearchSQL($param, $level=0){
 
 	$prompt  = str_repeat("\t", $level);
 	$prompt_ = $prompt."\t";

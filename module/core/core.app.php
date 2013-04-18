@@ -2,53 +2,53 @@
 
 class coreApp extends coreMedia {
 
-public	$splitter = '@@';
+	public	$splitter = '@@';
 
-#function __construct($autolog=true){
-function coreApp($autolog=true){
+//-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -
+//-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -
+	public  function __construct($autolog=true){
 
-	if(BENCHME && !isset($GLOBALS['bench'])){	
-		$GLOBALS['bench'] = &$this;	
-		$GLOBALS['bench']->benchmark = array(
-			'time'		=> microtime(true),
-			'step'		=> array(),
-			'current' 	=> NULL,
-			'previous' 	=> NULL,
-		);
+		$this->benchmarkInit();
+
+		$this->debugMode      = isset($_GET['debug']);
+		$this->formError      = array();
+		$this->userCookieName = str_replace('.', NULL, $_SERVER['SERVER_NAME']);
+		$this->userCookieTtl  = 31104000;
+		$this->cache          = coreCache::getInstance($this);
+
+		if(!isset($this->kodeine)) 		$this->kodeine		= array();
+		if(!isset($this->apisConfig))	$this->apisConfig	= array();
+		if(!isset($this->apiContext))	$this->apiContext	= 'site';
+		if(!isset($this->apiConfig))	$this->apiConfig	= array();
+		if(!isset($this->user))			$this->user			= array();
+		if(!isset($this->profile))		$this->profile		= array();
+		if(!isset($this->userIsLogged))	$this->userIsLogged	= false;
+
+		if($autolog) $this->userIsLoged();
 	}
 
-	$this->formError 		= array();
-	$this->userCookieName 	= str_replace('.', NULL, $_SERVER['SERVER_NAME']);
-	$this->userCookieTtl	= 31104000;
+//-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -
+//-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -
+	public  function go($url){
+		header("Location: ".$url);
+		exit();
+	}
 
-	if(isset($_GET['debug']))		$this->debugMode	= true;
-	if(!isset($this->kodeine)) 		$this->kodeine		= array();
-	if(!isset($this->apisConfig))	$this->apisConfig	= array();
-	if(!isset($this->apiContext))	$this->apiContext	= 'site';
-	if(!isset($this->apiConfig))	$this->apiConfig	= array();
-	if(!isset($this->user))			$this->user			= array();
-	if(!isset($this->profile))		$this->profile		= array();
-	if(!isset($this->userIsLogged))	$this->userIsLogged	= false;
+//-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -
+//-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -
+	public  function pre(){
 
-	$this->cache = $this->apiLoad('coreCache');
+		echo '<pre style="text-align:left; background-color:#FFFFFF; color:#515151; padding:5px; border:1px solid #515151;">';
 
-#	$this->coreMedia();
+		for($i=0; $i<func_num_args(); $i++){
+			(!is_array(func_get_arg($i)) && !is_object(func_get_arg($i)))
+					? print(func_get_arg($i)."\n")
+					: print_r(func_get_arg($i));
+		}
 
-	if($autolog) $this->userIsLoged();
-}
+		echo '</pre>';
+	}
 
-/* + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - 
-+ - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - */
-public function appRelease(){
-	return trim(file_get_contents(APP.'/_RELEASE'));
-}
-
-/* + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - 
- + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - */
-public function go($url){
-	header("Location: ".$url);
-	exit();
-}
 
 /* + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - 
 + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - */
@@ -294,128 +294,73 @@ public function userLogout(){
 	unset($_SESSION['id_user'], $_COOKIE[$this->userCookieName]);
 }
 
-/* + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - 
-+ - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - */
-public function userCan($job){
-	list($key, $code) = explode('.', $job);
-	$profile = $this->userProfile($this->user['id_profile']);
-	
-	$v = @$profile[$key][$code];
-	
-	if($v == '1'){
-		return true;
-	}else
-	if(strlen($v) > 1){
-		return $v;
-	}else{
+	//-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -
+	//-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -
+	public  function userCan($job){
+		list($key, $code) = explode('.', $job);
+		$profile = $this->userProfile($this->user['id_profile']);
+
+		$v = @$profile[$key][$code];
+
+		if($v == '1'){
+			return true;
+		}else
+		if(strlen($v) > 1){
+			return $v;
+		}
+
 		return false;
 	}
-}
 
-/* + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - 
-+ - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - */
-public function pre(){
+	//-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -
+	//-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -
+	public function apiLoad($api, $name=NULL, $new=false){
 
-	echo '<pre style="text-align:left; background-color:#FFFFFF; color:#515151; padding:5px; border:1px solid #515151;">';
+		$class = autoloader::file($api);
+		$cst   = ($name == NULL) ? $api : $name;
 
-	for($i=0; $i<func_num_args(); $i++){
-		(!is_array(func_get_arg($i)) && !is_object(func_get_arg($i)))
-			? print(func_get_arg($i)."\n") 
-			: print_r(func_get_arg($i));
-	}
+		if(file_exists($class)){
+			$stored = 'class_'.$cst;
 
-	echo '</pre>';
-}
+			# Si on demande une class (.php) alors la laoder a la main
+			# si non la fonction autoload() ne pourra pas la trouver
+			#
+			if(strpos($api, ".php") !== false) require_once($class);
 
-/* + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - 
-+ - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - */
-public function apiLoad($api, $name=NULL, $new=false){
+			# REFERENCE	:: Utiliser l'objet deja existant
+			if(get_class($this->$stored) == $cst && !$new){
+				$new = &$this->$stored;
+			}else
 
-	$first = substr(strtolower($api), 0, 4);
-
-	if(strpos($api, ".php") !== false){
-		$direct	= true;
-		$class	= $api;
-	}else
-	if($first == 'core'){
-		$class	= APP.'/module/core/core.'.substr(strtolower($api), 4).'.php';
-		$alter	= USER.'/api/core.'.substr(strtolower($api), 4).'.php';
-	}else
-	if($first == 'data'){
-		$class	= APP.'/module/core/data.'.substr(strtolower($api), 4).'.php';
-		$alter	= USER.'/api/data.'.substr(strtolower($api), 4).'.php';
-	}else{
-		$parts	= array_map('strtolower', explode(' ', preg_replace('/(?!^)[[:upper:]]/',' \0', $api)));
-		$mod   	= $parts[0];
-
-		if(count($parts) > 1){
-			unset($parts[0]);
-			$class	= APP.'/module/'.$mod.'/api.'.$mod.implode('', array_map('ucfirst', $parts)).'.php';
-			$alter	= USER.'/module/'.$mod.'/api.'.$mod.implode('', array_map('ucfirst', $parts)).'.php';
-			$custom	= USER.'/api/api.'.$mod.implode('', array_map('ucfirst', $parts)).'.php';
-		}else{
-			$class	= APP.'/module/'.$mod.'/api.'.$api.'.php';
-			$alter	= USER.'/module/'.$mod.'/api.'.$api.'.php';
-			$custom	= USER.'/api/api.'.$api.'.php';
-		}
-	}
-
-#	$this->pre($class, $alter, $custom);
-
-	$alter	= (isset($custom) && file_exists($custom))	? $custom	: $alter;
-	$class	= (isset($alter)  && file_exists($alter)) 	? $alter	: $class;
-
-	$cst	= ($name == NULL) ? $api : $name;
-#	$this->pre($class);
-	
-	if(file_exists($class)){
-		# STOCKED represente la maniere dont l'objet va etre stocke
-		$stored = 'class_'.$cst;
-
-		# Si on demande une class (.php) alors la laoder a la main
-		# si non la fonction autoload() ne pourra pas la trouver
-		#
-		if($direct) require_once($class);
-
-		# REFERENCE	:: Utiliser l'objet deja existant
-		if(get_class($this->$stored) == $cst && !$new){
-			$new = &$this->$stored;
-		}else
-
-		# CLONE 	:: Nouvel object a partir du precedent
-		if(get_class($this->$stored) == $cst && $new){
-			$new = clone $this->$stored;
-		}
-		
-		# CREATION 	:: Creer un nouvel objet tout neuf 
-		else{
-			$new = new $cst(false); // disable autoload
-
-			$this->$stored = &$new;
-
-			if($cst != 'coreCache'){
-				$new->config		= &$this->config;
-				$new->cache 		= &$this->cache;
-				$new->memcache		= &$this->memcache;
-				$new->apiContext	= &$this->apiContext;
-				$new->kodeine 		= &$this->kodeine;
-				$new->user			= &$this->user;
-				$new->profile		= &$this->profile;
-				$new->apisConfig	= &$this->apisConfig;
-
-				if(@array_key_exists($cst, $new->apisConfig)) $new->apiConfig = &$this->apisConfig[$cst];
+			# CLONE 	:: Nouvel object a partir du precedent
+			if(get_class($this->$stored) == $cst && $new){
+				$new = clone $this->$stored;
 			}
+
+			# CREATION 	:: Creer un nouvel objet tout neuf
+			else{
+				$new = new $cst(false); // disable autoload
+
+				$this->$stored = &$new;
+
+					$new->config		= &$this->config;
+					$new->apiContext	= &$this->apiContext;
+					$new->kodeine 		= &$this->kodeine;
+					$new->user			= &$this->user;
+					$new->profile		= &$this->profile;
+					$new->apisConfig	= &$this->apisConfig;
+
+				#	if(@array_key_exists($cst, $new->apisConfig)) $new->apiConfig = &$this->apisConfig[$cst];
+			}
+
+			return $new;
+
+		}else{
+			throw new Exception('API could not be loaded : '.$api.'('.$cst.')');
 		}
+	}
 
-		return $new;
-
-	}else{
-		throw new Exception('API could not be loaded : '.$api.'('.$cst.')');
-	#	$this->pre('ERROR LOADING API : ', $api, $cst);
-	}	
-}
-
-/* + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - 
+/* + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + -
  + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - */
 public function formValue($db, $fd){
 	if(is_string($db)) $db 	= stripslashes($db);
@@ -464,7 +409,7 @@ public function formErrorSet($nom, $message){
 	$this->formError[$nom] = $message;
 }
 
-/* + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - 
+ /* + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + -
 + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - */
 public function formError($nom, $message){
 	if($this->formError[$nom]) return $message;
@@ -775,113 +720,119 @@ public function helperArrayWrapp($array, $glue){
 	return $array;
 }
 
-/*+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-*/
-public function benchmarkMarker($label){
-	
-	if(array_key_exists($label, $this->benchmark['step'])){
-
-		$mem = max(memory_get_peak_usage(true), memory_get_usage(true));
-		$this->benchmark['step'][$label]['duration']	= microtime(true) - $this->benchmark['step'][$label]['time'];
-		$this->benchmark['step'][$label]['memory']		= number_format($mem, 0, '.', ',');
-		$this->benchmark['current']						= NULL;
-
-	}else{
-		$this->benchmark['current'] 		= $label;
-		$this->benchmark['step'][$label]	= array(
-			'time'		=> microtime(true),
-			'duration'	=> 0,
-			'memory'	=> 0
-		);
-	}
-
-}
-
-/*+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-*/
-public function benchmarkProfiling($detail=true){
-
-	$total		= microtime(true) - $this->benchmark['time'];
-	$duration	= 0;
-	$report		= array(array("%", "Time (s)", "Memory", "Label"));
-
-	foreach($this->benchmark['step'] as $label => $e){
-		$line = array(
-			number_format(@(($e['duration'] / $total) * 100), 	6, '.', ''),
-			number_format($e['duration'], 						8, '.', ''),
-			$e['memory'],
-			$label
-		);
-		
-		list($a,$b) = explode('.', $line[0]);
-		if(strlen($a) == 1) $line[0] = '0'.$line[0];
-		
-		$duration += $e['duration'];
-
-		foreach($line as $j => $row){
-			if($j < sizeof($line)-1){
-				if(strlen($row) > $length[$j]) $length[$j] = strlen($row);
-			}
-		}
-		
-		$report[] = $line;
-	}
-
-	// Ajouter le *inconnu*	
-	$report[] = array(
-		number_format(100 - @(($duration / $total) * 100), 	6, '.', ''),
-		number_format($duration,							8, '.', ''),
-		number_format(max(memory_get_peak_usage(true), memory_get_usage(true)), 0, '.', ','),
-		'Not monitored code'
-	);
-	
-	// Ajouter le total
-	$report[] = array(
-		'100',
-		number_format($total, 8, '.', '')
-	);
-	
-	foreach($report as $i => $line){
-		foreach($line as $j => $row){
-			$end[$i][] = str_pad($row, $length[$j]+5, ' ', STR_PAD_RIGHT);
+//-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -
+//-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -
+	public  function benchmarkInit(){
+		if(BENCHME && !isset($GLOBALS['bench'])){
+			$GLOBALS['bench'] = &$this;
+			$GLOBALS['bench']->benchmark = array(
+				'time'		=> microtime(true),
+				'step'		=> array(),
+				'current' 	=> NULL,
+				'previous' 	=> NULL,
+			);
 		}
 	}
 
-	// Sortie visuel
-	echo "<pre style=\"background-color:#333333; color:#FFFFFF; padding:5px; margin:5px; font-family:courier; font-size:10px;\">\n";	
-
-		for($i=0; $i<sizeof($end)-1; $i++){
-			echo implode('', $end[$i])."\n";
+//-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -
+//-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -
+	public function benchmarkMarker($label){
+		if(array_key_exists($label, $this->benchmark['step'])){
+			$mem = max(memory_get_peak_usage(true), memory_get_usage(true));
+			$this->benchmark['step'][$label]['duration']	= microtime(true) - $this->benchmark['step'][$label]['time'];
+			$this->benchmark['step'][$label]['memory']		= number_format($mem, 0, '.', ',');
+			$this->benchmark['current']						= NULL;
+		}else{
+			$this->benchmark['current']      = $label;
+			$this->benchmark['step'][$label] = array(
+				'time'     => microtime(true),
+				'duration' => 0,
+				'memory'   => 0
+			);
 		}
-	
-		echo "-------\n".implode('', $end[sizeof($end)-1])."\n";
-		
-		$total = 0; $last = '';
-		echo "-------\n";
-		foreach($GLOBALS['q'] as $n => $q_){
-			list($t, $q, $m) = $q_;
-			$total += $t;
-			
-			if($m != $last){
-				echo "\n".$m."\n";
-				$last = $m;
+	}
+
+//-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -
+//-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -
+	public function benchmarkProfiling(){
+
+		$total		= microtime(true) - $this->benchmark['time'];
+		$duration	= 0;
+		$report		= array(array("%", "Time (s)", "Memory", "Label"));
+
+		foreach($this->benchmark['step'] as $label => $e){
+			$line = array(
+				number_format(@(($e['duration'] / $total) * 100), 	6, '.', ''),
+				number_format($e['duration'], 						8, '.', ''),
+				$e['memory'],
+				$label
+			);
+
+			list($a,$b) = explode('.', $line[0]);
+			if(strlen($a) == 1) $line[0] = '0'.$line[0];
+
+			$duration += $e['duration'];
+
+			foreach($line as $j => $row){
+				if($j < sizeof($line)-1){
+					if(strlen($row) > $length[$j]) $length[$j] = strlen($row);
+				}
 			}
 
-			echo str_pad($n, 5);
-			echo str_pad($t, 24);
-			echo trim(str_replace(array("\n", "\t"), ' ', $q))."\n";
+			$report[] = $line;
 		}
-	
-		echo "-------\nTotal SQL: ".$total."\n";
-	
-		if(function_exists('__daevel_profiling')) __daevel_profiling();
 
-	echo "</pre>";
+		// Ajouter le *inconnu*
+		$report[] = array(
+			number_format(100 - @(($duration / $total) * 100), 	6, '.', ''),
+			number_format($duration,							8, '.', ''),
+			number_format(max(memory_get_peak_usage(true), memory_get_usage(true)), 0, '.', ','),
+			'Not monitored code'
+		);
 
-#	$this->pre($GLOBALS['q']);
-#	$this->pre($this->benchmark);
+		// Ajouter le total
+		$report[] = array(
+			'100',
+			number_format($total, 8, '.', '')
+		);
 
-}
+		foreach($report as $i => $line){
+			foreach($line as $j => $row){
+				$end[$i][] = str_pad($row, $length[$j]+5, ' ', STR_PAD_RIGHT);
+			}
+		}
+
+		// Sortie visuel
+		echo "<pre style=\"background-color:#333333; color:#FFFFFF; padding:5px; margin:5px; font-family:courier; font-size:10px;\">\n";
+
+			for($i=0; $i<sizeof($end)-1; $i++){
+				echo implode('', $end[$i])."\n";
+			}
+
+			echo "-------\n".implode('', $end[sizeof($end)-1])."\n";
+
+			$total = 0; $last = '';
+			echo "-------\n";
+			foreach($GLOBALS['q'] as $n => $q_){
+				list($t, $q, $m) = $q_;
+				$total += $t;
+
+				if($m != $last){
+					echo "\n".$m."\n";
+					$last = $m;
+				}
+
+				echo str_pad($n, 5);
+				echo str_pad($t, 24);
+				echo trim(str_replace(array("\n", "\t"), ' ', $q))."\n";
+			}
+
+			echo "-------\nTotal SQL: ".$total."\n";
+
+			if(function_exists('__daevel_profiling')) __daevel_profiling();
+
+		echo "</pre>";
+	}
 
 /* + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - 
  + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - */
@@ -1333,7 +1284,7 @@ public function robotsTxtMessage(){
 	exit();
 }
 
-/* + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - 
+/* + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + -
 + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - */
 public function configSet($module, $name, $value){
 
@@ -1415,6 +1366,14 @@ public function kTalk($str){
 public function kTalkCheck($str){
 	return substr_count($str, '{') > 0 ? true : false;
 }
+
+//-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -
+//-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -
+	public  function hookRegister(array $opt){
+
+		print_r($opt);
+		die('--');
+	}
 
 /* + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - 
 + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - */

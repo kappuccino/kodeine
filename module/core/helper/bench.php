@@ -29,10 +29,8 @@
 		$mem = max(memory_get_peak_usage(true), memory_get_peak_usage(true)); 
 		$mem = number_format((($mem  / 1024) / 1024), 2);
 	
-	  return $msg." MEM:".$mem."Mo";
+	  echo  "<br /><br /><br /><br />".$msg." MEM:".$mem."Mo";
 	}
 	
 
 	register_shutdown_function('__daevel_profiling');
-
-?>

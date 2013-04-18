@@ -2,12 +2,6 @@
 
 class autoloader{
 
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-	public function __construct(){
-	}
-
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	public static function register($prepend = true){
@@ -16,33 +10,21 @@ class autoloader{
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	public function classFile($api){
-
-		$first = substr(strtolower($api), 0, 4);
+	public function file($api){
 
 		if(strpos($api, ".php") !== false){
-			$direct	= true;
-			$class	= $api;
+			$class = $api;
 		}else
-		if($first == 'core'){
-			$class	= APP.'/module/core/core.'.substr(strtolower($api), 4).'.php';
-			$alter	= USER.'/api/core.'.substr(strtolower($api), 4).'.php';
-		/*else
-		if($first == 'data'){
-			$parts	= array_map('strtolower', explode(' ', preg_replace('/(?!^)[[:upper:]]/',' \0', $api)));
-			$file   = lcfirst(substr(implode('', array_map('ucfirst', $parts)), 4));
-
-			$class	= APP.'/module/core/data.'.$file.'.php';
-			$alter	= USER.'/api/data.'.$file.'.php';
-		}*/
+		if(substr(strtolower($api), 0, 4) == 'core'){
+			$class = APP . '/module/core/core.' . substr(strtolower($api), 4) . '.php';
+			$alter = USER . '/api/core.' . substr(strtolower($api), 4) . '.php';
 		}else{
-			$parts	= array_map('strtolower', explode(' ', preg_replace('/(?!^)[[:upper:]]/',' \0', $api)));
-			$mod   	= $parts[0];
+			$parts = array_map('strtolower', explode(' ', preg_replace('/(?!^)[[:upper:]]/', ' \0', $api)));
+			$mod   = $parts[0];
 
 			if(count($parts) > 1){
 				unset($parts[0]);
 				$file   = $mod.implode('', array_map('ucfirst', $parts));
-
 				$class	= APP.'/module/'.$mod.'/api.'.$file.'.php';
 				$alter	= USER.'/module/'.$mod.'/api.'.$file.'.php';
 				$custom	= USER.'/api/api.'.$file.'.php';
@@ -53,8 +35,8 @@ class autoloader{
 			}
 		}
 
-		$alter	= (isset($custom) && file_exists($custom)) ? $custom : $alter;
-		$class	= (isset($alter)  && file_exists($alter))  ? $alter	 : $class;
+		$alter = (isset($custom) && file_exists($custom)) ? $custom : $alter;
+		$class = (isset($alter)  && file_exists($alter))  ? $alter  : $class;
 
 		return $class;
 	}
@@ -62,14 +44,7 @@ class autoloader{
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	public function autoload($api){
-
-		$class = $this->classFile($api);
-
-		if(file_exists($class)){
-			require_once($class);
-		}
-
+		$class = $this->file($api);
+		if(file_exists($class)) require_once($class);
 	}
 }
-
-
