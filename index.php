@@ -1,11 +1,12 @@
 <?php session_start();
 
-	#include(__DIR__.'/module/core/helper/bench.php');
-
 // BOOTSTRAP ///////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	require(__DIR__.'/module/core/helper/app.php');
 	$app = new coreApp();
+
+	// BENCH
+	if(BENCHME && defined('BENCHALLOW') && constant('BENCHALLOW')) include(__DIR__.'/module/core/helper/bench.php');
 
 	// URL (Common URL Rewriting rules)
 	require(__DIR__.'/module/core/helper/url.php');
@@ -35,4 +36,4 @@
 
 // PROFILE /////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	if(BENCHME && defined(BENCHALLOW) && constant('BENCHALLOW')) $app->benchmarkProfiling();
+	if(BENCHME && defined('BENCHALLOW') && constant('BENCHALLOW')) $app->benchmarkProfiling();
