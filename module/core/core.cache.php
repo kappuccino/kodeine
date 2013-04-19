@@ -12,7 +12,7 @@ class coreCache{
 		$this->memecacheInit();
 	}
 
-	public static function getInstance($core) {
+	public  static function getInstance($core) {
 		if(is_null(self::$_instance)) self::$_instance = new coreCache();
 		self::$core = $core;
 		return self::$_instance;
@@ -32,7 +32,7 @@ class coreCache{
 				$this->memcache = new Memcache();
 
 				foreach (explode(',', $config['memcache']['server']) as $s) {
-					$this->memcache->addServer($s, 11211);
+					$this->memcache->addServer($s, $config['memcache']['port']);
 				}
 
 				$this->memcache->setCompressThreshold(20000, 0.2);
