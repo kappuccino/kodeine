@@ -341,6 +341,7 @@ public function userLogout(){
 				$this->api[$cst]    = $new = new $cst(false); // disable autoload
 
 				$new->api           = &$this->api;
+				$new->hook          = &$this->hook;
 				$new->config		= &$this->config;
 				$new->apiContext	= &$this->apiContext;
 				$new->kodeine 		= &$this->kodeine;
@@ -1177,7 +1178,7 @@ public function kodeineInit($get){
 		exit();
 	}
 
-	$this->kodeine = $this->hookFilter('kodeineInit', $this->kodeine);
+	$this->hookAction('kodeineInit');
 }
 
 /* + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - 
