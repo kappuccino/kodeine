@@ -1177,7 +1177,7 @@ public function kodeineInit($get){
 		exit();
 	}
 
-	$this->kodeine = $this->hookFilter('kodeineInit', $this->kodeine);
+	$this->hookAction('kodeineInit');
 }
 
 /* + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - 
