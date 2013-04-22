@@ -2,14 +2,10 @@
 
 class socialSandbox extends social{
 
-function __clone(){}
-function socialSandbox(){}
-
 /* + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - 
 + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - */
 function socialSandboxGet($opt){
 }
-
 
 /* + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - 
 + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - */
@@ -37,7 +33,6 @@ function socialSandboxSet($opt){
 	if($opt['debug']) $this->pre("QUERY", $this->db_query, "ERROR", $this->db_error);
 }
 
-
 /* + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - 
 + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - */
 function socialSandboxPush($opt){
@@ -58,21 +53,16 @@ function socialSandboxPush($opt){
 	return true;
 }
 
+//-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -
+//-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -
+	public  function socialSandboxRoot($type, $id){
 
-/* + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - 
-+ - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - */
-function socialSandboxRoot($type, $id){
+		$hook = $this->hookAction('socialSandboxRoot', $type, $id);
+		if(is_array($hook)) return $hook;
 
-	$hook = $this->eventTrigger('socialSandbox', 'socialSandboxRoot', array(
-		'type'	=> $type,
-		'id'	=> $id
-	));
-
-	if(is_array($hook)) return $hook;
-
-	// Dans le cas ou je n'ai pas de hook alors on retourne simplement les valeurs
-	return array('type' => $type, 'id' => $id);
-}
+		// Dans le cas ou je n'ai pas de hook alors on retourne simplement les valeurs
+		return array('type' => $type, 'id' => $id);
+	}
 
 /* + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - 
 + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - */
@@ -89,52 +79,4 @@ function socialSandboxRemove($opt){
 
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-} ?>
+}

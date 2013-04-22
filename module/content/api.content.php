@@ -1008,10 +1008,7 @@ public function contentSet($opt){
 	$isAlbum = $this->dbOne("SELECT id_content FROM k_contentalbum WHERE id_content=".$this->id_content);
 	if($isAlbum['id_content'] > 0) $this->contentAlbumFamily();
 
-	@$this->eventTrigger('content', 'contentSet', array(
-		'opt'        => $opt,
-		'id_content' => $this->id_content,
-	));
+	$this->hookAction('contentSet', $this->id_content, $opt);
 
 	return true;
 }

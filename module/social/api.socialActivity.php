@@ -108,8 +108,8 @@ if($opt['debug']) $this->pre("OPTION", $opt);
 		if($opt['debug']) $this->pre($this->db_query, $this->db_error);
 
 		// Hook
-		$this->eventTrigger('socialActivity', 'socialActivitySet', array('id_socialactivity' => $id_act));
-		
+		$this->hookAction('socialActivitySet', $id_act);
+
 		# Create NOTIFICATION
 		#
 		if($id_act > 0 && $opt['notification']){

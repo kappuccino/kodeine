@@ -31,7 +31,6 @@ class socialClean extends social{
 		}
 		if($opt['trace']) echo "\n";
 
-
 		// EVENT ////////////////////////////////////////////////////////////////////
 
 		$events_player = $this->apiLoad('socialEvent')->socialEventGet(array(
@@ -61,7 +60,6 @@ class socialClean extends social{
 			}
 			if($opt['trace']) echo "\n";
 
-
 		// CIRCLE ///////////////////////////////////////////////////////////////////
 
 		$circles_player = $this->apiLoad('socialCircle')->socialCircleGet(array(
@@ -88,13 +86,11 @@ class socialClean extends social{
 			}
 			if($opt['trace']) echo "\n";
 
-
 		// HOOK /////////////////////////////////////////////////////////////////////
 
-		$this->eventTrigger('socialClean', 'socialCleanUser', $opt);
+		$this->hookAction('socialCleanUser', $opt);
 
 		return true;
 	}
-
 
 }

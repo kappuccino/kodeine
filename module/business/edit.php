@@ -21,14 +21,10 @@
 			$app->dbQuery($app->dbUpdate($def)." WHERE id_cart=".$_POST['id_cart']);
 		}	
 		
-		# EVENT TRIGGER
-		$mailSent = $app->eventTrigger('business', 'businessCmdPaymentMail', array(
-			'id_cart'		=> $_POST['id_cart'],
-			'cartStatus'	=> $myCmd['cartStatus'],
-			'newStatus'     => $_POST['cartStatus']
-		));
-		
-		$reload = true;		
+		# HOOK
+		$this->hookAction('businessCmdPaymentMail', $_POST['id_cart'], $myCmd['cartStatus'], $_POST['cartStatus']);
+
+		$reload = true;
 	}
 	
 	# Data

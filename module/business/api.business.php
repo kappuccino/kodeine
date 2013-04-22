@@ -1,38 +1,28 @@
 <?php
-/* + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - 
-	Last release		2010.10.18-g
-+ - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - */
 
 class business extends coreApp {
 
-/* + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - 
-+ - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - */
-public function __construct(){
-//	$this->coreApp();
-	if(!$GLOBALS['jobTTL'] /*&& $this->user['id_group'] != NULL*/) $this->businessCartTTL();
-}
+//-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -
+//-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -
+	public  function businessCartTTL(){
 
-/* + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + -
-+ - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - */
-function businessCartTTL(){
+		$ttl  = $this->hookAction('businessCartTTL');
+		$ttl  = (intval($ttl) > 0) ? $ttl : 86400;
+		$cart = $this->dbMulti("SELECT id_cart, cartTTL FROM k_businesscart WHERE is_cart=1 AND is_locked=0 AND cartTTL<=" . (time() - $ttl));
 
-	$ttl	= @$this->eventTrigger('business', 'businessCartTTL');
-	$ttl 	= (intval($ttl) > 0)  ? $ttl : 86400;
-	$cart	= $this->dbMulti("SELECT id_cart, cartTTL FROM k_businesscart WHERE is_cart=1 AND is_locked=0 AND cartTTL<=".(time() - $ttl));
-
-	if(sizeof($cart) > 0){
-		foreach($cart as $c){
-			$this->businessCartRemove($c['id_cart'], true);
+		if(sizeof($cart) > 0){
+			foreach($cart as $c){
+				$this->businessCartRemove($c['id_cart'], true);
+			}
 		}
-	}
 
-	if($_SESSION['id_cart'] > 0){
-		$this->dbQuery("UPDATE k_businesscart SET cartTTL=".time().", cartDateUpdate=NOW() WHERE id_cart=".$_SESSION['id_cart']);
-		#$this->pre($this->db_query, $this->db_error);
-	}
+		if($_SESSION['id_cart'] > 0){
+			$this->dbQuery("UPDATE k_businesscart SET cartTTL=".time().", cartDateUpdate=NOW() WHERE id_cart=".$_SESSION['id_cart']);
+			#$this->pre($this->db_query, $this->db_error);
+		}
 
-	$GLOBALS['jobTTL'] = true;
-}
+		$GLOBALS['jobTTL'] = true;
+	}
 
 /* + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + -
 + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - */
@@ -194,54 +184,54 @@ public function businessCartGet($opt=array()){
 	return $cart;
 }
 
-/* + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + -
-+ - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - */
-public function businessCartUserSet($id_cart, $id_user){
-	
-    # On fixe l'id_user et les adresses BILLLING et DELIVERY
-    #
-    if($id_user > 0){
-        $billing     = $this->apiLoad('user')->userAddressBookGet(array('id_user' => $id_user, 'billing'  => true));
-        $delivery    = $this->apiLoad('user')->userAddressBookGet(array('id_user' => $id_user, 'delivery' => true));
+//-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -
+//-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -
+	public  function businessCartUserSet($id_cart, $id_user){
 
-		//Adresses
-        $adBilling  = $this->apiLoad('user')->userAddressBookFormat($billing);
-        $adDelivery = $this->apiLoad('user')->userAddressBookFormat($delivery);
-        
-        $adBilling_   = @$this->eventTrigger('user', 'userAddressBookFormat', array('data' => $billing));
-        $adDelivery_  = @$this->eventTrigger('user', 'userAddressBookFormat', array('data' => $delivery));
-        
-		if($adBilling_ != NULL) $adBilling = $adBilling_;
-		if($adDelivery_ != NULL) $adDelivery = $adDelivery_;
-		
-        //Noms
-		$billingName = $billing['addressbookCivility'].' '.$billing['addressbookFirstName'].' '.$billing['addressbookLastName'];
-		$deliveryName = $delivery['addressbookCivility'].' '.$delivery['addressbookFirstName'].' '.$delivery['addressbookLastName'];
-		
-        $billingName_  = @$this->eventTrigger('user', 'userAddressBookFormat', array('data' => $billing, 'opt' => array('name' => true)));
-        $deliveryName_ = @$this->eventTrigger('user', 'userAddressBookFormat', array('data' => $delivery, 'opt' => array('name' => true)));
-		
-		if($billingName_ != NULL) $billingName = $billingName_;
-		if($deliveryName_ != NULL) $deliveryName = $deliveryName_;
+	    # On fixe l'id_user et les adresses BILLLING et DELIVERY
+	    #
+	    if($id_user > 0){
+		    $billing  = $this->apiLoad('user')->userAddressBookGet(array('id_user' => $id_user, 'billing' => true));
+		    $delivery = $this->apiLoad('user')->userAddressBookGet(array('id_user' => $id_user, 'delivery' => true));
 
-        $def['k_businesscart'] = array(
-            'id_user'               => array('value' => $id_user),
-            'id_delivery'           => array('value' => $delivery['id_addressbook']),
-            'cartDeliveryName'      => array('value' => $deliveryName),
-            'cartDeliveryAddress'   => array('value' => $adDelivery),
+		    // Adresses
+	        $adBilling  = $this->apiLoad('user')->userAddressBookFormat($billing);
+	        $adDelivery = $this->apiLoad('user')->userAddressBookFormat($delivery);
 
-            'id_billing'            => array('value' => $billing['id_addressbook']),
-            'cartBillingName'       => array('value' => $billingName),
-            'cartBillingAddress'    => array('value' => $adBilling),
-            'cartBillingTVAIntra'   => array('value' => $billing['addressbookTVAIntra'])
-        );
-		$result = $this->dbQuery($this->dbUpdate($def)." WHERE id_cart=".$id_cart);
-        return true;
-    }
-    return false;
+		    $adBilling_  = $this->hookAction('userAddressBookFormat', $billing);
+		    $adDelivery_ = $this->hookAction('userAddressBookFormat', $delivery);
 
+		    if($adBilling_ != NULL) $adBilling = $adBilling_;
+			if($adDelivery_ != NULL) $adDelivery = $adDelivery_;
 
-}
+	        // Noms
+			$billingName  = $billing['addressbookCivility'].' '.$billing['addressbookFirstName'].' '.$billing['addressbookLastName'];
+			$deliveryName = $delivery['addressbookCivility'].' '.$delivery['addressbookFirstName'].' '.$delivery['addressbookLastName'];
+
+		    $billingName_  = $this->hookAction('userAddressBookFormat', $billing,  array('name' => true));
+	        $deliveryName_ = $this->hookAction('userAddressBookFormat', $delivery, array('name' => true));
+
+			if($billingName_  != NULL) $billingName  = $billingName_;
+			if($deliveryName_ != NULL) $deliveryName = $deliveryName_;
+
+	        $def['k_businesscart'] = array(
+	            'id_user'               => array('value' => $id_user),
+	            'id_delivery'           => array('value' => $delivery['id_addressbook']),
+	            'cartDeliveryName'      => array('value' => $deliveryName),
+	            'cartDeliveryAddress'   => array('value' => $adDelivery),
+
+	            'id_billing'            => array('value' => $billing['id_addressbook']),
+	            'cartBillingName'       => array('value' => $billingName),
+	            'cartBillingAddress'    => array('value' => $adBilling),
+	            'cartBillingTVAIntra'   => array('value' => $billing['addressbookTVAIntra'])
+	        );
+
+			$this->dbQuery($this->dbUpdate($def)." WHERE id_cart=".$id_cart);
+	        return true;
+	    }
+
+	    return false;
+	}
 
 /* + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + -
 + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - */
@@ -858,194 +848,180 @@ public function businessCmdNew($opt){
 		if($opt['debug']) $this->pre($this->db_query, $this->db_error);
 	}
 
-	# EVENT TRIGGER
-	@$this->eventTrigger('business', 'businessCmdNew', array(
-		'id_cart'	=> $opt['id_cart'],
-		'id_cmd'	=> $opt['id_cart']
-	));
+	# HOOK
+	$this->hookAction('businessCmdNew', $opt['id_cart']);
 
 	return true;
 }
 
-/* + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + -
-+ - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - */
-public function businessCmdIncrement($opt){
+//-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -
+//-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -
+	public  function businessCmdIncrement($opt){
 
-	$id_cart = $opt['id_cart']; if(intval($id_cart) == 0) return false;
+		$id_cart = $opt['id_cart']; if(intval($id_cart) == 0) return false;
 
-    # EVENT TRIGGER
-    $result = @$this->eventTrigger('business', 'businessCmdIncrement', array(
-        'id_cart'   => $opt['id_cart']
-    ));
-    
-	# Get
-	#
-	$cart = $this->dbOne("SELECT * FROM k_businesscart WHERE id_cart=".$id_cart);
-	if($cart['id_cart'] != $id_cart) return false;
-	if($cart['cartStatus'] != 'OK')	 return false; // Si le panier est OK = relge = facture
-	if($cart['cartCmdNumber'] != '') return false; // Si j'ai deja un numerod de facture on evite !
+	    # HOOK
+		$this->hookAction('businessCmdIncrement', $opt['id_cart']);
 
-	# Last
-	#
-	$last = ($cart['id_shop'] > 0)
-		? $this->dbOne("SELECT MAX(cartCmdNumber) AS h FROM k_businesscart WHERE id_shop=".$cart['id_shop'])
-		: $this->dbOne("SELECT MAX(cartCmdNumber) AS h FROM k_businesscart WHERE id_shop IS NULL");
+		# GET
+		$cart = $this->dbOne("SELECT * FROM k_businesscart WHERE id_cart=".$id_cart);
+		if($cart['id_cart'] != $id_cart) return false; // Ce cas ne devrait jamais arrivé
+		if($cart['cartStatus'] != 'OK')	 return false; // Si le panier est OK = relge = facture
+		if($cart['cartCmdNumber'] != '') return false; // Si j'ai deja un numerod de facture on evite !
 
-    if(is_null($last))$last = 0;
+		# LAST
+		$last = ($cart['id_shop'] > 0)
+			? $this->dbOne("SELECT MAX(cartCmdNumber) AS h FROM k_businesscart WHERE id_shop=".$cart['id_shop'])
+			: $this->dbOne("SELECT MAX(cartCmdNumber) AS h FROM k_businesscart WHERE id_shop IS NULL");
 
-	# Update
-	#
-	$this->dbQuery("UPDATE k_businesscart SET cartCmdNumber=".(intval($last['h']) + 1)." WHERE id_cart=".$id_cart);
-	if($opt['debug']) $this->pre($this->db_query, $this->db_error);
-}
+	    if(is_null($last)) $last = 0;
 
-/* + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + -
-+ - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - */
-public function businessCmdMail($opt){
+		# LAST
+		$this->dbQuery("UPDATE k_businesscart SET cartCmdNumber=".(intval($last['h']) + 1)." WHERE id_cart=".$id_cart);
+		if($opt['debug']) $this->pre($this->db_query, $this->db_error);
+	}
 
-	require_once(KROOT.'/app/plugin/phpmailer/class.phpmailer.php');
+//-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -
+//-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -
+	public function businessCmdMail($opt){
 
-	# Cmmand
-	#
-	$cmd = $this->businessCartGet(array(
-		'id_cart'	=> $opt['id_cart'],
-		'is_cmd'	=> true,
-		'debug'		=> false
-	));
-	if(!is_numeric($cmd['id_cart'])) return false;
+		require_once(KROOT.'/app/plugin/phpmailer/class.phpmailer.php');
 
-
-	# Shop
-	#
-	if($cmd['id_shop'] > 0){
-		$shop = $this->apiLoad('shop')->shopGet(array(
-			'id_shop'	=> $cmd['id_shop']
+		# Cmmand
+		#
+		$cmd = $this->businessCartGet(array(
+			'id_cart'	=> $opt['id_cart'],
+			'is_cmd'	=> true,
+			'debug'		=> false
 		));
+		if(!is_numeric($cmd['id_cart'])) return false;
 
-		$mailTo		= $this->apiLoad('shop')->shopMailExtraction($shop['shopMailTo']);
-		$mailCc		= $this->apiLoad('shop')->shopMailExtraction($shop['shopMailCc']);
-		$mailBcc	= $this->apiLoad('shop')->shopMailExtraction($shop['shopMailBcc']);
 
-		if($opt['mailTo'] != '')		$mailTo[] = $opt['mailTo'];
-		if($opt['mailCc'] != '')		$mailCc[] = $opt['mailCc'];
-		if(is_array($opt['mailBcc']))	$mailBcc  = array_merge($mailBcc, $opt['mailBcc']);
+		# Shop
+		#
+		if($cmd['id_shop'] > 0){
+			$shop = $this->apiLoad('shop')->shopGet(array(
+				'id_shop'	=> $cmd['id_shop']
+			));
 
-        $mailTitle 	= ($opt['mailTitle'] != '') ? $opt['mailTitle'] : $shop['shopMailTitle'];
-        $template 	= ($opt['mailTemplate'] != '') ? USER.'/mail/'.$opt['mailTemplate'] : USER.'/mail/'.$shop['shopMailTemplate'];
-	}else{
-		/*$mailTo		= array($opt['mailTo']);
-		$mailCc		= array($opt['mailCc']);
-		$mailBcc	= $opt['mailBcc'];*/
-		$mailTo		= is_array($opt['mailTo'])  ? $opt['mailTo']  : array($opt['mailTo']);
-		$mailCc		= is_array($opt['mailCc'])  ? $opt['mailCc']  : array($opt['mailCc']);
-		$mailBcc	= is_array($opt['mailBcc']) ? $opt['mailBcc'] : array($opt['mailBcc']);
+			$mailTo		= $this->apiLoad('shop')->shopMailExtraction($shop['shopMailTo']);
+			$mailCc		= $this->apiLoad('shop')->shopMailExtraction($shop['shopMailCc']);
+			$mailBcc	= $this->apiLoad('shop')->shopMailExtraction($shop['shopMailBcc']);
 
-		$mailTitle 	= $opt['mailTitle'];
-		$template	= USER.'/mail/'.$opt['mailTemplate'];
-	}
+			if($opt['mailTo'] != '')		$mailTo[] = $opt['mailTo'];
+			if($opt['mailCc'] != '')		$mailCc[] = $opt['mailCc'];
+			if(is_array($opt['mailBcc']))	$mailBcc  = array_merge($mailBcc, $opt['mailBcc']);
 
-	$mailTo	 = is_array($mailTo)  ? $mailTo  : array();
-	$mailCc	 = is_array($mailCc)  ? $mailCc  : array();
-	$mailBcc = is_array($mailBcc) ? $mailBcc : array();
+	        $mailTitle 	= ($opt['mailTitle'] != '') ? $opt['mailTitle'] : $shop['shopMailTitle'];
+	        $template 	= ($opt['mailTemplate'] != '') ? USER.'/mail/'.$opt['mailTemplate'] : USER.'/mail/'.$shop['shopMailTemplate'];
+		}else{
+			/*$mailTo		= array($opt['mailTo']);
+			$mailCc		= array($opt['mailCc']);
+			$mailBcc	= $opt['mailBcc'];*/
+			$mailTo		= is_array($opt['mailTo'])  ? $opt['mailTo']  : array($opt['mailTo']);
+			$mailCc		= is_array($opt['mailCc'])  ? $opt['mailCc']  : array($opt['mailCc']);
+			$mailBcc	= is_array($opt['mailBcc']) ? $opt['mailBcc'] : array($opt['mailBcc']);
 
-	# Mail
-	#
-	$mail = new PHPMailer();
-    $mail->CharSet = "UTF-8";
-    if($opt['mailFrom'] != '') $mail->SetFrom($opt['mailFrom']);
-	else $mail->SetFrom('noreply@'.$_SERVER['HTTP_HOST']);
-
-	// TO
-	foreach($mailTo as $e){
-		if(filter_var($e, FILTER_VALIDATE_EMAIL) !== FALSE) $mail->AddAddress($e);
-	}
-	$mail->ClearReplyTos();
-    if($opt['mailReplyTo'] != '') $mail->AddReplyTo($opt['mailReplyTo']);
-    else $mail->AddReplyTo('noreply@'.$_SERVER['HTTP_HOST']);
-
-	// CC
-	foreach($mailCc as $e){
-		if(filter_var($e, FILTER_VALIDATE_EMAIL) !== FALSE) $mail->AddCC($e);
-	}
-
-	// BCC
-	foreach($mailBcc as $e){
-		if(filter_var($e, FILTER_VALIDATE_EMAIL) !== FALSE) $mail->AddBCC($e);
-	}
-
-	if(file_exists($template)){
-		$split		= '{lines}';
-		$message 	= file_get_contents($template);
-
-		if(is_array($opt['replace'])){
-			$message = $this->helperReplace($message, $opt['replace']);
+			$mailTitle 	= $opt['mailTitle'];
+			$template	= USER.'/mail/'.$opt['mailTemplate'];
 		}
 
-		if(preg_match_all("#{lines}(.*){lines}#s", $message, $m, PREG_SET_ORDER)){
-			$tLine	= $m[0][1];
+		$mailTo	 = is_array($mailTo)  ? $mailTo  : array();
+		$mailCc	 = is_array($mailCc)  ? $mailCc  : array();
+		$mailBcc = is_array($mailBcc) ? $mailBcc : array();
 
-			foreach($cmd['line'] as $e){
-				$tmp .= $this->helperReplace($tLine, $e);
+		# Mail
+		#
+		$mail = new PHPMailer();
+	    $mail->CharSet = "UTF-8";
+	    if($opt['mailFrom'] != '') $mail->SetFrom($opt['mailFrom']);
+		else $mail->SetFrom('noreply@'.$_SERVER['HTTP_HOST']);
+
+		// TO
+		foreach($mailTo as $e){
+			if(filter_var($e, FILTER_VALIDATE_EMAIL) !== FALSE) $mail->AddAddress($e);
+		}
+		$mail->ClearReplyTos();
+	    if($opt['mailReplyTo'] != '') $mail->AddReplyTo($opt['mailReplyTo']);
+	    else $mail->AddReplyTo('noreply@'.$_SERVER['HTTP_HOST']);
+
+		// CC
+		foreach($mailCc as $e){
+			if(filter_var($e, FILTER_VALIDATE_EMAIL) !== FALSE) $mail->AddCC($e);
+		}
+
+		// BCC
+		foreach($mailBcc as $e){
+			if(filter_var($e, FILTER_VALIDATE_EMAIL) !== FALSE) $mail->AddBCC($e);
+		}
+
+		if(file_exists($template)){
+			$split		= '{lines}';
+			$message 	= file_get_contents($template);
+
+			if(is_array($opt['replace'])){
+				$message = $this->helperReplace($message, $opt['replace']);
 			}
 
-			$message = str_replace($m[0][0], $tmp, $message);
+			if(preg_match_all("#{lines}(.*){lines}#s", $message, $m, PREG_SET_ORDER)){
+				$tLine	= $m[0][1];
+
+				foreach($cmd['line'] as $e){
+					$tmp .= $this->helperReplace($tLine, $e);
+				}
+
+				$message = str_replace($m[0][0], $tmp, $message);
+			}
+
+			if(preg_match_all("#{ifCoupon}(.*){ifCoupon}#s", $message, $m, PREG_SET_ORDER)){
+				$message = (floatval($cmd['cartCoupon']) == 0)
+					? str_replace($m[0][0], NULL, $message)
+					: str_replace('{ifCoupon}', NULL, $message);
+			}
+
+			$cmd['cartDeliveryAddress']	= nl2br($cmd['cartDeliveryAddress']);
+			$cmd['cartBillingAddress']	= nl2br($cmd['cartBillingAddress']);
+
+			$message = $this->helperReplace($message, $cmd);
+		}else{
+			$message = 'Template not found '.$template;
 		}
 
-		if(preg_match_all("#{ifCoupon}(.*){ifCoupon}#s", $message, $m, PREG_SET_ORDER)){
-			$message = (floatval($cmd['cartCoupon']) == 0)
-				? str_replace($m[0][0], NULL, $message)
-				: str_replace('{ifCoupon}', NULL, $message);
-		}
+		$mail->Subject	= $this->helperReplace($mailTitle, $cmd);
+		$mail->AltBody	= strip_tags($message);
+		$mail->MsgHTML(preg_replace("[\]", '', $message));
 
-		$cmd['cartDeliveryAddress']	= nl2br($cmd['cartDeliveryAddress']);
-		$cmd['cartBillingAddress']	= nl2br($cmd['cartBillingAddress']);
-
-		$message = $this->helperReplace($message, $cmd);
-	}else{
-		$message = 'Template not found '.$template;
-	}
-
-	$mail->Subject	= $this->helperReplace($mailTitle, $cmd);
-	$mail->AltBody	= strip_tags($message);
-	$mail->MsgHTML(eregi_replace("[\]", '', $message));
-
-	if($opt['debug']){
-		$this->pre("mailto", $mailTo, 'mailCc', $mailCc, 'mailBcc', $mailBcc, 'mailTitle', $mailTitle, 'message', $message, 'cmd', $cmd, 'mail', $mail);
-	}
-
-	# EVENT TRIGGER
-	$custom = @$this->eventTrigger('business', 'businessCmdMail', array(
-		'id_cart'		=> $opt['id_cart'],
-		'id_cmd'		=> $opt['id_cart'],
-		'mailTo'		=> $mailtTo,
-		'mailTitle'		=> $mail->Subject,
-		'mailBody'		=> $message
-	));
-	
-	if(is_array($custom)){
-		if($custom['mailTitle'] != ''){
-			$mail->Subject = $custom['mailTitle'];
-		}
-		if($custom['mailBody'] != ''){
-			$mail->AltBody	= strip_tags($custom['mailBody']);
-			$mail->MsgHTML(eregi_replace("[\]", '', $custom['mailBody']));
-		}
-	}
-
-	if(!$opt['return']){
-		if(@$mail->send()){
-			return true;	
-		}else
 		if($opt['debug']){
-			$this->pre($mail->ErrorInfo);
-			return false;
+			$this->pre("mailto", $mailTo, 'mailCc', $mailCc, 'mailBcc', $mailBcc, 'mailTitle', $mailTitle, 'message', $message, 'cmd', $cmd, 'mail', $mail);
 		}
+
+		# HOOK
+		$custom = $this->hookAction('businessCmdMail', $opt['id_cart'], $mailTo, $mail->Subject, $message);
+
+		if(is_array($custom)){
+			if($custom['mailTitle'] != ''){
+				$mail->Subject = $custom['mailTitle'];
+			}
+			if($custom['mailBody'] != ''){
+				$mail->AltBody = strip_tags($custom['mailBody']);
+				$mail->MsgHTML(preg_replace("#[\]#", '', $custom['mailBody']));
+			}
+		}
+
+		if(!$opt['return']){
+			if(@$mail->send()){
+				return true;
+			}else
+			if($opt['debug']){
+				$this->pre($mail->ErrorInfo);
+				return false;
+			}
+		}
+
+		if($opt['return']) return $mail;
+
+		return false;
 	}
-
-	if($opt['return']) return $mail;
-
-	return false;
-}
 
 /* + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + -
 + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - */
@@ -1165,35 +1141,36 @@ public function businessConfigSet($configField, $configKey, $def){
     return true;
 }
 
-/* + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + -
-+ - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - */
-function businessStatusGet($opt=array()){
+//-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -
+//-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -
+	public  function businessStatusGet(){
 
-    $data   = array('OK', 'WAIT', 'CANCEL');
-    $custom = $this->eventTrigger('business', 'businessStatusGet', array('data' => $data));
+	    $data   = array('OK', 'WAIT', 'CANCEL');
+		$custom = $this->hookAction('businessStatusGet', $data);
 
-    return is_array($custom) ? $custom : $data;
-}
+		return is_array($custom) ? $custom : $data;
+	}
 
 
-/* + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - 
-+ - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - */
-public function businessModePaymentGet($opt=array()){
-   
-    $data   = array('CB', 'CHEQUE', 'VIREMENT', 'ESPECES', 'PAYPAL');
+//-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -
+//-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -
+	public  function businessModePaymentGet(){
 
-    return $data;
-}
+	    $data   = array('CB', 'CHEQUE', 'VIREMENT', 'ESPECES', 'PAYPAL');
+		$custom = $this->hookAction('businessModePaymentGet', $data);
 
-/* + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - 
-+ - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - */
-public function businessCartDeliveryStatus($opt=array()){
-   
-    $data   = array('WAIT', 'INPROGRESS', 'SENT');
+		return is_array($custom) ? $custom : $data;
+	}
 
-    return $data;
-}
+//-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -
+//-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -
+	public  function businessCartDeliveryStatus(){
 
+	    $data   = array('WAIT', 'INPROGRESS', 'SENT');
+		$custom = $this->hookAction('businessCartDeliveryStatus', $data);
+
+		return is_array($custom) ? $custom : $data;
+	}
 
 /* + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - 
 + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - */
@@ -1387,4 +1364,4 @@ public function businessTaxSelector($opt){
 
 
 
-} ?>
+}

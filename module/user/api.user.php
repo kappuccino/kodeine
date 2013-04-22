@@ -258,9 +258,9 @@ public  function userSet($opt){
 		$id_addressbook = $this->db_insert_id;
 		if($opt['debug']) $this->pre($this->db_query, $this->db_error);
 
-		$eventFunction = 'userInsert';
+		$hook = 'userInsert';
 	}else{
-		$eventFunction = 'userUpdate';
+		$hook = 'userUpdate';
 	}
 
 	# FIELD
@@ -291,24 +291,24 @@ public  function userSet($opt){
 	#
 	if(sizeof($addressbook) > 0){
 		$this->userAddressBookSet(array(
-			'id_user' 			=> $this->id_user,
-			'id_addressbook'	=> $id_addressbook,
-			'def'				=> $addressbook,
-			'debug'				=> $opt['debug']
+			'id_user'        => $this->id_user,
+			'id_addressbook' => $id_addressbook,
+			'def'            => $addressbook,
+			'debug'          => $opt['debug']
 		));
 	}
 
 	if($this->id_user > 0){
 		// Update Group
 		$this->userSearchCache(array(
-			'id_user'	=> $this->id_user
+			'id_user' => $this->id_user
 		));
 
 		// Update Circle
 		$this->userSocialCircle($this->id_user);
 
 		// Hook
-		@$this->eventTrigger('user', $eventFunction, array('id_user' => $this->id_user));
+		$this->hookAction($hook, $this->id_user);
 	}
 
 	return true;
@@ -318,15 +318,10 @@ public  function userSet($opt){
 + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - */
 public  function userRemove($id_user){
 
-	if($id_user == NULL) return false;
+	if(empty($id_user)) return false;
 
 	$this->dbQuery("UPDATE k_user SET is_deleted=1 WHERE id_user=".$id_user);
-
-	#$this->dbQuery("DELETE FROM k_user ".				" WHERE id_user=".$id_user);
-	#$this->dbQuery("DELETE FROM k_userdata ".			" WHERE id_user=".$id_user);
-	#$this->dbQuery("DELETE FROM k_useraddressbook ".	" WHERE id_user=".$id_user);
-
-	@$this->eventTrigger('user', 'userRemove', array('id_user' => $id_user));
+	$this->hookAction('userRemove', $id_user);
 
 	return true;
 }
@@ -1153,7 +1148,7 @@ public  function userAddressBookSet($opt=array()){
 
 	$this->id_addressbook = ($id_addressbook > 0) ? $id_addressbook : $this->db_insert_id;
 
-	@$this->eventTrigger('user', 'userAddressBookSet', array('id_addressbook' => $this->id_addressbook));
+	$this->hookAction('userAddressBookSet', $this->id_addressbook);
 
 	return true;
 }
