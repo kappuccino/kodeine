@@ -3,6 +3,7 @@
 class coreApp extends coreMedia {
 
 	public	$splitter = '@@';
+	public  $hook     = array('action' => array(), 'filter' => array());
 
 //-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -
 //-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -
@@ -49,7 +50,6 @@ class coreApp extends coreMedia {
 		echo '</pre>';
 	}
 
-
 /* + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - 
 + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - */
 public function userIsLoged($login=NULL, $passwd=NULL){
@@ -67,8 +67,7 @@ public function userLogin($login=NULL, $passwd=NULL){
 	$login 		= addslashes($login);
 	$passwd		= addslashes($passwd);
 
-	$get = 	"SELECT * FROM k_user \n".
-			"INNER JOIN k_group ON k_user.id_group = k_group.id_group\n";
+	$get = "SELECT * FROM k_user INNER JOIN k_group ON k_user.id_group = k_group.id_group\n";
 
 	$this->userLoginSuccess = false;
 
@@ -76,7 +75,7 @@ public function userLogin($login=NULL, $passwd=NULL){
 	#
 	if(filter_var(trim($login, FILTER_VALIDATE_EMAIL) !== FALSE && trim($passwd) != '')){
 		$user = $this->dbOne($get."WHERE is_active=1 AND is_deleted=0 AND userMail='".$login."' AND userPasswd=MD5('".$passwd."')");
-		$eventTrigger = true;
+		$hook = true;
 	}else
 	if(intval($_SESSION['id_user']) > 0){
 		$user	= $this->dbOne($get."WHERE is_active=1 AND is_deleted=0 AND id_user=".$_SESSION['id_user']);
@@ -138,9 +137,9 @@ public function userLogin($login=NULL, $passwd=NULL){
 
 	$this->userIsLogged = true;
 
-	if($eventTrigger){
+	if($hook){
+		$this->hookAction('userLogin', $user['id_user']);
 		$this->userLoginSuccess = true;
-		@$this->eventTrigger('user', 'userLogin', array('id_user' => $user['id_user']));
 	}
 
 	return true;
@@ -320,7 +319,6 @@ public function userLogout(){
 		$cst   = ($name == NULL) ? $api : $name;
 
 		if(file_exists($class)){
-			$stored = 'class_'.$cst;
 
 			# Si on demande une class (.php) alors la laoder a la main
 			# si non la fonction autoload() ne pourra pas la trouver
@@ -328,29 +326,29 @@ public function userLogout(){
 			if(strpos($api, ".php") !== false) require_once($class);
 
 			# REFERENCE	:: Utiliser l'objet deja existant
-			if(get_class($this->$stored) == $cst && !$new){
-				$new = &$this->$stored;
+			if(get_class($this->api[$cst]) == $cst && !$new){
+				$new = &$this->api[$cst];
 			}else
 
 			# CLONE 	:: Nouvel object a partir du precedent
-			if(get_class($this->$stored) == $cst && $new){
-				$new = clone $this->$stored;
+			if(get_class($this->api[$cst]) == $cst && $new){
+				$new = clone $this->api[$cst];
 			}
 
 			# CREATION 	:: Creer un nouvel objet tout neuf
 			else{
-				$new = new $cst(false); // disable autoload
 
-				$this->$stored = &$new;
+				$this->api[$cst]    = $new = new $cst(false); // disable autoload
 
-					$new->config		= &$this->config;
-					$new->apiContext	= &$this->apiContext;
-					$new->kodeine 		= &$this->kodeine;
-					$new->user			= &$this->user;
-					$new->profile		= &$this->profile;
-					$new->apisConfig	= &$this->apisConfig;
+				$new->api           = &$this->api;
+				$new->config		= &$this->config;
+				$new->apiContext	= &$this->apiContext;
+				$new->kodeine 		= &$this->kodeine;
+				$new->user			= &$this->user;
+				$new->profile		= &$this->profile;
+				$new->apisConfig	= &$this->apisConfig;
 
-				#	if(@array_key_exists($cst, $new->apisConfig)) $new->apiConfig = &$this->apisConfig[$cst];
+				if(@array_key_exists($cst, $new->apisConfig)) $new->apiConfig = &$this->apisConfig[$cst];
 			}
 
 			return $new;
@@ -736,7 +734,7 @@ public function helperArrayWrapp($array, $glue){
 
 //-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -
 //-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -
-	public function benchmarkMarker($label){
+	public  function benchmarkMarker($label){
 		if(array_key_exists($label, $this->benchmark['step'])){
 			$mem = max(memory_get_peak_usage(true), memory_get_usage(true));
 			$this->benchmark['step'][$label]['duration']	= microtime(true) - $this->benchmark['step'][$label]['time'];
@@ -754,7 +752,7 @@ public function helperArrayWrapp($array, $glue){
 
 //-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -
 //-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -
-	public function benchmarkProfiling(){
+	public  function benchmarkProfiling(){
 
 		$total		= microtime(true) - $this->benchmark['time'];
 		$duration	= 0;
@@ -970,7 +968,6 @@ public function fsFile($folder, $mask=NULL, $options=NULL, $recursive=false){
 + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - */
 public function kodeineInit($get){
 
-
 	# CONFIG
 	# Charge les parametre de CONFIG BOOT + CUSTOM et memorise les autres APIsCONFIG
 	#
@@ -1021,12 +1018,12 @@ public function kodeineInit($get){
 
 
 	# CHAPTERS
-	# La liste de tous les chapitres utilise
+	# La liste de tous les CHAPTER utilise
 	#
 	if(BENCHME) $GLOBALS['bench']->benchmarkMarker($bmStep='kodeineInit(chapter)');
 	$chapters = $this->apiLoad('chapter')->chapterGet(array('language' => $this->kodeine['language']));
 	foreach($chapters as $e){
-		$chaptersDbUi[$e['chapterUrl']] = $e;
+		$chaptersDbUi[$e['chapterUrl']] = $e['id_chapter'];
 		$chaptersDbId[$e['id_chapter']] = $e;
 	} unset($chapters, $e);
 	if(BENCHME) $GLOBALS['bench']->benchmarkMarker($bmStep);
@@ -1081,7 +1078,7 @@ public function kodeineInit($get){
 	$this->kodeine['chapterUrl']		= $chapter['chapterUrl'];
 	$this->kodeine['chapterModule']		= $chapter['chapterModule'];
 	$this->kodeine['chapterIdTheme']	= $chapter['id_theme'];
-	$this->kodeine['chaptersUrl']		= $chaptersDbUi;
+#	$this->kodeine['chaptersUrl']		= $chaptersDbUi;
 	$this->kodeine['chaptersIds']		= $chaptersDbId;
 	unset($chapter, $chaptersDbUi, $chaptersDbId);
 
@@ -1116,9 +1113,9 @@ public function kodeineInit($get){
 
 
 	# GROUP
-	# Memorise globalement le groupe du USER ou bien celui par DEFAUT (-1)
+	# Memorise le groupe du USER ou bien celui par DEFAUT (-1)
 	#
-	$this->kodeine['id_group'] = ($this->user['id_group'] != NULL) ? $this->user['id_group'] : -1;
+	$this->kodeine['id_group'] = $this->user['id_group'] ?: -1;
 
 
 	# SAVE GET
@@ -1132,22 +1129,11 @@ public function kodeineInit($get){
 	# 
 	if(!isset($_GET['noLabel'])){
 		if(BENCHME) $GLOBALS['bench']->benchmarkMarker($bmStep='kodeineInit(localisation)');
-	#	if(empty($this->apisConfig['boot']['jsonCacheLocalisation'])){
-			foreach($this->dbMulti("SELECT * FROM k_localisation WHERE language = '".$this->kodeine['language']."'") as $e){
-			#	define($e['label'], ((ISUTF8) ? ($e['translation']) : $e['translation']));
-				define($e['label'], $e['translation']);
-			}
-	/*	}else{
-			foreach($this->apisConfig['boot']['jsonCacheLocalisation'] as $lan => $es){
-				if($lan == $this->kodeine['language']){
-					foreach($es as $label => $translation){
-						define($label, base64_decode($translation));
-					}
-					break;
-				}
-			}
+
+		foreach($this->dbMulti("SELECT * FROM k_localisation WHERE language = '".$this->kodeine['language']."'") as $e){
+			define($e['label'], $e['translation']);
 		}
-		unset($e, $es, $lan, $label, $translation);*/
+
 		if(BENCHME) $GLOBALS['bench']->benchmarkMarker($bmStep);
 	}
 
@@ -1163,7 +1149,7 @@ public function kodeineInit($get){
 	# DEBUG
 	# Construit la zone de debugage par l'URL url?debug
 	#
-	if(isset($_GET['debug']) && DEBUGALLOW === true){
+	if(constant('DEBUGME') === true){
 		unset($this->user['groupFormLayout'], $this->user['userPasswd']);
 		echo "<pre style=\"background-color:#333333; color:#FFFFFF; width:800px; padding:5px; margin:5px; font-family:courier; font-size:12px;\"> <h1>Debug Data</h1>";
 			echo "[GET] ";		print_r($_GET);
@@ -1178,6 +1164,7 @@ public function kodeineInit($get){
 	# FATAL Error
 	# Verifier un certain nombre de point qui prend du temps a verifier a la main 
 	#
+	$fatal = array();
 	if($this->kodeine['language'] == ''){
 		$fatal[] = "Language is not defined";
 	}
@@ -1185,10 +1172,12 @@ public function kodeineInit($get){
 		$fatal[] = "Theme folder \"".$this->kodeine['themeFolder']."\" is missing";
 	}
 
-	if(is_array($fatal)){
+	if(count($fatal) > 0){
 		$this->pre(implode("\n", $fatal));
 		exit();
 	}
+
+	$this->kodeine = $this->hookFilter('kodeineInit', $this->kodeine);
 }
 
 /* + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - 
@@ -1369,21 +1358,78 @@ public function kTalkCheck($str){
 
 //-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -
 //-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -
-	public  function hookRegister(array $opt){
+	public  function hookAction($name){
 
-		print_r($opt);
-		die('--');
+		if(count($this->hook['action']) == 0) return false;
+		if(!is_a($this->hook['action'][$name], 'ArrayIterator')) return false;
+		$hooks = $this->hook['action'][$name];
+		$hooks->ksort();
+		$hooks = iterator_to_array($this->hook['action'][$name]);
+
+		foreach($hooks as $priorities){
+			foreach($priorities as $hook){
+
+				if(is_callable($hook['hook'])){
+					$args = func_get_args(); array_shift($args);
+
+					if(count($args) < $hook['args']){
+						for($i=count($args); $i<$hook['args']; $i++){
+							$args[] = NULL;
+						}
+					}
+
+					$args = (count($args) > 0) ? $args : array();
+					call_user_func_array($hook['hook'], $args);
+				}else
+				if(is_file($hook['hook'])){
+					include $hook['hook'];
+				}
+
+			}
+		}
 	}
 
-/* + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - 
-+ - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - */
-public function eventTrigger($api, $fct, $arg=array()){
+//-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -
+//-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -
+	public  function hookFilter($name, $data){
 
-	$file = EVENT.'/event.'.strtolower($api).'.php';
-	if(file_exists($file)){
-		$api = $this->apiLoad($file, 'event'.ucfirst($api));
-		if(method_exists($api, $fct)) return $api->$fct($this->apiContext, $arg);
+		if(count($this->hook['filter']) == 0) return $data;
+		if(!is_a($this->hook['filter'][$name], 'ArrayIterator')) return $data;
+		$hooks = $this->hook['filter'][$name];
+		$hooks->ksort();
+		$hooks = iterator_to_array($this->hook['filter'][$name]);
+
+		foreach($hooks as $priorities){
+			foreach($priorities as $hook){
+
+				if(is_callable($hook['hook'])){
+					$args = func_get_args(); array_shift($args);
+
+					if(count($args) < $hook['args']){
+						for($i=count($args); $i<$hook['args']; $i++){
+							$args[] = NULL;
+						}
+					}
+
+					$args = (count($args) > 0) ? $args : array();
+					$temp = call_user_func_array($hook['hook'], $args);
+					if(!empty($temp)) $data = $temp;
+				}else
+				if(is_file($hook['hook'])){
+					include $hook['hook'];
+				}
+
+			}
+		}
+
+		return $data;
 	}
-}
+
+//-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -
+//-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -
+	public  function hookRegister($name, $hook, $type='action', $priority=10, $args=1){
+		if(!isset($this->hook[$type][$name])) $this->hook[$type][$name] = new ArrayIterator();
+		$this->hook[$type][$name][$priority][] = array('hook' => $hook, 'args' => $args);
+	}
 
 }

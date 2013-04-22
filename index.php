@@ -6,13 +6,13 @@
 	$app = new coreApp();
 
 	// BENCH
-	if(BENCHME && defined('BENCHALLOW') && constant('BENCHALLOW')) include(__DIR__.'/module/core/helper/bench.php');
+	if(BENCHME && defined('BENCHALLOW') && BENCHALLOW) include(__DIR__.'/module/core/helper/bench.php');
+
+	// CUSTOM CONFIG
+	if(file_exists(CONFIG.'/app.php')) include(CONFIG.'/app.php');
 
 	// URL (Common URL Rewriting rules)
 	require(__DIR__.'/module/core/helper/url.php');
-
-	// Post action file (BEFORESTART must be inited in /user/config/app.php
-	if(defined('BEFORESTART') && is_file(BEFORESTART)) include(BEFORESTART);
 
 // INIT KODEINE ////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -25,9 +25,6 @@
 
 // THEME ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	// Post action file (AFTERINIT must be inited in /user/config/app.php
-	if(defined('AFTERINIT') && is_file(AFTERINIT)) include(AFTERINIT);
-
 	// Offline message
 	$app->offlineMessage();
 
@@ -36,4 +33,4 @@
 
 // PROFILE /////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	if(BENCHME && defined('BENCHALLOW') && constant('BENCHALLOW')) $app->benchmarkProfiling();
+	if(BENCHME && defined('BENCHALLOW') && BENCHALLOW) $app->benchmarkProfiling();

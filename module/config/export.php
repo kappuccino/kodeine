@@ -2,8 +2,11 @@
 
 	if(!defined('COREINC')) die('Direct access not allowed');
 
+	require(USER.'/config/config.php');
+	$conf = $config['mysql'] ?: $config['db'];
+
 	if(isset($_GET['dw'])){
-		$file = DUMPDIR.'/'.$_GET['dw'];
+		$file = $conf['dump'].'/'.$_GET['dw'];
 		$out  = file_get_contents($file);
 
 		header("Expires: Mon, 26 Jul 1997 05:00:00 GMT");
@@ -18,32 +21,23 @@
 
 	}else
 	if(isset($_GET['dump'])){
-		$sql = DUMPDIR.'/export-'.time().'.sql';
-		if(!file_exists(DUMPDIR)) mkdir(DUMPDIR, 0755, true);
-
-		require(USER.'/config/config.php');
-
-		system(DUMPBIN." --host=".$config['db']['host']." --user=".$config['db']['login']." --password=".$config['db']['password']." ".$config['db']['database']." --comments=0 > ".$sql, $r);
+		$app->dbDump();
+		$app->go('export');
 	}else
 	if(sizeof($_POST['del']) > 0){
-
 		foreach($_POST['del'] as $d){
-			$d = DUMPDIR.'/'.$d;
+			$d = $conf['dump'].'/'.$d;
 			if(file_exists($d)) unlink($d);
 		}
-
-		header("Location: export");
-		exit();
-
+		$app->go('export');
 	}else
 	if($_GET['reload'] != ''){
-		$tmp = DUMPDIR.'/tmp-'.time().'.sql';
-		$sql = DUMPDIR.'/'.$_GET['reload'];
+		$tmp = $conf['dump'].'/tmp-'.time().'.sql';
+		$sql = $conf['dump'].'/'.$_GET['reload'];
 		$sql = file_get_contents($sql);
 		$sql = str_replace("`k_", "`x_", $sql);
 		file_put_contents($tmp, $sql);
 
-		require(USER.'/config/config.php');
 		#echo "<pre>";
 		system("mysql --host=".$config['db']['host']." --user=".$config['db']['login']." --password=".$config['db']['passwor']." ".$config['db']['database']." < ".$tmp);
 		#echo "</pre>";
@@ -62,11 +56,10 @@
 		}
 
 		unlink($tmp);
-		header("Location: export?dumped");
-		exit();
+		$app->go('export?dumped');
 	}
 
-	$files = $app->fsFile(DUMPDIR, 'export-*.sql');
+	$files = $app->fsFile($conf['dump'], 'export-*.sql');
 	$files = is_array($files) ? $files : array();
 	rsort($files);
 

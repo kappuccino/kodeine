@@ -1,5 +1,9 @@
 <?php
 
+	$config = array();
+	require(USER.'/config/config.php');
+	$conf = $config['externalAuth'];
+
 	# Inspiration
 	# http://blog.studiovitamine.com/actualite,107,fr/php-cryptage-php-d-une-chaine-de-caractere-et-decryptage,304,fr.html?id=164
 	
@@ -36,7 +40,7 @@
 
 	# On demander le authToken pour se connecter ensuite
 	#
-	if(intval($_REQUEST['id_user']) > 0 && $_REQUEST['userToken'] != '' && $_REQUEST['siteToken'] == AUTHTOKEN){
+	if(intval($_REQUEST['id_user']) > 0 && $_REQUEST['userToken'] != '' && $_REQUEST['siteToken'] == $conf['token']){
 
 		$me = $app->dbOne("SELECT * FROM k_user WHERE userToken='".$_REQUEST['userToken']."' AND id_user=".$_REQUEST['id_user']);
 		if(intval($me['id_user']) > 0){
@@ -47,7 +51,7 @@
 
 			$out = array(
 				'success'	=> true,
-				'token' 	=> crypter(AUTHKEY, $key)
+				'token' 	=> crypter($conf['key'], $key)
 			);
 
 		}else{
@@ -64,8 +68,7 @@
 
 		if(intval($me['id_user']) > 0){
 			$_SESSION['id_user'] = $me['id_user'];
-			header("Location: /");
-			exit();
+			$app->go('/');
 		}else{
 			$out = array('success' => false, 'error' => 'authToken');
 		}
@@ -82,4 +85,3 @@
 	# Sortie
 	#
 	echo json_encode($out);
-?>

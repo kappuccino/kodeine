@@ -1,13 +1,11 @@
 <?php
 
-	# Web Context
 	if($_SERVER['DOCUMENT_ROOT'] != ''){
 		$DOCROOT = $_SERVER['DOCUMENT_ROOT'];
 
-		// Prevents end slash in document root path (lighttpd)
+		// Prevents end slash (lighttpd)
 		if(substr($DOCROOT, -1) == '/') $DOCROOT = substr($DOCROOT, 0, -1);
 	}else
-	# Term Context
 	if($_SERVER['TERM'] != ''){
 		$DOCROOT = dirname(dirname(dirname(dirname(__DIR__))));
 	}
@@ -22,22 +20,24 @@
 	define('PLUGIN',	APP.'/plugin');
 	define('MODULE',	APP.'/module');
 	define('CONFIG',	USER.'/config');
-	define('BENCHME',   isset($_GET['bench']));
 
 	# DEFAULT
 	#
 	date_default_timezone_set('Europe/Paris');
+	ini_set('display_errors',  'On');
+	ini_set('html_errors', 	   'On');
+	ini_set('error_reporting', E_ALL ^ E_NOTICE ^ E_DEPRECATED);
 
 	# CUSTOM VALUES
 	#
-	if(file_exists(CONFIG.'/app.php')) include(CONFIG.'/app.php');
-	if(!defined('THEME'))		define('THEME', 		USER.'/theme');
-	if(!defined('TEMPLATE'))	define('TEMPLATE',		USER.'/template');
-	if(!defined('EVENT'))		define('EVENT',			USER.'/event');
-	if(!defined('IMGENGINE'))	define('IMGENGINE',		'GD');
-	if(!defined('DBLOG'))		define('DBLOG',			USER.'/log');
-	if(!defined('DUMPDIR'))		define('DUMPDIR',		USER.'/dump');
-	if(!defined('DUMPBIN'))		define('DUMPBIN',		'mysqldump');
+	if(file_exists(CONFIG.'/config.php')) include(CONFIG.'/config.php');
+	if(!defined('THEME'))	  define('THEME', 	   USER.'/theme');
+	if(!defined('TEMPLATE'))  define('TEMPLATE',   USER.'/template');
+	if(!defined('DBLOG'))	  define('DBLOG',	   USER.'/log');
+	if(!defined('IMGENGINE')) define('IMGENGINE', 'GD');
+
+	define('BENCHME', isset($_GET['bench']) && !empty($config['benchmark']['allow']));
+	define('DEBUGME', isset($_GET['debug']) && !empty($config['debug']['allow']));
 
 	# LOADER
 	#

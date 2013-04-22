@@ -26,7 +26,7 @@
 	if($_GET['install'] == 'true'){
 
 		$app->dbDump(array(
-			'file' => DUMPDIR."/export-".time()."-install-".$module['key'].".sql"
+			'file' => "export-".time()."-install-".$module['key'].".sql"
 		));
 
 		$done = true;
