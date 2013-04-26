@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<element>
+
+	<data>
+		<key>template</key>
+		<version>5.2.0</version>
+		<lastMod>2013-02-27</lastMod>
+		<menu>NO</menu>
+		<name><![CDATA[Gabarits]]></name>
+	</data>
+
+    <locale language="fr_FR">
+		<name><![CDATA[Templates]]></name>
+    </locale>
+
+</element>
