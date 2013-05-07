@@ -60,7 +60,7 @@
 				'contentAdStockView'	=> array('value' => $_POST['contentAdStockView']),
 				'contentAdStockClick'	=> array('value' => $_POST['contentAdStockClick'])
 			);
-			if(!$app->formValidation($ad)) $do = false;
+			if(!$app->formValidation(array('k_contentad' => $ad))) $do = false;
 		}
 
 		if(!$app->apiLoad('field')->fieldValidation($_POST['field'])) $do = false;
