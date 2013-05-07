@@ -513,6 +513,8 @@ public function contentGet($opt=array()){
 	
 	if($needToGroup) $sqlGroup = "\nGROUP BY k_content.id_content";
 
+	if($opt['sqlGroup'] != '') $sqlGroup = "\nGROUP BY ".$opt['sqlGroup'];
+
 	# Demander le CONTENT
 	#
 	$content = $this->$dbMode(
