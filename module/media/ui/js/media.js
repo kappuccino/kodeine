@@ -950,8 +950,8 @@ media.router                = Backbone.Router.extend({
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-$(function(){
+media.start = function(){
 	media.views.myApp = new media.views.app;
-});
+};
 
 // The End Bro'

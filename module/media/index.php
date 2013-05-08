@@ -23,6 +23,7 @@
     <link rel="stylesheet" type="text/css" href="ui/css/media.css" />
 	<link rel="stylesheet" type="text/css" href="../core/vendor/jqueryui/jqui.slider.css" />
 	<link rel="stylesheet" type="text/css" href="../core/vendor/flowplayer/skin/functional.css" />
+	<script data-main="../core/ui/js/app" src="../core/vendor/requirejs/require.js"></script>
 </head>
 <body class="pictued <?php if($_GET['popMode']) echo 'popMode '; if(isset($_GET['embed'])) echo 'embed '; ?>">
 
@@ -164,14 +165,22 @@
 
 <!-- /// /// /// /// /// /// /// /// /// /// /// /// /// /// /// /// /// /// /// /// /// /// /// /// /// /// /// /// -->
 
-<?php include(COREINC.'/end.php'); ?>
+<?php #include(COREINC.'/end.php'); ?>
+
+<script>
+	requirejs(['backbone'], function() {
+		console.log('ok');
+	});
+</script>
+
+
+<?php /*
 <script type="text/javascript" src="../core/vendor/underscore/underscore-min.js"></script>
 <script type="text/javascript" src="../core/vendor/backbone/backbone-min.js"></script>
 <script type="text/javascript" src="../core/vendor/jqueryui/jqui.dragdrop.js"></script>
 <script type="text/javascript" src="../core/vendor/jqueryui/jqui.slider.js"></script>
 <script type="text/javascript" src="ui/_uploadifive/jquery.uploadifive-v1.0.js"></script>
 <script type="text/javascript" src="ui/_uploadify/jquery.uploadify.js"></script>
-<script type="text/javascript" src="ui/js/media.js"></script>
 
 <script>
     phpsid      = "<?php echo session_id() ?>";
@@ -180,5 +189,6 @@
     myPrompt	= '<?php echo KPROMPT ?>';
     useData		= 'true';
 </script>
+*/ ?>
 
 </body></html>
