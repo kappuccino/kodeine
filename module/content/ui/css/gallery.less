@@ -35,8 +35,6 @@
 		list-style-type: none;
 		padding: 0; margin: 0;
 
-
-
 		.item{
 			background: #E1E1E1;
 			border-bottom: 1px solid #FFFFFF;
@@ -50,11 +48,13 @@
 				cursor: pointer;
 			}
 			.name{
-				display: block;
-				float: left;
+				display: block; float: left;
 				cursor: pointer;
-				text-decoration: none;
-				color: #515151;
+				text-decoration: none; color: #515151;
+
+				&.fly{
+					background: deeppink;
+				}
 			}
 		}
 	}
@@ -86,6 +86,11 @@
 		text-align: center;
 		padding: 50px;
 		font-weight: bold;
+	}
+
+	.toto{
+		height: 30px;
+		background: red;
 	}
 }
 
@@ -140,7 +145,6 @@
 		}
 	}
 
-
 	&:hover .action{
 		display: block;
 	}
@@ -167,10 +171,10 @@
 		}
 	}
 }
-
-.fly .media{
+/*.fly .media{
 	background: #e1e1e1;
-}
+	background: #F60F60;
+}*/
 
 #gCarrousel{
 	margin-top: 20px;
@@ -264,4 +268,3 @@
 		}
 	}
 }
-

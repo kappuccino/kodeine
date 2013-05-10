@@ -34,7 +34,8 @@
 
 		$tmp = array(
 			'is_album'      => true,
-			'id_content'    => $e['id_content'],
+			'id_album'      => intval($e['id_album']),
+			'id_content'    => intval($e['id_content']),
 			'contentName'   => $e['contentName'],
 			'contentSee'    => $e['contentSee'],
 		);
@@ -106,7 +107,8 @@
 		$tmp = array(
 			'is_item'           => true,
 			'is_poster'         => ($id_poster == $e['id_content']),
-			'id_content'        => $e['id_content'],
+			'id_content'        => intval($e['id_content']),
+			'id_album'          => intval($e['id_album']),
 			'contentName'       => $e['contentName'],
 			'contentSee'        => $e['contentSee'],
 			'contentItemType'   => $e['contentItemType'],

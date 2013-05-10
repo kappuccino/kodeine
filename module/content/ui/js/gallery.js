@@ -59,10 +59,11 @@ gallery.views.view           = Backbone.View.extend({
 		this.listenTo(gallery.collections.myMedia, 'reset',  this.fill);
 		this.id_album = this.$el.data('id_album') || 0;
 		this.order = [];
+		this.isSortable = false;
 	},
 
 	clear: function(){
-		this.$el.sortable('destroy');
+		if(this.isSortable) this.$el.sortable('destroy');
 		this.$el.empty();
 	},
 
@@ -98,19 +99,20 @@ gallery.views.view           = Backbone.View.extend({
 	//////////////
 
 	makeSortable: function(){
+
 		var self = this;
 
-		this.$el.disableSelection();
-
 		this.$el.sortable({
-			distance: 30,
+			distance: 5,
 			helper: 'clone',
 			appendTo: 'body',
 			items: "> li",
-			cursorAt: { left: -30 },
+			cursorAt: {left: -30},
 
 			create: function(){
 				self.order = self.$el.sortable('toArray', {attribute : 'data-idc'});
+				self.$el.disableSelection();
+				self.isSortable = true;
 			},
 
 			stop: function() {
@@ -133,7 +135,6 @@ gallery.views.view           = Backbone.View.extend({
 				}
 			}
 		});
-
 	}
 
 });
@@ -219,8 +220,8 @@ gallery.views.viewItem       = Backbone.View.extend({
 		this.$el.attr('data-cid', this.model.cid);
 
 		this.icone();
-		//console.log('makeDroppable() pour viewItem');
-		gallery.views.myApp.makeDroppable(this);
+		//console.log('ma() pour viewItem');
+		//gallery.views.myApp.makeDroppable(this);
 
 	},
 
@@ -280,7 +281,8 @@ gallery.views.tree           = Backbone.View.extend({
 
 	fillItem: function(m){
 		var view  = new gallery.views.treeItem({model: m, level: this.level});
-		this.dynEl().append(view.render().el);
+	//	this.dynEl().append(view.render().el);
+		this.$el.append(view.render().el);
 		view.postRender();
 	},
 
@@ -317,16 +319,18 @@ gallery.views.treeItem       = Backbone.View.extend({
 	toggle: function(e){
 		e.stopPropagation();
 
-		var ul = this.item.next('ul');
-
 		if(this.model.get('opened')){
 			this.model.set('opened', false);
 			this.$el.removeClass('opened');
-			return;
 		}else{
 			this.model.set('opened', true);
 			this.$el.addClass('opened');
+			this.open();
 		}
+	},
+
+	open: function(){
+		var ul = this.item.next('ul');
 
 		// Creation d'une nouvelle COLLECTION + VIEW
 		this.col = new gallery.collections.tree;
@@ -368,13 +372,16 @@ gallery.views.treeItem       = Backbone.View.extend({
 	},
 
 	postRender: function(){
-		this.$el.attr('data-idc', this.model.get('id_content'));
+
+		this.$el.attr({
+			'data-idc': this.model.get('id_content')
+		});
 
 		this.item = $('.item', this.$el);
 		this.padding();
 
 	//	console.log('makeDroppable() pour treeItem');
-		gallery.views.myApp.makeDroppable(this);
+		gallery.views.myApp.makeDroppable(this, this.$el.find('.item .name'));
 	}
 
 });
@@ -524,37 +531,43 @@ gallery.views.app            = Backbone.View.extend({
 
 	/////////
 
-	makeDroppable: function(instance){
+	makeDroppable: function(instance, el){
 
-		var self = this;
+		var self = this, el = el || this.$el;
 
-		instance.$el.droppable({
+		el.droppable({
 			hoverClass: 'fly',
 			tolerance: 'pointer',
 			greedy: true,
+
 			drop: function(e, ui) {
 
-				var me  = ui.draggable.data('idc');
-				var to  = instance.$el.data('idc');
-				var cid = ui.draggable.data('cid');
-				var mod = gallery.collections.myMedia.get(cid);
+				var me   = ui.draggable.data('idc');
+				var to   = instance.$el.data('idc');
+				var cid  = ui.draggable.data('cid');
+				var mod  = gallery.collections.myMedia.get(cid);
+			//	var tree = gallery.views.myTree.$el.find('li[data-idc="'+ instance.$el.data('idc') +'"]');
 
-			/*	console.log('Drop Event', 'me:'+me, 'to:'+to, 'cid:'+cid);
-				console.log('mod',      mod.toJSON());
+				console.log('Drop Event', 'me:'+me, 'to:'+to, 'cid:'+cid);
+				console.log('model',  mod.toJSON());
 				console.log('instance', instance.model.toJSON());
-			*/
-				if(!instance.model.get('is_album') || me == to) return;
 
-				gallery.views.myView.$el.sortable('disable');
+				if(!instance.model.get('is_album')) return;
+				if(me == to) return;
+				if(mod.get('id_album') == instance.model.get('id_content')) return false;
+
+			//	console.log("tree", tree);
+			//	console.log('ok...');
+			//	return;
+
+			//  ????
+			// 	gallery.views.myView.$el.sortable('disable');
 
 				(mod.get('is_album'))
 					? self.moveAlbum(cid, me, to)
-					:  self.moveItem(cid, me, to);
+					: self.moveItem(cid, me, to);
 
 				gallery.views.myView.$el.sortable('enable');
-			},
-
-			over: function(e, ui) {
 			}
 		});
 	},
@@ -563,7 +576,7 @@ gallery.views.app            = Backbone.View.extend({
 
 	action: function(data, back){
 
-	//	console.log("[XHR ACTION]", 'data', data, 'back', back);
+		console.log("[XHR ACTION]", 'data', data, 'back', back);
 
 		var xhr = $.ajax({
 			url:        'helper/gallery-action',
@@ -613,6 +626,12 @@ gallery.views.app            = Backbone.View.extend({
 			action:     'moveAlbum',
 			id_album:   to,
 			id_content: me
+		}, function(js){
+			console.log(js);
+			if(js.success){
+				gallery.collections.myMedia.get(cid).destroy();
+				gallery.views.myView.makeSortable();
+			}
 		})
 	},
 

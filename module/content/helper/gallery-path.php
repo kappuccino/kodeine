@@ -23,8 +23,8 @@
 			$tmp = $app->apiLoad('content')->contentGet(array(
 				'language'	=> 'fr',
 				'raw'		=> true,
-				'id_type'	=> $_GET['id_type'],
-				'id_content'=> $id_album,
+				'id_type'	=> intval($_GET['id_type']),
+				'id_content'=> intval($id_album),
 				'is_album'	=> true,
 				'debug'     => false
 			));
