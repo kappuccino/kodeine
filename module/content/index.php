@@ -6,8 +6,8 @@
 		$type = $app->apiLoad('type')->typeGet(array('profile' => true));
 		
 		(sizeof($type) > 0)
-			? header("Location: index?id_type=".$type[0]['id_type'])
-			: header("Location: type?noData");
+			? $app->go('index?id_type='.$type[0]['id_type'])
+			: $app->go('../type/?noData');
 	}
 
 	if(isset($_REQUEST['duplicate'])){

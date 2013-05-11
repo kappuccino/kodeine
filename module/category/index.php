@@ -184,6 +184,7 @@
 				<input type="hidden" name="<?php echo 'errorUrl-'.$iso ?>" id="<?php echo 'errorUrl-'.$iso ?>" value="" />
 	
 				<table border="0" cellpadding="0" cellspacing="0" class="form">
+					<?php if(count($data['lan']) > 1){ ?>
 					<tr>
 						<td colspan="2" class="view-split"><?php
 							if($i == 0){
@@ -199,6 +200,7 @@
 							}
 						?></td>
 					</tr>
+					<?php } ?>
 					<tr>
 						<td width="100" class="<?php echo $app->formError('categoryName-'.$iso, 'alertNeedToCheck') ?>"><?php echo _('Name'); ?></td>
 						<td>

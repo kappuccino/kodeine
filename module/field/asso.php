@@ -120,7 +120,7 @@
 
 <div class="inject-subnav-right hide">
 	<li><a href="./" class="btn btn-mini"><?php echo _('Manage fields'); ?></a></li>
-    <li><a href="../content/type" class="btn btn-mini"><?php echo _('Manage types'); ?></a></li>
+    <li><a href="../type/" class="btn btn-mini"><?php echo _('Manage types'); ?></a></li>
 </div>
 
 <div id="app"><div class="wrapper"><div class="row-fluid">
@@ -146,7 +146,7 @@
 						echo "</li>";
 					}
 				}else{
-					echo "<li><a href=\"../content/type\">"._('Add a type')."</a></li>";
+					echo "<li><a href=\"../type/\">"._('Add a type')."</a></li>";
 				}
 			?>
 			<li class="section clearfix">
