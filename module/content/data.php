@@ -396,7 +396,7 @@
 		<span class="<?php echo $app->formError('contentUrl', 'needToBeFilled') ?>">
 			<label class="off"><?php echo _('Url'); ?></label>
 			<div class="form clearfix">
-				<input type="text" name="contentUrl" id="urlField" class="field" value="<?php echo $app->formValue($data['contentUrl'], $_POST['contentUrl']); ?>" size="100" style="width:75%; float:left;" />
+				<input type="text" name="contentUrl" id="urlField" class="field" value="<?php echo $app->formValue($data['contentUrl'], $_POST['contentUrl']); ?>" size="100" style="width:85%; float:left;" />
 				<div style="float:left; margin-top:2px;">
 					<input type="checkbox" id="autogen" value="1" name="contentUrlAuto" onclick="if(this.checked)urlCheck();"  <?php if($app->formValue($data['contentUrlAuto'], $_POST['contentUrlAuto']) || (!isset($data['contentUrlAuto']) && !isset($_POST['contentUrlAuto']))) echo "checked" ?> />
 					<?php echo _('Auto generate'); ?>
@@ -582,17 +582,17 @@
 	<li id="contentAssociation" class="clearfix form-item">
 		<div class="hand"></div>
 		<div class="toggle"></div>
-		<label><?php echo _('Relationships'); ?></label>
+		<label>
+			<?php echo _('Relationships'); ?>
+			<a onclick="sizer(100)"><i class="icon-plus"></i></a><br />
+			<a onclick="sizer(-100)"><i class="icon-minus"></i></a>
+		</label>
 		<div class="form">
 
 			<?php if($type['use_chapter']){ ?>
 			<div style="width:<?php echo $usePercent ?>%;" class="panelItem">
 				<span class="panelLabel clearfix">
 					<span class="name"><?php echo _('Chapters'); ?></span>
-					<span class="action">
-						<a onclick="sizer('#id_chapter', 100, 100)"><i class="icon-plus"></i></a>
-						<a onclick="sizer('#id_chapter', 100,-100)"><i class="icon-minus"></i></a>
-					</span>
 				</span>
 				<div class="panelBody"><?php echo 
 					$app->apiLoad('chapter')->chapterSelector(array(
@@ -609,10 +609,6 @@
 			<div style="width:<?php echo $usePercent ?>%;" class="panelItem">
 				<span class="panelLabel clearfix">
 					<span class="name"><?php echo _('Category'); ?></span>
-					<span class="action">
-						<a onclick="sizer('#id_category', 100, 100)"><i class="icon-plus"></i></a>
-						<a onclick="sizer('#id_category', 100,-100)"><i class="icon-minus"></i></a>
-					</span>
 				</span>
 				<div class="panelBody"><?php echo
 					$app->apiLoad('category')->categorySelector(array(
@@ -630,10 +626,6 @@
 			<div style="width:<?php echo $usePercent ?>%;" class="panelItem">
 				<span class="panelLabel clearfix">
 					<span class="name"><?php echo _('Groups'); ?></span>
-					<span class="action">
-						<a onclick="sizer('#id_group', 100, 100)"><i class="icon-plus"></i></a>
-						<a onclick="sizer('#id_group', 100,-100)"><i class="icon-minus"></i></a>
-					</span>
 				</span>
 				<div class="panelBody"><?php echo 
 					$app->apiLoad('user')->userGroupSelector(array(
@@ -650,13 +642,9 @@
 			<div style="width:<?php echo $usePercent ?>%;" class="panelItem">
 				<span class="panelLabel clearfix">
 					<span class="name"><?php echo _('Smart groups'); ?></span>
-					<span class="action">
-						<a onclick="sizer('#id_search', 100, 100)"><i class="icon-plus"></i></a>
-						<a onclick="sizer('#id_search', 100,-100)"><i class="icon-minus"></i></a>
-					</span>
 				</span>
 				<div class="panelBody"><?php echo 
-					$app->searchSelector(array(
+					$app->apiLoad('coreSearch')->searchSelector(array(
 						'name'		=> 'id_search[]',
 						'id'		=> 'id_search',
 						'searchType'=> 'user',
@@ -670,10 +658,6 @@
 			<div style="width:<?php echo $usePercent ?>%;" class="panelItem">
 				<span class="panelLabel clearfix">
 					<span class="name"><?php echo _('Forum (Social)'); ?></span>
-					<span class="action">
-						<a onclick="sizer('#id_socialforum', 100, 100)"><i class="icon-plus"></i></a>
-						<a onclick="sizer('#id_socialforum', 100,-100)"><i class="icon-minus"></i></a>
-					</span>
 				</span>
 				<div class="panelBody"><?php echo 
 					$app->apiLoad('socialForum')->socialForumSelector(array(
@@ -895,11 +879,15 @@
 	MceStyleFormats = [<?php echo @file_get_contents(USER.'/config/tinymceStyleFormats.php') ?>];
 	isDrag = false;
 	
-	function sizer(e, min, add){
-		if($(e).length > 0){
-			hauteur = $(e).height();
-			if(hauteur + add >= min) $(e).css('height', hauteur+add);
-		}
+	function sizer(add){
+		var es = ['id_chapter', 'id_category', 'id_group', 'id_search', 'id_socialforum'], min = Math.abs(add);
+
+		$.each(es, function(i, e){
+			if($('#'+e)){
+				var hauteur = $('#'+e).height();
+				if(hauteur + add >= min) $('#'+e).css('height', hauteur + add);
+			}
+		});
 	}
     function removeThis(id_content){
         if(confirm('SUPPRIMER CE CONTENU ?')){

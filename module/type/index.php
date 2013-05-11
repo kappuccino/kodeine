@@ -235,7 +235,7 @@
 </div></div></div>
 
 <?php include(COREINC.'/end.php'); ?>
-<script src="../content/ui/js/type.js" type="text/javascript"></script>
+<script src="ui/js/type.js" type="text/javascript"></script>
 <script>
 
     function apply(){
