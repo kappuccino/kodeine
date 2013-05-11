@@ -74,12 +74,12 @@
 	include(dirname(__DIR__) . '/content/ui/menu.php')
 ?></header>
 
-<div id="app"><div class="wrapper"><div class="row-fluid">
+<div id="app"><div class="wrapper">
 
 	<?php if(sizeof($_POST['remove']) > 0 ){ ?>
 	<div class="message messageWarning">
 		<p><?php echo _('<b>WARNING</b> you are about to remove data, this action is not cancelable (Database table destruction)') ?></p>
-		
+
 		<form action="./" method="post">
 			<?php foreach($_POST['remove'] as $e){ ?>
 			<input type="text" name="killme[]" value="<?php echo $e ?>" />
@@ -93,6 +93,7 @@
 	</div>
 	<?php } ?>
 
+	<div class="row-fluid">
 	<form action="./" method="post" id="listing" class="span6">
 
 		<table border="0" cellspacing="0" cellpadding="0" class="listing">
