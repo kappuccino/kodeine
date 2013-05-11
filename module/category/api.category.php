@@ -1,12 +1,10 @@
 <?php
 
-/* + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - 
-	Last release		2011.10.21
-+ - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - */
-
 class category extends coreApp {
 
-function __clone(){}
+function __construct(){
+	parent::__construct();
+}
 
 /* + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - 
 + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - */
@@ -278,7 +276,6 @@ public function categoryGet($opt=array()){
 	return $categories;
 }
 
-
 /* + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - 
 + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - */
 public function categorySet($id_category, $def, $lan){
@@ -398,50 +395,44 @@ public function categorySelector($opt){
 	return $form;
 }
 
-/* + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + -
-	Supprime une CATEGORY + CONTENT, et modifit les PROFILE  
-+ - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - */
+//-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -
+// Supprime une CATEGORY + CONTENT, et modifit les PROFILE
+//-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -
 public function categoryRemove($id_category){
 
-	# Mettre a jour les points d'entré des profiles
-	#
+	// Mettre a jour les points d'entré des profiles
 	foreach($this->dbMulti("SELECT * FROM k_userprofile") as $p){
 		$rule = unserialize($p['profileRule']);
 		foreach($rule['id_category'] as $idx => $id){
-			if(in_array($id, $_POST['del'])){
-				unset($rule['id_category'][$idx]);
-			}
+			if(in_array($id, $_POST['del'])) unset($rule['id_category'][$idx]);
 		}
 		$this->dbQuery("UPDATE k_userprofile SET profileRule='".addslashes(serialize($rule))."' WHERE id_profile=".$p['id_profile']);
 	}
 
 
-	# Supprimer les CATEGORY + CONTENT
-	#
+	// Supprimer les CATEGORY + CONTENT
 	$me = $this->categoryGet(array(
 		'language'		=> '??',
 		'id_category'	=> $id_category
 	));
 
-	if($me['categoryChildren'] != NULL){
-		$this->dbQuery("DELETE FROM k_category 			WHERE id_category IN(".$me['categoryChildren'].")");
-		$this->dbQuery("DELETE FROM k_categorydata 		WHERE id_category IN(".$me['categoryChildren'].")");
-		$this->dbQuery("DELETE FROM k_contentcategory 	WHERE id_category IN(".$me['categoryChildren'].")");
+	if($me['id_content'] > 0){
+
+		if($me['categoryChildren'] != NULL){
+			$this->dbQuery("DELETE FROM k_category 			WHERE id_category IN(".$me['categoryChildren'].")");
+			$this->dbQuery("DELETE FROM k_categorydata 		WHERE id_category IN(".$me['categoryChildren'].")");
+			$this->dbQuery("DELETE FROM k_contentcategory 	WHERE id_category IN(".$me['categoryChildren'].")");
+		}
+
+		$this->dbQuery("DELETE FROM k_category			WHERE id_category = ".$me['id_category']);
+		$this->dbQuery("DELETE FROM k_categorydata		WHERE id_category = ".$me['id_category']);
+		$this->dbQuery("DELETE FROM k_contentcategory	WHERE id_category = ".$me['id_category']);
 	}
 
-	$this->dbQuery("DELETE FROM k_category			WHERE id_category = ".$me['id_category']);
-	$this->dbQuery("DELETE FROM k_categorydata		WHERE id_category = ".$me['id_category']);
-	$this->dbQuery("DELETE FROM k_contentcategory	WHERE id_category = ".$me['id_category']);
-
-
-	# Recalcul la FAMILY qui a bouger suite a la SUPPRESSION
-	#
+	// Recalcul la FAMILY qui a bouger suite a la SUPPRESSION
 	$this->categoryFamily();
 	$this->categoryCache();
 }
-
-
-
 
 /* + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + -
 	Mettre a jour les PARENT et CHILDREN et les sauver en base
@@ -481,7 +472,6 @@ public function categoryFamily(){
 	}
 }
 
-
 /* + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + -
 	Trouver tous les PARENTS pour une CATEGORY
 + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - */
@@ -496,7 +486,6 @@ private function categoryFamilyParent($category, $path=''){
 	}
 
 }
-
 
 /* + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + -
 	Trouver tous les CHILDREN pour une CATEGORY
@@ -515,7 +504,6 @@ public function categoryFamilyChildren($e, &$line=array()){
 
 	return $line;
 }
-
 
 /* + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - 
 + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - */
@@ -556,4 +544,4 @@ public function categoryUpdatePos($category){
 
 }
 
-} ?>
+}

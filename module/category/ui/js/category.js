@@ -75,9 +75,9 @@ function urlCheckCategory(iso, d){
 
 function makeMeSortable(ul){
 	
-	var mySortables = ul.sortable({
-		'handle': 'div.handle',
-		'stop': function(e, ui) {
+	ul.sortable({
+		handle:     'div.handle',
+		stop:       function(e, ui){
 			serialMe(ul.attr('id'));
 		}
 	});
@@ -100,14 +100,13 @@ function serialMe(ul){
 			'ordered': 		all.join('-')
 		}
 	}).done(function(d) {
-		console.log('Serialized '+data)
+	//	console.log('Serialized '+data)
 	});
 }
 
 function serialSave(){
 	$('#order').submit();
 }
-
 
 function serialAll(mid){
 	var tmp = [];
@@ -194,17 +193,3 @@ function removeSelection(){
 		$('#items').submit();
 	}
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
