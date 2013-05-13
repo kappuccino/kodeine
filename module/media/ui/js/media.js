@@ -295,7 +295,7 @@ media.views.viewItem        = Backbone.View.extend({
 	makeDraggable: function(){
 		var self = this;
 
-		this.$el.disableSelection();
+		this.$el.find().not('input').disableSelection();
 
 		this.$el.draggable({
 			distance: 30,
