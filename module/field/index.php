@@ -410,7 +410,7 @@
 			<td height="30"></td>
 			<td>
 				<a href="javascript:$('#data').submit();" class="btn btn-mini"><?php echo _('Validate'); ?></a>
-				<a href="/" class="btn btn-mini"><?php echo _('New'); ?></a>
+				<a href="./" class="btn btn-mini"><?php echo _('New'); ?></a>
 			</td>
 		</tr>
 	</table>
