@@ -63,7 +63,7 @@ public function formDumpSet($opt=array()){
         : $this->dbInsert($def);
 
     @$this->dbQuery($q);
-    
+
     if($opt['debug']) $this->pre($this->db_query, $this->db_error);
     if($this->db_error != NULL) return false;
 

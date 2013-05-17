@@ -13,6 +13,13 @@
         $filter = $app->filterGet('formDump');
     }
 
+
+    if(sizeof($_POST['remove']) > 0){
+        foreach($_POST['remove'] as $e){
+            $app->apiLoad('formDump')->formDumpRemove($e);
+        }
+    }
+
 ?><!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -79,7 +86,7 @@
 
         echo
             "<tr valign=\"top\">".
-            "<td><input type=\"checkbox\" name=\"remove[]\" value=\"".$e['id_content']."\" class=\"chk cb\" id=\"chk_remove_".$count."\" /></td>".
+            "<td><input type=\"checkbox\" name=\"remove[]\" value=\"".$e['id_form']."\" class=\"chk cb\" id=\"chk_remove_".$count."\" /></td>".
             "<td class=\"dateTime\">".
                 "<a href=\"".$link."\" ".$onclick.">".
                 "<span class=\"date\">".$app->helperDate($e['formDate'], '%d.%m.%G %Hh%M')."</span> ".
