@@ -102,6 +102,10 @@
 
 
     // Forms
+        if($filter['order'] == '' && $filter['direction'] == '') {
+            $filter['order'] = 'formDate';
+            $filter['direction'] = 'DESC';
+        }
 		$opt		= array(
 			'debug'	 			=> false,
 			'limit'				=> $filter['limit'],
