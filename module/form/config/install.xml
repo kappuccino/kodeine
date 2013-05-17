@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<install>
+
+	<sql><![CDATA[
+        CREATE TABLE IF NOT EXISTS `k_formDump` (
+          `id_form` int(11) NOT NULL auto_increment,
+          `id_user` int(11) NOT NULL,
+          `formDate` timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP,
+          `formKey` varchar(255) collate utf8_unicode_ci NOT NULL,
+          `formTitle` varchar(255) collate utf8_unicode_ci NOT NULL,
+          `email` varchar(255) collate utf8_unicode_ci NOT NULL,
+          `json` text collate utf8_unicode_ci NOT NULL,
+          PRIMARY KEY  (`id_form`)
+        ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
+	]]></sql>
+
+	<preSript></preSript>
+	<postScript></postScript>
+
+</install>
