@@ -50,6 +50,9 @@ public function formDumpSet($opt=array()){
     $def = array();
     if(!isset($opt['id_user'])) $opt['id_user']     = $this->user['id_user'];
     if(!isset($opt['formDate'])) $opt['formDate']   = date('Y-m-d H:i:s');
+    $opt['json'] = '';
+    if(is_array($opt['data'])) $opt['json'] = addslashes($this->helperJsonEncode($opt['data']));
+    unset($opt['data']);
 
     foreach($opt as $k=>$o) {
         $def['k_formDump'][$k] = array('value' => $o);
