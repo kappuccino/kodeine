@@ -67,12 +67,14 @@
         $data = json_decode($e['json'], true);
         $onclick = " onclick=\"$('.raw".$e['id_form']."').toggle();\" ";
         $ee = print_r($e, true);
-
-        $raw = "<table style=\"display:none;margin-top: 10px;width: 100%;\" class=\"raw".$e['id_form']."\">";
-        foreach($data as $k=>$el) {
-            $raw .= "<tr><td width=150>".$k."</td><td>".$el."</td></tr>";
+        $raw = '';
+        if(is_array($data)) {
+            $raw = "<table style=\"display:none;margin-top: 10px;width: 100%;\" class=\"raw".$e['id_form']."\">";
+            foreach($data as $k=>$el) {
+                $raw .= "<tr><td width=150>".$k."</td><td>".$el."</td></tr>";
+            }
+            $raw .= "</table>";
         }
-        $raw .= "</table>";
 
 
         echo
