@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Kodeine\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2013-03-17 12:23+0100\n"
+"PO-Revision-Date: 2013-05-21 15:16+0100\n"
 "Last-Translator: Benjamin Mosnier <bm@kappuccino.org>\n"
 "Language-Team: Kappuccino <bm@kappuccino.org>\n"
 "Language: Français\n"
@@ -1317,7 +1317,7 @@ msgstr "Utilisateurs"
 #: ../../field/index.php:408 ../../localisation/index.php:211
 #: ../../media/index.php:64 ../../user/profile.php:63
 msgid "Validate"
-msgstr "Validé"
+msgstr "Valider"
 
 #: ../../config/admin.php:47 ../../config/index.php:97 ../../media/pref.php:35
 msgid "Value"
@@ -1396,7 +1396,8 @@ msgstr ""
 #: ../../config/index.php:199
 msgid "You can change default values for a specific domain name."
 msgstr ""
-"Vous pouvez changer les valeurs par défaut pour un nom de domaine spécific"
+"Vous pouvez changer les valeurs par défaut pour un nom de domaine "
+"spécifique.3"
 
 #: ../../user/import-book.php:45
 msgid "Zip Code"
