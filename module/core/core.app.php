@@ -340,6 +340,7 @@ public function userLogout(){
 				$new->kodeine 		= &$this->kodeine;
 				$new->user			= &$this->user;
 				$new->profile		= &$this->profile;
+				$new->cache         = &$this->cache;
 				$new->apisConfig	= &$this->apisConfig;
 
 				if(@array_key_exists($cst, $new->apisConfig)) $new->apiConfig = &$this->apisConfig[$cst];
