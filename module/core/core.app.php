@@ -315,16 +315,9 @@ public function userLogout(){
 	//-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -
 	public function apiLoad($api, $name=NULL, $new=false){
 
-		$class = autoloader::file($api);
 		$cst   = ($name == NULL) ? $api : $name;
 
-		if(file_exists($class)){
-
-			# Si on demande une class (.php) alors la laoder a la main
-			# si non la fonction autoload() ne pourra pas la trouver
-			#
-			if(strpos($api, ".php") !== false) require_once($class);
-
+		try{
 			# REFERENCE	:: Utiliser l'objet deja existant
 			if(get_class($this->api[$cst]) == $cst && !$new){
 				$new = &$this->api[$cst];
@@ -354,7 +347,7 @@ public function userLogout(){
 
 			return $new;
 
-		}else{
+		} catch (Exception $e) {
 			throw new Exception('API could not be loaded : '.$api.'('.$cst.')');
 		}
 	}
