@@ -12,7 +12,7 @@ class business extends coreApp {
 
 		if(sizeof($cart) > 0){
 			foreach($cart as $c){
-				$this->businessCartRemove($c['id_cart'], false);
+				$this->businessCartRemove($c['id_cart'], true, false);
 			}
 		}
 
@@ -101,7 +101,7 @@ public function businessCartGet($opt=array()){
 
 	# On fige les valeur de ID_CART en SESSION
 	#
-    if($opt['is_cart'] && $opt['reset'] !== false) {
+    if($opt['is_cart'] && $opt['init'] !== false) {
         if(intval($opt['id_cart']) > 0) $_SESSION['id_cart'] = $opt['id_cart'];
     }
 	//if($opt['is_cart']) $_SESSION['id_cart'] = $opt['id_cart'];
@@ -403,9 +403,9 @@ public function businessCartAddRaw($opt=array()){
 
 /* + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + -
 + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - */
-function businessCartRemove($id_cart, $reset=false){
+function businessCartRemove($id_cart, $reset=false, $init=true){
 
-	$cart = $this->businessCartGet(array('id_cart' => $id_cart, 'reset' => $reset));
+	$cart = $this->businessCartGet(array('id_cart' => $id_cart, 'init' => $init));
 
 	if(sizeof($cart['line']) > 0){
 		foreach($cart['line'] as $line){
@@ -416,7 +416,7 @@ function businessCartRemove($id_cart, $reset=false){
 	$this->dbQuery("DELETE FROM k_businesscart WHERE id_cart = ".$id_cart);
 
 
-    if($reset !== false) {
+    if($init) {
         unset($_SESSION['id_cart']);
     }
 
