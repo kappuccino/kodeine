@@ -27,7 +27,7 @@ msgstr ""
 msgid "(eBusiness)"
 msgstr ""
 
-#: ../../field/index.php:88
+#: ../../field/index.php:92
 msgid "<b>WARNING</b> you are about to remove some fields, you will not be able to cancel this operation"
 msgstr ""
 
@@ -66,7 +66,7 @@ msgstr ""
 msgid "Ad code"
 msgstr ""
 
-#: ../../content/parent.php:168 ../../type/row.php:195 ../../type/row.php:202
+#: ../../content/parent.php:168 ../../type/row.php:196 ../../type/row.php:203
 msgid "Add"
 msgstr ""
 
@@ -78,7 +78,7 @@ msgstr ""
 msgid "Add a %s"
 msgstr ""
 
-#: ../../field/index.php:267
+#: ../../field/index.php:271
 msgid "Add a choice"
 msgstr ""
 
@@ -146,7 +146,7 @@ msgstr ""
 msgid "Auto generate"
 msgstr ""
 
-#: ../../config/export.php:112
+#: ../../config/export.php:106
 msgid "Automatic backup (patch)"
 msgstr ""
 
@@ -182,7 +182,7 @@ msgstr ""
 msgid "Back to the list"
 msgstr ""
 
-#: ../../config/export.php:144
+#: ../../config/export.php:138
 msgid "Backup the database now"
 msgstr ""
 
@@ -214,7 +214,7 @@ msgstr ""
 msgid "Buyers"
 msgstr ""
 
-#: ../../category/index.php:118 ../../category/index.php:255 ../../chapter/index.php:173 ../../chapter/index.php:313 ../../config/admin.php:30 ../../config/field.php:55 ../../config/index.php:81 ../../config/language.php:71 ../../config/offline.php:52 ../../config/robots.php:45 ../../content/index.php:134 ../../content/parent.php:186 ../../field/asso.php:199 ../../media/index.php:65 ../../social/forum.php:166 ../../theme/index.php:62 ../../type/row.php:226 ../../user/group.php:121 ../../user/group.php:71
+#: ../../category/index.php:118 ../../category/index.php:255 ../../chapter/index.php:173 ../../chapter/index.php:313 ../../config/admin.php:30 ../../config/field.php:55 ../../config/index.php:81 ../../config/language.php:71 ../../config/offline.php:52 ../../config/robots.php:45 ../../content/index.php:134 ../../content/parent.php:186 ../../field/asso.php:199 ../../media/index.php:66 ../../social/forum.php:166 ../../theme/index.php:62 ../../type/row.php:227 ../../user/group.php:121 ../../user/group.php:71
 msgid "Cancel"
 msgstr ""
 
@@ -238,7 +238,7 @@ msgstr ""
 msgid "Change language"
 msgstr ""
 
-#: ../../field/index.php:240
+#: ../../field/index.php:244
 msgid "Change the type, change database field definition and could lost some data"
 msgstr ""
 
@@ -274,7 +274,7 @@ msgstr ""
 msgid "Click Limit"
 msgstr ""
 
-#: ../../field/index.php:108 ../../field/index.php:168
+#: ../../field/index.php:112 ../../field/index.php:172
 msgid "Code"
 msgstr ""
 
@@ -286,7 +286,7 @@ msgstr ""
 msgid "Column 2"
 msgstr ""
 
-#: ../../type/row.php:223
+#: ../../type/row.php:224
 msgid "Columns for type"
 msgstr ""
 
@@ -330,7 +330,7 @@ msgstr ""
 msgid "Country"
 msgstr ""
 
-#: ../../content/index.php:392
+#: ../../content/index.php:395
 msgid "Create a new %s"
 msgstr ""
 
@@ -338,7 +338,7 @@ msgstr ""
 msgid "Create a new ablum  into this album"
 msgstr ""
 
-#: ../../media/index.php:62
+#: ../../media/index.php:63
 msgid "Create a new folder"
 msgstr ""
 
@@ -346,7 +346,7 @@ msgstr ""
 msgid "Create folder and sub folders"
 msgstr ""
 
-#: ../../content/browse.php:100 ../../content/data.php:547 ../../content/gallery-album.php:354 ../../content/index.php:357 ../../user/data.php:232 ../../user/index.php:97
+#: ../../content/browse.php:100 ../../content/data.php:547 ../../content/gallery-album.php:354 ../../content/index.php:360 ../../user/data.php:232 ../../user/index.php:97
 msgid "Created"
 msgstr ""
 
@@ -367,7 +367,7 @@ msgstr ""
 msgid "Current note: "
 msgstr ""
 
-#: ../../config/export.php:98
+#: ../../config/export.php:92
 msgid "Date"
 msgstr ""
 
@@ -419,7 +419,7 @@ msgstr ""
 msgid "Domain name"
 msgstr ""
 
-#: ../../media/index.php:56
+#: ../../media/index.php:57
 msgid "Download"
 msgstr ""
 
@@ -483,15 +483,15 @@ msgstr ""
 msgid "Export"
 msgstr ""
 
-#: ../../config/ui/menu.php:23 ../../type/row.php:181
+#: ../../config/ui/menu.php:23 ../../type/row.php:182
 msgid "Field"
 msgstr ""
 
-#: ../../content/ui/menu.php:31 ../../field/index.php:329 ../../theme/index.php:80
+#: ../../content/ui/menu.php:31 ../../field/index.php:333 ../../theme/index.php:80
 msgid "Fields"
 msgstr ""
 
-#: ../../chapter/index.php:143 ../../content/index.php:133 ../../field/index.php:109 ../../user/index.php:87
+#: ../../chapter/index.php:143 ../../content/index.php:133 ../../field/index.php:113 ../../user/index.php:87
 msgid "Filter"
 msgstr ""
 
@@ -503,11 +503,11 @@ msgstr ""
 msgid "Folder"
 msgstr ""
 
-#: ../../config/export.php:89
+#: ../../config/export.php:83
 msgid "Folder /user/dump is used to backup database exoprt files."
 msgstr ""
 
-#: ../../media/index.php:63
+#: ../../media/index.php:64
 msgid "Folder name..."
 msgstr ""
 
@@ -559,7 +559,7 @@ msgstr ""
 msgid "Groups"
 msgstr ""
 
-#: ../../field/index.php:94
+#: ../../field/index.php:98
 msgid "I really want to remove thoses fields"
 msgstr ""
 
@@ -579,7 +579,7 @@ msgstr ""
 msgid "Import more languages"
 msgstr ""
 
-#: ../../config/export.php:100
+#: ../../config/export.php:94
 msgid "Infos"
 msgstr ""
 
@@ -587,7 +587,7 @@ msgstr ""
 msgid "Inheritance"
 msgstr ""
 
-#: ../../field/index.php:184
+#: ../../field/index.php:188
 msgid "Inline CSS applieds to form field"
 msgstr ""
 
@@ -603,7 +603,7 @@ msgstr ""
 msgid "Installed"
 msgstr ""
 
-#: ../../field/index.php:177
+#: ../../field/index.php:181
 msgid "Instruction"
 msgstr ""
 
@@ -623,7 +623,7 @@ msgstr ""
 msgid "Language"
 msgstr ""
 
-#: ../../field/index.php:398
+#: ../../field/index.php:402
 msgid "Language (JS, JSON, XML...)"
 msgstr ""
 
@@ -687,15 +687,15 @@ msgstr ""
 msgid "Manage types"
 msgstr ""
 
-#: ../../field/index.php:156
+#: ../../field/index.php:160
 msgid "Mandatory"
 msgstr ""
 
-#: ../../field/index.php:233 ../../field/index.php:253 ../../field/index.php:294 ../../field/index.php:317
+#: ../../field/index.php:237 ../../field/index.php:257 ../../field/index.php:298 ../../field/index.php:321
 msgid "Many choices avalaibles"
 msgstr ""
 
-#: ../../field/index.php:131
+#: ../../field/index.php:84
 msgid "Match fields & types"
 msgstr ""
 
@@ -719,11 +719,11 @@ msgstr ""
 msgid "More parameters"
 msgstr ""
 
-#: ../../category/index.php:107 ../../category/index.php:203 ../../chapter/index.php:142 ../../chapter/index.php:263 ../../config/language.php:140 ../../content/browse.php:102 ../../content/data-language.php:261 ../../content/data.php:389 ../../content/gallery-album.php:221 ../../content/gallery-item.php:214 ../../content/index.php:364 ../../content/parent.php:153 ../../field/index.php:106 ../../field/index.php:164 ../../social/forum.php:133 ../../theme/index.php:116 ../../theme/index.php:79 ../../user/group.php:143 ../../user/group.php:88 ../../user/import-book.php:37 ../../user/index.php:99 ../../user/profile.php:74
+#: ../../category/index.php:107 ../../category/index.php:203 ../../chapter/index.php:142 ../../chapter/index.php:263 ../../config/language.php:140 ../../content/browse.php:102 ../../content/data-language.php:261 ../../content/data.php:389 ../../content/gallery-album.php:221 ../../content/gallery-item.php:214 ../../content/index.php:367 ../../content/parent.php:153 ../../field/index.php:110 ../../field/index.php:168 ../../social/forum.php:133 ../../theme/index.php:116 ../../theme/index.php:79 ../../user/group.php:143 ../../user/group.php:88 ../../user/import-book.php:37 ../../user/index.php:99 ../../user/profile.php:74
 msgid "Name"
 msgstr ""
 
-#: ../../content/gallery.php:46 ../../field/index.php:409 ../../user/group.php:74 ../../user/profile.php:62
+#: ../../content/gallery.php:46 ../../field/index.php:413 ../../user/group.php:74 ../../user/profile.php:62
 msgid "New"
 msgstr ""
 
@@ -751,7 +751,7 @@ msgstr ""
 msgid "Next item"
 msgstr ""
 
-#: ../../config/export.php:125
+#: ../../config/export.php:119
 msgid "No backup"
 msgstr ""
 
@@ -763,7 +763,7 @@ msgstr ""
 msgid "No content"
 msgstr ""
 
-#: ../../content/data.php:315 ../../content/index.php:391
+#: ../../content/data.php:315 ../../content/index.php:394
 msgid "No data"
 msgstr ""
 
@@ -779,7 +779,7 @@ msgstr ""
 msgid "No document found in this language, other available languages: "
 msgstr ""
 
-#: ../../field/index.php:122
+#: ../../field/index.php:126
 msgid "No field"
 msgstr ""
 
@@ -791,7 +791,7 @@ msgstr ""
 msgid "No more item"
 msgstr ""
 
-#: ../../field/index.php:202 ../../field/index.php:207 ../../field/index.php:212 ../../field/index.php:217 ../../field/index.php:222
+#: ../../field/index.php:206 ../../field/index.php:211 ../../field/index.php:216 ../../field/index.php:221 ../../field/index.php:226
 msgid "No options available"
 msgstr ""
 
@@ -823,15 +823,15 @@ msgstr ""
 msgid "Off-line"
 msgstr ""
 
-#: ../../media/index.php:53
+#: ../../media/index.php:54
 msgid "One URL a line"
 msgstr ""
 
-#: ../../field/index.php:232 ../../field/index.php:252 ../../field/index.php:293 ../../field/index.php:316
+#: ../../field/index.php:236 ../../field/index.php:256 ../../field/index.php:297 ../../field/index.php:320
 msgid "One choice available"
 msgstr ""
 
-#: ../../field/index.php:254 ../../field/index.php:295 ../../field/index.php:318
+#: ../../field/index.php:258 ../../field/index.php:299 ../../field/index.php:322
 msgid "One choice available, (dropdown menu)"
 msgstr ""
 
@@ -907,7 +907,7 @@ msgstr ""
 msgid "Price with taxes"
 msgstr ""
 
-#: ../../field/index.php:355
+#: ../../field/index.php:359
 msgid "Primary Key/ID"
 msgstr ""
 
@@ -919,7 +919,7 @@ msgstr ""
 msgid "Profile name"
 msgstr ""
 
-#: ../../config/language.php:158 ../../content/data.php:446 ../../content/index.php:361
+#: ../../config/language.php:158 ../../content/data.php:446 ../../content/index.php:364
 msgid "Reference"
 msgstr ""
 
@@ -943,15 +943,15 @@ msgstr ""
 msgid "Reload the page"
 msgstr ""
 
-#: ../../media/index.php:51
+#: ../../media/index.php:52
 msgid "Remote URL"
 msgstr ""
 
-#: ../../content/data-language.php:196 ../../content/data.php:236 ../../content/parent.php:204 ../../field/index.php:130 ../../type/row.php:246
+#: ../../content/data-language.php:196 ../../content/data.php:236 ../../content/parent.php:204 ../../field/index.php:134 ../../type/row.php:247
 msgid "Remove"
 msgstr ""
 
-#: ../../config/export.php:134
+#: ../../config/export.php:128
 msgid "Remove selected files"
 msgstr ""
 
@@ -959,7 +959,7 @@ msgstr ""
 msgid "Remove selected items"
 msgstr ""
 
-#: ../../content/browse.php:116 ../../content/index.php:410
+#: ../../content/browse.php:116 ../../content/index.php:413
 msgid "Remove selected lines"
 msgstr ""
 
@@ -987,7 +987,7 @@ msgstr ""
 msgid "Root"
 msgstr ""
 
-#: ../../field/index.php:380
+#: ../../field/index.php:384
 msgid "SQL \"WHERE\" statements"
 msgstr ""
 
@@ -1007,7 +1007,7 @@ msgstr ""
 msgid "Save tabs"
 msgstr ""
 
-#: ../../content/parent.php:185 ../../type/row.php:225
+#: ../../content/parent.php:185 ../../type/row.php:226
 msgid "Save this order"
 msgstr ""
 
@@ -1019,7 +1019,7 @@ msgstr ""
 msgid "Search"
 msgstr ""
 
-#: ../../field/index.php:152
+#: ../../field/index.php:156
 msgid "Searchable"
 msgstr ""
 
@@ -1035,7 +1035,7 @@ msgstr ""
 msgid "Shop"
 msgstr ""
 
-#: ../../config/export.php:99
+#: ../../config/export.php:93
 msgid "Size"
 msgstr ""
 
@@ -1075,7 +1075,7 @@ msgstr ""
 msgid "State"
 msgstr ""
 
-#: ../../field/index.php:181
+#: ../../field/index.php:185
 msgid "Style"
 msgstr ""
 
@@ -1099,7 +1099,7 @@ msgstr ""
 msgid "TVA Intra"
 msgstr ""
 
-#: ../../field/index.php:351
+#: ../../field/index.php:355
 msgid "Table"
 msgstr ""
 
@@ -1155,11 +1155,11 @@ msgstr ""
 msgid "Translation"
 msgstr ""
 
-#: ../../content/ui/menu.php:25 ../../field/index.php:191 ../../field/index.php:227 ../../field/index.php:247 ../../user/profile.php:151
+#: ../../content/ui/menu.php:25 ../../field/index.php:195 ../../field/index.php:231 ../../field/index.php:251 ../../user/profile.php:151
 msgid "Type"
 msgstr ""
 
-#: ../../content/browse.php:101 ../../content/data.php:563 ../../content/gallery-album.php:370 ../../content/index.php:358 ../../user/data.php:234 ../../user/index.php:98
+#: ../../content/browse.php:101 ../../content/data.php:563 ../../content/gallery-album.php:370 ../../content/index.php:361 ../../user/data.php:234 ../../user/index.php:98
 msgid "Updated"
 msgstr ""
 
@@ -1191,17 +1191,17 @@ msgstr ""
 msgid "Used in the URL /fr/"
 msgstr ""
 
-#: ../../field/index.php:186
+#: ../../field/index.php:190
 msgid "Used rich text editor"
 msgstr ""
 
-#: ../../field/index.php:173
+#: ../../field/index.php:177
 msgid ""
 "Used to name a field in PHP code. Used only letters, no space or special caracters.\n"
 "\t\t\tChange this value could make troubles. Please take care."
 msgstr ""
 
-#: ../../config/export.php:112
+#: ../../config/export.php:106
 msgid "User export"
 msgstr ""
 
@@ -1209,7 +1209,7 @@ msgstr ""
 msgid "Users"
 msgstr ""
 
-#: ../../category/index.php:254 ../../chapter/index.php:312 ../../content/data-language.php:177 ../../content/data-language.php:199 ../../content/gallery-import.php:167 ../../content/gallery-import.php:211 ../../field/index.php:408 ../../localisation/index.php:211 ../../media/index.php:64 ../../user/profile.php:63
+#: ../../category/index.php:254 ../../chapter/index.php:312 ../../content/data-language.php:177 ../../content/data-language.php:199 ../../content/gallery-import.php:167 ../../content/gallery-import.php:211 ../../field/index.php:412 ../../localisation/index.php:211 ../../media/index.php:65 ../../user/profile.php:63
 msgid "Validate"
 msgstr ""
 
@@ -1229,11 +1229,11 @@ msgstr ""
 msgid "Visibility"
 msgstr ""
 
-#: ../../content/data.php:780 ../../field/index.php:160
+#: ../../content/data.php:780 ../../field/index.php:164
 msgid "Visible"
 msgstr ""
 
-#: ../../field/index.php:359
+#: ../../field/index.php:363
 msgid "Visible field"
 msgstr ""
 
@@ -1261,7 +1261,7 @@ msgstr ""
 msgid "Welcome,<br />login-in"
 msgstr ""
 
-#: ../../config/export.php:154
+#: ../../config/export.php:148
 msgid "Would you really reload this backup ?\\n\\nThis will empty your current database then load data from the selected file.\\n\\nUSE AT YOUR OWN RISK"
 msgstr ""
 
@@ -1269,7 +1269,7 @@ msgstr ""
 msgid "Would you really want to remove this language ?"
 msgstr ""
 
-#: ../../config/export.php:160
+#: ../../config/export.php:154
 msgid "Would you really want to remove those backup?"
 msgstr ""
 

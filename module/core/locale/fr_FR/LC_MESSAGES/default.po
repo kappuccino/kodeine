@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Kodeine\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2013-05-21 15:16+0100\n"
+"PO-Revision-Date: 2013-05-24 13:49+0100\n"
 "Last-Translator: Benjamin Mosnier <bm@kappuccino.org>\n"
 "Language-Team: Kappuccino <bm@kappuccino.org>\n"
 "Language: Français\n"
@@ -301,7 +301,7 @@ msgstr "Civilité"
 
 #: ../../content/data.php:721
 msgid "Click Limit"
-msgstr "Limite de clic"
+msgstr "Limite de click"
 
 #: ../../field/index.php:108 ../../field/index.php:168
 msgid "Code"
@@ -1329,7 +1329,7 @@ msgstr "Archive"
 
 #: ../../content/data.php:711
 msgid "View limit"
-msgstr "Limite de vie"
+msgstr "Limite de vue"
 
 #: ../../content/data.php:436 ../../content/gallery-album.php:240
 #: ../../content/gallery-item.php:241
