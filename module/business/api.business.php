@@ -2,28 +2,36 @@
 
 class business extends coreApp {
 
-//-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -
-//-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -
-	public  function businessCartTTL(){
+/* + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + -
++ - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - */
+public function __construct(){
+    $this->businessCartTTL();
+}
 
-		$ttl  = $this->hookAction('businessCartTTL');
-		$ttl  = (intval($ttl) > 0) ? $ttl : 86400;
-		$cart = $this->dbMulti("SELECT id_cart, cartTTL FROM k_businesscart WHERE is_cart=1 AND is_locked=0 AND cartTTL<=" . (time() - $ttl));
+/* + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + -
++ - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - */
+function businessCartTTL(){
+    if($GLOBALS['jobTTL'] !== true) {
 
-		if(sizeof($cart) > 0){
-			foreach($cart as $c){
-				$this->businessCartRemove($c['id_cart'], true);
-			}
-		}
+        $ttl	= @$this->eventTrigger('business', 'businessCartTTL');
+        $ttl 	= (intval($ttl) > 0)  ? $ttl : 86400;
+        $cart	= $this->dbMulti("SELECT id_cart, cartTTL FROM k_businesscart WHERE is_cart=1 AND is_locked=0 AND cartTTL<=".(time() - $ttl));
 
-		if($_SESSION['id_cart'] > 0){
-			$this->dbQuery("UPDATE k_businesscart SET cartTTL=".time().", cartDateUpdate=NOW() WHERE id_cart=".$_SESSION['id_cart']);
-			#$this->pre($this->db_query, $this->db_error);
-		}
 
-		$GLOBALS['jobTTL'] = true;
-	}
+        if(sizeof($cart) > 0){
+            foreach($cart as $c){
+                $this->businessCartRemove($c['id_cart'], false);
+            }
+        }
 
+        if($_SESSION['id_cart'] > 0){
+            $this->dbQuery("UPDATE k_businesscart SET cartTTL=".time().", cartDateUpdate=NOW() WHERE id_cart=".$_SESSION['id_cart']);
+            #$this->pre($this->db_query, $this->db_error);
+        }
+
+        $GLOBALS['jobTTL'] = true;
+    }
+}
 /* + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + -
 + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - */
 public function businessCartNew($opt=array()){
@@ -67,8 +75,8 @@ public function businessCartGet($opt=array()){
 	
 	$userAffect = array_key_exists('userAffect', $opt) ? $opt['userAffect'] : true;
 
-	# Si on a un ID , on verifit si l'ID qu'on nous donne est encore existant
-	if(intval($opt['is_cart']) > 0){
+	# Si on a un ID , on verifie si l'ID qu'on nous donne est encore existant
+	if(intval($opt['id_cart']) > 0){
 		$my = $this->dbOne("SELECT * FROM k_businesscart WHERE is_cart=1 AND id_cart='".$opt['id_cart']."'");
 		if($opt['debug']) $this->pre($this->db_query, $this->db_error);		
 	}
@@ -101,8 +109,9 @@ public function businessCartGet($opt=array()){
 
 	# On fige les valeur de ID_CART en SESSION
 	#
-	if($opt['is_cart']) $_SESSION['id_cart'] = $opt['id_cart'];
-
+    if($opt['is_cart'] === true) {
+        if(intval($opt['id_cart']) > 0) $_SESSION['id_cart'] = $opt['id_cart'];
+    }
 
 	#
 	# A ce stade on doit avoir un panier identifier par ID_CART
@@ -402,19 +411,17 @@ public function businessCartAddRaw($opt=array()){
 + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - */
 function businessCartRemove($id_cart, $reset=false){
 
-	$cart = $this->businessCartGet(array('id_cart' => $id_cart));
+    $cart = $this->businessCartGet(array('id_cart' => $id_cart));
 
-	if(sizeof($cart['line']) > 0){
-		foreach($cart['line'] as $line){
-			$this->businessCartLineRemove($line['id_cartline'], $reset);
-		}
-	}
+    if(sizeof($cart['line']) > 0){
+        foreach($cart['line'] as $line){
+            $this->businessCartLineRemove($line['id_cartline'], $reset);
+        }
+    }
 
-	$this->dbQuery("DELETE FROM k_businesscart WHERE id_cart = ".$id_cart);
+    $this->dbQuery("DELETE FROM k_businesscart WHERE id_cart = ".$id_cart);
 
-	unset($_SESSION['id_cart']);
-
-	return true;
+    return true;
 }
 
 /* + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + -
