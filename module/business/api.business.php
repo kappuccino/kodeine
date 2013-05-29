@@ -13,12 +13,12 @@ public function __construct(){
 function businessCartTTL(){
     if($GLOBALS['jobTTL'] !== true) {
 
-        $ttl	= @$this->eventTrigger('business', 'businessCartTTL');
-        $ttl 	= (intval($ttl) > 0)  ? $ttl : 86400;
-        $cart	= $this->dbMulti("SELECT id_cart, cartTTL FROM k_businesscart WHERE is_cart=1 AND is_locked=0 AND cartTTL<=".(time() - $ttl));
+	    $ttl  = $this->hookAction('businessCartTTL');
+	    $ttl  = (intval($ttl) > 0) ? $ttl : 86400;
+	    $cart = $this->dbMulti("SELECT id_cart, cartTTL FROM k_businesscart WHERE is_cart=1 AND is_locked=0 AND cartTTL<=" . (time() - $ttl));
 
 
-        if(sizeof($cart) > 0){
+	    if(sizeof($cart) > 0){
             foreach($cart as $c){
                 $this->businessCartRemove($c['id_cart'], false);
             }
