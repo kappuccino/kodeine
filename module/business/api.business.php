@@ -4,7 +4,7 @@ class business extends coreApp {
 
 /* + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + -
 + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - */
-public function __construct(){
+public function __loaded(){
     $this->businessCartTTL();
 }
 
@@ -13,9 +13,9 @@ public function __construct(){
 function businessCartTTL(){
     if($GLOBALS['jobTTL'] !== true) {
 
-	    $ttl  = $this->hookAction('businessCartTTL');
-	    $ttl  = (intval($ttl) > 0) ? $ttl : 86400;
-	    $cart = $this->dbMulti("SELECT id_cart, cartTTL FROM k_businesscart WHERE is_cart=1 AND is_locked=0 AND cartTTL<=" . (time() - $ttl));
+        $ttl  = $this->hookFilter('businessCartTTL', 86400);
+
+        $cart = $this->dbMulti("SELECT id_cart, cartTTL FROM k_businesscart WHERE is_cart=1 AND is_locked=0 AND cartTTL<=" . (time() - $ttl));
 
 
 	    if(sizeof($cart) > 0){
