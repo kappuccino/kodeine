@@ -5,8 +5,7 @@
 
 		// Prevents end slash (lighttpd)
 		if(substr($DOCROOT, -1) == '/') $DOCROOT = substr($DOCROOT, 0, -1);
-	}else
-	if($_SERVER['TERM'] != ''){
+	}else{
 		$DOCROOT = dirname(dirname(dirname(dirname(__DIR__))));
 	}
 
