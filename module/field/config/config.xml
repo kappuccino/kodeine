@@ -14,8 +14,9 @@
     </locale>
 
     <i18n>
-        <file>index.php</file>
         <file>asso.php</file>
+        <file>index.php</file>
+        <file>ui/menu.php</file>
     </i18n>
 
 </element>

@@ -48,8 +48,8 @@
 <div id="app"><div class="wrapper">
 		
 		<div class="alert" id="message" style="display:<?php if($message == '') echo 'none' ?>"><?php echo $message ?>&nbsp;</div>
-		<div class="alert alert-error"	id="error" 	 style="display:none;"	>Erreur</div>
-		<div class="alert alert-error"	id="doublon" style="display:none;"	>Doublon</div>
+		<div class="alert alert-error"	id="error" 	 style="display:none;"><?php echo _('Error') ?></div>
+		<div class="alert alert-error"	id="doublon" style="display:none;"><?php echo _('Duplicate') ?></div>
 		
 		<?php if($_POST['myFile'] != NULL){ ?>
 		<form action="import" method="POST" id="formulaire">
@@ -88,13 +88,13 @@
 						
 							$out  =
 							"<select name=\"headers[".$index."]\">".
-								"<option value=\"\">Ne pas prendre en compte</option>".
-								"<optgroup label=\"Champs obligatoire\">";
-									foreach(array('id_user' => 'ID Utilisateur (unique)', 'userMail' => 'Email (login)') as $field => $e){
+								"<option value=\"\">"._('Do not use')."</option>".
+								"<optgroup label=\""._('Mandatory fields')."\">";
+									foreach(array('id_user' => _('User ID (uniq)'), 'userMail' => _('Email (login)')) as $field => $e){
 										$sel  = ($field == $me) ? ' selected' : NULL;
 										$out .= "<option value=\"".$field."\"".$sel.">".$e."</option>";
 									}
-								$out .= "</optgroup><optgroup label=\"Champs personnalises\">";
+								$out .= "</optgroup><optgroup label=\""._('Custom fields')."\">";
 									foreach($label as $e){
 										$sel  = ($e['id_field'] == $me) ? ' selected' : NULL;
 										$out .= "<option value=\"".$e['id_field']."\"".$sel.">".$e['fieldName']."</option>";
@@ -110,9 +110,9 @@
 			
 						switch($step){
 							case 'needHeaders' :
-								echo "<div class=\"step\">Etape 2 : Associer chaque colonne au champs utilisateur de Kappuccino</div>";
+								echo "<div class=\"step\">"._('Step 2 : Match each columns to kodeine custom user fields')."</div>";
 								if(sizeof($data['lignes']) > 6){
-									echo "<p>Le fichier contient ".sizeof($data['lignes'])." lignes, les 6 premieres lignes seulement sont affich&eacute;es</p>";
+									echo "<p>".sptrintf(_('The file contains %s lines, only the six first lines are displayed'), sizeof($data['lignes']))."</p>";
 								}
 			
 								echo "<table cellspacing=\"0\" class=\"listing\" border=\"0\"><thead><tr>";
@@ -128,9 +128,9 @@
 							break;
 						
 							case 'needID' : 
-								echo "<div class=\"step\">Etape 3 : Pour terminer l'import vous devez completer les options suivantes</div>";
+								echo "<div class=\"step\">"._('Step 3 : You must check this options to complete the import')."</div>";
 								if(sizeof($data['lignes']) > 6){
-									echo "<p>Le fichier contient ".sizeof($data['lignes'])." lignes, les 6 premieres lignes seulement sont affich&eacute;es</p>";
+									echo "<p>".sptrintf(_('The file contains %s lines, only the six first lines are displayed'), sizeof($data['lignes']))."</p>";
 								}
 		
 								echo
@@ -159,27 +159,27 @@
 								"<table cellspacing=\"0\" class=\"listing\" width=\"100%\" border=\"0\">".
 								"<thead>".
 									"<tr>".
-										"<th colspan=\"2\">Compl&eacute;ment d'information</th>".
+										"<th colspan=\"2\">"._('More informations')."</th>".
 									"</tr>".
 								"</thead>".
 								"<tbody>".
 									"<tr>".
-										"<td width=\"400\">La premi&egrave;re ligne du fichier ne contient pas d'utilisateur</td>".
+										"<td width=\"400\">"._('The first line does not contain user data')."</td>".
 										"<td><input type=\"checkbox\" name=\"removeFirst\" value=\"1\" /></td>".
 									"</tr>".
 									"<tr>".
-										"<td>Verifier si un utilisateur avec cet email existe dej&agrave;</td>".
+										"<td>"._('Check if the user already exists')."</td>".
 										"<td><input type=\"checkbox\" name=\"checkDoublon\" value=\"1\" /></td>".
 									"</tr>".
 									"<tr>".
-										"<td>Si non pr&eacute;ciser, integrer ces utilisateurs au groupe</td><td>".
+										"<td>"._('If not defined, import the user in the group')."<td>".
 										$app->apiLoad('user')->userGroupSelector(array(
 											'one'	=> true,
 											'name'	=> 'id_group'
 										))."</td>".
 									"</tr>".
 									"<tr>".
-										"<td>Si non pr&eacute;ciser, rendre actif ces utilisateurs</td>".
+										"<td>"._('If not defined, activate the user')."</td>".
 										"<td><input type=\"checkbox\" name=\"activate\" value=\"1\" /></td>".
 									"</tr>".
 									/*"<tr valign=\"top\">".
@@ -204,11 +204,12 @@
 							case 'imported' : 
 			
 								echo ($data['count'] > 0)
-									? "<p>Import termin&eacute; : ".$data['count']." membre(s) import&eacute;(s) dans votre base utilisateur.</p>"
-									: "<p>Aucun membre import&eacute;.</p>";
+									? "<p>".sprintf(_('Import finished: %s users imported in your database'), $data['count'])."</p>"
+									: "<p>"._('No user imported')."</p>";
 			
 								if(sizeof($data['doublon']) > 0){
-									echo "<p>Des doublons ont &eacute;t&eacute; detect&eacute; pendant l'import email en doublon</p><p>";
+									echo "<p>"._('Duplicates accounts detected during the import')."<p>";
+									echo "<p>";
 									foreach($data['doublon'] as $doublon){
 										echo "- ".$doublon['user']." (".$doublon['id_user'].")<br />";
 									}
@@ -216,7 +217,8 @@
 								}
 			
 								if(sizeof($data['error']) > 0){
-									echo "<p>Des erreurs sont survenues pendant l'import. Impossible d'ajouter : </p></p>";
+									echo "<p>"._('Errors occured during this import. Can not import :')."</p>";
+									echo "<p>";
 									foreach($data['error'] as $error){
 										echo "- ".$error['user']." (".$error['id_user'].")<br />";
 									}
@@ -235,24 +237,23 @@
 			if(file_exists($uploaddir.'/'.$file)) unlink($uploaddir.'/'.$file);
 		?>
 			
-			<div class="step">Etape 1 : Choisir sur votre ordinateur le fichier contenant la liste des utilisateurs</div>
+			<div class="step"><?php echo _('Step 1: Choose your import file on your computer') ?></div>
 			
 			<form action="import" method="post" enctype="multipart/form-data">
 				<input type="hidden" name="max_file_size" value="100000000" />
 				<input type="hidden" name="action" value="1" />
-				
-				<input type="file" name="upTemplate" /> <input type="submit" value="Envoyer ce fichier" />
+				<input type="file" name="upTemplate" /> <input type="submit" value="<?php echo _('Upload this file') ?>" />
 			</form>	
 			
 			<p><br /><br /></p>
-			<p>Les fichiers servant a importer massivement des utilisateurs doivent : </p>
+			<p><?php echo _('Import files must: ') ?></p>
 			<ul>
-				<li>Etre des fichiers texte (.TXT, .CSV)</li>
-				<li>Avoir un utilisateur par ligne</li>
-				<li>Les propri&eacute;t&eacute;s doivent etre sur des colonnes identifiables</li>
+				<li><?php echo _('Be texte files (.TXT, .CSV)') ?></li>
+				<li><?php echo _('Containing one user a line') ?></li>
+				<li><?php echo _('Containning user properties in distinct columnes') ?></li>
 			</ul>
-			<p>Kappuccino detecte automatiquement le s&eacute;parateur de ligne et de colonne en se basant sur les configuration les plus courantes.</p>
-			<p>Si votre fichier contient un caractere qui prot&eacute;ge les colonnes (Exemple : "valeur","valeur","valeur"), il sera	supprim&eacute;.</p>
+			<p><?php echo _('Kodeine detect automaticaly, the new line caracter.') ?></p>
+			<p><?php echo _('If the file uses a protect caracter to wrapp data, it (ie: "value","value","value"...), it will be removed.') ?></p>
 		
 		<?php } ?>
 		

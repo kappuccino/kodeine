@@ -14,7 +14,10 @@
     </locale>
 
     <i18n>
+        <file>index.php</file>
+        <file>circle.php</file>
         <file>forum.php</file>
+        <file>ui/menu.php</file>
     </i18n>
 
     <profile>

@@ -13,23 +13,20 @@
     </locale>
 
     <i18n>
-        <file>index.php</file>
-        <file>group.php</file>
-        <file>profile.php</file>
-        <file>import-book.php</file>
         <file>data.php</file>
-    </i18n>
-
-    <todo>
         <file>export.php</file>
+        <file>group.php</file>
         <file>group-view.php</file>
         <file>import.php</file>
+        <file>import-book.php</file>
+        <file>index.php</file>
+        <file>picker.php</file>
         <file>picker-addressook.php</file>
         <file>picker-create.php</file>
         <file>picker-data.php</file>
-        <file>picker.php</file>
+        <file>profile.php</file>
         <file>search.php</file>
-    </todo>
+    </i18n>
 
 	<profile>
 		<item code="index" 		type="ALLOW_DENY" name="Accessible" />

@@ -451,7 +451,10 @@
 		<div class="hand"></div>
 		<div class="toggle"></div>
 		<label><?php echo _('Weight'); ?></label>
-		<div class="form"><input type="text" name="contentWeight" class="input-thin" value="<?php echo $app->formValue($data['contentWeight'], $_POST['contentWeight']); ?>" size="8" /> en gramme</div>
+		<div class="form">
+			<input type="text" name="contentWeight" class="input-thin" value="<?php echo $app->formValue($data['contentWeight'], $_POST['contentWeight']); ?>" size="8" />
+			<?php echo _('grams') ?>
+		</div>
 	</li>
 
 	<li id="contentCarriage" class="clearfix form-item">
@@ -473,7 +476,8 @@
 		<label>Stock</label>
 		<div class="form">
 			<input type="text" name="contentStock" class="input-thin" value="<?php echo $app->formValue($data['contentStock'], $_POST['contentStock']); ?>" size="8" />
-			<input type="checkbox" name="contentStockNeg" value="1" <?php if($app->formValue($data['contentStockNeg'], $_POST['contentStockNeg'])) echo "checked" ?> /> Autoriser le stock négatif
+			<input type="checkbox" name="contentStockNeg" value="1" <?php if($app->formValue($data['contentStockNeg'], $_POST['contentStockNeg'])) echo "checked" ?> />
+			<?php echo _('Allow negative stock') ?>
 		</div>
 	</li>
 
@@ -550,7 +554,7 @@
 							if(!is_array($v)) $v = explode(' ', $v);
 						?>
 						<input type="text" class="input-small input-thin" name="contentDateCreation[0]" id="contentDateCreation" value="<?php echo $v[0] ?>" size="12" style="text-align:center;" />
-						<input type="text" class="input-small input-thin" name="contentDateCreation[1]" 						  value="<?php echo $v[1] ?>" size="7"  style="text-align:center;" />
+						<input type="text" class="input-small input-thin" name="contentDateCreation[1]" 						 value="<?php echo $v[1] ?>" size="7"  style="text-align:center;" />
 					</td>
 					<td width="50"><?php echo _('Starts'); ?></td>
 					<td width="200">

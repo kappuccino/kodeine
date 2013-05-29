@@ -12,7 +12,28 @@
 		<install>YES</install>
 	</data>
 
-	<profile>
+    <i18n>
+        <file>analytics.php</file>
+        <file>analytics-click.php</file>
+        <file>analytics-data.php</file>
+        <file>blacklist.php</file>
+        <file>data-confirm.php</file>
+        <file>data-designer.php</file>
+        <file>data-editor.php</file>
+        <file>data-list.php</file>
+        <file>data-options.php</file>
+        <file>designer.php</file>
+        <file>index.php</file>
+        <file>list.php</file>
+        <file>pool.php</file>
+        <file>pref.php</file>
+        <file>preview.php</file>
+        <file>report.php</file>
+        <file>template.php</file>
+        <file>ui/menu.php</file>
+    </i18n>
+
+    <profile>
 		<item code="index"	 		type="ALLOW_DENY" name="Accessible" />
 		<item code="designer"	 	type="ALLOW_DENY" name="Designer" />
 	</profile>
