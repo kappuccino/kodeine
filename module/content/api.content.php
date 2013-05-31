@@ -741,6 +741,8 @@ public function contentGet($opt=array()){
 
 	if(BENCHME) @$GLOBALS['bench']->benchmarkMarker($bmStep);
 
+    $content  = $this->hookFilter('contentGet', $content);
+
 	return $content;
 }
 
