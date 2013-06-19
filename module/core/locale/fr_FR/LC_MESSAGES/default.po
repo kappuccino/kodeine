@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Kodeine\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2013-05-29 10:28+0100\n"
+"PO-Revision-Date: 2013-06-19 11:22+0100\n"
 "Last-Translator: Benjamin Mosnier <bm@kappuccino.org>\n"
 "Language-Team: Kappuccino <bm@kappuccino.org>\n"
 "Language: Français\n"
@@ -149,6 +149,10 @@ msgstr "Permettre à l'utilisateur de se connecter"
 #: ../../content/data.php:357 ../../user/data.php:189
 msgid "Always visible"
 msgstr "Toujours visible"
+
+#: ../../content/index.php:413
+msgid "Apply changes"
+msgstr "Appliquer les changements"
 
 #: ../../config/offline.php:66
 msgid "Apply to those groups"
@@ -1151,7 +1155,7 @@ msgstr "Supprimer les fichiers selecitonnés"
 msgid "Remove selected items"
 msgstr "Supprimer les élements selecitonnés"
 
-#: ../../content/browse.php:116 ../../content/index.php:413
+#: ../../content/browse.php:116
 msgid "Remove selected lines"
 msgstr "Supprimer les lignes selecitonnées"
 

@@ -138,6 +138,10 @@ msgstr ""
 msgid "Always visible"
 msgstr ""
 
+#: ../../content/index.php:413
+msgid "Apply changes"
+msgstr ""
+
 #: ../../config/offline.php:66
 msgid "Apply to those groups"
 msgstr ""
@@ -1071,7 +1075,7 @@ msgstr ""
 msgid "Remove selected items"
 msgstr ""
 
-#: ../../content/browse.php:116 ../../content/index.php:413
+#: ../../content/browse.php:116
 msgid "Remove selected lines"
 msgstr ""
 
