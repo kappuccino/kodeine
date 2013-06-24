@@ -1,10 +1,4 @@
-var folders = [],
-	total = 0,
-	done = 0,
-	percent= 0,
-	log = $('#log'),
-	id_type,
-	id_album;
+var folders = [], percent = 0, total = 0, done = 0, log = $('#log'), id_type, id_album;
 
 function discoverInit(){
 

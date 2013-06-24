@@ -13,6 +13,15 @@
         <name><![CDATA[Enquête]]></name>
     </locale>
 
+    <i18n>
+        <file>data.php</file>
+        <file>index.php</file>
+        <file>order.php</file>
+        <file>query.php</file>
+        <file>stat.php</file>
+        <file>ui/menu.php</file>
+    </i18n>
+
 	<profile>
 		<item code="index"	type="ALLOW_DENY" name="Accessible" />
 	</profile>

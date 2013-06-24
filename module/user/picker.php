@@ -45,10 +45,10 @@
 <body>
 
 <ul class="menu-icon clearfix">
-    <li class=""><a href="user.picker.php"><img src="ressource/img/ico-list.png" height="32" width="32" /><br />Liste</a></li>
+    <li class=""><a href="user.picker.php"><img src="ressource/img/ico-list.png" height="32" width="32" /><br /><?php echo _('Listing') ?></a></li>
     
     <div style="float:right; margin:15px 10px 0px 0px;">
-        <a href="user.picker.create.php" class="button colorButton rButton">Ajouter un utilisateur</a>
+        <a href="user.picker.create.php" class="button colorButton rButton"><?php echo _('New user') ?></a>
     </div>
 
 </ul>
@@ -59,17 +59,17 @@
 <div class="quickForm clearfix">
 
     <div class="upper clearfix">
-        <div class="label">OPTIONS</div>
+        <div class="label"><?php echo _('Options') ?></div>
     </div>
 
     <form action="user.picker.php" method="post" id="filter">
         <input type="hidden" name="filter[open]"    value="0" />
         <input type="hidden" name="filter[offset]"  value="0" />
 
-        Recherche
+        <?php echo _('Search') ?>
         <input type="text" name="filter[q]" value="<?php echo $filter['q'] ?>" />
 
-        Combien
+	    <?php echo _('How many') ?>
         <input type="text" name="filter[limit]" value="<?php echo $filter['limit'] ?>" size="3" />
 
 
@@ -85,12 +85,12 @@
             <th width="30"  class="icone"><img src="ressource/img/add.png" height="20" width="20" /></th>
             
             <th width="80"  class="order <?php if($filter['order'] == 'k_user.id_user')     echo 'order'.$dir; ?>" onClick="document.location='user.picker.php?cf&order=k_user.id_user&direction=<?php echo $dir ?>'"><span>#</span></th>
-            <th width="110" class="order <?php if($filter['order'] == 'k_user.userDateCreate')  echo 'order'.$dir; ?>" onClick="document.location='user.picker.php?cf&order=k_user.userDateCreate&direction=<?php echo $dir ?>'"><span>Cr&eacute;ation</span></th>
-            <th width="110" class="order <?php if($filter['order'] == 'k_user.userDateUpdate')  echo 'order'.$dir; ?>" onClick="document.location='user.picker.php?cf&order=k_user.userDateUpdate&direction=<?php echo $dir ?>'"><span>Mise &agrave; jour</span></th>
-            <th             class="order <?php if($filter['order'] == 'k_useraddressbook.addressbookCompanyName')        echo 'order'.$dir; ?>" onClick="document.location='user.picker.php?cf&order=k_useraddressbook.addressbookCompanyName&direction=<?php echo $dir ?>'"><span>Raison sociale</span></th>
-            <th             class="order <?php if($filter['order'] == 'k_useraddressbook.addressbookLastName')        echo 'order'.$dir; ?>" onClick="document.location='user.picker.php?cf&order=k_useraddressbook.addressbookLastName&direction=<?php echo $dir ?>'"><span>Nom</span></th>
-            <th             class="order <?php if($filter['order'] == 'k_useraddressbook.addressbookFirstName')        echo 'order'.$dir; ?>" onClick="document.location='user.picker.php?cf&order=k_useraddressbook.addressbookFirstName&direction=<?php echo $dir ?>'"><span>Prénom</span></th>
-            <th             class="order <?php if($filter['order'] == 'k_user.userMail')        echo 'order'.$dir; ?>" onClick="document.location='user.picker.php?cf&order=k_user.userMail&direction=<?php echo $dir ?>'"><span>Email</span></th>
+            <th width="110" class="order <?php if($filter['order'] == 'k_user.userDateCreate')  echo 'order'.$dir; ?>" onClick="document.location='user.picker.php?cf&order=k_user.userDateCreate&direction=<?php echo $dir ?>'"><span><?php echo _('Created') ?></span></th>
+            <th width="110" class="order <?php if($filter['order'] == 'k_user.userDateUpdate')  echo 'order'.$dir; ?>" onClick="document.location='user.picker.php?cf&order=k_user.userDateUpdate&direction=<?php echo $dir ?>'"><span><?php echo _('Updated') ?></span></th>
+            <th             class="order <?php if($filter['order'] == 'k_useraddressbook.addressbookCompanyName')        echo 'order'.$dir; ?>" onClick="document.location='user.picker.php?cf&order=k_useraddressbook.addressbookCompanyName&direction=<?php echo $dir ?>'"><span><?php echo _('Company name') ?></span></th>
+            <th             class="order <?php if($filter['order'] == 'k_useraddressbook.addressbookLastName')        echo 'order'.$dir; ?>" onClick="document.location='user.picker.php?cf&order=k_useraddressbook.addressbookLastName&direction=<?php echo $dir ?>'"><span><?php echo _('Name') ?></span></th>
+            <th             class="order <?php if($filter['order'] == 'k_useraddressbook.addressbookFirstName')        echo 'order'.$dir; ?>" onClick="document.location='user.picker.php?cf&order=k_useraddressbook.addressbookFirstName&direction=<?php echo $dir ?>'"><span><?php echo _('Last name') ?></span></th>
+            <th             class="order <?php if($filter['order'] == 'k_user.userMail')        echo 'order'.$dir; ?>" onClick="document.location='user.picker.php?cf&order=k_user.userMail&direction=<?php echo $dir ?>'"><span><?php echo _('Email') ?></span></th>
             <?php
                 $colspan = 1;
 
@@ -115,10 +115,7 @@
                 $a = $app->apiLoad('user')->userAddressBookGet(array('delivery' => true, 'id_user' => $e['id_user']));
         ?>
         <tr>
-            <td>
-                <a href="" title="S&eacute;l&eacute;ctionner" onclick="insertUser(<?php echo $e['id_user']; ?>);"><img src="ressource/img/add.png" alt="S&eacute;l&eacute;ctionner" width="20"></a>
-
-            </td>
+            <td><a href="#" onclick="insertUser(<?php echo $e['id_user']; ?>);"><img src="ressource/img/add.png" width="20"></a></td>
             <td><?php echo $e['id_user'] ?></td>
             <td class="dateTime">
                 <span class="date"><?php echo $app->helperDate($e['userDateCreate'], '%d.%m.%G')?></span>
@@ -141,7 +138,7 @@
     }else{ ?>
         <tr>
             <td colspan="<?php echo (7 + $colspan) ?>" style="text-align:center; font-weight:bold; padding:30px 0px 30px 0px;">
-                Aucun r&eacute;sultat avec cette recherche
+	            <?php echo _('No result'); ?>
             </td>
         </tr>
     <?php } ?>
@@ -165,16 +162,17 @@
 </div>
 
 <script>
-function insertUser(id_user){
-    parent.opener.document.getElementById('id_user').value=id_user;
-    parent.opener.document.getElementById('form-cart').submit();
-    window.close();      
-}
+
+	function insertUser(id_user){
+	    parent.opener.document.getElementById('id_user').value=id_user;
+	    parent.opener.document.getElementById('form-cart').submit();
+	    window.close();
+	}
 
 
-window.onbeforeunload = function() {
-    parent.opener.document.getElementById('form-cart').submit();
-} 
+	window.onbeforeunload = function() {
+	    parent.opener.document.getElementById('form-cart').submit();
+	}
 
 </script>
 

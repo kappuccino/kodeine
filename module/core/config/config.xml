@@ -15,9 +15,12 @@
 	</dependencies>
 
     <i18n>
+        <file>admin.php</file>
         <file>index.php</file>
         <file>login.php</file>
+        <file>menu.php</file>
         <file>module.php</file>
+        <file>support.php</file>
         <file>includes/top.php</file>
     </i18n>
 

@@ -315,16 +315,9 @@ public function userLogout(){
 	//-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -
 	public function apiLoad($api, $name=NULL, $new=false){
 
-		$class = autoloader::file($api);
 		$cst   = ($name == NULL) ? $api : $name;
 
-		if(file_exists($class)){
-
-			# Si on demande une class (.php) alors la laoder a la main
-			# si non la fonction autoload() ne pourra pas la trouver
-			#
-			if(strpos($api, ".php") !== false) require_once($class);
-
+		try{
 			# REFERENCE	:: Utiliser l'objet deja existant
 			if(get_class($this->api[$cst]) == $cst && !$new){
 				$new = &$this->api[$cst];
@@ -347,14 +340,19 @@ public function userLogout(){
 				$new->kodeine 		= &$this->kodeine;
 				$new->user			= &$this->user;
 				$new->profile		= &$this->profile;
+				$new->cache         = &$this->cache;
 				$new->apisConfig	= &$this->apisConfig;
 
 				if(@array_key_exists($cst, $new->apisConfig)) $new->apiConfig = &$this->apisConfig[$cst];
+
+                if(method_exists($new, '__loaded')) {
+                    $new->__loaded();
+                }
 			}
 
 			return $new;
 
-		}else{
+		} catch (Exception $e) {
 			throw new Exception('API could not be loaded : '.$api.'('.$cst.')');
 		}
 	}
@@ -1147,6 +1145,8 @@ public function kodeineInit($get){
 	#}
 	#if(BENCHME) $GLOBALS['bench']->benchmarkMarker($bmStep);
 
+	$this->kodeine = $this->hookFilter('kodeineInit', $this->kodeine);
+
 	# DEBUG
 	# Construit la zone de debugage par l'URL url?debug
 	#
@@ -1178,7 +1178,6 @@ public function kodeineInit($get){
 		exit();
 	}
 
-	$this->hookAction('kodeineInit');
 }
 
 /* + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - 
@@ -1361,6 +1360,7 @@ public function kTalkCheck($str){
 //-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -
 	public  function hookAction($name){
 
+
 		if(count($this->hook['action']) == 0) return false;
 		if(!is_a($this->hook['action'][$name], 'ArrayIterator')) return false;
 		$hooks = $this->hook['action'][$name];
@@ -1396,6 +1396,7 @@ public function kTalkCheck($str){
 
 		if(count($this->hook['filter']) == 0) return $data;
 		if(!is_a($this->hook['filter'][$name], 'ArrayIterator')) return $data;
+
 		$hooks = $this->hook['filter'][$name];
 		$hooks->ksort();
 		$hooks = iterator_to_array($this->hook['filter'][$name]);
@@ -1431,6 +1432,8 @@ public function kTalkCheck($str){
 	public  function hookRegister($name, $hook, $type='action', $priority=10, $args=1){
 		if(!isset($this->hook[$type][$name])) $this->hook[$type][$name] = new ArrayIterator();
 		$this->hook[$type][$name][$priority][] = array('hook' => $hook, 'args' => $args);
+
+		// $this->pre($this->hook);
 	}
 
 }

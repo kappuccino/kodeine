@@ -93,7 +93,7 @@
 	<table width="100%" border="0" cellpadding="0" cellspacing="0" class="listing">
 		<thead>
 			<tr>
-				<th>Quels utilisateurs voulez vous exporter ?</th>
+				<th><?php echo _('Which users would you like to export ?') ?></th>
 			</tr>
 		</thead>
 		<tbody>
