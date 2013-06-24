@@ -43,6 +43,7 @@
 		if(!$app->apiLoad('field')->fieldValidation($_POST['field'])) $do = false;
 
 		if($do){
+
 			$result     = $app->apiLoad('content')->contentSet(array(
 				'id_type'		=> $_REQUEST['id_type'],
 				'language'		=> $_POST['language'],
@@ -82,6 +83,7 @@
 	));
 
 	$fields = $app->apiLoad('field')->fieldGet(array(
+		'itemField'     => true,
 		'id_type'		=> $type['id_type'],
 		'fieldShowForm'	=> true,
 		'debug'			=> false
@@ -198,7 +200,7 @@
 	<form action="gallery-item" method="post" id="data">
 	
 		<input type="hidden" name="action"      value="1" />
-		<input type="hidden" name="id_type"     value="<?php echo $_REQUEST['id_type'] ?>" />
+		<input type="hidden" name="id_type"     value="<?php echo $data['id_type'] ?>" />
 		<input type="hidden" name="id_content"  value="<?php echo $data['id_content'] ?>" id="id_content" />
 		<input type="hidden" name="language"    value="fr" />
 

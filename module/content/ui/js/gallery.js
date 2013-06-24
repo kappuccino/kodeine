@@ -237,9 +237,7 @@ gallery.views.viewItem       = Backbone.View.extend({
 
 		var icone   = $('.icone', this.$el);
 		var respon  = (preview.height > preview.width) ? 'height' : 'width';
-		var img     = $('<img />').addClass('responsive-'+respon);
-
-		img.attr('src', preview.url);
+		var img     = $('<img />').addClass('responsive-'+respon).attr('src', preview.url);
 
 		if(this.model.get('is_album')){
 			img.addClass('posterized');
