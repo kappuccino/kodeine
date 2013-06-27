@@ -7,7 +7,7 @@
 		
 		(sizeof($type) > 0)
 			? header("Location: index?id_type=".$type[0]['id_type'])
-			: header("Location: type?noData");
+			: header("Location: ../type/?noData");
 	}
 
 	if(isset($_REQUEST['duplicate'])){
