@@ -74,7 +74,7 @@ msgstr ""
 msgid "Add %s"
 msgstr ""
 
-#: ../../content/index.php:79
+#: ../../content/index.php:78
 msgid "Add a %s"
 msgstr ""
 
@@ -122,7 +122,7 @@ msgstr ""
 msgid "Album URL"
 msgstr ""
 
-#: ../../content/index.php:127
+#: ../../content/index.php:149
 msgid "All"
 msgstr ""
 
@@ -138,7 +138,7 @@ msgstr ""
 msgid "Always visible"
 msgstr ""
 
-#: ../../content/index.php:413
+#: ../../content/index.php:435
 msgid "Apply changes"
 msgstr ""
 
@@ -226,7 +226,7 @@ msgstr ""
 msgid "Buyers"
 msgstr ""
 
-#: ../../category/index.php:118 ../../category/index.php:255 ../../chapter/index.php:173 ../../chapter/index.php:313 ../../config/admin.php:30 ../../config/field.php:55 ../../config/index.php:81 ../../config/language.php:71 ../../config/offline.php:52 ../../config/robots.php:45 ../../content/index.php:134 ../../content/parent.php:186 ../../field/asso.php:199 ../../media/index.php:66 ../../social/forum.php:166 ../../theme/index.php:62 ../../type/row.php:227 ../../user/group.php:121 ../../user/group.php:71
+#: ../../category/index.php:118 ../../category/index.php:255 ../../chapter/index.php:173 ../../chapter/index.php:313 ../../config/admin.php:30 ../../config/field.php:55 ../../config/index.php:81 ../../config/language.php:71 ../../config/offline.php:52 ../../config/robots.php:45 ../../content/index.php:156 ../../content/parent.php:186 ../../field/asso.php:199 ../../media/index.php:66 ../../social/forum.php:166 ../../theme/index.php:62 ../../type/row.php:227 ../../user/group.php:121 ../../user/group.php:71
 msgid "Cancel"
 msgstr ""
 
@@ -242,7 +242,7 @@ msgstr ""
 msgid "Categories"
 msgstr ""
 
-#: ../../content/data.php:615 ../../content/gallery-album.php:298 ../../content/index.php:98 ../../content/ui/menu.php:14 ../../user/profile.php:128
+#: ../../content/data.php:615 ../../content/gallery-album.php:298 ../../content/index.php:120 ../../content/ui/menu.php:14 ../../user/profile.php:128
 msgid "Category"
 msgstr ""
 
@@ -358,7 +358,7 @@ msgstr ""
 msgid "Country"
 msgstr ""
 
-#: ../../content/index.php:395
+#: ../../content/index.php:417
 msgid "Create a new %s"
 msgstr ""
 
@@ -374,7 +374,7 @@ msgstr ""
 msgid "Create folder and sub folders"
 msgstr ""
 
-#: ../../content/browse.php:100 ../../content/data.php:551 ../../content/gallery-album.php:354 ../../content/index.php:360 ../../user/data.php:232 ../../user/index.php:97 ../../user/picker.php:88
+#: ../../content/browse.php:100 ../../content/data.php:551 ../../content/gallery-album.php:354 ../../content/index.php:382 ../../user/data.php:232 ../../user/index.php:97 ../../user/picker.php:88
 msgid "Created"
 msgstr ""
 
@@ -390,7 +390,7 @@ msgstr ""
 msgid "Current album: %s"
 msgstr ""
 
-#: ../../content/gallery-item.php:271
+#: ../../content/gallery-item.php:273
 msgid "Current item"
 msgstr ""
 
@@ -443,7 +443,7 @@ msgstr ""
 msgid "Disable cache may cause slowness for large images."
 msgstr ""
 
-#: ../../content/index.php:65 ../../user/index.php:54
+#: ../../content/index.php:64 ../../user/index.php:54
 msgid "Display settings"
 msgstr ""
 
@@ -551,7 +551,7 @@ msgstr ""
 msgid "Fields"
 msgstr ""
 
-#: ../../chapter/index.php:143 ../../content/index.php:133 ../../field/index.php:113 ../../user/index.php:87
+#: ../../chapter/index.php:143 ../../content/index.php:155 ../../field/index.php:113 ../../user/index.php:87
 msgid "Filter"
 msgstr ""
 
@@ -671,7 +671,7 @@ msgstr ""
 msgid "Infos"
 msgstr ""
 
-#: ../../content/index.php:129
+#: ../../content/index.php:151
 msgid "Inheritance"
 msgstr ""
 
@@ -711,7 +711,7 @@ msgstr ""
 msgid "Kodeine detect automaticaly, the new line caracter."
 msgstr ""
 
-#: ../../config/index.php:140 ../../config/index.php:210 ../../config/language.php:146 ../../config/language.php:88 ../../content/index.php:119
+#: ../../config/index.php:140 ../../config/index.php:210 ../../config/language.php:146 ../../config/language.php:88 ../../content/index.php:141
 msgid "Language"
 msgstr ""
 
@@ -739,7 +739,7 @@ msgstr ""
 msgid "Let both fields empty to keep the current password"
 msgstr ""
 
-#: ../../content/index.php:95 ../../user/index.php:68
+#: ../../content/index.php:117 ../../user/index.php:68
 msgid "Limit"
 msgstr ""
 
@@ -771,7 +771,7 @@ msgstr ""
 msgid "Mail recipient"
 msgstr ""
 
-#: ../../content/index.php:135
+#: ../../content/index.php:157
 msgid "Manage columns"
 msgstr ""
 
@@ -823,7 +823,7 @@ msgstr ""
 msgid "More parameters"
 msgstr ""
 
-#: ../../category/index.php:107 ../../category/index.php:203 ../../chapter/index.php:142 ../../chapter/index.php:263 ../../config/language.php:140 ../../content/browse.php:102 ../../content/data-language.php:261 ../../content/data.php:389 ../../content/gallery-album.php:221 ../../content/gallery-item.php:214 ../../content/index.php:367 ../../content/parent.php:153 ../../field/index.php:110 ../../field/index.php:168 ../../social/forum.php:133 ../../theme/index.php:116 ../../theme/index.php:79 ../../user/group-view.php:90 ../../user/group.php:143 ../../user/group.php:88 ../../user/import-book.php:37 ../../user/index.php:99 ../../user/picker.php:91 ../../user/profile.php:74
+#: ../../category/index.php:107 ../../category/index.php:203 ../../chapter/index.php:142 ../../chapter/index.php:263 ../../config/language.php:140 ../../content/browse.php:102 ../../content/data-language.php:261 ../../content/data.php:389 ../../content/gallery-album.php:221 ../../content/gallery-item.php:216 ../../content/index.php:389 ../../content/parent.php:153 ../../field/index.php:110 ../../field/index.php:168 ../../social/forum.php:133 ../../theme/index.php:116 ../../theme/index.php:79 ../../user/group-view.php:90 ../../user/group.php:143 ../../user/group.php:88 ../../user/import-book.php:37 ../../user/index.php:99 ../../user/picker.php:91 ../../user/profile.php:74
 msgid "Name"
 msgstr ""
 
@@ -851,7 +851,7 @@ msgstr ""
 msgid "Next album"
 msgstr ""
 
-#: ../../content/gallery-item.php:272
+#: ../../content/gallery-item.php:274
 msgid "Next item"
 msgstr ""
 
@@ -867,7 +867,7 @@ msgstr ""
 msgid "No content"
 msgstr ""
 
-#: ../../content/data.php:315 ../../content/index.php:394
+#: ../../content/data.php:315 ../../content/index.php:416
 msgid "No data"
 msgstr ""
 
@@ -891,7 +891,7 @@ msgstr ""
 msgid "No more album"
 msgstr ""
 
-#: ../../content/gallery-item.php:287
+#: ../../content/gallery-item.php:289
 msgid "No more item"
 msgstr ""
 
@@ -903,7 +903,7 @@ msgstr ""
 msgid "No previous album"
 msgstr ""
 
-#: ../../content/gallery-item.php:279
+#: ../../content/gallery-item.php:281
 msgid "No previous item"
 msgstr ""
 
@@ -951,7 +951,7 @@ msgstr ""
 msgid "Options"
 msgstr ""
 
-#: ../../content/index.php:128
+#: ../../content/index.php:150
 msgid "Ordered"
 msgstr ""
 
@@ -999,7 +999,7 @@ msgstr ""
 msgid "Phone 2"
 msgstr ""
 
-#: ../../category/index.php:221 ../../content/gallery-import.php:166 ../../content/gallery-import.php:210 ../../content/gallery-item.php:230 ../../social/forum.php:140
+#: ../../category/index.php:221 ../../content/gallery-import.php:166 ../../content/gallery-import.php:210 ../../content/gallery-item.php:232 ../../social/forum.php:140
 msgid "Pick"
 msgstr ""
 
@@ -1011,7 +1011,7 @@ msgstr ""
 msgid "Previous album"
 msgstr ""
 
-#: ../../content/gallery-item.php:270
+#: ../../content/gallery-item.php:272
 msgid "Previous item"
 msgstr ""
 
@@ -1035,7 +1035,7 @@ msgstr ""
 msgid "Profile name"
 msgstr ""
 
-#: ../../config/language.php:158 ../../content/data.php:446 ../../content/index.php:364
+#: ../../config/language.php:158 ../../content/data.php:446 ../../content/index.php:386
 msgid "Reference"
 msgstr ""
 
@@ -1099,7 +1099,7 @@ msgstr ""
 msgid "Robots.txt"
 msgstr ""
 
-#: ../../content/gallery-album.php:179 ../../content/gallery-import.php:120 ../../content/gallery-item.php:264
+#: ../../content/gallery-album.php:179 ../../content/gallery-import.php:120 ../../content/gallery-item.php:266
 msgid "Root"
 msgstr ""
 
@@ -1111,7 +1111,7 @@ msgstr ""
 msgid "Same as reference"
 msgstr ""
 
-#: ../../chapter/index.php:172 ../../config/admin.php:31 ../../config/field.php:56 ../../config/index.php:82 ../../config/language.php:72 ../../config/offline.php:53 ../../config/robots.php:46 ../../content/data.php:237 ../../content/gallery-album.php:156 ../../content/gallery-item.php:186 ../../field/asso.php:198 ../../media/pref.php:60 ../../social/forum.php:165 ../../theme/index.php:65 ../../theme/index.php:67 ../../user/data.php:133 ../../user/group.php:72 ../../user/group.php:75
+#: ../../chapter/index.php:172 ../../config/admin.php:31 ../../config/field.php:56 ../../config/index.php:82 ../../config/language.php:72 ../../config/offline.php:53 ../../config/robots.php:46 ../../content/data.php:237 ../../content/gallery-album.php:156 ../../content/gallery-item.php:188 ../../field/asso.php:198 ../../media/pref.php:60 ../../social/forum.php:165 ../../theme/index.php:65 ../../theme/index.php:67 ../../user/data.php:133 ../../user/group.php:72 ../../user/group.php:75
 msgid "Save"
 msgstr ""
 
@@ -1131,7 +1131,7 @@ msgstr ""
 msgid "Saved"
 msgstr ""
 
-#: ../../content/index.php:92 ../../content/ui/menu.php:41 ../../user/group-view.php:64 ../../user/index.php:65 ../../user/picker.php:69
+#: ../../content/index.php:114 ../../content/ui/menu.php:41 ../../user/group-view.php:64 ../../user/index.php:65 ../../user/picker.php:69
 msgid "Search"
 msgstr ""
 
@@ -1147,7 +1147,7 @@ msgstr ""
 msgid "Settings"
 msgstr ""
 
-#: ../../content/data.php:833 ../../content/index.php:109
+#: ../../content/data.php:833 ../../content/index.php:131
 msgid "Shop"
 msgstr ""
 
@@ -1299,12 +1299,12 @@ msgstr ""
 msgid "Update"
 msgstr ""
 
-#: ../../content/browse.php:101 ../../content/data.php:567 ../../content/gallery-album.php:370 ../../content/index.php:361 ../../user/data.php:234 ../../user/index.php:98 ../../user/picker.php:89
+#: ../../content/browse.php:101 ../../content/data.php:567 ../../content/gallery-album.php:370 ../../content/index.php:383 ../../user/data.php:234 ../../user/index.php:98 ../../user/picker.php:89
 msgid "Updated"
 msgstr ""
 
 #: ../../media/ui/menu.php:13
-msgid "Upload"
+msgid "Upload files"
 msgstr ""
 
 #: ../../user/import.php:245
@@ -1315,7 +1315,7 @@ msgstr ""
 msgid "Upload to this album"
 msgstr ""
 
-#: ../../category/index.php:210 ../../chapter/index.php:270 ../../content/data-language.php:268 ../../content/data.php:397 ../../content/gallery-item.php:226
+#: ../../category/index.php:210 ../../chapter/index.php:270 ../../content/data-language.php:268 ../../content/data.php:397 ../../content/gallery-item.php:228
 msgid "Url"
 msgstr ""
 
@@ -1373,7 +1373,7 @@ msgstr ""
 msgid "View limit"
 msgstr ""
 
-#: ../../content/data.php:436 ../../content/gallery-album.php:240 ../../content/gallery-item.php:241
+#: ../../content/data.php:436 ../../content/gallery-album.php:240 ../../content/gallery-item.php:243
 msgid "Visibility"
 msgstr ""
 
