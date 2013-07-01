@@ -4,6 +4,9 @@ Kodeine Change log
 * = Autre / Divers / Inclassable...
 
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+2013-07-01 (5.2.2)
++ Page intermediaire listante les contenus
+
 2013-03-15 (5.2.1)
 + Déplacement de la gestion des type dans le module type (/admin/content/type => /admin/type/)
 
