@@ -34,6 +34,14 @@
 
 	$dir = ($filter['direction'] == 'ASC') ? 'DESC' : 'ASC';
 
+
+
+    $conf	= $app->configGet('business', 'row');
+    if(is_array($conf)) $rows = array();
+    elseif(is_array(json_decode($conf))) $rows = json_decode($conf, true);
+    else $rows = array();
+///$app->pre($rows);
+
 ?><!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -47,7 +55,7 @@
 ?></header>
 
 <div class="inject-subnav-right hide">
-	<li><a onclick="filterToggle('business');" class="btn btn-mini">Options d'affichage</a></li>
+	<li><a onclick="filterToggle('business');" class="btn btn-mini"><?php echo _('Display settings'); ?></a></li>
 </div>
 
 <div id="app"><div class="">
@@ -58,7 +66,7 @@
 		<input type="hidden" name="filter[open]"	value="1" />
 		<input type="hidden" name="filter[offset]"	value="0" />
 	
-		<label for="txt-combien">Combien</label>
+		<label for="txt-combien"><?php echo _('Limit'); ?></label>
 		<input type="text" name="filter[limit]" id="txt-combien" size="5" value="<?php echo $filter['limit'] ?>" />
 
 		<label for="shop-select">Shop</label><?php
@@ -71,29 +79,54 @@
 			   'empty'		=> true
 			));
 		?>
-		<button type="submit" class="btn btn-mini">Valider</button>
+		<button type="submit" class="btn btn-mini"><?php echo _('Filter'); ?></button>
 			
 	</form>
 	</div>
 	
 	<form method="post" action="./" id="listing">
-	<table width="100%" border="0" cellpadding="0" cellspacing="0" class="listing sortable align-left">
+	<table width="100%" border="0" cellpadding="0" cellspacing="0" class="listing align-left">
 		<thead>
 			<tr>
 				<th width="30" class="icone"><i class="icon-remove icon-white"></i></th>
-				<th width="50" class="order <?php if($filter['order'] == 'k_businesscart.id_cart') 		echo 'order'.$dir; ?>"><span>#</span></th>
-				<th width="150"class="order <?php if($filter['order'] == 'k_businesscart.cartDateCmd') 	echo 'order'.$dir; ?>"><span>Date</span></th>
-				<th width="200">Nom</th>
+
+				<th width="50" class="order <?php if($filter['order'] == 'k_businesscart.id_cart') 		echo 'order'.$dir; ?>" onClick="document.location='index?cf&order=k_businesscart.id_cart&direction=<?php echo $dir ?>'"><span>#</span></th>
+                <th width="150" class="order <?php if($filter['order'] == 'k_businesscart.cartDateCmd') 		echo 'order'.$dir; ?>" onClick="document.location='index?cf&order=k_businesscart.cartDateCmd&direction=<?php echo $dir ?>'"><span>Date</span></th>
+                <th width="200" class="order <?php if($filter['order'] == 'k_businesscart.cartDeliveryName') 		echo 'order'.$dir; ?>" onClick="document.location='index?cf&order=k_businesscart.cartDeliveryName&direction=<?php echo $dir ?>'"><span><?php echo _('Name'); ?></span></th>
 				<th></th>
-	
-				<th width="100">Status</th>
-				<th width="100">Moyen</th>
-				<th width="100" style="text-align:right;">Total</th>
+                <?php
+                $colspan = 0;
+                if(is_array($rows)) {
+                    $colspan ++;
+                    foreach($rows as $r) {
+
+                        if(is_numeric($r['field'])) {
+                            $field	    = $app->apiLoad('field')->fieldGet(array('id_field' => $r['field']));
+                            $fieldbdd = 'k_businesscart.field'.$r['field'];
+                        }else {
+                            $field = array('fieldName' => $r['field']);
+                            $fieldbdd = 'k_businesscart.'.$r['field'];
+                        }
+                        ?>
+                        <th width="<?php echo $r['width']; ?>" class="order <?php if($filter['order'] == $fieldbdd) 	echo 'order'.$dir; ?>" onClick="document.location='index?cf&order=<?php echo $fieldbdd; ?>&direction=<?php echo $dir ?>'">
+                            <span><?php echo $field['fieldName']; ?></span>
+                        </th>
+
+                        <?php
+                    }
+                }
+                ?>
+
+
+                <th width="100" class="order <?php if($filter['order'] == 'k_businesscart.cartDeliveryStatus') 		echo 'order'.$dir; ?>" onClick="document.location='index?cf&order=k_businesscart.cartDeliveryStatus&direction=<?php echo $dir ?>'"><span><?php echo _('Status'); ?></span></th>
+                <th width="100" class="order <?php if($filter['order'] == 'k_businesscart.cartPayment') 		echo 'order'.$dir; ?>" onClick="document.location='index?cf&order=k_businesscart.cartPayment&direction=<?php echo $dir ?>'"><span><?php echo _('Mode'); ?></span></th>
+
+				<th width="100" style="text-align:right;"><?php echo _('Total'); ?></th>
 			</tr>
 		</thead>
 		<tbody><?php
 		if(sizeof($cmd)){
-			foreach($cmd as $e){ 
+			foreach($cmd as $e){
 				$chkdel++; # count chkbox 
 			?>
 			<tr>
@@ -102,23 +135,44 @@
 				<td><a href="detail?id_cart=<?php echo $e['id_cart'] ?>"><?php echo $app->helperDate($e['cartDateCmd'], '%d %B %G %Hh%M'); ?></a></td>
 				<td><?php echo $e['cartDeliveryName'] ?></td>
 				<td></td>
-				<td><a href="edit?id_cart=<?php echo $e['id_cart'] ?>"><?php echo $e['cartStatus'] ?></a></td>
-				<td><?php echo $e['cartPayment'] ?></td>
-				<td align="right"><?php echo $e['cartTotalFinal'] ?></td>
+                <?php
+                if(is_array($rows)) {
+                    foreach($rows as $r) {
+
+                        if(is_numeric($r['field'])) {
+                            $field	    = $app->apiLoad('field')->fieldGet(array('id_field' => $r['field']));
+                            $value = $e['field'.$r['field']];
+                        }else {
+                            $field = array('fieldName' => $r['field']);
+                            $value = $e[$field['fieldName']];
+                        }
+                        ?>
+                        <td>
+                            <span><?php echo $value; ?></span>
+                        </td>
+
+                        <?php
+                    }
+                }
+                ?>
+
+				<td><a href="edit?id_cart=<?php echo $r['id_cart'] ?>"><?php echo $r['cartStatus'] ?></a></td>
+				<td><?php echo $r['cartPayment'] ?></td>
+				<td align="right"><?php echo $r['cartTotalFinal'] ?></td>
 			</tr>
 			<?php }
 		}else{ ?>
 			<tr>
-				<td colspan="8" style="padding-top:30px; padding-bottom:30px; font-weight:bold;" align="center">Aucune commande</td>
+				<td colspan="<?php echo ($colspan + 8); ?>" style="padding-top:30px; padding-bottom:30px; font-weight:bold;" align="center"><?php echo _('No order'); ?></td>
 			</tr>
 		<?php } ?>
 		</tbody>
 		<tfoot>
 			<tr>
 				<td height="30"></td>
-				<td colspan="5"><?php
+				<td colspan="<?php echo ($colspan + 5); ?>"><?php
 				if(sizeof($cmd)){ ?>
-					<a href="#" onClick="apply();" class="btn btn-mini">Supprimer les commandes selectionnés</a>
+					<a href="#" onClick="apply();" class="btn btn-mini"><?php echo _('Remove selected orders'); ?></a>
 					<span class="pagination"><?php $app->pagination($app->apiLoad('business')->total, $app->apiLoad('business')->limit, $filter['offset'], 'index?cf&offset=%s'); ?></span>
 				<?php } ?></td>
 				<td>&nbsp;</td>
