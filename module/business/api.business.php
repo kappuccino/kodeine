@@ -87,6 +87,11 @@ public function businessCartGet($opt=array()){
 	# On cherche a recupere un CART pas tous les moyens
 	#
 	if($opt['create']){
+		# Si je suis connecté, verifié si j'ai pas un panier existant
+		if($id_user > 0){
+			$check = $this->dbOne("SELECT id_cart FROM k_businesscart WHERE is_cart=1 AND id_user='".$id_user."'");
+			if(!empty($check)) $opt['id_cart'] = $check['id_cart'];
+		} else
 		# Si le id_cart n'est pas renseigne
 		if(intval($opt['id_cart']) == 0){
 			$opt['id_cart'] = $this->businessCartNew(array('id_user' => $id_user, 'debug' => $opt['debug']));
