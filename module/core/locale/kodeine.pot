@@ -298,6 +298,10 @@ msgstr ""
 msgid "Click Limit"
 msgstr ""
 
+#: ../../media/index.php:157
+msgid "Close"
+msgstr ""
+
 #: ../../field/index.php:112 ../../field/index.php:172
 msgid "Code"
 msgstr ""
@@ -447,11 +451,15 @@ msgstr ""
 msgid "Default theme — Could be changed by chapters and/or modules"
 msgstr ""
 
+#: ../../media/index.php:103 ../../media/index.php:77
+msgid "Delete"
+msgstr ""
+
 #: ../../config/language.php:189
 msgid "Delivery"
 msgstr ""
 
-#: ../../category/index.php:225 ../../chapter/index.php:289 ../../content/data-language.php:290
+#: ../../category/index.php:225 ../../chapter/index.php:289 ../../content/data-language.php:290 ../../media/index.php:151
 msgid "Description"
 msgstr ""
 
@@ -491,7 +499,7 @@ msgstr ""
 msgid "Drag & drop files here to upload them."
 msgstr ""
 
-#: ../../user/import.php:52
+#: ../../media/index.php:104 ../../user/import.php:52
 msgid "Duplicate"
 msgstr ""
 
@@ -625,6 +633,14 @@ msgstr ""
 
 #: ../../content/data.php:439 ../../content/gallery-album.php:243
 msgid "Front office view"
+msgstr ""
+
+#: ../../media/index.php:105
+msgid "Fullscreen"
+msgstr ""
+
+#: ../../media/index.php:109 ../../media/index.php:112
+msgid "Generate thumbnail"
 msgstr ""
 
 #: ../../config/language.php:210
@@ -839,7 +855,7 @@ msgstr ""
 msgid "Members only"
 msgstr ""
 
-#: ../../business/index.php:122
+#: ../../business/index.php:124
 msgid "Mode"
 msgstr ""
 
@@ -935,7 +951,7 @@ msgstr ""
 msgid "No options available"
 msgstr ""
 
-#: ../../business/index.php:166
+#: ../../business/index.php:181
 msgid "No order"
 msgstr ""
 
@@ -1055,6 +1071,10 @@ msgstr ""
 msgid "Pick"
 msgstr ""
 
+#: ../../media/index.php:113 ../../media/index.php:116
+msgid "Play"
+msgstr ""
+
 #: ../../user/data.php:50
 msgid "Please, fill the form correctly"
 msgstr ""
@@ -1131,7 +1151,7 @@ msgstr ""
 msgid "Remove selected lines"
 msgstr ""
 
-#: ../../business/index.php:175
+#: ../../business/index.php:190
 msgid "Remove selected orders"
 msgstr ""
 
@@ -1145,6 +1165,10 @@ msgstr ""
 
 #: ../../comment/index.php:133
 msgid "Remove/Change selected items"
+msgstr ""
+
+#: ../../media/index.php:106
+msgid "Rename"
 msgstr ""
 
 #: ../../content/data.php:540
@@ -1167,7 +1191,7 @@ msgstr ""
 msgid "Same as reference"
 msgstr ""
 
-#: ../../chapter/index.php:172 ../../config/admin.php:31 ../../config/field.php:56 ../../config/index.php:82 ../../config/language.php:72 ../../config/offline.php:53 ../../config/robots.php:46 ../../content/data.php:237 ../../content/gallery-album.php:156 ../../content/gallery-item.php:188 ../../field/asso.php:198 ../../media/pref.php:60 ../../social/forum.php:165 ../../theme/index.php:65 ../../theme/index.php:67 ../../user/data.php:133 ../../user/group.php:72 ../../user/group.php:75
+#: ../../chapter/index.php:172 ../../config/admin.php:31 ../../config/field.php:56 ../../config/index.php:82 ../../config/language.php:72 ../../config/offline.php:53 ../../config/robots.php:46 ../../content/data.php:237 ../../content/gallery-album.php:156 ../../content/gallery-item.php:188 ../../field/asso.php:198 ../../media/index.php:156 ../../media/pref.php:60 ../../social/forum.php:165 ../../theme/index.php:65 ../../theme/index.php:67 ../../user/data.php:133 ../../user/group.php:72 ../../user/group.php:75
 msgid "Save"
 msgstr ""
 
@@ -1197,6 +1221,10 @@ msgstr ""
 
 #: ../../content/data.php:291 ../../user/data.php:158
 msgid "See all"
+msgstr ""
+
+#: ../../media/index.php:119 ../../media/index.php:79
+msgid "Select"
 msgstr ""
 
 #: ../../media/ui/menu.php:17
@@ -1255,7 +1283,7 @@ msgstr ""
 msgid "State"
 msgstr ""
 
-#: ../../business/index.php:121
+#: ../../business/index.php:123
 msgid "Status"
 msgstr ""
 
@@ -1339,7 +1367,7 @@ msgstr ""
 msgid "Time format"
 msgstr ""
 
-#: ../../content/data-language.php:279
+#: ../../content/data-language.php:279 ../../media/index.php:148
 msgid "Title"
 msgstr ""
 
@@ -1355,7 +1383,7 @@ msgstr ""
 msgid "Top left name, default Kodeine"
 msgstr ""
 
-#: ../../business/index.php:124
+#: ../../business/index.php:126
 msgid "Total"
 msgstr ""
 

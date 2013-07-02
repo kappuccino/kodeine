@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Kodeine\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2013-07-01 16:48+0100\n"
+"PO-Revision-Date: 2013-07-02 10:44+0100\n"
 "Last-Translator: Benjamin Mosnier <bm@kappuccino.org>\n"
 "Language-Team: Kappuccino <bm@kappuccino.org>\n"
 "Language: Français\n"
@@ -327,6 +327,10 @@ msgstr "Civilité"
 msgid "Click Limit"
 msgstr "Limite de click"
 
+#: ../../media/index.php:157
+msgid "Close"
+msgstr "Fermer"
+
 #: ../../field/index.php:112 ../../field/index.php:172
 msgid "Code"
 msgstr "Code"
@@ -480,12 +484,16 @@ msgstr "Langue par défaut (si non précisé dans l'URL)"
 msgid "Default theme — Could be changed by chapters and/or modules"
 msgstr "Thème par défaut — Peut être changé par chapitres et/ou modules"
 
+#: ../../media/index.php:103 ../../media/index.php:77
+msgid "Delete"
+msgstr "Supprimer"
+
 #: ../../config/language.php:189
 msgid "Delivery"
 msgstr "Livraison"
 
 #: ../../category/index.php:225 ../../chapter/index.php:289
-#: ../../content/data-language.php:290
+#: ../../content/data-language.php:290 ../../media/index.php:151
 msgid "Description"
 msgstr "Description"
 
@@ -526,7 +534,7 @@ msgstr "Téléchargement"
 msgid "Drag & drop files here to upload them."
 msgstr "Glisser et déposer des fichiers ici pour les envoyer."
 
-#: ../../user/import.php:52
+#: ../../media/index.php:104 ../../user/import.php:52
 msgid "Duplicate"
 msgstr "Doublon"
 
@@ -666,6 +674,14 @@ msgstr "Ouvrir le site"
 #: ../../content/data.php:439 ../../content/gallery-album.php:243
 msgid "Front office view"
 msgstr "Visible sur le site"
+
+#: ../../media/index.php:105
+msgid "Fullscreen"
+msgstr "Plein écran"
+
+#: ../../media/index.php:109 ../../media/index.php:112
+msgid "Generate thumbnail"
+msgstr "Générer la vignette"
 
 #: ../../config/language.php:210
 msgid "Give this zone a name"
@@ -891,7 +907,7 @@ msgstr "Media"
 msgid "Members only"
 msgstr "Membres seulement"
 
-#: ../../business/index.php:122
+#: ../../business/index.php:124
 msgid "Mode"
 msgstr "Mode"
 
@@ -1003,7 +1019,7 @@ msgstr "Pas d'élement supplémentaire"
 msgid "No options available"
 msgstr "Aucune option disponible"
 
-#: ../../business/index.php:166
+#: ../../business/index.php:181
 msgid "No order"
 msgstr "Aucune commande"
 
@@ -1132,6 +1148,10 @@ msgstr "Téléphone 2"
 msgid "Pick"
 msgstr "Choisir"
 
+#: ../../media/index.php:113 ../../media/index.php:116
+msgid "Play"
+msgstr "Lire"
+
 #: ../../user/data.php:50
 msgid "Please, fill the form correctly"
 msgstr "Merci de remplir le "
@@ -1214,7 +1234,7 @@ msgstr "Supprimer les élements selecitonnés"
 msgid "Remove selected lines"
 msgstr "Supprimer les lignes selecitonnées"
 
-#: ../../business/index.php:175
+#: ../../business/index.php:190
 msgid "Remove selected orders"
 msgstr "Supprimer les commandes sélectionnées"
 
@@ -1233,6 +1253,10 @@ msgstr "Supprimer cette langue"
 #: ../../comment/index.php:133
 msgid "Remove/Change selected items"
 msgstr "Supprimer/Changer les lignes sélectionnées."
+
+#: ../../media/index.php:106
+msgid "Rename"
+msgstr "Renommer"
 
 #: ../../content/data.php:540
 msgid "Reset notes"
@@ -1260,9 +1284,10 @@ msgstr "Identique à la référence"
 #: ../../config/language.php:72 ../../config/offline.php:53
 #: ../../config/robots.php:46 ../../content/data.php:237
 #: ../../content/gallery-album.php:156 ../../content/gallery-item.php:188
-#: ../../field/asso.php:198 ../../media/pref.php:60 ../../social/forum.php:165
-#: ../../theme/index.php:65 ../../theme/index.php:67 ../../user/data.php:133
-#: ../../user/group.php:72 ../../user/group.php:75
+#: ../../field/asso.php:198 ../../media/index.php:156 ../../media/pref.php:60
+#: ../../social/forum.php:165 ../../theme/index.php:65
+#: ../../theme/index.php:67 ../../user/data.php:133 ../../user/group.php:72
+#: ../../user/group.php:75
 msgid "Save"
 msgstr "Sauver"
 
@@ -1295,6 +1320,10 @@ msgstr "Recherchable"
 #: ../../content/data.php:291 ../../user/data.php:158
 msgid "See all"
 msgstr "Tout voir"
+
+#: ../../media/index.php:119 ../../media/index.php:79
+msgid "Select"
+msgstr "Sélectionner"
 
 #: ../../media/ui/menu.php:17
 msgid "Settings"
@@ -1352,7 +1381,7 @@ msgstr "Commence"
 msgid "State"
 msgstr "Etat"
 
-#: ../../business/index.php:121
+#: ../../business/index.php:123
 msgid "Status"
 msgstr "Etat"
 
@@ -1438,7 +1467,7 @@ msgstr "Afficher en image"
 msgid "Time format"
 msgstr "Format de l'heure"
 
-#: ../../content/data-language.php:279
+#: ../../content/data-language.php:279 ../../media/index.php:148
 msgid "Title"
 msgstr "Titre"
 
@@ -1454,7 +1483,7 @@ msgstr "Activer/Désactiver l'éditeur de texte"
 msgid "Top left name, default Kodeine"
 msgstr "Nom en haut à gauche, par défaut: Kodeine"
 
-#: ../../business/index.php:124
+#: ../../business/index.php:126
 msgid "Total"
 msgstr "Total"
 
