@@ -90,6 +90,10 @@ msgstr ""
 msgid "Add a label"
 msgstr ""
 
+#: ../../media/index.php:106
+msgid "Add a legend"
+msgstr ""
+
 #: ../../content/data.php:292 ../../user/data.php:159
 msgid "Add a tab"
 msgstr ""
@@ -1165,10 +1169,6 @@ msgstr ""
 
 #: ../../comment/index.php:133
 msgid "Remove/Change selected items"
-msgstr ""
-
-#: ../../media/index.php:106
-msgid "Rename"
 msgstr ""
 
 #: ../../content/data.php:540

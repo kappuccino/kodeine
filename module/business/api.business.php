@@ -21,7 +21,7 @@ function businessCartTTL(){
 
 	    if(sizeof($cart) > 0){
             foreach($cart as $c){
-                $this->businessCartRemove($c['id_cart'], false);
+                $this->businessCartRemove($c['id_cart'], true);
             }
         }
 
@@ -1024,7 +1024,7 @@ public function businessCmdNew($opt){
 
 		$mail->Subject	= $this->helperReplace($mailTitle, $cmd);
 		$mail->AltBody	= strip_tags($message);
-		$mail->MsgHTML(preg_replace("[\]", '', $message));
+		$mail->MsgHTML(preg_replace("[\\\]",'',$message));;
 
 		if($opt['debug']){
 			$this->pre("mailto", $mailTo, 'mailCc', $mailCc, 'mailBcc', $mailBcc, 'mailTitle', $mailTitle, 'message', $message, 'cmd', $cmd, 'mail', $mail);
@@ -1039,7 +1039,7 @@ public function businessCmdNew($opt){
 			}
 			if($custom['mailBody'] != ''){
 				$mail->AltBody = strip_tags($custom['mailBody']);
-				$mail->MsgHTML(preg_replace("#[\]#", '', $custom['mailBody']));
+				$mail->MsgHTML(preg_replace("[\\\]",'',$custom['mailBody']));
 			}
 		}
 

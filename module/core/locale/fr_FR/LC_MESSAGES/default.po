@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Kodeine\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2013-07-02 10:44+0100\n"
+"PO-Revision-Date: 2013-07-02 11:10+0100\n"
 "Last-Translator: Benjamin Mosnier <bm@kappuccino.org>\n"
 "Language-Team: Kappuccino <bm@kappuccino.org>\n"
 "Language: Français\n"
@@ -101,6 +101,10 @@ msgstr "Ajouter un choix"
 #: ../../localisation/index.php:122
 msgid "Add a label"
 msgstr "Ajouter un label"
+
+#: ../../media/index.php:106
+msgid "Add a legend"
+msgstr "Ajouter une légende"
 
 #: ../../content/data.php:292 ../../user/data.php:159
 msgid "Add a tab"
@@ -1254,10 +1258,6 @@ msgstr "Supprimer cette langue"
 msgid "Remove/Change selected items"
 msgstr "Supprimer/Changer les lignes sélectionnées."
 
-#: ../../media/index.php:106
-msgid "Rename"
-msgstr "Renommer"
-
 #: ../../content/data.php:540
 msgid "Reset notes"
 msgstr "Remettre à zéro la note"
@@ -1724,6 +1724,9 @@ msgstr "réinitialiser votre mot de passe"
 #: ../../core/login.php:84
 msgid "save it"
 msgstr "et sauver le"
+
+#~ msgid "Rename"
+#~ msgstr "Renommer"
 
 #~ msgid "Upload"
 #~ msgstr "Envoyer"

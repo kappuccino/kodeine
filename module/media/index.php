@@ -103,7 +103,7 @@
         <img class="delete" src="ui/img/media-delete.png" title="<?php echo _('Delete'); ?>" />
         <img class="duplicate" src="ui/img/media-duplicate.png" title="<?php echo _('Duplicate'); ?>" />
         <img class="fullsize" src="ui/img/media-wide.png" title="<?php echo _('Fullscreen'); ?>" />
-        <img class="meta" src="ui/img/media-rename.png" title="<?php echo _('Rename'); ?>" />
+        <img class="meta" src="ui/img/media-rename.png" title="<?php echo _('Add a legend'); ?>" />
 
 		<% if(kind == 'pdf'){ %>
 				<img class="pdfCover" src="ui/img/media-flip.png" title="<?php echo _('Generate thumbnail'); ?>" />
