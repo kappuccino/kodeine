@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Kodeine\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2013-07-01 16:44+0100\n"
+"PO-Revision-Date: 2013-07-01 16:48+0100\n"
 "Last-Translator: Benjamin Mosnier <bm@kappuccino.org>\n"
 "Language-Team: Kappuccino <bm@kappuccino.org>\n"
 "Language: Français\n"
@@ -341,7 +341,7 @@ msgstr "Colonne 2"
 
 #: ../../business/ui/menu.php:44
 msgid "Columns"
-msgstr "Colonne s"
+msgstr "Colonnes"
 
 #: ../../type/row.php:224
 msgid "Columns for type"

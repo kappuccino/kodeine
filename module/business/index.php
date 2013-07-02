@@ -107,9 +107,11 @@
                             $field = array('fieldName' => $r['field']);
                             $fieldbdd = 'k_businesscart.'.$r['field'];
                         }
+                        $name = $field['fieldName'];
+                        if($r['title'] != '') $name = $r['title'];
                         ?>
                         <th width="<?php echo $r['width']; ?>" class="order <?php if($filter['order'] == $fieldbdd) 	echo 'order'.$dir; ?>" onClick="document.location='index?cf&order=<?php echo $fieldbdd; ?>&direction=<?php echo $dir ?>'">
-                            <span><?php echo $field['fieldName']; ?></span>
+                            <span><?php echo $name; ?></span>
                         </th>
 
                         <?php
@@ -141,8 +143,21 @@
 
                         if(is_numeric($r['field'])) {
                             $field	    = $app->apiLoad('field')->fieldGet(array('id_field' => $r['field']));
-                            $value = $e['field'.$r['field']];
-                        }else {
+                            $value      = $e['field'.$r['field']];
+                        }elseif($r['field'] == 'cartWeight') {
+                            $value = 0;
+                            foreach($e['line'] as $l) {
+                                $value += ($l['contentWeight'] * $l['contentQuantity']);
+                            }
+                            if($value >= 0) $value = round(($value / 1000), 3);
+                            $value .= ' kg';
+                        } elseif(substr($r['field'], 0, 8) == 'DELIVERY') {
+                            $address = $app->apiLoad('user')->userAddressBookGet(array( 'id_user' => $e['id_user'], 'id_addressbook' => $e['id_delivery'] ));
+                            $value = $address[str_replace('DELIVERY', '', $r['field'])];
+                        }  elseif(substr($r['field'], 0, 7) == 'BILLING') {
+                            $address = $app->apiLoad('user')->userAddressBookGet(array( 'id_user' => $e['id_user'], 'id_addressbook' => $e['id_billing'] ));
+                            $value = $address[str_replace('BILLING', '', $r['field'])];
+                        } else {
                             $field = array('fieldName' => $r['field']);
                             $value = $e[$field['fieldName']];
                         }

@@ -40,14 +40,16 @@
 	    $used       = $data;
 
 	    $pos        = explode(',', $_GET['pos']);
-	    $width      = explode(',', $_GET['width']);
+        $width      = explode(',', $_GET['width']);
+        $title      = explode(',', $_GET['title']);
 	    $newused    = array();
 
 	    $i = 0;
 	    foreach($pos as $p) {
 	        foreach($used as $k=>$e) {
 	            if($p == $e['field']) {
-	                $e['width'] = $width[$i];
+                    $e['width'] = $width[$i];
+                    $e['title'] = $title[$i];
 	                $newused[]  = $e;
 	                $i ++;
 	            }
@@ -74,7 +76,10 @@
 	$tmp    = array();
 
 	// Champs de k_businesscart autorises
-	$contentField = array('cartEmail', 'cartDeliveryName', 'cartBillingName', 'cartDeliveryStatus', 'cartSerial', 'cartWeight');
+	$contentField = array(
+        'cartEmail', 'cartDeliveryName', 'cartBillingName', 'cartDeliveryStatus', 'cartSerial', 'cartWeight',
+        'DELIVERYaddressbookPhone1', 'DELIVERYaddressbookPhone2', 'BILLINGaddressbookPhone1', 'BILLINGaddressbookPhone2'
+    );
 
 	// Champs utilises
 	foreach($data as $e) $tmp[] = $e['field'];
@@ -210,7 +215,8 @@
                             $id_field   = $e['field'];
                             $fieldName  = $e['field'];
                         }
-                        echo "<li id=\"".$id_field."\" style=\"height: 75px;\">". $fieldName . "<br />";
+                        echo "<li id=\"".$id_field."\" style=\"height: 100px;\">". $fieldName . "<br />";
+                        echo "Titre <input type=\"text\" size=\"15\" id=\"t" . $id_field . "\" value=\"".$e['title']."\"><br />";
                         echo "Largeur <input type=\"text\" size=\"2\" id=\"w" . $id_field . "\" value=\"".$e['width']."\"><br />";
                         echo "<a href=\"row?field=".$id_field."&remove\" class=\"btn btn-mini\">"._('Remove')."</a>";
                         echo "</li>";
@@ -242,11 +248,14 @@
                     ordreA = mySortables.sortable("toArray");
                     ordre = ordreA.join(',');
                     var w = new Array();
+                    var t = new Array();
                     for(i=0;i<ordreA.length;i++) {
                         w.push($('#w'+ordreA[i]).val());
+                        t.push($('#t'+ordreA[i]).val());
                     }
-                    width = w.join(',');
-                    document.location='row?pos='+ordre+'&width='+width;
+                    var width = w.join(',');
+                    var title = t.join(',');
+                    document.location='row?pos='+ordre+'&width='+width+'&title='+title;
                 }
 
             </script>
