@@ -4,6 +4,9 @@ Kodeine Change log
 * = Autre / Divers / Inclassable...
 
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+2013-07-03
++ Fix i18n bugs
+
 2013-03-15
 + Deplacement de la gestion des type dans le module
 
