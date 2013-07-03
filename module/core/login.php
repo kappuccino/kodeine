@@ -25,7 +25,7 @@
 		$app->go('./');
 	}else
 	if($app->userIsLogged && !$app->userIsAdmin){
-		echo _('You are logged in, but you do not have enought privileges to use the back office. <a href=\"?logout=1\">Logout</a>');
+		echo _('You are logged in, but you do not have enought privileges to use the back office. <a href="?logout=1">Logout</a>');
 		die();
 	}
 

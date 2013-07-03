@@ -34,7 +34,7 @@ foreach($modules as $mod){
 
 echo "OK\n";
 
-echo "> Generation du .pot ...";
+echo "> Generation du .pot ...\n";
 
 $dest   = 'kodeine.pot';
 $source = 'kodeine.source';
@@ -43,14 +43,18 @@ file_put_contents($source, implode("\n", $files));
 echo "OK\n";
 
 
-echo "> Fix UTF-8... ";
+echo "> Fix UTF-8... \n";
 
 $cmd = 'C:\Perl64\bin\perl.exe xgettext.pl -f "'.$source.'" -o "'.$dest.'"';
 
-echo "$cmd\n";
+echo "Command : $cmd\n";
 $out = $app->helperPipeExec($cmd);
 
-echo var_dump($out, true)."\n";
+if(is_array($out)) {
+    foreach($out as $k=>$v) {
+        echo $k." : ".$v."\n";
+    }
+}
 $raw = file_get_contents($dest);
 $raw = str_replace('charset=CHARSET', 'charset=UTF-8', $raw);
 file_put_contents($dest, $raw);
