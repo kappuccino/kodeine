@@ -11,6 +11,7 @@ public function __loaded(){
 /* + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + -
 + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - */
 function businessCartTTL(){
+
     if($GLOBALS['jobTTL'] !== true) {
 
         $ttl  = $this->hookFilter('businessCartTTL', 86400);
@@ -20,7 +21,7 @@ function businessCartTTL(){
 
 	    if(sizeof($cart) > 0){
             foreach($cart as $c){
-                $this->businessCartRemove($c['id_cart'], false);
+                $this->businessCartRemove($c['id_cart'], true);
             }
         }
 
@@ -72,7 +73,7 @@ public function businessCartNew($opt=array()){
 /* + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + -
 + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - */
 public function businessCartGet($opt=array()){
-	
+
 	$userAffect = array_key_exists('userAffect', $opt) ? $opt['userAffect'] : true;
 
 	# Si on a un ID , on verifie si l'ID qu'on nous donne est encore existant
@@ -86,6 +87,11 @@ public function businessCartGet($opt=array()){
 	# On cherche a recupere un CART pas tous les moyens
 	#
 	if($opt['create']){
+		# Si je suis connecté, verifié si j'ai pas un panier existant
+		if($id_user > 0){
+			$check = $this->dbOne("SELECT id_cart FROM k_businesscart WHERE is_cart=1 AND id_user='".$id_user."'");
+			if(!empty($check)) $opt['id_cart'] = $check['id_cart'];
+		} else
 		# Si le id_cart n'est pas renseigne
 		if(intval($opt['id_cart']) == 0){
 			$opt['id_cart'] = $this->businessCartNew(array('id_user' => $id_user, 'debug' => $opt['debug']));
@@ -101,7 +107,7 @@ public function businessCartGet($opt=array()){
 	
 	# On force le CART a son USER si les 2 sont definit
 	#	
-	if($affect && $id_user > 0 && $opt['id_cart'] > 0 && $my['id_user'] == 0){
+	if($userAffect && $id_user > 0 && $opt['id_cart'] > 0 && $my['id_user'] == 0){
 		$this->dbQuery("UPDATE k_businesscart SET id_user=".$id_user." WHERE is_cart=1 AND id_cart=".$opt['id_cart']);		
 	 	if($opt['debug']) $this->pre($this->db_query, $this->db_error);		
 	}
@@ -269,7 +275,21 @@ public function businessCartPrice($id_cart, $opt=array()){
 		}
 		
 		$cartCouponName	= $coupon['couponName'];
-	}else{
+	}elseif($opt['couponMode'] != '' && $opt['couponName'] != '') {
+
+        if($opt['couponMode'] == 'FIXE'){
+            $cartCoupon	= $opt['couponAmount'];
+        }else
+        if($opt['couponMode'] == 'PERCENT'){
+            $cartCoupon	= $cartTotalFinal * ($opt['couponAmount'] / 100);
+        }else
+        if($opt['couponMode'] == 'CARRIAGE'){
+            $cartCoupon	= $cart['cartCarriage'];
+        }
+
+        $cartCouponName	= $opt['couponName'];
+    }else
+    {
 		$cartCoupon 	= 0;
 		$cartCouponName	= '';
 	}
@@ -759,7 +779,7 @@ public function businessCartCarriageGet($id_cart, $opt=array()){
 /* + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + -
 + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - */
 public function businessCartCarriageSet($opt){
-	
+
 	if($opt['id_cart'] == NULL) die("FATAL ERROR : NO ID_CART GIVEN TO App:Business:businessCartCarriageSet()");
 
 	$carriage = ($opt['carriage'])
@@ -768,7 +788,20 @@ public function businessCartCarriageSet($opt){
 
 	if(is_float($carriage)){
 
-		$this->dbQuery("UPDATE k_businesscart SET cartCarriage='".$carriage."' WHERE id_cart=".$opt['id_cart']);
+        // TVA
+        $cartCarriageTax            = ($opt['carriageTax'] > 0) ? $opt['carriageTax'] : '19.60';
+        $cartCarriageTotalTax       = $carriage;
+        $cartCarriage               = number_format(($cartCarriageTotalTax / (1 + ($cartCarriageTax / 100))), 2, '.', '');
+
+        $def = array();
+        $def['k_businesscart'] = array(
+            'cartCarriageTax'           => array('value' => $cartCarriageTax),
+            'cartCarriage'              => array('value' => $cartCarriage),
+            'cartCarriageTotalTax'      => array('value' => $cartCarriageTotalTax)
+        );
+        $this->dbQuery($this->dbUpdate($def)." WHERE id_cart='".$opt['id_cart']."'");
+
+        //$this->pre($this->db_query);
 		if($opt['debug']) $this->pre($this->db_query, $this->db_error);
 	
 		$this->businessCartPrice($opt['id_cart'], array('debug' => $opt['debug']));
@@ -996,7 +1029,7 @@ public function businessCmdNew($opt){
 
 		$mail->Subject	= $this->helperReplace($mailTitle, $cmd);
 		$mail->AltBody	= strip_tags($message);
-		$mail->MsgHTML(preg_replace("[\]", '', $message));
+		$mail->MsgHTML(preg_replace("[\\\]",'',$message));;
 
 		if($opt['debug']){
 			$this->pre("mailto", $mailTo, 'mailCc', $mailCc, 'mailBcc', $mailBcc, 'mailTitle', $mailTitle, 'message', $message, 'cmd', $cmd, 'mail', $mail);
@@ -1011,7 +1044,7 @@ public function businessCmdNew($opt){
 			}
 			if($custom['mailBody'] != ''){
 				$mail->AltBody = strip_tags($custom['mailBody']);
-				$mail->MsgHTML(preg_replace("#[\]#", '', $custom['mailBody']));
+				$mail->MsgHTML(preg_replace("[\\\]",'',$custom['mailBody']));
 			}
 		}
 
@@ -1065,7 +1098,7 @@ public function businessCouponUserSet($opt=array()){
 	);
 
 	$this->dbQuery($this->dbInsert($def));
-	if($opt['debug']) $this->pre($this->db_query, $this->db_error, $coupon);
+	if($opt['debug']) $this->pre($this->db_query, $this->db_error, $opt);
 
 	$this->id_coupon = ($opt['id_coupon'] > 0) ? $opt['id_coupon'] : $this->db_insert_id;
 
@@ -1197,7 +1230,7 @@ public function businessCarriageGet($opt=array()){
 	# Carraige
 	#
 	$carriage = $this->$dbMode("SELECT * FROM  k_businesscarriage ".$where);
-	if($opt['debug']) $this->pre($opt, $this->db_query, $this->db_error, $theme);
+	if($opt['debug']) $this->pre($opt, $this->db_query, $this->db_error, $carriage);
 
 	return $carriage;
 }
@@ -1240,7 +1273,7 @@ public function businessAccountGet($opt=array()){
     # Account
     #
     $account = $this->$dbMode("SELECT * FROM  k_businessaccount ".$where);
-    if($opt['debug']) $this->pre($opt, $this->db_query, $this->db_error, $theme);
+    if($opt['debug']) $this->pre($opt, $this->db_query, $this->db_error, $account);
 
     return $account;
 }
@@ -1313,7 +1346,7 @@ public function businessTaxGet($opt=array()){
     # Tax
     #
     $tax = $this->$dbMode("SELECT * FROM  k_businesstax ".$where." ORDER BY tax");
-    if($opt['debug']) $this->pre($opt, $this->db_query, $this->db_error, $theme);
+    if($opt['debug']) $this->pre($opt, $this->db_query, $this->db_error, $tax);
 
     return $tax;
 }

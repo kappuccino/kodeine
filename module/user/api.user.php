@@ -1126,31 +1126,58 @@ public  function userAddressBookGet($opt=array(), $check=true){
 	return $ab;
 }
 
-/* + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - 
+/* + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + -
  - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + */
 public  function userAddressBookSet($opt=array()){
 
-	$id_user		= $opt['id_user'];
-	$id_addressbook	= $opt['id_addressbook'];
-	$def			= $opt['def'];
+    $id_user		= $opt['id_user'];
+    $id_addressbook	= $opt['id_addressbook'];
+    $def			= $opt['def'];
 
-	if(!$this->formValidation($def)) return false;
+    if(!$this->formValidation($def)) return false;
 
-	if($id_addressbook != NULL){
-		$q = $this->dbUpdate($def)." WHERE id_addressbook=".$id_addressbook;
-	}else{
-		$q = $this->dbInsert($def);
-	}
+    if($id_addressbook != NULL){
+        $q = $this->dbUpdate($def)." WHERE id_addressbook=".$id_addressbook;
+    }else{
+        $q = $this->dbInsert($def);
+    }
 
-	@$this->dbQuery($q);
-	if($opt['debug']) $this->pre($this->db_query, $this->db_error);
-	if($this->db_error != NULL) return false;
+    @$this->dbQuery($q);
+    if($opt['debug']) $this->pre($this->db_query, $this->db_error);
+    if($this->db_error != NULL) return false;
 
-	$this->id_addressbook = ($id_addressbook > 0) ? $id_addressbook : $this->db_insert_id;
+    $this->id_addressbook = ($id_addressbook > 0) ? $id_addressbook : $this->db_insert_id;
 
-	$this->hookAction('userAddressBookSet', $this->id_addressbook);
+    if($opt['is_delivery']) $this->userAddressBookDeliverySet($this->id_addressbook, $id_user);
+    if($opt['is_billing']) $this->userAddressBookBillingSet($this->id_addressbook, $id_user);
 
-	return true;
+    $this->hookAction('userAddressBookSet', $this->id_addressbook);
+
+    return true;
+}
+/* + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + -
+ - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + */
+public  function userAddressBookDeliverySet($id_addressbook, $id_user){
+
+    if(intval($id_addressbook) == 0 || intval($id_user) == 0) return false;
+
+    $this->dbQuery("UPDATE k_useraddressbook SET addressbookIsProtected=0 WHERE addressbookIsDelivery = '1' AND id_user='".$id_user."'");
+    $this->dbQuery("UPDATE k_useraddressbook SET addressbookIsDelivery=0,addressbookIsMain=0 WHERE id_user='".$id_user."'");
+    $this->dbQuery("UPDATE k_useraddressbook SET addressbookIsDelivery=1,addressbookIsProtected=1,addressbookIsMain=1 WHERE id_addressbook='".$id_addressbook."'");
+
+    return true;
+}
+/* + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + -
+ - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + */
+public  function userAddressBookBillingSet($id_addressbook, $id_user){
+
+    if(intval($id_addressbook) == 0 || intval($id_user) == 0) return false;
+
+    $this->dbQuery("UPDATE k_useraddressbook SET addressbookIsProtected=0 WHERE addressbookIsBilling = '1' AND id_user='".$id_user."'");
+    $this->dbQuery("UPDATE k_useraddressbook SET addressbookIsBilling=0 WHERE id_user='".$id_user."'");
+    $this->dbQuery("UPDATE k_useraddressbook SET addressbookIsBilling=1,addressbookIsProtected=1 WHERE id_addressbook='".$id_addressbook."'");
+
+    return true;
 }
 
 /* + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + -
@@ -1340,7 +1367,7 @@ public  function userImportCSV($file, $post=NULL){
 		}
 	}
 
-	return array('imported', array('todo' => $todo, 'done' => $done, 'error' => $error, 'doublon' => $doublon));
+	return array('imported', array('todo' => $todo, 'done' => $done, 'error' => $errors, 'doublon' => $doublon));
 }
 
 /* + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + -
@@ -1551,7 +1578,7 @@ public  function userImportAddressBookCSV($file, $post=NULL){
         }
     }
 
-    return array('imported', array('todo' => $todo, 'done' => $done, 'error' => $error, 'doublon' => $doublon));
+    return array('imported', array('todo' => $todo, 'done' => $done, 'error' => $errors, 'doublon' => $doublon));
 }
 
 /* + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - 

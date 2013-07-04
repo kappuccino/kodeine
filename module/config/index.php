@@ -38,15 +38,15 @@
 			}
 		}
 
-		if(sizeof($_POST['ext']) > 0){
-			$i = 0;
-			foreach($_POST['ext'] as $ext_id => $ext_value){
-				$val = $app->apiLoad('field')->fieldSaveValue($ext_id, $ext_value);
-				$app->dbQuery("UPDATE k_config SET configValue='".addslashes($val)."' WHERE configModule='bootExt' AND configName='".$i.":id_field:".$ext_id."'");
-			#	$app->pre($app->db_query, $app->db_error);
-				$i++;
-			}
-		}
+        if(sizeof($_POST['field']) > 0){
+            $i = 0;
+            foreach($_POST['field'] as $ext_id => $ext_value){
+                $val = $app->apiLoad('field')->fieldSaveValue($ext_id, $ext_value);
+                $app->dbQuery("UPDATE k_config SET configValue='".addslashes($val)."' WHERE configModule='bootExt' AND configName='".$i.":id_field:".$ext_id."'");
+                #	$app->pre($app->db_query, $app->db_error);
+                $i++;
+            }
+        }
 
 		$app->go("./?saved");
 	}

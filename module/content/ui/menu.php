@@ -26,11 +26,11 @@
 		</li>
 		<?php }  ?>
 
-		<?php if($app->userCan('content.field')){ ?>
-		<li class="<?php echo isMe('/field/.*') ? 'me':'' ?>">
-			<a href="../field/asso"><span><?php echo _('Fields'); ?></span></a>
-		</li>
-		<?php }  ?>
+        <?php if($app->userCan('content.field')){ ?>
+        <li class="<?php echo isMe('/field/.*') ? 'me':'' ?>">
+            <a href="../field/asso"><span><?php echo _('Fields'); ?></span></a>
+        </li>
+        <?php }  ?>
 
 		<li class="<?php echo isMe('/comment/') ? 'me':'' ?>">
 			<a href="../comment/"><span><?php echo _('Comments'); ?></span></a>
@@ -42,9 +42,13 @@
 		</li>
 		<?php }  ?>
 
-		<li class="<?php echo isMe('/localisation/') ? 'me':'' ?>">
-			<a href="../localisation/"><span><?php echo _('Translate'); ?></span></a>
-		</li>
+        <li class="<?php echo isMe('/localisation/') ? 'me':'' ?>">
+            <a href="../localisation/"><span><?php echo _('Translate'); ?></span></a>
+        </li>
+
+        <li class="<?php echo isMe('/content/adzone') ? 'me':'' ?>">
+            <a href="../content/adzone"><span><?php echo _('Ads'); ?></span></a>
+        </li>
 	</ul>
 
 	<ul class="right"></ul>

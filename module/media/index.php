@@ -74,9 +74,9 @@
         <div class="icone"><img src="ui/img/media-folder.png" /></div>
     </div>
     <div class="action">
-        <img class="delete" src="ui/img/media-delete.png" />
+        <img class="delete" src="ui/img/media-delete.png" title="<?php echo _('Delete'); ?>" />
         <span class="lock <% if(is_locked){ %>locked<% } %>"></span>
-        <img class="select" src="ui/img/media-select.png" />
+        <img class="select" src="ui/img/media-select.png" title="<?php echo _('Select'); ?>" />
     </div>
     <div class="title">
 	    <input type="text" value="<%- url %>" />
@@ -100,23 +100,23 @@
         </div>
     </div>
     <div class="action">
-        <img class="delete" src="ui/img/media-delete.png" />
-        <img class="duplicate" src="ui/img/media-duplicate.png" />
-        <img class="fullsize" src="ui/img/media-wide.png" />
-        <img class="meta" src="ui/img/media-rename.png" />
+        <img class="delete" src="ui/img/media-delete.png" title="<?php echo _('Delete'); ?>" />
+        <img class="duplicate" src="ui/img/media-duplicate.png" title="<?php echo _('Duplicate'); ?>" />
+        <img class="fullsize" src="ui/img/media-wide.png" title="<?php echo _('Fullscreen'); ?>" />
+        <img class="meta" src="ui/img/media-rename.png" title="<?php echo _('Add a legend'); ?>" />
 
 		<% if(kind == 'pdf'){ %>
-				<img class="pdfCover" src="ui/img/media-flip.png" />
+				<img class="pdfCover" src="ui/img/media-flip.png" title="<?php echo _('Generate thumbnail'); ?>" />
 	    <% }else
 	       if(kind == 'video'){ %>
-				<img class="poster" src="ui/img/media-flip.png" />
-				<img class="playVideo" src="ui/img/media-play.png" />
+				<img class="poster" src="ui/img/media-flip.png" title="<?php echo _('Generate thumbnail'); ?>" />
+				<img class="playVideo" src="ui/img/media-play.png" title="<?php echo _('Play'); ?>" />
 	    <% }else
 		   if(kind == 'audio'){ %>
-				<img class="playAudio" src="ui/img/media-play.png" />
+				<img class="playAudio" src="ui/img/media-play.png" title="<?php echo _('Play'); ?>" />
 	    <% } %>
 
-        <img class="select" src="ui/img/media-select.png" />
+        <img class="select" src="ui/img/media-select.png" title="<?php echo _('Select'); ?>" />
     </div>
     <div class="title">
         <input type="text" value="<%- url %>" />
@@ -145,16 +145,16 @@
 <script type="text/template" id="modal-meta">
 
     <div class="data">
-        Titre
+        <?php echo _('Title'); ?>
         <div class="wrapp"><textarea name="title"></textarea></div>
 
-        Description
+        <?php echo _('Description'); ?>
         <div class="wrapp"><textarea name="caption"></textarea></div>
 
 	    <div class="group">
 		    <div class="btn-group">
-				<a class="btn save">Sauver</a>
-				<a class="btn close">Fermer</a>
+				<a class="btn save"><?php echo _('Save'); ?></a>
+				<a class="btn close"><?php echo _('Close'); ?></a>
 		    </div>
 	    </div>
     </div>

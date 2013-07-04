@@ -5,9 +5,7 @@
 	if($_REQUEST['id_type'] == NULL){
 		$type = $app->apiLoad('type')->typeGet(array('profile' => true));
 		
-		(sizeof($type) > 0)
-			? header("Location: index?id_type=".$type[0]['id_type'])
-			: header("Location: ../type/?noData");
+		if(sizeof($type) == 0) header("Location: type?noData");
 	}
 
 	if(isset($_REQUEST['duplicate'])){
@@ -25,28 +23,29 @@
 	}
 
 	// Type
-	$type 		= $app->apiLoad('type')->typeGet();
-	$id_type	= $_REQUEST['id_type'];
-	$cType		= $app->apiLoad('type')->typeGet(array('id_type' => $id_type));
+	if(isset($_REQUEST['id_type'])){
+		$type 		= $app->apiLoad('type')->typeGet();
+		$id_type	= $_REQUEST['id_type'];
+		$cType		= $app->apiLoad('type')->typeGet(array('id_type' => $id_type));
 
-	// Filter (verifier content / album)
-	if($id_type == NULL)		die("APP : id_type IS NULL");
-	if($cType['is_gallery'])	header("Location: gallery?id_type=".$cType['is_type']);
+		// Filter (verifier content / album)
+		if($id_type == NULL)		die("APP : id_type IS NULL");
+		if($cType['is_gallery'])	header("Location: gallery?id_type=".$cType['is_type']);
 
-	// Filter
-	if(isset($_GET['cf'])){
-		$app->filterSet('content'.$id_type, $_GET);
-		$filter = array_merge($app->filterGet('content'.$id_type), $_GET);	
-	}else
-	if(isset($_POST['filter'])){
-		$app->filterSet('content'.$id_type, $_POST['filter']);
-		$filter = array_merge($app->filterGet('content'.$id_type), $_POST['filter']);	
-	}else{
-		$filter = $app->filterGet('content'.$id_type);
+		// Filter
+		if(isset($_GET['cf'])){
+			$app->filterSet('content'.$id_type, $_GET);
+			$filter = array_merge($app->filterGet('content'.$id_type), $_GET);
+		}else
+		if(isset($_POST['filter'])){
+			$app->filterSet('content'.$id_type, $_POST['filter']);
+			$filter = array_merge($app->filterGet('content'.$id_type), $_POST['filter']);
+		}else{
+			$filter = $app->filterGet('content'.$id_type);
+		}
+
+		$dir = ($filter['direction'] == 'ASC') ? 'DESC' : 'ASC';
 	}
-
-	$dir = ($filter['direction'] == 'ASC') ? 'DESC' : 'ASC';
-
 
 ?><!DOCTYPE html>
 <html lang="fr">
@@ -60,8 +59,8 @@
 	include(__DIR__.'/ui/menu.php')
 ?></header>
 
+<?php if(isset($_REQUEST['id_type'])){ ?>
 <div class="inject-subnav-right hide">
-	
 	<li><a onclick="filterToggle('content<?php echo $id_type ?>');" class="btn btn-small"><?php echo _('Display settings'); ?></a></li>
 	<li>
 		<div class="btn-group">
@@ -77,11 +76,34 @@
 		</div>
 	</li>
 	<li><a href="<?php echo (($cType['is_gallery']) ? 'gallery-album' : 'data' )."?id_type=".$id_type; ?>" class="btn btn-small btn-success"><?php printf(_('Add a %s'), $cType['typeName']); ?> </a></li>
-
 </div>
+<?php } ?>
 
-<div id="app">
-	
+<div id="app"><?php
+
+	if(!isset($_REQUEST['id_type'])){ ?>
+
+		<table border="0" cellpadding="0" cellspacing="0" class="listing">
+			<thead>
+				<tr>
+					<th>Liste des types</th>
+					<th width="100">Liste</th>
+					<th width="200">Ajouter</th>
+				</tr>
+			</thead>
+			<tbody>
+			<?php foreach($type as $e){ ?>
+				<tr>
+					<td><a href="./?id_type=<?php echo $e['id_type'] ?>"><?php echo $e['typeName'] ?></a></td>
+					<td><a href="./?id_type=<?php echo $e['id_type'] ?>" class="btn btn-mini">Voir la liste</a></td>
+					<td><a href="data.php?id_type=<?php echo $e['id_type'] ?>" class="btn btn-mini btn-success" style="color: #FFF;">Ajouter un nouveau</a></td>
+				</tr>
+			<?php } ?>
+			</tbody>
+		</table>
+
+	<?php }else{ ?>
+
 	<div class="quickForm" style="display:<?php echo ($filter['open']) ? 'block' : 'none;' ?>;">
 	<form action="index" method="post" class="form-horizontal">
 
@@ -424,7 +446,8 @@
 			<?php } ?>
 		</table>
 	</form>
-</div>
+
+<?php } ?></div>
 
 <?php include(COREINC.'/end.php'); ?>
 <script src="../core/vendor/datatables/jquery.dataTables.js"></script>

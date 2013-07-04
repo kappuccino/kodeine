@@ -14,7 +14,8 @@
 		
 		$def['k_businesscart'] = array(
 			'cartStatus'	=> array('value' => $_POST['cartStatus']),
-			'cartSerial'	=> array('value' => $_POST['cartSerial'])
+			'cartSerial'	=> array('value' => $_POST['cartSerial']),
+            'cartDeliveryStatus'	=> array('value' => $_POST['cartDeliveryStatus'])
 		);
 		
 		if($app->formValidation($def)){
@@ -22,7 +23,7 @@
 		}	
 		
 		# HOOK
-		$this->hookAction('businessCmdPaymentMail', $_POST['id_cart'], $myCmd['cartStatus'], $_POST['cartStatus']);
+        $app->hookAction('businessCmdPaymentMail', $_POST['id_cart'], $myCmd['cartStatus'], $_POST['cartStatus']);
 
 		$reload = true;
 	}
@@ -46,6 +47,24 @@
 		$mail->SetFrom("noreply@".$_SERVER['HTTP_HOST']);
 		$mail->AddReplyTo("noreply@".$_SERVER['HTTP_HOST']);
 		$mail->AddAddress($myCmd['cartEmail']);
+
+
+        $shop = $app->apiLoad('shop')->shopGet(array(
+            'id_shop'	=> $myCmd['id_shop']
+        ));
+        $mailCc		= $app->apiLoad('shop')->shopMailExtraction($shop['shopMailCc']);
+        // CC
+        foreach($mailCc as $e){
+            if(filter_var($e, FILTER_VALIDATE_EMAIL) !== FALSE) $mail->AddCC($e);
+        }
+        $mailBcc		= $app->apiLoad('shop')->shopMailExtraction($shop['shopMailBcc']);
+        // CC
+        foreach($mailBcc as $e){
+            if(filter_var($e, FILTER_VALIDATE_EMAIL) !== FALSE) $mail->AddBCC($e);
+        }
+
+
+
 		$mail->Subject	= "[".$_SERVER['HTTP_HOST']."] Votre commande";
 		$mail->AltBody	= "Pour voir ce message, merci d'utiliser un client compatible html";
 		$body = eregi_replace("[\]",'', $message);
@@ -87,21 +106,28 @@
 	<input type="hidden" name="id_cart" value="<?php echo $myCmd['id_cart'] ?>" />
 
 	<div style="width:900px; margin:0 auto;">
-		<h1>Edition de la commande #<?php echo $_REQUEST['id_cart'] ?></h1>
+		<h1><?php echo _('Order edit'); ?> #<?php echo $_REQUEST['id_cart'] ?></h1>
 
         <div class="clearfix"></div>
 
-		<p>Statut : <select name="cartStatus"><?php
+		<p><?php echo _('Payment status'); ?> : <select name="cartStatus"><?php
 			foreach($app->apiLoad('business')->businessStatusGet() as $e){
 				$sel = ($myCmd['cartStatus'] == $e) ? ' selected' : NULL;
 				echo "<option value=\"".$e."\"".$sel.">".$e."</option>";
 			}
-		?></select></p>
+		?></select>
 
-		<p>Num&eacute;ro de suivi : <input type="text" name="cartSerial" value="<?php echo $myCmd['cartSerial'] ?>" /></p>
+        <p><?php echo _('Shipment status'); ?> : <select name="cartDeliveryStatus"><?php
+            foreach($app->apiLoad('business')->businessCartDeliveryStatus() as $e){
+                $sel = ($myCmd['cartDeliveryStatus'] == $e) ? ' selected' : NULL;
+                echo "<option value=\"".$e."\"".$sel.">".$e."</option>";
+            }
+            ?></select></p>
 
-		<p>Mod&egrave;le de mail <select name="mailTemplate">
-			<option value="">Ne pas envoyer de mail</option><?php
+		<p><?php echo _('Tracking code'); ?> : <input type="text" name="cartSerial" value="<?php echo $myCmd['cartSerial'] ?>" /></p>
+
+		<p><?php echo _('Mail template'); ?> <select name="mailTemplate">
+			<option value=""><?php echo _('Do not send email'); ?></option><?php
 			$files = $app->fsFile(KROOT.'/user/mail/business/', 'business*.html');
 			foreach($files as $e){
 				$e = basename($e);
