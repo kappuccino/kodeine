@@ -1360,15 +1360,19 @@ public function kTalkCheck($str){
 //-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -
 	public  function hookAction($name){
 
-
 		if(count($this->hook['action']) == 0) return false;
 		if(!is_a($this->hook['action'][$name], 'ArrayIterator')) return false;
 		$hooks = $this->hook['action'][$name];
 		$hooks->ksort();
 		$hooks = iterator_to_array($this->hook['action'][$name]);
 
+
 		foreach($hooks as $priorities){
 			foreach($priorities as $hook){
+
+				if(is_array($hook['hook'])){
+					$hook['hook'] = array($this->apiLoad($hook['hook'][0]), $hook['hook'][1]);
+				}
 
 				if(is_callable($hook['hook'])){
 					$args = func_get_args(); array_shift($args);
@@ -1404,6 +1408,10 @@ public function kTalkCheck($str){
 		foreach($hooks as $priorities){
 			foreach($priorities as $hook){
 
+				if(is_array($hook['hook'])){
+					$hook['hook'] = array($this->apiLoad($hook['hook'][0]), $hook['hook'][1]);
+				}
+
 				if(is_callable($hook['hook'])){
 					$args = func_get_args(); array_shift($args);
 
@@ -1433,7 +1441,7 @@ public function kTalkCheck($str){
 		if(!isset($this->hook[$type][$name])) $this->hook[$type][$name] = new ArrayIterator();
 		$this->hook[$type][$name][$priority][] = array('hook' => $hook, 'args' => $args);
 
-		// $this->pre($this->hook);
+	#	$this->pre($this->hook);
 	}
 
 }
