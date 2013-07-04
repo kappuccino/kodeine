@@ -736,7 +736,7 @@ media.views.app             = Backbone.View.extend({
 
 		$('.item').css('width', value+20);
 
-		$('.item .media').css({
+		$('.item .media, .item .icone').css({
 			'height':  value,
 			'width':   value
 		});
