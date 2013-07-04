@@ -1012,7 +1012,7 @@ public function contentSet($opt){
 	$isAlbum = $this->dbOne("SELECT id_content FROM k_contentalbum WHERE id_content=".$this->id_content);
 	if($isAlbum['id_content'] > 0) $this->contentAlbumFamily();
 
-	$this->hookAction('contentSet', $this->id_content, $opt);
+	if(!$opt['noHook']) $this->hookAction('contentSet', $this->id_content, $opt);
 
 	return true;
 }
