@@ -56,7 +56,8 @@
 	<job action = "createField" 	table = "k_newsletter"			field = "newsletterStyle"		type = "MEDIUMTEXT" 	null = "YES"	after = "newsletterSendDate" />
 	<job action = "createField"		table = "k_newsletter"			field = "newsletterAllUser" 	type = "INT(1)"			null = "NO" 	after = "newsletterLink" />
 	<job action = "createField"		table = "k_newsletter"			field = "newsletterConnector" 	type = "VARCHAR(20)"	null = "NO" 	after = "newsletterAllUser" />
-	<job action = "createField"		table = "k_newsletter"			field = "newsletterConnectorId" type = "VARCHAR(255)"	null = "NO" 	after = "newsletterConnector" />
+    <job action = "createField"		table = "k_newsletter"			field = "newsletterConnectorId" type = "VARCHAR(255)"	null = "NO" 	after = "newsletterConnector" />
+    <job action = "createField"		table = "k_newsletter"			field = "newsletterConnectorValue"  type = "MEDIUMTEXT"	null = "NO" 	after = "newsletterConnectorId" />
 	<job action = "createField"		table = "k_newsletter"			field = "newsletterStyle" 		type = "MEDIUMTEXT"		null = "YES" 	after = "newsletterSendDate" />
 	<job action = "createField" 	table = "k_newsletter"			field = "newsletterListRaw"		type = "LONGTEXT" 		null = "NO"		after = "newsletterList" />
 	<job action = "createField" 	table = "k_newsletter"			field = "newsletterTitle"		type = "VARCHAR(255)"	null = "NO"		after = "newsletterName" />

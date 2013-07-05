@@ -463,7 +463,7 @@ public function newsletterPoolPopulation($id_newsletter){
 	# Final, demande tous les user
 	#
 	if(sizeof($id) > 0){
-		$protect	= ($data['newsletterAllUser']) ? NULL : "userNewsletter=1 AND ";
+		//$protect	= ($data['newsletterAllUser']) ? NULL : "userNewsletter=1 AND ";
 		$population = $this->dbMulti("
 			SELECT * FROM k_user
 			INNER JOIN k_userdata ON k_user.id_user = k_userdata.id_user

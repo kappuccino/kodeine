@@ -56,7 +56,7 @@
 			}else
 			if($result && $_POST['do'] == 'send'){
 				if($data['newsletterSendDate'] == NULL){
-					header("Location: connector/cloudapp/push?id_newsletter=".$app->apiLoad('newsletter')->id_newsletter);
+					header("Location: push?id_newsletter=".$app->apiLoad('newsletter')->id_newsletter);
 					exit();
 				}else{
 					$message = 'KO: Cette newsletter est en cours d\'envois ou bien elle a déjà été envoyé.';
