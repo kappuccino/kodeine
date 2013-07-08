@@ -1195,6 +1195,7 @@ public  function userAddressBookDefine($id_user, $id_addressbook, $field, $value
 + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - */
 public function userAddressBookFormat($data, $opt=array()){
 
+    $out = '';
 	if($opt['name']){
 		$out = $data['addressbookCivility'].' '.$data['addressbookFirstName'].' '.$data['addressbookLastName']."\n";
 	}
@@ -1208,8 +1209,11 @@ public function userAddressBookFormat($data, $opt=array()){
 	if($data['addressbookCountryCode']) 	$out.= strtoupper($data['addressbookCountryCode']);
 
 	if($opt['html']) $out = nl2br($out);
-	
-	return $out;
+
+    $ret = array('out'  => $out, 'data' => $data, 'opt' => $opt);
+    $ret  = $this->hookFilter('userAddressBookFormat', $ret);
+
+	return $ret['out'];
 }
 
 /* + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + -

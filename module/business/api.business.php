@@ -81,14 +81,15 @@ public function businessCartGet($opt=array()){
 		$my = $this->dbOne("SELECT * FROM k_businesscart WHERE is_cart=1 AND id_cart='".$opt['id_cart']."'");
 		if($opt['debug']) $this->pre($this->db_query, $this->db_error);		
 	}
-	
-	$id_user = ($opt['id_user'] > 0) ? $opt['id_user'] : $this->user['id_user'];
+
+    $id_user    = ($opt['id_user'] > 0) ? $opt['id_user'] : $this->user['id_user'];
+    $userCheck = ($opt['userCheck'] === false) ? false : true;
 	
 	# On cherche a recupere un CART pas tous les moyens
 	#
 	if($opt['create']){
 		# Si je suis connecté, verifié si j'ai pas un panier existant
-		if($id_user > 0){
+		if($id_user > 0 && $userCheck){
 			$check = $this->dbOne("SELECT id_cart FROM k_businesscart WHERE is_cart=1 AND id_user='".$id_user."'");
 			if(!empty($check)) $opt['id_cart'] = $check['id_cart'];
 		} else
@@ -213,21 +214,9 @@ public function businessCartGet($opt=array()){
 	        $adBilling  = $this->apiLoad('user')->userAddressBookFormat($billing);
 	        $adDelivery = $this->apiLoad('user')->userAddressBookFormat($delivery);
 
-		    $adBilling_  = $this->hookAction('userAddressBookFormat', $billing);
-		    $adDelivery_ = $this->hookAction('userAddressBookFormat', $delivery);
-
-		    if($adBilling_ != NULL) $adBilling = $adBilling_;
-			if($adDelivery_ != NULL) $adDelivery = $adDelivery_;
-
 	        // Noms
-			$billingName  = $billing['addressbookCivility'].' '.$billing['addressbookFirstName'].' '.$billing['addressbookLastName'];
-			$deliveryName = $delivery['addressbookCivility'].' '.$delivery['addressbookFirstName'].' '.$delivery['addressbookLastName'];
-
-		    $billingName_  = $this->hookAction('userAddressBookFormat', $billing,  array('name' => true));
-	        $deliveryName_ = $this->hookAction('userAddressBookFormat', $delivery, array('name' => true));
-
-			if($billingName_  != NULL) $billingName  = $billingName_;
-			if($deliveryName_ != NULL) $deliveryName = $deliveryName_;
+            $billingName  = $this->apiLoad('user')->userAddressBookFormat($billing, array('name' => true));
+            $deliveryName = $this->apiLoad('user')->userAddressBookFormat($delivery, array('name' => true));
 
 	        $def['k_businesscart'] = array(
 	            'id_user'               => array('value' => $id_user),
@@ -901,7 +890,7 @@ public function businessCmdNew($opt){
 		$id_cart = $opt['id_cart']; if(intval($id_cart) == 0) return false;
 
 	    # HOOK
-		$this->hookAction('businessCmdIncrement', $opt['id_cart']);
+		$this->hookAction('businessCmdIncrement', $id_cart);
 
 		# GET
 		$cart = $this->dbOne("SELECT * FROM k_businesscart WHERE id_cart=".$id_cart);
