@@ -8,6 +8,7 @@ if(isset($_GET['cf'])){
     $filter = array_merge($app->filterGet('pubs'), $_GET);
 }else
     if(isset($_POST['filter'])){
+        $_POST['filter']['date'] = ($_POST['filter']['date'] == 1) ? 1 : 0;
         $app->filterSet('pubs', $_POST['filter']);
         $filter = array_merge($app->filterGet('pubs'), $_POST['filter']);
     }else{
@@ -51,8 +52,24 @@ $types = array_merge($types);
             <input type="hidden" name="filter[open]"	value="1" />
             <input type="hidden" name="filter[offset]"	value="0" />
 
-            Début : <input type="text" name="filter[dateStart]" class="datePicker" value="<?php echo $filter['dateStart']; ?>">
-            Fin : <input type="text" name="filter[dateEnd]" class="datePicker" value="<?php echo $filter['dateEnd']; ?>">
+            <label class="control-label">Filtrer par période</label>
+            <input type="checkbox" name="filter[date]"	value="1" <?php echo ($filter['date'] == '1') ? ' checked="checked" ' : ''; ?> />
+
+            <label class="control-label"> Du</label>
+            <input type="text" name="filter[dateStart]" class="datePicker" value="<?php echo $filter['dateStart']; ?>">
+
+            <label class="control-label"> au</label>
+            <input type="text" name="filter[dateEnd]" class="datePicker" value="<?php echo $filter['dateEnd']; ?>">
+
+            <label class="control-label"><?php echo _('Category'); ?></label>
+            <?php
+            echo $app->apiLoad('category')->categorySelector(array(
+                'name'		=> 'filter[id_category]',
+                'value'		=> $filter['id_category'],
+                'language'	=> 'fr',
+                'one'		=> true,
+                'empty'		=> true
+            )); ?>
 
 
             <button class="btn btn-mini" type="submit"><?php echo _('Filter'); ?></button>
@@ -83,9 +100,12 @@ $types = array_merge($types);
                         'id_type'   => $type['id_type'],
                         'useGroup'  => false,
                         'sqlWhere'  => ' AND k_contentad.id_adzone = "'.$z['id_adzone'].'" ',
+                        'assoCategory'     => true,
+                        'id_category'      => $filter['id_category'],
+                        'categoryThrough'  => true,
                         'debug'     => false
                     );
-                    if($filter['dateStart'] != '' && $filter['dateEnd'] != '') {
+                    if($filter['date'] == '1' && $filter['dateStart'] != '' && $filter['dateEnd'] != '') {
                         $opt['sqlWhere'] .= '
                         AND (
                          (contentDateStart IS NULL AND contentDateEnd IS NULL)
@@ -102,16 +122,61 @@ $types = array_merge($types);
         ?>
             <tr>
                <td><strong><?php echo $z['zoneName']; ?></strong></td>
-               <td>
+               <td align="left">
+                   <?php if(sizeof($campaigns) > 0) { ?>
+                   <table border="0" cellpadding="0" cellspacing="0" width="100%" >
+                       <tr>
+                           <th width="200" align="left" style="padding: 5px;border-bottom: 1px solid #ccc;">Nom</th>
+                           <th width="170" align="left" style="padding: 5px;border-bottom: 1px solid #ccc;">Période</th>
+                           <th width="300" align="left" style="padding: 5px;border-bottom: 1px solid #ccc;">Catégories</th>
+                           <th align="left" style="padding: 5px;border-bottom: 1px solid #ccc;">Aperçu</th>
+                       </tr>
                    <?php
                         foreach($campaigns as $campaign) {
-                            echo '- <a href="data?id_content='.$campaign['id_content'].'">'.$campaign['contentName'].' ';
-                            if($campaign['contentDateStart'] != NULL && $campaign['contentDateEnd'] != NULL) {
-                                echo '('.$app->helperDate($campaign['contentDateStart'], '%d %B %G'). ' > '.$app->helperDate($campaign['contentDateEnd'], '%d %B %G').')';
-                            }
-                            echo '</a><br />';
+                   ?>
+                       <tr>
+                           <td style="border-bottom: 1px solid #ccc;">
+                               <a href="data?id_content=<?php echo $campaign['id_content']; ?>">
+                                   <strong><?php echo $campaign['contentName']; ?></strong>
+                               </a>
+                           </td>
+                           <td style="border-bottom: 1px solid #ccc;">
+                               <a href="data?id_content=<?php echo $campaign['id_content']; ?>">
+                               <?php
+                                   if($campaign['contentDateStart'] != NULL) {
+                                       echo 'Du '.$app->helperDate($campaign['contentDateStart'], '%d %B %G'). '<br />';
+                                   }
+                                   if($campaign['contentDateEnd'] != NULL) {
+                                       echo 'Au '.$app->helperDate($campaign['contentDateEnd'], '%d %B %G').'';
+                                   }
+                               ?>
+                               </a>
+                           </td>
+                           <td style="border-bottom: 1px solid #ccc;">
+                               <?php
+                                    if(is_array($campaign['id_category'])) {
+                                        $cats = array();
+                                        foreach($campaign['id_category'] as $idcat) {
+                                            $category = $app->apiLoad('category')->categoryGet(array('id_category' => $idcat, 'language' => '??'));
+                                            $cats[] = str_replace('<br />', ' ', $category['categoryName']);
+                                        }
+                                        echo implode(', ', $cats);
+                                    }
+                               ?>
+                           </td>
+                           <td style="border-bottom: 1px solid #ccc;">
+                               <?php
+                               if($campaign['adCode'] == NULL && sizeof($campaign['contentMedia']['image']) > 0){
+                                   echo "<a href=\"/ad".$campaign['id_content']."\" target=\"_blank\"><img src=\"".$campaign['contentMedia']['image'][0]['url']."\" height=45 /></a>";
+                               }
+                               ?>
+                           </td>
+                       </tr>
+                   <?php
                         }
                    ?>
+                   </table>
+                   <?php } ?>
                </td>
             </tr>
         <?php
