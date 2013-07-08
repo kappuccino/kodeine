@@ -80,8 +80,8 @@ $types = array_merge($types);
     <table border="0" cellpadding="0" cellspacing="0" class="listing">
         <thead>
         <tr>
-            <th width="200" class="icone">Emplacement</th>
-            <th>Campagnes</th>
+            <th width="200" class="icone"><?php echo _('Ad location'); ?></th>
+            <th><?php echo _('Ad'); ?></th>
         </tr>
         </thead>
         <tbody>
@@ -121,15 +121,19 @@ $types = array_merge($types);
                 }
         ?>
             <tr>
-               <td><strong><?php echo $z['zoneName']; ?></strong></td>
+               <td>
+                   <a href="data?id_type=<?php echo $types[0]['id_type']; ?>&id_adzone=<?php echo $z['id_adzone']; ?>">
+                       <strong><?php echo $z['zoneName']; ?></strong>
+                   </a>
+               </td>
                <td align="left">
                    <?php if(sizeof($campaigns) > 0) { ?>
                    <table border="0" cellpadding="0" cellspacing="0" width="100%" >
                        <tr>
-                           <th width="200" align="left" style="padding: 5px;border-bottom: 1px solid #ccc;">Nom</th>
-                           <th width="170" align="left" style="padding: 5px;border-bottom: 1px solid #ccc;">Période</th>
-                           <th width="300" align="left" style="padding: 5px;border-bottom: 1px solid #ccc;">Catégories</th>
-                           <th align="left" style="padding: 5px;border-bottom: 1px solid #ccc;">Aperçu</th>
+                           <th width="200" align="left" style="padding: 5px;border-bottom: 1px solid #ccc;"><?php echo _('Name'); ?></th>
+                           <th width="170" align="left" style="padding: 5px;border-bottom: 1px solid #ccc;"><?php echo _('Period'); ?></th>
+                           <th width="300" align="left" style="padding: 5px;border-bottom: 1px solid #ccc;"><?php echo _('Categories'); ?></th>
+                           <th align="left" style="padding: 5px;border-bottom: 1px solid #ccc;"><?php echo _('Overview'); ?></th>
                        </tr>
                    <?php
                         foreach($campaigns as $campaign) {
@@ -144,10 +148,10 @@ $types = array_merge($types);
                                <a href="data?id_content=<?php echo $campaign['id_content']; ?>">
                                <?php
                                    if($campaign['contentDateStart'] != NULL) {
-                                       echo 'Du '.$app->helperDate($campaign['contentDateStart'], '%d %B %G'). '<br />';
+                                       echo _('From').' '.$app->helperDate($campaign['contentDateStart'], '%d %B %G'). '<br />';
                                    }
                                    if($campaign['contentDateEnd'] != NULL) {
-                                       echo 'Au '.$app->helperDate($campaign['contentDateEnd'], '%d %B %G').'';
+                                       echo _('To').' '.$app->helperDate($campaign['contentDateEnd'], '%d %B %G').'';
                                    }
                                ?>
                                </a>

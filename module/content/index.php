@@ -86,17 +86,17 @@
 		<table border="0" cellpadding="0" cellspacing="0" class="listing">
 			<thead>
 				<tr>
-					<th>Liste des types</th>
-					<th width="100">Liste</th>
-					<th width="200">Ajouter</th>
+					<th><?php echo _('Type list'); ?></th>
+					<th width="100"><?php echo _('List'); ?></th>
+					<th width="200"><?php echo _('Add'); ?></th>
 				</tr>
 			</thead>
 			<tbody>
 			<?php foreach($type as $e){ ?>
 				<tr>
 					<td><a href="./?id_type=<?php echo $e['id_type'] ?>"><?php echo $e['typeName'] ?></a></td>
-					<td><a href="./?id_type=<?php echo $e['id_type'] ?>" class="btn btn-mini">Voir la liste</a></td>
-					<td><a href="data.php?id_type=<?php echo $e['id_type'] ?>" class="btn btn-mini btn-success" style="color: #FFF;">Ajouter un nouveau</a></td>
+					<td><a href="./?id_type=<?php echo $e['id_type'] ?>" class="btn btn-mini"><?php echo _('See the list'); ?></a></td>
+					<td><a href="data?id_type=<?php echo $e['id_type'] ?>" class="btn btn-mini btn-success" style="color: #FFF;"><?php echo _('Add a new'); ?></a></td>
 				</tr>
 			<?php } ?>
 			</tbody>
