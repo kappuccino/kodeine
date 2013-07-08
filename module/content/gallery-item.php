@@ -71,11 +71,11 @@
 	}
 
 	$data   = $app->apiLoad('content')->contentGet(array(
-		'debug'	 		=> false,
-		'language'		=> 'fr',
-		'id_content' 	=> $_REQUEST['id_content'],
-		'is_item'		=> true,
-		'raw'			=> true
+		'debug'	 	 => false,
+		'language'	 => 'fr',
+		'id_content' => $_REQUEST['id_content'],
+		'is_item'	 => true,
+		'raw'		 => true
 	));
 
 	$type   = $app->apiLoad('type')->typeGet(array(
@@ -118,6 +118,13 @@
 			'noLimit'		=> true
 		));
 
+		$parent = $app->apiLoad('content')->contentGet(array(
+			'debug'		 => false,
+			'id_type'	 => $type['id_type'],
+			'id_content' => $data['id_album'],
+			'is_album'	 => true,
+			'raw'		 => true,
+		));
 	}
 
 	for($i=0; $i<sizeof($items); $i++){
@@ -133,7 +140,6 @@
 	if(is_array($previous)) $leftLink  = "gallery-item?id_content=".$previous['id_content'];
 	if(is_array($next))     $rightLink = "gallery-item?id_content=".$next['id_content'];
 
-
 	function previewMe($app, $item, $value, $link=NULL){
 
 		if($item['contentItemType'] == 'image'){
@@ -145,16 +151,16 @@
 				'cache'	=> true
 			));
 
-			$img = "<img src=\"".$img['img']."\" height=\"".$img['height']."\" width=\"".$img['width']."\" class=\"isimg\" />";
+			$img = '<img src="'.$img['img'].'" height="'.$img['height'].'" width="'.$img['width'].'" class="isimg" />';
 		}else
 		if($item['contentItemType'] == 'video'){
-			$img = "<img src=\"../media/ui/img/media-file_quicktime.png\" />";
+			$img = '<img src="../media/ui/img/media-file_quicktime.png" />';
 		}else
 		if($item['contentItemType'] == 'audio'){
-			$img = "<img src=\"../media/ui/img/media-file_audio.png\" />";
+			$img = '<img src="../media/ui/img/media-file_audio.png" />';
 		}else
 		if($item['contentItemType'] == 'application' AND $item['contentItemMime'] == 'pdf'){
-			$img = "<img src=\../media/img/media-file_pdf.png\" />";
+			$img = '<img src="../media/img/media-file_pdf.png" />';
 		}else{
 			$img = NULL;
 		}
@@ -195,7 +201,21 @@
 			list($class, $message) = $app->helperMessage($message);
 			echo "<div class=\"message message".ucfirst($class)."\">".$message."</div>";
 		}
-	?></div>
+		?>
+		<table width="100%" border="0" cellpadding="0" cellspacing="2" id="gCarrousel">
+			<thead>
+				<tr>
+					<td class="previous"><a href="<?php echo ($leftLink  != '') ? $leftLink  : '#'; ?>" id="goToLeft">← <?php echo _('Previous item'); ?></a></td>
+					<td class="current">↑ <?php
+						echo !isset($parent)
+							? '<a id="goToAlbum" href="gallery?id_type='.$type['id_type'].'">'._('Root').'</a>'
+							: '<a id="goToAlbum" href="gallery?id_type='.$type['id_type'].'#album/'.$parent['id_content'].'">Album '.$parent['contentName'].'</a>';
+						?></td>
+					<td width="25%" class="next"><a href="<?php echo ($rightLink != '') ? $rightLink : '#'; ?>" id="goToRight"><?php echo _('Next item'); ?> →</a></td>
+				</tr>
+			</thead>
+		</table>
+	</div>
 
 	<form action="gallery-item" method="post" id="data">
 	
@@ -258,39 +278,20 @@
 	    </div>
     </form>
 
-	<table width="100%" border="0" cellpadding="0" cellspacing="2" id="gCarrousel">
-		<tr>
-			<td colspan="3" class="current">&#8593;<?php
+	<div class="wrapper">
+		<table width="100%" border="0" cellpadding="0" cellspacing="2" id="gCarrousel">
+			<tr valign="top">
+				<td class="previous"><?php
+					echo ($leftLink != '') ? previewMe($app, $previous, 100, $leftLink) : _('No previous item');
+				?></td>
+				<td class="current"><?php previewMe($app, $data, 300); ?></td>
+				<td class="next"><?php
+					echo ($rightLink != '') ? previewMe($app, $next, 100, $rightLink) : _('No more item');
+				?></td>
+			</tr>
+		</table>
+	</div>
 
-				echo ($data['id_album'] == 0)
-					? '<a id="goToAlbum" href="gallery?id_type='.$type['id_type'].'">'._('Root').'</a>'
-					: '<a id="goToAlbum" href="gallery?id_type='.$type['id_type'].'#album/'.$album['id_content'].'">Album '.$album['contentName'].'</a>';
-
-			?></td>
-		</tr>
-		<tr>
-			<th class="previous"><a href="<?php echo ($leftLink  != '') ? $leftLink  : '#'; ?>" id="goToLeft">← <?php echo _('Previous item'); ?></a></th>
-			<th class="current"><?php echo _('Current item'); ?></th>
-			<th class="next"><a href="<?php echo ($rightLink != '') ? $rightLink : '#'; ?>" id="goToRight"><?php echo _('Next item'); ?> →</a></th>
-		</tr>
-		<tr valign="top">
-			<td class="previous"><?php
-
-				echo ($leftLink != '')
-					? previewMe($app, $previous, 200, $leftLink)
-					: _('No previous item');
-
-			?>&nbsp;</td>
-			<td class="current"><?php previewMe($app, $data, 600); ?></td>
-			<td class="next">&nbsp;<?php
-
-				echo ($rightLink != '')
-					? previewMe($app, $next, 200, $rightLink)
-					: _('No more item');
-
-			?></td>
-		</tr>
-	</table>
 
 
 </div>

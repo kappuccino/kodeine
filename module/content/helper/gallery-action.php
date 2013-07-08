@@ -14,10 +14,11 @@
 		}
 	}
 
-	/* + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - */
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	$id_album   = $_GET['id_album'];
 	$id_content = $_GET['id_content'];
+
 
 	# On supprime un element (ALBUM / ITEM);
 	#
@@ -114,8 +115,43 @@
 
 		$poster = ($_GET['state'] == 'OFF') ? $id_content : 0;
 		$app->dbQuery("UPDATE k_contentalbum SET id_poster=".$poster." WHERE id_content=".$id_album);
-
 		$data['success'] = true;
+
+		if($poster > 0){
+			$poster = $app->apiLoad('content')->contentGet(array(
+				'id_content' => $poster,
+				'raw'		 => true
+			));
+
+			if(file_exists(KROOT.$poster['contentItemUrl']) && is_file(KROOT.$poster['contentItemUrl'])){
+				$tmp['hasPoster'] = true;
+
+				$opt = array(
+					'url'	=> $poster['contentItemUrl'],
+					'admin'	=> true,
+					'debug'	=> false,
+					'cache'	=> true
+				);
+
+				if($poster['contentItemWidth'] >= $poster['contentItemHeight']){
+					$preview = $app->mediaUrlData(array_merge($opt, array(
+						'mode'	=> 'width',
+						'value'	=> 300
+					)));
+				}else{
+					$preview = $app->mediaUrlData(array_merge($opt, array(
+						'mode'	=> 'height',
+						'value'	=> 300
+					)));
+				}
+
+				$data['preview'] = array(
+					'url'    => $preview['img'],
+					'width'  => intval($preview['width']),
+					'height' => intval($preview['height']),
+				);
+			}
+		}
 
 	}else{
 		$data['message'] = 'Action non reconnue';

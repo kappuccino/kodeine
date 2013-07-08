@@ -782,19 +782,24 @@ function setUrlBehaviour(){
 
 function urlCheck(){
 
-	url = liveUrlTitle($('#contentNameField').val());
+	var url = liveUrlTitle($('#contentNameField').val());
 	$('#urlField').val(url); 
 
-	language = ($('#language')[0].tagName.toLowerCase() == 'select')
-		? $('#language option:selected').val()
-		: $('#language').val()
 
-	 var get = $.ajax({
-		url: '../content/helper/url?id_content='+$('#id_content').val()+'&url='+url+'&language='+language,
+	var language = ($('#language')[0].tagName.toLowerCase() == 'select')
+		? $('#language option:selected').val()
+		: $('#language').val();
+
+	$.ajax({
+		url: '../content/helper/url',
+		data: {
+			id_content: $('#id_content').val(),
+			url: url,
+			language: language
+		},
+		type: 'get',
 		dataType: 'json'
-	});
-	
-	get.done(function(data) {
+	}).done(function(data) {
 		if($('#urlField').val() != data.url) $('#urlField').val(data.url);
 	});
 }	

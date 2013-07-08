@@ -2,8 +2,8 @@
 
 	if(!defined('COREINC')) die('Direct access not allowed');
 
-	$id_album	= ($_REQUEST['id_album'] > 0) ? $_REQUEST['id_album'] : 0;
-	$id_type    = $_REQUEST['id_type'];
+	$id_album = $_REQUEST['id_album'] ?: 0;
+	$id_type  = $_REQUEST['id_type'];
 
 	if($_POST['importFolder'] != ''){
 
@@ -109,16 +109,49 @@
 
 	if($id_album > 0){
 		$data = $app->apiLoad('content')->contentGet(array(
-			'id_content' 	=> $_REQUEST['id_album'],
-			'is_album'		=> true,
-			'language'		=> 'fr',
-			'raw'			=> true
+			'id_content' => $_REQUEST['id_album'],
+			'is_album'	 => true,
+			'language'	 => 'fr',
+			'raw'		 => true
 		));
+
+		if($data['id_album'] > 0){
+			$parent = $app->apiLoad('content')->contentGet(array(
+				'debug'		 => false,
+				'id_type'	 => $id_type,
+				'id_content' => $data['id_album'],
+				'is_album'	 => true,
+				'raw'		 => true,
+			));
+		}
 
 		$title = $data['contentName'];
 	}else{
 		$title = _('Root');
 	}
+
+	$albums = $app->apiLoad('content')->contentGet(array(
+		'id_type'	=> $id_type,
+		'id_album'	=> $id_album,
+		'is_album'	=> true,
+		'raw'		=> true,
+		'debug'		=> false,
+		'noLimit'	=> true
+	));
+
+	for($i=0; $i<sizeof($albums); $i++){
+		if($albums[$i]['id_content'] == $data['id_content']){
+			$previous = $albums[$i-1];
+			if($previous['id_content'] == NULL) unset($previous);
+
+			$next = $albums[$i+1];
+			if($next['id_content'] == NULL) unset($next);
+		}
+	}
+
+	if(is_array($previous)) $leftLink  = "gallery-album?id_content=".$previous['id_content'];
+	if(is_array($next))     $rightLink = "gallery-album?id_content=".$next['id_content'];
+
 
 ?><!DOCTYPE html>
 <html lang="fr">
@@ -149,7 +182,34 @@
 		}
 	?>
 
-	<h1 style="float:none;"><?php printf(_('Current album <i>%s</i>'), $title) ?></h1>
+	<table width="100%" border="0" cellpadding="0" cellspacing="2" id="gCarrousel">
+		<thead>
+			<tr>
+				<td class="previous"><a href="<?php echo ($leftLink  != '') ? $leftLink  : '#'; ?>" id="goToLeft">← <?php echo _('Previous album'); ?></a></td>
+				<td class="current"	>↑ <?php
+					echo (!isset($parent))
+						? '<a id="goToAlbum" href="gallery?id_type='.$id_type.'">'._('Root').'</a>'
+						: '<a id="goToAlbum" href="gallery?id_type='.$id_type.'#album/'.$parent['id_content'].'">Album '.$parent['contentName'].'</a>';
+				?></td>
+				<td width="25%" class="next"><a href="<?php echo ($rightLink != '') ? $rightLink : '#'; ?>" id="goToRight"><?php echo _('Next album'); ?> →</a></td>
+			</tr>
+		</thead>
+		<tr>
+			<td class="previous"><?php
+				echo ($leftLink != '')
+					? "<a href=\"".$leftLink."\">".$previous['contentName']."</a>"
+					: _('No previous album');
+			?></td>
+			<td class="current" align="center"><?php
+				if(isset($data)) printf(_('Current album: %s'), $data['contentName']);
+				?></td>
+			<td class="next" align="right"><?php
+				echo ($rightLink != '')
+					? "<a href=\"".$rightLink."\">".$next['contentName']."</a>"
+					: _('No more album');
+			?></td>
+		</tr>
+	</table>
 
 	<section>
 		<form action="gallery-import" method="post">
@@ -160,9 +220,9 @@
 			<input type="hidden" name="id_album"	value="<?php echo $id_album ?>" />
 
 			<h2><?php echo _('Import item from /media folder') ?></h2>
-			<input type="text" name="importFolder" id="importFolder" style="width:80%" />
+			<input type="text" class="field" name="importFolder" id="importFolder" style="width:80%" />
 
-			<div class="btn-group" style="clear:left; margin-top:20px;">
+			<div class="btn-group" style="margin-top:10px;">
 				<a onclick="mediaOpen('line', 'importFolder')" class="btn"><?php echo _('Pick'); ?></a>
 				<a onclick="$(this).parents('form').submit();" class="btn"><?php echo _('Validate') ?></a>
 			</div>
@@ -189,34 +249,30 @@
             <input type="hidden" name="id_type"		value="<?php echo $type['id_type'] ?>" />
             <input type="hidden" name="id_album"	value="<?php echo ($_REQUEST['id_album']) ? $_REQUEST['id_album'] : 0 ?>" />
 
-
             <h2><?php echo _('Create folder and sub folders') ?></h2>
 
             <input type="text" name="discoverFolder" id="discoverFolder" value="<?php echo $_GET['sync'] ?>" style="width:80%" />
 
-	        <br />
+	        <div style="margin-top:10px;" class="clearfix">
+		        <div class="btn-group" style="float:left;">
+					<a onclick="mediaOpen('line', 'discoverFolder')" class="btn"><?php echo _('Pick') ?></a>
+					<a onclick="discoverInit();" class="btn"><?php echo _('Validate') ?></a>
+		        </div>
 
-            <input type="radio" name="sel" value="inside" checked="checked" />
-	        <?php echo _('Insert data into this album'); ?>
-
-	        <br />
-
-	        <input type="radio" name="sel" value="create" />
-	        <?php echo _('Create a new ablum  into this album'); ?>
-
-            <br />
-
-            <div class="btn-group" style="clear:left; margin-top:20px;">
-		        <a onclick="mediaOpen('line', 'discoverFolder')" class="btn"><?php echo _('Pick') ?></a>
-	            <a onclick="discoverInit();" class="btn"><?php echo _('Validate') ?></a>
+		        <div style="float:left; margin-left: 10px;">
+		            <input type="radio" name="sel" value="inside" checked="checked" />
+			        <?php echo _('Insert data into this album'); ?>
+			        <br />
+			        <input type="radio" name="sel" value="create" />
+		            <?php echo _('Create a new ablum  into this album'); ?>
+		        </div>
 	        </div>
 
-            <div class="progress" id="progress" style="width: 82%; margin: 10px 0 10px 0;">
+            <div class="progress" id="progress" style="width: 82%; margin: 20px 0 0 0;">
                 <div class="bar" style="width: 5%;"></div>
             </div>
 
             <div id="log"></div>
-
 
         </form>
     </section>
@@ -228,6 +284,7 @@
 <script type="text/javascript" src="../media/ui/_uploadifive/jquery.uploadifive-v1.0.js"></script>
 <script type="text/javascript" src="ui/js/gallery.discover.js"></script>
 <script type="text/javascript" src="ui/js/gallery.upload.js"></script>
+<script type="text/javascript" src="ui/js/gallery.nav.js"></script>
 
 <script>
     id_album = <?php echo $_REQUEST['id_album'] ?>;

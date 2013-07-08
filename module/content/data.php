@@ -230,6 +230,7 @@
 				<li class="clearfix"><a href="./?id_content=<?php echo $data['id_content'] ?>" class="left"><?php echo _('Comments'); ?></a></li>
 				<li class="clearfix"><a href="parent?id_content=<?php echo $data['id_content'] ?>" class="left"><?php echo _('Sub-content'); ?></a></li>
 				<?php } ?>
+			</ul>
 		</div>
 	</li>
 	<li><a href="./?id_type=<?php echo $type['id_type'] ?>" class="btn btn-small"><i class="icon-list"></i> <?php echo $type['typeName']; ?></a></li>
@@ -600,12 +601,12 @@
 				</span>
 				<div class="panelBody"><?php echo 
 					$app->apiLoad('chapter')->chapterSelector(array(
-						'name'		=> 'id_chapter[]',
-						'id'		=> 'id_chapter',
-						'multi' 	=> true,
-						'style' 	=> 'width:100%; height:200px',
-						'profile'	=> true,
-						'value'		=> $app->formValue($data['id_chapter'], $_POST['id_chapter'])
+						'name'	  => 'id_chapter[]',
+						'id'	  => 'id_chapter',
+						'multi'   => true,
+						'style'   => 'width:100%; height:200px',
+						'profile' => true,
+						'value'	  => $app->formValue($data['id_chapter'], $_POST['id_chapter'])
 					));
 				?></div>
 			</div>
@@ -620,13 +621,13 @@
 				</span>
 				<div class="panelBody"><?php echo
 					$app->apiLoad('category')->categorySelector(array(
-						'name'		=> 'id_category[]',
-						'id'		=> 'id_category',
-						'multi' 	=> true,
-						'style' 	=> 'width:100%; height:200px',
-						'profile'	=> true,
-						'language'	=> 'fr',
-						'value'		=> $app->formValue($data['id_category'], $_POST['id_category'])
+						'name'	   => 'id_category[]',
+						'id'	   => 'id_category',
+						'multi'    => true,
+						'style'    => 'width:100%; height:200px',
+						'profile'  => true,
+						'language' => 'fr',
+						'value'	   => $app->formValue($data['id_category'], $_POST['id_category'])
 					));
 				?></div>
 			</div>
@@ -660,7 +661,7 @@
 					</span>
 				</span>
 				<div class="panelBody"><?php echo 
-					$app->searchSelector(array(
+					$app->apiLoad('coreSearch')->searchSelector(array(
 						'name'		=> 'id_search[]',
 						'id'		=> 'id_search',
 						'searchType'=> 'user',
@@ -681,11 +682,11 @@
 				</span>
 				<div class="panelBody"><?php echo 
 					$app->apiLoad('socialForum')->socialForumSelector(array(
-						'name'		=> 'id_socialforum[]',
-						'id'		=> 'id_socialforum',
-						'multi' 	=> true,
-						'style' 	=> 'width:100%; height:200px',
-						'value'		=> $app->formValue($data['id_socialforum'], $_POST['id_socialforum'])
+						'name'	=> 'id_socialforum[]',
+						'id'	=> 'id_socialforum',
+						'multi' => true,
+						'style' => 'width:100%; height:200px',
+						'value'	=> $app->formValue($data['id_socialforum'], $_POST['id_socialforum'])
 					));
 				?></div>
 			<?php } ?>

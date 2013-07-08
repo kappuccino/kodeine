@@ -86,17 +86,23 @@
 		<table border="0" cellpadding="0" cellspacing="0" class="listing">
 			<thead>
 				<tr>
-					<th>Liste des types</th>
-					<th width="100">Liste</th>
-					<th width="200">Ajouter</th>
+					<th><?php echo _('Types') ?></th>
+					<th width="100"><?php echo _('Listing') ?></th>
+					<th width="200"><?php echo _('Add') ?></th>
 				</tr>
 			</thead>
 			<tbody>
-			<?php foreach($type as $e){ ?>
+			<?php foreach($type as $e){
+				$list = ($e['is_gallery']) ? 'gallery' : './';
+				?>
 				<tr>
-					<td><a href="./?id_type=<?php echo $e['id_type'] ?>"><?php echo $e['typeName'] ?></a></td>
-					<td><a href="./?id_type=<?php echo $e['id_type'] ?>" class="btn btn-mini">Voir la liste</a></td>
-					<td><a href="data.php?id_type=<?php echo $e['id_type'] ?>" class="btn btn-mini btn-success" style="color: #FFF;">Ajouter un nouveau</a></td>
+					<td><a href="<?php echo $list ?>?id_type=<?php echo $e['id_type'] ?>"><?php echo $e['typeName'] ?></a></td>
+					<td><a href="<?php echo $list ?>?id_type=<?php echo $e['id_type'] ?>" class="btn btn-mini">Voir la liste</a></td>
+					<td><?php
+						if($e['is_gallery'] != '1'){
+							echo '<a href="data.php?id_type='.$e['id_type'].'" class="btn btn-mini btn-success" style="color: #FFF;">Ajouter un nouveau</a>';
+						}
+					?></td>
 				</tr>
 			<?php } ?>
 			</tbody>

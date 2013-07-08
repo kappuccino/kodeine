@@ -2,6 +2,12 @@
 
 var gallery = {
 	id_type:'',
+	pickAlbum: null,
+	pickMode: false,
+	pickModel: null,
+
+	/////////////////////////////////
+
 	models: {},
 	views: {},
 	collections: {},
@@ -57,6 +63,8 @@ gallery.views.view           = Backbone.View.extend({
 
 	initialize:function(){
 		this.listenTo(gallery.collections.myMedia, 'reset',  this.fill);
+		this.listenTo(gallery.collections.myMedia, 'add',    this.fillItem);
+
 		this.id_album = this.$el.data('id_album') || 0;
 		this.order = [];
 		this.isSortable = false;
@@ -146,6 +154,7 @@ gallery.views.viewItem       = Backbone.View.extend({
 
 	initialize: function(){
 		this.listenTo(this.model, 'remove', this.destroy);
+		this.listenTo(this.model, 'change', this.reRender);
 
 		this.html = '';
 	},
@@ -161,8 +170,13 @@ gallery.views.viewItem       = Backbone.View.extend({
 
 	nav: function(){
 		if(this.model.get('dragging')) return;
+
 		if(this.model.get('is_album')){
 			gallery.views.myView.nav(this.model.get('id_content'));
+		}else
+		if(this.model.get('is_item') && gallery.pickMode){
+			parent.opener.gallery.views.myApp.togglePosterRemote(gallery.pickAlbum, gallery.pickModel, this.model.get('id_content'));
+			window.close();
 		}
 	},
 
@@ -189,16 +203,23 @@ gallery.views.viewItem       = Backbone.View.extend({
 
 		var target  = $(e.target);
 		var state   = target.hasClass('off') ? 'OFF' : 'ON';
-		gallery.views.myApp.togglePoster(this.model.get('id_content'), state);
+		var item    = target.parents('.gItem');
+		var toggle  = gallery.views.myApp.togglePoster(this, state, item);
 
-		$('#galleryView .action .poster').not(target).addClass('off');
-		target.toggleClass('off');
+		if(toggle){
+			$('#galleryView .action .poster').not(target).addClass('off');
+			target.toggleClass('off');
+		}
 	},
 
 	//////////////
 
 	templateAlbum: _.template($('#view-album').html()),
 	templateItem:  _.template($('#view-item').html()),
+
+	reRender: function(){
+		this.render().postRender();
+	},
 
 	render: function() {
 		var data    = this.model.toJSON();
@@ -485,46 +506,197 @@ gallery.views.app            = Backbone.View.extend({
 	el: $('body'),
 
 	initialize: function(){
-		gallery.id_type = this.$el.data('id_type');
+		gallery.id_type   = this.$el.data('id_type');
+		gallery.pickMode  = this.$el.data('pick');
+		gallery.pickAlbum = this.$el.data('album');
+		gallery.pickModel = this.$el.data('model');
 
 		// Collections
-		gallery.collections.myMedia     = new gallery.collections.media;
-		gallery.collections.myTree      = new gallery.collections.tree;
-		gallery.collections.myPath      = new gallery.collections.path;
+		gallery.collections.myMedia = new gallery.collections.media;
+		gallery.collections.myTree  = new gallery.collections.tree;
+		gallery.collections.myPath  = new gallery.collections.path;
 
 		// Views
-		gallery.views.myView   = new gallery.views.view;
-		gallery.views.myTree   = new gallery.views.tree;
-		gallery.views.myPath   = new gallery.views.path;
+		gallery.views.myView = new gallery.views.view;
+		gallery.views.myTree = new gallery.views.tree;
+		gallery.views.myPath = new gallery.views.path;
 
 		// Routeur
 		gallery.myRouter = new gallery.router;
 		Backbone.history.start();
 
+		// Upload
+		this.uploadInit();
+
 		// Load Tree
 		gallery.views.myTree.load(true);
 
 		this.buttonEdit = this.$('#buttonEdit');
+
+		// Fix TOP
+		$('#gallery').css('top', $('#gallery').position().top);
+		$('#gallery').css({
+			'bottom': 0,
+			'position': 'absolute',
+			'right': '0px',
+			'left': '0px'
+		});
+
+		// UI Item
+		this.modalUpload    = $('#modal-upload');
 	},
 
 	events: {
-		'click #buttonAdd':     'addAlbum',
-		'click #buttonEdit':    'editAlbum',
-		'click #buttonImport':  'importAlbum'
+		'click #buttonAdd':         'addAlbum',
+		'click #buttonEdit':        'editAlbum',
+		'click #buttonImport':      'importAlbum',
+		'click #buttonUpload':      'uploadShow',
+		'click #buttonCloseUpload': 'clearModal',
+		'click #distantDownload':   'distantDownload'
 	},
 
 	addAlbum: function(){
-		document.location = 'gallery-album?id_type=' + gallery.id_type;
+		var id_album = gallery.views.myView.id_album
+		document.location = 'gallery-album?id_album='+id_album+'&id_type='+gallery.id_type;
 	},
 
 	editAlbum: function(){
 		var id_album = gallery.views.myView.id_album
-		if(id_album > 0) document.location = 'gallery-album?id_content=' + id_album;
+		if(id_album > 0) document.location = 'gallery-album?id_content='+id_album;
 	},
 
 	importAlbum: function(){
 		var id_album = gallery.views.myView.id_album
 		document.location = 'gallery-import?id_album='+id_album+'&id_type='+gallery.id_type;
+	},
+
+	/////////
+
+	uploadInit: function(){
+		var self = this;
+
+		document.addEventListener('dragleave', function(e) {
+			// Stop FireFox from opening the dropped file(s)
+			e.preventDefault(); e.stopPropagation();
+
+			if (e.pageX === 0) {
+				self.clearModal();
+				self.isDrag = false;
+			}
+
+		}, false);
+
+		document.addEventListener('dragenter', function(e) {
+			// Stop FireFox from opening the dropped file(s)
+			e.preventDefault(); e.stopPropagation();
+
+			if (self.isDrag) return;
+			self.isDrag = true;
+			self.upload();
+
+		}, false);
+
+		document.addEventListener('dragover', function(e) {
+			// Stop FireFox from opening the dropped file(s)
+			e.preventDefault(); e.stopPropagation();
+
+		}, false);
+	},
+
+	uploadShow: function(){
+		this.clearModal();
+		this.modalUpload.css('display', 'block');
+	},
+
+	upload: function(){
+		this.uploadShow();
+
+		var self         = this;
+		var isSafari     = (/safari/.test(navigator.userAgent.toLowerCase())) ? true : false;
+		var isSafariFive = (isSafari && /version\/5/.test(navigator.userAgent.toLowerCase())) ? true : false;
+
+		if(typeof($('#file_upload').data('uploadifive')) !== "undefined") return;
+
+		// SI ON A ACCES AU FILEREADER DU BROWSER
+		if(typeof FileReader !== 'undefined' && !isSafariFive) {
+
+			$('#file_upload').uploadifive({
+				'buttonText':       'Parcourir',
+				'auto':             true,
+				'formData':         {'id_album': gallery.views.myView.id_album},
+				'queueID':          'upqueue',
+				'uploadScript':     'helper/gallery-upload',
+
+				'onUploadComplete': function(file, data){
+					var data = $.parseJSON(data);
+					if(data.model) gallery.collections.myMedia.add(data.model);
+				},
+				'onQueueComplete':  function(file, data) {
+
+					$('#upqueue').empty();
+					self.clearModal();
+				//	self.refresh();
+					self.isDrag = false;
+				}
+
+				/*'onSelect':         function(event, ID, fileObj){ },
+				 'onDrop':           function(file, count){ },
+				 'onUploadComplete': function(file, data){ },*/
+			});
+
+		}else{
+			console.log('fy');
+			$('#file_upload').uploadify({
+				'buttonText':       'Parcourir',
+				'auto':             true,
+				'formData':         {'id_album': gallery.views.myView.id_album},
+				'queueID':          'ipqueue',
+				'uploader':         'helper/upload',
+				'swf':              '../../../media/ui/_uploadify/uploadify.swf',
+				'onUploadStart':    function(){
+				//	$('#file_upload').data('uploadify').settings.formData = {'f' : media.views.myView.folder};
+				},
+				'onQueueComplete':  function() {
+					$('#queue').empty();
+					self.clearModal();
+				//	self.refresh();
+					self.isDrag = false;
+				}
+			});
+		}
+
+	},
+
+	clearModal: function(e){
+		if(e != undefined) e.stopPropagation();
+
+	//	this.wall.css('display', 'none');
+	//	this.modalNewDir.css('display', 'none');
+		this.modalUpload.css('display', 'none');
+	//	this.modalMeta.css('display', 'none');
+	},
+
+	distantDownload: function(e){
+		var remoteUrl = $('#distantUpload').val();
+		if(remoteUrl.length == 0) return;
+
+		$.ajax({
+			url: 'helper/gallery-upload',
+			type: 'post',
+			dataType: 'json',
+			data: {
+				remoteUrl: remoteUrl,
+				id_album: gallery.views.myView.id_album
+			}
+		}).done($.proxy(function(data){
+			if(data.success && data.remote.length > 0){
+				_.each(data.remote, function(value, key, list){
+					if(value.model) gallery.collections.myMedia.add(value.model);
+				});
+			}
+
+			this.clearModal();
+		}, this));
 	},
 
 	/////////
@@ -574,7 +746,7 @@ gallery.views.app            = Backbone.View.extend({
 
 	action: function(data, back){
 
-		console.log("[XHR ACTION]", 'data', data, 'back', back);
+	//	console.log("[XHR ACTION]", 'data', data, 'back', back);
 
 		var xhr = $.ajax({
 			url:        'helper/gallery-action',
@@ -661,17 +833,70 @@ gallery.views.app            = Backbone.View.extend({
 		})
 	},
 
-	togglePoster: function(me, state){
-		var id_album = gallery.views.myView.id_album;
+	togglePoster: function(view, state, el){
+		var model = view.model;
+
+		// Pick un POSTER d'après un ITEM
+		if(model.get('is_item')){
+
+			this.action({
+				action:     'togglePoster',
+				id_album:   gallery.views.myView.id_album,
+				id_content: model.get('id_content'),
+				state:      state
+			});
+
+		}else
+		if(model.get('is_album')){
+
+			if(state == 'ON'){
+				this.action({
+					action:     'togglePoster',
+					id_album:   model.get('id_content'),
+					state:      state
+				});
+
+				this.togglePosterRemove(el, view);
+			}else{
+
+				window.open('gallery.php?pick&album='+model.get('id_content')+'&id_type='+gallery.id_type+'&model='+model.cid, '@', 'height=500');
+
+				return false;
+			}
+		}
+
+		return true;
+	},
+
+	togglePosterRemove: function(el, view){
+		var icone = $('.icone', el);
+		var tmp   = $('<div/>').append(view.templateAlbum(view.model.toJSON()));
+		var src   = $('.media .icone img', tmp).attr('src');
+		var img   = $('<img />').attr('src', src);
+
+		icone.empty().append(img);
+	},
+
+	togglePosterRemote: function(id_album, model, id_content){
 
 		this.action({
 			action:     'togglePoster',
 			id_album:   id_album,
-			id_content: me,
-			state:      state
-		})
+			id_content: id_content,
+			state:      'OFF'
+		}, $.proxy(function(d){
+
+			var mod = gallery.collections.myMedia.get(model);
+
+			mod.set({
+				'hasPoster': true,
+				'preview': d.preview
+			});
+
+		}, this));
 
 	}
+
 
 });
 

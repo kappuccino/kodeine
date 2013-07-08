@@ -5,40 +5,42 @@
 	if($_POST['action']){
 		$do = true;
 
-		if(!$_POST['contentDateStartDo'])	$_POST['contentDateStart'] == NULL;
-		if(!$_POST['contentDateEndDo']) 	$_POST['contentDateEnd'] == NULL;
+	#	if(!$_POST['contentDateStartDo'])	$_POST['contentDateStart'] == NULL;
+	#	if(!$_POST['contentDateEndDo']) 	$_POST['contentDateEnd'] == NULL;
 
-		$_POST['contentDateCreation']	= implode(' ', $_POST['contentDateCreation']);
-		$_POST['contentDateUpdate']		= implode(' ', $_POST['contentDateUpdate']);
+	#	$_POST['contentDateCreation']	= implode(' ', $_POST['contentDateCreation']);
+	#	$_POST['contentDateUpdate']		= implode(' ', $_POST['contentDateUpdate']);
 
-		// Core
+		// CORE ////////////////////////////////////////////////////////////////////////////////////////////////////////
 		$def['k_content'] = array(
 			'is_album'				=> array('value' => 1),
 			'contentSee'			=> array('value' => $_POST['contentSee'], 				'zero' => true),
 			'contentTemplate'		=> array('value' => $_POST['contentTemplate']),
-			'contentDateCreation'	=> array('value' => $_POST['contentDateCreation']),
-			'contentDateUpdate'		=> array('value' => $_POST['contentDateUpdate']),
-			'contentDateStart'		=> array('value' => $_POST['contentDateStart'],			'null' => true),
-			'contentDateEnd'		=> array('value' => $_POST['contentDateEnd'],			'null' => true),
+		#	'contentDateCreation'	=> array('value' => $_POST['contentDateCreation']),
+		#	'contentDateUpdate'		=> array('value' => $_POST['contentDateUpdate']),
+		#	'contentDateStart'		=> array('value' => $_POST['contentDateStart'],			'null' => true),
+		#	'contentDateEnd'		=> array('value' => $_POST['contentDateEnd'],			'null' => true),
 		);
 		if(!$app->formValidation($def)) $do = false;
 		
-		// Album
-		// Ligne suivante = soucis en cas de update non ?
-		// $last = $app->dbOne("SELECT MAX(contentAlbumPos) AS h FROM k_contentalbum WHERE id_album=".$_POST['id_album']);
+		// ALBUM ///////////////////////////////////////////////////////////////////////////////////////////////////////
 		$album['k_contentalbum'] = array(
-			'id_album'				=> array('value' => $_POST['id_album']),
-			//'contentAlbumPos'		=> array('value' => ($last['h'] + 1))
+			'id_album' => array('value' => $_POST['id_album']),
 		);
 
-		// Data
+		if(empty($_POST['id_content'])){
+			$l = $app->dbOne("SELECT MAX(contentAlbumPos) AS h FROM k_contentalbum WHERE id_album=".$_POST['id_album']);
+			$album['k_contentalbum']['contentAlbumPos'] = array('value' => ($l['h'] + 1));
+		}
+
+		// DATA ////////////////////////////////////////////////////////////////////////////////////////////////////////
 		$dat['k_contentdata'] = array(
-			'contentUrl'			=> array('value' => $_POST['contentUrl'], 				'check' => '.'),
-			'contentName' 			=> array('value' => $_POST['contentName'], 				'check' => '.')
+			'contentUrl'  => array('value' => $_POST['contentUrl'],  'check' => '.'),
+			'contentName' => array('value' => $_POST['contentName'], 'check' => '.')
 		);
 		if(!$app->formValidation($dat)) $do = false;
 
-		// Field
+		// FIELD ///////////////////////////////////////////////////////////////////////////////////////////////////////
 		if(!$app->apiLoad('field')->fieldValidation($_POST['field'])) $do = false;
 
 		if($do){
@@ -70,7 +72,7 @@
 					$app->dbQuery("UPDATE k_contentalbum SET contentAlbumSyncFolder='' WHERE id_content=".$id_content);
 				}
 
-				header("Location: gallery-album?id_content=".$id_content.'&message='.$message);
+				$app->go('gallery-album?id_content='.$id_content.'&message='.$message);
 			}
 
 		}else{
@@ -89,14 +91,26 @@
 		
 		$type		= $app->apiLoad('type')->typeGet(array('id_type' => $data['id_type']));
 		$title		= $data['contentName'];
-
-		$tpl		= ($data['contentTemplate'] != NULL) ? $data['contentTemplate'] : $type['typeTemplate'];
-		$opt		= $app->apiLoad('template')->templateInfoGet($tpl);
 		$id_album	= $data['id_album'];
+
+	#	$tpl		= ($data['contentTemplate'] != NULL) ? $data['contentTemplate'] : $type['typeTemplate'];
+	#	$opt		= $app->apiLoad('template')->templateInfoGet($tpl);
+		$language   = $data['language'];
 	}else{
 		$type		= $app->apiLoad('type')->typeGet(array('id_type' => $_REQUEST['id_type']));
 		$title 		= "Nouvel album";
-		$id_album	= ($_REQUEST['id_album']) ? $_REQUEST['id_album'] : 0;
+		$id_album	= $_REQUEST['id_album'] ?: 0;
+		$language   = 'fr';
+	}
+
+	if($id_album > 0){
+		$parent = $app->apiLoad('content')->contentGet(array(
+			'debug'		 => false,
+			'id_type'	 => $type['id_type'],
+			'id_content' => $id_album,
+			'is_album'	 => true,
+			'raw'		 => true,
+		));
 	}
 
 	$albums = $app->apiLoad('content')->contentGet(array(
@@ -118,14 +132,8 @@
 		}
 	}
 
-	if(is_array($previous)){
-		$leftLink = "gallery-album?id_content=".$previous['id_content'];
-	}
-
-	if(is_array($next)){
-		$rightLink = "gallery-album?id_content=".$next['id_content'];
-	}
-
+	if(is_array($previous)) $leftLink  = "gallery-album?id_content=".$previous['id_content'];
+	if(is_array($next))     $rightLink = "gallery-album?id_content=".$next['id_content'];
 
 	$fields = $app->apiLoad('field')->fieldGet(array(
 		'id_type'		=> $type['id_type'],
@@ -133,6 +141,14 @@
 		'fieldShowForm'	=> true,
 		'debug'			=> false
 	));
+
+	$useCount 	= 0;
+	$usePercent = 100;
+	foreach(array('use_group', 'use_search', 'use_chapter', 'use_category', 'use_socialforum') as $use){
+		if($type[$use] == '1') $useCount++;
+	}
+
+	if($useCount > 0) $usePercent = round(100 / $useCount);
 
 ?><!DOCTYPE html>
 <html lang="fr">
@@ -155,7 +171,8 @@
 <div class="inject-subnav-right hide">
     <li><a onclick="$('#data').submit()" class="btn btn-small btn-success"><?php echo _('Save'); ?></a></li>
 	<?php if($data['id_content'] > 0){ ?>
-	<li><a href="gallery?id_type=<?php echo $data['id_type'] ?>#<?php echo $data['id_content'] ?>" class="button button-blue"><?php echo _('Thumbnails view'); ?></a></li>
+	<li><a href="gallery?id_type=<?php echo $data['id_type'] ?>#album/<?php echo $data['id_content'] ?>" class="btn btn-small"><?php echo _('Thumbnails view'); ?></a></li>
+	<li><a href="gallery-import?id_album=<?php echo $data['id_content'].'&id_type='.$data['id_type'] ?>" class="btn btn-small"><?php echo _('Import'); ?></a></li>
 	<?php } ?>
 </div>
 
@@ -166,37 +183,35 @@
 			if(isset($_GET['message'])) $message = urldecode($_GET['message']);
 			if($message != NULL){
 				list($class, $message) = $app->helperMessage($message);
-				echo "<div class=\"message message".ucfirst($class)."\">".$message."</div>";
+				echo "<div class=\"message message".ucfirst($class)."\" style=\"margin-top:20px;\">".$message."</div>";
 			}
 		?>
 
 		<table width="100%" border="0" cellpadding="0" cellspacing="2" id="gCarrousel">
-			<tr>
-				<td class="previous"><a href="<?php echo ($leftLink  != '') ? $leftLink  : '#'; ?>" id="goToLeft">← <?php echo _('Previous album'); ?></a></td>
-				<td class="current"	>↑ <?php
-
-					echo ($data['id_album'] == 0)
-						? '<a id="goToAlbum" href="gallery?id_type='.$type['id_type'].'">'._('Root').'</a>'
-						: '<a id="goToAlbum" href="gallery?id_type='.$type['id_type'].'#album/'.$album['id_content'].'">Album '.$album['contentName'].'</a>';
-
-				?></td>
-				<td width="25%" class="next"><a href="<?php echo ($rightLink != '') ? $rightLink : '#'; ?>" id="goToRight"><?php echo _('Next album'); ?> →</a></td>
-			</tr>
+			<thead>
+				<tr>
+					<td class="previous"><a href="<?php echo ($leftLink  != '') ? $leftLink  : '#'; ?>" id="goToLeft">← <?php echo _('Previous album'); ?></a></td>
+					<td class="current"	>↑ <?php
+						echo ($id_album == 0)
+							? '<a id="goToAlbum" href="gallery?id_type='.$type['id_type'].'">'._('Root').'</a>'
+							: '<a id="goToAlbum" href="gallery?id_type='.$type['id_type'].'#album/'.$parent['id_content'].'">Album '.$parent['contentName'].'</a>';
+					?></td>
+					<td width="25%" class="next"><a href="<?php echo ($rightLink != '') ? $rightLink : '#'; ?>" id="goToRight"><?php echo _('Next album'); ?> →</a></td>
+				</tr>
+			</thead>
 			<tr>
 				<td class="previous"><?php
-
 					echo ($leftLink != '')
 						? "<a href=\"".$leftLink."\">".$previous['contentName']."</a>"
 						: _('No previous album');
-
-				?>&nbsp;</td>
-				<td class="current" align="center";><?php printf(_('Current album: %s'), $data['contentName']); ?></td>
+				?></td>
+				<td class="current" align="center"><?php
+					if(isset($data)) printf(_('Current album: %s'), $data['contentName']);
+				?></td>
 				<td class="next" align="right"><?php
-
 					echo ($rightLink != '')
 						? "<a href=\"".$rightLink."\">".$next['contentName']."</a>"
 						: _('No more album');
-
 				?></td>
 			</tr>
 		</table>
@@ -207,12 +222,13 @@
 		<input type="hidden" name="action"      value="1" />
 		<input type="hidden" name="id_type"     value="<?php echo $type['id_type'] ?>" />
 		<input type="hidden" name="id_content"  value="<?php echo $data['id_content'] ?>" id="id_content" />
-		<input type="hidden" name="language"    value="fr" />
+		<input type="hidden" name="language"    value="<?php echo $language; ?>" id="language" />
 		<input type="hidden" name="id_album"    value="<?php echo $id_album; ?>" />
 	
 		<div class="tabset">
 			<div class="view view-tab">
 				<ul class="is-sortable field-list">
+
 					<li class="clearfix form-item">
 						<div class="hand">&nbsp;</div>
 						<div class="toggle toggle-hidden">&nbsp;</div>
@@ -220,16 +236,21 @@
 						<span class="<?php echo $app->formError('contentName', 'needToBeFilled') ?> clearfix">
 							<label><?php echo _('Name'); ?></label>
 							<div class="form">
-								<input type="text" name="contentName" id="contentNameField" value="<?php echo $app->formValue($data['contentName'], $_POST['contentName']); ?>" size="100" style="width:99%;" />
+								<input type="text" class="field" name="contentName" id="contentNameField" value="<?php echo $app->formValue($data['contentName'], $_POST['contentName']); ?>" autocomplete="off" size="100" style="width:99%;" />
 							</div>
 						</span>
-	
-						<div class="spacer">&nbsp;</div>
+
+						<div class="spacer"></div>
 	
 						<span class="<?php echo $app->formError('contentUrl', 'needToBeFilled') ?>">
 							<label><?php echo _('Album URL'); ?></label>
-							<div class="form">
-								<input type="text" name="contentUrl" id="urlField" value="<?php echo $app->formValue($data['contentUrl'], $_POST['contentUrl']); ?>" size="100" style="width:99%;" />
+
+							<div class="form clearfix">
+								<input type="text" name="contentUrl" id="urlField" class="field" value="<?php echo $app->formValue($data['contentUrl'], $_POST['contentUrl']); ?>" size="100" style="width:75%; float:left;" />
+								<div style="float:left; margin-top:2px;">
+									<input type="checkbox" id="autogen" value="1" name="contentUrlAuto" onclick="if(this.checked)urlCheck();"  <?php if($app->formValue($data['contentUrlAuto'], $_POST['contentUrlAuto']) || (!isset($data['contentUrlAuto']) && !isset($_POST['contentUrlAuto']))) echo "checked" ?> />
+									<?php echo _('Auto generate'); ?>
+								</div>
 							</div>
 						</span>
 					</li>
@@ -264,7 +285,7 @@
 						<div class="form">
 							<select name="contentTemplate">
 								<option value=""><?php echo _('Use default template'); ?></option><?php
-								foreach($app->fsFolder(TEMPLATE, '', FLAT) as $e){
+								foreach($app->fsFolder(TEMPLATE, '', 'FLAT') as $e){
 									$e	 = basename($e);
 									$sel = ($app->formValue($data['contentTemplate'], $_POST['contentTemplate']) == $e) ? ' selected' : NULL;
 									echo "<option value=\"".$e."\"".$sel.">".$e."</option>\n";
@@ -272,78 +293,120 @@
 							?></select>
 						</div>
 					</li>
-	
+
+					<?php if($useCount > 0){ ?>
 					<li class="clearfix form-item">
 						<div class="hand">&nbsp;</div>
 						<div class="toggle toggle-hidden">&nbsp;</div>
 						<label><?php echo _('Relationships'); ?></label>
 						<div class="form">
-							<div style="width:25%;" class="panelItem">
-								<span class="panelLabel">
-									<?php echo _('Chapters'); ?>
+
+							<?php if($type['use_chapter']){ ?>
+								<div style="width:<?php echo $usePercent ?>%;" class="panelItem">
+									<span class="panelLabel clearfix">
+										<span class="name"><?php echo _('Chapters'); ?></span>
+										<span class="action">
+											<a onclick="sizer('#id_chapter', 100, 100)"><i class="icon-plus"></i></a>
+											<a onclick="sizer('#id_chapter', 100,-100)"><i class="icon-minus"></i></a>
+										</span>
+									</span>
+									<div class="panelBody"><?php
+										echo $app->apiLoad('chapter')->chapterSelector(array(
+											'name'		=> 'id_chapter[]',
+											'id'		=> 'id_chapter',
+											'multi' 	=> true,
+											'style' 	=> 'width:100%; height:200px',
+											'profile'	=> true,
+											'value'		=> $app->formValue($data['id_chapter'], $_POST['id_chapter'])
+										));
+									?></div>
+								</div>
+							<?php } if($type['use_category']){ ?>
+								<div style="width:<?php echo $usePercent ?>%;" class="panelItem">
+									<span class="panelLabel clearfix">
+										<span class="name"><?php echo _('Category'); ?></span>
+										<span class="action">
+											<a onclick="sizer('#id_category', 100, 100)"><i class="icon-plus"></i></a>
+											<a onclick="sizer('#id_category', 100,-100)"><i class="icon-minus"></i></a>
+										</span>
+									</span>
+									<div class="panelBody"><?php
+										echo $app->apiLoad('category')->categorySelector(array(
+											'name'		=> 'id_category[]',
+											'id'		=> 'id_category',
+											'multi' 	=> true,
+											'style' 	=> 'width:100%; height:200px',
+											'profile'	=> true,
+											'language'	=> 'fr',
+											'value'		=> $app->formValue($data['id_category'], $_POST['id_category'])
+										));
+									?></div>
+								</div>
+							<?php } if($type['use_group'] && !$type['is_business']){ ?>
+								<div style="width:<?php echo $usePercent ?>%;" class="panelItem">
+									<span class="panelLabel clearfix">
+										<span class="name"><?php echo _('Groups'); ?></span>
+										<span class="action">
+											<a onclick="sizer('#id_group', 100, 100)"><i class="icon-plus"></i></a>
+											<a onclick="sizer('#id_group', 100,-100)"><i class="icon-minus"></i></a>
+										</span>
+									</span>
+									<div class="panelBody"><?php
+										echo $app->apiLoad('user')->userGroupSelector(array(
+											'name'		=> 'id_group[]',
+											'id'		=> 'id_group',
+											'multi' 	=> true,
+											'style' 	=> 'width:100%; height:200px',
+											'profile'	=> true,
+											'value'		=> $app->formValue($data['id_group'], $_POST['id_group'])
+										));
+									?></div>
+								</div>
+							<?php } if($type['use_search']){ ?>
+								<div style="width:<?php echo $usePercent ?>%;" class="panelItem">
+									<span class="panelLabel clearfix">
+										<span class="name"><?php echo _('Smart groups'); ?></span>
+										<span class="action">
+											<a onclick="sizer('#id_search', 100, 100)"><i class="icon-plus"></i></a>
+											<a onclick="sizer('#id_search', 100,-100)"><i class="icon-minus"></i></a>
+										</span>
+									</span>
+									<div class="panelBody"><?php
+										echo $app->apiLoad('coreSearch')->searchSelector(array(
+											'name'		=> 'id_search[]',
+											'id'		=> 'id_search',
+											'searchType'=> 'user',
+											'multi' 	=> true,
+											'style' 	=> 'width:100%; height:200px',
+											'value'		=> $app->formValue($data['id_search'], $_POST['id_search'])
+										));
+										?></div>
+								</div>
+							<?php } if($type['use_socialforum']){ ?>
+							<div style="width:<?php echo $usePercent ?>%;" class="panelItem">
+								<span class="panelLabel clearfix">
+									<span class="name"><?php echo _('Forum (Social)'); ?></span>
+									<span class="action">
+										<a onclick="sizer('#id_socialforum', 100, 100)"><i class="icon-plus"></i></a>
+										<a onclick="sizer('#id_socialforum', 100,-100)"><i class="icon-minus"></i></a>
+									</span>
 								</span>
-								<div class="panelBody" style="width:95%;"><?php echo 
-									$app->apiLoad('chapter')->chapterSelector(array(
-										'name'		=> 'id_chapter[]',
-										'id'		=> 'id_chapter',
+								<div class="panelBody"><?php
+									echo $app->apiLoad('socialForum')->socialForumSelector(array(
+										'name'		=> 'id_socialforum[]',
+										'id'		=> 'id_socialforum',
 										'multi' 	=> true,
 										'style' 	=> 'width:100%; height:200px',
-										'profile'	=> true,
-										'value'		=> $app->formValue($data['id_chapter'], $_POST['id_chapter'])
+										'value'		=> $app->formValue($data['id_socialforum'], $_POST['id_socialforum'])
 									));
 								?></div>
-							</div>
-							<div style="width:25%;" class="panelItem">
-								<span class="panelLabel">
-									<?php echo _('Category'); ?>
-								</span>
-								<div class="panelBody" style="width:95%;"><?php echo 
-									$app->apiLoad('category')->categorySelector(array(
-										'name'		=> 'id_category[]',
-										'id'		=> 'id_category',
-										'multi' 	=> true,
-										'style' 	=> 'width:100%; height:200px',
-										'profile'	=> true,
-										'language'	=> 'fr',
-										'value'		=> $app->formValue($data['id_category'], $_POST['id_category'])
-									));
-								?></div>
-							</div>
-							<?php if(!$type['is_business']){ ?>
-							<div style="width:25%;" class="panelItem">
-								<span class="panelLabel">
-									<?php echo _('Groups'); ?>
-								</span>
-								<div class="panelBody" style="width:95%;"><?php echo 
-									$app->apiLoad('user')->userGroupSelector(array(
-										'name'		=> 'id_group[]',
-										'id'		=> 'id_group',
-										'multi' 	=> true,
-										'style' 	=> 'width:100%; height:200px',
-										'profile'	=> true,
-										'value'		=> $app->formValue($data['id_group'], $_POST['id_group'])
-									));
-								?></div>
-							</div>
 							<?php } ?>
-							<div style="width:25%;" class="panelItem">
-								<span class="panelLabel">
-									<?php echo _('Smart groups'); ?>
-								</span>
-								<div class="panelBody" style="width:95%;"><?php echo 
-									$app->searchSelector(array(
-										'name'		=> 'id_search[]',
-										'id'		=> 'id_search',
-										'searchType'=> 'user',
-										'multi' 	=> true,
-										'style' 	=> 'width:100%; height:200px',
-										'value'		=> $app->formValue($data['id_search'], $_POST['id_search'])
-									));
-								?></div>
-							</div>
 						</div>
+
 					</li>
-	
+					<?php } ?>
+
+					<!--
 					<li id="contentDate" class="clearfix form-item">
 						<div class="hand">&nbsp;</div>
 						<div class="toggle toggle-hidden">&nbsp;</div>
@@ -383,6 +446,7 @@
 							</table>
 						</div>
 					</li>
+					-->
 	
 					<?php
 						foreach($fields as $e){
@@ -415,7 +479,7 @@
 	textarea		= "<?php echo @implode(',', $GLOBALS['textarea']) ?>";
 	MceStyleFormats = [<?php echo @file_get_contents(USER.'/config/tinymceStyleFormats.php') ?>];
 
-	$(document).ready(function(){
+	$(function(){
 		boot();
 		checkNeedToBeFilled();
 	});

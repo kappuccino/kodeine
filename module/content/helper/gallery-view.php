@@ -14,7 +14,6 @@
 		$id_poster = $album['id_poster'];
 	}else{
 		$id_poster = NULL;
-
 	}
 
 	// Albums
@@ -38,6 +37,7 @@
 			'id_content'    => intval($e['id_content']),
 			'contentName'   => $e['contentName'],
 			'contentSee'    => $e['contentSee'],
+			'hasPoster'     => false
 		);
 
 		// Verifier le poster du dossier
@@ -49,6 +49,7 @@
 			));
 
 			if(file_exists(KROOT.$poster['contentItemUrl']) && is_file(KROOT.$poster['contentItemUrl'])){
+				$tmp['hasPoster'] = true;
 
 				$opt = array(
 					'url'	=> $poster['contentItemUrl'],
@@ -74,20 +75,10 @@
 					'width'     => intval($preview['width']),
 					'height'    => intval($preview['height']),
 				);
-
-				/*$tmp['preview'] = array(
-					'url'	    => $poster['contentItemUrl'],
-					'width'	    => intval($poster['contentItemWidth']),
-					'height'	=> intval($poster['contentItemHeight']),
-				);*/
-
-			}else{
-				$albums[$idx]['id_poster'] = 0;
 			}
 		}
 
 		$data[] = $tmp;
-
 	}
 
 	// Items
