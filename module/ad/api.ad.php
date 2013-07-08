@@ -114,7 +114,7 @@ class ad extends content {
             if($opt['id_adzone'] != NULL){
                 $zone = $this->dbOne("SELECT * FROM k_adzone WHERE id_adzone = ".$opt['id_adzone']);
             }else{
-                $zone = $this->dbMulti("SELECT * FROM k_adzone");
+                $zone = $this->dbMulti("SELECT * FROM k_adzone ".$opt['sqlWhere']." ORDER BY zoneName ASC");
             }
 
         if($opt['debug']) $this->pre($this->db_query, $this->db_error);
