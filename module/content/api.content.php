@@ -468,7 +468,11 @@ public function contentGet($opt=array()){
 	}
 
 	if($opt['id_user'] != NULL)		$cond[] = "k_content.id_user=".$opt['id_user'];
-	if($opt['contentSee'] != 'ALL')	$cond[] = "contentSee=".(isset($opt['contentSee']) ? $opt['contentSee'] : '1');
+	if($opt['contentSee'] != 'ALL') {
+        $cond[] = " ('".date('Y-m-d H:i:s')."' >= contentDateStart OR contentDateStart IS NULL)";
+        $cond[] = " ('".date('Y-m-d H:i:s')."' <= contentDateEnd OR contentDateEnd IS NULL)";
+        $cond[] = "contentSee=".(isset($opt['contentSee']) ? $opt['contentSee'] : '1');
+    }
 	if(isset($opt['is_buy']))		$cond[] = "is_buy=".(($opt['is_buy']) ? '1' : '0');
 	if(isset($opt['social']))		$cond[] = "k_content.is_social=".$opt['is_social'];
 	if(isset($opt['noId']))			$cond[] = "k_content.id_content".(is_array($opt['noId']) ? ' NOT IN('.implode(',', $opt['noId']).')' : '!='.$opt['noId']);

@@ -7,7 +7,7 @@
 ?>
 	<br /><br />
 	S&eacute;lectionner un groupe<br />
-	<select name="listInterestGroupings[]" id="listInterestGroupings" multiple size="15" style="width:500px;">
+	<select name="listInterestGroupings[]" id="listInterestGroupings" multiple size="15" style="width:500px;height: 250px;">
 <?php
 	foreach($lists as $list) {
 		
