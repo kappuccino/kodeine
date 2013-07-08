@@ -747,7 +747,7 @@
 				<select name="id_adzone"><?php
 					foreach($app->apiLoad('ad')->adZoneGet() as $e){
                         $sel = ($app->formValue($data['id_adzone'], $_POST['id_adzone']) == $e['id_adzone']) ? ' selected' : NULL;
-                        $sel = ($sel == NULL && $app->formValue($data['id_adzone'], $_POST['id_adzone']) == '' && $_GET['id_adzone'] == $e['id_adzone']) ? ' selected' : NULL;
+                        $sel = ($sel == NULL && $app->formValue($data['id_adzone'], $_POST['id_adzone']) == '' && $_GET['id_adzone'] == $e['id_adzone']) ? ' selected' : $sel;
 						echo "<option value=\"".$e['id_adzone']."\"".$sel.">".$e['zoneName']."</option>";
 					}
 				?></select>
