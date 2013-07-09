@@ -139,7 +139,7 @@ class coreDb{
 //-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -
 	public  function dbOne($query, $link=NULL){
 
-		$result = $this->dbQuery($query, $link);
+		$result = $this->mysql->query($query, $link);
 		if($result === false) return array();
 		$db = $result->fetch_assoc();
 
@@ -150,7 +150,7 @@ class coreDb{
 //-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -
 	public  function dbMulti($query, $link=NULL){
 
-		$result = $this->dbQuery($query, $link);
+		$result = $this->mysql->query($query, $link);
 
 		if($result === false) return array();
 		$db		= array();
@@ -282,13 +282,13 @@ class coreDb{
 		if($id_profile != NULL) $profile = $this->userProfile($id_profile);
 
 		if($type == 'PROFILE' && $profileKey != '' && $profile[$profileKey] != ''){
-			$this->dbQuery("DELETE FROM ".$table." WHERE ".$a."='".$id."' AND ".$b." IN(".$profile[$profileKey].")");
+			$this->mysql->query("DELETE FROM ".$table." WHERE ".$a."='".$id."' AND ".$b." IN(".$profile[$profileKey].")");
 		}else
 		if($type == 'UNIQUE'){
-			$this->dbQuery("DELETE FROM ".$table." WHERE ".$a."='".$id."' AND ".$b."='".$values."'");
+			$this->mysql->query("DELETE FROM ".$table." WHERE ".$a."='".$id."' AND ".$b."='".$values."'");
 		}else
 		if($type == 'ALL'){
-			$this->dbQuery("DELETE FROM ".$table." WHERE ".$a."='".$id."'");
+			$this->mysql->query("DELETE FROM ".$table." WHERE ".$a."='".$id."'");
 		}
 
 	#	if($debug) die($this->pre($profile));
@@ -305,9 +305,9 @@ class coreDb{
 			}
 
 			if($child == ''){
-				$this->dbQuery("INSERT IGNORE INTO ".$table." (".$a.", ".$b.") VALUES ".implode(',', $added));
+				$this->mysql->query("INSERT IGNORE INTO ".$table." (".$a.", ".$b.") VALUES ".implode(',', $added));
 			}else{
-				$this->dbQuery("INSERT IGNORE INTO ".$table." (".$a.", ".$b.", is_selected) VALUES ".implode(',', $added));
+				$this->mysql->query("INSERT IGNORE INTO ".$table." (".$a.", ".$b.", is_selected) VALUES ".implode(',', $added));
 			}
 
 			if($debug) $this->pre('A', $this->db_query, $this->db_error);
@@ -318,7 +318,7 @@ class coreDb{
 					if($e != NULL) $added[] = '('.$id.','.$e.',0)';
 				}
 				if(sizeof($added) > 0){
-					$this->dbQuery("INSERT IGNORE INTO ".$table." (".$a.", ".$b.", is_selected) VALUES ".implode(',', $added));
+					$this->mysql->query("INSERT IGNORE INTO ".$table." (".$a.", ".$b.", is_selected) VALUES ".implode(',', $added));
 					if($debug) $this->pre('B', $this->db_query, $this->db_error);
 				}
 			}

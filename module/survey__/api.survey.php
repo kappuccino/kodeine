@@ -90,7 +90,7 @@ public function surveySet($opt=array()){
 		$q = $this->dbInsert($def);
 	}
 
-	@$this->dbQuery($q);
+	@$this->mysql->query($q);
 	if($opt['debug']) $this->pre($this->db_query, $this->db_error);
 	if($this->db_error != NULL) return false;
 
@@ -122,7 +122,7 @@ public function surveyRemove($id_survey){
 	}
 	
 	// Finallement on KILL le survey
-	$this->dbQuery("DELETE FROM k_survey WHERE id_survey=".$id_survey);
+	$this->mysql->query("DELETE FROM k_survey WHERE id_survey=".$id_survey);
 }
 
 /* + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + -
@@ -137,7 +137,7 @@ public function surveySlotInit($opt){
 		$ext = "SELECT id_surveyslot FROM k_surveyslot WHERE id_survey=".$opt['id_survey']." AND id_user=".$opt['id_user'];
 
 		// Recuperer le MAIL du USER
-		$myu = $this->dbOne("SELECT userMail FROM k_user WHERE id_user=".$opt['id_user']);
+		$myu = $this->mysql->one("SELECT userMail FROM k_user WHERE id_user=".$opt['id_user']);
 		$opt['surveySlotEmail'] = $myu['userMail'];
 
 	}else
@@ -145,14 +145,14 @@ public function surveySlotInit($opt){
 		$ext = "SELECT id_surveyslot FROM k_surveyslot WHERE id_survey=".$opt['id_survey']." AND surveySlotEmail='".$opt['surveySlotEmail']."'";
 		
 		// Verifier si un USER existe avec cette EMAIL, sauver l'id_user
-		$uxt = $this->dbOne("SELECT id_user FROM k_user WHERE userMail='".$opt['surveySlotEmail']."'");
+		$uxt = $this->mysql->one("SELECT id_user FROM k_user WHERE userMail='".$opt['surveySlotEmail']."'");
 		if($uxt['id_user'] != NULL) $opt['id_user'] = $uxt['id_user'];
 
 	}else{
 		die(' ? ');
 		return false;
 	}
-	$ext = $this->dbOne($ext);
+	$ext = $this->mysql->one($ext);
 
 	# Recuperer l'identifiant du slot, ou en creer un nouveau
 	#
@@ -168,7 +168,7 @@ public function surveySlotInit($opt){
 		));
 
 		$query = $this->dbInsert($def);
-		$this->dbQuery($query);
+		$this->mysql->query($query);
 
 		return $this->db_insert_id;
 	}
@@ -264,7 +264,7 @@ public function surveySlotNext($id_surveyslot){
 /* + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + -
 + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - */
 public function surveySlotFinished($id_surveyslot){
-	$this->dbQuery("UPDATE k_surveyslot SET is_finished=1 WHERE id_surveyslot=".$id_surveyslot);
+	$this->mysql->query("UPDATE k_surveyslot SET is_finished=1 WHERE id_surveyslot=".$id_surveyslot);
 }
 
 /* + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + -
@@ -326,12 +326,12 @@ public function surveyGroupSet($opt=array()){
 	if($id_surveygroup > 0){
 		$q	  = $this->dbUpdate($def)." WHERE id_surveygroup=".$id_surveygroup;
 	}else{
-		$last = $this->dbOne("SELECT MAX(surveyGroupOrder) AS m FROM k_surveygroup");
+		$last = $this->mysql->one("SELECT MAX(surveyGroupOrder) AS m FROM k_surveygroup");
 		$def['k_surveygroup']['surveyGroupOrder'] = array('value' => $last['m'] + 1);
 		$q	  = $this->dbInsert($def);
 	}
 
-	@$this->dbQuery($q);
+	@$this->mysql->query($q);
 	if($opt['debug']) $this->pre($this->db_query, $this->db_error);
 	if($this->db_error != NULL) return false;
 
@@ -343,7 +343,7 @@ public function surveyGroupSet($opt=array()){
 /* + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + -
 + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - */
 public function surveyGroupRemove($id_surveygroup){
-	$this->dbQuery("DELETE FROM k_surveygroup WHERE id_surveygroup=".$id_surveygroup);
+	$this->mysql->query("DELETE FROM k_surveygroup WHERE id_surveygroup=".$id_surveygroup);
 }
 
 /* + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + -
@@ -418,7 +418,7 @@ public function surveyQuerySet($opt=array()){
 		$q = $this->dbInsert($def);
 	}
 	
-	@$this->dbQuery($q);
+	@$this->mysql->query($q);
 	if($opt['debug']) $this->pre($this->db_query, $this->db_error);
 	if($this->db_error != NULL) return false;
 
@@ -430,8 +430,8 @@ public function surveyQuerySet($opt=array()){
 /* + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + -
 + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - */
 public function surveyQueryRemove($id_surveyquery){
-	$this->dbQuery("DELETE FROM k_surveyquery	  WHERE id_surveyquery = ".$id_surveyquery);
-	$this->dbQuery("DELETE FROM k_surveyqueryitem WHERE id_surveyquery = ".$id_surveyquery);
+	$this->mysql->query("DELETE FROM k_surveyquery	  WHERE id_surveyquery = ".$id_surveyquery);
+	$this->mysql->query("DELETE FROM k_surveyqueryitem WHERE id_surveyquery = ".$id_surveyquery);
 }
 
 /* + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + -
@@ -496,7 +496,7 @@ public function surveyQueryItemSet($opt){
 		$q = $this->dbInsert($def);
 	}
 
-	@$this->dbQuery($q);
+	@$this->mysql->query($q);
 	if($opt['debug']) $this->pre($this->db_query, $this->db_error);
 	if($this->db_error != NULL) return false;
 
@@ -508,7 +508,7 @@ public function surveyQueryItemSet($opt){
 /* + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + -
 + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - */
 public function surveyQueryItemRemove($id_surveyqueryitem){
-	$this->dbQuery("DELETE FROM k_surveyqueryitem WHERE id_surveyqueryitem = ".$id_surveyqueryitem);
+	$this->mysql->query("DELETE FROM k_surveyqueryitem WHERE id_surveyqueryitem = ".$id_surveyqueryitem);
 }
 
 
@@ -580,7 +580,7 @@ public function surveyFormSubmit($opt=array()){
 		if(($item == '' && $dbQuery['allow_empty'] == '1') OR $item != ''){
 
 			// Verifier si un SLOTITEM existe
-			$ext = $this->dbOne("SELECT id_surveyslot FROM k_surveyslotitem WHERE id_surveyslot=".$id_surveyslot." AND id_surveyquery=".$id_surveyquery);
+			$ext = $this->mysql->one("SELECT id_surveyslot FROM k_surveyslotitem WHERE id_surveyslot=".$id_surveyslot." AND id_surveyquery=".$id_surveyquery);
 			if($ext['id_surveyslot'] == ''){
 
 				if(!is_array($item)) $item = array($item);
@@ -629,7 +629,7 @@ public function surveyFormSubmit($opt=array()){
 	if(!$error){
 		$sql[] = "UPDATE k_surveyslot SET surveySlotGroup=".$dbQuery['id_surveygroup']." WHERE id_surveyslot=".$id_surveyslot;
 		foreach($sql as $e){
-			$this->dbQuery($e);
+			$this->mysql->query($e);
 		}
 	}else{
 		$this->formError = true;
@@ -649,16 +649,16 @@ public function surveyStat($id_survey){
 			'id_surveyquery' => $q['id_surveyquery']
 		));
 
-		$people = $this->dbOne("SELECT COUNT(*) AS H FROM k_surveyslotitem WHERE id_surveyquery=".$q['id_surveyquery']." GROUP BY id_surveyqueryitem");
+		$people = $this->mysql->one("SELECT COUNT(*) AS H FROM k_surveyslotitem WHERE id_surveyquery=".$q['id_surveyquery']." GROUP BY id_surveyqueryitem");
 		$merge['player'] = $people['H'];
 
 		foreach($items as $i){
-			$slotItem 	= $this->dbOne("SELECT COUNT(*) AS H FROM k_surveyslotitem WHERE id_surveyqueryitem=".$i['id_surveyqueryitem']);
+			$slotItem 	= $this->mysql->one("SELECT COUNT(*) AS H FROM k_surveyslotitem WHERE id_surveyqueryitem=".$i['id_surveyqueryitem']);
 			$merge['item'][$i['id_surveyqueryitem']] = $slotItem['H'];
 		}
 
 		# Verifier s'il existe des AUTRE		
-		$other = $this->dbOne("SELECT COUNT(*) AS H FROM k_surveyslotitem WHERE id_surveyquery=".$q['id_surveyquery']." AND id_surveyqueryitem IS NULL AND surveySlotItemText != ''");
+		$other = $this->mysql->one("SELECT COUNT(*) AS H FROM k_surveyslotitem WHERE id_surveyquery=".$q['id_surveyquery']." AND id_surveyqueryitem IS NULL AND surveySlotItemText != ''");
 		if($other['H'] > 0) $merge['item']['@'] = $other['H'];
 
 		$merge['total'] = array_sum($merge['item']);

@@ -9,7 +9,7 @@ function socialForum(){}
 + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - */
 function socialForumGet($opt=array()){
 
-	if(BENCHME) @$GLOBALS['bench']->benchmarkMarker($bmStep='socialForumGet() @='.json_encode($opt));
+	if(BENCHME) $this->bench->marker($bmStep='socialForumGet() @='.json_encode($opt));
 
 	if($opt['debug']) $this->pre("[OPT]", $opt);
 	$dbMode = 'dbMulti';
@@ -100,7 +100,7 @@ function socialForumGet($opt=array()){
 
 		$where 	= (sizeof($cond)  > 0) ? "WHERE ".implode(' AND ', $cond) : NULL;
 		$query	= "SELECT * FROM k_socialforum".$inner."\n".$where."\nORDER by pos_forum";
-		$forum	= $this->dbMulti($query);
+		$forum	= $this->mysql->multi($query);
 		if($opt['debug']) $this->pre($this->db_query, $this->db_error);
 
 		foreach($forum as $idx => $e){
@@ -161,7 +161,7 @@ function socialForumGet($opt=array()){
 
 	if($opt['debug']) $this->pre("[FORMAT]", $forums);
 
-	if(BENCHME) @$GLOBALS['bench']->benchmarkMarker($bmStep);
+	if(BENCHME) $this->bench->marker($bmStep);
 
 	return $forums;
 }
@@ -173,13 +173,13 @@ function socialForumSet($opt){
 	# NEW !
 	#
 	if($opt['id_socialforum'] == NULL){
-		$this->dbQuery("INSERT INTO k_socialforum (socialForumName) VALUES ('TEMP_NAME')");
+		$this->mysql->query("INSERT INTO k_socialforum (socialForumName) VALUES ('TEMP_NAME')");
 		if($opt['debug']) $this->pre($this->db_query, $this->db_error);
 		$id_socialforum = $this->db_insert_id;
 
 		// position		
 		if(intval($opt['core']['mid_socialforum']['value']) > 0){
-			$last = $this->dbOne("SELECT MAX(pos_forum) AS m FROM k_socialforum WHERE mid_socialforum=".$opt['core']['mid_socialforum']['value']);
+			$last = $this->mysql->one("SELECT MAX(pos_forum) AS m FROM k_socialforum WHERE mid_socialforum=".$opt['core']['mid_socialforum']['value']);
 			$opt['core']['pos_forum'] = array('value' => $last['m']+1);
 		}
 
@@ -192,7 +192,7 @@ function socialForumSet($opt){
 	# CORE
 	#
 	$query = $this->dbUpdate(array('k_socialforum' => $opt['core']))." WHERE id_socialforum=".$id_socialforum;
-	$this->dbQuery($query);
+	$this->mysql->query($query);
 	if($opt['debug']) $this->pre($this->db_query, $this->db_error);
 
 	# FIELD
@@ -214,7 +214,7 @@ function socialForumSet($opt){
 			$def['k_socialforum']['field'.$id_field] = array('value' => $value); 
 		}
 
-		$this->dbQuery($this->dbUpdate($def)." WHERE id_socialforum=".$id_socialforum);
+		$this->mysql->query($this->dbUpdate($def)." WHERE id_socialforum=".$id_socialforum);
 		if($opt['debug']) $this->pre($this->db_query, $this->db_error);
 	}
 
@@ -262,7 +262,7 @@ function socialForumMapping($opt){
 				if(is_array($v) && $f['fieldType'] == 'user'){
 					unset($tmp);
 					foreach($v as $id_user){
-						$tmp[] = $this->dbOne("SELECT * FROM k_user WHERE id_user=".$id_user);
+						$tmp[] = $this->mysql->one("SELECT * FROM k_user WHERE id_user=".$id_user);
 					}
 					$forums[$n]['field'][$f['fieldKey']] = $tmp;
 				}else
@@ -270,7 +270,7 @@ function socialForumMapping($opt){
 				if(is_array($v) && $f['fieldType'] == 'content'){
 					unset($tmp);
 					foreach($v as $id_content){
-						$tmp[] = $this->dbOne("SELECT * FROM k_contentdata WHERE id_content=".$id_content);
+						$tmp[] = $this->mysql->one("SELECT * FROM k_contentdata WHERE id_content=".$id_content);
 					}
 					$forums[$n]['field'][$f['fieldKey']] = $tmp;
 				}else
@@ -304,7 +304,7 @@ function socialForumRemove($opt){
 	$ids[] = $forum['id_socialforum'];
 	$ids   = array_merge($ids, $forum['socialForumFlat']);
 
-	$this->dbQuery("DELETE FROM k_socialforum WHERE id_socialforum IN(".implode(',', $ids).")");
+	$this->mysql->query("DELETE FROM k_socialforum WHERE id_socialforum IN(".implode(',', $ids).")");
 	if($opt['debug']) $this->pre($this->db_query, $this->db_error);
 
 	$this->socialForumFamily();
@@ -327,7 +327,7 @@ public function socialForumFamily(){
 	$this->socialForumFamilyParent($forum);
 
 	foreach($this->tempFor as $id_socialforum => $tree){
-		$this->dbQuery("UPDATE k_socialforum SET socialForumParent='".json_encode($tree)."' WHERE id_socialforum=".$id_socialforum);
+		$this->mysql->query("UPDATE k_socialforum SET socialForumParent='".json_encode($tree)."' WHERE id_socialforum=".$id_socialforum);
 		#$this->pre($this->db_query, $this->db_error);
 	}
 
@@ -337,7 +337,7 @@ public function socialForumFamily(){
 		$child	= $this->socialForumFamilyChildren($e);
 		$thread	= $this->socialForumFamilyThread($e['id_socialforum']);
 
-		$this->dbQuery(
+		$this->mysql->query(
 			"UPDATE k_socialforum SET ".
 			"socialForumFlat='".json_encode($child)."', socialForumThread='".json_encode($thread)."'".
 			"WHERE id_socialforum=".$e['id_socialforum']
@@ -384,7 +384,7 @@ public function socialForumFamilyChildren($e, &$line=array()){
 + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - */
 function socialForumFamilyThread($mid_socialforum){
 
-	$children = $this->dbMulti("SELECT id_socialforum FROM k_socialforum WHERE mid_socialforum=".$mid_socialforum." ORDER BY pos_forum");
+	$children = $this->mysql->multi("SELECT id_socialforum FROM k_socialforum WHERE mid_socialforum=".$mid_socialforum." ORDER BY pos_forum");
 
 	if(sizeof($children) > 0){
 		foreach($children as $c){

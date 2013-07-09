@@ -67,7 +67,7 @@ public function commentSet($id_comment, $def){
 		$q = $this->dbInsert($def);
 	}
 
-	@$this->dbQuery($q);
+	@$this->mysql->query($q);
 	if($this->db_error != NULL) return false;
 
 	$this->id_comment = ($id_comment > 0) ? $id_comment : $this->db_insert_id;
@@ -86,15 +86,15 @@ public function commentSet($id_comment, $def){
 public function commentRemove($id_comment){
 	if(intval($id_comment) <= 0) return false;
 	
-	$tmp = $this->dbOne("SELECT * FROM k_contentcomment WHERE id_comment=".$id_comment);
+	$tmp = $this->mysql->one("SELECT * FROM k_contentcomment WHERE id_comment=".$id_comment);
 
 	if(intval($tmp['id_comment']) <= 0) return false;
 
-	$this->dbQuery("UPDATE k_contentcomment SET is_moderate=0 WHERE id_comment=".$id_comment);
+	$this->mysql->query("UPDATE k_contentcomment SET is_moderate=0 WHERE id_comment=".$id_comment);
 	$this->commentUpdateCount($id_comment);
 
-	$this->dbQuery("DELETE FROM k_contentcomment WHERE id_comment=".$id_comment);
-	$this->dbQuery("DELETE FROM k_contentcommentrate WHERE id_comment=".$id_comment);
+	$this->mysql->query("DELETE FROM k_contentcomment WHERE id_comment=".$id_comment);
+	$this->mysql->query("DELETE FROM k_contentcommentrate WHERE id_comment=".$id_comment);
 	
 	return true;
 }
@@ -104,11 +104,11 @@ public function commentRemove($id_comment){
 public function commentModerate($id_comment, $mod){
 	if(intval($id_comment) <= 0) return false;
 
-	$tmp = $this->dbOne("SELECT * FROM k_contentcomment WHERE id_comment=".$id_comment);
+	$tmp = $this->mysql->one("SELECT * FROM k_contentcomment WHERE id_comment=".$id_comment);
 	
 	if(intval($tmp['id_content']) <= 0) return false;
 
-	$this->dbQuery("UPDATE k_contentcomment SET is_moderate=".$mod." WHERE id_comment=".$id_comment);
+	$this->mysql->query("UPDATE k_contentcomment SET is_moderate=".$mod." WHERE id_comment=".$id_comment);
 	$this->commentUpdateCount($id_comment);
 	
 	return true;
@@ -118,11 +118,11 @@ public function commentModerate($id_comment, $mod){
 + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - */
 public function commentUpdateCount($id_comment){
 
-	$tmp = $this->dbOne("SELECT * FROM k_contentcomment WHERE id_comment=".$id_comment);
+	$tmp = $this->mysql->one("SELECT * FROM k_contentcomment WHERE id_comment=".$id_comment);
 	if(intval($tmp['id_content']) <= 0) return false;
 
-	$count = $this->dbOne("SELECT COUNT(id_comment) as H FROM k_contentcomment WHERE is_moderate=1 AND id_content=".$tmp['id_content']);
-	$this->dbQuery("UPDATE k_content SET contentCommentCount=".$count['H']." WHERE id_content=".$tmp['id_content']);
+	$count = $this->mysql->one("SELECT COUNT(id_comment) as H FROM k_contentcomment WHERE is_moderate=1 AND id_content=".$tmp['id_content']);
+	$this->mysql->query("UPDATE k_content SET contentCommentCount=".$count['H']." WHERE id_content=".$tmp['id_content']);
 #	echo $this->db_query."\n";	
 
 	return true;
@@ -138,7 +138,7 @@ function commentGoodBad($opt){
 	$id_user	= $opt['id_user'];		if(intval($id_user) 	<= 0) return false;
 
 	$field = "comment".ucfirst(strtolower($opt['gb']));
-	$this->dbQuery("UPDATE k_contentcomment SET ".$field."=".$field."+1 WHERE id_comment=".$id_comment);
+	$this->mysql->query("UPDATE k_contentcomment SET ".$field."=".$field."+1 WHERE id_comment=".$id_comment);
 	if($opt['debug']) $this->pre($this->db_query, $this->db_error);
 
 	$this->commentGoodBadCalculate($id_comment);
@@ -151,7 +151,7 @@ function commentGoodBad($opt){
 		'commentRateValue'	=> array('value' => (($opt['gb'] == 'good') ? '1' : '-1'))
 	);
 
-	$this->dbQuery($this->dbInsert($tmp));
+	$this->mysql->query($this->dbInsert($tmp));
 	if($opt['debug']) $this->pre($this->db_query, $this->db_error);
 }
 
@@ -159,10 +159,10 @@ function commentGoodBad($opt){
 + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - */
 public function commentGoodBadCalculate($id_comment){
 
-	$avg = $this->dbOne("SELECT * FROM k_contentcomment WHERE id_comment=".$id_comment);
+	$avg = $this->mysql->one("SELECT * FROM k_contentcomment WHERE id_comment=".$id_comment);
 	$avg = $avg['commentGood'] + ($avg['commentBad'] * -1);
 
-	$this->dbQuery("UPDATE k_contentcomment SET commentAvg=".$avg." WHERE id_comment=".$id_comment);
+	$this->mysql->query("UPDATE k_contentcomment SET commentAvg=".$avg." WHERE id_comment=".$id_comment);
 }
 
 /* + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - 
@@ -172,7 +172,7 @@ public function commentGoodBadUserValue($opt){
 	$id_content = $opt['id_content'];	if(intval($id_content) <= 0) return array();
 	$id_user	= $opt['id_user'];		if(intval($id_user) <= 0) 	 return array();
 
-	$done = $this->dbMulti(
+	$done = $this->mysql->multi(
 		"SELECT k_contentcommentrate.* FROM k_contentcomment\n".
 
 		"INNER JOIN k_contentcommentrate ON k_contentcomment.id_comment = k_contentcommentrate.id_comment\n".
@@ -197,7 +197,7 @@ public function commentGoodBadUsers($opt){
 
 	$id_comment = $opt['id_comment'];	if(intval($id_comment) <= 0) return array();;
 
-	$users = $this->dbMulti("SELECT * FROM k_contentcommentrate WHERE id_comment=".$id_comment);
+	$users = $this->mysql->multi("SELECT * FROM k_contentcommentrate WHERE id_comment=".$id_comment);
 	
 	return $users;
 }
@@ -209,16 +209,16 @@ public function commentGoodBadUndo($opt){
 	$id_user	= $opt['id_user'];		if(intval($id_user) <= 0) 	 return false;
 	$id_comment	= $opt['id_comment'];	if(intval($id_comment) <= 0) return false;
 
-	$rate		= $this->dbOne("SELECT * FROM k_contentcommentrate WHERE id_comment=".$id_comment." AND id_user=".$id_user);
+	$rate		= $this->mysql->one("SELECT * FROM k_contentcommentrate WHERE id_comment=".$id_comment." AND id_user=".$id_user);
 	
 	if($rate['id_comment'] > 0){
 		
 		// Decremente le COMPTEUR sur la table COMMENT
 		$field = "comment".ucfirst(strtolower(	(($rate['commentRateValue'] == -1) ? 'bad' : 'good')			));
-		$this->dbQuery("UPDATE k_contentcomment SET ".$field."=".$field."-1 WHERE id_comment=".$id_comment);
+		$this->mysql->query("UPDATE k_contentcomment SET ".$field."=".$field."-1 WHERE id_comment=".$id_comment);
 
 		// Supprime HISTORIQUE de vote dans la table COMMENTRATE
-		$this->dbQuery("DELETE FROM k_contentcommentrate WHERE id_comment=".$id_comment." AND id_user=".$id_user);
+		$this->mysql->query("DELETE FROM k_contentcommentrate WHERE id_comment=".$id_comment." AND id_user=".$id_user);
 	
 		// Calculer AVERAGE et sauver le resultat
 		$this->commentGoodBadCalculate($id_comment);

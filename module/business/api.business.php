@@ -16,7 +16,7 @@ function businessCartTTL(){
 
         $ttl  = $this->hookFilter('businessCartTTL', 86400);
 
-        $cart = $this->dbMulti("SELECT id_cart, cartTTL FROM k_businesscart WHERE is_cart=1 AND is_locked=0 AND cartTTL<=" . (time() - $ttl));
+        $cart = $this->mysql->multi("SELECT id_cart, cartTTL FROM k_businesscart WHERE is_cart=1 AND is_locked=0 AND cartTTL<=" . (time() - $ttl));
 
 
 	    if(sizeof($cart) > 0){
@@ -26,7 +26,7 @@ function businessCartTTL(){
         }
 
         if($_SESSION['id_cart'] > 0){
-            $this->dbQuery("UPDATE k_businesscart SET cartTTL=".time().", cartDateUpdate=NOW() WHERE id_cart=".$_SESSION['id_cart']);
+            $this->mysql->query("UPDATE k_businesscart SET cartTTL=".time().", cartDateUpdate=NOW() WHERE id_cart=".$_SESSION['id_cart']);
             #$this->pre($this->db_query, $this->db_error);
         }
 
@@ -48,7 +48,7 @@ public function businessCartNew($opt=array()){
 
 	# Si le USER est defini
 	if($id_user != NULL){
-		if(!$force) $o = $this->dbOne("SELECT id_cart FROM k_businesscart WHERE is_cart=1 AND id_user='".$id_user."'");
+		if(!$force) $o = $this->mysql->one("SELECT id_cart FROM k_businesscart WHERE is_cart=1 AND id_user='".$id_user."'");
 
 		# METTRE A JOUR ou CREER le panier pour ce USER
 		$q = ($o['id_cart'] != NULL)
@@ -62,7 +62,7 @@ public function businessCartNew($opt=array()){
 		$q = "INSERT INTO k_businesscart (is_cart, cartDateCreate, cartDateUpdate, cartTTL, cartToken) VALUES (1, NOW(), NOW(), '".time()."', '".$token."')";
 	}
 
-	$this->dbQuery($q);
+	$this->mysql->query($q);
 	$id_cart = ($o['id_cart'] != NULL) ? $o['id_cart'] : $this->db_insert_id;
 	
 
@@ -78,7 +78,7 @@ public function businessCartGet($opt=array()){
 
 	# Si on a un ID , on verifie si l'ID qu'on nous donne est encore existant
 	if(intval($opt['id_cart']) > 0){
-		$my = $this->dbOne("SELECT * FROM k_businesscart WHERE is_cart=1 AND id_cart='".$opt['id_cart']."'");
+		$my = $this->mysql->one("SELECT * FROM k_businesscart WHERE is_cart=1 AND id_cart='".$opt['id_cart']."'");
 		if($opt['debug']) $this->pre($this->db_query, $this->db_error);		
 	}
 
@@ -90,7 +90,7 @@ public function businessCartGet($opt=array()){
 	if($opt['create']){
 		# Si je suis connecté, verifié si j'ai pas un panier existant
 		if($id_user > 0 && $userCheck){
-			$check = $this->dbOne("SELECT id_cart FROM k_businesscart WHERE is_cart=1 AND id_user='".$id_user."'");
+			$check = $this->mysql->one("SELECT id_cart FROM k_businesscart WHERE is_cart=1 AND id_user='".$id_user."'");
 			if(!empty($check)) $opt['id_cart'] = $check['id_cart'];
 		} else
 		# Si le id_cart n'est pas renseigne
@@ -109,7 +109,7 @@ public function businessCartGet($opt=array()){
 	# On force le CART a son USER si les 2 sont definit
 	#	
 	if($userAffect && $id_user > 0 && $opt['id_cart'] > 0 && $my['id_user'] == 0){
-		$this->dbQuery("UPDATE k_businesscart SET id_user=".$id_user." WHERE is_cart=1 AND id_cart=".$opt['id_cart']);		
+		$this->mysql->query("UPDATE k_businesscart SET id_user=".$id_user." WHERE is_cart=1 AND id_cart=".$opt['id_cart']);
 	 	if($opt['debug']) $this->pre($this->db_query, $this->db_error);		
 	}
 
@@ -150,7 +150,7 @@ public function businessCartGet($opt=array()){
 	# On demande UN SEUL CART
 	#
 	if($opt['id_cart'] != NULL){
-		$cart = $this->dbOne("SELECT * FROM k_businesscart ".$where);
+		$cart = $this->mysql->one("SELECT * FROM k_businesscart ".$where);
 		if($opt['debug']) $this->pre('Solo', $this->db_query, $this->db_error);
 
 		$cart['cartTax'] = ($cart['cartTaxJSON'] != '') ? json_decode($cart['cartTaxJSON'], true) : array();
@@ -162,7 +162,7 @@ public function businessCartGet($opt=array()){
 		));
 
 		// Lines
-		$cart['line'] = $this->dbMulti("SELECT * FROM k_businesscartline WHERE id_cart=".$opt['id_cart']);
+		$cart['line'] = $this->mysql->multi("SELECT * FROM k_businesscartline WHERE id_cart=".$opt['id_cart']);
 		if($opt['debug']) $this->pre('Solo', $this->db_query, $this->db_error);
 
 		// Mapping (2)	
@@ -181,7 +181,7 @@ public function businessCartGet($opt=array()){
 		if($opt['order'] != NULL && $opt['direction'] != NULL){
 			$order = " ORDER BY ".$opt['order']." ".$opt['direction'];
 		}
-		$cart = $this->dbMulti("SELECT SQL_CALC_FOUND_ROWS * FROM k_businesscart ". $where . $order . $sqlLimit);
+		$cart = $this->mysql->multi("SELECT SQL_CALC_FOUND_ROWS * FROM k_businesscart ". $where . $order . $sqlLimit);
 
 		$this->total	= $this->db_num_total;
 		$this->limit	= $limit;
@@ -189,7 +189,7 @@ public function businessCartGet($opt=array()){
 		if($opt['debug']) $this->pre('Multi', $this->db_query, $this->db_error);
 		
 		foreach($cart as $idx => $e){
-			$cart[$idx]['line']	= $this->dbMulti("SELECT * FROM k_businesscartline WHERE id_cart=".$e['id_cart']);
+			$cart[$idx]['line']	= $this->mysql->multi("SELECT * FROM k_businesscartline WHERE id_cart=".$e['id_cart']);
 			if($opt['debug']) $this->pre('Multi', $this->db_query, $this->db_error);
 			$cart[$idx]['cartTax'] = array();
 			if($e['cartTaxJSON'] != '') $cart[$idx]['cartTax'] = json_decode($e['cartTaxJSON'], true);	
@@ -230,7 +230,7 @@ public function businessCartGet($opt=array()){
 	            'cartBillingTVAIntra'   => array('value' => $billing['addressbookTVAIntra'])
 	        );
 
-			$this->dbQuery($this->dbUpdate($def)." WHERE id_cart=".$id_cart);
+			$this->mysql->query($this->dbUpdate($def)." WHERE id_cart=".$id_cart);
 	        return true;
 	    }
 
@@ -241,8 +241,8 @@ public function businessCartGet($opt=array()){
 + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - */
 public function businessCartPrice($id_cart, $opt=array()){
 	
-	$cart	= $this->dbOne("SELECT * FROM k_businesscart WHERE id_cart=".$id_cart);
-	$line	= $this->dbMulti("SELECT * FROM k_businesscartline WHERE id_cart=".$id_cart);
+	$cart	= $this->mysql->one("SELECT * FROM k_businesscart WHERE id_cart=".$id_cart);
+	$line	= $this->mysql->multi("SELECT * FROM k_businesscartline WHERE id_cart=".$id_cart);
 	
 	foreach($line as $e){
 		$cartTotal 		+= $e['contentPriceQuantity'];
@@ -252,7 +252,7 @@ public function businessCartPrice($id_cart, $opt=array()){
 	$cartTotalFinal 	= $cartTotalTax + $cart['cartCarriageTotalTax'];
 
 	if($cart['id_coupon'] > 0){
-		$coupon	= $this->dbOne("SELECT * FROM k_businesscoupon WHERE id_coupon=".$cart['id_coupon']);
+		$coupon	= $this->mysql->one("SELECT * FROM k_businesscoupon WHERE id_coupon=".$cart['id_coupon']);
 		if($coupon['couponMode'] == 'FIXE'){
 			$cartCoupon	= $coupon['couponAmount'];
 		}else
@@ -294,7 +294,7 @@ public function businessCartPrice($id_cart, $opt=array()){
 		'cartTotalFinal'	=> array('value' => number_format($cartTotalFinal, 	2, '.', '')),
 	);
 	
-	$this->dbQuery($this->dbUpdate($def)." WHERE id_cart=".$id_cart);
+	$this->mysql->query($this->dbUpdate($def)." WHERE id_cart=".$id_cart);
 	if($opt['debug']) $this->pre($this->db_query, $this->db_error);	
 }
 
@@ -327,7 +327,7 @@ public function businessCartTaxJSON($id_cart, $array = NULL){
 		'cartTaxJSON'	=> array('value' => $json)
 	);
 	
-	$this->dbQuery($this->dbUpdate($def)." WHERE id_cart=".$id_cart);
+	$this->mysql->query($this->dbUpdate($def)." WHERE id_cart=".$id_cart);
 }
 
 /* + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + -
@@ -355,15 +355,15 @@ public function businessCartAdd($opt=array()){
 	}
 
 	# Verifier qu'il n'existe pas deja une LINE dans le CART pour ce CONTENT
-	$exists = $this->dbOne("SELECT 1 FROM k_businesscartline WHERE id_cart=".$id_cart." AND id_content=".$id_content);
+	$exists = $this->mysql->one("SELECT 1 FROM k_businesscartline WHERE id_cart=".$id_cart." AND id_content=".$id_content);
 	$query	= $exists[1]
 		?	"UPDATE k_businesscartline SET contentQuantity = contentQuantity + (".$quantity.") WHERE id_cart=".$id_cart." AND id_content=".$id_content		
 		: 	"INSERT INTO k_businesscartline (id_cart, id_content, contentQuantity) VALUES (".$id_cart.", ".$id_content.", ".$quantity.")";
 
-	$this->dbQuery($query);
+	$this->mysql->query($query);
 	if($opt['debug']) $this->pre($this->db_query, $this->db_error);
 
-	$line = $this->dbOne("SELECT * FROM k_businesscartline WHERE id_cart=".$id_cart." AND id_content=".$id_content);
+	$line = $this->mysql->one("SELECT * FROM k_businesscartline WHERE id_cart=".$id_cart." AND id_content=".$id_content);
 
 	# Mettre a jour les valeurs du CARLTLINE (prix, ref, etc...)
     $def['k_businesscartline'] = array(
@@ -379,12 +379,12 @@ public function businessCartAdd($opt=array()){
         'accountNumber'             => array('value' => $c['accountNumber'])
     );
    
-	$this->dbQuery($this->dbUpdate($def)." WHERE id_cart=".$id_cart." AND id_content=".$id_content);
+	$this->mysql->query($this->dbUpdate($def)." WHERE id_cart=".$id_cart." AND id_content=".$id_content);
 	if($opt['debug']) $this->pre($this->db_query, $this->db_error);
 	
 
 	# Mettre a jour le STOCK pour le CONTENT
-	$this->dbQuery("UPDATE k_content SET contentStock = contentStock - ".$quantity." WHERE id_content=".$id_content);
+	$this->mysql->query("UPDATE k_content SET contentStock = contentStock - ".$quantity." WHERE id_content=".$id_content);
 	if($opt['debug']) $this->pre($this->db_query, $this->db_error);
 
 	# Update CART
@@ -405,8 +405,8 @@ public function businessCartAddRaw($opt=array()){
     $def            = array('k_businesscartline' => $opt['data']);
 
     # Mettre a jour les valeurs du CARLTLINE
-    if($id_cartline != NULL) $this->dbQuery($this->dbUpdate($def)." WHERE id_cartline=".$id_cartline);
-    else  $this->dbQuery($this->dbInsert($def));
+    if($id_cartline != NULL) $this->mysql->query($this->dbUpdate($def)." WHERE id_cartline=".$id_cartline);
+    else  $this->mysql->query($this->dbInsert($def));
 
     if($opt['debug']) $this->pre($this->db_query, $this->db_error);
 
@@ -428,7 +428,7 @@ function businessCartRemove($id_cart, $reset=false){
         }
     }
 
-    $this->dbQuery("DELETE FROM k_businesscart WHERE id_cart = ".$id_cart);
+    $this->mysql->query("DELETE FROM k_businesscart WHERE id_cart = ".$id_cart);
 
     return true;
 }
@@ -453,7 +453,7 @@ public function businessCartLineSet($opt=array()){
         if(!isset($opt['contentQuantity']))$opt['contentQuantity'] = 1;
         
         if($id_content > 0){
-            $exists = $this->dbOne("SELECT 1 FROM k_businesscartline WHERE id_cart=".$id_cart." AND id_content=".$id_content);
+            $exists = $this->mysql->one("SELECT 1 FROM k_businesscartline WHERE id_cart=".$id_cart." AND id_content=".$id_content);
             if(!$exists[1])$query = "INSERT INTO k_businesscartline (id_cart, id_content) VALUES (".$id_cart.", ".$id_content.")";
             else {
                 //die($this->pre($exists));
@@ -464,7 +464,7 @@ public function businessCartLineSet($opt=array()){
             $query = "INSERT INTO k_businesscartline (id_cart,contentQuantity) VALUES (".$id_cart.",".$opt['contentQuantity'].")";
             //die($query);
         }
-        $this->dbQuery($query);
+        $this->mysql->query($query);
         if($opt['debug']) $this->pre($this->db_query, $this->db_error);
         $id_cartline = $this->db_insert_id;
     }
@@ -565,7 +565,7 @@ public function businessCartLineSet($opt=array()){
         //die($this->pre($def));
         
         if($id_cartline > 0){
-            $this->dbQuery($this->dbUpdate($def)." WHERE id_cartline=".$id_cartline);
+            $this->mysql->query($this->dbUpdate($def)." WHERE id_cartline=".$id_cartline);
             if($opt['debug']) $this->pre($this->db_query, $this->db_error);
         }
     }
@@ -582,14 +582,14 @@ public function businessCartLineSet($opt=array()){
 function businessCartLineRemove($id_cartline, $reset=true){
 
 	if($reset){
-		$line = $this->dbOne("SELECT * FROM k_businesscartline WHERE id_cartline=".$id_cartline);
+		$line = $this->mysql->one("SELECT * FROM k_businesscartline WHERE id_cartline=".$id_cartline);
 
 		if($line['id_content'] != NULL){
-			$this->dbQuery("UPDATE k_content SET contentStock = contentStock + ".$line['contentQuantity']." WHERE id_content = ".$line['id_content']);
+			$this->mysql->query("UPDATE k_content SET contentStock = contentStock + ".$line['contentQuantity']." WHERE id_content = ".$line['id_content']);
 		}
 	}
 
-	$this->dbQuery("DELETE FROM k_businesscartline WHERE id_cartline = ".$id_cartline);
+	$this->mysql->query("DELETE FROM k_businesscartline WHERE id_cartline = ".$id_cartline);
 }
 
 /* + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + -
@@ -610,7 +610,7 @@ public function businessCartLineField($opt){
 	));
 
 	if(is_array($format) && sizeof($format) > 0){
-		$this->dbQuery($this->dbUpdate(array('k_businesscartline' => $format))."\nWHERE id_cartline=".$id_cartline);
+		$this->mysql->query($this->dbUpdate(array('k_businesscartline' => $format))."\nWHERE id_cartline=".$id_cartline);
 		if($opt['debug']) $this->pre($this->db_query, $this->db_error);
 		return true;
 	}
@@ -629,8 +629,8 @@ function businessCartQuantity($id_cartline, $quantity, $remove=true){
 	}else{
 
 		# Prod -> Line
-		$line		= $this->dbOne("SELECT * FROM k_businesscartline WHERE id_cartline = ".$id_cartline);
-		$content	= $this->dbOne("SELECT * FROM k_content WHERE id_content = ".$line['id_content']);
+		$line		= $this->mysql->one("SELECT * FROM k_businesscartline WHERE id_cartline = ".$id_cartline);
+		$content	= $this->mysql->one("SELECT * FROM k_content WHERE id_content = ".$line['id_content']);
 		$v 			= $quantity - $line['contentQuantity'];
 
 		if($v != '0'){
@@ -647,7 +647,7 @@ function businessCartQuantity($id_cartline, $quantity, $remove=true){
 			}
 
 			# Reset CONTENT stock
-			$this->dbQuery("UPDATE k_content SET contentStock = contentStock + (".$d.") WHERE id_content = ".$line['id_content']);
+			$this->mysql->query("UPDATE k_content SET contentStock = contentStock + (".$d.") WHERE id_content = ".$line['id_content']);
 			#$this->pre($this->db_query, $this->db_error);
 
 			# Update CARTLINE
@@ -659,7 +659,7 @@ function businessCartQuantity($id_cartline, $quantity, $remove=true){
 				'contentPriceTaxQuantity'	=> array('value' => number_format(($line['contentPriceTax'] * $quantity), 2, '.', ''))
 			);
 
-			$this->dbQuery($this->dbUpdate($def)." WHERE id_cartline = ".$id_cartline); 
+			$this->mysql->query($this->dbUpdate($def)." WHERE id_cartline = ".$id_cartline);
 			#$this->pre($this->db_query, $this->db_error);
 			
 			# Update CART
@@ -674,7 +674,7 @@ function businessCartQuantity($id_cartline, $quantity, $remove=true){
 + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - */
 public function businessCartFlagSet($id_cart, $name, $value){
 
-	$this->dbQuery(
+	$this->mysql->query(
 		"INSERT IGNORE k_businesscartflag ".
 		"(id_cart, cartFlagName, cartFlagValue) ".
 		"VALUES ".
@@ -710,7 +710,7 @@ public function businessCartCarriageGet($id_cart, $opt=array()){
 			}
 	
 			foreach($rule as $id_carriage => $rule){
-				$carriage	= $this->dbOne("SELECT * FROM k_businesscarriage WHERE id_carriage=".$id_carriage);
+				$carriage	= $this->mysql->one("SELECT * FROM k_businesscarriage WHERE id_carriage=".$id_carriage);
 	
 				if($carriage['is_gift']){
 					$this->pre("GIFT");
@@ -788,7 +788,7 @@ public function businessCartCarriageSet($opt){
             'cartCarriage'              => array('value' => $cartCarriage),
             'cartCarriageTotalTax'      => array('value' => $cartCarriageTotalTax)
         );
-        $this->dbQuery($this->dbUpdate($def)." WHERE id_cart='".$opt['id_cart']."'");
+        $this->mysql->query($this->dbUpdate($def)." WHERE id_cart='".$opt['id_cart']."'");
 
         //$this->pre($this->db_query);
 		if($opt['debug']) $this->pre($this->db_query, $this->db_error);
@@ -806,7 +806,7 @@ public function businessCartCarriageSet($opt){
 + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - */
 public function businessCartShopSet($id_cart, $id_shop){
 	if(intval($id_cart) <= 0 OR intval($id_shop) <= 0) return false;
-	$this->dbQuery("UPDATE k_businesscart SET id_shop=".$id_shop." WHERE id_cart=".$id_cart);
+	$this->mysql->query("UPDATE k_businesscart SET id_shop=".$id_shop." WHERE id_cart=".$id_cart);
 }
 
 /* + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + -
@@ -827,7 +827,7 @@ public function businessCartField($opt){
 	));
 
 	if(is_array($format) && sizeof($format) > 0){
-		$this->dbQuery($this->dbUpdate(array('k_businesscart' => $format))."\nWHERE id_cart=".$id_cart);
+		$this->mysql->query($this->dbUpdate(array('k_businesscart' => $format))."\nWHERE id_cart=".$id_cart);
 		if($opt['debug']) $this->pre($this->db_query, $this->db_error);
 		return true;
 	}
@@ -857,13 +857,13 @@ public function businessCmdNew($opt){
 	if($cart['id_cart'] == NULL || $cart['is_cmd']) die("businessCmdNew, erreur pannier errone (NULL ou IS_CMD)");
 
 	# On change les CART en CMD et on fixe quelques valeurs
-	$this->dbQuery("UPDATE k_businesscart SET is_cmd=1, is_cart=0, cartDateCmd=NOW(), cartEmail='".$user['userMail']."' WHERE id_cart=".$opt['id_cart']);
+	$this->mysql->query("UPDATE k_businesscart SET is_cmd=1, is_cart=0, cartDateCmd=NOW(), cartEmail='".$user['userMail']."' WHERE id_cart=".$opt['id_cart']);
 	if($opt['debug']) $this->pre($this->db_query, $this->db_error);
 
 	# On met a jour les valeurs des champs opt[update]
 	foreach($opt['update'] as $k => $v){
 		if($k != NULL && $v != NULL){
-			$this->dbQuery("UPDATE k_businesscart SET `".$k."`='".addslashes($v)."' WHERE id_cart=".$opt['id_cart']);
+			$this->mysql->query("UPDATE k_businesscart SET `".$k."`='".addslashes($v)."' WHERE id_cart=".$opt['id_cart']);
 			if($opt['debug']) $this->pre($this->db_query, $this->db_error);
 		}
 	}
@@ -873,7 +873,7 @@ public function businessCmdNew($opt){
 
 	# On signale que le COUPON ne peut plus etre utilise IS_USED=1
 	if($cart['id_coupon'] > 0){
-		$this->dbQuery("UPDATE k_usercoupon SET is_used=1 WHERE id_coupon=".$cart['id_coupon']." AND id_user=".$cart['id_user']);
+		$this->mysql->query("UPDATE k_usercoupon SET is_used=1 WHERE id_coupon=".$cart['id_coupon']." AND id_user=".$cart['id_user']);
 		if($opt['debug']) $this->pre($this->db_query, $this->db_error);
 	}
 
@@ -893,20 +893,20 @@ public function businessCmdNew($opt){
 		$this->hookAction('businessCmdIncrement', $id_cart);
 
 		# GET
-		$cart = $this->dbOne("SELECT * FROM k_businesscart WHERE id_cart=".$id_cart);
+		$cart = $this->mysql->one("SELECT * FROM k_businesscart WHERE id_cart=".$id_cart);
 		if($cart['id_cart'] != $id_cart) return false; // Ce cas ne devrait jamais arrivé
 		if($cart['cartStatus'] != 'OK')	 return false; // Si le panier est OK = relge = facture
 		if($cart['cartCmdNumber'] != '') return false; // Si j'ai deja un numerod de facture on evite !
 
 		# LAST
 		$last = ($cart['id_shop'] > 0)
-			? $this->dbOne("SELECT MAX(cartCmdNumber) AS h FROM k_businesscart WHERE id_shop=".$cart['id_shop'])
-			: $this->dbOne("SELECT MAX(cartCmdNumber) AS h FROM k_businesscart WHERE id_shop IS NULL");
+			? $this->mysql->one("SELECT MAX(cartCmdNumber) AS h FROM k_businesscart WHERE id_shop=".$cart['id_shop'])
+			: $this->mysql->one("SELECT MAX(cartCmdNumber) AS h FROM k_businesscart WHERE id_shop IS NULL");
 
 	    if(is_null($last)) $last = 0;
 
 		# LAST
-		$this->dbQuery("UPDATE k_businesscart SET cartCmdNumber=".(intval($last['h']) + 1)." WHERE id_cart=".$id_cart);
+		$this->mysql->query("UPDATE k_businesscart SET cartCmdNumber=".(intval($last['h']) + 1)." WHERE id_cart=".$id_cart);
 		if($opt['debug']) $this->pre($this->db_query, $this->db_error);
 	}
 
@@ -1065,7 +1065,7 @@ public function businessCouponSet($opt){
 		$q = $this->dbInsert($def);
 	}
 
-	@$this->dbQuery($q);
+	@$this->mysql->query($q);
 	if($this->db_error != NULL) return false;
 
 	$this->id_coupon = ($id_coupon > 0) ? $id_coupon : $this->db_insert_id;
@@ -1086,7 +1086,7 @@ public function businessCouponUserSet($opt=array()){
 		'id_coupon'	=> array('value' => $opt['id_coupon'])
 	);
 
-	$this->dbQuery($this->dbInsert($def));
+	$this->mysql->query($this->dbInsert($def));
 	if($opt['debug']) $this->pre($this->db_query, $this->db_error, $opt);
 
 	$this->id_coupon = ($opt['id_coupon'] > 0) ? $opt['id_coupon'] : $this->db_insert_id;
@@ -1128,7 +1128,7 @@ public function businessCouponGet($opt=array()){
 
 	// Shop
 	if($dbMode == 'dbOne'){
-		$shops = $this->dbMulti("SELECT id_shop FROM k_businesscouponshop WHERE id_coupon='".$coupon['id_coupon']."'");
+		$shops = $this->mysql->multi("SELECT id_shop FROM k_businesscouponshop WHERE id_coupon='".$coupon['id_coupon']."'");
 		foreach($shops as $e){
 			$coupon['id_shop'][] = $e['id_shop'];
 		}
@@ -1146,7 +1146,7 @@ function businessConfigGet($opt=array()){
     if($opt['configKey'] != '')$sqlWhere [] =  " configKey='".$opt['configKey']."'";
     if(sizeof($sqlWhere) > 0)$where = ' WHERE '.implode('AND',$sqlWhere);
 
-	$config = $this->dbMulti("SELECT * FROM k_businessconfig ".$where." ".$opt['sqlOrder']);
+	$config = $this->mysql->multi("SELECT * FROM k_businessconfig ".$where." ".$opt['sqlOrder']);
 
     return $config;
 }
@@ -1163,7 +1163,7 @@ public function businessConfigSet($configField, $configKey, $def){
         return false;
     }
 
-    @$this->dbQuery($q);
+    @$this->mysql->query($q);
     if($this->db_error != NULL) return false;
 
 
@@ -1235,7 +1235,7 @@ public function businessCarriageSet($id_carriage, $def){
 		$q = $this->dbInsert($def);
 	}
 
-	@$this->dbQuery($q);
+	@$this->mysql->query($q);
 	if($this->db_error != NULL) return false;
 
 	$this->id_carriage = ($id_carriage > 0) ? $id_carriage : $this->db_insert_id;
@@ -1278,7 +1278,7 @@ public function businessAccountSet($id_account, $def){
         $q = $this->dbInsert($def);
     }
 
-    @$this->dbQuery($q);
+    @$this->mysql->query($q);
     if($this->db_error != NULL) return false;
 
     $this->id_account = ($id_account > 0) ? $id_account : $this->db_insert_id;
@@ -1351,7 +1351,7 @@ public function businessTaxSet($id_tax, $def){
         $q = $this->dbInsert($def);
     }
 
-    @$this->dbQuery($q);
+    @$this->mysql->query($q);
     if($this->db_error != NULL) return false;
 
     $this->id_tax = ($id_tax > 0) ? $id_tax : $this->db_insert_id;

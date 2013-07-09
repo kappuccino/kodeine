@@ -33,7 +33,7 @@ public function formDumpGet($opt=array()){
     // Limites
     $q .= " LIMIT ".$offset.",".$limit;
 
-    $data = $this->dbMulti($q);
+    $data = $this->mysql->multi($q);
 
     $this->total = $this->db_num_total;
     $this->limit = $limit;
@@ -62,7 +62,7 @@ public function formDumpSet($opt=array()){
         ? $this->dbUpdate($def)." WHERE id_form=".$opt['id_form']
         : $this->dbInsert($def);
 
-    @$this->dbQuery($q);
+    @$this->mysql->query($q);
 
     if($opt['debug']) $this->pre($this->db_query, $this->db_error);
     if($this->db_error != NULL) return false;
@@ -75,7 +75,7 @@ public function formDumpKeyGet(){
 
     $q = "SELECT formKey FROM k_formDump GROUP BY formKey ORDER BY formKey ASC";
 
-    $data = $this->dbMulti($q);
+    $data = $this->mysql->multi($q);
 
     return $data;
 }
@@ -86,7 +86,7 @@ public function formDumpRemove($id_form){
 
 	if($id_form == NULL) return false;
 
-	$this->dbQuery("DELETE FROM k_formDump	WHERE id_form=".$id_form);
+	$this->mysql->query("DELETE FROM k_formDump	WHERE id_form=".$id_form);
 
 	return true;
 }

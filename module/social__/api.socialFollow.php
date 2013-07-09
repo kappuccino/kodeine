@@ -9,7 +9,7 @@ function socialFollow(){}
 + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - */
 function socialFollowerGet($opt=array()){
 
-	if(BENCHME) @$GLOBALS['bench']->benchmarkMarker($bmStep='socialFollowerGet() @='.json_encode($opt));
+	if(BENCHME) $this->bench->marker($bmStep='socialFollowerGet() @='.json_encode($opt));
 
 	if($opt['debug']) $this->pre("[OPT]", $opt);
 
@@ -17,12 +17,12 @@ function socialFollowerGet($opt=array()){
 
 	# GET
 	#
-	$data = $this->dbMulti("SELECT id_followed FROM k_userfollow WHERE id_follower=".$id_user);
+	$data = $this->mysql->multi("SELECT id_followed FROM k_userfollow WHERE id_follower=".$id_user);
 	foreach($data as $n => $d){
 		$data[$n] = $d['id_followed'];
 	}
 
-	if(BENCHME) @$GLOBALS['bench']->benchmarkMarker($bmStep);
+	if(BENCHME) $this->bench->marker($bmStep);
 
 	return $data;
 }
@@ -43,15 +43,15 @@ function socialFollowIt($opt){
 		$query	= "INSERT IGNORE INTO k_userfollow (id_follower, id_followed, timeline) VALUES (".$follower.",".$followed.", ".time().")";
 	}
 
-	$this->dbQuery($query);
+	$this->mysql->query($query);
 	if($opt['debug']) $this->pre($this->db_query, $this->db_error);
 
 	# Remove the FOLLOW LINK
 	#
 	if($remove){
-		$myCircles = $this->dbMulti("SELECT id_socialcircle FROM k_socialcircle WHERE id_user=".$follower);
+		$myCircles = $this->mysql->multi("SELECT id_socialcircle FROM k_socialcircle WHERE id_user=".$follower);
 		foreach($myCircles as $e){
-			$this->dbQuery("DELETE FROM k_socialcircleuser WHERE id_socialcircle=".$e['id_socialcircle']." AND id_user=".$follower);
+			$this->mysql->query("DELETE FROM k_socialcircleuser WHERE id_socialcircle=".$e['id_socialcircle']." AND id_user=".$follower);
 		}
 
 		// Remove Activity & Notification
@@ -87,18 +87,18 @@ function socialFollowIt($opt){
 + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - */
 function socialFollowedGet($opt=array()){
 
-	if(BENCHME) @$GLOBALS['bench']->benchmarkMarker($bmStep='socialFollowedGet() @='.json_encode($opt));
+	if(BENCHME) $this->bench->marker($bmStep='socialFollowedGet() @='.json_encode($opt));
 
 	if($opt['debug']) $this->pre("[OPT]", $opt);
 
 	$id_user = $opt['id_user']; if(intval($id_user) <= 0) return array();
 
-	$data = $this->dbMulti("SELECT id_follower FROM k_userfollow WHERE id_followed=".$id_user);
+	$data = $this->mysql->multi("SELECT id_follower FROM k_userfollow WHERE id_followed=".$id_user);
 	foreach($data as $n => $d){
 		$data[$n] = $d['id_follower'];
 	}
 
-	if(BENCHME) @$GLOBALS['bench']->benchmarkMarker($bmStep);
+	if(BENCHME) $this->bench->marker($bmStep);
 
 	return $data;
 }
@@ -120,11 +120,11 @@ function socialFollowFix($opt=array()){
 	$er = array();
 	$ed = array();
 
-	foreach($this->dbMulti("SELECT id_followed FROM k_userfollow WHERE id_follower=".$id_user." ORDER BY timeline ASC") as $n => $d){
+	foreach($this->mysql->multi("SELECT id_followed FROM k_userfollow WHERE id_follower=".$id_user." ORDER BY timeline ASC") as $n => $d){
 		$er[] = intval($d['id_followed']);
 	}
 
-	foreach($this->dbMulti("SELECT id_follower FROM k_userfollow WHERE id_followed=".$id_user." ORDER BY timeline ASC") as $n => $d){
+	foreach($this->mysql->multi("SELECT id_follower FROM k_userfollow WHERE id_followed=".$id_user." ORDER BY timeline ASC") as $n => $d){
 		$ed[] = intval($d['id_follower']);
 	}
 
@@ -147,7 +147,7 @@ function socialFollowFix($opt=array()){
 		"userSocialFollowedUser='".$jsonED."',\n".
 		"userSocialFollowedCount=".$countED;
 
-	$this->dbQuery($query);
+	$this->mysql->query($query);
 	if($opt['debug']) $this->pre($this->db_query, $this->db_error);
 }
 

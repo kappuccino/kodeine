@@ -2,14 +2,15 @@
 
 namespace Kodeine;
 
-class appKodeine extends  appModule{
+class appKodeine extends appModule{
+	
+	public $kodeine;
+	public $apisConfig = array();
 
-	public $t = 'toto';
-
-	public function __get($k){
+	/*public function __get($k){
 		if(!property_exists($this, $k)) $this->$k = NULL;
 		return $this->$k;
-	}
+	}*/
 
 //--- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --
 //--- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --
@@ -18,7 +19,7 @@ class appKodeine extends  appModule{
 		# CONFIG
 		# Charge les parametre de CONFIG BOOT + CUSTOM et memorise les autres APIsCONFIG
 		#
-		if(BENCHME) $GLOBALS['bench']->benchmarkMarker($bmStep='kodeineInit(k_config)');
+		if(BENCHME) $this->bench->marker($bmStep='kodeineInit(k_config)');
 		$config = $this->mysql->multi("SELECT * FROM k_config");
 		foreach($config as $e){
 			if($e['configModule'] == 'boot' OR $e['configModule'] == 'custom'){
@@ -40,13 +41,13 @@ class appKodeine extends  appModule{
 		}
 		unset($config, $e, $v);
 		#die($this->pre("*", $this->apisConfig));
-		if(BENCHME) $GLOBALS['bench']->benchmarkMarker($bmStep);
+		if(BENCHME) $this->bench->marker($bmStep);
 
 
 		# LANGUAGE
 		# Determine si on utilise la langue de l'URL GET ou celui par DEFAUT (FR)
 		#
-		if(BENCHME) $GLOBALS['bench']->benchmarkMarker($bmStep='kodeineInit(languages)');
+		if(BENCHME) $this->bench->marker($bmStep='kodeineInit(languages)');
 		$language = ($get['urlLanguage'] == NULL) ? $this->kodeine['defaultLanguage'] : $get['urlLanguage'];
 		if(empty($this->apisConfig['boot']['jsonCacheCountry'])){
 			$language = $this->countryGet(array('iso' => $language));
@@ -61,29 +62,27 @@ class appKodeine extends  appModule{
 		$this->kodeine['locale'] 	= $locale;
 		setlocale(LC_ALL, $locale.'.UTF8');
 		unset($locale, $language, $tmp);
-		if(BENCHME) $GLOBALS['bench']->benchmarkMarker($bmStep);
+		if(BENCHME) $this->bench->marker($bmStep);
 
 
 		# CHAPTERS
 		# La liste de tous les CHAPTER utilise
 		#
-		if(BENCHME) $GLOBALS['bench']->benchmarkMarker($bmStep='kodeineInit(chapter)');
+		if(BENCHME) $this->bench->marker($bmStep='kodeineInit(chapter)');
 
 		$chapters = $this->app->load('chapter')->get(array('language' => $this->kodeine['language']));
-
-		var_dump($chapters);
 
 		foreach($chapters as $e){
 			$chaptersDbUi[$e['chapterUrl']] = $e['id_chapter'];
 			$chaptersDbId[$e['id_chapter']] = $e;
 		} unset($chapters, $e);
-		if(BENCHME) $GLOBALS['bench']->benchmarkMarker($bmStep);
+		if(BENCHME) $this->bench->marker($bmStep);
 
 
 		# URL
 		# Decortique l'URL pour determiner le CHAPTER, MODULE, FICHIER
 		#
-		if(BENCHME) $GLOBALS['bench']->benchmarkMarker($bmStep='kodeineInit(url_parser)');
+		if(BENCHME) $this->bench->marker($bmStep='kodeineInit(url_parser)');
 		$query = $get['urlRequest'];
 		$parts = explode('/', $get['urlRequest']);
 		if(sizeof($parts) > 0){
@@ -105,7 +104,7 @@ class appKodeine extends  appModule{
 				$get['urlModule']  = $parts[sizeof($parts)-2];
 			}
 		}
-		if(BENCHME) $GLOBALS['bench']->benchmarkMarker($bmStep);
+		if(BENCHME) $this->bench->marker($bmStep);
 
 
 		# CHECK DOMAIN
@@ -129,7 +128,7 @@ class appKodeine extends  appModule{
 		$this->kodeine['chapterUrl']		= $chapter['chapterUrl'];
 		$this->kodeine['chapterModule']		= $chapter['chapterModule'];
 		$this->kodeine['chapterIdTheme']	= $chapter['id_theme'];
-#	$this->kodeine['chaptersUrl']		= $chaptersDbUi;
+	#	$this->kodeine['chaptersUrl']		= $chaptersDbUi;
 		$this->kodeine['chaptersIds']		= $chaptersDbId;
 		unset($chapter, $chaptersDbUi, $chaptersDbId);
 
@@ -179,23 +178,23 @@ class appKodeine extends  appModule{
 		# Definit en global les traductions
 		# 
 		if(!isset($_GET['noLabel'])){
-			if(BENCHME) $GLOBALS['bench']->benchmarkMarker($bmStep='kodeineInit(localisation)');
+			if(BENCHME) $this->bench->marker($bmStep='kodeineInit(localisation)');
 
 			foreach($this->mysql->multi("SELECT * FROM k_localisation WHERE language = '".$this->kodeine['language']."'") as $e){
 				define($e['label'], $e['translation']);
 			}
 
-			if(BENCHME) $GLOBALS['bench']->benchmarkMarker($bmStep);
+			if(BENCHME) $this->bench->marker($bmStep);
 		}
 
 		# TYPE
 		#
-		#if(BENCHME) $GLOBALS['bench']->benchmarkMarker($bmStep='kodeineInit(type)');
+		#if(BENCHME) $this->bench->marker($bmStep='kodeineInit(type)');
 		#foreach($this->mysql->multi("SELECT * FROM k_type") as $e){
 		#	unset($e['typeFormLayout']);
 		#	$this->kodeine['typesIds'][$e['id_type']] = $e;
 		#}
-		#if(BENCHME) $GLOBALS['bench']->benchmarkMarker($bmStep);
+		#if(BENCHME) $this->bench->marker($bmStep);
 
 		$this->kodeine = $this->hook->filter('kodeineInit', $this->kodeine);
 

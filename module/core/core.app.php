@@ -74,17 +74,17 @@ public function userLogin($login=NULL, $passwd=NULL){
 	# Log depuis le POST, SESSION ou le COOKIE
 	#
 	if(filter_var(trim($login, FILTER_VALIDATE_EMAIL) !== FALSE && trim($passwd) != '')){
-		$user = $this->dbOne($get."WHERE is_active=1 AND is_deleted=0 AND userMail='".$login."' AND userPasswd=MD5('".$passwd."')");
+		$user = $this->mysql->one($get."WHERE is_active=1 AND is_deleted=0 AND userMail='".$login."' AND userPasswd=MD5('".$passwd."')");
 		$hook = true;
 	}else
 	if(intval($_SESSION['id_user']) > 0){
-		$user	= $this->dbOne($get."WHERE is_active=1 AND is_deleted=0 AND id_user=".$_SESSION['id_user']);
+		$user	= $this->mysql->one($get."WHERE is_active=1 AND is_deleted=0 AND id_user=".$_SESSION['id_user']);
 	}else
 	if($_COOKIE[$this->userCookieName] != NULL){
 		$cookie = unserialize(stripslashes($_COOKIE[$this->userCookieName]));
 
 		if($cookie[0] != NULL && $cookie[1] != NULL){
-			$user 	= $this->dbOne($get."WHERE is_active=1 AND is_deleted=0 AND userMail='".$cookie[0]."' AND userPasswd='".$cookie[1]."'");
+			$user 	= $this->mysql->one($get."WHERE is_active=1 AND is_deleted=0 AND userMail='".$cookie[0]."' AND userPasswd='".$cookie[1]."'");
 		}else{
 			$this->userLogout();
 			return false;
@@ -150,7 +150,7 @@ public function userLogin($login=NULL, $passwd=NULL){
 public function userProfile($id_profile){
 
 	$p = ($id_profile > 0)
-		? $this->dbOne("SELECT id_profile, profileRule FROM k_userprofile WHERE id_profile=".$id_profile)
+		? $this->mysql->one("SELECT id_profile, profileRule FROM k_userprofile WHERE id_profile=".$id_profile)
 		: '';
 	
 	if(sizeof($p) > 0){
@@ -162,7 +162,7 @@ public function userProfile($id_profile){
 		if(sizeof($p['profileRule']['id_chapter']) > 0){
 			$id_chapter 	= array();
 			$id_chapter_p	= array();
-			$chapter 		= $this->dbMulti("SELECT * FROM k_chapter WHERE id_chapter IN(".implode(',', $p['profileRule']['id_chapter']).")");
+			$chapter 		= $this->mysql->multi("SELECT * FROM k_chapter WHERE id_chapter IN(".implode(',', $p['profileRule']['id_chapter']).")");
 
 			foreach($chapter as $e){
 				$id_chapter		= array_merge($id_chapter, 	 explode(',', $e['chapterChildren']));
@@ -190,7 +190,7 @@ public function userProfile($id_profile){
 		if(sizeof($p['profileRule']['id_category']) > 0){
 			$id_category	= array();
 			$id_category_p	= array();
-			$category 		= $this->dbMulti("SELECT * FROM k_category WHERE id_category IN(".implode(',', $p['profileRule']['id_category']).")");
+			$category 		= $this->mysql->multi("SELECT * FROM k_category WHERE id_category IN(".implode(',', $p['profileRule']['id_category']).")");
 
 			foreach($category as $e){
 				$id_category 	= array_merge($id_category,   explode(',', $e['categoryChildren']));
@@ -218,7 +218,7 @@ public function userProfile($id_profile){
 		if(sizeof($p['profileRule']['id_group']) > 0){
 			$id_group		= array();
 			$id_group_p		= array();
-			$group 			= $this->dbMulti("SELECT * FROM k_group WHERE id_group IN(".implode(',', $p['profileRule']['id_group']).")");
+			$group 			= $this->mysql->multi("SELECT * FROM k_group WHERE id_group IN(".implode(',', $p['profileRule']['id_group']).")");
 
 			foreach($group as $e){
 				$id_group 		= array_merge($id_group,   explode(',', $e['groupChildren']));
@@ -556,13 +556,13 @@ public function helperUrlEncode($str, $language=NULL, $id_content=NULL){
 	
 		if($id_content != NULL) $idc = " AND id_content != ".$id_content;
 
-		$content = $this->dbMulti("SELECT contentUrl FROM k_contentdata WHERE contentUrl='".$url."' AND language='".$language."'".$idc);
+		$content = $this->mysql->multi("SELECT contentUrl FROM k_contentdata WHERE contentUrl='".$url."' AND language='".$language."'".$idc);
 		
 		if(sizeof($content) > 0){
 			$i = 1;
 
 			while(!$found && $i <= 100){
-				$check = $this->dbOne("SELECT 1 FROM k_contentdata WHERE contentUrl='".$url."-".$i."' AND language='".$language."'");
+				$check = $this->mysql->one("SELECT 1 FROM k_contentdata WHERE contentUrl='".$url."-".$i."' AND language='".$language."'");
 	
 				if(!$check[1]){
 					$url	= $url.'-'.$i;
@@ -971,7 +971,7 @@ public function kodeineInit($get){
 	# Charge les parametre de CONFIG BOOT + CUSTOM et memorise les autres APIsCONFIG
 	#
 	if(BENCHME) $GLOBALS['bench']->benchmarkMarker($bmStep='kodeineInit(k_config)');
-	$config = $this->dbMulti("SELECT * FROM k_config");
+	$config = $this->mysql->multi("SELECT * FROM k_config");
 	foreach($config as $e){
 		if($e['configModule'] == 'boot' OR $e['configModule'] == 'custom'){
 			if(substr($e['configName'], 0, 7) == 'domain:' && empty($domainConfig)){
@@ -1096,7 +1096,7 @@ public function kodeineInit($get){
 	#
 	$id_theme	= ($this->kodeine['chapterIdTheme'] != NULL) ? $this->kodeine['chapterIdTheme'] : $this->kodeine['defaultIdTheme'];
 	if(empty($this->apisConfig['boot']['jsonCacheTheme'])){
-		$theme = $this->dbOne("SELECT * FROM k_theme WHERE id_theme=".$id_theme);
+		$theme = $this->mysql->one("SELECT * FROM k_theme WHERE id_theme=".$id_theme);
 	}else{
 		foreach($this->apisConfig['boot']['jsonCacheTheme'] as $e){
 			if($e['id_theme'] == $id_theme){
@@ -1129,7 +1129,7 @@ public function kodeineInit($get){
 	if(!isset($_GET['noLabel'])){
 		if(BENCHME) $GLOBALS['bench']->benchmarkMarker($bmStep='kodeineInit(localisation)');
 
-		foreach($this->dbMulti("SELECT * FROM k_localisation WHERE language = '".$this->kodeine['language']."'") as $e){
+		foreach($this->mysql->multi("SELECT * FROM k_localisation WHERE language = '".$this->kodeine['language']."'") as $e){
 			define($e['label'], $e['translation']);
 		}
 
@@ -1139,7 +1139,7 @@ public function kodeineInit($get){
 	# TYPE
 	#
 	#if(BENCHME) $GLOBALS['bench']->benchmarkMarker($bmStep='kodeineInit(type)');
-	#foreach($this->dbMulti("SELECT * FROM k_type") as $e){
+	#foreach($this->mysql->multi("SELECT * FROM k_type") as $e){
 	#	unset($e['typeFormLayout']);
 	#	$this->kodeine['typesIds'][$e['id_type']] = $e;
 	#}
@@ -1257,7 +1257,7 @@ public function countryGet($opt=array()){
 + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - */
 public function offlineMessage(){
 	if(in_array($this->kodeine['id_group'], explode(',', $this->kodeine['offlineGroup']))){
-		$off = $this->dbOne("SELECT * FROM k_config WHERE configModule='offline' AND configName='offlineMessage'");
+		$off = $this->mysql->one("SELECT * FROM k_config WHERE configModule='offline' AND configName='offlineMessage'");
 		echo $off['configValue'];
 		exit();
 	}	
@@ -1266,7 +1266,7 @@ public function offlineMessage(){
 /* + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - 
 + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - */
 public function robotsTxtMessage(){
-	$off = $this->dbOne("SELECT * FROM k_config WHERE configModule='robots.txt' AND configName='contentFile'");
+	$off = $this->mysql->one("SELECT * FROM k_config WHERE configModule='robots.txt' AND configName='contentFile'");
 
 	header("Content-Type: text/plain");
 	echo $off['configValue'];
@@ -1282,12 +1282,12 @@ public function configSet($module, $name, $value){
 	$module	= addslashes(trim($module));
 	$name	= addslashes(trim($name));
 
-	$exists = $this->dbOne("SELECT 1 FROM k_config WHERE configModule='".$module."' AND configName='".$name."'");
+	$exists = $this->mysql->one("SELECT 1 FROM k_config WHERE configModule='".$module."' AND configName='".$name."'");
 	$query	= ($exists[1])
 		? "UPDATE k_config SET configValue='".$value."' WHERE configModule='".$module."' AND configName='".$name."'"
 		: "INSERT INTO k_config (configModule, configName, configValue) VALUES ('".$module."', '".$name."', '".$value."')";
 
-	$this->dbQuery($query);
+	$this->mysql->query($query);
 }
 
 /* + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - 
@@ -1297,7 +1297,7 @@ public function configGet($module, $key=NULL){
 	if(@array_key_exists($module, $this->apiConfig)){
 		return is_array($this->apiConfig[$module]) ? $this->apiConfig[$module] : array();
 	}else{
-		$config = $this->dbMulti("SELECT * FROM k_config WHERE configModule='".$module."'");
+		$config = $this->mysql->multi("SELECT * FROM k_config WHERE configModule='".$module."'");
 		foreach($config as $v){
 			if($module == 'bootExt'){
 				$part	= explode(':', $v['configName']);

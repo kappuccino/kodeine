@@ -148,7 +148,7 @@ public function searchSet($id_search, $def){
         $q = $this->dbInsert($def);
     }
 
-    @$this->dbQuery($q);
+    @$this->mysql->query($q);
     if($this->db_error != NULL) return false;
 
     $this->id_search = ($id_search > 0) ? $id_search : $this->db_insert_id;
@@ -193,12 +193,12 @@ public function searchSelector($opt){
 + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - */
 public function countrySet($def){
 
-	$x = $this->dbOne("SELECT 1 FROM k_country WHERE iso='".$def['k_country']['iso']['value']."'");
+	$x = $this->mysql->one("SELECT 1 FROM k_country WHERE iso='".$def['k_country']['iso']['value']."'");
 	$q = ($x[1])
 		? $this->dbUpdate($def)." WHERE iso='".$def['k_country']['iso']['value']."'"
 		: $this->dbInsert($def);
 
-	@$this->dbQuery($q);
+	@$this->mysql->query($q);
 	if($this->db_error != NULL) return false;
 
 	return true;
@@ -368,7 +368,7 @@ public function moduleData($mod, $core=true){
 		));
 	}
 	
-	$config = $this->dbMulti("
+	$config = $this->mysql->multi("
 		SELECT configName, configValue
 		FROM k_config
 		WHERE configName NOT LIKE 'jsonCache%' AND configModule='".basename($mod)."'"

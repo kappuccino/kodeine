@@ -87,13 +87,13 @@ class coreCache{
 
 	public  function sqlcacheGet($key){
 
-		if(BENCHME) @$GLOBALS['bench']->benchmarkMarker($bmStep='sqlcacheGet('.$key.')');
+		if(BENCHME) $this->bench->marker($bmStep='sqlcacheGet('.$key.')');
 
 		self::$core->dbQuery("DELETE FROM k_cache WHERE cacheTTL < ".time());
 		$r = self::$core->dbOne("SELECT UNCOMPRESS(cacheValue) AS back FROM k_cache WHERE cacheKey='".addslashes($key)."'");
 		$r = isset($r['back']) ? unserialize($r['back']) : false;
 
-		if(BENCHME) @$GLOBALS['bench']->benchmarkMarker($bmStep);
+		if(BENCHME) $this->bench->marker($bmStep);
 
 		return $r;
 	}

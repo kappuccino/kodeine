@@ -11,7 +11,7 @@ function socialPostGet($opt=array()){
 
 	if($opt['debug']) $this->pre("[OPT]", $opt);
 
-	if(BENCHME) @$GLOBALS['bench']->benchmarkMarker($bmStep='socialPostGet() @='.json_encode($opt));
+	if(BENCHME) $this->bench->marker($bmStep='socialPostGet() @='.json_encode($opt));
 	$dbMode = 'dbMulti';
 	$cond[] = "k_socialpost.socialPostHide=0";
 
@@ -233,7 +233,7 @@ function socialPostGet($opt=array()){
 		if($opt['debug']) $this->pre("[FORMAT]", $posts);
 	}
 
-	if(BENCHME) @$GLOBALS['bench']->benchmarkMarker($bmStep);
+	if(BENCHME) $this->bench->marker($bmStep);
 	
 	return $posts;
 }
@@ -247,7 +247,7 @@ function socialPostSet($opt){
 	# NEW !
 	#
 	if($opt['id_socialpost'] == NULL){
-		$this->dbQuery("INSERT INTO k_socialpost (socialPostDate, socialPostDateLast) VALUES (NOW(), NOW())");
+		$this->mysql->query("INSERT INTO k_socialpost (socialPostDate, socialPostDateLast) VALUES (NOW(), NOW())");
 		if($opt['debug']) $this->pre($this->db_query, $this->db_error);
 
 		$id_socialpost = $this->db_insert_id;
@@ -279,7 +279,7 @@ function socialPostSet($opt){
 	# CORE
 	#
 	$query = $this->dbUpdate(array('k_socialpost' => $opt['core']))." WHERE id_socialpost=".$id_socialpost;
-	$this->dbQuery($query);
+	$this->mysql->query($query);
 	if($opt['debug']) $this->pre($this->db_query, $this->db_error);
 
 	# BUILD CACHE
@@ -288,7 +288,7 @@ function socialPostSet($opt){
 
 	# FORUM
 	#
-	$this->dbQuery("DELETE FROM k_socialpostforum WHERE id_socialpost=".$id_socialpost);
+	$this->mysql->query("DELETE FROM k_socialpostforum WHERE id_socialpost=".$id_socialpost);
 	if(is_array($opt['forum']) && sizeof($opt['forum']) > 0){
 		$forums = $this->apiLoad('socialForum')->socialForumGet(array(
 			'id_socialforum'	=> $opt['forum']
@@ -305,14 +305,14 @@ function socialPostSet($opt){
 				$idfs[] = intval($id_socialforum);
 			}
 
-			$this->dbQuery("INSERT IGNORE INTO k_socialpostforum (id_socialforum,id_socialpost) VALUES ".implode(',', $addf));
+			$this->mysql->query("INSERT IGNORE INTO k_socialpostforum (id_socialforum,id_socialpost) VALUES ".implode(',', $addf));
 			if($opt['debug']) $this->pre($this->db_query, $this->db_error);
 
-			$this->dbQuery("UPDATE k_socialpost SET socialPostForum='".json_encode($idfs)."' WHERE id_socialpost=".$id_socialpost);
+			$this->mysql->query("UPDATE k_socialpost SET socialPostForum='".json_encode($idfs)."' WHERE id_socialpost=".$id_socialpost);
 			if($opt['debug']) $this->pre($this->db_query, $this->db_error);
 
 			if($flag == 'POST'){
-				$this->dbQuery("UPDATE k_socialforum SET socialForumPostCount=socialForumPostCount+1 WHERE id_socialforum IN(".implode(',', $idfs).")");
+				$this->mysql->query("UPDATE k_socialforum SET socialForumPostCount=socialForumPostCount+1 WHERE id_socialforum IN(".implode(',', $idfs).")");
 				if($opt['debug']) $this->pre($this->db_query, $this->db_error);
 			}
 		}
@@ -320,7 +320,7 @@ function socialPostSet($opt){
 
 	# CIRCLE
 	#
-	$this->dbQuery("DELETE FROM k_socialpostcircle WHERE id_socialpost=".$id_socialpost);
+	$this->mysql->query("DELETE FROM k_socialpostcircle WHERE id_socialpost=".$id_socialpost);
 	if(is_array($opt['circle']) && sizeof($opt['circle']) > 0){
 		foreach($opt['circle'] as $idc){
 			if($idc > 0){
@@ -329,14 +329,14 @@ function socialPostSet($opt){
 			}
 		}
 		if(sizeof($addc) > 0){
-			$this->dbQuery("INSERT INTO k_socialpostcircle (id_socialcircle,id_socialpost) VALUES ".implode(',', $addc));
+			$this->mysql->query("INSERT INTO k_socialpostcircle (id_socialcircle,id_socialpost) VALUES ".implode(',', $addc));
 			if($opt['debug']) $this->pre($this->db_query, $this->db_error);
 
-			$this->dbQuery("UPDATE k_socialpost SET socialPostCircle='".json_encode($idcs)."' WHERE id_socialpost=".$id_socialpost);
+			$this->mysql->query("UPDATE k_socialpost SET socialPostCircle='".json_encode($idcs)."' WHERE id_socialpost=".$id_socialpost);
 			if($opt['debug']) $this->pre($this->db_query, $this->db_error);
 
 			if($flag == 'POST'){
-				$this->dbQuery("UPDATE k_socialcircle SET socialCirclePostCount=socialCirclePostCount+1 WHERE id_socialcircle IN(".implode(',', $idcs).")");
+				$this->mysql->query("UPDATE k_socialcircle SET socialCirclePostCount=socialCirclePostCount+1 WHERE id_socialcircle IN(".implode(',', $idcs).")");
 				if($opt['debug']) $this->pre($this->db_query, $this->db_error);
 			}
 		}
@@ -344,7 +344,7 @@ function socialPostSet($opt){
 
 	# EVENT
 	#
-	$this->dbQuery("DELETE FROM k_socialpostevent WHERE id_socialpost=".$id_socialpost);
+	$this->mysql->query("DELETE FROM k_socialpostevent WHERE id_socialpost=".$id_socialpost);
 	if(is_array($opt['event']) && sizeof($opt['event']) > 0){
 		foreach($opt['event'] as $idc){
 			if($idc > 0){
@@ -353,14 +353,14 @@ function socialPostSet($opt){
 			}
 		}
 		if(sizeof($addc) > 0){
-			$this->dbQuery("INSERT INTO k_socialpostevent (id_socialevent,id_socialpost) VALUES ".implode(',', $addc));
+			$this->mysql->query("INSERT INTO k_socialpostevent (id_socialevent,id_socialpost) VALUES ".implode(',', $addc));
 			if($opt['debug']) $this->pre($this->db_query, $this->db_error);
 			
-			$this->dbQuery("UPDATE k_socialpost SET socialPostEvent='".json_encode($idcs)."' WHERE id_socialpost=".$id_socialpost);
+			$this->mysql->query("UPDATE k_socialpost SET socialPostEvent='".json_encode($idcs)."' WHERE id_socialpost=".$id_socialpost);
 			if($opt['debug']) $this->pre($this->db_query, $this->db_error);
 
 			if($flag == 'POST'){
-				$this->dbQuery("UPDATE k_socialevent SET socialEventPostCount=socialEventPostCount+1 WHERE id_socialevent IN(".implode(',', $idcs).")");
+				$this->mysql->query("UPDATE k_socialevent SET socialEventPostCount=socialEventPostCount+1 WHERE id_socialevent IN(".implode(',', $idcs).")");
 				if($opt['debug']) $this->pre($this->db_query, $this->db_error);
 			}
 		}
@@ -429,19 +429,19 @@ function socialPostHide($opt){
 
 	// Decrementer les CERCLES ou je me trouvais
 	if(count($post['socialPostCircle']) > 0){
-		$this->dbQuery("UPDATE k_socialcircle SET socialCirclePostCount=socialCirclePostCount-1 WHERE id_socialcircle IN(".implode(',', $post['socialPostCircle']).")");
+		$this->mysql->query("UPDATE k_socialcircle SET socialCirclePostCount=socialCirclePostCount-1 WHERE id_socialcircle IN(".implode(',', $post['socialPostCircle']).")");
 		if($opt['debug']) $this->pre($this->db_query, $this->db_error);
 	}
 
 	// Decrementer les FORUMS ou je me trouvais
 	if(count($post['socialPostForum']) > 0){
-		$this->dbQuery("UPDATE k_socialforum SET socialForumPostCount=socialForumPostCount-1 WHERE id_socialforum IN(".implode(',', $post['socialPostForum']).")");
+		$this->mysql->query("UPDATE k_socialforum SET socialForumPostCount=socialForumPostCount-1 WHERE id_socialforum IN(".implode(',', $post['socialPostForum']).")");
 		if($opt['debug']) $this->pre($this->db_query, $this->db_error);
 	}
 
 	// Decrementer les EVENTS ou je me trouvais
 	if(count($post['socialPostEvent']) > 0){
-		$this->dbQuery("UPDATE k_socialforum SET socialEventPostCount=socialEventPostCount-1 WHERE id_socialforum IN(".implode(',', $post['socialPostEvent']).")");
+		$this->mysql->query("UPDATE k_socialforum SET socialEventPostCount=socialEventPostCount-1 WHERE id_socialforum IN(".implode(',', $post['socialPostEvent']).")");
 		if($opt['debug']) $this->pre($this->db_query, $this->db_error);
 	}
 
@@ -451,14 +451,14 @@ function socialPostHide($opt){
 	}
 
 	if($opt['delete']){
-		$this->dbQuery("DELETE FROM k_socialpost 		WHERE id_socialpost IN(".implode(',', $del).")");
-		$this->dbQuery("DELETE FROM k_socialpostcircle 	WHERE id_socialpost IN(".implode(',', $del).")");
-		$this->dbQuery("DELETE FROM k_socialpostforum 	WHERE id_socialpost IN(".implode(',', $del).")");
-		$this->dbQuery("DELETE FROM k_socialpostevent 	WHERE id_socialpost IN(".implode(',', $del).")");
-		$this->dbQuery("DELETE FROM k_socialactivity 	WHERE socialActivityThread IN(".implode(',', $del).") AND socialActivityKey='id_socialpost'");
-		$this->dbQuery("DELETE FROM k_socialsandbox 	WHERE socialSandboxId IN(".implode(',', $del).") AND socialSandboxType='id_socialpost'");
+		$this->mysql->query("DELETE FROM k_socialpost 		WHERE id_socialpost IN(".implode(',', $del).")");
+		$this->mysql->query("DELETE FROM k_socialpostcircle 	WHERE id_socialpost IN(".implode(',', $del).")");
+		$this->mysql->query("DELETE FROM k_socialpostforum 	WHERE id_socialpost IN(".implode(',', $del).")");
+		$this->mysql->query("DELETE FROM k_socialpostevent 	WHERE id_socialpost IN(".implode(',', $del).")");
+		$this->mysql->query("DELETE FROM k_socialactivity 	WHERE socialActivityThread IN(".implode(',', $del).") AND socialActivityKey='id_socialpost'");
+		$this->mysql->query("DELETE FROM k_socialsandbox 	WHERE socialSandboxId IN(".implode(',', $del).") AND socialSandboxType='id_socialpost'");
 	}else{
-		$this->dbQuery("UPDATE k_socialpost SET socialPostHide=1 WHERE id_socialpost IN(".implode(',', $del).")");
+		$this->mysql->query("UPDATE k_socialpost SET socialPostHide=1 WHERE id_socialpost IN(".implode(',', $del).")");
 	}
 
 	// Reconstruire le CACHE pour ce post (flat + thread)
@@ -498,7 +498,7 @@ function socialPostBuild($id_socialpostthread){
 		'socialPostThread'		=> array('value' => json_encode($thread)),
 	));
 
-	$this->dbQuery($this->dbUpdate($def)." WHERE id_socialpost=".$id_socialpostthread);
+	$this->mysql->query($this->dbUpdate($def)." WHERE id_socialpost=".$id_socialpostthread);
 	#$this->pre($this->db_query, $this->db_error);
 	
 	// Doit etre independant, et a la fin
@@ -509,7 +509,7 @@ function socialPostBuild($id_socialpostthread){
 //-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -
 function socialPostBuildFlat($starter){
 
-	$all = $this->dbMulti("
+	$all = $this->mysql->multi("
 		SELECT * FROM k_socialpost
 		WHERE id_socialpostthread=".$starter." AND id_socialpost != ".$starter." AND socialPostHide=0
 		ORDER BY id_socialpost"
@@ -528,7 +528,7 @@ function socialPostBuildFlat($starter){
 //-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -
 function socialPostBuildThread($thread, $mid_socialpost){
 
-	$children = $this->dbMulti("
+	$children = $this->mysql->multi("
 		SELECT id_socialpost FROM k_socialpost
 		WHERE id_socialpostthread=".$thread." AND mid_socialpost=".$mid_socialpost." AND socialPostHide=0
 		ORDER BY id_socialpost
@@ -551,7 +551,7 @@ function socialPostBuildThread($thread, $mid_socialpost){
 //-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -
 function socialPostBuildSubscribed($id_socialpost){
 
-	$all = $this->dbMulti("SELECT * FROM k_socialpost WHERE id_socialpostthread=".$id_socialpost." AND socialPostHide=0");
+	$all = $this->mysql->multi("SELECT * FROM k_socialpost WHERE id_socialpostthread=".$id_socialpost." AND socialPostHide=0");
 	$usr = array();
 
 	foreach($all as $u){
@@ -574,7 +574,7 @@ function socialPostBuildSubscribed($id_socialpost){
 		'socialPostSubscribed'	=> array('value' => json_encode($usr))
 	));
 
-	$this->dbQuery($this->dbUpdate($def)." WHERE id_socialpost=".$id_socialpost);
+	$this->mysql->query($this->dbUpdate($def)." WHERE id_socialpost=".$id_socialpost);
 #	$this->pre($this->db_query, $this->db_error);
 }
 
@@ -585,7 +585,7 @@ function socialPostRateForUser($id_user){
 	$empty = array('plus' => array(), 'minus' => array());
 	if(intval($id_user) <= 0) return $empty;
 
-	$u = $this->dbOne("SELECT * FROM k_usersocial WHERE id_user=".$id_user);
+	$u = $this->mysql->one("SELECT * FROM k_usersocial WHERE id_user=".$id_user);
 	if($u['id_user'] != $id_user) return $empty;
 
 	$p = json_decode($u['userSocialPostRatePlus'],  true);
@@ -628,7 +628,7 @@ function socialPostRateUserUpdate($id_user, $id_socialpost, $field, $action){
 	)));
 	$query .= "\nON DUPLICATE KEY UPDATE ".$fld."='".$json."';";
 	
-	$this->dbQuery($query);
+	$this->mysql->query($query);
 	#$this->pre("UPDATE USER", $query, $this->db_error);
 }
 
@@ -642,7 +642,7 @@ if($opt['debug']) $this->pre("OPTION", $opt);
 	$id_socialpost	= $opt['id_socialpost'];	if(intval($id_socialpost) <= 0) return false;
 	if($opt['plus'] == false && $opt['minus'] == false)							return false;
 
-	$post = $this->dbOne("SELECT * FROM k_socialpost WHERE id_socialpost=".$id_socialpost);
+	$post = $this->mysql->one("SELECT * FROM k_socialpost WHERE id_socialpost=".$id_socialpost);
 	$pVal = intval($post['socialPostRatePlus']);
 	$mVal = intval($post['socialPostRateMinus']);
 
@@ -675,7 +675,7 @@ if($opt['debug']) $this->pre("OPTION", $opt);
 			'socialPostRateAverage'			=> array('value'	=> $pVal + ($mVal * -1))
 		)))." WHERE id_socialpost=".$id_socialpost;
 
-		$this->dbQuery($query);
+		$this->mysql->query($query);
 		if($opt['debug']) $this->pre("UPDATE POST", $query, $this->db_error);
 
 		// Mettre a jour LE USER
@@ -709,7 +709,7 @@ if($opt['debug']) $this->pre("OPTION", $opt);
 	$id_socialpost	= $opt['id_socialpost'];	if(intval($id_socialpost) <= 0) return false;
 	if($opt['plus'] == false && $opt['minus'] == false) return false;
 
-	$post = $this->dbOne("SELECT * FROM k_socialpost WHERE id_socialpost=".$id_socialpost);
+	$post = $this->mysql->one("SELECT * FROM k_socialpost WHERE id_socialpost=".$id_socialpost);
 	$pVal = intval($post['socialPostRatePlus']);
 	$mVal = intval($post['socialPostRateMinus']);
 
@@ -748,7 +748,7 @@ if($opt['debug']) $this->pre("OPTION", $opt);
 			'socialPostRateAverage'			=> array('value'	=> $pVal + ($mVal * -1))
 		)))." WHERE id_socialpost=".$id_socialpost;
 
-		$this->dbQuery($query);
+		$this->mysql->query($query);
 		if($opt['debug']) $this->pre("UPDATE POST", $this->db_query, $this->db_error);
 
 		// Mettre a jour LE USER
@@ -779,7 +779,7 @@ if($opt['debug']) $this->pre("[OPT]", $opt);
 	if(intval($opt['id_socialpost']) == 0)	return false;
 
 	$fd = ($opt['reply']) ? 'userSocialPostReply' : 'userSocialPostOwner';
-	$me = $this->dbOne("SELECT ".$fd."Count, ".$fd." FROM k_usersocial WHERE id_user=".$opt['id_user']);
+	$me = $this->mysql->one("SELECT ".$fd."Count, ".$fd." FROM k_usersocial WHERE id_user=".$opt['id_user']);
 	$db = json_decode($me[$fd], true);
 	$db = is_array($db) ? $db : array();
 	
@@ -793,7 +793,7 @@ if($opt['debug']) $this->pre("[OPT]", $opt);
 		if(!in_array($opt['id_socialpost'], $db)){
 			$db[] = $opt['id_socialpost'];
 			
-			$this->dbQuery("INSERT IGNORE INTO k_socialpostuser (id_user, id_socialpost) VALUES (".$opt['id_user'].",".$opt['id_socialpost'].")");
+			$this->mysql->query("INSERT IGNORE INTO k_socialpostuser (id_user, id_socialpost) VALUES (".$opt['id_user'].",".$opt['id_socialpost'].")");
 			if($opt['debug']) $this->pre($this->db_query, $this->db_error);
 		}
 	}
@@ -810,7 +810,7 @@ if($opt['debug']) $this->pre("[OPT]", $opt);
 	)));
 	$query .= "\nON DUPLICATE KEY UPDATE ".$fd."Count=".$count.", ".$fd."='".$json."';";
 
-	$this->dbQuery($query);
+	$this->mysql->query($query);
 	if($opt['debug']) $this->pre($this->db_query, $this->db_error);
 
 	if($opt['undo']){
@@ -832,12 +832,12 @@ if($opt['debug']) $this->pre("[OPT]", $opt);
 		$all = array_unique($all);
 		$all = array_values($all);
 	
-		$this->dbQuery("DELETE FROM k_socialpostuser WHERE id_user=".$opt['id_user']);
+		$this->mysql->query("DELETE FROM k_socialpostuser WHERE id_user=".$opt['id_user']);
 		foreach($all as $a){
 			$tmp[] = '('.$opt['id_user'].','.$a.')';
 		}
 		
-		$this->dbQuery("INSERT IGNORE INTO k_socialpostuser (id_user, id_socialpost) VALUES ".implode(',', $tmp));
+		$this->mysql->query("INSERT IGNORE INTO k_socialpostuser (id_user, id_socialpost) VALUES ".implode(',', $tmp));
 		if($opt['debug']) $this->pre($this->db_query, $this->db_error);
 	}
 

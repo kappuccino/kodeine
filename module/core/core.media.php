@@ -202,7 +202,7 @@ function mediaGetKeywords($options=NULL){
 	$sqlLimit	= " LIMIT ".$offset.", ".$limit;
 
 	# Querying
-	$r = $this->dbMulti("SELECT occurence, dataValue FROM ".$this->viewKeywords . $where . $sqlOrder . $sqlLimit);
+	$r = $this->mysql->multi("SELECT occurence, dataValue FROM ".$this->viewKeywords . $where . $sqlOrder . $sqlLimit);
 
 	return $r;	
 }
@@ -232,7 +232,7 @@ function mediaGet($options=NULL){
 		 "INNER JOIN ".$this->tableMediaData." ON ".$this->tableMedia.".id_media = ".$this->tableMediaData.".id_media\n".
 		 "WHERE dataName='".$dataName."' AND dataValue='".addslashes($dataValue)."' " . $sqlOrder . $sqlLimit;
 	
-	$r = $this->dbMulti($q);
+	$r = $this->mysql->multi($q);
 
 #	$this->pre($q);
 
@@ -244,7 +244,7 @@ function mediaGet($options=NULL){
 /*+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-*/
 function mediaDataGet($file){
-	$re = $this->dbOne("SELECT * FROM k_media WHERE mediaUrl='".addslashes($file)."'");
+	$re = $this->mysql->one("SELECT * FROM k_media WHERE mediaUrl='".addslashes($file)."'");
 	return $re;
 }
 
@@ -253,7 +253,7 @@ function mediaDataGet($file){
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-*/
 function mediaDataSet($url, $def){
 
-	$exists = $this->dbOne("SELECT 1 FROM k_media WHERE mediaUrl='".$url."'");
+	$exists = $this->mysql->one("SELECT 1 FROM k_media WHERE mediaUrl='".$url."'");
 
 	if($exists[1]){
 		$q = $this->dbUpdate($def)." WHERE mediaUrl='".$url."'";
@@ -267,7 +267,7 @@ function mediaDataSet($url, $def){
 	$fw   = fwrite($fo, $raw, strlen($raw));
 	$fc   = fclose($fo);
 
-	@$this->dbQuery($q);
+	@$this->mysql->query($q);
 	if($this->db_error != NULL) return false;
 
 	return true;
@@ -289,9 +289,9 @@ public function mediaRename($src, $dst){
 		if($r){
 			chmod($dst, 0755);
 
-			$media = $this->dbMulti("SELECT * FROM k_media WHERE mediaUrl LIKE '".$src_."%'");
+			$media = $this->mysql->multi("SELECT * FROM k_media WHERE mediaUrl LIKE '".$src_."%'");
 			foreach($media as $e){
-				$this->dbQuery("UPDATE k_media SET mediaUrL='".str_replace($src_, $dst_, $e['mediaUrl'])."' WHERE mediaUrl='".$e['mediaUrl']."'");
+				$this->mysql->query("UPDATE k_media SET mediaUrL='".str_replace($src_, $dst_, $e['mediaUrl'])."' WHERE mediaUrl='".$e['mediaUrl']."'");
 				$this->pre($this->db_query, $this->db_error);
 			}
 
@@ -304,11 +304,11 @@ public function mediaRename($src, $dst){
 				rename(KROOT.$cacheSrc, KROOT.$cacheDst);
 			}
 
-			$cache = $this->dbMulti("SELECT * FROM k_cachemedia WHERE cacheSource LIKE '".$src_."/%'");
+			$cache = $this->mysql->multi("SELECT * FROM k_cachemedia WHERE cacheSource LIKE '".$src_."/%'");
 			#$this->pre($cache);
 
 			foreach($cache as $e){
-				$this->dbQuery("
+				$this->mysql->query("
 					UPDATE k_cachemedia SET
 					cacheSource='".str_replace($src_,     $dst_,     $e['cacheSource'])."', 
 					cacheUrl   ='".str_replace($cacheSrc, $cacheDst, $e['cacheUrl'])."'
@@ -327,14 +327,14 @@ public function mediaRename($src, $dst){
 
 			# Verifier dans la base de media si je dois bouger des choses
 			#
-			$media = $this->dbOne("SELECT * FROM k_media WHERE mediaUrl='".$src_."'");
+			$media = $this->mysql->one("SELECT * FROM k_media WHERE mediaUrl='".$src_."'");
 			if($media['mediaUrl'] != ''){
-				$this->dbQuery("UPDATE k_media SET mediaUrl='".$dst_."' WHERE mediaUrl='".$src_."'");
+				$this->mysql->query("UPDATE k_media SET mediaUrl='".$dst_."' WHERE mediaUrl='".$src_."'");
 			}
 
 			# Recuperer la version en cache
 			#
-			$cache 		= $this->dbOne("SELECT * FROM k_cachemedia WHERE cacheSource = '".$src_."'");
+			$cache 		= $this->mysql->one("SELECT * FROM k_cachemedia WHERE cacheSource = '".$src_."'");
 			$cacheSrc	= $cache['cacheUrl'];
 			$cacheDst	= dirname($dst_).'/'.basename($cacheSrc);
 			$cacheDst	= str_replace('/media/', '/media/.cache/', $cacheDst);
@@ -345,7 +345,7 @@ public function mediaRename($src, $dst){
 				}
 				rename(KROOT.$cacheSrc, KROOT.$cacheDst);
 
-				$this->dbQuery("UPDATE k_cachemedia SET cacheSource='".$dst_."',  cacheUrl   ='".$cacheDst."' WHERE cacheSource='".$src_."'");
+				$this->mysql->query("UPDATE k_cachemedia SET cacheSource='".$dst_."',  cacheUrl   ='".$cacheDst."' WHERE cacheSource='".$src_."'");
 			}
 
 			# Supprimer l'ancien fichier (BDD + Cache)
@@ -512,8 +512,8 @@ public function mediaRemove($src){
 			#	echo "Suppression de ".$f."\n";
 				rmdir($f);
 
-				$this->dbQuery("DELETE FROM k_media 		WHERE mediaUrl 	LIKE '".str_replace(KROOT, NULL, $f)."/%'");
-				$this->dbQuery("DELETE FROM k_cachemedia WHERE cacheSource 	LIKE '".str_replace(KROOT, NULL, $f)."/%'");
+				$this->mysql->query("DELETE FROM k_media 		WHERE mediaUrl 	LIKE '".str_replace(KROOT, NULL, $f)."/%'");
+				$this->mysql->query("DELETE FROM k_cachemedia WHERE cacheSource 	LIKE '".str_replace(KROOT, NULL, $f)."/%'");
 			}
 		}
 
@@ -523,8 +523,8 @@ public function mediaRemove($src){
 	}else
 	if(is_file($src)){
 		$r = unlink($src);
-		$this->dbQuery("DELETE FROM k_media 		WHERE mediaUrl	= '".str_replace(KROOT, NULL, $src)."'");
-		$this->dbQuery("DELETE FROM k_cachemedia WHERE cacheSource	= '".str_replace(KROOT, NULL, $src)."'");
+		$this->mysql->query("DELETE FROM k_media 		WHERE mediaUrl	= '".str_replace(KROOT, NULL, $src)."'");
+		$this->mysql->query("DELETE FROM k_cachemedia WHERE cacheSource	= '".str_replace(KROOT, NULL, $src)."'");
 	}
 
 	$r = true;
@@ -536,7 +536,7 @@ public function mediaRemove($src){
 /* + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - 
 + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - */
 function mediaIndexRemove($file){
-	$this->dbQuery("DELETE FROM k_media WHERE mediaUrl='".$file."'");
+	$this->mysql->query("DELETE FROM k_media WHERE mediaUrl='".$file."'");
 }
 
 /* + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - 

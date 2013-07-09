@@ -195,7 +195,7 @@ public function toArray(){
 + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - */
 public function execute(){
 	$query = (string) $this;
-	$this->dbQuery($query);
+	$this->mysql->query($query);
 
 	return (($this->db_error == NULL) ? true : false);
 }

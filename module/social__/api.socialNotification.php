@@ -195,7 +195,7 @@ if($opt['debug']) $this->pre("OPTION", $opt);
 	$idn = $opt['id_socialactivity'];	if(intval($idn) <= 0) return false;
 
 	// Remove
-	$this->dbQuery("DELETE FROM k_socialnotification WHERE id_socialactivity=".$idn." AND id_user=".$idu);
+	$this->mysql->query("DELETE FROM k_socialnotification WHERE id_socialactivity=".$idn." AND id_user=".$idu);
 	if($opt['debug']) $this->pre($this->db_query, $this->db_error);
 }
 
@@ -206,7 +206,7 @@ function socialNotificationView($opt){
 
 	if(!is_array($opt['socialActivityId']) OR sizeof($opt['socialActivityId']) == 0) return false;
 
-	$data = $this->dbMulti(
+	$data = $this->mysql->multi(
 		"SELECT * FROM k_socialactivity
 		INNER JOIN k_socialnotification ON k_socialactivity.id_socialactivity = k_socialnotification.id_socialactivity
 		WHERE	
@@ -219,7 +219,7 @@ function socialNotificationView($opt){
 	if($opt['debug']) $this->pre($this->db_query, $this->db_error);
 	
 	if(sizeof($data) > 0){
-		$this->dbQuery("UPDATE k_socialnotification SET socialNotificationView=1 WHERE
+		$this->mysql->query("UPDATE k_socialnotification SET socialNotificationView=1 WHERE
 			id_user= ".$opt['id_user']." AND id_socialactivity IN(".implode(',', $this->dbKey($data, 'id_socialactivity', true)).")"
 		);
 
@@ -256,7 +256,7 @@ if($opt['debug']) $this->pre("OPTION", $opt);
 	$where = "WHERE ".implode(' AND ', $cond);
 
 	// Remove
-	$this->dbQuery("UPDATE k_socialnotification SET socialNotificationView=1 ".$where);
+	$this->mysql->query("UPDATE k_socialnotification SET socialNotificationView=1 ".$where);
 	if($opt['debug']) $this->pre($this->db_query, $this->db_error);
 }
 

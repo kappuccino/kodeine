@@ -20,7 +20,7 @@
 	foreach($tables_ as $table_ => $opt){
 		if($this->tableExists(array('table' => $table_))){
 
-			$raw = $this->dbMulti("SELECT * FROM ".$table_." ORDER by `order` ASC ");
+			$raw = $this->mysql->multi("SELECT * FROM ".$table_." ORDER by `order` ASC ");
 			$tmp = array();
 
 			if($opt['id'] != ''){
@@ -42,7 +42,7 @@
 				$this->apiLoad('field')->fieldAffectSet($opt['key'], $tmp);
 			}
 
-			$this->dbQuery("RENAME TABLE ".$table_." TO  `@".$table_."`");
+			$this->mysql->query("RENAME TABLE ".$table_." TO  `@".$table_."`");
 		}
 	}
 

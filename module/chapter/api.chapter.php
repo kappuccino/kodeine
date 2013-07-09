@@ -8,7 +8,7 @@ class chapter extends appModule{
 	+ - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - */
 	public function chapterGet($opt=array()){
 	
-		if(BENCHME) @$GLOBALS['bench']->benchmarkMarker($bmStep='chapterGet() @='.json_encode($opt));
+		if(BENCHME) $this->bench->marker($bmStep='chapterGet() @='.json_encode($opt));
 	
 		# Gerer les OPTIONS
 		$offset		= $opt['offset'];
@@ -194,7 +194,7 @@ class chapter extends appModule{
 			if($dbMode == 'one') $chapter = $chapter[0];
 		}
 	
-		if(BENCHME) @$GLOBALS['bench']->benchmarkMarker($bmStep);
+		if(BENCHME) $this->bench->marker($bmStep);
 	
 		return $chapter;
 	}
@@ -207,16 +207,16 @@ class chapter extends appModule{
 			$nxt = $this->one("SELECT MAX(pos_chapter)+1 as next FROM k_chapter");
 			$def['k_chapter']['pos_chapter'] = array('value' => $nxt['next']);
 	
-			$this->dbQuery($this->dbInsert($def));
+			$this->mysql->query($this->dbInsert($def));
 			$id_chapter = $this->db_insert_id;
 			$needNewAffect = true;
 		}
 	
-		$query = $this->dbQuery($this->dbUpdate($def)." WHERE id_chapter=".$id_chapter);
+		$query = $this->mysql->query($this->dbUpdate($def)." WHERE id_chapter=".$id_chapter);
 	
 		foreach($lan as $iso => $e){
 			$exists = $this->one("SELECT 1 FROM k_chapterdata WHERE language='".$iso."' AND id_chapter=".$id_chapter);
-			if(!$exists[1]) $this->dbQuery("INSERT INTO k_chapterdata (id_chapter, language) VALUES (".$id_chapter.", '".$iso."')");
+			if(!$exists[1]) $this->mysql->query("INSERT INTO k_chapterdata (id_chapter, language) VALUES (".$id_chapter.", '".$iso."')");
 	
 			if($e['copy'] != NULL){ // je dois recopier la source
 				$me = $lan[$e['copy']]['sql'];
@@ -236,7 +236,7 @@ class chapter extends appModule{
 				}
 			}
 	
-		    @$this->dbQuery($this->dbUpdate($me)." WHERE id_chapter=".$id_chapter." AND language='".$iso."'");
+		    @$this->mysql->query($this->dbUpdate($me)." WHERE id_chapter=".$id_chapter." AND language='".$iso."'");
 			#$this->pre($this->db_query, $this->db_error);
 		}
 	
@@ -269,16 +269,16 @@ class chapter extends appModule{
 				}
 			}
 	
-			$this->dbQuery("UPDATE k_userprofile SET profileRule='".addslashes(serialize($rule))."' WHERE id_profile=".$p['id_profile']);
+			$this->mysql->query("UPDATE k_userprofile SET profileRule='".addslashes(serialize($rule))."' WHERE id_profile=".$p['id_profile']);
 		}
 	
 		# Supprimer les entres
 		foreach($_POST['del'] as $e){
 			$me = $this->chapterGet(array('language' => 'fr', 'id_chapter' => $e));
 			if($me['chapterChildren'] != NULL){
-				$this->dbQuery("DELETE FROM k_contentchapter WHERE id_chapter IN(".$me['chapterChildren'].")");
-				$this->dbQuery("DELETE FROM k_chapter WHERE id_chapter IN(".$me['chapterChildren'].")");
-				$this->dbQuery("DELETE FROM k_chapterdata WHERE id_chapter IN(".$me['chapterChildren'].")");
+				$this->mysql->query("DELETE FROM k_contentchapter WHERE id_chapter IN(".$me['chapterChildren'].")");
+				$this->mysql->query("DELETE FROM k_chapter WHERE id_chapter IN(".$me['chapterChildren'].")");
+				$this->mysql->query("DELETE FROM k_chapterdata WHERE id_chapter IN(".$me['chapterChildren'].")");
 			}
 		}
 	
@@ -299,7 +299,7 @@ class chapter extends appModule{
 		}
 		
 		if(sizeof($add) > 0){
-			$this->dbQuery("INSERT IGNORE INTO k_contentchapter (id_content, id_chapter, is_selected) VALUES ".implode(',', $add));
+			$this->mysql->query("INSERT IGNORE INTO k_contentchapter (id_content, id_chapter, is_selected) VALUES ".implode(',', $add));
 		}
 	
 	}
@@ -317,13 +317,13 @@ class chapter extends appModule{
 		foreach($chapter as $e){
 			$tree = $this->chapterFamilyParent($e);
 			$tree = sizeof($tree) > 0 ? '0,'.implode(',', array_reverse($tree)) : 0;
-			$this->dbQuery("UPDATE k_chapter SET chapterParent='".$tree."' WHERE id_chapter=".$e['id_chapter']);
+			$this->mysql->query("UPDATE k_chapter SET chapterParent='".$tree."' WHERE id_chapter=".$e['id_chapter']);
 		}
 	
 		foreach($chapter as $e){
 			$tree = $this->chapterFamilyChildren($e);
 			$tree = sizeof($tree) > 0 ? $e['id_chapter'].','.implode(',', $tree) : $e['id_chapter'];
-			$this->dbQuery("UPDATE k_chapter SET chapterChildren='".$tree."' WHERE id_chapter=".$e['id_chapter']);
+			$this->mysql->query("UPDATE k_chapter SET chapterChildren='".$tree."' WHERE id_chapter=".$e['id_chapter']);
 		}
 	}
 	
@@ -362,7 +362,7 @@ class chapter extends appModule{
 	+ - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - */
 	public function chapterUpdatePos($chapter){
 		foreach($chapter as $pos => $e){
-			$this->dbQuery("UPDATE k_chapter SET pos_chapter=".$pos." WHERE id_chapter=".$e['id_chapter']);
+			$this->mysql->query("UPDATE k_chapter SET pos_chapter=".$pos." WHERE id_chapter=".$e['id_chapter']);
 			if(is_array($e['sub'])) $this->chapterUpdatePos($e['sub']);
 		}
 	}
@@ -416,7 +416,7 @@ class chapter extends appModule{
 	
 		$profileRule['id_chapter'] = $chapter;
 	
-		$this->dbQuery("UPDATE k_userprofile SET profileRule='".serialize($profileRule)."' WHERE id_profile=".$id_profile);
+		$this->mysql->query("UPDATE k_userprofile SET profileRule='".serialize($profileRule)."' WHERE id_profile=".$id_profile);
 	
 		$this->profile = $this->apiLoad('user')->userProfile($id_profile);
 	}

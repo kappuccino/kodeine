@@ -115,7 +115,7 @@ function socialAlertSet($opt){
 	# NEW !
 	#
 	if($opt['id_socialalert'] == NULL){
-		$this->dbQuery("INSERT INTO k_socialalert (socialAlertName) VALUES ('TEMP+NAME')");
+		$this->mysql->query("INSERT INTO k_socialalert (socialAlertName) VALUES ('TEMP+NAME')");
 		if($opt['debug']) $this->pre($this->db_query, $this->db_error);
 	
 		$id_socialalert = $this->db_insert_id;
@@ -128,7 +128,7 @@ function socialAlertSet($opt){
 	# CORE
 	#
 	$query = $this->dbUpdate(array('k_socialalert' => $opt['core']))." WHERE id_socialalert=".$id_socialalert;
-	$this->dbQuery($query);
+	$this->mysql->query($query);
 	if($opt['debug']) $this->pre("QUERY", $this->db_query, "ERROR", $this->db_error);
 
 	# FIELD
@@ -153,7 +153,7 @@ function socialAlertSet($opt){
 			}
 		}
 
-		$this->dbQuery($this->dbUpdate($def)." WHERE id_socialalert=".$id_socialalert);
+		$this->mysql->query($this->dbUpdate($def)." WHERE id_socialalert=".$id_socialalert);
 		if($opt['debug']) $this->pre($this->db_query, $this->db_error);
 	}
 
@@ -168,7 +168,7 @@ function socialAlertRemove($opt){
 	$id_socialalert = $opt['id_socialalert'];
 	if(intval($id_socialalert) == 0) return false;
 	
-	$this->dbQuery("DELETE FROM k_socialalert WHERE id_socialalert=".$id_socialalert);
+	$this->mysql->query("DELETE FROM k_socialalert WHERE id_socialalert=".$id_socialalert);
 	return true;
 }
 
@@ -206,7 +206,7 @@ function socialAlertMapping($opt){
 				if($f['fieldType'] == 'user'){
 					$v = is_array($v) ? $v : array(intval($v));
 					foreach($v as $id_user){
-						$tmp_ = $this->dbOne("SELECT id_user FROM k_user WHERE id_user=".$id_user);
+						$tmp_ = $this->mysql->one("SELECT id_user FROM k_user WHERE id_user=".$id_user);
 						if($tmp_['id_user'] != '') $tmp[] = $tmp_;
 					}
 
@@ -215,7 +215,7 @@ function socialAlertMapping($opt){
 				if($f['fieldType'] == 'content'){
 					$v = is_array($v) ? $v : array(intval($v));
 					foreach($v as $id_content){
-						$tmp_ = $this->dbOne("SELECT * FROM k_contentdata WHERE id_content=".$id_content);
+						$tmp_ = $this->mysql->one("SELECT * FROM k_contentdata WHERE id_content=".$id_content);
 						if($tmp_['id_content'] != '') $tmp[] = $tmp_;
 					}
 

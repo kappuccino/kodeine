@@ -14,17 +14,6 @@
 	// URL (Common URL Rewriting rules)
 	require(__DIR__ . '/module/core/helper/url.php');
 
-
-	$d = $app->load('content')->contentGet(array(
-		'debug' => true,
-		'id_content' => 324
-	));
-
-	var_dump($d);
-
-	die('@');
-
-
 // INIT KODEINE ////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	// Logout or Auto Login

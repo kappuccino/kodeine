@@ -153,7 +153,7 @@ function socialToolExternal($opt){
 		$field => array('value' => addslashes(json_encode($opengraph)))
 	));
 
-	$this->dbQuery($this->dbUpdate($def)." WHERE ".$ref.'='.$opt['id']);
+	$this->mysql->query($this->dbUpdate($def)." WHERE ".$ref.'='.$opt['id']);
 	#$this->pre($opengraph, $this->db_query, $this->db_error);	
 }
 

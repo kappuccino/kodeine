@@ -9,7 +9,7 @@ function socialUser(){}
 + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - */
 function socialUserGet($opt){
 
-	if(BENCHME) @$GLOBALS['bench']->benchmarkMarker($bmStep='socialUserGet() @='.json_encode($opt));
+	if(BENCHME) $this->bench->marker($bmStep='socialUserGet() @='.json_encode($opt));
 
 	if(intval($opt['id_user']) == 0){
 		if($opt['debug']) $this->pre("ERROR: ID_USER (NUMERIC)", "GIVEN", var_export($opt['id_user'], true));
@@ -19,7 +19,7 @@ function socialUserGet($opt){
 //	//	if($this->user['id_user'] > 0){
 	if($opt['id_user'] > 0){
 	
-		$so = $this->dbOne("SELECT * FROM k_usersocial WHERE id_user=".$opt['id_user']);
+		$so = $this->mysql->one("SELECT * FROM k_usersocial WHERE id_user=".$opt['id_user']);
 		$me = $this->apiLoad('user')->userGet(array_merge(array(
 			'id_user'	=> $opt['id_user'],
 			'useMedia'	=> true
@@ -62,7 +62,7 @@ function socialUserGet($opt){
 		$user = array();
 	}
 
-	if(BENCHME) @$GLOBALS['bench']->benchmarkMarker($bmStep);
+	if(BENCHME) $this->bench->marker($bmStep);
 	
 	return $user;
 }

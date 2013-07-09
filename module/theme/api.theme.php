@@ -38,7 +38,7 @@ class theme extends appModule {
 			$q = $this->dbInsert($def);
 		}
 
-		@$this->dbQuery($q);
+		@$this->mysql->query($q);
 		if($this->db_error != NULL) return false;
 
 		$this->id_theme = ($id_theme > 0) ? $id_theme : $this->db_insert_id;

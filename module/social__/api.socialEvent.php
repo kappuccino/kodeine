@@ -8,7 +8,7 @@ function __clone(){}
 //-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -
 function socialEventGet($opt=array()){
 
-	if(BENCHME) @$GLOBALS['bench']->benchmarkMarker($bmStep='socialEventGet() @='.json_encode($opt));
+	if(BENCHME) $this->bench->marker($bmStep='socialEventGet() @='.json_encode($opt));
 
 	if($opt['debug']) $this->pre("[OPT]", $opt);
 
@@ -136,7 +136,7 @@ function socialEventGet($opt=array()){
 
 	if($opt['debug']) $this->pre("[FORMAT]", $events);
 
-	if(BENCHME) @$GLOBALS['bench']->benchmarkMarker($bmStep);
+	if(BENCHME) $this->bench->marker($bmStep);
 
 	return $events;
 }
@@ -148,7 +148,7 @@ function socialEventSet($opt){
 	# NEW !
 	#
 	if($opt['id_socialevent'] == NULL){
-		$this->dbQuery("INSERT INTO k_socialevent (socialEventDateCreation, socialEventDateUpdate) VALUES (NOW(), NOW())");
+		$this->mysql->query("INSERT INTO k_socialevent (socialEventDateCreation, socialEventDateUpdate) VALUES (NOW(), NOW())");
 		if($opt['debug']) $this->pre($this->db_query, $this->db_error);
 		$id_socialevent = $this->db_insert_id;
 		
@@ -165,7 +165,7 @@ function socialEventSet($opt){
 	# CORE
 	#
 	$query = $this->dbUpdate(array('k_socialevent' => $opt['core']))." WHERE id_socialevent=".$id_socialevent;
-	$this->dbQuery($query);
+	$this->mysql->query($query);
 	if($opt['debug']) $this->pre($this->db_query, $this->db_error);
 
 	# FIELD
@@ -190,7 +190,7 @@ function socialEventSet($opt){
 			}
 		}
 
-		$this->dbQuery($this->dbUpdate($def)." WHERE id_socialevent=".$id_socialevent);
+		$this->mysql->query($this->dbUpdate($def)." WHERE id_socialevent=".$id_socialevent);
 		if($opt['debug']) $this->pre($this->db_query, $this->db_error);
 	}
 
@@ -272,7 +272,7 @@ function socialEventMapping($opt){
 				if($f['fieldType'] == 'user'){
 					$v = is_array($v) ? $v : array();
 					foreach($v as $id_user){
-						$tmp_ = $this->dbOne("SELECT id_user FROM k_user WHERE id_user=".$id_user);
+						$tmp_ = $this->mysql->one("SELECT id_user FROM k_user WHERE id_user=".$id_user);
 						if($tmp_['id_user'] != '') $tmp[] = $tmp_;
 					}
 
@@ -281,7 +281,7 @@ function socialEventMapping($opt){
 				if($f['fieldType'] == 'content'){
 					$v = is_array($v) ? $v : array();
 					foreach($v as $id_content){
-						$tmp_ = $this->dbOne("SELECT * FROM k_contentdata WHERE id_content=".$id_content);
+						$tmp_ = $this->mysql->one("SELECT * FROM k_contentdata WHERE id_content=".$id_content);
 						if($tmp_['id_content'] != '') $tmp[] = $tmp_;
 					}
 
@@ -305,7 +305,7 @@ function socialEventRemove($id_socialevent){
 	if(intval($id_socialevent) == 0) return false;
 
 	// USER
-	$users = $this->dbMulti("SELECT id_user FROM k_socialeventuser WHERE id_socialevent=".$id_socialevent);
+	$users = $this->mysql->multi("SELECT id_user FROM k_socialeventuser WHERE id_socialevent=".$id_socialevent);
 	$users = $this->dbKey($users, 'id_user');
 	foreach($users as $e){
 		$this->socialUserCacheClean($e);
@@ -323,13 +323,13 @@ function socialEventRemove($id_socialevent){
 	}
 
 	// REMOVE
-	$this->dbQuery("DELETE FROM k_socialeventpending 	WHERE id_socialevent=".$id_socialevent);
-	$this->dbQuery("DELETE FROM k_socialeventuser 		WHERE id_socialevent=".$id_socialevent);
-	$this->dbQuery("DELETE FROM k_socialeventuserdata	WHERE id_socialevent=".$id_socialevent);
-	$this->dbQuery("DELETE FROM k_socialevent 			WHERE id_socialevent=".$id_socialevent);
-	$this->dbQuery("DELETE FROM k_socialpostevent		WHERE id_socialevent=".$id_socialevent);
+	$this->mysql->query("DELETE FROM k_socialeventpending 	WHERE id_socialevent=".$id_socialevent);
+	$this->mysql->query("DELETE FROM k_socialeventuser 		WHERE id_socialevent=".$id_socialevent);
+	$this->mysql->query("DELETE FROM k_socialeventuserdata	WHERE id_socialevent=".$id_socialevent);
+	$this->mysql->query("DELETE FROM k_socialevent 			WHERE id_socialevent=".$id_socialevent);
+	$this->mysql->query("DELETE FROM k_socialpostevent		WHERE id_socialevent=".$id_socialevent);
 
-	$this->dbQuery("DELETE FROM k_socialsandbox 		WHERE socialSandboxId=".$id_socialevent." AND socialSandboxType='id_socialevent'");
+	$this->mysql->query("DELETE FROM k_socialsandbox 		WHERE socialSandboxId=".$id_socialevent." AND socialSandboxType='id_socialevent'");
 }
 
 //-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -
@@ -340,7 +340,7 @@ function socialEventHide($opt){
 	if(intval($id_socialevent) == 0) return false;
 
 	// USER
-	$users = $this->dbMulti("SELECT id_user FROM k_socialeventuser WHERE id_socialevent=".$id_socialevent);
+	$users = $this->mysql->multi("SELECT id_user FROM k_socialeventuser WHERE id_socialevent=".$id_socialevent);
 	foreach($users as $e){
 		$this->socialUserCacheClean($e['id_user']);
 	}
@@ -357,10 +357,10 @@ function socialEventHide($opt){
 	}
 
 	// HIDE
-	$this->dbQuery("UPDATE k_socialevent SET socialEventHide=1 WHERE id_socialevent=".$id_socialevent);
+	$this->mysql->query("UPDATE k_socialevent SET socialEventHide=1 WHERE id_socialevent=".$id_socialevent);
 
 	// REMOVE
-	$this->dbQuery("DELETE FROM k_socialsandbox WHERE socialSandboxId=".$id_socialevent." AND socialSandboxType='id_socialevent'");
+	$this->mysql->query("DELETE FROM k_socialsandbox WHERE socialSandboxId=".$id_socialevent." AND socialSandboxType='id_socialevent'");
 }
 
 /* + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + -
@@ -383,7 +383,7 @@ function socialEventMediaLink($opt){
 	# CLEAR and Exit 
 	#
 	if($opt['clear']){
-		$this->dbQuery("UPDATE k_socialevent SET socialEventMedia='' WHERE id_socialevent=".$opt['id_socialevent']);
+		$this->mysql->query("UPDATE k_socialevent SET socialEventMedia='' WHERE id_socialevent=".$opt['id_socialevent']);
 		if($opt['debug']) $this->pre("CLEAR", $this->db_query, $this->db_error);
 		return true;
 	}
@@ -419,7 +419,7 @@ function socialEventMediaLink($opt){
 			'socialEventMedia' => array('value' => json_encode($media))
 		));
 	
-		$this->dbQuery($this->dbUpdate($def)." WHERE id_socialevent=".$opt['id_socialevent']);
+		$this->mysql->query($this->dbUpdate($def)." WHERE id_socialevent=".$opt['id_socialevent']);
 		if($opt['debug']) $this->pre("UPDATE", $this->db_query, $this->db_error);
 
 		return true;
@@ -443,10 +443,10 @@ function socialEventPendingAccept($opt){
 	}
 
 	if(sizeof($add) > 0){
-		$this->dbQuery("DELETE FROM k_socialeventpending WHERE id_socialevent=".$id_socialevent." AND id_user IN(".implode(', ', $del).")");
+		$this->mysql->query("DELETE FROM k_socialeventpending WHERE id_socialevent=".$id_socialevent." AND id_user IN(".implode(', ', $del).")");
 		if($opt['debug']) $this->pre($this->db_query, $this->db_error);
 
-		$this->dbQuery("INSERT IGNORE INTO k_socialeventuser (id_socialevent, id_user, timeline) VALUES ".implode(', ', $add));
+		$this->mysql->query("INSERT IGNORE INTO k_socialeventuser (id_socialevent, id_user, timeline) VALUES ".implode(', ', $add));
 		if($opt['debug']) $this->pre($this->db_query, $this->db_error);
 	}
 
@@ -469,13 +469,13 @@ function socialEventPendingDismiss($opt){
 	$user			= is_array($opt['user']) ? $opt['user'] : array($opt['user']);
 	$where			= "WHERE id_socialevent=".$id_socialevent." AND id_user IN(".implode(',', $user).")";
 
-	$this->dbQuery("DELETE FROM k_socialeventuser  ".$where);
+	$this->mysql->query("DELETE FROM k_socialeventuser  ".$where);
 	if($opt['debug']) $this->pre($this->db_query, $this->db_error);
 
-	$this->dbQuery("DELETE FROM k_socialeventuserdata ".$where);
+	$this->mysql->query("DELETE FROM k_socialeventuserdata ".$where);
 	if($opt['debug']) $this->pre($this->db_query, $this->db_error);
 
-	$this->dbQuery("DELETE FROM k_socialeventpending ".$where);
+	$this->mysql->query("DELETE FROM k_socialeventpending ".$where);
 	if($opt['debug']) $this->pre($this->db_query, $this->db_error);
 
 	$this->socialEventMemberCount(array(
@@ -542,7 +542,7 @@ function socialEventPendingGet($opt){
 	if(sizeof($cond) > 0) $where = "\n\nWHERE\n\t".implode("\n\tAND\n\t", $cond)."\n";
 	if(sizeof($join) > 0) $join	 = "\n".implode("\n", $join)."\n";
 
-	$ids = $this->dbMulti("SELECT ".$select." FROM k_socialeventpending ". $join . $where);
+	$ids = $this->mysql->multi("SELECT ".$select." FROM k_socialeventpending ". $join . $where);
 	if($opt['debug']) $this->pre("[QUERY]", $this->db_query, "[ERROR]", $this->db_error, "[DATA]", $ids);
 
 	if(sizeof($ids) == 0) return array();
@@ -563,7 +563,7 @@ function socialEventPendingGet($opt){
 + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - */
 function socialEventMemberGet($opt){
 
-	if(BENCHME) @$GLOBALS['bench']->benchmarkMarker($bmStep='socialEventMemberGet() @='.json_encode($opt));
+	if(BENCHME) $this->bench->marker($bmStep='socialEventMemberGet() @='.json_encode($opt));
 
 	if($opt['debug']) $this->pre("OPTION", $opt);
 
@@ -614,7 +614,7 @@ function socialEventMemberGet($opt){
 	if(sizeof($cond) > 0) $where = "\n\nWHERE\n\t".implode("\n\tAND\n\t", $cond)."\n";
 	if(sizeof($join) > 0) $join	 = "\n".implode("\n", $join)."\n";
 
-	$ids = $this->dbMulti("SELECT ".$select." FROM k_socialeventuser ". $join . $where);
+	$ids = $this->mysql->multi("SELECT ".$select." FROM k_socialeventuser ". $join . $where);
 	if($opt['debug']) $this->pre("[QUERY]", $this->db_query, "[ERROR]", $this->db_error, "[DATA]", $ids);
 
 	if(sizeof($ids) == 0) return array();
@@ -627,7 +627,7 @@ function socialEventMemberGet($opt){
 		$tmp[] = $id[$f];
 	}
 
-	if(BENCHME) @$GLOBALS['bench']->benchmarkMarker($bmStep);
+	if(BENCHME) $this->bench->marker($bmStep);
 
 	return $tmp;
 }
@@ -653,7 +653,7 @@ function socialEventMemberAdd($opt){
 	}
 
 	if(sizeof($tmp) > 0){
-		$this->dbQuery("INSERT IGNORE INTO ".$table." (id_socialevent, id_user, timeline) VALUES ".implode(', ', $tmp));
+		$this->mysql->query("INSERT IGNORE INTO ".$table." (id_socialevent, id_user, timeline) VALUES ".implode(', ', $tmp));
 		if($opt['debug']) $this->pre($this->db_query, $this->db_error);
 	}
 
@@ -684,13 +684,13 @@ function socialEventMemberRemove($opt){
 	$user			= is_array($opt['user']) ? $opt['user'] : array($opt['user']);
 	$where 			= "WHERE id_socialevent=".$id_socialevent." AND id_user IN(".implode(',', $user).")";
 
-	$this->dbQuery("DELETE FROM k_socialeventpending ".$where);
+	$this->mysql->query("DELETE FROM k_socialeventpending ".$where);
 	if($opt['debug']) $this->pre($this->db_query, $this->db_error);
 
-	$this->dbQuery("DELETE FROM k_socialeventuser ".$where);
+	$this->mysql->query("DELETE FROM k_socialeventuser ".$where);
 	if($opt['debug']) $this->pre($this->db_query, $this->db_error);
 
-	$this->dbQuery("DELETE FROM k_socialeventuserdata ".$where);
+	$this->mysql->query("DELETE FROM k_socialeventuserdata ".$where);
 	if($opt['debug']) $this->pre($this->db_query, $this->db_error);
 
 	$this->socialEventMemberCount(array(
@@ -720,14 +720,14 @@ function socialEventMemberCount($opt){
 	}
 
 	// Member
-	$c = $this->dbOne("SELECT COUNT(*) AS c FROM k_socialeventuser WHERE id_socialevent=".$id_socialevent);
-	$this->dbQuery("UPDATE k_socialevent SET socialEventMemberCount=".intval($c['c'])." WHERE id_socialevent=".$id_socialevent);
+	$c = $this->mysql->one("SELECT COUNT(*) AS c FROM k_socialeventuser WHERE id_socialevent=".$id_socialevent);
+	$this->mysql->query("UPDATE k_socialevent SET socialEventMemberCount=".intval($c['c'])." WHERE id_socialevent=".$id_socialevent);
 	if($opt['debug']) $this->pre($this->db_query, $this->db_error);
 	
 
 	// Pending
-	$c = $this->dbOne("SELECT COUNT(*) AS c FROM k_socialeventpending WHERE id_socialevent=".$id_socialevent);
-	$this->dbQuery("UPDATE k_socialevent SET socialEventPendingCount=".intval($c['c'])." WHERE id_socialevent=".$id_socialevent);
+	$c = $this->mysql->one("SELECT COUNT(*) AS c FROM k_socialeventpending WHERE id_socialevent=".$id_socialevent);
+	$this->mysql->query("UPDATE k_socialevent SET socialEventPendingCount=".intval($c['c'])." WHERE id_socialevent=".$id_socialevent);
 	if($opt['debug']) $this->pre($this->db_query, $this->db_error);
 
 	return true;
@@ -746,19 +746,19 @@ function socialEventMemberFix($opt){
 
 		// Member
 		$mem		= array();
-		$events	= $this->dbMulti("SELECT id_socialevent FROM  k_socialeventuser WHERE id_user=".$u);
+		$events	= $this->mysql->multi("SELECT id_socialevent FROM  k_socialeventuser WHERE id_user=".$u);
 		foreach($events as $c){ $mem[] = intval($c['id_socialevent']); }
 		$jsonM		= json_encode($mem);
 
 		// Owner
 		$own		= array();
-		$owner		= $this->dbMulti("SELECT id_socialevent FROM  k_socialevent WHERE id_user=".$u);
+		$owner		= $this->mysql->multi("SELECT id_socialevent FROM  k_socialevent WHERE id_user=".$u);
 		foreach($owner as $o){ $own[] = intval($o['id_socialevent']); }
 		$jsonO		= json_encode($own);
 
 		// Pending
 		$pend		= array();
-		$pending	= $this->dbMulti("SELECT id_socialevent FROM  k_socialeventpending WHERE id_user=".$u);
+		$pending	= $this->mysql->multi("SELECT id_socialevent FROM  k_socialeventpending WHERE id_user=".$u);
 		foreach($pending as $p){ $pend[] = intval($p['id_socialevent']); }
 		$jsonP		= json_encode($pend);
 
@@ -775,7 +775,7 @@ function socialEventMemberFix($opt){
 			"userSocialEventOwner='".$jsonO."', ".
 			"userSocialEventPending='".$jsonP."'; ";
 
-		$this->dbQuery($query);
+		$this->mysql->query($query);
 		if($opt['debug']) $this->pre($this->db_query, $this->db_error);
 
 		// Cache cleaning
@@ -904,7 +904,7 @@ function socialEventUserDataSet($opt){
 	$query	= $this->dbInsert(array('k_socialeventuserdata' => $core)).
 			  "\nON DUPLICATE KEY UPDATE socialEventUserDataDateUpdate = NOW();";
 	
-	$this->dbQuery($query);
+	$this->mysql->query($query);
 	if($opt['debug']) $this->pre($this->db_query, $this->db_error);
 	
 
@@ -912,7 +912,7 @@ function socialEventUserDataSet($opt){
 	#
 	$where	= " WHERE id_socialevent=".$opt['id_socialevent']." AND id_user=".$opt['id_user'];
 	if(is_array($opt['core'])){
-		$this->dbQuery($this->dbUpdate(array('k_socialeventuserdata' => $opt['core'])).$where);
+		$this->mysql->query($this->dbUpdate(array('k_socialeventuserdata' => $opt['core'])).$where);
 		if($opt['debug']) $this->pre($this->db_query, $this->db_error);
 	}
 
@@ -939,7 +939,7 @@ function socialEventUserDataSet($opt){
 			}
 		}
 
-		$this->dbQuery($this->dbUpdate($def).$where);
+		$this->mysql->query($this->dbUpdate($def).$where);
 		if($opt['debug']) $this->pre($this->db_query, $this->db_error);
 	}
 

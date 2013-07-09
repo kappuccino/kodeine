@@ -301,13 +301,13 @@ class appHelper{
 
 			if($id_content != NULL) $idc = " AND id_content != ".$id_content;
 
-			$content = $this->dbMulti("SELECT contentUrl FROM k_contentdata WHERE contentUrl='".$url."' AND language='".$language."'".$idc);
+			$content = $this->mysql->multi("SELECT contentUrl FROM k_contentdata WHERE contentUrl='".$url."' AND language='".$language."'".$idc);
 
 			if(sizeof($content) > 0){
 				$i = 1;
 
 				while(!$found && $i <= 100){
-					$check = $this->dbOne("SELECT 1 FROM k_contentdata WHERE contentUrl='".$url."-".$i."' AND language='".$language."'");
+					$check = $this->mysql->one("SELECT 1 FROM k_contentdata WHERE contentUrl='".$url."-".$i."' AND language='".$language."'");
 
 					if(!$check[1]){
 						$url	= $url.'-'.$i;

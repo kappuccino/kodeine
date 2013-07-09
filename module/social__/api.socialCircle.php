@@ -8,7 +8,7 @@ function __clone(){}
 //-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -
 function socialCircleGet($opt=array()){
 
-	if(BENCHME) @$GLOBALS['bench']->benchmarkMarker($bmStep='socialCircleGet() @='.json_encode($opt));
+	if(BENCHME) $this->bench->marker($bmStep='socialCircleGet() @='.json_encode($opt));
 
 	if($opt['debug']) $this->pre("[OPT]", $opt);
 
@@ -143,7 +143,7 @@ function socialCircleGet($opt=array()){
 
 	if($opt['debug']) $this->pre("[FORMAT]", $circles);
 
-	if(BENCHME) @$GLOBALS['bench']->benchmarkMarker($bmStep);
+	if(BENCHME) $this->bench->marker($bmStep);
 
 	return $circles;
 }
@@ -155,7 +155,7 @@ function socialCircleSet($opt){
 	# NEW !
 	#
 	if($opt['id_socialcircle'] == NULL){
-		$this->dbQuery("INSERT INTO k_socialcircle (socialCircleDateCreation, socialCircleDateUpdate) VALUES (NOW(), NOW())");
+		$this->mysql->query("INSERT INTO k_socialcircle (socialCircleDateCreation, socialCircleDateUpdate) VALUES (NOW(), NOW())");
 		if($opt['debug']) $this->pre($this->db_query, $this->db_error);
 		$id_socialcircle = $this->db_insert_id;
 		
@@ -172,7 +172,7 @@ function socialCircleSet($opt){
 	# CORE
 	#
 	$query = $this->dbUpdate(array('k_socialcircle' => $opt['core']))." WHERE id_socialcircle=".$id_socialcircle;
-	$this->dbQuery($query);
+	$this->mysql->query($query);
 	if($opt['debug']) $this->pre($this->db_query, $this->db_error);
 
 	# FIELD
@@ -194,7 +194,7 @@ function socialCircleSet($opt){
 			$def['k_socialcircle']['field'.$id_field] = array('value' => $value); 
 		}
 
-		$this->dbQuery($this->dbUpdate($def)." WHERE id_socialcircle=".$id_socialcircle);
+		$this->mysql->query($this->dbUpdate($def)." WHERE id_socialcircle=".$id_socialcircle);
 		if($opt['debug']) $this->pre($this->db_query, $this->db_error);
 	}
 
@@ -274,7 +274,7 @@ function socialCircleMapping($opt){
 				if(is_array($v) && $f['fieldType'] == 'user'){
 					unset($tmp);
 					foreach($v as $id_user){
-						$tmp[] = $this->dbOne("SELECT * FROM k_user WHERE id_user=".$id_user);
+						$tmp[] = $this->mysql->one("SELECT * FROM k_user WHERE id_user=".$id_user);
 					}
 					$circles[$n]['field'][$f['fieldKey']] = $tmp;
 				}else
@@ -282,7 +282,7 @@ function socialCircleMapping($opt){
 				if(is_array($v) && $f['fieldType'] == 'content'){
 					unset($tmp);
 					foreach($v as $id_content){
-						$tmp[] = $this->dbOne("SELECT * FROM k_contentdata WHERE id_content=".$id_content);
+						$tmp[] = $this->mysql->one("SELECT * FROM k_contentdata WHERE id_content=".$id_content);
 					}
 					$circles[$n]['field'][$f['fieldKey']] = $tmp;
 				}else
@@ -313,7 +313,7 @@ function socialCircleRemove($id_socialcircle){
 	if(intval($id_socialcircle) == 0) return false;
 
 	// Cache cleaning
-	$users = $this->dbMulti("SELECT id_user FROM k_socialcircleuser WHERE id_socialcircle=".$id_socialcircle);
+	$users = $this->mysql->multi("SELECT id_user FROM k_socialcircleuser WHERE id_socialcircle=".$id_socialcircle);
 	$users = $this->dbKey($users, 'id_user');
 
 	foreach($users as $e){
@@ -321,9 +321,9 @@ function socialCircleRemove($id_socialcircle){
 	}
 
 	// Suppression du CIRCLE et de ses USER
-	$this->dbQuery("DELETE FROM k_socialcirclepending 	WHERE id_socialcircle=".$id_socialcircle);
-	$this->dbQuery("DELETE FROM k_socialcircleuser 		WHERE id_socialcircle=".$id_socialcircle);
-	$this->dbQuery("DELETE FROM k_socialcircle 			WHERE id_socialcircle=".$id_socialcircle);
+	$this->mysql->query("DELETE FROM k_socialcirclepending 	WHERE id_socialcircle=".$id_socialcircle);
+	$this->mysql->query("DELETE FROM k_socialcircleuser 		WHERE id_socialcircle=".$id_socialcircle);
+	$this->mysql->query("DELETE FROM k_socialcircle 			WHERE id_socialcircle=".$id_socialcircle);
 
 	// Supprime les POST relier a ce CIRCLE
 	$posts = $this->apiLoad('socialPost')->socialPostGet(array(
@@ -346,17 +346,17 @@ function socialCircleHide($opt){
 	if(intval($id_socialcircle) == 0) return false;
 
 	// Cache cleaning
-	$users = $this->dbMulti("SELECT id_user FROM k_socialcircleuser WHERE id_socialcircle=".$id_socialcircle);
+	$users = $this->mysql->multi("SELECT id_user FROM k_socialcircleuser WHERE id_socialcircle=".$id_socialcircle);
 	foreach($users as $e){
 		$this->socialUserCacheClean($e['id_user']);
 	}
 
 	// Suppression des data CIRCLE/USER
-	$this->dbQuery("DELETE FROM k_socialcirclepending 	WHERE id_socialcircle=".$id_socialcircle);
-	$this->dbQuery("DELETE FROM k_socialcircleuser 		WHERE id_socialcircle=".$id_socialcircle);
+	$this->mysql->query("DELETE FROM k_socialcirclepending 	WHERE id_socialcircle=".$id_socialcircle);
+	$this->mysql->query("DELETE FROM k_socialcircleuser 		WHERE id_socialcircle=".$id_socialcircle);
 
 	// Masquer le CIRCLE
-	$this->dbQuery("UPDATE k_socialcircle SET socialCircleHide=1 WHERE id_socialcircle=".$id_socialcircle);
+	$this->mysql->query("UPDATE k_socialcircle SET socialCircleHide=1 WHERE id_socialcircle=".$id_socialcircle);
 
 	// Supprime les POST relier a ce CIRCLE
 	$posts = $this->apiLoad('socialPost')->socialPostGet(array(
@@ -391,7 +391,7 @@ function socialCircleMediaLink($opt){
 	# CLEAR and Exit 
 	#
 	if($opt['clear']){
-		$this->dbQuery("UPDATE k_socialcircle SET socialCircleMedia='' WHERE id_socialcircle=".$opt['id_socialcircle']);
+		$this->mysql->query("UPDATE k_socialcircle SET socialCircleMedia='' WHERE id_socialcircle=".$opt['id_socialcircle']);
 		if($opt['debug']) $this->pre("CLEAR", $this->db_query, $this->db_error);
 		return true;
 	}
@@ -427,7 +427,7 @@ function socialCircleMediaLink($opt){
 			'socialCircleMedia' => array('value' => json_encode($media))
 		));
 	
-		$this->dbQuery($this->dbUpdate($def)." WHERE id_socialcircle=".$opt['id_socialcircle']);
+		$this->mysql->query($this->dbUpdate($def)." WHERE id_socialcircle=".$opt['id_socialcircle']);
 		if($opt['debug']) $this->pre("UPDATE", $this->db_query, $this->db_error);
 
 		return true;
@@ -454,10 +454,10 @@ function socialCirclePendingAccept($opt){
 	}
 
 	if(sizeof($add) > 0){
-		$this->dbQuery("DELETE FROM k_socialcirclepending WHERE id_socialcircle=".$id_socialcircle." AND id_user IN(".implode(', ', $del).")");
+		$this->mysql->query("DELETE FROM k_socialcirclepending WHERE id_socialcircle=".$id_socialcircle." AND id_user IN(".implode(', ', $del).")");
 		if($opt['debug']) $this->pre($this->db_query, $this->db_error);
 
-		$this->dbQuery("INSERT IGNORE INTO k_socialcircleuser (id_socialcircle, id_user, timeline) VALUES ".implode(', ', $add));
+		$this->mysql->query("INSERT IGNORE INTO k_socialcircleuser (id_socialcircle, id_user, timeline) VALUES ".implode(', ', $add));
 		if($opt['debug']) $this->pre($this->db_query, $this->db_error);
 
 		// ACTIVITY + NOTIFICATION
@@ -494,10 +494,10 @@ function socialCirclePendingDismiss($opt){
 
 	$user = is_array($user) ? $user : array($user);
 
-	$this->dbQuery("DELETE FROM k_socialcircleuser 	  WHERE id_socialcircle=".$id_socialcircle." AND id_user IN(".implode(',', $user).")");
+	$this->mysql->query("DELETE FROM k_socialcircleuser 	  WHERE id_socialcircle=".$id_socialcircle." AND id_user IN(".implode(',', $user).")");
 	if($opt['debug']) $this->pre($this->db_query, $this->db_error);
 
-	$this->dbQuery("DELETE FROM k_socialcirclepending WHERE id_socialcircle=".$id_socialcircle." AND id_user IN(".implode(',', $user).")");
+	$this->mysql->query("DELETE FROM k_socialcirclepending WHERE id_socialcircle=".$id_socialcircle." AND id_user IN(".implode(',', $user).")");
 	if($opt['debug']) $this->pre($this->db_query, $this->db_error);
 
 	$this->socialCircleMemberCount(array(
@@ -565,7 +565,7 @@ function socialCirclePendingGet($opt){
 	if(sizeof($cond) > 0) $where = "\n\nWHERE\n\t".implode("\n\tAND\n\t", $cond)."\n";
 	if(sizeof($join) > 0) $join	 = "\n".implode("\n", $join)."\n";
 
-	$ids = $this->dbMulti("SELECT ".$select." FROM k_socialcirclepending ". $join . $where);
+	$ids = $this->mysql->multi("SELECT ".$select." FROM k_socialcirclepending ". $join . $where);
 	if($opt['debug']) $this->pre("[QUERY]", $this->db_query, "[ERROR]", $this->db_error, "[DATA]", $ids);
 
 	if(sizeof($ids) == 0) return array();
@@ -586,7 +586,7 @@ function socialCirclePendingGet($opt){
 + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - */
 function socialCircleMemberGet($opt){
 
-	if(BENCHME) @$GLOBALS['bench']->benchmarkMarker($bmStep='socialCircleMemberGet() @='.json_encode($opt));
+	if(BENCHME) $this->bench->marker($bmStep='socialCircleMemberGet() @='.json_encode($opt));
 
 	if($opt['debug']) $this->pre("OPTION", $opt);
 
@@ -637,7 +637,7 @@ function socialCircleMemberGet($opt){
 	if(sizeof($cond) > 0) $where = "\n\nWHERE\n\t".implode("\n\tAND\n\t", $cond)."\n";
 	if(sizeof($join) > 0) $join	 = "\n".implode("\n", $join)."\n";
 
-	$ids = $this->dbMulti("SELECT ".$select." FROM k_socialcircleuser ". $join . $where);
+	$ids = $this->mysql->multi("SELECT ".$select." FROM k_socialcircleuser ". $join . $where);
 	if($opt['debug']) $this->pre("[QUERY]", $this->db_query, "[ERROR]", $this->db_error, "[DATA]", $ids);
 
 	if(sizeof($ids) == 0) return array();
@@ -650,7 +650,7 @@ function socialCircleMemberGet($opt){
 		$tmp[] = $id[$f];
 	}
 
-	if(BENCHME) @$GLOBALS['bench']->benchmarkMarker($bmStep);
+	if(BENCHME) $this->bench->marker($bmStep);
 
 	return $tmp;
 }
@@ -679,7 +679,7 @@ if($opt['debug']) $this->pre($opt);
 	}
 
 	if(sizeof($tmp) > 0){
-		$this->dbQuery("INSERT IGNORE INTO ".$table." (id_socialcircle, id_user, timeline) VALUES ".implode(', ', $tmp));
+		$this->mysql->query("INSERT IGNORE INTO ".$table." (id_socialcircle, id_user, timeline) VALUES ".implode(', ', $tmp));
 		if($opt['debug']) $this->pre($this->db_query, $this->db_error);
 	}
 
@@ -726,7 +726,7 @@ function socialCircleMemberRemove($opt){
 
 	$user = is_array($user) ? $user : array($user);
 
-	$this->dbQuery("DELETE FROM k_socialcircleuser WHERE id_socialcircle=".$id_socialcircle." AND id_user IN(".implode(',', $user).")");
+	$this->mysql->query("DELETE FROM k_socialcircleuser WHERE id_socialcircle=".$id_socialcircle." AND id_user IN(".implode(',', $user).")");
 	if($opt['debug']) $this->pre($this->db_query, $this->db_error);
 
 	$this->socialCircleMemberCount(array(
@@ -768,14 +768,14 @@ function socialCircleMemberCount($opt){
 	}
 
 	// Member
-	$c = $this->dbOne("SELECT COUNT(*) AS c FROM k_socialcircleuser WHERE id_socialcircle=".$id_socialcircle);
-	$this->dbQuery("UPDATE k_socialcircle SET socialCircleMemberCount=".intval($c['c'])." WHERE id_socialcircle=".$id_socialcircle);
+	$c = $this->mysql->one("SELECT COUNT(*) AS c FROM k_socialcircleuser WHERE id_socialcircle=".$id_socialcircle);
+	$this->mysql->query("UPDATE k_socialcircle SET socialCircleMemberCount=".intval($c['c'])." WHERE id_socialcircle=".$id_socialcircle);
 	if($opt['debug']) $this->pre($this->db_query, $this->db_error);
 	
 
 	// Pending
-	$c = $this->dbOne("SELECT COUNT(*) AS c FROM k_socialcirclepending WHERE id_socialcircle=".$id_socialcircle);
-	$this->dbQuery("UPDATE k_socialcircle SET socialCirclePendingCount=".intval($c['c'])." WHERE id_socialcircle=".$id_socialcircle);
+	$c = $this->mysql->one("SELECT COUNT(*) AS c FROM k_socialcirclepending WHERE id_socialcircle=".$id_socialcircle);
+	$this->mysql->query("UPDATE k_socialcircle SET socialCirclePendingCount=".intval($c['c'])." WHERE id_socialcircle=".$id_socialcircle);
 	if($opt['debug']) $this->pre($this->db_query, $this->db_error);
 	
 	return true;
@@ -794,19 +794,19 @@ function socialCircleMemberFix($opt){
 
 		// Member
 		$mem		= array();
-		$circles	= $this->dbMulti("SELECT id_socialcircle FROM  k_socialcircleuser WHERE id_user=".$u);
+		$circles	= $this->mysql->multi("SELECT id_socialcircle FROM  k_socialcircleuser WHERE id_user=".$u);
 		foreach($circles as $c){ $mem[] = intval($c['id_socialcircle']); }
 		$jsonM		= json_encode($mem);
 
 		// Owner
 		$own		= array();
-		$owner		= $this->dbMulti("SELECT id_socialcircle FROM  k_socialcircle WHERE id_user=".$u);
+		$owner		= $this->mysql->multi("SELECT id_socialcircle FROM  k_socialcircle WHERE id_user=".$u);
 		foreach($owner as $o){ $own[] = intval($o['id_socialcircle']); }
 		$jsonO		= json_encode($own);
 
 		// Pending
 		$pend		= array();
-		$pending	= $this->dbMulti("SELECT id_socialcircle FROM  k_socialcirclepending WHERE id_user=".$u);
+		$pending	= $this->mysql->multi("SELECT id_socialcircle FROM  k_socialcirclepending WHERE id_user=".$u);
 		foreach($pending as $p){ $pend[] = intval($p['id_socialcircle']); }
 		$jsonP		= json_encode($pend);
 
@@ -823,7 +823,7 @@ function socialCircleMemberFix($opt){
 			"userSocialCircleOwner='".$jsonO."', ".
 			"userSocialCirclePending='".$jsonP."'; ";
 
-		$this->dbQuery($query);
+		$this->mysql->query($query);
 		if($opt['debug']) $this->pre($this->db_query, $this->db_error);
 
 		// Cache cleaning

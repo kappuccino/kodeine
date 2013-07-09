@@ -14,7 +14,7 @@ public function logAdd($data){
 		$def['k_log'][$k] = array('value' => $v);
 	}
 
-	$this->dbQuery($this->dbInsert($def));
+	$this->mysql->query($this->dbInsert($def));
 	#$this->pre($this->db_query, $this->db_error);
 }
 

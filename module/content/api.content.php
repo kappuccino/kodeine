@@ -87,15 +87,14 @@ public function contentGet($opt=array()){
 
 	# Detecter si je suis en mode IS_ITEM ou IS_ALBUM
 	#
-	$is_item	= isset($opt['is_item'])  ? true : (($data['is_item']  === '1') ? true : false);
-	$is_album	= isset($opt['is_album']) ? true : (($data['is_album'] === '1') ? true : false);
+	$is_item  = isset($opt['is_item'])  ? true : (($data['is_item']  === '1') ? true : false);
+	$is_album = isset($opt['is_album']) ? true : (($data['is_album'] === '1') ? true : false);
 	if($is_item && $is_album){
 		if($opt['debug']) $this->helper->pre("Fatal Error : IS_ITEM=TRUE + IS_ALBUM=TRUE !");
 		return array();
 	}
 
-	# Trouver le TYPE
-	#
+	// Trouver le TYPE /////////////////////////////////////////////////////////////////////////////////////////////////
 	$type = $this->app->load('type')->typeGet(array(
 		'id_type' => $opt['id_type'],
 		'typeKey' => $opt['typeKey']
@@ -113,12 +112,11 @@ public function contentGet($opt=array()){
 	if($useSocialForum 	=== 'checkType') $useSocialForum	= ($type['use_socialforum'] === '1');
 
 
-	# Demander les FIELDS pour ce CONTENT
-	#
+	// FIELDS pour ce CONTENT //////////////////////////////////////////////////////////////////////////////////////////
 	$field = $this->app->load('field')->fieldGet(array(
-		'id_type'		=> $type['id_type'],
-		'albumField'	=> $is_album,
-		'itemField'		=> $is_item
+		'id_type'    => $type['id_type'],
+		'albumField' => $is_album,
+		'itemField'  => $is_item
 	));
 
 	foreach($field as $f){
@@ -740,7 +738,7 @@ public function contentGet($opt=array()){
 
 	if($opt['debug']) $this->helper->pre("OUTPUT", $content);
 
-	if(BENCHME) @$GLOBALS['bench']->benchmarkMarker($bmStep);
+	if(BENCHME) $this->bench->marker($bmStep);
 
     $content  = $this->hookFilter('contentGet', $content);
 
@@ -766,7 +764,7 @@ public function contentSet($opt){
 
 	# Core
 	if($id_content == NULL){
-		$this->dbQuery("INSERT INTO k_content (id_type, id_user) VALUES ('".$id_type."','".$this->user['id_user']."')");
+		$this->mysql->query("INSERT INTO k_content (id_type, id_user) VALUES ('".$id_type."','".$this->user['id_user']."')");
 		$id_content = $this->db_insert_id;
 		if($opt['debug']) $this->helper->pre($this->db_query, $this->db_error, 'ID_CONTENT >> '.$id_content);
 	}
@@ -781,7 +779,7 @@ public function contentSet($opt){
 			$extType = $this->mysql->one("SELECT 1 FROM k_contentitem".$id_type." WHERE id_content=".$this->id_content." AND language='".$language."'");
 	
 			if(!$extType[1]){
-				$this->dbQuery("INSERT INTO k_contentitem".$id_type." (id_content,language) VALUES (".$this->id_content.",'".$language."')");
+				$this->mysql->query("INSERT INTO k_contentitem".$id_type." (id_content,language) VALUES (".$this->id_content.",'".$language."')");
 				if($opt['debug']) $this->helper->pre($this->db_query, $this->db_error);
 			}
 		}else
@@ -790,7 +788,7 @@ public function contentSet($opt){
 			$extType = $this->mysql->one("SELECT 1 FROM k_contentalbum".$id_type." WHERE id_content=".$this->id_content." AND language='".$language."'");
 	
 			if(!$extType[1]){
-				$this->dbQuery("INSERT INTO k_contentalbum".$id_type." (id_content,language) VALUES (".$this->id_content.",'".$language."')");
+				$this->mysql->query("INSERT INTO k_contentalbum".$id_type." (id_content,language) VALUES (".$this->id_content.",'".$language."')");
 				if($opt['debug']) $this->helper->pre($this->db_query, $this->db_error);
 			}
 		}
@@ -799,7 +797,7 @@ public function contentSet($opt){
 			$extType = $this->mysql->one("SELECT 1 FROM k_content".$id_type." WHERE id_content=".$this->id_content." AND language='".$language."'");
 	
 			if(!$extType[1]){
-				$this->dbQuery("INSERT INTO k_content".$id_type." (id_content,language) VALUES (".$this->id_content.",'".$language."')");
+				$this->mysql->query("INSERT INTO k_content".$id_type." (id_content,language) VALUES (".$this->id_content.",'".$language."')");
 				if($opt['debug']) $this->helper->pre($this->db_query, $this->db_error);
 			}
 		}
@@ -813,12 +811,12 @@ public function contentSet($opt){
 		#if($opt['debug']) $this->helper->pre($this->db_query, $this->db_error, $extData);
 
 		if(!$extData[1]){
-			$this->dbQuery("INSERT INTO k_contentdata (id_content, language) VALUES (".$this->id_content.",'".$language."')");
+			$this->mysql->query("INSERT INTO k_contentdata (id_content, language) VALUES (".$this->id_content.",'".$language."')");
 			if($opt['debug']) $this->helper->pre($this->db_query, $this->db_error);
 		}
 
 		$q = $this->dbUpdate($data)." WHERE language='".$language."' AND id_content=".$this->id_content;
-		@$this->dbQuery($q);
+		@$this->mysql->query($q);
 		if($opt['debug']) $this->helper->pre($this->db_query, $this->db_error);
 	}
 
@@ -831,19 +829,19 @@ public function contentSet($opt){
 		#if($opt['debug']) $this->helper->pre($this->db_query, $this->db_error, $extItem);
 
 		if(!$extItem[1]){
-			$this->dbQuery("INSERT INTO k_contentitem (id_content) VALUES (".$this->id_content.")");
+			$this->mysql->query("INSERT INTO k_contentitem (id_content) VALUES (".$this->id_content.")");
 			if($opt['debug']) $this->helper->pre($this->db_query, $this->db_error);
 		}
 
 		if(sizeof($item) > 0){
-			@$this->dbQuery($this->dbUpdate($item)." WHERE id_content=".$this->id_content);
+			@$this->mysql->query($this->dbUpdate($item)." WHERE id_content=".$this->id_content);
 			if($opt['debug']) $this->helper->pre($this->db_query, $this->db_error);
 		}
 
 		$id_album = $item['k_contentitem']['id_album']['value'];
 		if($id_album > 0 && $def['k_content']['id_content']['value'] == ''){
 			$last = $this->mysql->one("SELECT MAX(contentItemPos) AS la FROM k_contentitem WHERE id_album=".$id_album);
-			$this->dbQuery("UPDATE k_contentitem SET contentItemPos=".($last['la'] + 1)." WHERE id_content=".$this->id_content." AND id_album=".$item['k_contentitem']['id_album']['value']);
+			$this->mysql->query("UPDATE k_contentitem SET contentItemPos=".($last['la'] + 1)." WHERE id_content=".$this->id_content." AND id_album=".$item['k_contentitem']['id_album']['value']);
 			if($opt['debug']) $this->helper->pre($this->db_query, $this->db_error);
 		}
 	}
@@ -856,12 +854,12 @@ public function contentSet($opt){
 		if($opt['debug']) $this->helper->pre($this->db_query, $this->db_error, $extAlb);
 
 		if(!$extAlb[1]){
-			$this->dbQuery("INSERT INTO k_contentalbum (id_content) VALUES (".$this->id_content.")");
+			$this->mysql->query("INSERT INTO k_contentalbum (id_content) VALUES (".$this->id_content.")");
 			if($opt['debug']) $this->helper->pre($this->db_query, $this->db_error);
 		}
 
 		if(isset($opt['album'])){
-			$this->dbQuery($this->dbUpdate($album)." WHERE id_content=".$this->id_content);
+			$this->mysql->query($this->dbUpdate($album)." WHERE id_content=".$this->id_content);
 		}
 	}
 
@@ -870,7 +868,7 @@ public function contentSet($opt){
 	#
 	if(isset($opt['def'])){
 		$q = $this->dbUpdate($def)." WHERE id_content=".$this->id_content;
-		@$this->dbQuery($q);
+		@$this->mysql->query($q);
 		if($opt['debug']) $this->helper->pre($this->db_query, $this->db_error);
 		if($this->db_error != NULL) return false;
 	}
@@ -916,7 +914,7 @@ public function contentSet($opt){
 		}
 
 		if(sizeof($def) > 0){
-			$this->dbQuery($this->dbUpdate($def)." WHERE language='".$language."' AND id_content=".$this->id_content);
+			$this->mysql->query($this->dbUpdate($def)." WHERE language='".$language."' AND id_content=".$this->id_content);
 			if($opt['debug']) $this->helper->pre($this->db_query, $this->db_error);
 		}
 	}
@@ -964,10 +962,10 @@ public function contentSet($opt){
 			$exists = $this->mysql->one("SELECT 1 FROM k_contentgroupbusiness WHERE id_content=".$this->id_content." AND id_group=".$id_group);
 
 			if(!$exists['1'] && $e['is_view']){
-				$this->dbQuery("INSERT INTO k_contentgroupbusiness (id_content, id_group) VALUES (".$this->id_content.", ".$id_group.")");
+				$this->mysql->query("INSERT INTO k_contentgroupbusiness (id_content, id_group) VALUES (".$this->id_content.", ".$id_group.")");
 			}else
 			if($exists['1'] && !$e['is_view']){
-				$this->dbQuery("DELETE FROM k_contentgroupbusiness WHERE id_content=".$this->id_content." AND id_group=".$id_group);
+				$this->mysql->query("DELETE FROM k_contentgroupbusiness WHERE id_content=".$this->id_content." AND id_group=".$id_group);
 			}
 
 			$def = array('k_contentgroupbusiness' => array(
@@ -979,7 +977,7 @@ public function contentSet($opt){
 				'contentPriceComment'	=> array('value' => $e['contentPriceComment'],							'null' => true)
 			));
 			
-			$this->dbQuery($this->dbUpdate($def)." WHERE id_content=".$this->id_content." AND id_group=".$id_group);
+			$this->mysql->query($this->dbUpdate($def)." WHERE id_content=".$this->id_content." AND id_group=".$id_group);
 			if($opt['debug']) $this->helper->pre($this->db_query, $this->db_error);
 		}
 	}
@@ -997,7 +995,7 @@ public function contentSet($opt){
 			? $this->dbUpdate(array('k_contentad' => $opt['ad'])).$cond
 			: $this->dbInsert(array('k_contentad' => $opt['ad']));
 
-		$this->dbQuery($query);
+		$this->mysql->query($query);
 		if($opt['debug']) $this->helper->pre($this->db_query, $this->db_error);
 	}
 
@@ -1127,14 +1125,14 @@ public function contentDuplicate($id_content){
 
 	# Dupliquer la partie Core
 	#
-	$this->dbQuery("INSERT INTO k_content (".implode(', ', $coreFields).") SELECT ".implode(', ', $coreFields)." FROM k_content WHERE id_content=".$id_content);
+	$this->mysql->query("INSERT INTO k_content (".implode(', ', $coreFields).") SELECT ".implode(', ', $coreFields)." FROM k_content WHERE id_content=".$id_content);
 	if($this->db_error) die($this->helper->pre($this->db_query, $this->db_error));
 	$new = $this->db_insert_id;
 
 
 	# On effectus quelques mise à jour pour la nouvelle version
 	#
-	$this->dbQuery("UPDATE k_content SET contentSee=0, contentDateUpdate=NOW() WHERE id_content=".$new);
+	$this->mysql->query("UPDATE k_content SET contentSee=0, contentDateUpdate=NOW() WHERE id_content=".$new);
 	if($this->db_error) die($this->helper->pre($this->db_query, $this->db_error));
 
 
@@ -1152,7 +1150,7 @@ public function contentDuplicate($id_content){
 
 			$addData[] = "(".$new.", ".implode(',', $tmp).")";
 		}
-		$this->dbQuery("INSERT INTO k_contentdata (id_content, ".implode(', ', $dataFields).") VALUES ".implode(', ', $addData));
+		$this->mysql->query("INSERT INTO k_contentdata (id_content, ".implode(', ', $dataFields).") VALUES ".implode(', ', $addData));
 		if($this->db_error) die($this->helper->pre($this->db_query, $this->db_error));
 	}
 
@@ -1168,7 +1166,7 @@ public function contentDuplicate($id_content){
 			}
 			$addMore[] = "(".$new.", ".implode(',', $tmp).")";
 		}
-		$this->dbQuery("INSERT INTO k_content".$from['id_type']." (id_content, ".implode(', ', $moreFields).") VALUES ".implode(', ', $addMore));
+		$this->mysql->query("INSERT INTO k_content".$from['id_type']." (id_content, ".implode(', ', $moreFields).") VALUES ".implode(', ', $addMore));
 		if($this->db_error) die($this->helper->pre($this->db_query, $this->db_error));
 	}
 
@@ -1209,7 +1207,7 @@ public function contentDuplicate($id_content){
 				$add[] = "(".$new.", ".$e[$key].", ".$e['is_selected'].")";	
 			}*/
 
-			$this->dbQuery("INSERT INTO ".$table." (".$where.", ".implode(', ', $field).") VALUES ".implode(', ', $add));
+			$this->mysql->query("INSERT INTO ".$table." (".$where.", ".implode(', ', $field).") VALUES ".implode(', ', $add));
 			#if($this->db_error) die($this->helper->pre($table, $this->db_query, $this->db_error));
 			unset($add);
 		}
@@ -1220,7 +1218,7 @@ public function contentDuplicate($id_content){
 		foreach($asso as $e){
 			$addAsso[] = "(".$new.", ".$e['aType'].", ".$e['aField'].", ".$e['bType'].", ".$e['bContent'].")";	
 		}
-		$this->dbQuery("INSERT INTO k_contentasso (aContent, aType, aField, bType, bContent) VALUES ".implode(', ', $addAsso));
+		$this->mysql->query("INSERT INTO k_contentasso (aContent, aType, aField, bType, bContent) VALUES ".implode(', ', $addAsso));
 		if($this->db_error) die($this->helper->pre($this->db_query, $this->db_error));
 	}
 
@@ -1230,7 +1228,7 @@ public function contentDuplicate($id_content){
 		foreach($business as $e){
 			$addBusiness[] = "(".$e['id_group'].", ".$new.", ".$e['is_view'].", ".$e['is_buy'].", '".$e['contentPrice']."', '".$e['contentPriceTax']."', '".$e['contentPriceNormal']."', '".$e['contentPriceComment']."')";	
 		}
-		$this->dbQuery("INSERT INTO k_contentgroupbusiness (id_group, id_content, is_view, is_buy, contentPrice, contentPriceTax, contentPriceNormal, contentPriceComment) VALUES ".implode(', ', $addBusiness));
+		$this->mysql->query("INSERT INTO k_contentgroupbusiness (id_group, id_content, is_view, is_buy, contentPrice, contentPriceTax, contentPriceNormal, contentPriceComment) VALUES ".implode(', ', $addBusiness));
 		if($this->db_error) die($this->helper->pre($this->db_query, $this->db_error));
 	}
 
@@ -1240,7 +1238,7 @@ public function contentDuplicate($id_content){
 		foreach($search as $e){
 			$addSearch[] = "(".$new.", ".$e['id_search'].")";	
 		}
-		$this->dbQuery("INSERT INTO k_contentsearch (id_content, id_search) VALUES ".implode(', ', $addSearch));
+		$this->mysql->query("INSERT INTO k_contentsearch (id_content, id_search) VALUES ".implode(', ', $addSearch));
 		if($this->db_error) die($this->helper->pre($this->db_query, $this->db_error));
 	}
 
@@ -1249,7 +1247,7 @@ public function contentDuplicate($id_content){
 		foreach($shop as $e){
 			$addShop[] = "(".$new.", ".$e['id_shop'].")";	
 		}
-		$this->dbQuery("INSERT INTO k_contentshop (id_content, id_shop) VALUES ".implode(', ', $addShop));
+		$this->mysql->query("INSERT INTO k_contentshop (id_content, id_shop) VALUES ".implode(', ', $addShop));
 		if($this->db_error) die($this->helper->pre($this->db_query, $this->db_error));
 	}*/
 
@@ -1281,7 +1279,7 @@ public function contentDuplicateLanguage($id_content, $fr, $to){
 		$tmp[] = "'".addslashes($data[$df])."'";
 	}
 
-	$this->dbQuery("INSERT INTO k_contentdata (id_content, language, ".implode(', ', $dataFields).") VALUES ('".$id_content."', '".$to."', ".implode(',', $tmp).")");
+	$this->mysql->query("INSERT INTO k_contentdata (id_content, language, ".implode(', ', $dataFields).") VALUES ('".$id_content."', '".$to."', ".implode(',', $tmp).")");
 	if($this->db_error) die($this->helper->pre($this->db_query, $this->db_error));
 
 	# On s'occupe des parties qui concerne les traductions MORE
@@ -1300,7 +1298,7 @@ public function contentDuplicateLanguage($id_content, $fr, $to){
 		$values = ', '.implode(',', $tmp);
 	}
 
-	$this->dbQuery("INSERT INTO k_content".$from['id_type']." (id_content, language".$select.") VALUES ('".$id_content."','".$to."'".$values.")");
+	$this->mysql->query("INSERT INTO k_content".$from['id_type']." (id_content, language".$select.") VALUES ('".$id_content."','".$to."'".$values.")");
 	if($this->db_error) die($this->helper->pre($this->db_query, $this->db_error));
 }
 
@@ -1333,7 +1331,7 @@ public function contentVersionSet($opt=array()){
 		'raw'			=> true
 	));
 
-	$this->dbQuery(
+	$this->mysql->query(
 		"INSERT INTO k_contentversion (id_content, language, versionDate, versionRaw) ".
 		"VALUES (".$opt['id_content'].", '".$opt['language']."', NOW(), '".addslashes(serialize($from))."')"
 	);
@@ -1353,38 +1351,38 @@ public function contentRemove($id_type, $id_content, $language=''){
         $sqllang = ($language != '') ? " AND language='".$language."'" : "";
 
         if($type['is_ad'] == 1){
-            $this->dbQuery("DELETE FROM k_contentad				WHERE id_content=".$id_content." ".$sqllang);
-            $this->dbQuery("DELETE FROM k_contentadstats		WHERE id_content=".$id_content." ".$sqllang);
+            $this->mysql->query("DELETE FROM k_contentad				WHERE id_content=".$id_content." ".$sqllang);
+            $this->mysql->query("DELETE FROM k_contentadstats		WHERE id_content=".$id_content." ".$sqllang);
         }else
         if($type['is_gallery'] == 1){
-            $this->dbQuery("DELETE FROM k_contentitem".$id_type."	WHERE id_content=".$id_content." ".$sqllang);
-            $this->dbQuery("DELETE FROM k_contentalbum".$id_type."	WHERE id_content=".$id_content." ".$sqllang);
+            $this->mysql->query("DELETE FROM k_contentitem".$id_type."	WHERE id_content=".$id_content." ".$sqllang);
+            $this->mysql->query("DELETE FROM k_contentalbum".$id_type."	WHERE id_content=".$id_content." ".$sqllang);
         }else{
-            $this->dbQuery("DELETE FROM k_content".$id_type."		WHERE id_content=".$id_content." ".$sqllang);
+            $this->mysql->query("DELETE FROM k_content".$id_type."		WHERE id_content=".$id_content." ".$sqllang);
         }
     }
 
-    $this->dbQuery("DELETE FROM k_contentdata	WHERE id_content=".$id_content." ".$sqllang);
+    $this->mysql->query("DELETE FROM k_contentdata	WHERE id_content=".$id_content." ".$sqllang);
 	$data = $this->mysql->multi("SELECT * FROM k_contentdata WHERE id_content=".$id_content);
 
 	// il n'y a plus de data (du tout !)
 	if(sizeof($data) == 0){
-		$this->dbQuery("DELETE FROM k_content 				WHERE id_content=".$id_content);
-		$this->dbQuery("DELETE FROM k_contentitem			WHERE id_content=".$id_content);
-		$this->dbQuery("DELETE FROM k_contentalbum			WHERE id_content=".$id_content);
-		$this->dbQuery("DELETE FROM k_contentshop			WHERE id_content=".$id_content);
+		$this->mysql->query("DELETE FROM k_content 				WHERE id_content=".$id_content);
+		$this->mysql->query("DELETE FROM k_contentitem			WHERE id_content=".$id_content);
+		$this->mysql->query("DELETE FROM k_contentalbum			WHERE id_content=".$id_content);
+		$this->mysql->query("DELETE FROM k_contentshop			WHERE id_content=".$id_content);
 
-		$this->dbQuery("DELETE FROM k_contentcategory		WHERE id_content=".$id_content);
-		$this->dbQuery("DELETE FROM k_contentchapter		WHERE id_content=".$id_content);
-		$this->dbQuery("DELETE FROM k_contentcomment		WHERE id_content=".$id_content);
-		$this->dbQuery("DELETE FROM k_contentgroup			WHERE id_content=".$id_content);
-		$this->dbQuery("DELETE FROM k_contentgroupbusiness	WHERE id_content=".$id_content);
-		$this->dbQuery("DELETE FROM k_contentrate			WHERE id_content=".$id_content);
-		$this->dbQuery("DELETE FROM k_contentsearch			WHERE id_content=".$id_content);
-		$this->dbQuery("DELETE FROM k_contentversion		WHERE id_content=".$id_content);
+		$this->mysql->query("DELETE FROM k_contentcategory		WHERE id_content=".$id_content);
+		$this->mysql->query("DELETE FROM k_contentchapter		WHERE id_content=".$id_content);
+		$this->mysql->query("DELETE FROM k_contentcomment		WHERE id_content=".$id_content);
+		$this->mysql->query("DELETE FROM k_contentgroup			WHERE id_content=".$id_content);
+		$this->mysql->query("DELETE FROM k_contentgroupbusiness	WHERE id_content=".$id_content);
+		$this->mysql->query("DELETE FROM k_contentrate			WHERE id_content=".$id_content);
+		$this->mysql->query("DELETE FROM k_contentsearch			WHERE id_content=".$id_content);
+		$this->mysql->query("DELETE FROM k_contentversion		WHERE id_content=".$id_content);
 
-		$this->dbQuery("DELETE FROM k_userasso				WHERE id_content=".$id_content);
-		$this->dbQuery("DELETE FROM k_contentasso			WHERE bContent=".$id_content." OR aContent=".$id_content);
+		$this->mysql->query("DELETE FROM k_userasso				WHERE id_content=".$id_content);
+		$this->mysql->query("DELETE FROM k_contentasso			WHERE bContent=".$id_content." OR aContent=".$id_content);
 	}
 
 	if($type['is_gallery']) $this->contentAlbumFamily();
@@ -1394,7 +1392,7 @@ public function contentRemove($id_type, $id_content, $language=''){
 + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - */
 public function contentView($id_content){
 	if(intval($id_content) == 0) return false;
-	$this->dbQuery("UPDATE k_content SET contentView=contentView+1 WHERE id_content=".$id_content);
+	$this->mysql->query("UPDATE k_content SET contentView=contentView+1 WHERE id_content=".$id_content);
 }
 
 /* + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - 
@@ -1436,7 +1434,7 @@ public function contentCacheBuild($id_content, $opt=array()){
 		'contentCache' => array('value' => addslashes(json_encode($cache)))
 	));
 
-	$this->dbQuery($this->dbUpdate($def)." WHERE id_content=".$id_content);
+	$this->mysql->query($this->dbUpdate($def)." WHERE id_content=".$id_content);
 	if($opt['debug']) $this->helper->pre($this->db_query, $this->db_error);
 	
 	return true;
@@ -1588,7 +1586,7 @@ public function contentMediaLink($opt){
 	# CLEAR and Exit 
 	#
 	if($opt['clear']){
-		$this->dbQuery("UPDATE k_content SET contentMedia='' WHERE id_content=".$opt['id_content']);
+		$this->mysql->query("UPDATE k_content SET contentMedia='' WHERE id_content=".$opt['id_content']);
 		if($opt['debug']) $this->helper->pre("CLEAR", $this->db_query, $this->db_error);
 		return true;
 	}
@@ -1632,7 +1630,7 @@ public function contentMediaLink($opt){
 			'contentMedia' => array('value' => json_encode($media))
 		));
 	
-		$this->dbQuery($this->dbUpdate($def)." WHERE id_content=".$opt['id_content']);
+		$this->mysql->query($this->dbUpdate($def)." WHERE id_content=".$opt['id_content']);
 		if($opt['debug']) $this->helper->pre("INSERT", $this->db_query, $this->db_error);
 
 		return true;
@@ -1653,14 +1651,14 @@ public function contentAlbumFamily(){
 		$tree = $this->contentAlbumFamilyParent($e);
 		$tree = sizeof($tree) > 0 ? implode(',', array_reverse($tree)) : '';
 
-		$this->dbQuery("UPDATE k_contentalbum SET contentAlbumParent='".$tree."' WHERE id_content=".$e['id_content']);
+		$this->mysql->query("UPDATE k_contentalbum SET contentAlbumParent='".$tree."' WHERE id_content=".$e['id_content']);
 	}
 	
 	foreach($albums as $e){
 		$tree = $this->contentAlbumFamilyChildren($e);
 		$tree = (sizeof($tree) > 0) ? implode(',', $tree) : '';
 
-		$this->dbQuery("UPDATE k_contentalbum SET contentAlbumChildren='".$tree."' WHERE id_content=".$e['id_content']);
+		$this->mysql->query("UPDATE k_contentalbum SET contentAlbumChildren='".$tree."' WHERE id_content=".$e['id_content']);
 	}
 
 	return true;
@@ -1774,7 +1772,7 @@ public function contentAssoGet($aContent, $aType, $aField, $bType){
  + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - */
 public function contentAssoSet($aContent, $aType, $aField, $bType, $bContent){
 
-	$this->dbQuery("DELETE FROM k_contentasso WHERE aContent=".$aContent." AND aType=".$aType." AND aField=".$aField." AND bType=".$bType);
+	$this->mysql->query("DELETE FROM k_contentasso WHERE aContent=".$aContent." AND aType=".$aType." AND aField=".$aField." AND bType=".$bType);
 	#$this->helper->pre($this->db_query, $this->db_error);
 
 	if(sizeof($bContent) > 0){
@@ -1788,7 +1786,7 @@ public function contentAssoSet($aContent, $aType, $aField, $bType, $bContent){
 		}
 		
 		if(sizeof($added) > 0){
-			$this->dbQuery("INSERT IGNORE INTO k_contentasso (aContent, aType, aField, bType, bContent, assoOrder) VALUES ".implode(',', $added));
+			$this->mysql->query("INSERT IGNORE INTO k_contentasso (aContent, aType, aField, bType, bContent, assoOrder) VALUES ".implode(',', $added));
 			#$this->helper->pre($this->db_query, $this->db_error);
 		}
 	}
@@ -1816,7 +1814,7 @@ public function contentAssoUserGet($id_content, $id_type, $id_field){
  + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - */
 public function contentAssoUserSet($id_content, $id_type, $id_field, $ids_user){
 
-	$this->dbQuery("DELETE FROM k_contentasso WHERE aContent=".$id_content." AND aType=".$id_type." AND aField=".$id_field);
+	$this->mysql->query("DELETE FROM k_contentasso WHERE aContent=".$id_content." AND aType=".$id_type." AND aField=".$id_field);
 	#$this->helper->pre($this->db_query, $this->db_error);
 
 	if(sizeof($ids_user) > 0){
@@ -1825,7 +1823,7 @@ public function contentAssoUserSet($id_content, $id_type, $id_field, $ids_user){
 		}
 
 		if(sizeof($added) > 0){
-			$this->dbQuery("INSERT IGNORE INTO k_contentasso (aContent, aType, aField, bType, bUser) VALUES ".implode(',', $added));
+			$this->mysql->query("INSERT IGNORE INTO k_contentasso (aContent, aType, aField, bType, bUser) VALUES ".implode(',', $added));
 		#	$this->helper->pre($this->db_query, $this->db_error);
 		}
 	}
@@ -1835,7 +1833,7 @@ public function contentAssoUserSet($id_content, $id_type, $id_field, $ids_user){
  + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - */
 public function contentAssoTag($id_content, $id_field, $language, $value){
 
-	$this->dbQuery("DELETE FROM k_contenttag WHERE id_content=".$id_content." AND language='".$language."'");
+	$this->mysql->query("DELETE FROM k_contenttag WHERE id_content=".$id_content." AND language='".$language."'");
 	#$this->helper->pre($this->db_query, $this->db_error);
 
 	foreach($value as $e){
@@ -1848,7 +1846,7 @@ public function contentAssoTag($id_content, $id_field, $language, $value){
 			'contentTag'	=> array('value' => addslashes(trim($e)))
 		));
 		
-		$this->dbQuery($this->dbInsert($def, array('ignore' => true)));
+		$this->mysql->query($this->dbInsert($def, array('ignore' => true)));
 		#$this->helper->pre($this->db_query, $this->db_error);
 		
 		
@@ -1858,7 +1856,7 @@ public function contentAssoTag($id_content, $id_field, $language, $value){
 			'contentTag'	=> array('value' => addslashes(trim($e)))
 		));
 		
-		$this->dbQuery($this->dbInsert($def, array('ignore' => true)));
+		$this->mysql->query($this->dbInsert($def, array('ignore' => true)));
 		#$this->helper->pre($this->db_query, $this->db_error);
 	
 		$tmp[] = "'".$def['k_contenttagcloud']['contentTag']['value']."'";
@@ -1871,7 +1869,7 @@ public function contentAssoTag($id_content, $id_field, $language, $value){
 	");
 
 	foreach($tmp as $e){
-		$this->dbQuery("UPDATE k_contenttagcloud SET how=".$e['how']." WHERE contentTag='".$e['contentTag']."' AND language='".$e['language']."'");
+		$this->mysql->query("UPDATE k_contenttagcloud SET how=".$e['how']." WHERE contentTag='".$e['contentTag']."' AND language='".$e['language']."'");
 		#$this->helper->pre($this->db_query, $this->db_error);
 	}
 }

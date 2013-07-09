@@ -13,12 +13,12 @@ class appConfig{
 		$module	= addslashes(trim($module));
 		$name	= addslashes(trim($name));
 
-		$exists = $this->dbOne("SELECT 1 FROM k_config WHERE configModule='".$module."' AND configName='".$name."'");
+		$exists = $this->mysql->one("SELECT 1 FROM k_config WHERE configModule='".$module."' AND configName='".$name."'");
 		$query	= ($exists[1])
 				? "UPDATE k_config SET configValue='".$value."' WHERE configModule='".$module."' AND configName='".$name."'"
 				: "INSERT INTO k_config (configModule, configName, configValue) VALUES ('".$module."', '".$name."', '".$value."')";
 
-		$this->dbQuery($query);
+		$this->mysql->query($query);
 	}
 
 	/* + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + -
@@ -28,7 +28,7 @@ class appConfig{
 		if(@array_key_exists($module, $this->apiConfig)){
 			return is_array($this->apiConfig[$module]) ? $this->apiConfig[$module] : array();
 		}else{
-			$config = $this->dbMulti("SELECT * FROM k_config WHERE configModule='".$module."'");
+			$config = $this->mysql->multi("SELECT * FROM k_config WHERE configModule='".$module."'");
 			foreach($config as $v){
 				if($module == 'bootExt'){
 					$part	= explode(':', $v['configName']);

@@ -35,7 +35,7 @@ class ad extends content {
     + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - */
     public function adPick($opt){
 
-        if(BENCHME) @$GLOBALS['bench']->benchmarkMarker($bmStep='adPick() @='.json_encode($opt));
+        if(BENCHME) $this->bench->marker($bmStep='adPick() @='.json_encode($opt));
 
         $opt['noLimit'] = true;
         $opt['noOrder'] = true; // ???
@@ -72,7 +72,7 @@ class ad extends content {
         }else{
             $out = array();
         }
-        if(BENCHME) @$GLOBALS['bench']->benchmarkMarker($bmStep);
+        if(BENCHME) $this->bench->marker($bmStep);
 
         return $out;
     }
@@ -86,7 +86,7 @@ class ad extends content {
 
             if($opt['field'] != 'view' && $opt['field'] != 'click') return false;
 
-            $this->dbQuery(
+            $this->mysql->query(
                 "INSERT INTO k_contentadstats\n".
                     "(id_content, language, year, month, day, ".$opt['field'].")\n".
                     "VALUES\n".
@@ -97,7 +97,7 @@ class ad extends content {
             if($opt['debug']) $this->pre($this->db_query, $this->db_error);
 
             $field = 'contentAdCache'.ucfirst($opt['field']);
-            $this->dbQuery("UPDATE k_contentad SET ".$field."=".$field."+1 WHERE id_content=".$opt['id_content']." AND language='".$opt['language']."'");
+            $this->mysql->query("UPDATE k_contentad SET ".$field."=".$field."+1 WHERE id_content=".$opt['id_content']." AND language='".$opt['language']."'");
             if($opt['debug']) $this->pre($this->db_query, $this->db_error);
 
         }
@@ -109,12 +109,12 @@ class ad extends content {
     public function adZoneGet($opt=array()){
 
         if($opt['zoneCode'] != NULL){
-            $zone = $this->dbOne("SELECT * FROM k_adzone WHERE zoneCode = '".$opt['zoneCode']."'");
+            $zone = $this->mysql->one("SELECT * FROM k_adzone WHERE zoneCode = '".$opt['zoneCode']."'");
         }else
             if($opt['id_adzone'] != NULL){
-                $zone = $this->dbOne("SELECT * FROM k_adzone WHERE id_adzone = ".$opt['id_adzone']);
+                $zone = $this->mysql->one("SELECT * FROM k_adzone WHERE id_adzone = ".$opt['id_adzone']);
             }else{
-                $zone = $this->dbMulti("SELECT * FROM k_adzone ".$opt['sqlWhere']." ORDER BY zoneName ASC");
+                $zone = $this->mysql->multi("SELECT * FROM k_adzone ".$opt['sqlWhere']." ORDER BY zoneName ASC");
             }
 
         if($opt['debug']) $this->pre($this->db_query, $this->db_error);
@@ -133,7 +133,7 @@ class ad extends content {
             $q = $this->dbInsert($def);
         }
 
-        @$this->dbQuery($q);
+        @$this->mysql->query($q);
         if($this->db_error != NULL) return false;
 
         $this->id_adzone = ($id_adzone > 0) ? $id_adzone : $this->db_insert_id;
@@ -148,7 +148,7 @@ class ad extends content {
 
         if($id_adzone == NULL) return false;
 
-        $this->dbQuery("DELETE FROM k_adzone WHERE id_adzone=".$id_adzone);
+        $this->mysql->query("DELETE FROM k_adzone WHERE id_adzone=".$id_adzone);
 
         return true;
     }

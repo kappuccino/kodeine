@@ -16,7 +16,7 @@ function socialSandboxSet($opt){
 	# NEW !
 	#
 	if($opt['id_socialsandbox'] == NULL){
-		$this->dbQuery("INSERT INTO k_socialsandbox (socialSandboxType) VALUES ('')");
+		$this->mysql->query("INSERT INTO k_socialsandbox (socialSandboxType) VALUES ('')");
 		if($opt['debug']) $this->pre($this->db_query, $this->db_error);
 	
 		$id_socialsandbox  = $this->db_insert_id;
@@ -29,7 +29,7 @@ function socialSandboxSet($opt){
 	# CORE
 	#
 	$query = $this->dbUpdate(array('k_socialsandbox' => $opt['core']))." WHERE id_socialsandbox=".$id_socialsandbox;
-	$this->dbQuery($query);
+	$this->mysql->query($query);
 	if($opt['debug']) $this->pre("QUERY", $this->db_query, "ERROR", $this->db_error);
 }
 
@@ -68,7 +68,7 @@ function socialSandboxPush($opt){
 + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - */
 function socialSandboxExists($type, $id){
 	if($type == '' OR intval($id) == 0)	return false;
-	$ext = $this->dbOne("SELECT 1 FROM k_socialsandbox WHERE del=0 AND socialSandboxType='".$type."' AND socialSandboxId=".$id);
+	$ext = $this->mysql->one("SELECT 1 FROM k_socialsandbox WHERE del=0 AND socialSandboxType='".$type."' AND socialSandboxId=".$id);
 	return ($ext[1] === '1');
 }
 

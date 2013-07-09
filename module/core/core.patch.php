@@ -7,7 +7,7 @@ class corePatch extends coreApp{
 + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - */
 function tableExists($d){	
 
-	$tables = $this->dbMulti("SHOW TABLES");
+	$tables = $this->mysql->multi("SHOW TABLES");
 	$me		= ($d['prefix'] == 'NO') ? $d['table'] : $this->dbPrefixe.$d['table'];
 
 	foreach($tables as $table){
@@ -24,7 +24,7 @@ function tableExists($d){
 function indexExists($d){
 
 	$me		= ($d['prefix'] == 'NO') ? $d['table'] : $this->dbPrefixe.$d['table'];
-	$index	= $this->dbMulti("SHOW INDEX FROM ".$me);
+	$index	= $this->mysql->multi("SHOW INDEX FROM ".$me);
 
 	foreach($index as $idx){
 		if($idx['Column_name'] == $d['index']) return true;
@@ -42,7 +42,7 @@ function fieldNeedChange($d){
 	}
 
 	$me		= ($d['prefix'] == 'NO') ? $d['table'] : $this->dbPrefixe.$d['table'];
-	$fields = $this->dbMulti("SHOW COLUMNS FROM ".$me);
+	$fields = $this->mysql->multi("SHOW COLUMNS FROM ".$me);
 
 	$sqlNull		= ($d['null'] == 'YES') 	? 'NULL' : 'NOT NULL';
 	$sqlAfter		= ($d['after'] != '') 		? "AFTER `".$d['after']."`" : NULL;
@@ -183,7 +183,7 @@ function patchIt($file){
 				#
 				$sql = $this->alterTable($def);
 				if($sql !== false){
-					($debug) ? $this->pre($sql) : $this->dbQuery($sql);
+					($debug) ? $this->pre($sql) : $this->mysql->query($sql);
 					if($this->db_error != NULL) $out[] = $this->db_query."<br />".$this->db_error;
 				}
 
@@ -192,7 +192,7 @@ function patchIt($file){
 				else{
 					$sql = $this->fieldNeedChange($def);
 					if($sql !== false){
-						($debug) ? $this->pre($sql) : $this->dbQuery($sql);
+						($debug) ? $this->pre($sql) : $this->mysql->query($sql);
 						if($this->db_error != NULL) $out[] = $this->db_query."<br />".$this->db_error;
 					}
 				}
@@ -203,7 +203,7 @@ function patchIt($file){
 			else{
 				$sql = $this->alterTable($def);
 				if($sql !== false){
-					($debug) ? $this->pre($sql) : $this->dbQuery($sql);
+					($debug) ? $this->pre($sql) : $this->mysql->query($sql);
 					if($this->db_error != NULL) $out[] = $this->db_query."<br />".$this->db_error;
 				}
 			}
@@ -241,7 +241,7 @@ function installIt($file){
 			foreach(explode(";\n\n", $e->nodeValue) as $q){
 				$q = trim($q);
 				if(!$err){
-					@$this->dbQuery($q);
+					@$this->mysql->query($q);
 					
 					#$this->pre($q);
 

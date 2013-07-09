@@ -133,7 +133,7 @@ function socialMessageSet($opt){
 	# NEW !
 	#
 	if($opt['id_socialmessage'] == NULL){
-		$this->dbQuery("INSERT INTO k_socialmessage (socialMessageDate, socialMessageDateLast) VALUES (NOW(), NOW())");
+		$this->mysql->query("INSERT INTO k_socialmessage (socialMessageDate, socialMessageDateLast) VALUES (NOW(), NOW())");
 		$id_socialmessage = $this->db_insert_id;
 		if($opt['debug']) $this->pre($this->db_query, $this->db_error);
 	}else{
@@ -148,7 +148,7 @@ function socialMessageSet($opt){
 		$opt['core']['mid_socialmessage'] 	   = array('value' => $opt['replyTo']);
 		$opt['core']['id_socialmessagethread'] = array('value' => $opt['thread']);
 
-		$this->dbQuery("UPDATE k_socialmessage SET socialMessageDateLast=NOW() WHERE id_socialmessage=".$opt['thread']);
+		$this->mysql->query("UPDATE k_socialmessage SET socialMessageDateLast=NOW() WHERE id_socialmessage=".$opt['thread']);
 		if($opt['debug']) $this->pre($this->db_query, $this->db_error);
 
 	}else{
@@ -166,7 +166,7 @@ function socialMessageSet($opt){
 	# CORE
 	#
 	$query = $this->dbUpdate(array('k_socialmessage' => $opt['core']))." WHERE id_socialmessage=".$id_socialmessage;
-	$this->dbQuery($query);
+	$this->mysql->query($query);
 	if($opt['debug']) $this->pre($this->db_query, $this->db_error);
 
 
@@ -189,7 +189,7 @@ function socialMessageSet($opt){
 			$def['k_socialmessage']['field'.$id_field] = array('value' => $value);
 		}
 
-		$this->dbQuery($this->dbUpdate($def)." WHERE id_socialmessage=".$id_socialmessage);
+		$this->mysql->query($this->dbUpdate($def)." WHERE id_socialmessage=".$id_socialmessage);
 		if($opt['debug']) $this->pre($this->db_query, $this->db_error);
 	}
 
@@ -213,7 +213,7 @@ function socialMessageSet($opt){
 			$rcpt[]	= intval($idu);
 		}
 
-		$this->dbQuery("UPDATE k_socialmessage SET socialMessageRecipient='".json_encode($rcpt)."' WHERE id_socialmessage=".$id_socialmessage);
+		$this->mysql->query("UPDATE k_socialmessage SET socialMessageRecipient='".json_encode($rcpt)."' WHERE id_socialmessage=".$id_socialmessage);
 		if($opt['debug']) $this->pre($this->db_query, $this->db_error);
 
 	}else
@@ -231,7 +231,7 @@ function socialMessageSet($opt){
 	}
 
 	if(count($addu) > 0){
-		$this->dbQuery("INSERT INTO k_socialmessageuser (id_socialmessage, id_user, is_read) VALUES ".implode(', ', $addu));
+		$this->mysql->query("INSERT INTO k_socialmessageuser (id_socialmessage, id_user, is_read) VALUES ".implode(', ', $addu));
 		if($opt['debug']) $this->pre($this->db_query, $this->db_error);
 	}
 
@@ -272,7 +272,7 @@ function socialMessageMapping($opt){
 				if(is_array($v) && $f['fieldType'] == 'user'){
 					unset($tmp);
 					foreach($v as $id_user){
-						$tmp[] = $this->dbOne("SELECT * FROM k_user WHERE id_user=".$id_user);
+						$tmp[] = $this->mysql->one("SELECT * FROM k_user WHERE id_user=".$id_user);
 					}
 					$messages[$n]['field'][$f['fieldKey']] = $tmp;
 				}else
@@ -280,7 +280,7 @@ function socialMessageMapping($opt){
 				if(is_array($v) && $f['fieldType'] == 'content'){
 					unset($tmp);
 					foreach($v as $id_content){
-						$tmp[] = $this->dbOne("SELECT * FROM k_contentdata WHERE id_content=".$id_content);
+						$tmp[] = $this->mysql->one("SELECT * FROM k_contentdata WHERE id_content=".$id_content);
 					}
 					$messages[$n]['field'][$f['fieldKey']] = $tmp;
 				}else
@@ -373,10 +373,10 @@ function socialMessageRemove($opt){
 	$del	= array_merge($del, $message['socialMessageFlat']);
 
 	if(sizeof($del) > 0){
-		$this->dbQuery("DELETE FROM k_socialmessage WHERE id_socialmessage IN(".implode(',', $del).")");
+		$this->mysql->query("DELETE FROM k_socialmessage WHERE id_socialmessage IN(".implode(',', $del).")");
 		if($opt['debug']) $this->pre($this->db_query, $this->db_error);
 
-		$this->dbQuery("DELETE FROM k_socialmessageuser WHERE id_socialmessage IN(".implode(',', $del).")");
+		$this->mysql->query("DELETE FROM k_socialmessageuser WHERE id_socialmessage IN(".implode(',', $del).")");
 		if($opt['debug']) $this->pre($this->db_query, $this->db_error);
 	}
 
@@ -404,7 +404,7 @@ function socialMessageBuild($opt){
 		'socialMessageThread'	=> array('value' => json_encode($thread))
 	));
 
-	$this->dbQuery($this->dbUpdate($def)." WHERE id_socialmessage=".$id_socialmessagethread);
+	$this->mysql->query($this->dbUpdate($def)." WHERE id_socialmessage=".$id_socialmessagethread);
 	if($opt['debug']) $this->pre($this->db_query, $this->db_error);
 }
 
@@ -412,7 +412,7 @@ function socialMessageBuild($opt){
 + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - */
 function socialMessageBuildFlat($starter){
 
-	$all = $this->dbMulti("
+	$all = $this->mysql->multi("
 		SELECT * FROM k_socialmessage
 		WHERE id_socialmessagethread=".$starter." AND id_socialmessage != ".$starter."
 		ORDER BY id_socialmessage"
@@ -433,7 +433,7 @@ function socialMessageBuildFlat($starter){
 + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - */
 function socialMessageBuildThread($thread, $mid_socialmessage){
 
-	$children = $this->dbMulti("
+	$children = $this->mysql->multi("
 		SELECT id_socialmessage FROM k_socialmessage
 		WHERE id_socialmessagethread=".$thread." AND mid_socialmessage=".$mid_socialmessage."
 		ORDER BY id_socialmessage
@@ -459,7 +459,7 @@ function socialMessageMarkRead($opt){
 	if(intval($opt['id_socialmessage']) == 0)	return false;
 	if(intval($opt['id_user']) == 0)			return false;
 
-	$this->dbQuery(
+	$this->mysql->query(
 		" UPDATE k_socialmessageuser".
 		" SET is_read=".intval($opt['is_read']).
 		" WHERE id_user=".$opt['id_user']." AND id_socialmessage=".$opt['id_socialmessage']

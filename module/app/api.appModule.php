@@ -169,7 +169,7 @@ class appModule{
 			));
 		}
 
-		$config = $this->dbMulti("
+		$config = $this->mysql->multi("
 		SELECT configName, configValue
 		FROM k_config
 		WHERE configName NOT LIKE 'jsonCache%' AND configModule='".basename($mod)."'"

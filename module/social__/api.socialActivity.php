@@ -56,7 +56,7 @@ function socialActivityGet($opt){
 	$where		= is_array($cond) ? "\nWHERE\n".implode(" AND ", $cond) : NULL;
 	$inner		= is_array($join) ? "\n".implode("\n", $join)."\n" : NULL;
 
-	$activity	= $this->dbMulti("SELECT ".$field." FROM k_socialactivity ".$inner. $where . $__group__ . $order . $limit);
+	$activity	= $this->mysql->multi("SELECT ".$field." FROM k_socialactivity ".$inner. $where . $__group__ . $order . $limit);
 	if($opt['debug']) $this->pre($this->db_query, $this->db_error, $activity);
 
 	return $activity;
@@ -77,13 +77,13 @@ if($opt['debug']) $this->pre("OPTION", $opt);
 	# REMOVE
 	#
 	if($opt['remove']){
-		$act = $this->dbOne("SELECT * FROM k_socialactivity WHERE socialActivityKey='".$key."' AND socialActivityId=".$id);
+		$act = $this->mysql->one("SELECT * FROM k_socialactivity WHERE socialActivityKey='".$key."' AND socialActivityId=".$id);
 
 		if(intval($act['id_socialactivity']) > 0){
-			$this->dbQuery("DELETE FROM k_socialactivity		WHERE id_socialactivity=".$act['id_socialactivity']);
+			$this->mysql->query("DELETE FROM k_socialactivity		WHERE id_socialactivity=".$act['id_socialactivity']);
 			if($opt['debug']) $this->pre($this->db_query, $this->db_error);
 
-			$this->dbQuery("DELETE FROM k_socialnotification	WHERE id_socialactivity=".$act['id_socialactivity']);
+			$this->mysql->query("DELETE FROM k_socialnotification	WHERE id_socialactivity=".$act['id_socialactivity']);
 			if($opt['debug']) $this->pre($this->db_query, $this->db_error);
 		}
 	}
@@ -103,7 +103,7 @@ if($opt['debug']) $this->pre("OPTION", $opt);
 			'socialActivityDate'	=> array('value'	=> date("Y-m-d H:i:s")),
 		)));
 
-		$this->dbQuery($query);
+		$this->mysql->query($query);
 		$id_act = $this->db_insert_id;
 		if($opt['debug']) $this->pre($this->db_query, $this->db_error);
 
@@ -134,8 +134,8 @@ if($opt['debug']) $this->pre("OPTION", $opt);
 				}
 
 				// ?
-				$item = $this->dbOne("SELECT ".$noti." FROM ".$table." WHERE ".$thrd."=".$thread." AND ".$noti." != ''");
-				//$item = $this->dbOne("SELECT ".$noti." FROM ".$table." WHERE ".$thrd."=".$thread);
+				$item = $this->mysql->one("SELECT ".$noti." FROM ".$table." WHERE ".$thrd."=".$thread." AND ".$noti." != ''");
+				//$item = $this->mysql->one("SELECT ".$noti." FROM ".$table." WHERE ".$thrd."=".$thread);
 				if($opt['debug']) $this->pre($this->db_query, $this->db_error);
 				
 				$usrs = json_decode($item[$noti], true);
@@ -151,7 +151,7 @@ if($opt['debug']) $this->pre("OPTION", $opt);
 			}
 			
 			if(sizeof($tmp) > 0){
-				$this->dbQuery("INSERT INTO k_socialnotification (id_socialactivity, id_user) VALUES\n".implode(",\n", $tmp));
+				$this->mysql->query("INSERT INTO k_socialnotification (id_socialactivity, id_user) VALUES\n".implode(",\n", $tmp));
 				if($opt['debug']) $this->pre($this->db_query, $this->db_error);
 			}
 		}

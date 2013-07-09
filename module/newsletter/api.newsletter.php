@@ -37,7 +37,7 @@ public function newsletterSet($id_newsletter, $def){
 		$q = $this->dbInsert($def);
 	}
 
-	@$this->dbQuery($q);
+	@$this->mysql->query($q);
 	if($this->db_error != NULL) return false;
 
 	$this->id_newsletter = ($id_newsletter > 0) ? $id_newsletter : $this->db_insert_id;
@@ -122,7 +122,7 @@ public function newsletterGet($opt=array()){
 + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - */
 public function newsletterRemove($id_newsletter){
 	if($id_newsletter == NULL) return false;
-	$this->dbQuery("DELETE FROM k_newsletter WHERE id_newsletter=".$id_newsletter);
+	$this->mysql->query("DELETE FROM k_newsletter WHERE id_newsletter=".$id_newsletter);
 }
 
 /* + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - 
@@ -174,9 +174,9 @@ public function newsletterPreview($id_newsletter){
 public function newsletterDuplicate($id_newsletter){
 
 	# Originale
-	$from = $this->dbOne("SELECT * FROM k_newsletter WHERE id_newsletter=".$id_newsletter);
+	$from = $this->mysql->one("SELECT * FROM k_newsletter WHERE id_newsletter=".$id_newsletter);
 
-	foreach($this->dbMulti("SHOW COLUMNS FROM k_newsletter WHERE Field NOT IN('id_newsletter', 'newsletterSendDate')") as $e){
+	foreach($this->mysql->multi("SHOW COLUMNS FROM k_newsletter WHERE Field NOT IN('id_newsletter', 'newsletterSendDate')") as $e){
 		$fields[] = $e['Field'];
 	}
 
@@ -184,7 +184,7 @@ public function newsletterDuplicate($id_newsletter){
 		$tmp[] = "'".addslashes($from[$df])."'";
 	}
 
-	$this->dbQuery("INSERT INTO k_newsletter (".implode(', ', $fields).") VALUES (".implode(',', $tmp).")");
+	$this->mysql->query("INSERT INTO k_newsletter (".implode(', ', $fields).") VALUES (".implode(',', $tmp).")");
 	if($this->db_error) die($this->pre($this->db_query, $this->db_error));
 }
 
@@ -215,16 +215,16 @@ public function newsletterListImportJob($opt){
 	foreach($items as $mail){
 		$mail = trim($mail);
 		$flag = (filter_var($mail, FILTER_VALIDATE_EMAIL) === FALSE) ? 'ERROR' : 'VALID';
-		$ext  = $this->dbOne("SELECT id_newslettermail FROM k_newslettermail WHERE mail='".addslashes($mail)."' LIMIT 1");
+		$ext  = $this->mysql->one("SELECT id_newslettermail FROM k_newslettermail WHERE mail='".addslashes($mail)."' LIMIT 1");
 
 		if($ext['id_newslettermail'] != ''){
 			$last = $ext['id_newslettermail'];
 		}else{
-			$this->dbQuery("INSERT INTO k_newslettermail (mail, flag) VALUES ('".addslashes($mail)."', '".$flag."')");
+			$this->mysql->query("INSERT INTO k_newslettermail (mail, flag) VALUES ('".addslashes($mail)."', '".$flag."')");
 			$last = $this->db_insert_id;
 		}
 
-		$this->dbQuery("INSERT IGNORE INTO k_newsletterlistmail (id_newslettermail, id_newsletterlist) VALUES ('".$last."', '".$id_newsletterlist."')");
+		$this->mysql->query("INSERT IGNORE INTO k_newsletterlistmail (id_newslettermail, id_newsletterlist) VALUES ('".$last."', '".$id_newsletterlist."')");
 		#$this->pre($this->db_query, $this->db_error);
 	}
 	
@@ -237,9 +237,9 @@ public function newsletterListImportJob($opt){
 public function newsletterListGet($opt=array()){
 
 	if($opt['id_newsletterlist']){
-		$type = $this->dbOne("SELECT * FROM k_newsletterlist WHERE id_newsletterlist=".$opt['id_newsletterlist']);
+		$type = $this->mysql->one("SELECT * FROM k_newsletterlist WHERE id_newsletterlist=".$opt['id_newsletterlist']);
 	}else{
-		$type = $this->dbMulti("SELECT * FROM k_newsletterlist");
+		$type = $this->mysql->multi("SELECT * FROM k_newsletterlist");
 	}
 	
 	if($opt['debug']) $this->pre($this->db_query, $this->db_error);
@@ -260,7 +260,7 @@ public function newsletterListSet($id_newsletterlist, $def){
 		$q = $this->dbInsert($def);
 	}
 
-	@$this->dbQuery($q);
+	@$this->mysql->query($q);
 	if($this->db_error != NULL) return false;
 
 	$this->id_newsletterlist = ($id_newsletterlist > 0) ? $id_newsletterlist : $this->db_insert_id;
@@ -273,8 +273,8 @@ public function newsletterListSet($id_newsletterlist, $def){
 public function newsletterListRemove($id_newsletterlist){
 	if($id_newsletterlist == NULL) return false;
 
-	$this->dbQuery("DELETE FROM k_newsletterlist 	 WHERE id_newsletterlist=".$id_newsletterlist);
-	$this->dbQuery("DELETE FROM k_newsletterlistmail WHERE id_newsletterlist=".$id_newsletterlist);
+	$this->mysql->query("DELETE FROM k_newsletterlist 	 WHERE id_newsletterlist=".$id_newsletterlist);
+	$this->mysql->query("DELETE FROM k_newsletterlistmail WHERE id_newsletterlist=".$id_newsletterlist);
 
 	return true;
 }
@@ -285,17 +285,17 @@ public function newsletterListRemove($id_newsletterlist){
 public function newsletterListEmpty($id_newsletterlist){
 	if($id_newsletterlist == NULL) return false;
 
-	$ms = $this->dbMulti("SELECT * FROM k_newsletterlistmail WHERE id_newsletterlist=".$id_newsletterlist);
+	$ms = $this->mysql->multi("SELECT * FROM k_newsletterlistmail WHERE id_newsletterlist=".$id_newsletterlist);
 
 	foreach($ms as $m){
-		$count = $this->dbOne("SELECT COUNT(id_newsletterlist) AS c FROM k_newsletterlistmail WHERE id_newslettermail=".$m['id_newslettermail']);
+		$count = $this->mysql->one("SELECT COUNT(id_newsletterlist) AS c FROM k_newsletterlistmail WHERE id_newslettermail=".$m['id_newslettermail']);
 		if($count['c'] == 1) $del[] = $m['id_newslettermail'];
 	}
 
-	$this->dbQuery("DELETE FROM k_newsletterlistmail WHERE id_newsletterlist=".$_GET['id_newsletterlist']);
+	$this->mysql->query("DELETE FROM k_newsletterlistmail WHERE id_newsletterlist=".$_GET['id_newsletterlist']);
 
 	if(sizeof($del) > 0){
-		$this->dbQuery("DELETE FROM k_newslettermail WHERE id_newslettermail IN(".implode(',', $del).")");
+		$this->mysql->query("DELETE FROM k_newslettermail WHERE id_newslettermail IN(".implode(',', $del).")");
 	}
 
 	return true;
@@ -304,7 +304,7 @@ public function newsletterListEmpty($id_newsletterlist){
 
 /* + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - 
 public function newsletterListClearUnaffected(){
-	$this->dbQuery("DELETE FROM k_newslettermail WHERE id_newslettermail NOT IN(SELECT id_newslettermail FROM k_newsletterlistmail)");
+	$this->mysql->query("DELETE FROM k_newslettermail WHERE id_newslettermail NOT IN(SELECT id_newslettermail FROM k_newsletterlistmail)");
 }
 + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - */
 
@@ -318,7 +318,7 @@ public function newsletterListMailSubscribed($opt=array()){
 
 	if(!$valid) return array();
 
-	$r = $this->dbMulti("
+	$r = $this->mysql->multi("
 		SELECT id_newsletterlist FROM k_newsletterlistmail
 		INNER JOIN k_newslettermail ON k_newsletterlistmail.id_newslettermail = k_newslettermail.id_newslettermail
 		WHERE mail = '".$email."'
@@ -447,7 +447,7 @@ public function newsletterPoolPopulation($id_newsletter){
 	# Liste tous les user des groupes selectionnes
 	if(sizeof($data['newsletterGroup']) > 0){
 		foreach($data['newsletterGroup'] as $e){
-			$grp = $this->dbMulti("
+			$grp = $this->mysql->multi("
 				SELECT * FROM k_user
 				INNER JOIN k_userdata ON k_user.id_user = k_userdata.id_user
 				WHERE id_group=".$e
@@ -464,7 +464,7 @@ public function newsletterPoolPopulation($id_newsletter){
 	#
 	if(sizeof($id) > 0){
 		//$protect	= ($data['newsletterAllUser']) ? NULL : "userNewsletter=1 AND ";
-		$population = $this->dbMulti("
+		$population = $this->mysql->multi("
 			SELECT * FROM k_user
 			INNER JOIN k_userdata ON k_user.id_user = k_userdata.id_user
 			WHERE ".$protect." k_user.id_user IN(".implode(',', array_unique($id)).")"
@@ -483,7 +483,7 @@ public function newsletterPoolPopulation($id_newsletter){
 	# 
 	if(sizeof($data['newsletterList']) > 0){
 		foreach($data['newsletterList'] as $e){
-			$tmp = $this->dbMulti("
+			$tmp = $this->mysql->multi("
 				SELECT * FROM  k_newslettermail
 				INNER JOIN k_newsletterlistmail ON k_newslettermail.id_newslettermail = k_newsletterlistmail.id_newslettermail
 				WHERE k_newsletterlistmail.id_newsletterlist=".$e." AND k_newslettermail.flag = 'VALID'"
@@ -574,7 +574,7 @@ public function newsletterPoolPopulate($id_newsletter){
 	# Liste tous les user des groupes selectionnes
 	if(sizeof($data['newsletterGroup']) > 0){
 		foreach($data['newsletterGroup'] as $e){
-			$grp = $this->dbMulti("
+			$grp = $this->mysql->multi("
 				SELECT *
 				FROM k_user INNER JOIN k_userdata ON k_user.id_user = k_userdata.id_user
 				WHERE id_group=".$e
@@ -592,7 +592,7 @@ public function newsletterPoolPopulate($id_newsletter){
 	$used = array();
 	if(sizeof($id) > 0){
 		$protect	= ($data['newsletterAllUser']) ? NULL : "userNewsletter=1 AND ";
-		$population = $this->dbMulti("
+		$population = $this->mysql->multi("
 			SELECT *
 			FROM k_user INNER JOIN k_userdata ON k_user.id_user = k_userdata.id_user
 			WHERE ".$protect." k_user.id_user IN(".implode(',', array_unique($id)).")"
@@ -611,7 +611,7 @@ public function newsletterPoolPopulate($id_newsletter){
 	if(sizeof($data['newsletterList']) > 0){
 		foreach($data['newsletterList'] as $e){
 
-			$tmp = $this->dbMulti("
+			$tmp = $this->mysql->multi("
 				SELECT * FROM  k_newslettermail
 				INNER JOIN k_newsletterlistmail ON k_newslettermail.id_newslettermail = k_newsletterlistmail.id_newslettermail
 				WHERE k_newsletterlistmail.id_newsletterlist=".$e." AND k_newslettermail.flag = 'VALID'"
@@ -718,7 +718,7 @@ public function newsletterPoolPopulate($id_newsletter){
 		#$this->pre($raw);
 		#die('-------');
 
-		$this->dbQuery("INSERT INTO k_newsletterpool (id_newsletter, poolRaw) VALUES (".$id_newsletter.", '".addslashes(serialize($raw))."')");
+		$this->mysql->query("INSERT INTO k_newsletterpool (id_newsletter, poolRaw) VALUES (".$id_newsletter.", '".addslashes(serialize($raw))."')");
 		#$this->pre($this->db_query, $this->db_error);
 		#die();
 	}
@@ -726,7 +726,7 @@ public function newsletterPoolPopulate($id_newsletter){
 
 	# Renseigner la date de l'envois
 	#
-	$this->dbQuery("UPDATE k_newsletter SET newsletterSendDate=NOW() WHERE id_newsletter=".$id_newsletter);
+	$this->mysql->query("UPDATE k_newsletter SET newsletterSendDate=NOW() WHERE id_newsletter=".$id_newsletter);
 
 
 	return true;
@@ -737,7 +737,7 @@ public function newsletterPoolPopulate($id_newsletter){
 /* + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - 
 public function newsletterPoolEmpty($id_newsletter){
 	if($id_newsletter == NULL) return true;
-	$this->dbQuery("DELETE FROM k_newsletterpool WHERE id_newsletter=".$id_newsletter);
+	$this->mysql->query("DELETE FROM k_newsletterpool WHERE id_newsletter=".$id_newsletter);
 
 	return true;
 }
@@ -746,15 +746,15 @@ public function newsletterPoolEmpty($id_newsletter){
 /* + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - 
 public function newsletterAnalytic($id_newsletter){
 
-	$t		= $this->dbMulti("SELECT trackingMail FROM k_newslettertracking WHERE id_newsletter=".$id_newsletter." GROUP BY trackingMail");
+	$t		= $this->mysql->multi("SELECT trackingMail FROM k_newslettertracking WHERE id_newsletter=".$id_newsletter." GROUP BY trackingMail");
 	$total	= sizeof($t);
 
-	$u = $this->dbMulti("SELECT COUNT(trackingFlag) AS how, trackingFlag FROM k_newslettertracking WHERE id_newsletter=".$id_newsletter." GROUP BY trackingFlag");
+	$u = $this->mysql->multi("SELECT COUNT(trackingFlag) AS how, trackingFlag FROM k_newslettertracking WHERE id_newsletter=".$id_newsletter." GROUP BY trackingFlag");
 	foreach($u as $e){
 		$out[$e['trackingFlag']] = $e['how'];
 	}
 
-	$todo = $this->dbOne("SELECT COUNT(id_newsletter) AS how FROM k_newsletterpool WHERE id_newsletter=".$id_newsletter);
+	$todo = $this->mysql->one("SELECT COUNT(id_newsletter) AS how FROM k_newsletterpool WHERE id_newsletter=".$id_newsletter);
 	$out['mailingSentTotal'] = $total; 
 	$out['mailingSentTodo']  = (($todo['how'] > 0) ? $todo['how'] : 0);
 	$out['mailingSentDone']  = $out['mailingSentTotal'] - $out['mailingSentTodo'];
@@ -764,7 +764,7 @@ public function newsletterAnalytic($id_newsletter){
 
 	//
 
-	$click 	= $this->dbOne("SELECT SQL_CALC_FOUND_ROWS clickMail FROM k_newsletterclick WHERE id_newsletter=".$id_newsletter." GROUP BY clickMail LIMIT 1");
+	$click 	= $this->mysql->one("SELECT SQL_CALC_FOUND_ROWS clickMail FROM k_newsletterclick WHERE id_newsletter=".$id_newsletter." GROUP BY clickMail LIMIT 1");
 	$out['mailingClick'] = (($this->db_num_total > 0) ? $this->db_num_total : 0);
 
 	return $out;
@@ -777,10 +777,10 @@ public function newsletterAnalytic($id_newsletter){
 public function newsletterTemplateGet($opt=array()){
 
 	if($opt['id_newslettertemplate']){
-		$template = $this->dbOne("SELECT * FROM k_newslettertemplate WHERE id_newslettertemplate=".$opt['id_newslettertemplate']);
+		$template = $this->mysql->one("SELECT * FROM k_newslettertemplate WHERE id_newslettertemplate=".$opt['id_newslettertemplate']);
 		$template['templateStyle'] = json_decode($template['templateStyle'], true);
 	}else{
-		$template = $this->dbMulti("SELECT * FROM k_newslettertemplate");
+		$template = $this->mysql->multi("SELECT * FROM k_newslettertemplate");
 	}
 	
 	if($opt['debug']) $this->pre($this->db_query, $this->db_error, $template);
@@ -802,7 +802,7 @@ public function newsletterTemplateSet($id_newslettertemplate, $def){
 		$q = $this->dbInsert($def);
 	}
 
-	@$this->dbQuery($q);
+	@$this->mysql->query($q);
 	if($this->db_error != NULL) return false;
 
 	$this->id_newslettertemplate = ($id_newslettertemplate > 0) ? $id_newslettertemplate : $this->db_insert_id;
@@ -816,7 +816,7 @@ public function newsletterTemplateSet($id_newslettertemplate, $def){
 public function newsletterTemplateRemove($id_newslettertemplate){
 	if($id_newslettertemplate == NULL) return false;
 
-	$this->dbQuery("DELETE FROM k_newslettertemplate WHERE id_newslettertemplate=".$id_newslettertemplate);
+	$this->mysql->query("DELETE FROM k_newslettertemplate WHERE id_newslettertemplate=".$id_newslettertemplate);
 
 	return true;
 }
@@ -827,19 +827,19 @@ public function newsletterTemplateRemove($id_newslettertemplate){
 public function newsletterSubscribe($opt=array()){
 
 	$email	= addslashes(trim($opt['email']));
-	$mail	= $this->dbOne("SELECT * FROM k_newslettermail WHERE `mail`='".$email."'");
+	$mail	= $this->mysql->one("SELECT * FROM k_newslettermail WHERE `mail`='".$email."'");
 
 	if($mail['id_newslettermail'] == NULL){
-		$this->dbQuery("INSERT INTO k_newslettermail (mail, flag) VALUES ('".$email."', 'VALID')");
+		$this->mysql->query("INSERT INTO k_newslettermail (mail, flag) VALUES ('".$email."', 'VALID')");
 		if($opt['debug']) $this->pre($this->db_query, $this->db_error);
 		$id_newslettermail = $this->db_insert_id;
 	}else{
 		$id_newslettermail = $mail['id_newslettermail'];
-		$this->dbQuery("UPDATE k_newslettermail SET flag='VALID' WHERE id_newslettermail=".$id_newslettermail);
+		$this->mysql->query("UPDATE k_newslettermail SET flag='VALID' WHERE id_newslettermail=".$id_newslettermail);
 	}
 
 	if($opt['clean']){
-		$this->dbQuery("DELETE FROM k_newsletterlistmail WHERE id_newslettermail=".$id_newslettermail);
+		$this->mysql->query("DELETE FROM k_newsletterlistmail WHERE id_newslettermail=".$id_newslettermail);
 		if($opt['debug']) $this->pre($this->db_query, $this->db_error);
 	}
 
@@ -849,7 +849,7 @@ public function newsletterSubscribe($opt=array()){
 		}
 
 		if(sizeof($sql) > 0){
-			$this->dbQuery("INSERT IGNORE INTO k_newsletterlistmail (id_newslettermail, id_newsletterlist) VALUES ".implode(',', $sql));
+			$this->mysql->query("INSERT IGNORE INTO k_newsletterlistmail (id_newslettermail, id_newsletterlist) VALUES ".implode(',', $sql));
 			if($opt['debug']) $this->pre($this->db_query, $this->db_error);
 			
 			// Envoyer un SIGNAL pour UNBLACKLISTER le MAIL
@@ -869,18 +869,18 @@ public function newsletterSubscribe($opt=array()){
 public function newsletterUnsubscribe($opt=array()){
 
 	$email	= addslashes(trim($opt['email']));
-	$mail	= $this->dbOne("SELECT * FROM k_newslettermail WHERE `mail`='".$email."'");
+	$mail	= $this->mysql->one("SELECT * FROM k_newslettermail WHERE `mail`='".$email."'");
 
 	if($mail['id_newslettermail'] == NULL) return false;
 
 	if(sizeof($opt['list']) > 0){
-		$this->dbQuery("DELETE FROM k_newsletterlistmail WHERE id_newslettermail='".$mail['id_newslettermail']."' AND id_newsletterlist IN(".implode(',', $opt['list']).")");
+		$this->mysql->query("DELETE FROM k_newsletterlistmail WHERE id_newslettermail='".$mail['id_newslettermail']."' AND id_newsletterlist IN(".implode(',', $opt['list']).")");
 		if($opt['debug']) $this->pre($this->db_query, $this->db_error);
 
 		return true;
 	}else
 	if($opt['listAll']){
-		$this->dbQuery("DELETE FROM k_newsletterlistmail WHERE id_newslettermail='".$mail['id_newslettermail']."'");
+		$this->mysql->query("DELETE FROM k_newsletterlistmail WHERE id_newslettermail='".$mail['id_newslettermail']."'");
 		if($opt['debug']) $this->pre($this->db_query, $this->db_error);
 		
 		return true;
