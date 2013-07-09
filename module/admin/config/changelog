@@ -1,0 +1,44 @@
++ = Ajout / Nouveaute
+- = Correction
+* = Autre / Divers / Inclassable...
+
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+2013-02-14 (build 5.0.12)
++ Ajout de la lib codemirror
++ Ajout de la lib requirejs
+
+2013-01-31 (build 5.0.11)
+- Fix un get pour une langue qui n'est pas définit
+
+2013-01-29 (build 5.0.10)
+- Fix pb encodage UTF-8 de la fonction helperDate() avec setlocale(LC_ALL, 'fr_FR.UTF8') dans core.admin.php
+
+2013-01-28 (build 5.0.9)
++ labelisation multilingue du backoffice (i18n)
+
+2012-12-06 (build 5.0.8)
+- Fix CSS boutons dropdown btn-group core > 0-top.less
+
+2012-12-05 (build 5.0.7)
++ Quelques fixe de CSS
+
+2012-11-30 (build 5.0.6)
+- fix gestion droits acces user dans core/includes/top.php
++ modif CSS reduction du padding sur liste du subnav
+
+2012-11-29
+- Micro fix de CSS pour avoir le bon curseur de sousis sur les colones classables
+
+2012-11-23
+- Correction du menu top.php pour bien prendre en compte la gestion des droits
+
+2012-11-21
++ Correction du patcher/installer
+
+2012-10-17 (51)
++ Refonte du patch pour la compilation des LESS, le passage des LESS/CSS se fait depuis la homepage
++ Refonte du proxy PHP pour la gestiond des fichier de ressource pour le backoffice
++ Utilisation d'un cookie pour gerer les icones dans les sous-menu
++ Ajout du lien pour l'ouverture du site, suppression de "Mon Compte"
++ Ameliioration de la fonction core:mediaMimeType() pour mieux gerer les CSS/JS/WOFF (ne renvoit plus text/plain)
++ Possibilite de changer le brandName sur le back office

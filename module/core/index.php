@@ -15,13 +15,13 @@
 ?><!DOCTYPE html>
 <html lang="fr">
 <head>
-	<?php include(COREINC.'/head.php'); ?>
+	<?php include(COREINC . '/head.php'); ?>
 </head>
 <body>
 
 <header><?php
-	include(COREINC.'/top.php');
-	include(__DIR__.'/menu.php')
+	include(COREINC . '/top.php');
+	include(__DIR__ . '/menu.php')
 ?></header>
 
 <div class="inject-subnav-right hide">
@@ -53,8 +53,8 @@
 
 </div></div>
 
-<?php include(COREINC.'/end.php'); ?>
-<script src="../core/vendor/bootstrap/js/bootstrap-dropdown.js"></script>
+<?php include(COREINC . '/end.php'); ?>
+<script src="vendor/bootstrap/js/bootstrap-dropdown.js"></script>
 <script src="ui/js/dashboard.js"></script>
 
 <script>

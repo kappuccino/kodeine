@@ -16,7 +16,7 @@
 
 	$app	= new coreAdmin();
 
-	if(file_exists(CONFIG.'/app.php')) include(CONFIG.'/app.php');
+	if(file_exists(CONFIG.'/app.php')) include(CONFIG . '/app.php');
 
 	$url	= parse_url($url);
 	$part	= explode('/', substr($url['path'], 7), 2);

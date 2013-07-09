@@ -36,8 +36,5 @@
 	define('DEBUGME', isset($_GET['debug']) && !empty($config['debug']['allow']));
 
 // LOADER ////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
 	require __DIR__.'/autoloader.php';
 	Kodeine\autoloader::register();
-
-

@@ -10,13 +10,13 @@
 ?><!DOCTYPE html>
 <html lang="fr">
 <head>
-	<?php include(COREINC.'/head.php'); ?>
+	<?php include(COREINC . '/head.php'); ?>
 </head>
 <body>
 
 <header><?php
-	include(COREINC.'/top.php');
-	include(__DIR__.'/menu.php')
+	include(COREINC . '/top.php');
+	include(__DIR__ . '/menu.php')
 ?></header>
 
 <div class="inject-subnav-right hide">
@@ -108,7 +108,7 @@
 
 </div></div>
 
-<?php include(COREINC.'/end.php'); ?>
+<?php include(COREINC . '/end.php'); ?>
 <script src="ui/js/module.js" type="text/javascript"></script>
 
 </body>

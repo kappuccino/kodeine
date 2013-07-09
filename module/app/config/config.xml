@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<element>
+
+	<data>
+		<key>app</key>
+		<version>6.0.0</version>
+		<lastMod>2013-07-09</lastMod>
+		<hidden>YES</hidden>
+		<name><![CDATA[App]]></name>
+	</data>
+
+	<dependencies>
+		<module>user</module>
+		<module>field</module>
+	</dependencies>
+
+    <i18n>
+        <file>admin.php</file>
+        <file>index.php</file>
+        <file>login.php</file>
+        <file>menu.php</file>
+        <file>module.php</file>
+        <file>support.php</file>
+        <file>includes/top.php</file>
+    </i18n>
+
+    <profile>
+		<item code="index"	 	type="ALLOW_DENY" name="Accessible" />
+		<item code="config" 	type="ALLOW_DENY" name="Config" />
+		<item code="language"	type="ALLOW_DENY" name="Langues" />
+	</profile>
+
+</element>
