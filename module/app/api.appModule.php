@@ -6,19 +6,28 @@ class appModule{
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	public function __invoke($name){
+	function __invoke($name){
 		echo "__invoke ".$name."\n";
 	}
 
 	function __get($name){
-		$allowed = array('app', 'hook', 'me', 'helper', 'media', 'mongo', 'mysql');
-		if(in_array($name, $allowed)) return app::register($name);
+	#	$allowed = array('app', 'hook', 'me', 'helper', 'media', 'mongo', 'mysql', 'bench');
+	#	if(in_array($name, $allowed))
+		return app::register($name);
 	}
 
 	function __call($name, $arguments){
+	#	print_r(func_get_args());
+
+			//	$allowed = array('load');
+	//	if(in_array($name, $allowed))
+		return call_user_func_array(array($this->app, $name), $arguments);
+
 	#	echo $name."\n";
 	#	print_r($arguments);
 	}
+
+
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 

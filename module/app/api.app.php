@@ -19,18 +19,18 @@ class app{
 //--- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --
 	public static function register($name){
 
-	#	echo 'regiter::'.$name.PHP_EOL;
+	#	echo PHP_EOL.'app::regiter '.$name.PHP_EOL;
 
 		$app = self::getInstance();
+
+		if($name == 'app')      return $app;
+		if($name == 'kodeine')  return $app->kodeine;
 
 		if($name == 'mysql' && !property_exists($app, $name)){
 			$app->$name = appMysql::getInstance();
 		}else
 		if($name == 'mongo' && !property_exists($app, $name)){
 			$app->$name = appMongo::getInstance();
-		}else
-		if($name == 'app'){
-			return self::getInstance();
 		}else
 		if(!property_exists($app, $name)){
 			$n   = 'Kodeine\app'.ucfirst($name);
@@ -43,7 +43,9 @@ class app{
 //--- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --
 //--- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --
 	function __get($name){
-		$allowed = array('me', 'helper', 'media', 'mongo', 'mysql');
+	#	echo "app::__get ".$name;
+
+		$allowed = array('helper', 'media', 'mongo', 'mysql', 'bench');
 		if(in_array($name, $allowed)) return $this->register($name);
 	}
 

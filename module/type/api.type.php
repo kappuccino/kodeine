@@ -1,6 +1,8 @@
 <?php
 
-class type extends coreApp {
+namespace Kodeine;
+
+class type extends appModule {
 
 //-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -
 //-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -
@@ -22,12 +24,12 @@ class type extends coreApp {
 			$dbMode = 'dbOne';
 			$cond[] = "id_type=".$opt['id_type'];
 		}else
-			if($opt['typeKey'] != NULL){
-				$dbMode = 'dbOne';
-				$cond[] = "typeKey='".addslashes($opt['typeKey'])."'";
-			}else{
-				$dbMode	= 'dbMulti';
-			}
+		if($opt['typeKey'] != NULL){
+			$dbMode = 'dbOne';
+			$cond[] = "typeKey='".addslashes($opt['typeKey'])."'";
+		}else{
+			$dbMode	= 'dbMulti';
+		}
 
 		if(sizeof($cond) > 0) $sqlWhere = " WHERE ".implode(" AND ", $cond)." ";
 

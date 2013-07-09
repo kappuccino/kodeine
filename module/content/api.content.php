@@ -1,16 +1,16 @@
 <?php
 
-class content extends coreApp {
+namespace Kodeine;
 
-function __clone(){}
+class content extends appModule{
 
-/* + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - 
+/* + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + -
 + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - */
 public function contentGet($opt=array()){
 
-	if(BENCHME) @$GLOBALS['bench']->benchmarkMarker($bmStep='contentGet() @='.json_encode($opt));
+	if(BENCHME) $this->bench->marker($bmStep='contentGet() @='.json_encode($opt));
 
-	if($opt['debug']) $this->pre("[OPTION]", $opt);
+	if($opt['debug']) $this->helper->pre("[OPTION]", $opt);
 
 	# Shortcourt
 	#
@@ -30,9 +30,9 @@ public function contentGet($opt=array()){
 
 	# Gerer les OPTIONS :: valeurs par defaut
 	#
-	$id_group			= isset($opt['id_group']) 			? $opt['id_group'] 			: $this->kodeine['id_group'];
-	$id_chapter			= isset($opt['id_chapter']) 		? $opt['id_chapter'] 		: $this->kodeine['id_chapter'];
-	$language			= isset($opt['language']) 			? $opt['language'] 			: $this->kodeine['language'];
+	$id_group			= isset($opt['id_group']) 			? $opt['id_group'] 			: $this->kodeine->id_group;
+	$id_chapter			= isset($opt['id_chapter']) 		? $opt['id_chapter'] 		: $this->kodeine->id_chapter;
+	$language			= isset($opt['language']) 			? $opt['language'] 			: $this->kodeine->language;
 	$useField			= isset($opt['useField']) 			? $opt['useField']			: true;
 	$useGroup			= isset($opt['useGroup']) 			? $opt['useGroup']			: 'checkType';
 	$useChapter			= isset($opt['useChapter']) 		? $opt['useChapter']		: 'checkType';
@@ -47,7 +47,8 @@ public function contentGet($opt=array()){
 	$noLimit			= isset($opt['noLimit'])			? $opt['noLimit']			: false;
 	$limit				= ($opt['limit'] != '') 			? $opt['limit']				: 30;
 	$offset				= ($opt['offset'] != '')			? $opt['offset']			: 0;
-	$opt['searchMode']	= ($opt['searchMode'] != NULL) 		? $opt['searchMode'] 		: 'OR'; 
+	$opt['searchMode']	= ($opt['searchMode'] != NULL) 		? $opt['searchMode'] 		: 'OR';
+
 
 	# Security
 	#
@@ -57,15 +58,15 @@ public function contentGet($opt=array()){
 	#
 	$get = "SELECT * FROM k_contentdata INNER JOIN k_content ON k_contentdata.id_content = k_content.id_content";
 	if($opt['contentUrl'] != NULL){
-		$data = $this->dbOne($get." WHERE contentUrl='".$opt['contentUrl']."' AND language='".$language."'");
+		$data = $this->mysql->one($get." WHERE contentUrl='".$opt['contentUrl']."' AND language='".$language."'");
 	}else
 	if($opt['id_content'] != NULL && !is_array($opt['id_content'])){
-		$data = $this->dbOne($get." WHERE k_contentdata.id_content=".$opt['id_content']." AND language='".$language."'");
+		$data = $this->mysql->one($get." WHERE k_contentdata.id_content=".$opt['id_content']." AND language='".$language."'");
 	} unset($get);
 
 	if(isset($data)){
 		if($data['id_content'] == NULL){
-			if($opt['debug']) $this->pre("contentGet IS NULL", $opt);
+			if($opt['debug']) $this->helper->pre("contentGet IS NULL", $opt);
 			return array();
 		}else
 		if($data['is_album']){
@@ -79,9 +80,9 @@ public function contentGet($opt=array()){
 		$opt['id_content']	= $data['id_content'];
 
 		$cond[]	= "k_content.id_content=".$data['id_content'];
-		$dbMode	= 'dbOne';
+		$dbMode	= 'one';
 	}else{	
-		$dbMode	= 'dbMulti';
+		$dbMode	= 'multi';
 	}
 
 	# Detecter si je suis en mode IS_ITEM ou IS_ALBUM
@@ -89,20 +90,20 @@ public function contentGet($opt=array()){
 	$is_item	= isset($opt['is_item'])  ? true : (($data['is_item']  === '1') ? true : false);
 	$is_album	= isset($opt['is_album']) ? true : (($data['is_album'] === '1') ? true : false);
 	if($is_item && $is_album){
-		if($opt['debug']) $this->pre("Fatal Error : IS_ITEM=TRUE + IS_ALBUM=TRUE !");
+		if($opt['debug']) $this->helper->pre("Fatal Error : IS_ITEM=TRUE + IS_ALBUM=TRUE !");
 		return array();
 	}
 
 	# Trouver le TYPE
 	#
-	$type = $this->apiLoad('type')->typeGet(array(
-		'id_type'	=> $opt['id_type'],
-		'typeKey'	=> $opt['typeKey']
+	$type = $this->app->load('type')->typeGet(array(
+		'id_type' => $opt['id_type'],
+		'typeKey' => $opt['typeKey']
 	));
 
 	// Check
 	if($type['id_type'] == NULL){
-		if($opt['debug']) $this->pre("Fatal Error : TYPE NOT DEFINED, OR UNKNOWN");
+		if($opt['debug']) $this->helper->pre("Fatal Error : TYPE NOT DEFINED, OR UNKNOWN");
 		return array();
 	}
 
@@ -114,7 +115,7 @@ public function contentGet($opt=array()){
 
 	# Demander les FIELDS pour ce CONTENT
 	#
-	$field = $this->apiLoad('field')->fieldGet(array(
+	$field = $this->app->load('field')->fieldGet(array(
 		'id_type'		=> $type['id_type'],
 		'albumField'	=> $is_album,
 		'itemField'		=> $is_item
@@ -132,25 +133,25 @@ public function contentGet($opt=array()){
 	# Gerer les CATEGORY lie a ce CONTENT
 	#
 	if($opt['categoryUrl'] != ''){
-		$monoCat = $this->apiLoad('category')->categoryGet(array(
+		$monoCat = $this->app->load('category')->categoryGet(array(
 			'categoryUrl'	=> $opt['categoryUrl'],
 			'language' 		=> $language,
 			'debug'			=> $opt['debug']
 		));
 		if(sizeof($monoCat) == 0){
-			if($opt['debug']) $this->pre("No CATEGORY found by URL : ".$opt['categoryUrl']);
+			if($opt['debug']) $this->helper->pre("No CATEGORY found by URL : ".$opt['categoryUrl']);
 			return array();
 		}
 	}else
 	if($opt['id_category'] != NULL){
 		if(is_array($opt['id_category'])){
-			$multiCat = $this->apiLoad('category')->categoryGet(array(
+			$multiCat = $this->app->load('category')->categoryGet(array(
 				'id_category'	=> $opt['id_category'],
 				'language'		=> $language,
 				'debug'			=> $opt['debug']
 			));
 			if(sizeof($multiCat) == 0){
-				if($opt['debug']) $this->pre("NO MULTI-CATEGORY found by IDs : ", $opt['id_category']);
+				if($opt['debug']) $this->helper->pre("NO MULTI-CATEGORY found by IDs : ", $opt['id_category']);
 				return array();
 			}else{
 				foreach($multiCat as $e){
@@ -164,7 +165,7 @@ public function contentGet($opt=array()){
 				'debug'			=> $opt['debug']
 			));
 			if(sizeof($monoCat) == 0){
-				if($opt['debug']) $this->pre("NO CATEGORY found by ID : ".$opt['id_category']);
+				if($opt['debug']) $this->helper->pre("NO CATEGORY found by ID : ".$opt['id_category']);
 				return array();
 			}		
 		}
@@ -194,7 +195,7 @@ public function contentGet($opt=array()){
 		}
 
 		if($chapter['id_chapter'] != $id_chapter){
-			if($opt['debug']) $this->pre("No CHAPTER found by ID : ".$id_chapter);
+			if($opt['debug']) $this->helper->pre("No CHAPTER found by ID : ".$id_chapter);
 			return array();
 		}
 	}
@@ -210,7 +211,7 @@ public function contentGet($opt=array()){
 		if(intval($opt['id_socialforum']) > 0){
 			$cond[] = "k_contentsocialforum.id_socialforum=".$opt['id_socialforum'];
 		}else{
-			if($opt['debug']) $this->pre("ERROR: ID_SOCIALFORUM (ARRAY, NUMERIC > 0)", "GIVEN", var_export($opt['id_socialforum'], true));
+			if($opt['debug']) $this->helper->pre("ERROR: ID_SOCIALFORUM (ARRAY, NUMERIC > 0)", "GIVEN", var_export($opt['id_socialforum'], true));
 			return array();
 		}
 	}else{
@@ -278,7 +279,7 @@ public function contentGet($opt=array()){
 	# Search
 	#
 	if($opt['id_search'] > 0){
-		$searchData = $this->dbMulti("SELECT * FROM k_searchparam WHERE id_search=".$opt['id_search']);
+		$searchData = $this->mysql->multi("SELECT * FROM k_searchparam WHERE id_search=".$opt['id_search']);
 		if(sizeof($searchData)) $opt['search'] = $searchData;
 	}
 	if(is_array($opt['search'])){
@@ -356,7 +357,7 @@ public function contentGet($opt=array()){
 	#
 	if(isset($opt['asso'])){
 		foreach($opt['asso'] as $ass){	
-			$linked = $this->dbMulti("
+			$linked = $this->mysql->multi("
 				SELECT k_content.id_content FROM k_content
 				INNER JOIN k_contentasso ON k_content.id_content = k_contentasso.aContent
 				WHERE aType='".$type['id_type']."' AND aField='".$ass['id_field']."' AND bType = ".$ass['id_type']."  AND bContent = ".$ass['id_content']
@@ -382,7 +383,7 @@ public function contentGet($opt=array()){
 				if($opt['id_album'] == '0'){
 					unset($opt['id_album']);
 				}else{
-					$alb = $this->dbOne("SELECT * FROM k_contentalbum WHERE id_content='".$opt['id_album']."'");
+					$alb = $this->mysql->one("SELECT * FROM k_contentalbum WHERE id_content='".$opt['id_album']."'");
 					if($alb['contentAlbumChildren'] != NULL){
 						$albumCond = " IN(".implode(',', array_merge(array($opt['id_album']), explode(',', $alb['contentAlbumChildren']))).")";
 					}else{
@@ -414,14 +415,14 @@ public function contentGet($opt=array()){
 
 	if(is_array($opt['id_content'])){
 		if(sizeof($opt['id_content']) == 0){
-			if($opt['debug']) $this->pre("Fatal Error : multiple id_content BUT id_content/array is empty");
+			if($opt['debug']) $this->helper->pre("Fatal Error : multiple id_content BUT id_content/array is empty");
 			return array();
 		}
 
 		$cond[] = "k_content.id_content IN(".implode(',', $opt['id_content']).")";
 	}
 
-	if($dbMode == 'dbMulti' && $opt['id_parent'] != '*'){
+	if($dbMode == 'multi' && $opt['id_parent'] != '*'){
 		$cond[] = "k_content.id_parent=".(isset($opt['id_parent']) ? $opt['id_parent'] : '0');
 	}
 
@@ -462,17 +463,13 @@ public function contentGet($opt=array()){
 
 			$cond[] = "k_contentad.id_adzone='".$zone['id_adzone']."'";
 		}else{
-			if($opt['debug']) $this->pre("No ADZONE found for ID/KEY : ".$opt['adZone']);
+			if($opt['debug']) $this->helper->pre("No ADZONE found for ID/KEY : ".$opt['adZone']);
 			return array();
 		}
 	}
 
 	if($opt['id_user'] != NULL)		$cond[] = "k_content.id_user=".$opt['id_user'];
-	if($opt['contentSee'] != 'ALL') {
-        $cond[] = " ('".date('Y-m-d H:i:s')."' >= contentDateStart OR contentDateStart IS NULL)";
-        $cond[] = " ('".date('Y-m-d H:i:s')."' <= contentDateEnd OR contentDateEnd IS NULL)";
-        $cond[] = "contentSee=".(isset($opt['contentSee']) ? $opt['contentSee'] : '1');
-    }
+	if($opt['contentSee'] != 'ALL')	$cond[] = "contentSee=".(isset($opt['contentSee']) ? $opt['contentSee'] : '1');
 	if(isset($opt['is_buy']))		$cond[] = "is_buy=".(($opt['is_buy']) ? '1' : '0');
 	if(isset($opt['social']))		$cond[] = "k_content.is_social=".$opt['is_social'];
 	if(isset($opt['noId']))			$cond[] = "k_content.id_content".(is_array($opt['noId']) ? ' NOT IN('.implode(',', $opt['noId']).')' : '!='.$opt['noId']);
@@ -492,7 +489,7 @@ public function contentGet($opt=array()){
 	
 	# Former les LIMITATIONS et ORDRE
 	#
-	if($dbMode == 'dbMulti'){
+	if($dbMode == 'multi'){
 		if(isset($opt['order']) && isset($opt['direction'])){
 			if($fieldKey[$opt['order']]['id_field'] != NULL && $opt['direction'] != NULL){
 				$sqlOrder = "\nORDER BY field".$fieldKey[$opt['order']]['id_field']." ".$opt['direction'];
@@ -526,9 +523,9 @@ public function contentGet($opt=array()){
 		implode("\n", $join).
 		$where . $sqlGroup . $sqlOrder . $sqlLimit
 	);
-	if($opt['debug']) $this->pre($this->db_query, $this->db_error, "Query Output", $content);
+	if($opt['debug']) $this->helper->pre($this->db_query, $this->db_error, "Query Output", $content);
 
-	if($dbMode == 'dbOne'){
+	if($dbMode == 'one'){
 		$flip 		= true;
 		$content 	= (sizeof($content) > 0) ? array($content) : array();
 	}
@@ -616,14 +613,14 @@ public function contentGet($opt=array()){
 					$tmp = array();
 
 					if($p['type'] == 'solo' && intval($v) > 0){
-						$tmp = $this->dbOne("SELECT id_category, categoryName FROM k_categorydata WHERE id_category=".intval($v));
+						$tmp = $this->mysql->one("SELECT id_category, categoryName FROM k_categorydata WHERE id_category=".intval($v));
 					}else
 					if($p['type'] == 'multi'){
 						$v = explode($this->splitter, $v);
 						unset($v[sizeof($v)-1], $v[0]);
 
 						foreach($v as $vCat){
-							$tmp[] = $this->dbOne("SELECT id_category, categoryName FROM k_categorydata WHERE id_category=".intval($vCat));
+							$tmp[] = $this->mysql->one("SELECT id_category, categoryName FROM k_categorydata WHERE id_category=".intval($vCat));
 						}
 					}
 
@@ -634,18 +631,18 @@ public function contentGet($opt=array()){
 				if(is_array($v) && $f['fieldType'] == 'user'){
 					unset($tmp);
 					foreach($v as $bUser){
-						$tmp[] = $this->dbOne("SELECT * FROM k_user WHERE k_user.id_user=".$bUser." AND is_deleted=0");
+						$tmp[] = $this->mysql->one("SELECT * FROM k_user WHERE k_user.id_user=".$bUser." AND is_deleted=0");
 					}
 					$content[$idx]['field'.$f['id_field']] = $tmp;
 				}else
 
 				if(is_array($v) && $f['fieldType'] == 'content'){
 					$param = json_decode($f['fieldParam'], true); 
-					#$this->pre($f, $param, $v);
+					#$this->helper->pre($f, $param, $v);
 
 					unset($tmp);
 					foreach($v as $bContent){
-						$tmp[] = $this->dbOne("SELECT * FROM k_contentdata WHERE id_content=".$bContent." AND language='".$language."'");
+						$tmp[] = $this->mysql->one("SELECT * FROM k_contentdata WHERE id_content=".$bContent." AND language='".$language."'");
 					}
 					$content[$idx]['field'.$f['id_field']] = (($param['type'] == 'solo' && sizeof($v) == 1) ? $tmp[0] : $tmp);
 				}else
@@ -687,7 +684,7 @@ public function contentGet($opt=array()){
 	#
 	if($opt['assoChapter']){
 		foreach($content as $idx => $c){
-			$ids = $this->dbMulti("SELECT id_chapter FROM k_contentchapter WHERE id_content=".$c['id_content']." AND is_selected=1");
+			$ids = $this->mysql->multi("SELECT id_chapter FROM k_contentchapter WHERE id_content=".$c['id_content']." AND is_selected=1");
 			$content[$idx]['id_chapter'] = $this->dbKey($ids, 'id_chapter');
 		}
 	}
@@ -696,7 +693,7 @@ public function contentGet($opt=array()){
 	#
 	if($opt['assoGroup']){
 		foreach($content as $idx => $c){
-			$ids = $this->dbMulti("SELECT id_group FROM k_contentgroup WHERE id_content=".$c['id_content']." AND is_selected=1");
+			$ids = $this->mysql->multi("SELECT id_group FROM k_contentgroup WHERE id_content=".$c['id_content']." AND is_selected=1");
 			$content[$idx]['id_group'] = $this->dbKey($ids, 'id_group');
 		}
 	}
@@ -705,7 +702,7 @@ public function contentGet($opt=array()){
 	#
 	if($opt['assoCategory']){
 		foreach($content as $idx => $c){
-			$ids = $this->dbMulti("SELECT id_category FROM k_contentcategory WHERE id_content=".$c['id_content']." AND is_selected=1");
+			$ids = $this->mysql->multi("SELECT id_category FROM k_contentcategory WHERE id_content=".$c['id_content']." AND is_selected=1");
 			$content[$idx]['id_category'] = $this->dbKey($ids, 'id_category');
 		}
 	}
@@ -714,7 +711,7 @@ public function contentGet($opt=array()){
 	#
 	if($opt['assoSearch']){
 		foreach($content as $idx => $c){
-			$ids = $this->dbMulti("SELECT id_search FROM k_contentsearch WHERE id_content=".$c['id_content']);
+			$ids = $this->mysql->multi("SELECT id_search FROM k_contentsearch WHERE id_content=".$c['id_content']);
 			$content[$idx]['id_search'] = $this->dbKey($ids, 'id_search');
 		}
 	}
@@ -723,7 +720,7 @@ public function contentGet($opt=array()){
 	#
 	if($opt['assoShop']){
 		foreach($content as $idx => $c){
-			$ids = $this->dbMulti("SELECT id_shop FROM k_contentshop WHERE id_content=".$c['id_content']);
+			$ids = $this->mysql->multi("SELECT id_shop FROM k_contentshop WHERE id_content=".$c['id_content']);
 			$content[$idx]['id_shop'] = $this->dbKey($ids, 'id_shop');
 		}
 	}
@@ -732,7 +729,7 @@ public function contentGet($opt=array()){
 	#
 	if($opt['assoSocialForum']){
 		foreach($content as $idx => $c){
-			$ids = $this->dbMulti("SELECT id_socialforum FROM k_contentsocialforum WHERE id_content=".$c['id_content']);
+			$ids = $this->mysql->multi("SELECT id_socialforum FROM k_contentsocialforum WHERE id_content=".$c['id_content']);
 			$content[$idx]['id_socialforum'] = $this->dbKey($ids, 'id_socialforum');
 
 			if(!is_array($content[$idx]['id_socialforum'])) $content[$idx]['id_socialforum'] = array();
@@ -741,7 +738,7 @@ public function contentGet($opt=array()){
 
 	if($flip) $content = $content[0];
 
-	if($opt['debug']) $this->pre("OUTPUT", $content);
+	if($opt['debug']) $this->helper->pre("OUTPUT", $content);
 
 	if(BENCHME) @$GLOBALS['bench']->benchmarkMarker($bmStep);
 
@@ -771,7 +768,7 @@ public function contentSet($opt){
 	if($id_content == NULL){
 		$this->dbQuery("INSERT INTO k_content (id_type, id_user) VALUES ('".$id_type."','".$this->user['id_user']."')");
 		$id_content = $this->db_insert_id;
-		if($opt['debug']) $this->pre($this->db_query, $this->db_error, 'ID_CONTENT >> '.$id_content);
+		if($opt['debug']) $this->helper->pre($this->db_query, $this->db_error, 'ID_CONTENT >> '.$id_content);
 	}
 	$this->id_content = $id_content;
 
@@ -781,29 +778,29 @@ public function contentSet($opt){
 	if($id_type != ''){
 		// ITEM
 		if($opt['def']['k_content']['is_item']['value'] == 1){
-			$extType = $this->dbOne("SELECT 1 FROM k_contentitem".$id_type." WHERE id_content=".$this->id_content." AND language='".$language."'");
+			$extType = $this->mysql->one("SELECT 1 FROM k_contentitem".$id_type." WHERE id_content=".$this->id_content." AND language='".$language."'");
 	
 			if(!$extType[1]){
 				$this->dbQuery("INSERT INTO k_contentitem".$id_type." (id_content,language) VALUES (".$this->id_content.",'".$language."')");
-				if($opt['debug']) $this->pre($this->db_query, $this->db_error);
+				if($opt['debug']) $this->helper->pre($this->db_query, $this->db_error);
 			}
 		}else
 		// ALBUM
 		if($opt['def']['k_content']['is_album']['value'] == 1){
-			$extType = $this->dbOne("SELECT 1 FROM k_contentalbum".$id_type." WHERE id_content=".$this->id_content." AND language='".$language."'");
+			$extType = $this->mysql->one("SELECT 1 FROM k_contentalbum".$id_type." WHERE id_content=".$this->id_content." AND language='".$language."'");
 	
 			if(!$extType[1]){
 				$this->dbQuery("INSERT INTO k_contentalbum".$id_type." (id_content,language) VALUES (".$this->id_content.",'".$language."')");
-				if($opt['debug']) $this->pre($this->db_query, $this->db_error);
+				if($opt['debug']) $this->helper->pre($this->db_query, $this->db_error);
 			}
 		}
 		// CORE
 		else{
-			$extType = $this->dbOne("SELECT 1 FROM k_content".$id_type." WHERE id_content=".$this->id_content." AND language='".$language."'");
+			$extType = $this->mysql->one("SELECT 1 FROM k_content".$id_type." WHERE id_content=".$this->id_content." AND language='".$language."'");
 	
 			if(!$extType[1]){
 				$this->dbQuery("INSERT INTO k_content".$id_type." (id_content,language) VALUES (".$this->id_content.",'".$language."')");
-				if($opt['debug']) $this->pre($this->db_query, $this->db_error);
+				if($opt['debug']) $this->helper->pre($this->db_query, $this->db_error);
 			}
 		}
 	}
@@ -812,17 +809,17 @@ public function contentSet($opt){
 	# Data
 	#
 	if(isset($opt['data'])){
-		$extData = $this->dbOne("SELECT 1 FROM k_contentdata WHERE id_content=".$this->id_content." AND language='".$language."'");
-		#if($opt['debug']) $this->pre($this->db_query, $this->db_error, $extData);
+		$extData = $this->mysql->one("SELECT 1 FROM k_contentdata WHERE id_content=".$this->id_content." AND language='".$language."'");
+		#if($opt['debug']) $this->helper->pre($this->db_query, $this->db_error, $extData);
 
 		if(!$extData[1]){
 			$this->dbQuery("INSERT INTO k_contentdata (id_content, language) VALUES (".$this->id_content.",'".$language."')");
-			if($opt['debug']) $this->pre($this->db_query, $this->db_error);
+			if($opt['debug']) $this->helper->pre($this->db_query, $this->db_error);
 		}
 
 		$q = $this->dbUpdate($data)." WHERE language='".$language."' AND id_content=".$this->id_content;
 		@$this->dbQuery($q);
-		if($opt['debug']) $this->pre($this->db_query, $this->db_error);
+		if($opt['debug']) $this->helper->pre($this->db_query, $this->db_error);
 	}
 
 
@@ -830,24 +827,24 @@ public function contentSet($opt){
 	#
 	if(isset($opt['item'])){
 		$isItem	 = true;
-		$extItem = $this->dbOne("SELECT 1 FROM k_contentitem WHERE id_content=".$this->id_content);
-		#if($opt['debug']) $this->pre($this->db_query, $this->db_error, $extItem);
+		$extItem = $this->mysql->one("SELECT 1 FROM k_contentitem WHERE id_content=".$this->id_content);
+		#if($opt['debug']) $this->helper->pre($this->db_query, $this->db_error, $extItem);
 
 		if(!$extItem[1]){
 			$this->dbQuery("INSERT INTO k_contentitem (id_content) VALUES (".$this->id_content.")");
-			if($opt['debug']) $this->pre($this->db_query, $this->db_error);
+			if($opt['debug']) $this->helper->pre($this->db_query, $this->db_error);
 		}
 
 		if(sizeof($item) > 0){
 			@$this->dbQuery($this->dbUpdate($item)." WHERE id_content=".$this->id_content);
-			if($opt['debug']) $this->pre($this->db_query, $this->db_error);
+			if($opt['debug']) $this->helper->pre($this->db_query, $this->db_error);
 		}
 
 		$id_album = $item['k_contentitem']['id_album']['value'];
 		if($id_album > 0 && $def['k_content']['id_content']['value'] == ''){
-			$last = $this->dbOne("SELECT MAX(contentItemPos) AS la FROM k_contentitem WHERE id_album=".$id_album);
+			$last = $this->mysql->one("SELECT MAX(contentItemPos) AS la FROM k_contentitem WHERE id_album=".$id_album);
 			$this->dbQuery("UPDATE k_contentitem SET contentItemPos=".($last['la'] + 1)." WHERE id_content=".$this->id_content." AND id_album=".$item['k_contentitem']['id_album']['value']);
-			if($opt['debug']) $this->pre($this->db_query, $this->db_error);
+			if($opt['debug']) $this->helper->pre($this->db_query, $this->db_error);
 		}
 	}
 
@@ -855,12 +852,12 @@ public function contentSet($opt){
 	#
 	else if($opt['def']['k_content']['is_album']['value'] == 1){
 		$isAlbum = true;
-		$extAlb  = $this->dbOne("SELECT 1 FROM k_contentalbum WHERE id_content=".$this->id_content);
-		if($opt['debug']) $this->pre($this->db_query, $this->db_error, $extAlb);
+		$extAlb  = $this->mysql->one("SELECT 1 FROM k_contentalbum WHERE id_content=".$this->id_content);
+		if($opt['debug']) $this->helper->pre($this->db_query, $this->db_error, $extAlb);
 
 		if(!$extAlb[1]){
 			$this->dbQuery("INSERT INTO k_contentalbum (id_content) VALUES (".$this->id_content.")");
-			if($opt['debug']) $this->pre($this->db_query, $this->db_error);
+			if($opt['debug']) $this->helper->pre($this->db_query, $this->db_error);
 		}
 
 		if(isset($opt['album'])){
@@ -874,7 +871,7 @@ public function contentSet($opt){
 	if(isset($opt['def'])){
 		$q = $this->dbUpdate($def)." WHERE id_content=".$this->id_content;
 		@$this->dbQuery($q);
-		if($opt['debug']) $this->pre($this->db_query, $this->db_error);
+		if($opt['debug']) $this->helper->pre($this->db_query, $this->db_error);
 		if($this->db_error != NULL) return false;
 	}
 
@@ -920,7 +917,7 @@ public function contentSet($opt){
 
 		if(sizeof($def) > 0){
 			$this->dbQuery($this->dbUpdate($def)." WHERE language='".$language."' AND id_content=".$this->id_content);
-			if($opt['debug']) $this->pre($this->db_query, $this->db_error);
+			if($opt['debug']) $this->helper->pre($this->db_query, $this->db_error);
 		}
 	}
 
@@ -964,7 +961,7 @@ public function contentSet($opt){
 	if(sizeof($group) > 0){
 		foreach($group as $id_group => $e){
 
-			$exists = $this->dbOne("SELECT 1 FROM k_contentgroupbusiness WHERE id_content=".$this->id_content." AND id_group=".$id_group);
+			$exists = $this->mysql->one("SELECT 1 FROM k_contentgroupbusiness WHERE id_content=".$this->id_content." AND id_group=".$id_group);
 
 			if(!$exists['1'] && $e['is_view']){
 				$this->dbQuery("INSERT INTO k_contentgroupbusiness (id_content, id_group) VALUES (".$this->id_content.", ".$id_group.")");
@@ -983,7 +980,7 @@ public function contentSet($opt){
 			));
 			
 			$this->dbQuery($this->dbUpdate($def)." WHERE id_content=".$this->id_content." AND id_group=".$id_group);
-			if($opt['debug']) $this->pre($this->db_query, $this->db_error);
+			if($opt['debug']) $this->helper->pre($this->db_query, $this->db_error);
 		}
 	}
 
@@ -995,13 +992,13 @@ public function contentSet($opt){
 		$opt['ad']['id_content'] = array('value' => $this->id_content);
 
 		$cond	= " WHERE id_content=".$this->id_content." AND language='".$language."'";
-		$exists = $this->dbOne("SELECT 1 FROM k_contentad".$cond);
+		$exists = $this->mysql->one("SELECT 1 FROM k_contentad".$cond);
 		$query	= ($exists[1])
 			? $this->dbUpdate(array('k_contentad' => $opt['ad'])).$cond
 			: $this->dbInsert(array('k_contentad' => $opt['ad']));
 
 		$this->dbQuery($query);
-		if($opt['debug']) $this->pre($this->db_query, $this->db_error);
+		if($opt['debug']) $this->helper->pre($this->db_query, $this->db_error);
 	}
 
 
@@ -1013,7 +1010,7 @@ public function contentSet($opt){
 
 	# Generer la famille si je suis un ALBUM
 	#
-	$isAlbum = $this->dbOne("SELECT id_content FROM k_contentalbum WHERE id_content=".$this->id_content);
+	$isAlbum = $this->mysql->one("SELECT id_content FROM k_contentalbum WHERE id_content=".$this->id_content);
 	if($isAlbum['id_content'] > 0) $this->contentAlbumFamily();
 
 	if(!$opt['noHook']) $this->hookAction('contentSet', $this->id_content, $opt);
@@ -1055,14 +1052,14 @@ public function contentCheckCategory($category){
 + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - */
 public function contentSearch($opt){
 
-	$search = $this->dbOne("SELECT * FROM k_search WHERE id_search=".$opt['id_search']);
+	$search = $this->mysql->one("SELECT * FROM k_search WHERE id_search=".$opt['id_search']);
 	$search['searchParam'] = unserialize($search['searchParam']);
 
 	$where = $this->contentSearchSQL($search);
 	if(trim($where) != '') $where = " WHERE \n".$where;
 	
-	$c = $this->dbMulti("SELECT SQL_CALC_FOUND_ROWS * FROM k_content".$search['searchType'] . $where);
-	if($opt['debug']) $this->pre($this->db_query, $this->db_error, $c);
+	$c = $this->mysql->multi("SELECT SQL_CALC_FOUND_ROWS * FROM k_content".$search['searchType'] . $where);
+	if($opt['debug']) $this->helper->pre($this->db_query, $this->db_error, $c);
 
 	$this->total = $this->db_num_total;
 
@@ -1113,37 +1110,37 @@ public function contentDuplicate($id_content){
 
 	# Originale
 	#
-	$from		= $this->dbOne("SELECT * FROM k_content WHERE id_content=".$id_content);
+	$from		= $this->mysql->one("SELECT * FROM k_content WHERE id_content=".$id_content);
 
 	# Trouver les champs à dupliquer
 	#
-	$core		= $this->dbMulti("SHOW COLUMNS FROM k_content WHERE Field != 'id_content'");
+	$core		= $this->mysql->multi("SHOW COLUMNS FROM k_content WHERE Field != 'id_content'");
 	$coreFields	= $this->dbKey($core, 'Field');
 
-	$data		= $this->dbMulti("SHOW COLUMNS FROM k_contentdata WHERE Field != 'id_content'");
+	$data		= $this->mysql->multi("SHOW COLUMNS FROM k_contentdata WHERE Field != 'id_content'");
 	$dataFields = $this->dbKey($data, 'Field');
 
-	$more		= $this->dbMulti("SHOW COLUMNS FROM k_content".$from['id_type']." WHERE Field != 'id_content'");
+	$more		= $this->mysql->multi("SHOW COLUMNS FROM k_content".$from['id_type']." WHERE Field != 'id_content'");
 	$moreFields	= $this->dbKey($more, 'Field');
-	//die($this->pre('coreFields', $coreFields, 'dateFields', $dataFields, 'moreFields', $moreFields));
+	//die($this->helper->pre('coreFields', $coreFields, 'dateFields', $dataFields, 'moreFields', $moreFields));
 
 
 	# Dupliquer la partie Core
 	#
 	$this->dbQuery("INSERT INTO k_content (".implode(', ', $coreFields).") SELECT ".implode(', ', $coreFields)." FROM k_content WHERE id_content=".$id_content);
-	if($this->db_error) die($this->pre($this->db_query, $this->db_error));
+	if($this->db_error) die($this->helper->pre($this->db_query, $this->db_error));
 	$new = $this->db_insert_id;
 
 
 	# On effectus quelques mise à jour pour la nouvelle version
 	#
 	$this->dbQuery("UPDATE k_content SET contentSee=0, contentDateUpdate=NOW() WHERE id_content=".$new);
-	if($this->db_error) die($this->pre($this->db_query, $this->db_error));
+	if($this->db_error) die($this->helper->pre($this->db_query, $this->db_error));
 
 
 	# On s'occupe des parties qui concerne les traductions DATA
 	#
-	$data = $this->dbMulti("SELECT * FROM k_contentdata WHERE id_content=".$id_content);
+	$data = $this->mysql->multi("SELECT * FROM k_contentdata WHERE id_content=".$id_content);
 	if(sizeof($data) > 0){
 		foreach($data as $e){
 			$tmp = array();
@@ -1156,13 +1153,13 @@ public function contentDuplicate($id_content){
 			$addData[] = "(".$new.", ".implode(',', $tmp).")";
 		}
 		$this->dbQuery("INSERT INTO k_contentdata (id_content, ".implode(', ', $dataFields).") VALUES ".implode(', ', $addData));
-		if($this->db_error) die($this->pre($this->db_query, $this->db_error));
+		if($this->db_error) die($this->helper->pre($this->db_query, $this->db_error));
 	}
 
 
 	# On s'occupe des parties qui concerne les traductions MORE
 	#
-	$more = $this->dbMulti("SELECT * FROM k_content".$from['id_type']." WHERE id_content=".$id_content);
+	$more = $this->mysql->multi("SELECT * FROM k_content".$from['id_type']." WHERE id_content=".$id_content);
 	if(sizeof($more) > 0){
 		foreach($more as $e){
 			$tmp = array();
@@ -1172,7 +1169,7 @@ public function contentDuplicate($id_content){
 			$addMore[] = "(".$new.", ".implode(',', $tmp).")";
 		}
 		$this->dbQuery("INSERT INTO k_content".$from['id_type']." (id_content, ".implode(', ', $moreFields).") VALUES ".implode(', ', $addMore));
-		if($this->db_error) die($this->pre($this->db_query, $this->db_error));
+		if($this->db_error) die($this->helper->pre($this->db_query, $this->db_error));
 	}
 
 
@@ -1191,11 +1188,11 @@ public function contentDuplicate($id_content){
 
 	foreach($proto as $table => $k){
 		$where	= ($table == 'k_contentasso') ? 'aContent' : 'id_content';
-		$get	= $this->dbMulti("SELECT * FROM ".$table." WHERE ".$where."=".$id_content);
+		$get	= $this->mysql->multi("SELECT * FROM ".$table." WHERE ".$where."=".$id_content);
 
 		// si ca vaut le coup de faire la suite
 		if(sizeof($get) > 0){
-			$field	= $this->dbMulti("SHOW COLUMNS FROM ".$table." WHERE Field != '".$where."'");
+			$field	= $this->mysql->multi("SHOW COLUMNS FROM ".$table." WHERE Field != '".$where."'");
 			$field	= $this->dbKey($field, 'Field');
 
 			foreach($get as $e){
@@ -1213,47 +1210,47 @@ public function contentDuplicate($id_content){
 			}*/
 
 			$this->dbQuery("INSERT INTO ".$table." (".$where.", ".implode(', ', $field).") VALUES ".implode(', ', $add));
-			#if($this->db_error) die($this->pre($table, $this->db_query, $this->db_error));
+			#if($this->db_error) die($this->helper->pre($table, $this->db_query, $this->db_error));
 			unset($add);
 		}
 	}
 
-	/*$asso = $this->dbMulti("SELECT * FROM k_contentasso WHERE aContent=".$id_content);
+	/*$asso = $this->mysql->multi("SELECT * FROM k_contentasso WHERE aContent=".$id_content);
 	if(sizeof($asso) > 0){
 		foreach($asso as $e){
 			$addAsso[] = "(".$new.", ".$e['aType'].", ".$e['aField'].", ".$e['bType'].", ".$e['bContent'].")";	
 		}
 		$this->dbQuery("INSERT INTO k_contentasso (aContent, aType, aField, bType, bContent) VALUES ".implode(', ', $addAsso));
-		if($this->db_error) die($this->pre($this->db_query, $this->db_error));
+		if($this->db_error) die($this->helper->pre($this->db_query, $this->db_error));
 	}
 
 
-	$business = $this->dbMulti("SELECT * FROM  k_contentgroupbusiness WHERE id_content=".$id_content);
+	$business = $this->mysql->multi("SELECT * FROM  k_contentgroupbusiness WHERE id_content=".$id_content);
 	if(sizeof($business) > 0){
 		foreach($business as $e){
 			$addBusiness[] = "(".$e['id_group'].", ".$new.", ".$e['is_view'].", ".$e['is_buy'].", '".$e['contentPrice']."', '".$e['contentPriceTax']."', '".$e['contentPriceNormal']."', '".$e['contentPriceComment']."')";	
 		}
 		$this->dbQuery("INSERT INTO k_contentgroupbusiness (id_group, id_content, is_view, is_buy, contentPrice, contentPriceTax, contentPriceNormal, contentPriceComment) VALUES ".implode(', ', $addBusiness));
-		if($this->db_error) die($this->pre($this->db_query, $this->db_error));
+		if($this->db_error) die($this->helper->pre($this->db_query, $this->db_error));
 	}
 
 
-	$search = $this->dbMulti("SELECT * FROM k_contentsearch WHERE id_content=".$id_content);
+	$search = $this->mysql->multi("SELECT * FROM k_contentsearch WHERE id_content=".$id_content);
 	if(sizeof($search) > 0){
 		foreach($search as $e){
 			$addSearch[] = "(".$new.", ".$e['id_search'].")";	
 		}
 		$this->dbQuery("INSERT INTO k_contentsearch (id_content, id_search) VALUES ".implode(', ', $addSearch));
-		if($this->db_error) die($this->pre($this->db_query, $this->db_error));
+		if($this->db_error) die($this->helper->pre($this->db_query, $this->db_error));
 	}
 
-	$shop = $this->dbMulti("SELECT * FROM k_contentshop WHERE id_content=".$id_content);
+	$shop = $this->mysql->multi("SELECT * FROM k_contentshop WHERE id_content=".$id_content);
 	if(sizeof($shop) > 0){
 		foreach($shop as $e){
 			$addShop[] = "(".$new.", ".$e['id_shop'].")";	
 		}
 		$this->dbQuery("INSERT INTO k_contentshop (id_content, id_shop) VALUES ".implode(', ', $addShop));
-		if($this->db_error) die($this->pre($this->db_query, $this->db_error));
+		if($this->db_error) die($this->helper->pre($this->db_query, $this->db_error));
 	}*/
 
 }
@@ -1263,36 +1260,36 @@ public function contentDuplicate($id_content){
 public function contentDuplicateLanguage($id_content, $fr, $to){
 
 	# Originale
-	$from = $this->dbOne("SELECT * FROM k_content WHERE id_content=".$id_content);
+	$from = $this->mysql->one("SELECT * FROM k_content WHERE id_content=".$id_content);
 
-	$data = $this->dbMulti("SHOW COLUMNS FROM k_contentdata WHERE Field NOT IN('id_content', 'language')");
+	$data = $this->mysql->multi("SHOW COLUMNS FROM k_contentdata WHERE Field NOT IN('id_content', 'language')");
 	foreach($data as $e){
 		$dataFields[] = $e['Field'];
 	}
 
-	$more = $this->dbMulti("SHOW COLUMNS FROM k_content".$from['id_type']." WHERE Field NOT IN('id_content', 'language')");
+	$more = $this->mysql->multi("SHOW COLUMNS FROM k_content".$from['id_type']." WHERE Field NOT IN('id_content', 'language')");
 	foreach($more as $e){
 		$moreFields[] = $e['Field'];
 	}
 
-#	$this->pre('dateFields', $dataFields, 'moreFields', $moreFields);
+#	$this->helper->pre('dateFields', $dataFields, 'moreFields', $moreFields);
 
 	# On s'occupe des parties qui concerne les traductions DATA
-	$data	= $this->dbOne("SELECT * FROM k_contentdata WHERE id_content=".$id_content." AND language='".$fr."'");
+	$data	= $this->mysql->one("SELECT * FROM k_contentdata WHERE id_content=".$id_content." AND language='".$fr."'");
 	$tmp	= array();
 	foreach($dataFields as $df){
 		$tmp[] = "'".addslashes($data[$df])."'";
 	}
 
 	$this->dbQuery("INSERT INTO k_contentdata (id_content, language, ".implode(', ', $dataFields).") VALUES ('".$id_content."', '".$to."', ".implode(',', $tmp).")");
-	if($this->db_error) die($this->pre($this->db_query, $this->db_error));
+	if($this->db_error) die($this->helper->pre($this->db_query, $this->db_error));
 
 	# On s'occupe des parties qui concerne les traductions MORE
 	$select = '';
 	$values = '';
 
 	if(count($moreFields) > 0){
-		$more   = $this->dbOne("SELECT * FROM k_content".$from['id_type']." WHERE id_content=".$id_content);
+		$more   = $this->mysql->one("SELECT * FROM k_content".$from['id_type']." WHERE id_content=".$id_content);
 		$tmp    = array();
 
 		foreach($moreFields as $mf){
@@ -1304,7 +1301,7 @@ public function contentDuplicateLanguage($id_content, $fr, $to){
 	}
 
 	$this->dbQuery("INSERT INTO k_content".$from['id_type']." (id_content, language".$select.") VALUES ('".$id_content."','".$to."'".$values.")");
-	if($this->db_error) die($this->pre($this->db_query, $this->db_error));
+	if($this->db_error) die($this->helper->pre($this->db_query, $this->db_error));
 }
 
 /* + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - 
@@ -1312,12 +1309,12 @@ public function contentDuplicateLanguage($id_content, $fr, $to){
 public function contentVersionGet($opt=array()){
 
 	if($opt['id_content'] != NULL){
-		$version = $this->dbMulti("SELECT id_version, versionDate FROM k_contentversion WHERE id_content=".$opt['id_content']." AND language='".$opt['language']."'");
-		if($opt['debug']) $this->pre($this->db_query, $this->db_error);
+		$version = $this->mysql->multi("SELECT id_version, versionDate FROM k_contentversion WHERE id_content=".$opt['id_content']." AND language='".$opt['language']."'");
+		if($opt['debug']) $this->helper->pre($this->db_query, $this->db_error);
 	}else
 	if($opt['id_version'] != NULL){
-		$version = $this->dbOne("SELECT * FROM k_contentversion WHERE id_version=".$opt['id_version']);
-		if($opt['debug']) $this->pre($this->db_query, $this->db_error);
+		$version = $this->mysql->one("SELECT * FROM k_contentversion WHERE id_version=".$opt['id_version']);
+		if($opt['debug']) $this->helper->pre($this->db_query, $this->db_error);
 
 		$version = unserialize($version['versionRaw']);
 	}
@@ -1368,7 +1365,7 @@ public function contentRemove($id_type, $id_content, $language=''){
     }
 
     $this->dbQuery("DELETE FROM k_contentdata	WHERE id_content=".$id_content." ".$sqllang);
-	$data = $this->dbMulti("SELECT * FROM k_contentdata WHERE id_content=".$id_content);
+	$data = $this->mysql->multi("SELECT * FROM k_contentdata WHERE id_content=".$id_content);
 
 	// il n'y a plus de data (du tout !)
 	if(sizeof($data) == 0){
@@ -1407,7 +1404,7 @@ public function contentCacheBuild($id_content, $opt=array()){
 	if(intval($id_content) <= 0) return false;
 	$cache = array();
 
-	$languages = $this->dbMulti("SELECT * FROM k_contentdata WHERE id_content=".$id_content);
+	$languages = $this->mysql->multi("SELECT * FROM k_contentdata WHERE id_content=".$id_content);
 	foreach($languages as $e){
 	
 		// Langue
@@ -1417,7 +1414,7 @@ public function contentCacheBuild($id_content, $opt=array()){
 		);
 
 		// Categorie
-		$cats = $this->dbMulti("
+		$cats = $this->mysql->multi("
 			SELECT * FROM k_contentcategory
 			INNER JOIN k_categorydata ON k_contentcategory.id_category = k_categorydata.id_category
 			WHERE id_content=".$id_content." AND language='".$e['language']."' AND is_selected=1
@@ -1440,7 +1437,7 @@ public function contentCacheBuild($id_content, $opt=array()){
 	));
 
 	$this->dbQuery($this->dbUpdate($def)." WHERE id_content=".$id_content);
-	if($opt['debug']) $this->pre($this->db_query, $this->db_error);
+	if($opt['debug']) $this->helper->pre($this->db_query, $this->db_error);
 	
 	return true;
 }
@@ -1456,7 +1453,7 @@ public function contentCacheTable($id_content, $opt=array()){
 
 	# Autres langues
 	#
-	$languages = $this->dbMulti("SELECT * FROM k_contentdata WHERE id_content=".$id_content);
+	$languages = $this->mysql->multi("SELECT * FROM k_contentdata WHERE id_content=".$id_content);
 	foreach($languages as $e){
 	
 		// Get
@@ -1476,7 +1473,7 @@ public function contentCacheTable($id_content, $opt=array()){
 
 
 		// Find cat
-		$cats = $this->dbMulti("
+		$cats = $this->mysql->multi("
 			SELECT * FROM k_contentcategory
 			INNER JOIN k_categorydata ON k_contentcategory.id_category = k_categorydata.id_category
 			WHERE id_content=".$id_content." AND language='".$e['language']."' AND is_selected=1
@@ -1510,8 +1507,8 @@ public function contentCacheTable($id_content, $opt=array()){
 		}
 		
 		// On sauve
-		$chapter = $this->dbMulti("SELECT id_chapter FROM k_contentchapter WHERE id_content=".$e['id_content']);
-		$group	 = $this->dbMulti("SELECT id_group   FROM k_contentgroup WHERE id_content=".$e['id_content']);
+		$chapter = $this->mysql->multi("SELECT id_chapter FROM k_contentchapter WHERE id_content=".$e['id_content']);
+		$group	 = $this->mysql->multi("SELECT id_group   FROM k_contentgroup WHERE id_content=".$e['id_content']);
 		$keys[]  = 'content:'.$e['language'].':id_content:'.$id_content;
 
 		foreach($chapter as $c){
@@ -1546,7 +1543,7 @@ public function contentTypeSet($id_type, $def){ // DEPRECATED
 + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - */
 public function contentGroupGet($id_content){
 
-	$groups = $this->dbMulti("SELECT * FROM k_group");
+	$groups = $this->mysql->multi("SELECT * FROM k_group");
 	
 	$groups = $this->apiLoad('user')->userGroupGet(array(
 		'profile'		=> true,
@@ -1559,7 +1556,7 @@ public function contentGroupGet($id_content){
 	
 	if($id_content == NULL) return $data;
 
-	$group = $this->dbMulti("SELECT * FROM k_contentgroupbusiness WHERE id_content=".$id_content);
+	$group = $this->mysql->multi("SELECT * FROM k_contentgroupbusiness WHERE id_content=".$id_content);
 	foreach($group as $e){
 		if(is_array($data[$e['id_group']])){
 			$data[$e['id_group']] = array_merge($data[$e['id_group']], $e);
@@ -1584,7 +1581,7 @@ public function contentMediaLink($opt){
 		'raw'			=> true
 	));
 	if($content['id_content'] == NULL){
-		if($opt['debug']) $this->pre("contet not found with id_content", $opt['id_content']);
+		if($opt['debug']) $this->helper->pre("contet not found with id_content", $opt['id_content']);
 		return false;
 	}
 	
@@ -1592,14 +1589,14 @@ public function contentMediaLink($opt){
 	#
 	if($opt['clear']){
 		$this->dbQuery("UPDATE k_content SET contentMedia='' WHERE id_content=".$opt['id_content']);
-		if($opt['debug']) $this->pre("CLEAR", $this->db_query, $this->db_error);
+		if($opt['debug']) $this->helper->pre("CLEAR", $this->db_query, $this->db_error);
 		return true;
 	}
 
 	// Check if file EXIST
 /*
 	if(!file_exists(KROOT.$opt['url'])){
-		if($opt['debug']) $this->pre("file not found : ".KROOT.$opt['url']);
+		if($opt['debug']) $this->helper->pre("file not found : ".KROOT.$opt['url']);
 		return false;
 	}
 */
@@ -1636,7 +1633,7 @@ public function contentMediaLink($opt){
 		));
 	
 		$this->dbQuery($this->dbUpdate($def)." WHERE id_content=".$opt['id_content']);
-		if($opt['debug']) $this->pre("INSERT", $this->db_query, $this->db_error);
+		if($opt['debug']) $this->helper->pre("INSERT", $this->db_query, $this->db_error);
 
 		return true;
 	}
@@ -1649,7 +1646,7 @@ public function contentMediaLink($opt){
 + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - */
 public function contentAlbumFamily(){
 
-	$albums = $this->dbMulti("SELECT id_content, id_album FROM k_contentalbum");
+	$albums = $this->mysql->multi("SELECT id_content, id_album FROM k_contentalbum");
 	if(sizeof($albums) == 0) return true;
 
 	foreach($albums as $e){
@@ -1676,7 +1673,7 @@ public function contentAlbumFamilyParent($e, $line=array()){
 
 	if($e['id_album'] > 0){
 		$line[] = $e['id_album'];
-		$next	= $this->dbOne("SELECT id_content, id_album FROM k_contentalbum WHERE id_content=".$e['id_album']);
+		$next	= $this->mysql->one("SELECT id_content, id_album FROM k_contentalbum WHERE id_content=".$e['id_album']);
 
 		return $this->contentAlbumFamilyParent($next, $line);
 	}else{
@@ -1689,7 +1686,7 @@ public function contentAlbumFamilyParent($e, $line=array()){
 + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - */
 public function contentAlbumFamilyChildren($e, &$line=array()){
 
-	$children = $this->dbMulti("SELECT id_content, id_album FROM k_contentalbum WHERE id_album=".$e['id_content']);
+	$children = $this->mysql->multi("SELECT id_content, id_album FROM k_contentalbum WHERE id_album=".$e['id_content']);
 
 	foreach($children as $child){
 		$line[] = $child['id_content'];
@@ -1760,7 +1757,7 @@ public function contentItemProxySet($opt=array()){
 + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - */
 public function contentAssoGet($aContent, $aType, $aField, $bType){
 
-	$asso = $this->dbMulti(
+	$asso = $this->mysql->multi(
 		"SELECT * FROM k_contentasso WHERE ".
 		"aContent=".$aContent." AND aType=".$aType." AND aField=".$aField." AND bType=".$bType." ".
 		"ORDER BY assoOrder ASC"
@@ -1778,7 +1775,7 @@ public function contentAssoGet($aContent, $aType, $aField, $bType){
 public function contentAssoSet($aContent, $aType, $aField, $bType, $bContent){
 
 	$this->dbQuery("DELETE FROM k_contentasso WHERE aContent=".$aContent." AND aType=".$aType." AND aField=".$aField." AND bType=".$bType);
-	#$this->pre($this->db_query, $this->db_error);
+	#$this->helper->pre($this->db_query, $this->db_error);
 
 	if(sizeof($bContent) > 0){
 		$used = array();
@@ -1792,7 +1789,7 @@ public function contentAssoSet($aContent, $aType, $aField, $bType, $bContent){
 		
 		if(sizeof($added) > 0){
 			$this->dbQuery("INSERT IGNORE INTO k_contentasso (aContent, aType, aField, bType, bContent, assoOrder) VALUES ".implode(',', $added));
-			#$this->pre($this->db_query, $this->db_error);
+			#$this->helper->pre($this->db_query, $this->db_error);
 		}
 	}
 }
@@ -1801,7 +1798,7 @@ public function contentAssoSet($aContent, $aType, $aField, $bType, $bContent){
 + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - */
 public function contentAssoUserGet($id_content, $id_type, $id_field){
 
-	$asso = $this->dbMulti(
+	$asso = $this->mysql->multi(
 		"SELECT * FROM k_contentasso WHERE ".
 		"aContent=".$id_content." AND aType=".$id_type." AND aField=".$id_field." AND bType IS NULL"
 	);
@@ -1820,7 +1817,7 @@ public function contentAssoUserGet($id_content, $id_type, $id_field){
 public function contentAssoUserSet($id_content, $id_type, $id_field, $ids_user){
 
 	$this->dbQuery("DELETE FROM k_contentasso WHERE aContent=".$id_content." AND aType=".$id_type." AND aField=".$id_field);
-	#$this->pre($this->db_query, $this->db_error);
+	#$this->helper->pre($this->db_query, $this->db_error);
 
 	if(sizeof($ids_user) > 0){
 		foreach($ids_user as $id_user){
@@ -1829,7 +1826,7 @@ public function contentAssoUserSet($id_content, $id_type, $id_field, $ids_user){
 
 		if(sizeof($added) > 0){
 			$this->dbQuery("INSERT IGNORE INTO k_contentasso (aContent, aType, aField, bType, bUser) VALUES ".implode(',', $added));
-		#	$this->pre($this->db_query, $this->db_error);
+		#	$this->helper->pre($this->db_query, $this->db_error);
 		}
 	}
 }
@@ -1839,7 +1836,7 @@ public function contentAssoUserSet($id_content, $id_type, $id_field, $ids_user){
 public function contentAssoTag($id_content, $id_field, $language, $value){
 
 	$this->dbQuery("DELETE FROM k_contenttag WHERE id_content=".$id_content." AND language='".$language."'");
-	#$this->pre($this->db_query, $this->db_error);
+	#$this->helper->pre($this->db_query, $this->db_error);
 
 	foreach($value as $e){
 
@@ -1852,7 +1849,7 @@ public function contentAssoTag($id_content, $id_field, $language, $value){
 		));
 		
 		$this->dbQuery($this->dbInsert($def, array('ignore' => true)));
-		#$this->pre($this->db_query, $this->db_error);
+		#$this->helper->pre($this->db_query, $this->db_error);
 		
 		
 		// Alimenter le CLOUD
@@ -1862,12 +1859,12 @@ public function contentAssoTag($id_content, $id_field, $language, $value){
 		));
 		
 		$this->dbQuery($this->dbInsert($def, array('ignore' => true)));
-		#$this->pre($this->db_query, $this->db_error);
+		#$this->helper->pre($this->db_query, $this->db_error);
 	
 		$tmp[] = "'".$def['k_contenttagcloud']['contentTag']['value']."'";
 	}
 
-	$tmp = $this->dbMulti("
+	$tmp = $this->mysql->multi("
 		SELECT contentTag, language, COUNT(*) AS how FROM k_contenttag
 		WHERE contentTag IN (".implode(',', $tmp).")
 		GROUP BY language, contentTag
@@ -1875,9 +1872,8 @@ public function contentAssoTag($id_content, $id_field, $language, $value){
 
 	foreach($tmp as $e){
 		$this->dbQuery("UPDATE k_contenttagcloud SET how=".$e['how']." WHERE contentTag='".$e['contentTag']."' AND language='".$e['language']."'");
-		#$this->pre($this->db_query, $this->db_error);
+		#$this->helper->pre($this->db_query, $this->db_error);
 	}
 }
 
-
-} ?>
+}

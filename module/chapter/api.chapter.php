@@ -6,7 +6,7 @@ class chapter extends appModule{
 
 	/* + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + -
 	+ - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - */
-	function get($opt=array()){
+	public function chapterGet($opt=array()){
 	
 		if(BENCHME) @$GLOBALS['bench']->benchmarkMarker($bmStep='chapterGet() @='.json_encode($opt));
 	
@@ -201,7 +201,7 @@ class chapter extends appModule{
 	
 	/* + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - 
 	+ - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - */
-	public function set($id_chapter, $def, $lan){
+	public function chapterSet($id_chapter, $def, $lan){
 	
 		if($id_chapter == ''){
 			$nxt = $this->one("SELECT MAX(pos_chapter)+1 as next FROM k_chapter");
@@ -257,7 +257,7 @@ class chapter extends appModule{
 	/* + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + -
 		Supprime un CHAPITRE, modifit les PROFILE, et CONTENT 
 	+ - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - */
-	public function remove($id){
+	public function chapterRemove($id){
 	
 		# Mettre a jour les points d'entré des profiles
 		foreach($this->multi("SELECT * FROM k_userprofile") as $p){

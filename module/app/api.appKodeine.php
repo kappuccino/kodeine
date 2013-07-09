@@ -4,6 +4,13 @@ namespace Kodeine;
 
 class appKodeine extends  appModule{
 
+	public $t = 'toto';
+
+	public function __get($k){
+		if(!property_exists($this, $k)) $this->$k = NULL;
+		return $this->$k;
+	}
+
 //--- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --
 //--- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --
 	public function init($get){

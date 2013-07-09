@@ -50,8 +50,8 @@ class appMongo extends appModule{
 
 //-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -
 //-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -
-	public static function getInstance() {
-		if(is_null(self::$_instance)) self::$_instance = new appMongo();
+	public static function getInstance(){
+		if(is_null(self::$_instance)) self::$_instance = new self();
 		return self::$_instance;
 	}
 
