@@ -4,6 +4,9 @@ Kodeine Change log
 * = Autre / Divers / Inclassable...
 
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+2013-07-11 (5.2.2)
++ Affichage de l'URI d'un ficheir
+
 2013-02-06 (5.0.10)
 + Correction pb upload : quand on cliquait sur "envoyer des fichiers" alors le dossier courant etait toujours le dossier d'upload meme si on change de dossier
 

@@ -129,6 +129,7 @@ media.views.viewItem        = Backbone.View.extend({
 		'click .playVideo':     'playVideo',
 		'click .poster':        'videoPoster',
 		'click .meta':          'meta',
+		'click .uri':           'uri',
 		'click .select':        'select'
 	},
 
@@ -235,6 +236,11 @@ media.views.viewItem        = Backbone.View.extend({
 
 		this.panelView.postRender();
 
+	},
+
+	uri: function(e){
+		e.stopPropagation();
+		alert(media.views.myView.folder+'/'+this.model.get('url'));
 	},
 
 	select: function(e){

@@ -100,10 +100,11 @@
         </div>
     </div>
     <div class="action">
-        <img class="delete" src="ui/img/media-delete.png" title="<?php echo _('Delete'); ?>" />
-        <img class="duplicate" src="ui/img/media-duplicate.png" title="<?php echo _('Duplicate'); ?>" />
+        <img class="delete" src="ui/img/media-delete.png" title="<?php echo _('Delete this file'); ?>" />
+        <img class="duplicate" src="ui/img/media-duplicate.png" title="<?php echo _('Duplicate this file'); ?>" />
         <img class="fullsize" src="ui/img/media-wide.png" title="<?php echo _('Fullscreen'); ?>" />
         <img class="meta" src="ui/img/media-rename.png" title="<?php echo _('Add a legend'); ?>" />
+        <img class="uri" src="ui/img/media-copy.png" title="<?php echo _("Afficher le chemin d'accès"); ?>" />
 
 		<% if(kind == 'pdf'){ %>
 				<img class="pdfCover" src="ui/img/media-flip.png" title="<?php echo _('Generate thumbnail'); ?>" />
