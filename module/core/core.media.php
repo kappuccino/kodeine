@@ -545,7 +545,7 @@ function mediaUrlCache($opt, $file, $raw=false){
 
 	if(is_array($opt)){
 		unset(
-			$opt['cache'], $opt['debug'], $opt['url'], $opt['file'],
+			$opt['cache'], $opt['debug'], $opt['url'], $opt['file'], $opt['admin'],
 			$opt['generate'], $opt['ssl'], $opt['cdn'], $opt['domain']
 		);
 	}
