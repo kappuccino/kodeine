@@ -92,7 +92,7 @@
 <script type="text/template" id="view-item">
 
 	<div class="media">
-	    <div class="icone"></div>
+	    <div class="icone loading"></div>
 		<div class="small"><img src="ui/img/media-file_file.png" /></div>
     </div>
 

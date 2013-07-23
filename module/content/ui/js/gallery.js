@@ -268,7 +268,6 @@ gallery.views.viewItem       = Backbone.View.extend({
 		this.icone();
 		//console.log('ma() pour viewItem');
 		//gallery.views.myApp.makeDroppable(this);
-
 	},
 
 	destroy: function(){
@@ -284,9 +283,8 @@ gallery.views.viewItem       = Backbone.View.extend({
 		var icone   = $('.icone', this.$el);
 		var respon  = (preview.height > preview.width) ? 'height' : 'width';
 		var img     = $('<img />').addClass('lazy responsive-'+respon).attr('data-original', preview.url);
-		if(this.model.get('is_album')){
-			img.addClass('posterized');
-		}
+
+		if(this.model.get('is_album')) img.addClass('posterized');
 
 		icone.empty().append(img);
 	}

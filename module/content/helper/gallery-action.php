@@ -24,7 +24,7 @@
 	#
 	if($_GET['action'] == 'remove'){
 
-		$me = $app->dbOne("SELECT id_type FROM k_content WHERE id_content = ".$id_content);
+		$me = $app->dbOne("SELECT id_type, is_album FROM k_content WHERE id_content = ".$id_content);
 
 		$subs = array($id_content);
 		sub($app, $id_content, $subs);
@@ -40,7 +40,7 @@
 			$app->apiLoad('content')->contentRemove($me['id_type'], $e['id_content'], 'fr');
 		}
 
-		$app->apiLoad('content')->contentAlbumFamily();
+		if($me['is_album']) $app->apiLoad('content')->contentAlbumFamily();
 
 		$data['success'] = true;
 
