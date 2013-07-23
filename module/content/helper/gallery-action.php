@@ -153,7 +153,21 @@
 			}
 		}
 
-	}else{
+	}else
+
+
+	# Sauver le mode de DISPLAY
+	#
+	if($_GET['action'] == 'toggleDisplay'){
+		$app->filterSet('content'.$_GET['id_type'], $_GET['display'], 'display');
+		$data['success'] = true;
+	}
+
+
+
+
+
+	else{
 		$data['message'] = 'Action non reconnue';
 	}
 

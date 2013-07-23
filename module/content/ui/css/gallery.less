@@ -75,14 +75,6 @@
 	padding: 0px; margin: 0px;
 	overflow-y: auto;
 
-	li, .dragging{
-		list-style-type: none;
-		float: left;
-	//	height: 200px;
-		width: 160px;
-		margin: 15px;
-	}
-
 	li.nothing{
 		float: none;
 		width: inherit;
@@ -98,9 +90,9 @@
 	}
 }
 
-.gItem{
-	position: relative;
+// VIEW ITEMS //////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+.gItem{
 	.title{
 		color:#FFFFFF; line-height: 26px; font-size: 11px;
 		overflow: hidden;
@@ -108,78 +100,150 @@
 		white-space: nowrap;
 	}
 
-	.media{
-		height: 150px; width: 150px; padding: 5px;
-		background: rgba(0, 0, 0, .1);
-
-		display: table-cell;
-		vertical-align: middle;
-		position: relative; z-index: 40;
-	}
-
-	.icone{
-		height: 150px; width: 150px; padding: 5px;
-		z-index: 2;
-		cursor: pointer;
-		text-align: center;
-
-		img{
-			vertical-align: top;
-
-			&.responsive-height{
-				height: 100%;
-				width: auto;
-			}
-
-			&.responsive-width{
-				height: auto;
-				width: 100%;
-			}
-
-			&.shadow{
-				box-shadow: 0px 0px 3px rgba(0, 0, 0, 0.5);
-			}
-
-			&.loading{
-				background: url('@{corepath}/img/_img/media-loader-reverse.png') no-repeat center center;
-			}
-
-			&.posterized{
-				box-shadow: 0 0 3px #000000;
-			}
-		}
-	}
-
-	&:hover .action{
-		display: block;
-	}
-
-	&.ui-sortable-helper{
-		.title, .action{
-			display: none;
-		}
-	}
-
 	.action{
-		display: none;
-		position: absolute; z-index: 50;
-		top: 0; right: 0; padding:3px 0 3px 0;
-		background: rgba(0, 0, 0, 0.5);
+		.visibility.off, .poster.off{
+			opacity: .25;
+		}
 
 		img{
 			cursor: pointer;
 		}
+	}
+}
 
-		.visibility.off,
-		    .poster.off{
-			opacity: .25;
+body.grid{
+
+	#galleryView{
+		li, .dragging{
+			list-style-type: none;
+			float: left;
+			width: 160px; // height: 200px;
+			margin: 15px;
+		}
+	}
+
+	.gItem{
+		position: relative;
+
+		.media{
+			height: 150px; width: 150px; padding: 5px;
+			background: rgba(0, 0, 0, .1);
+
+			display: table-cell;
+			vertical-align: middle;
+			position: relative; z-index: 40;
+		}
+
+		.icone{
+			height: 150px; width: 150px; padding: 5px;
+			z-index: 2;
+			cursor: pointer;
+			text-align: center;
+
+			img{
+				vertical-align: top;
+
+				&.responsive-height{
+					height: 100%;
+					width: auto;
+				}
+
+				&.responsive-width{
+					height: auto;
+					width: 100%;
+				}
+
+				&.shadow{
+					box-shadow: 0px 0px 3px rgba(0, 0, 0, 0.5);
+				}
+
+				&.loading{
+					background: url('@{corepath}/img/_img/media-loader-reverse.png') no-repeat center center;
+				}
+
+				&.posterized{
+					box-shadow: 0 0 3px #000000;
+				}
+			}
+		}
+
+		.small{
+			display: none;
+		}
+
+		&:hover .action{
+			display: block;
+		}
+
+		&.ui-sortable-helper{
+			.title, .action{
+				display: none;
+			}
+		}
+
+		.action{
+			display: none;
+			position: absolute; z-index: 50;
+			top: 0; right: 0; padding:3px 0 3px 0;
+			background: rgba(0, 0, 0, 0.5);
 		}
 	}
 }
-/*.fly .media{
-	background: #e1e1e1;
-	background: #F60F60;
-}*/
+
+body.list{
+
+	#galleryView {
+		li, .dragging{
+			float: none;
+			width: auto; height: auto;
+			margin: 0 0 1px 0;
+			position: relative;
+		}
+	}
+
+	.gItem{
+		background: rgba(0, 0, 0, .25);
+
+		.title{
+			float: left;
+			line-height: 30px;
+		}
+
+		.media{
+			float: left;
+
+			.icone{
+				display: none;
+			}
+
+			.small{
+				float: left;
+				height: 20px; width: 20px;
+				margin: 5px;
+				cursor: pointer;
+
+				img{
+					height: 100%; width: auto;
+				}
+			}
+		}
+
+		&.ui-sortable-helper .action{
+			display: none;
+		}
+
+		.action{
+			float: right;
+
+			img{
+				margin: 5px 5px 0 0;
+			}
+		}
+	}
+}
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 #gCarrousel{
 	margin-top: 20px;
@@ -276,6 +340,21 @@
 
 			}
 		}
+	}
+}
+
+// ACTION //////////////////////////////////////////////////////////////////////////////////////////////////////////////
+#galleryAction{
+	position: absolute;
+	top: 5px; right: 10px;
+	z-index: 1000;
+
+	a{
+		cursor: pointer;
+	}
+
+	#toggleGrid, #toggleList{
+		display: none;
 	}
 }
 

@@ -10,6 +10,7 @@
 
 	$id_type = $_REQUEST['id_type'];
 	$type    = $app->apiLoad('type')->typeGet(array('id_type' => $id_type));
+	$filter  = $app->filterGet('content'.$id_type);
 
 ?><!DOCTYPE html>
 <html lang="fr">
@@ -17,7 +18,11 @@
 	<?php include(COREINC.'/head.php'); ?>
     <link rel="stylesheet" type="text/css" href="ui/css/gallery.css" />
 </head>
-<body data-id_type="<?php echo $id_type ?>" data-model="<?php echo $_GET['model'] ?>" data-album="<?php echo $_GET['album'] ?>" data-pick="<?php echo isset($_GET['pick']) ? 'true' : 'false' ?>">
+<body data-id_type="<?php echo $id_type ?>"
+      data-model="<?php echo $_GET['model'] ?>"
+      data-album="<?php echo $_GET['album'] ?>"
+      data-pick="<?php echo isset($_GET['pick']) ? 'true' : 'false' ?>"
+      data-display="<?php echo $filter['display'] ?: 'grid' ?>">
 
 <header><?php
 	if(!isset($_GET['pick'])) include(COREINC.'/top.php');
@@ -49,6 +54,11 @@
 
 <div id="gallery">
 
+	<div id="galleryAction">
+		<a id="toggleGrid"><i class="icon icon-th"></i> <?php echo _('Grid') ?></a>
+		<a id="toggleList"><i class="icon icon-list"></i> <?php echo _('List') ?></a>
+	</div>
+
 	<ul id="galleryPath" class="clearfix"></ul>
 
 	<ul id="galleryTree"></ul>
@@ -57,12 +67,13 @@
 
 </div>
 
-<!-- ///   ///   ///   ///   ///   ///   ///   ///   ///   ///   ///   ///   ///   ///   ///   ///   ///   ///  ///  -->
+<!-- /////////////////////////////////////////////////////////////////////////////////////////////////////////////// -->
 
 <script type="text/template" id="view-album">
 
     <div class="media">
 	    <div class="icone"><img src="ui/img/gallery-folder.png" /></div>
+	    <div class="small"><img src="ui/img/gallery-folder.png" /></div>
     </div>
 
 	<div class="action">
@@ -82,6 +93,7 @@
 
 	<div class="media">
 	    <div class="icone"></div>
+		<div class="small"><img src="ui/img/media-file_file.png" /></div>
     </div>
 
     <div class="action">
@@ -96,6 +108,8 @@
     <div class="title"><%- contentName %></div>
 
 </script>
+
+
 
 <script type="text/template" id="tree-item">
 
@@ -115,7 +129,7 @@
     <span class="name">/</span>
 </script>
 
-<!-- ///   ///   ///   ///   ///   ///   ///   ///   ///   ///   ///   ///   ///   ///   ///   ///   ///   ///  ///  -->
+<!-- /////////////////////////////////////////////////////////////////////////////////////////////////////////////// -->
 
 <div id="modal-upload">
 	<form id="uploadembed">
@@ -137,7 +151,7 @@
 	</form>
 </div>
 
-<!-- ///   ///   ///   ///   ///   ///   ///   ///   ///   ///   ///   ///   ///   ///   ///   ///   ///   ///  ///  -->
+<!-- /////////////////////////////////////////////////////////////////////////////////////////////////////////////// -->
 
 <?php include(COREINC.'/end.php'); ?>
 <script src="../core/vendor/jqueryui/jqui.dragdrop.js"></script>

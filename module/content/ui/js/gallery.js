@@ -1,6 +1,7 @@
 'use strict';
 
 var gallery = {
+	display: '',
 	id_type:'',
 	pickAlbum: null,
 	pickMode: false,
@@ -68,6 +69,8 @@ gallery.views.view           = Backbone.View.extend({
 		this.id_album = this.$el.data('id_album') || 0;
 		this.order = [];
 		this.isSortable = false;
+
+		this.changeDisplay();
 	},
 
 	clear: function(){
@@ -83,6 +86,8 @@ gallery.views.view           = Backbone.View.extend({
 	},
 
 	lazyLoad: function(){
+
+		if(gallery.display == 'list') return;
 
 		$('img.lazy', this.$el).lazyload({
 			container: this.$el,
@@ -100,6 +105,13 @@ gallery.views.view           = Backbone.View.extend({
 	},
 
 	//////////////
+
+	changeDisplay: function(){
+		if(this.$el.hasClass(gallery.display)) return;
+		$('body').removeClass('grid list').addClass(gallery.display);
+
+		if(gallery.display == 'grid') this.lazyLoad();
+	},
 
 	nav: function(id){
 		this.id_album = id;
@@ -162,7 +174,7 @@ gallery.views.view           = Backbone.View.extend({
 gallery.views.viewItem       = Backbone.View.extend({
 
 	tagName:    'li',
-	className:  'gItem',
+	className:  'gItem clearfix',
 
 	initialize: function(){
 		this.listenTo(this.model, 'remove', this.destroy);
@@ -172,6 +184,7 @@ gallery.views.viewItem       = Backbone.View.extend({
 	},
 
 	events: {
+		'click .small':         'nav',
 		'click .icone':         'nav',
 		'click .delete':        'kill',
 		'click .visibility':    'visibility',
@@ -510,6 +523,50 @@ gallery.views.pathItem       = Backbone.View.extend({
 
 });
 
+gallery.views.action         = Backbone.View.extend({
+
+	el: $('#galleryAction'),
+
+	initialize:function(){
+		gallery.display = $('body').data('display') || 'list';
+
+		if(gallery.display == 'list') this.viewList();
+		if(gallery.display == 'grid') this.viewGrid();
+
+	},
+
+	events: {
+		'click #toggleGrid': 'viewGrid',
+		'click #toggleList': 'viewList'
+	},
+
+	//////////////
+
+	viewList: function(){
+		gallery.display = 'list';
+		$('body').attr('data-display', 'list');
+
+		$('#toggleGrid', this.$el).show();
+		$('#toggleList', this.$el).hide();
+
+		if(gallery.views.myApp)  gallery.views.myApp.toggleDisplay('list');
+		if(gallery.views.myView) gallery.views.myView.changeDisplay();
+	},
+
+	viewGrid: function(){
+		gallery.display = 'grid';
+		$('body').attr('data-display', 'grid');
+
+		$('#toggleGrid', this.$el).hide();
+		$('#toggleList', this.$el).show();
+
+		if(gallery.views.myApp)  gallery.views.myApp.toggleDisplay('grid');
+		if(gallery.views.myView) gallery.views.myView.changeDisplay();
+	}
+
+});
+
+
 // APP /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 gallery.views.app            = Backbone.View.extend({
@@ -528,9 +585,10 @@ gallery.views.app            = Backbone.View.extend({
 		gallery.collections.myPath  = new gallery.collections.path;
 
 		// Views
-		gallery.views.myView = new gallery.views.view;
-		gallery.views.myTree = new gallery.views.tree;
-		gallery.views.myPath = new gallery.views.path;
+		gallery.views.myAction  = new gallery.views.action;
+		gallery.views.myView    = new gallery.views.view;
+		gallery.views.myTree    = new gallery.views.tree;
+		gallery.views.myPath    = new gallery.views.path;
 
 		// Routeur
 		gallery.myRouter = new gallery.router;
@@ -656,7 +714,6 @@ gallery.views.app            = Backbone.View.extend({
 			});
 
 		}else{
-			console.log('fy');
 			$('#file_upload').uploadify({
 				'buttonText':       'Parcourir',
 				'auto':             true,
@@ -908,8 +965,15 @@ gallery.views.app            = Backbone.View.extend({
 
 		}, this));
 
-	}
+	},
 
+	toggleDisplay: function(){
+		this.action({
+			action:  'toggleDisplay',
+			id_type: gallery.id_type,
+			display: gallery.display
+		});
+	}
 
 });
 
