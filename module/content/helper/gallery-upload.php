@@ -145,7 +145,7 @@
 			$raw = curl_exec($curlHandle);
 
 			if($raw !== false){
-				$targetFile = basename($e);
+				$targetFile = time().'_'.uniqid().'_'.basename($e);
 
 				if($escape){
 					$ext        = strtolower(pathinfo($targetFile, PATHINFO_EXTENSION));
@@ -176,7 +176,7 @@
 			? $_FILES['Filedata']['name'][0]
 			: $_FILES['Filedata']['name'];
 
-		$targetFile = uniqid().'_'.$tempName;
+		$targetFile = time().'_'.uniqid().'_'.$tempName;
 		$ext        = strtolower(pathinfo($targetFile, PATHINFO_EXTENSION));
 
 		if($escape){
