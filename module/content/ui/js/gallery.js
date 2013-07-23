@@ -79,6 +79,18 @@ gallery.views.view           = Backbone.View.extend({
 		this.clear();
 		gallery.collections.myMedia.each(this.fillItem, this);
 		this.makeSortable();
+		this.lazyLoad();
+	},
+
+	lazyLoad: function(){
+
+		$('img.lazy', this.$el).lazyload({
+			container: this.$el,
+			effect: 'fadeIn'
+		});
+
+		// Forcer le repaint de la page
+		this.$el.trigger('scroll');
 	},
 
 	fillItem: function(m){
@@ -258,8 +270,7 @@ gallery.views.viewItem       = Backbone.View.extend({
 
 		var icone   = $('.icone', this.$el);
 		var respon  = (preview.height > preview.width) ? 'height' : 'width';
-		var img     = $('<img />').addClass('responsive-'+respon).attr('src', preview.url);
-
+		var img     = $('<img />').addClass('lazy responsive-'+respon).attr('data-original', preview.url);
 		if(this.model.get('is_album')){
 			img.addClass('posterized');
 		}
@@ -859,7 +870,7 @@ gallery.views.app            = Backbone.View.extend({
 				this.togglePosterRemove(el, view);
 			}else{
 
-				window.open('gallery.php?pick&album='+model.get('id_content')+'&id_type='+gallery.id_type+'&model='+model.cid, '@', 'height=500');
+				window.open('gallery?pick&album='+model.get('id_content')+'&id_type='+gallery.id_type+'&model='+model.cid, '@', 'height=500');
 
 				return false;
 			}
@@ -892,6 +903,8 @@ gallery.views.app            = Backbone.View.extend({
 				'hasPoster': true,
 				'preview': d.preview
 			});
+
+			gallery.views.myView.lazyLoad();
 
 		}, this));
 

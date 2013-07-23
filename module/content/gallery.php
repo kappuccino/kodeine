@@ -144,6 +144,7 @@
 <script src="../core/vendor/bootstrap/js/bootstrap-dropdown.js"></script>
 <script src="../core/vendor/underscore/underscore-min.js"></script>
 <script src="../core/vendor/backbone/backbone-min.js"></script>
+<script src="../core/vendor/lazyload/jquery.lazyload.min.js"></script>
 <script src="../media/ui/_uploadifive/jquery.uploadifive-v1.0.js"></script>
 <script src="../media/ui/_uploadify/jquery.uploadify.js"></script>
 <script src="ui/js/gallery.js"></script>
