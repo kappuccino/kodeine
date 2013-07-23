@@ -763,7 +763,9 @@ public function contentSet($opt){
 	$field		= $opt['field'];
 	$group		= $opt['group'];
 	$item		= $opt['item'];
-	$album		= $opt['album'];
+    $album		= $opt['album'];
+
+    $contentFamily		= ($opt['contentFamily'] !== false) ? true : false;
 
 	$type 		= $this->apiLoad('type')->typeGet(array('id_type' => $id_type));
 
@@ -1014,7 +1016,7 @@ public function contentSet($opt){
 	# Generer la famille si je suis un ALBUM
 	#
 	$isAlbum = $this->dbOne("SELECT id_content FROM k_contentalbum WHERE id_content=".$this->id_content);
-	if($isAlbum['id_content'] > 0) $this->contentAlbumFamily();
+	if($isAlbum['id_content'] > 0 && $contentFamily) $this->contentAlbumFamily();
 
 	if(!$opt['noHook']) $this->hookAction('contentSet', $this->id_content, $opt);
 
