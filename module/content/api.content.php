@@ -1651,8 +1651,12 @@ public function contentMediaLink($opt){
 //-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -
 public function contentAlbumFamily($id_content=0){
 
-	$albums = $this->dbMulti("SELECT id_content, id_album FROM k_contentalbum WHERE id_content = ".$id_content);
-	if(sizeof($albums) == 0) return true;
+    $q = "SELECT id_content, id_album FROM k_contentalbum";
+
+    if($id_content > 0) $q .= " WHERE id_content = ".$id_content;
+
+    $albums = $this->dbMulti($q);
+    if(sizeof($albums) == 0) return true;
 
 	foreach($albums as $e){
 		$tree = $this->contentAlbumFamilyParent($e);
