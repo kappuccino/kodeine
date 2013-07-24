@@ -18,19 +18,19 @@
 		<li class="<?php echo isMe('/chapter/') ? 'me':'' ?>">
 			<a href="../chapter/"><span><?php echo _('Chapter'); ?></span></a>
 		</li>
-		<?php }  ?>
+		<?php } ?>
 
 		<?php if($app->userCan('content.type')){ ?>
 		<li class="<?php echo isMe('/type/') ? 'me':'' ?>">
 			<a href="../type/"><span><?php echo _('Type'); ?></span></a>
 		</li>
-		<?php }  ?>
+		<?php } ?>
 
         <?php if($app->userCan('content.field')){ ?>
         <li class="<?php echo isMe('/field/.*') ? 'me':'' ?>">
             <a href="../field/asso"><span><?php echo _('Fields'); ?></span></a>
         </li>
-        <?php }  ?>
+        <?php } ?>
 
 		<li class="<?php echo isMe('/comment/') ? 'me':'' ?>">
 			<a href="../comment/"><span><?php echo _('Comments'); ?></span></a>
@@ -40,7 +40,7 @@
 		<li class="<?php echo isMe('/content/search') ? 'me':'' ?>">
 			<a href="../content/search"><span><?php echo _('Search'); ?></span></a>
 		</li>
-		<?php }  ?>
+		<?php } ?>
 
         <li class="<?php echo isMe('/localisation/') ? 'me':'' ?>">
             <a href="../localisation/"><span><?php echo _('Translate'); ?></span></a>
@@ -49,6 +49,12 @@
         <li class="<?php echo isMe('/content/adzone') ? 'me':'' ?>">
             <a href="../content/adzone"><span><?php echo _('Ads'); ?></span></a>
         </li>
+
+		<?php if($app->userCan('content.pref')){ ?>
+        <li class="<?php echo isMe('/content/pref') ? 'me':'' ?>">
+            <a href="../content/pref"><span><?php echo _('Preferences'); ?></span></a>
+        </li>
+		<?php } ?>
 	</ul>
 
 	<ul class="right"></ul>

@@ -18,11 +18,65 @@
 
 	$id_album   = $_GET['id_album'];
 	$id_content = $_GET['id_content'];
+	$pref       = $app->configGet('content');
 
 
-	# On supprime un element (ALBUM / ITEM);
+	# On supprimer tous les ITEMS d'un ALBUM
 	#
-	if($_GET['action'] == 'remove'){
+	if($_GET['action'] == 'removeItemAll'){
+
+		$items = $app->apiLoad('content')->contentGet(array(
+			'id_album' => $id_album,
+			'is_item'  => true,
+			'id_type'  => $_GET['id_type'],
+			'raw'      => true
+		));
+
+		if(count($items) > 0){
+
+			foreach($items as $e){
+				$app->apiLoad('content')->contentRemove($e['id_type'], $e['id_content'], 'fr');
+
+				// Remove linked fil
+				$file = KROOT.$e['contentItemUrl'];
+				if($pref['galleryItemRemove'] && file_exists($file) && is_file($file)) unlink($file);
+			}
+
+			$data['success'] = true;
+		}else{
+			$data['success'] = false;
+		}
+	}else
+
+
+	# On supprime ITEM
+	#
+	if($_GET['action'] == 'removeItem'){
+
+		$item = $app->apiLoad('content')->contentGet(array(
+			'id_content' => $id_content,
+			'raw'        => true
+		));
+
+		if(!empty($item['id_content'])){
+
+			$app->apiLoad('content')->contentRemove($item['id_type'], $item['id_content'], 'fr');
+
+			// Remove linked fil
+			$file = KROOT.$item['contentItemUrl'];
+			if($pref['galleryItemRemove'] && file_exists($file) && is_file($file)) unlink($file);
+
+			$data['success'] = true;
+		}else{
+			$data['success'] = false;
+		}
+
+	}else
+
+
+	# On supprime ALBUM
+	#
+	if($_GET['action'] == 'removeAlbum'){
 
 		$me = $app->dbOne("SELECT id_type, is_album FROM k_content WHERE id_content = ".$id_content);
 

@@ -3,8 +3,8 @@
 
 	<data>
 		<key>content</key>
-		<version>5.2.2</version>
-        <lastMod>2013-07-01</lastMod>
+		<version>5.2.3</version>
+        <lastMod>2013-07-23</lastMod>
 		<install>YES</install>
 		<name><![CDATA[Contents]]></name>
 	</data>
@@ -46,6 +46,7 @@
 		<item code="type"		type="ALLOW_DENY" name="Type" />
 		<item code="field"		type="ALLOW_DENY" name="Champs" />
 		<item code="search"		type="ALLOW_DENY" name="Recherche" />
+		<item code="pref"		type="ALLOW_DENY" name="Preference" />
 	</profile>
 	
 </element>

@@ -211,7 +211,7 @@ gallery.views.viewItem       = Backbone.View.extend({
 		var cid = this.$el.data('cid');
 		var idc = this.model.get('id_content');
 
-		gallery.views.myApp.removeItem(cid, idc);
+		gallery.views.myApp.remove(cid, idc);
 	},
 
 	visibility: function(e){
@@ -619,7 +619,8 @@ gallery.views.app            = Backbone.View.extend({
 		'click #buttonImport':      'importAlbum',
 		'click #buttonUpload':      'uploadShow',
 		'click #buttonCloseUpload': 'clearModal',
-		'click #distantDownload':   'distantDownload'
+		'click #distantDownload':   'distantDownload',
+		'click #removeAllItems':    'removeAllItems'
 	},
 
 	addAlbum: function(){
@@ -871,12 +872,15 @@ gallery.views.app            = Backbone.View.extend({
 		})
 	},
 
-	removeItem: function(cid, me){
-	//	console.log("Remove Item", 'cid', cid, 'me', me);
+	remove: function(cid, me){
 
-		if(confirm('???')){
+		var model  = gallery.collections.myMedia.get(cid);
+		var action = model.get('is_album') ? 'removeAlbum' : 'removeItem';
+
+
+		if(confirm('Voulez-vous vraiment supprimer cet élément ?')){
 			this.action({
-				action:     'remove',
+				action:     action,
 				id_content: me
 			}, function(js){
 
@@ -900,6 +904,7 @@ gallery.views.app            = Backbone.View.extend({
 	},
 
 	togglePoster: function(view, state, el){
+				
 		var model = view.model;
 
 		// Pick un POSTER d'après un ITEM
@@ -971,6 +976,30 @@ gallery.views.app            = Backbone.View.extend({
 			id_type: gallery.id_type,
 			display: gallery.display
 		});
+	},
+
+	removeAllItems: function(){
+
+		if(confirm('Voulez-vous supprimer tous les items présents dans cet album ?')){
+			this.action({
+				action:  'removeItemAll',
+				id_albm: gallery.views.myView.id_album,
+				id_type: gallery.id_type
+			}, function(){
+
+				var items = gallery.collections.myMedia.filter(function(item) {
+					return item.get("is_item") === true;
+				});
+
+				if(items.length  > 0){
+					_.each(items, function(n, i){
+						n.destroy();
+					});
+				}
+
+			});
+		}
+
 	}
 
 });

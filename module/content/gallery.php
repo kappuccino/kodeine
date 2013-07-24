@@ -57,6 +57,7 @@
 	<div id="galleryAction">
 		<a id="toggleGrid"><i class="icon icon-th"></i> <?php echo _('Grid') ?></a>
 		<a id="toggleList"><i class="icon icon-list"></i> <?php echo _('List') ?></a>
+		<a id="removeAllItems"><i class="icon icon-remove"></i> <?php echo _('Remove all items') ?></a>
 	</div>
 
 	<ul id="galleryPath" class="clearfix"></ul>

@@ -1016,7 +1016,7 @@ public function contentSet($opt){
 	# Generer la famille si je suis un ALBUM
 	#
 	$isAlbum = $this->dbOne("SELECT id_content FROM k_contentalbum WHERE id_content=".$this->id_content);
-	if($isAlbum['id_content'] > 0 && $contentFamily) $this->contentAlbumFamily();
+	if($isAlbum['id_content'] > 0 && $contentFamily) $this->contentAlbumFamily($this->id_content);
 
 	if(!$opt['noHook']) $this->hookAction('contentSet', $this->id_content, $opt);
 
@@ -1646,26 +1646,29 @@ public function contentMediaLink($opt){
 	return false;
 }
 
-/* + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + -
-	Mettre a jour les PARENT et CHILDREN et les sauver en base
-+ - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - */
-public function contentAlbumFamily(){
+//-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -
+// Mettre a jour les PARENT et CHILDREN et les sauver en base
+//-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -
+public function contentAlbumFamily($id_content=0){
 
-	$albums = $this->dbMulti("SELECT id_content, id_album FROM k_contentalbum");
+	$albums = $this->dbMulti("SELECT id_content, id_album FROM k_contentalbum WHERE id_content = ".$id_content);
 	if(sizeof($albums) == 0) return true;
 
 	foreach($albums as $e){
 		$tree = $this->contentAlbumFamilyParent($e);
-		$tree = sizeof($tree) > 0 ? implode(',', array_reverse($tree)) : '';
+		$tree = (sizeof($tree) > 0) ? implode(',', array_reverse($tree)) : '';
 
 		$this->dbQuery("UPDATE k_contentalbum SET contentAlbumParent='".$tree."' WHERE id_content=".$e['id_content']);
+	#	$this->pre($this->db_query);
 	}
-	
+
+
 	foreach($albums as $e){
 		$tree = $this->contentAlbumFamilyChildren($e);
 		$tree = (sizeof($tree) > 0) ? implode(',', $tree) : '';
 
 		$this->dbQuery("UPDATE k_contentalbum SET contentAlbumChildren='".$tree."' WHERE id_content=".$e['id_content']);
+	#	$this->pre($this->db_query);
 	}
 
 	return true;
