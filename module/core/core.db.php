@@ -297,7 +297,7 @@ class coreDb{
 		if(is_array($values) && sizeof($values) > 0){
 
 			foreach($values as $value){
-				if($child == NULL){
+				if($child == ''){
 					$added[] = '('.$id.','.$value.')';
 				}else{
 					$added[] = '('.$id.','.$value.',1)';
