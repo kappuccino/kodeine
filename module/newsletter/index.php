@@ -91,7 +91,11 @@
 			<tr>
 				<td><input type="checkbox" name="del[]" value="<?php echo $e['id_newsletter'] ?>" class="cb" <?php echo $disabled ?> /></td>
 				<td class="icone"><a href="javascript:duplicate(<?php echo $e['id_newsletter'] ?>);"><i class="icon-tags"></i></a></td>
-				<td style="padding-left:3px;"><a href="analytic?id_newsletter=<?php echo $e['id_newsletter'] ?>"><i class="icon-signal"></i></a></td>
+				<td style="padding-left:3px;">
+                    <?php if($e['newsletterSendDate'] != NULL) { ?>
+                    <a href="analytic?id_newsletter=<?php echo $e['id_newsletter'] ?>"><i class="icon-signal"></i></a>
+                    <?php } ?>
+                </td>
 				<td><a href="data-options?id_newsletter=<?php echo $e['id_newsletter'] ?>"><?php echo $e['id_newsletter'] ?></a></td>
 				<td><a href="data-options?id_newsletter=<?php echo $e['id_newsletter'] ?>"><?php echo $e['newsletterSendDate']; ?></a></td>
 				<td><a href="data-options?id_newsletter=<?php echo $e['id_newsletter'] ?>"><?php echo $e['newsletterName'] ?></a></td>

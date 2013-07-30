@@ -26,7 +26,7 @@
 					? array(str_replace(KROOT, NULL, $folder))
 					: @$app->fsFile($folder, '', 'FLAT_NOROOT_NOHIDDEN');
 			}
-
+            sort($files);
 			if(sizeof($files) > 0){
 				foreach($files as $e){
 
