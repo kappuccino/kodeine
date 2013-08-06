@@ -1,8 +1,10 @@
 'use strict';
 
 var gallery = {
+	itemedMode: false,
 	display: '',
 	id_type:'',
+	id_item:'',
 	pickAlbum: null,
 	pickMode: false,
 	pickModel: null,
@@ -268,6 +270,12 @@ gallery.views.viewItem       = Backbone.View.extend({
 		this.icone();
 		//console.log('ma() pour viewItem');
 		//gallery.views.myApp.makeDroppable(this);
+
+		if(gallery.id_item == this.model.get('id_content')){
+			this.$el.addClass('current');
+		}else{
+			this.$el.removeClass('current');
+		}
 	},
 
 	destroy: function(){
@@ -572,6 +580,7 @@ gallery.views.app            = Backbone.View.extend({
 	el: $('body'),
 
 	initialize: function(){
+		gallery.id_item   = this.$el.data('id_item');
 		gallery.id_type   = this.$el.data('id_type');
 		gallery.pickMode  = this.$el.data('pick');
 		gallery.pickAlbum = this.$el.data('album');
@@ -592,6 +601,20 @@ gallery.views.app            = Backbone.View.extend({
 		gallery.myRouter = new gallery.router;
 		Backbone.history.start();
 
+		// EN MODE GALLERY
+		if(!gallery.itemedMode){
+
+
+			// Fix TOP
+			$('#gallery').css('top', $('#gallery').position().top);
+			$('#gallery').css({
+				'bottom': 0,
+				'position': 'absolute',
+				'right': '0px',
+				'left': '0px'
+			});
+		}
+
 		// Upload
 		this.uploadInit();
 
@@ -600,17 +623,9 @@ gallery.views.app            = Backbone.View.extend({
 
 		this.buttonEdit = this.$('#buttonEdit');
 
-		// Fix TOP
-		$('#gallery').css('top', $('#gallery').position().top);
-		$('#gallery').css({
-			'bottom': 0,
-			'position': 'absolute',
-			'right': '0px',
-			'left': '0px'
-		});
 
 		// UI Item
-		this.modalUpload    = $('#modal-upload');
+		this.modalUpload = $('#modal-upload');
 	},
 
 	events: {
@@ -1015,10 +1030,10 @@ gallery.router               = Backbone.Router.extend({
 	},
 
 	initialize: function(){
-
-		/*this.on('route:album', function(id) {
-		 gallery.views.myView.nav(id);
-		 });*/
+	/*	this.on('route:album', function(id) {
+			gallery.views.myView.nav(id);
+		});
+		*/
 	},
 
 	album: function(id){
@@ -1035,5 +1050,6 @@ gallery.router               = Backbone.Router.extend({
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 $(function(){
+	gallery.itemedMode = $('body').hasClass('itemed');
 	gallery.views.myApp = new gallery.views.app;
 });

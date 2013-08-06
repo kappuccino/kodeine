@@ -28,5 +28,21 @@ $(function(){
 		if(link != '') document.location = link;
 	});
 
+	$('#saveAndGoToLeft').click(function(){
+		var goto = $('#goToLeft').attr('href');
+		if(goto == '#') goto = document.location.href;
+
+		$('input[name="goto"]').val(goto);
+		$('#data').submit();
+	});
+
+	$('#saveAndGoToRight').click(function(){
+		var goto = $('#goToRight').attr('href');
+		if(goto == '#') goto = document.location.href;
+
+		$('input[name="goto"]').val(goto);
+		$('#data').submit();
+	});
+
 });
 

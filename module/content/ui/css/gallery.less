@@ -1,7 +1,19 @@
-@import      '../../../core/ui/css/0-mixins.less';
+@import '../../../core/ui/css/0-mixins.less';
 
 #gallery{
+	&.itemed{
+		position: absolute;
+		left: 0; right: 0;
+		height: 400px;
 
+		#galleryPath{
+			left: 0px;
+		}
+
+		#galleryView{
+			left: 0px;
+		}
+	}
 }
 
 #galleryPath{
@@ -86,13 +98,16 @@
 
 	.toto{
 		height: 30px;
-		background: red;
+	//	background: red;
 	}
+
+
 }
 
 // VIEW ITEMS //////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 .gItem{
+
 	.title{
 		color:#FFFFFF; line-height: 26px; font-size: 11px;
 		overflow: hidden;
@@ -111,7 +126,7 @@
 	}
 
 	.icone.loading{
-		background: red;
+	//	background: red;
 	}
 }
 
@@ -185,6 +200,10 @@ body.grid{
 			}
 		}
 
+		&.current .media{
+			background: rgba(0, 0, 0, .5);
+		}
+
 		.action{
 			display: none;
 			position: absolute; z-index: 50;
@@ -249,6 +268,10 @@ body.list{
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+body.itemed{
+	background: url(../img/background.png);
+}
+
 #gCarrousel{
 	margin-top: 20px;
 
@@ -289,7 +312,19 @@ body.list{
 		-moz-box-shadow: 0px 0px 2px rgba(0, 0, 0, 0.5);
 		-webkit-box-shadow: 0px 0px 2px rgba(0, 0, 0, 0.5);
 	}
-	
+
+}
+
+#gCarrouselBottom{
+//	padding: 20px 0 20px 0;
+
+	#gCarrousel{
+		margin-top: 0px;
+
+		thead a, a{
+			color: #CCC;
+		}
+	}
 }
 
 #import{
@@ -348,6 +383,7 @@ body.list{
 }
 
 // ACTION //////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 #galleryAction{
 	position: absolute;
 	top: 5px; right: 10px;
@@ -363,8 +399,8 @@ body.list{
 	}
 }
 
-
 // UPLOAD //////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 #modal-upload {
 	display: none;
 	position: absolute; z-index: 9999;

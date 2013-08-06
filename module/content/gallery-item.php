@@ -64,7 +64,13 @@
 			));
 			$message    = ($result) ? 'OK: Enregistrement' : 'KO: Erreur APP:<br />'.$app->apiLoad('content')->db_error;
 
-			if($result) $app->go('gallery-item?id_content='.$app->apiLoad('content')->id_content);
+			if($result){
+				if(!empty($_POST['goto'])){
+					$app->go($_POST['goto']);
+				}else{
+					$app->go('gallery-item?id_content='.$app->apiLoad('content')->id_content);
+				}
+			}
 		}else{
 			$message = 'WA: Validation failed';
 		}
@@ -88,6 +94,8 @@
 		'fieldShowForm'	=> true,
 		'debug'			=> false
 	));
+
+	$pref   = $app->configGet('content');
 
 	if($data['id_album'] == 0){
 		$items = $app->apiLoad('content')->contentGet(array(
@@ -183,7 +191,12 @@
     <link rel="stylesheet" type="text/css" href="../core/vendor/codemirror/lib/codemirror.css" />
     <link rel="stylesheet" type="text/css" href="../core/vendor/codemirror/theme/monokai.css" />
 </head>
-<body>
+<body class="itemed" data-id_type="<?php echo $type['id_type'] ?>"
+      data-id_item="<?php echo $data['id_content'] ?>"
+      data-model="<?php echo $_GET['model'] ?>"
+      data-album="<?php echo $data['id_album'] ?>"
+      data-pick="<?php echo isset($_GET['pick']) ? 'true' : 'false' ?>"
+      data-display="<?php echo $pref['display'] ?: 'grid' ?>">
 
 <header><?php
 	include(COREINC.'/top.php');
@@ -194,7 +207,7 @@
 	<li><a onclick="$('#data').submit()" class="btn btn-small btn-success"><?php echo _('Save'); ?></a></li>
 </div>
 
-<div id="app">
+<div id="app" class="clearfix" style="background: #FFF;">
 
 	<div class="wrapper"><?php
 		if($message != NULL){
@@ -205,13 +218,19 @@
 		<table width="100%" border="0" cellpadding="0" cellspacing="2" id="gCarrousel">
 			<thead>
 				<tr>
-					<td class="previous"><a href="<?php echo ($leftLink  != '') ? $leftLink  : '#'; ?>" id="goToLeft">← <?php echo _('Previous item'); ?></a></td>
+					<td class="previous">
+						<a href="<?php echo ($leftLink  != '') ? $leftLink  : '#'; ?>" id="goToLeft">← <?php echo _('Previous item'); ?></a>
+						<a id="saveAndGoToLeft"><?php echo _('(save)'); ?></a>
+					</td>
 					<td class="current">↑ <?php
 						echo !isset($parent)
 							? '<a id="goToAlbum" href="gallery?id_type='.$type['id_type'].'">'._('Root').'</a>'
 							: '<a id="goToAlbum" href="gallery?id_type='.$type['id_type'].'#album/'.$parent['id_content'].'">Album '.$parent['contentName'].'</a>';
 						?></td>
-					<td width="25%" class="next"><a href="<?php echo ($rightLink != '') ? $rightLink : '#'; ?>" id="goToRight"><?php echo _('Next item'); ?> →</a></td>
+					<td width="25%" class="next">
+						<a id="saveAndGoToRight"><?php echo _('(save)'); ?></a>
+						<a href="<?php echo ($rightLink != '') ? $rightLink : '#'; ?>" id="goToRight"><?php echo _('Next item'); ?> →</a>
+					</td>
 				</tr>
 			</thead>
 		</table>
@@ -220,11 +239,12 @@
 	<form action="gallery-item" method="post" id="data">
 	
 		<input type="hidden" name="action"      value="1" />
+		<input type="hidden" name="goto"        value="" />
 		<input type="hidden" name="id_type"     value="<?php echo $data['id_type'] ?>" />
 		<input type="hidden" name="id_content"  value="<?php echo $data['id_content'] ?>" id="id_content" />
 		<input type="hidden" name="language"    value="fr" />
 
-        <div class="tabset">
+        <div class="tabset" style="margin-bottom:0px;">
             <div class="view view-tab">
                 <ul class="is-sortable field-list">
 
@@ -278,40 +298,60 @@
 	    </div>
     </form>
 
-	<div class="wrapper">
-		<table width="100%" border="0" cellpadding="0" cellspacing="2" id="gCarrousel">
-			<tr valign="top">
-				<td class="previous"><?php
-					echo ($leftLink != '') ? previewMe($app, $previous, 100, $leftLink) : _('No previous item');
-				?></td>
-				<td class="current"><?php previewMe($app, $data, 300); ?></td>
-				<td class="next"><?php
-					echo ($rightLink != '') ? previewMe($app, $next, 100, $rightLink) : _('No more item');
-				?></td>
-			</tr>
-		</table>
-	</div>
+</div>
 
-
-
+<div id="gCarrouselBottom">
+	<?php if($pref['galleryItemRoll'] != '1'){ ?>
+		<div class="wrapper">
+			<table width="100%" border="0" cellpadding="0" cellspacing="2" id="gCarrousel">
+				<tr valign="top">
+					<td class="previous"><?php
+						echo ($leftLink != '') ? previewMe($app, $previous, 100, $leftLink) : _('No previous item');
+					?></td>
+					<td class="current"><?php previewMe($app, $data, 300); ?></td>
+					<td class="next"><?php
+						echo ($rightLink != '') ? previewMe($app, $next, 100, $rightLink) : _('No more item');
+					?></td>
+				</tr>
+			</table>
+		</div>
+	<?php }else{ ?>
+		<div id="gallery" class="itemed">
+			<ul id="galleryPath" class="clearfix"></ul>
+			<ul id="galleryView" data-id_album="<?php echo $data['id_album'] ?>" class="clearfix"></ul>
+		</div>
+	<?php } ?>
 </div>
 
 
-<?php include(COREINC.'/end.php'); ?>
+<?php
+	if($pref['galleryItemRoll'] == '1') include(__DIR__.'/ui/tpl/gallery.tpl');
+	include(COREINC.'/end.php');
+?>
 <script src="../core/vendor/tinymce/jscripts/tiny_mce/jquery.tinymce.js"></script>
 <script src="../core/vendor/tinymce/jscripts/tiny_mce/tiny_mce.js"></script>
 <script src="ui/js/content.js"></script>
 <script src="ui/js/gallery.nav.js"></script>
-<script>
 
+<?php if($pref['galleryItemRoll'] == '1'){ ?>
+<script src="../core/vendor/jqueryui/jqui.dragdrop.js"></script>
+<script src="../core/vendor/bootstrap/js/bootstrap-dropdown.js"></script>
+<script src="../core/vendor/underscore/underscore-min.js"></script>
+<script src="../core/vendor/backbone/backbone-min.js"></script>
+<script src="../core/vendor/lazyload/jquery.lazyload.min.js"></script>
+<script src="../media/ui/_uploadifive/jquery.uploadifive-v1.0.js"></script>
+<script src="../media/ui/_uploadify/jquery.uploadify.js"></script>
+<script src="ui/js/gallery.js"></script>
+<?php } ?>
+
+<script>
 	actionNav		= true;
 	language		= '<?php echo $data['language'] ?>';
 	doMove  		= false;
 	useEditor		= true;
-	replace			= []
+	replace			= [];
 	textarea		= "<?php echo @implode(',', $GLOBALS['textarea']) ?>";
 	MceStyleFormats = [<?php echo @file_get_contents(USER.'/config/tinymceStyleFormats.php') ?>];
-
 </script>
 
 </body></html>
