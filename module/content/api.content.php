@@ -129,56 +129,6 @@ public function contentGet($opt=array()){
 	}
 
 
-	# Gerer les CATEGORY lie a ce CONTENT
-	#
-	if($opt['categoryUrl'] != ''){
-		$monoCat = $this->apiLoad('category')->categoryGet(array(
-			'categoryUrl'	=> $opt['categoryUrl'],
-			'language' 		=> $language,
-			'debug'			=> $opt['debug']
-		));
-		if(sizeof($monoCat) == 0){
-			if($opt['debug']) $this->pre("No CATEGORY found by URL : ".$opt['categoryUrl']);
-			return array();
-		}
-	}else
-	if($opt['id_category'] != NULL){
-		if(is_array($opt['id_category'])){
-			$multiCat = $this->apiLoad('category')->categoryGet(array(
-				'id_category'	=> $opt['id_category'],
-				'language'		=> $language,
-				'debug'			=> $opt['debug']
-			));
-			if(sizeof($multiCat) == 0){
-				if($opt['debug']) $this->pre("NO MULTI-CATEGORY found by IDs : ", $opt['id_category']);
-				return array();
-			}else{
-				foreach($multiCat as $e){
-					$multiCatItem[] = $e['id_category'];
-				}
-			}
-		}else{
-			$monoCat = $this->apiLoad('category')->categoryGet(array(
-				'id_category'	=> $opt['id_category'],
-				'language'		=> $language,
-				'debug'			=> $opt['debug']
-			));
-			if(sizeof($monoCat) == 0){
-				if($opt['debug']) $this->pre("NO CATEGORY found by ID : ".$opt['id_category']);
-				return array();
-			}		
-		}
-	}
-	if(is_array($multiCat)){
-		$useCategory = true;
-		$id_category = " IN(".implode(',', $multiCatItem).")";
-	}else
-	if(is_array($monoCat)){
-		$useCategory = true;
-		$id_category = ($categoryThrough)
-			? " IN(".$monoCat['id_category'].(($monoCat['categoryChildren'] != NULL) ? ',' : '').$monoCat['categoryChildren'].")"
-			: " =".$monoCat['id_category'];
-	}
 
 
 	# Gerer le CHAPTER lie a ce CONTENT
@@ -261,10 +211,6 @@ public function contentGet($opt=array()){
 		$join[] = "INNER JOIN k_contentsocialforum ON k_content.id_content = k_contentsocialforum.id_content";
 	}
 
-	if($id_category != ''){
-		$join[] = "INNER JOIN k_contentcategory ON ".$jTable.".id_content = k_contentcategory.id_content";
-	}
-
 	if($type['is_ad']){
 		$join[] = "INNER JOIN k_contentad ON ".$jTable.".id_content = k_contentad.id_content";
 		$cond[] = "k_contentad.language='".$language."'";
@@ -273,6 +219,69 @@ public function contentGet($opt=array()){
 	if($opt['assoUser'] == true){
 		$join[] = "INNER JOIN k_user     ON k_content.id_user = k_user.id_user";
 		$join[] = "INNER JOIN k_userdata ON k_user.id_user = k_userdata.id_user";
+	}
+
+	# Gerer les CATEGORY lie a ce CONTENT
+	#
+	if($opt['categoryUrl'] != ''){
+		$monoCat = $this->apiLoad('category')->categoryGet(array(
+			'categoryUrl'	=> $opt['categoryUrl'],
+			'language' 		=> $language,
+			'debug'			=> $opt['debug']
+		));
+		if(sizeof($monoCat) == 0){
+			if($opt['debug']) $this->pre("No CATEGORY found by URL : ".$opt['categoryUrl']);
+			return array();
+		}
+	}else
+	if($opt['id_category'] != NULL){
+		if(is_array($opt['id_category'])){
+			$multiCat = $this->apiLoad('category')->categoryGet(array(
+				'id_category'	=> $opt['id_category'],
+				'language'		=> $language,
+				'debug'			=> $opt['debug']
+			));
+			if(sizeof($multiCat) == 0){
+				if($opt['debug']) $this->pre("NO MULTI-CATEGORY found by IDs : ", $opt['id_category']);
+				return array();
+			}else{
+				foreach($multiCat as $e){
+					$multiCatItem[] = $e['id_category'];
+				}
+			}
+		}else{
+			$monoCat = $this->apiLoad('category')->categoryGet(array(
+				'id_category'	=> $opt['id_category'],
+				'language'		=> $language,
+				'debug'			=> $opt['debug']
+			));
+			if(sizeof($monoCat) == 0){
+				if($opt['debug']) $this->pre("NO CATEGORY found by ID : ".$opt['id_category']);
+				return array();
+			}
+		}
+	}
+
+	if(is_array($multiCat)){
+		$useCategory = true;
+
+		if($opt['categoryAll']){
+			foreach($multiCatItem as $e){
+				$join[] = "RIGHT JOIN k_contentcategory AS cat".$e." ON ".$jTable.".id_content = cat".$e.".id_content AND cat".$e.".id_category=".$e;
+			}
+		}else{
+			$id_category = " IN(".implode(',', $multiCatItem).")";
+		}
+	}else
+	if(is_array($monoCat)){
+		$useCategory = true;
+		$id_category = ($categoryThrough)
+				? " IN(".$monoCat['id_category'].(($monoCat['categoryChildren'] != NULL) ? ',' : '').$monoCat['categoryChildren'].")"
+				: " =".$monoCat['id_category'];
+	}
+
+	if($id_category != '' && !$opt['categoryAll']){
+		$join[] = "INNER JOIN k_contentcategory ON ".$jTable.".id_content = k_contentcategory.id_content";
 	}
 
 	# Search
@@ -434,11 +443,13 @@ public function contentGet($opt=array()){
 		}
 	}
 
-	if($useCategory != ''){
+	if($useCategory != '' && !$opt['categoryAll']){
 		$cond[] = "id_category".$id_category;
+
 		if(!$categoryThrough){
 			$cond[] = "k_contentcategory.is_selected=1";
 		}
+
 		$needToGroup = true;
 	}
 
