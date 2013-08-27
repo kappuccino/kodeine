@@ -854,6 +854,7 @@ public function fieldForm($id_field, $value, $opt=array()){
 				? $this->apiLoad('content')->contentGet(array(
 					'id_content'	=> $value,
 					'id_type'		=> $type['id_type'],
+					'is_album'      => ($type['is_gallery'] == 1),
 					'id_parent'		=> '*',
 					'raw'			=> true,
 					'debug'			=> false,

@@ -847,7 +847,7 @@ function tagInsert(zone, fieldName, id_field, id_type, id, contentName, method){
 	if(id_type == 'user'){
 		var prompt = '#us';
 	}else{
-		var prompt = '#ct';
+		var prompt = 'ct';
 	}
 
 	var area = $('#'+zone).find('.keyword');
@@ -888,11 +888,13 @@ function tagOpen(id_type, id){
 }
 
 function tagRemove(prompt, id_field, id){
-	prompt = '#'+prompt;
-	
-		
-	if(!$(prompt+'-'+id_field+'-'+id).length > 0) return false;
-	$(prompt+'-'+id_field+'-'+id).remove();
+
+
+//	prompt = '#'+prompt;
+//	prompt = prompt;
+
+//	if(!$(prompt+'-'+id_field+'-'+id).length > 0) return false;
+	$('#'+prompt+'-'+id_field+'-'+id).remove();
 }
 
 function tagSearch(id_field, id_type, fieldName, method){
@@ -1006,9 +1008,12 @@ function tagSearchRequest(id_field, id_type, fieldName, clean, getVar, method){
 				var anch = $('<a style="cursor:pointer;"><img src=\"../core/ui/img/_img/picto-add.png\" /></a>').appendTo(push).bind('click', function() {
 					tagInsert('contenttable-'+id_field, fieldName, id_field, id_type, eval('e.'+tagId), eval('e.'+tagView), method);
 				});
-				
+
+				var name = e[tagView];
+				if(e.path) name = name + ' ('+ e.path +')';
+
 				$('<td>'+e[tagId]+'</td>').appendTo(line).css('width', 25);
-				$('<td>'+e[tagView]+'</td>').appendTo(line);					
+				$('<td class="@">'+name+'</td>').appendTo(line);
 				
 				
 				if(typeof e.more != 'undefined'){
