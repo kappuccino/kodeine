@@ -16,7 +16,7 @@
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	$id_album   = $_GET['id_album'];
+	$id_album   = $_GET['id_album'] ?: -5000;
 	$id_content = $_GET['id_content'];
 	$pref       = $app->configGet('content');
 
@@ -26,11 +26,15 @@
 	if($_GET['action'] == 'removeItemAll'){
 
 		$items = $app->apiLoad('content')->contentGet(array(
+			'debug'    => true,
 			'id_album' => $id_album,
 			'is_item'  => true,
 			'id_type'  => $_GET['id_type'],
 			'raw'      => true
 		));
+
+#		echo count($items);
+#		die();
 
 		if(count($items) > 0){
 
