@@ -300,8 +300,8 @@
 
 </div>
 
-<div id="gCarrouselBottom">
-	<?php if($pref['galleryItemRoll'] != '1'){ ?>
+<?php if($pref['galleryItemRoll'] != '1'){ ?>
+	<div id="gCarrouselBottom">
 		<div class="wrapper">
 			<table width="100%" border="0" cellpadding="0" cellspacing="2" id="gCarrousel">
 				<tr valign="top">
@@ -315,16 +315,14 @@
 				</tr>
 			</table>
 		</div>
-	<?php }else{ ?>
-		<div id="gallery" class="itemed">
-			<ul id="galleryPath" class="clearfix"></ul>
-			<ul id="galleryView" data-id_album="<?php echo $data['id_album'] ?>" class="clearfix"></ul>
-		</div>
-	<?php } ?>
-</div>
+	</div>
+<?php }else{ ?>
+	<div id="gallery" class="itemed">
+		<ul id="galleryPath" class="clearfix"></ul>
+		<ul id="galleryView" data-id_album="<?php echo $data['id_album'] ?>" class="clearfix"></ul>
+	</div>
+<?php }
 
-
-<?php
 	if($pref['galleryItemRoll'] == '1') include(__DIR__.'/ui/tpl/gallery.tpl');
 	include(COREINC.'/end.php');
 ?>

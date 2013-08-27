@@ -15,27 +15,100 @@
 	}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	$api        = $app->apiLoad('content');
 
 	$id_album   = $_GET['id_album'];
 	$id_content = $_GET['id_content'];
 	$pref       = $app->configGet('content');
+	$is_alias   = false;
 
+	// Si on travail sur un ALIAS, travailler sur l'ORIGINAL
+	if($id_album > 0){
+		$album = $api->contentGet(array(
+			'id_content' => $id_album,
+			'raw'        => true
+		));
+
+		if($album['id_alias'] > 0){
+			$is_alias = true;
+			$id_album = $album['id_alias'];
+		}
+	}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+	# Création d'un nouvel alias depuis
+	#
+	if($_GET['action'] == 'createAlias'){
+
+		$src = $api->contentGet(array(
+			'id_content' => $id_content,
+			'raw'        => true
+		));
+
+		$last = $app->dbOne("SELECT MAX(contentAlbumPos) AS h FROM k_contentalbum WHERE id_album=".$src['id_album']);
+		$name = $src['contentName'].' - alias';
+
+		$def['k_content'] = array(
+			'is_album'   => array('value' => 1),
+			'contentSee' => array('value' => $src['contentSee'])
+		);
+
+		$album['k_contentalbum'] = array(
+			'id_alias'        => array('value' => $src['id_content']),
+			'id_album'        => array('value' => $src['id_album']),
+			'contentAlbumPos' => array('value' => ($last['h'] + 1))
+		);
+
+		$dat['k_contentdata'] = array(
+			'contentUrl'  => array('value' => $app->helperUrlEncode($name, $src['language'])),
+			'contentName' => array('value' => $name)
+		);
+
+		$opt = array(
+			'id_type'		=> $src['id_type'],
+			'language'		=> $src['language'],
+			'debug'			=> false,
+			'def'			=> $def,
+			'data'			=> $dat,
+			'album'			=> $album,
+		);
+
+		$result = $api->contentSet($opt);
+		$new    = $api->contentGet(array(
+			'id_content' => $api->id_content
+		));
+
+		$data['success'] = true;
+		$data['new']     = array(
+			'is_album'      => true,
+			'is_alias'      => true,
+			'id_alias'      => intval($new['id_alias']),
+			'id_album'      => intval($new['id_album']),
+			'id_content'    => intval($new['id_content']),
+			'contentName'   => $new['contentName'],
+			'contentSee'    => $new['contentSee'],
+			'hasPoster'     => false
+		);
+
+	}else
 
 	# On supprimer tous les ITEMS d'un ALBUM
 	#
 	if($_GET['action'] == 'removeItemAll'){
 
-		$items = $app->apiLoad('content')->contentGet(array(
+		$items = $api->contentGet(array(
 			'id_album' => $id_album,
 			'is_item'  => true,
 			'id_type'  => $_GET['id_type'],
-			'raw'      => true
+			'raw'      => true,
+			'noLimit'  => true
 		));
 
 		if(count($items) > 0){
 
 			foreach($items as $e){
-				$app->apiLoad('content')->contentRemove($e['id_type'], $e['id_content'], 'fr');
+				$api->contentRemove($e['id_type'], $e['id_content'], 'fr');
 
 				// Remove linked fil
 				$file = KROOT.$e['contentItemUrl'];
@@ -53,14 +126,14 @@
 	#
 	if($_GET['action'] == 'removeItem'){
 
-		$item = $app->apiLoad('content')->contentGet(array(
+		$item = $api->contentGet(array(
 			'id_content' => $id_content,
 			'raw'        => true
 		));
 
 		if(!empty($item['id_content'])){
 
-			$app->apiLoad('content')->contentRemove($item['id_type'], $item['id_content'], 'fr');
+			$api->contentRemove($item['id_type'], $item['id_content'], 'fr');
 
 			// Remove linked fil
 			$file = KROOT.$item['contentItemUrl'];
@@ -85,16 +158,16 @@
 
 		// Suppression des sous-albums
 		foreach($subs as $e){
-			$app->apiLoad('content')->contentRemove($_GET['id_type'], $e, 'fr');
+			$api->contentRemove($_GET['id_type'], $e, 'fr');
 		}
 		
 		// Supprimer les id_content de tous ces albums
 		$items = $app->dbMulti("SELECT id_content FROM k_contentitem WHERE id_album IN(".implode(',', $subs).")");
 		foreach($items as $e){
-			$app->apiLoad('content')->contentRemove($me['id_type'], $e['id_content'], 'fr');
+			$api->contentRemove($me['id_type'], $e['id_content'], 'fr');
 		}
 
-		if($me['is_album']) $app->apiLoad('content')->contentAlbumFamily();
+		if($me['is_album']) $api->contentAlbumFamily();
 
 		$data['success'] = true;
 
@@ -104,6 +177,7 @@
 	# Gerer la positions des elements (ALBUM / ITEMS)
 	#
 	if($_GET['action'] == 'order'){
+
 
 		$albums = explode('.', $_GET['albums']);
 		$items  = explode('.', $_GET['items']);
@@ -119,6 +193,7 @@
 				$app->dbQuery("UPDATE k_contentitem SET contentItemPos=".$idx." WHERE id_content=".$id_content." AND id_album=".$id_album);
 			}
 		}
+
 
 		$data['success'] = true;
 
@@ -141,12 +216,14 @@
 	#
 	if($_GET['action'] == 'moveAlbum'){
 
+		if($is_alias) $id_album = $_GET['id_album'];
+
 		$last = $app->dbOne("SELECT MAX(contentAlbumPos) AS la FROM k_contentalbum WHERE id_album=".$id_album);
 		$app->dbQuery("UPDATE k_contentalbum SET id_album=".$id_album.", contentAlbumPos=".($last['la']+1)." WHERE id_content=".$id_content);
 
 		$data['success'] = true;
 
-		$app->apiLoad('content')->contentAlbumFamily();
+		$api->contentAlbumFamily();
 	
 	}else
 	
@@ -172,7 +249,7 @@
 		$data['success'] = true;
 
 		if($poster > 0){
-			$poster = $app->apiLoad('content')->contentGet(array(
+			$poster = $api->contentGet(array(
 				'id_content' => $poster,
 				'raw'		 => true
 			));

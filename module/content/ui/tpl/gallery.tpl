@@ -9,6 +9,12 @@
 		<img class="delete" src="../media/ui/img/media-delete.png" />
 		<a href="gallery-album?id_content=<%- id_content %>"><img src="../media/ui/img/media-edit.png"></a>
 		<img class="visibility <% if(contentSee == '0'){ %>off<% } %>" src="../media/ui/img/media-eye.png" />
+
+
+		<% if(!is_alias){ %>
+		<img class="alias" src="ui/img/ico-alias.png" />
+		<% } %>
+
 		<% if(!gallery.pickMode){ %>
 		<img class="poster <% if(!hasPoster){ %>off<% } %>" src="../media/ui/img/media-star.png" />
 		<% } %>

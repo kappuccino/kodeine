@@ -611,7 +611,7 @@ function tabAction(){
 						: $(this).html(newName);
 					
 					var view	= parent.parent().parent().parent().parent().children('.view').eq(i);
-					console.log(parent.parent().parent().parent().parent().children('.view').eq(i))
+				//	console.log(parent.parent().parent().parent().parent().children('.view').eq(i))
 					var label	= view.find('.view-label span');
 
 					if(label) label.html(newName);						

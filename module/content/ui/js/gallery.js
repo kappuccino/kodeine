@@ -190,7 +190,8 @@ gallery.views.viewItem       = Backbone.View.extend({
 		'click .icone':         'nav',
 		'click .delete':        'kill',
 		'click .visibility':    'visibility',
-		'click .poster':        'poster'
+		'click .poster':        'poster',
+		'click .alias':         'alias'
 	},
 
 	//////////////
@@ -239,6 +240,11 @@ gallery.views.viewItem       = Backbone.View.extend({
 		}
 	},
 
+	alias: function(e){
+		e.stopPropagation();
+		gallery.views.myApp.createAlias(this.model.get('id_content'));
+	},
+
 	//////////////
 
 	templateAlbum: _.template($('#view-album').html()),
@@ -273,6 +279,11 @@ gallery.views.viewItem       = Backbone.View.extend({
 
 		if(gallery.id_item == this.model.get('id_content')){
 			this.$el.addClass('current');
+
+			gallery.views.myView.$el.animate({
+				scrollTop: this.$el.offset().top
+			}, 500);
+
 		}else{
 			this.$el.removeClass('current');
 		}
@@ -601,19 +612,14 @@ gallery.views.app            = Backbone.View.extend({
 		gallery.myRouter = new gallery.router;
 		Backbone.history.start();
 
-		// EN MODE GALLERY
-		if(!gallery.itemedMode){
-
-
-			// Fix TOP
-			$('#gallery').css('top', $('#gallery').position().top);
-			$('#gallery').css({
-				'bottom': 0,
-				'position': 'absolute',
-				'right': '0px',
-				'left': '0px'
-			});
-		}
+		// Fix TOP
+		$('#gallery').css('top', $('#gallery').position().top);
+		$('#gallery').css({
+			'bottom': 0,
+			'position': 'absolute',
+			'right': '0px',
+			'left': '0px'
+		});
 
 		// Upload
 		this.uploadInit();
@@ -800,9 +806,9 @@ gallery.views.app            = Backbone.View.extend({
 				var mod  = gallery.collections.myMedia.get(cid);
 			//	var tree = gallery.views.myTree.$el.find('li[data-idc="'+ instance.$el.data('idc') +'"]');
 
-				console.log('Drop Event', 'me:'+me, 'to:'+to, 'cid:'+cid);
-				console.log('model',  mod.toJSON());
-				console.log('instance', instance.model.toJSON());
+			//	console.log('Drop Event', 'me:'+me, 'to:'+to, 'cid:'+cid);
+			//	console.log('model',  mod.toJSON());
+			//	console.log('instance', instance.model.toJSON());
 
 				if(!instance.model.get('is_album')) return;
 				if(me == to) return;
@@ -1015,7 +1021,23 @@ gallery.views.app            = Backbone.View.extend({
 			});
 		}
 
-	}
+	},
+
+	createAlias: function(id_content){
+		this.action({
+			action:  'createAlias',
+			id_albm: gallery.views.myView.id_album,
+			id_content: id_content
+		}, function(d){
+
+			if(d.success){
+				var m = new gallery.models.media(d.new);
+				console.log(m);
+				gallery.views.myView.fillItem(m);
+			}
+
+		});
+}
 
 });
 
