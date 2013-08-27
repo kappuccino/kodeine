@@ -1003,9 +1003,9 @@ gallery.views.app            = Backbone.View.extend({
 
 		if(confirm('Voulez-vous supprimer tous les items présents dans cet album ?')){
 			this.action({
-				action:  'removeItemAll',
-				id_albm: gallery.views.myView.id_album,
-				id_type: gallery.id_type
+				action:   'removeItemAll',
+				id_album: gallery.views.myView.id_album,
+				id_type:  gallery.id_type
 			}, function(){
 
 				var items = gallery.collections.myMedia.filter(function(item) {

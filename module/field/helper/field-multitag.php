@@ -21,27 +21,60 @@
 	# CONTENT
 	#
 	if($is_content){
-		$api = $app->apiLoad('content');
-	
+		$api  = $app->apiLoad('content');
+		$type = $app->apiLoad('type')->typeGet(array(
+			'id_type' => $_GET['id_type']
+		));
+
 		$rez = $api->contentGet(array(
-			'id_type' 	=> $_GET['id_type'],
-			'raw'		=> true,
-			'debug'		=> false,
-			'limit'		=> $limit,
-			'offset'	=> $offset,
-			'search'	=> array(
+			'id_type'    => $type['id_type'],
+			'is_album'   => ($type['is_gallery'] == 1),
+			'raw'        => true,
+			'debug'      => false,
+			'limit'      => $limit,
+			'offset'     => $offset,
+			'search'     => array(
 				array('searchField' => 'contentName', 'searchValue' => $_GET['q'], 'searchMode' => 'CT')
 			)
-	
 		));
 
 		$total = $api->total;
 
 		foreach($rez as $e){
-			$m[] = array(
+			$tmp = array(
 				'id_content' 	=> $e['id_content'],
 				'contentName'	=> $e['contentName']
 			);
+
+			if($type['is_gallery'] == 1 && !empty($e['contentAlbumParent'])){
+
+				$albums  = explode(',', $e['contentAlbumParent']);
+				$parents = $api->contentGet(array(
+					'id_type'    => $type['id_type'],
+					'id_content' => $albums,
+					'is_album'   => true,
+					'limit'      => 15
+				));
+
+				$p = $p_ = array();
+				foreach($parents as $ps){
+					$p_[$ps['id_content']] = trim($ps['contentName']);
+				}
+
+				foreach($albums as $a){
+					$p[] = $p_[$a];
+				}
+
+				#echo $e['contentAlbumParent'];
+				#$app->pre($p);
+
+
+				$tmp['path'] = implode(' > ', $p);
+				unset($p);
+			}
+
+
+			$m[] = $tmp;
 		}
 	}else
 
@@ -129,4 +162,3 @@
 	}else{
 		echo json_encode($m);
 	}
-?>

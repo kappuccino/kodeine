@@ -2,6 +2,8 @@
 
 	if(!defined('COREINC')) die('Direct access not allowed');
 
+	$airFile = KROOT.'/user/config/.onair';
+
 	# Save
 	#
 	if($_POST['action']){
@@ -47,6 +49,12 @@
                 $i++;
             }
         }
+
+		if(isset($_POST['onAir'])){
+			if(!file_exists($airFile)) touch($airFile);
+		}else{
+			if(file_exists($airFile)) unlink($airFile);
+		}
 
 		$app->go("./?saved");
 	}
@@ -191,6 +199,11 @@
 					<td><?php echo _('Google Analytics') ?></td>
 					<td><input type="text" name="defautAnalytic" value="<?php echo $app->formValue($data['defautAnalytic'], $_POST['defautAnalytic']) ?>" style="width:80%;" /></td>
 					<td><?php echo _('Google Analytics ID (UA-YYYYYYY-XX)') ?></td>
+				</tr>
+				<tr>
+					<td><?php echo _('In production') ?></td>
+					<td><input type="checkbox" name="onAir" value="YES" <?php if(file_exists($airFile)) echo ' checked' ?> /></td>
+					<td><?php echo _('Toggle development mode ON or OFF') ?></td>
 				</tr>
 			</tbody>
 		</table>
