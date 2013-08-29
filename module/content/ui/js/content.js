@@ -903,6 +903,7 @@ function tagSearch(id_field, id_type, fieldName, method){
 	var g = {
 		'id_field'	: id_field,
 		'id_type'	: id_type,
+		'offset'    : 0,
 		'q'			: q
 	};
 	
@@ -981,8 +982,6 @@ function tagSearchRequest(id_field, id_type, fieldName, clean, getVar, method){
 	if($('#morexqr-'+id_field)) $('#morexqr-'+id_field).remove();
 
 	// Est-ce que j'utiliser deja ce XQR ?
-	
-
 	var xqr = $.ajax({
 		'url'			: '../field/helper/field-multitag',
 		'dataType'		: "json",
@@ -991,38 +990,49 @@ function tagSearchRequest(id_field, id_type, fieldName, clean, getVar, method){
 	
 	xqr.done(function(r) {
 		var a = r.result;
+
 		// On supprime les lignes actuelles
-		/*if(tagSearchStorageGet(id_field, 'clean')){
-			t.find('tr').remove();
-		}*/
 		t.find('tr').remove();
+
 		// le lien MORE en dessous
 		if($('#morexqr-'+id_field)) $('#morexqr-'+id_field).remove();
 
 		if(a.length > 0){
 			$.each(a, function(i, e){
-				var line = $('<tr />').appendTo(t);
 
+				var line = $('<tr />').appendTo(t);
 				var push = $('<td />').css('width', 25).appendTo(line);
-				
 				var anch = $('<a style="cursor:pointer;"><img src=\"../core/ui/img/_img/picto-add.png\" /></a>').appendTo(push).bind('click', function() {
 					tagInsert('contenttable-'+id_field, fieldName, id_field, id_type, eval('e.'+tagId), eval('e.'+tagView), method);
 				});
-
 				var name = e[tagView];
+
 				if(e.path) name = name + ' ('+ e.path +')';
 
 				$('<td>'+e[tagId]+'</td>').appendTo(line).css('width', 25);
 				$('<td class="@">'+name+'</td>').appendTo(line);
-				
-				
+
 				if(typeof e.more != 'undefined'){
 					e.more.each(function(i, more){
-						var name = $('<td>'+more+'</td>').appendTo(line).css('width', '20%');
+						$('<td>'+more+'</td>').appendTo(line).css('width', '20%');
 					});
 				}
-
 			});
+
+			if(r.more){
+				var line = $('<tr id="#morexqr-'+id_field+'" />').appendTo(t);
+				var more = $('<td colspan="4" width="25" />').appendTo(line);
+
+				more.click(function(){
+					getVar_ = getVar;
+					getVar_.offset = getVar.offset + 1;
+
+					console.log(id_field, id_type, fieldName, false, getVar_, method);
+					tagSearchRequest(id_field, id_type, fieldName, false, getVar_, method);
+				});
+
+				more.html('Plus');
+			}
 		}
 		else{
 			$('<tr><td colspan="2" class="tagListingSearch">Aucun r&eacute;sultat</td></tr>').appendTo(t);
