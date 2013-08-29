@@ -317,7 +317,7 @@
 		</div>
 	</div>
 <?php }else{ ?>
-	<div id="gallery" class="itemed">
+	<div id="gallery" class="itemed" style="min-height:100px;">
 		<ul id="galleryPath" class="clearfix"></ul>
 		<ul id="galleryView" data-id_album="<?php echo $data['id_album'] ?>" class="clearfix"></ul>
 	</div>

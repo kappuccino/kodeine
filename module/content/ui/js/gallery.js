@@ -280,8 +280,11 @@ gallery.views.viewItem       = Backbone.View.extend({
 		if(gallery.id_item == this.model.get('id_content')){
 			this.$el.addClass('current');
 
+			var before = gallery.views.myView.$el.offset().top;
+			var scroll = this.$el.offset().top - before;
+
 			gallery.views.myView.$el.animate({
-				scrollTop: this.$el.offset().top
+				scrollTop: scroll
 			}, 500);
 
 		}else{
