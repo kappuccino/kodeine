@@ -24,20 +24,23 @@
 		if(preg_match("#S(.*)#", $_GET['group'], $e)){
 			$user = $app->apiLoad('user')->userSearch(array(
 				'debug' 	=> false,
-				'id_search'	=> $e[1]
+				'id_search'	=> $e[1],
+				'noLimit'	=> true
 			));
 		}else
 		if(preg_match("#G(.*)#", $_GET['group'], $e)){
 			$user = $app->apiLoad('user')->userGet(array(
 				'debug' 	=> false,
 				'useField'	=> false,
-				'id_group'	=> $e[1]
+				'id_group'	=> $e[1],
+				'noLimit'	=> true
 			));
 		}else
 		if($_GET['group'] == 'ALL'){
 			$user = $app->apiLoad('user')->userGet(array(
 				'debug'		=> false,
-				'useField'	=> false
+				'useField'	=> false,
+				'noLimit'	=> true
 			));
 		}
 		
