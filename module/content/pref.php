@@ -57,6 +57,14 @@
 					</td>
 					<td><?php echo _('Display the entire roll'); ?></td>
 				</tr>
+				<tr>
+					<td><?php echo _('Generate chao in upload file name'); ?></td>
+					<td class="check-green" colspan="2">
+						<input type="radio" name="pref[galleryUploadChao]" value=""      <?php if($pref['galleryUploadChao'] == '')      echo 'checked' ?> /> Before &nbsp;&nbsp;
+						<input type="radio" name="pref[galleryUploadChao]" value="after" <?php if($pref['galleryUploadChao'] == 'after') echo 'checked' ?> /> After &nbsp;&nbsp;
+						<input type="radio" name="pref[galleryUploadChao]" value="none"  <?php if($pref['galleryUploadChao'] == 'none')  echo 'checked' ?> /> None
+					</td>
+				</tr>
 			</tbody>
 		</table>
 

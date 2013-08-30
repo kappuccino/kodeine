@@ -176,8 +176,18 @@
 			? $_FILES['Filedata']['name'][0]
 			: $_FILES['Filedata']['name'];
 
-		$targetFile = time().'_'.uniqid().'_'.$tempName;
-		$ext        = strtolower(pathinfo($targetFile, PATHINFO_EXTENSION));
+		$pref  = $app->configGet('content');
+		$ext   = strtolower(pathinfo($tempName, PATHINFO_EXTENSION));
+
+		if($pref['galleryUploadChao'] == 'after'){
+			$noExt      = substr($tempName, 0, ( strlen($ext)+1 )*-1);
+			$targetFile = $noExt.'_'.time().'_'.uniqid().'.'.$ext;
+		}else
+		if($pref['galleryUploadChao'] == 'none'){
+			$targetFile = $tempName;
+		}else{
+			$targetFile = time().'_'.uniqid().'_'.$tempName;
+		}
 
 		if($escape){
 			$targetFile = substr($targetFile, 0, strlen($ext)*-1);
