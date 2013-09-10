@@ -9,4 +9,7 @@
 	<job action = "createField" table = "k_categorydata"	field = "categoryDescription" 	type = "MEDIUMTEXT" 	null = "NO" />
 	<job action = "createField" table = "k_categorydata" 	field = "categoryCache"			type = "mediumtext" 	null = "NO"		after="categoryDescription" />
 
+    <job action = "createIndex" 	table = "k_contentcategory" 	index = "is_selected"		field = "is_selected" />
+
+
 </patch>
