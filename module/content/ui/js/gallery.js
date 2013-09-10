@@ -116,6 +116,7 @@ gallery.views.view           = Backbone.View.extend({
 	},
 
 	nav: function(id){
+		console.log('nav ID='+id);
 		this.id_album = id;
 		this.load();
 
@@ -719,6 +720,11 @@ gallery.views.app            = Backbone.View.extend({
 				'queueID':          'upqueue',
 				'uploadScript':     'helper/gallery-upload',
 
+				'onUpload':         function(){
+					this.data('uploadifive').settings.formData = {
+						'id_album': gallery.views.myView.id_album
+					};
+				},
 				'onUploadComplete': function(file, data){
 					var data = $.parseJSON(data);
 					if(data.model) gallery.collections.myMedia.add(data.model);
@@ -744,8 +750,11 @@ gallery.views.app            = Backbone.View.extend({
 				'queueID':          'ipqueue',
 				'uploader':         'helper/upload',
 				'swf':              '../../../media/ui/_uploadify/uploadify.swf',
+
 				'onUploadStart':    function(){
-				//	$('#file_upload').data('uploadify').settings.formData = {'f' : media.views.myView.folder};
+					$('#file_upload').data('uploadify').settings.formData = {
+						'id_album' : gallery.views.myView.id_album
+					};
 				},
 				'onQueueComplete':  function() {
 					$('#queue').empty();
