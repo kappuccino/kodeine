@@ -12,6 +12,8 @@
 		$app->configSet('boot', 'jsonCacheCountry', json_encode($app->countryGet(array('is_used' => true))));
 
 		header("Location: language");
+		exit();
+
 	}else
 	if($_POST['action']){
 		$do = true;
@@ -24,6 +26,7 @@
 			'iso_ref'				=> array('value' => $_POST['iso_ref'], 				'check' => '.'),
 			'is_used'				=> array('value' => $_POST['is_used'], 				'zero' 	=> true),
 			'is_delivered'			=> array('value' => $_POST['is_delivered'], 		'zero' 	=> true),
+			'is_priced'		    	=> array('value' => $_POST['is_priced'], 		    'zero' 	=> true),
 			'countryZone'			=> array('value' => $_POST['countryZone'], 			'check' => '.'),
 			'countryName'			=> array('value' => $_POST['countryName'], 			'check' => '.'),
 			'countryLanguage'		=> array('value' => $_POST['countryLanguage'], 		'check' => '.'),
@@ -52,7 +55,15 @@
 		$data = $app->countryGet(array('iso' => $_REQUEST['iso']));
 	}
 
-	$country = $app->countryGet(array('byZone' => true));
+	//////////////////////////////////////////////////////////////////
+
+	$country = $app->countryGetByZone();
+
+	foreach($country as $e){
+		$out[$e['countryZone']][] = $e;
+	}
+
+	$country = $out;
 
 ?><!DOCTYPE html>
 <html lang="fr">
@@ -68,7 +79,7 @@
 
 <div class="inject-subnav-right hide">
 	<li><a href="language-import" class="btn btn-mini"><?php echo _('Import more languages') ?></a></li>
-	<li><a href="./" class="btn btn-small"><?php echo _('Cancel') ?></a></li>
+	<li><a href="language" class="btn btn-small"><?php echo _('Cancel') ?></a></li>
 	<li><a onclick="$('#data').submit();" class="btn btn-small btn-success"><?php echo _('Save') ?></a></li>
 </div>
 
@@ -86,15 +97,16 @@
 					<th width="30" class="icone"><i class="icon-remove icon-white"></i></th>
 					<th><?php echo _('Country') ?></th>
 					<th><?php echo _('Language') ?></th>
-					<th width="40" class="icone"><i class="icon-globe icon-white"></i></th>
-					<th width="40" class="icone"><i class="icon-shopping-cart icon-white"></i></th>
+					<th width="20" class="icone"><i class="icon-globe icon-white"></i></th>
+					<th width="20" class="icone"><i class="icon-shopping-cart icon-white"></i></th>
+					<th width="20" class="icone">$</th>
 				</tr>
 			</thead>
 			<tbody>
 			<?php foreach($country as $zone){ ?>
 				<tr class="separator">
 					<td width="30"></td>
-					<td colspan="4" style="font-weight: bold;"><?php echo $zone[0]['countryZone'] ?></td>
+					<td colspan="5" style="font-weight: bold;"><?php echo $zone[0]['countryZone'] ?></td>
 				</tr>
 				<?php foreach($zone as $e){ $chkdel++; ?>
 				<tr class="<?php if($e['iso'] == $_REQUEST['iso']) echo "selected" ?>">
@@ -103,8 +115,29 @@
 					<td><?php echo $e['countryLanguage'] ?></td>
 					<td><img src="../core/ui/img/_img/boxcheck<?php if($e['is_used']) 		echo "ed"; ?>.png" align="absmiddle" /></td>
 					<td><img src="../core/ui/img/_img/boxcheck<?php if($e['is_delivered'])	echo "ed"; ?>.png" align="absmiddle" /></td>
+					<td><img src="../core/ui/img/_img/boxcheck<?php if($e['is_priced'])	    echo "ed"; ?>.png" align="absmiddle" /></td>
 				</tr>
-			<?php }} ?>
+				<?php if(!empty($e['sub'])){
+					foreach($e['sub'] as $s){ ?>
+					<tr>
+						<td style="padding: 8px 0 8px 80px" colspan="2">
+							<a href="language?iso=<?php echo $s['iso'] ?>"><?php echo $s['countryName'] ?></a>
+						</td>
+						<td colspan="2"><?php echo $e['countryLanguage'] ?></td>
+						<td><img src="../core/ui/img/_img/boxcheck<?php if($s['is_delivered'])	echo "ed"; ?>.png" align="absmiddle" /></td>
+						<td><img src="../core/ui/img/_img/boxcheck<?php if($s['is_priced'])    echo "ed"; ?>.png" align="absmiddle" /></td>
+					</tr>
+					<?php if(!empty($s['sub'])){
+						foreach($s['sub'] as $p){ ?>
+							<tr>
+								<td style="padding: 8px 0 8px 120px" colspan="2">
+									<a href="language?iso=<?php echo $p['iso'] ?>"><?php echo $p['countryName'] ?></a>
+								</td>
+								<td colspan="2"><?php echo $e['countryLanguage'] ?></td>
+								<td><img src="../core/ui/img/_img/boxcheck<?php if($s['is_delivered'])	echo "ed"; ?>.png" align="absmiddle" /></td>
+								<td></td>
+							</tr>
+			<?php }} } } }} ?>
 			</tbody>
 			<tfoot>
 				<tr>
@@ -158,13 +191,14 @@
 				<td><?php echo _('Reference') ?></td>
 				<td><select name="iso_ref"><?php
 					if($data['iso'] == $data['iso_ref']) $selSame = ' selected';
-					echo "<option value=\"\"".$selSame.">Pas de référence</option>";
+					echo '<option value=""'.$selSame.'>Pas de référence</option>';
 	
 					$all = $app->countryGet();
 					foreach($all as $e){
 						$sel = ($e['iso'] == $app->formValue($data['iso_ref'], $_POST['iso_ref']) && $selSame == '') ? ' selected' : NULL;
 						echo "<option value=\"".$e['iso']."\"".$sel.">".strtoupper($e['iso'])." : ".$e['countryName']."</option>";
 					}
+
 				?></select></td>
 			</tr>
 			<tr>
@@ -189,6 +223,12 @@
 				<td><?php echo _('Delivery') ?></td>
 				<td><input type="checkbox" name="is_delivered" value="1" <?php echo $app->formValue($data['is_delivered'], $_POST['is_delivered']) ? ' checked' : ''; ?> />
 					<?php echo _('Enable the country for delivery (eBusiness)') ?>
+				</td>
+			</tr>
+			<tr>
+				<td><?php echo _('Custom price') ?></td>
+				<td><input type="checkbox" name="is_priced" value="1" <?php echo $app->formValue($data['is_priced'], $_POST['is_priced']) ? ' checked' : ''; ?> />
+					<?php echo _('Allow to set a different price') ?>
 				</td>
 			</tr>
 		</table>

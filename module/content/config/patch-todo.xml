@@ -120,6 +120,24 @@
 		) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 	]]></job>
 
+    <job action="sql"><![CDATA[
+        CREATE TABLE IF NOT EXISTS `k_contentgroupbusinessloc` (
+            `country` char(2) collate utf8_unicode_ci NOT NULL,
+            `id_group` mediumint(64) NOT NULL,
+            `id_content` mediumint(64) NOT NULL,
+            `is_view` tinyint(1) NOT NULL,
+            `is_buy` tinyint(1) NOT NULL,
+            `contentPrice` float(10,2) default NULL,
+            `contentPriceTax` float(10,2) default NULL,
+            `contentPriceNormal` float(10,2) default NULL,
+            `contentPriceComment` varchar(255) collate utf8_unicode_ci default NULL,
+        PRIMARY KEY  (`id_group`,`id_content`,`country`),
+        KEY `id_group` (`id_group`),
+        KEY `id_content` (`id_content`),
+        KEY `language` (`country`)
+        ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+]]></job>
+
 	<job action = "createField" 	table = "k_content" 		field = "id_user" 					type = "MEDIUMINT(64)" 	null = "NO" 	after = "id_carriage" />
 	<job action = "createField" 	table = "k_content" 		field = "is_social" 				type = "TINYINT(1)" 	null = "NO" 	after = "is_version"		default = "0" />
 	<job action = "createField" 	table = "k_content"			field = "is_album"					type = "TINYINT(1)" 	null = "NO"		after = "is_social"			default = "0" />

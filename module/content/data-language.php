@@ -53,16 +53,20 @@
 		if(!$app->apiLoad('field')->fieldValidation($_POST['field'])) $do = false;
 
 		if($do){
-			$result = $app->apiLoad('content')->contentSet(array(
-				'id_type'		=> $_POST['id_type'],
-				'language'		=> $_POST['language'],
-				'id_content'	=> $_POST['id_content'],
-				'def'			=> $def,
-				'data'			=> $dat,
-				'field'			=> $_POST['field'],
-				'debug'			=> false
-			));
+			$opt  = array(
+				'id_type'    => $_POST['id_type'],
+				'language'   => $_POST['language'],
+				'id_content' => $_POST['id_content'],
+				'def'        => $def,
+				'data'       => $dat,
+				'field'      => $_POST['field'],
+				'debug'      => false
+			);
 
+			$type = $app->apiLoad('type')->typeGet(array('id_type' => $_POST['id_type']));
+			if($type['is_businessloc'] == '1') $opt['group'] = $_POST['group'];
+
+			$result  = $app->apiLoad('content')->contentSet($opt);
 			$message = ($result) ? 'OK: Enregistrement' : 'KO: Erreur APP:<br />'.$app->apiLoad('content')->db_error;
 			
 			if($result && $_POST['is_version']){
@@ -72,7 +76,10 @@
 				));
 			}
 			
-			if($result) header("Location: data-language?id_content=".$app->apiLoad('content')->id_content.'&language='.$_REQUEST['language']);
+			if($result){
+				header("Location: data-language?id_content=".$app->apiLoad('content')->id_content.'&language='.$_REQUEST['language']);
+				exit();
+			}
 
 		}else{
 			$message = 'WA: Validation failed';
@@ -291,8 +298,85 @@
 						<div class="form"><input type="text" name="contentMetaDescription" value="<?php echo $app->formValue($data['contentMetaDescription'], $_POST['contentMetaDescription']); ?>" size="100" style="width:99%;" /></div>
 					</span>
 				</li>
-	
-				<?php
+
+				<?php if($type['is_business'] && $type['is_businessloc'] == '1'){
+
+					$loc = $app->countryGet(array(
+						'ref'    => $_REQUEST['language'],
+						'priced' => '1'
+					));
+
+					?>
+					<li id="contentGroup" class="clearfix form-item">
+						<div class="hand"></div>
+						<div class="toggle"></div>
+						<label><?php echo _('Buyers'); ?></label>
+						<div class="form"><?php
+
+							foreach($loc as $l){ $iso = $l['iso']; ?>
+							<table border="0" cellpadding="0" cellspacing="0" width="100%" class="listing" style="margin-bottom: 40px;">
+								<thead>
+									<tr>
+										<th colspan="7" style="text-align:center; background: #808080;"><?php echo $l['countryName'] ?></th>
+									</tr>
+									<tr>
+										<th width="200">Nom</th>
+										<th width="75" style="text-align:center;"><?php echo _('Visible'); ?></th>
+										<th width="75" style="text-align:center;"><?php echo _('Buyable'); ?></th>
+										<th width="75" style="text-align:right;"><?php echo _('Price'); ?></th>
+										<th width="75" style="text-align:right;"><?php echo _('Price with taxes'); ?></th>
+										<th width="75" style="text-align:right;"><?php echo _('Normal price'); ?></th>
+										<th style="padding-left:50px;"><?php echo _('Comment'); ?></th>
+									</tr>
+								</thead>
+								<tbody>
+								<?php
+									$groups = $app->apiLoad('content')->contentGroupGet($data['id_content'], $type['id_type'], $iso);
+									foreach($groups as $id_group => $e){
+
+										$prompt   = 'group['.$iso.']['.$id_group.']';
+										$disabled = ($e['is_view']) ? NULL : "disabled=\"disabled\""; ?>
+
+										<tr id="line-<?php echo $iso.'-'.$id_group ?>">
+											<td>
+												<span style="padding-left:<?php echo ($e['level']+1) * 10 ?>px;"><?php echo $e['groupName'] ?></span>
+												<input type="hidden" name="<?php echo $prompt ?>[1]" value="1" />
+											</td>
+											<td style="text-align:center"><input type="checkbox"	name="<?php echo $prompt ?>[is_view]"				value="1" <?php if($e['is_view']) echo  " checked"; ?> class="cb-<?php echo $iso ?>-view" onClick="toggleLine('<?php echo $iso.'-'.$id_group ?>', $(this))" accept="<?php echo $id_group ?>" /></td>
+											<td style="text-align:center"><input type="checkbox"	name="<?php echo $prompt ?>[is_buy]"				value="1" <?php if($e['is_buy'])  echo  " checked"; ?> class="cb-<?php echo $iso ?>-buy is-toggle" <?php echo $disabled ?> /></td>
+											<td style="text-align:right;"><input type="text" 		name="<?php echo $prompt ?>[contentPrice]"			value="<?php echo $app->formValue($e['contentPrice'], 			$_POST['group'][$id_group]['contentPrice']) ?>" size="6" class="fl-<?php echo $iso ?>-ht is-toggle input-thin" <?php echo $disabled ?> /></td>
+											<td style="text-align:right;"><input type="text"		name="<?php echo $prompt ?>[contentPriceTax]"		value="<?php echo $app->formValue($e['contentPriceTax'], 		$_POST['group'][$id_group]['contentPriceTax']) ?>" size="6" class="fl-<?php echo $iso ?>-tt is-toggle input-thin" <?php echo $disabled ?> /></td>
+											<td style="text-align:right;"><input type="text"		name="<?php echo $prompt ?>[contentPriceNormal]"	value="<?php echo $app->formValue($e['contentPriceNormal'], 	$_POST['group'][$id_group]['contentPriceNormal']) ?>" size="6" class="fl-<?php echo $iso ?>-no is-toggle input-thin" <?php echo $disabled ?> /></td>
+											<td style="padding-left:50px;"><input type="text"		name="<?php echo $prompt ?>[contentPriceComment]"	value="<?php echo $app->formValue($e['contentPriceComment'], 	$_POST['group'][$id_group]['contentPriceComment']) ?>" class="fl-<?php echo $iso ?>-co is-toggle input-thin" <?php echo $disabled ?> /></td>
+										</tr>
+									<?php } ?>
+								</tbody>
+								<tfoot>
+									<tr>
+										<td></td>
+										<td style="text-align:center">
+											<a href="javascript:chk('<?php echo $iso ?>', 'view', false)"><img src="ui/img/boxcheck.png" /></a>
+											<a href="javascript:chk('<?php echo $iso ?>', 'view', true)"><img src="ui/img/boxchecked.png" /></a>
+											<a href="javascript:permu('<?php echo $iso ?>', 'view')"><img src="ui/img/boxcheckreverse.png" /></a>
+										</td>
+										<td style="text-align:center">
+											<a href="javascript:chk('<?php echo $iso ?>', 'buy',false)"><img src="ui/img/boxcheck.png" /></a>
+											<a href="javascript:chk('<?php echo $iso ?>', 'buy',true)"><img src="ui/img/boxchecked.png" /></a>
+											<a href="javascript:permu('<?php echo $iso ?>', 'buy')"><img src="ui/img/boxcheckreverse.png" /></a>
+										</td>
+										<td style="text-align:right"><a href="javascript:dupli('<?php  echo $iso ?>-ht')"><img src="ui/img/bigt.png" /></a></td>
+										<td style="text-align:right"><a href="javascript:dupli('<?php  echo $iso ?>-tt')"><img src="ui/img/bigt.png" /></a></td>
+										<td style="text-align:right"><a href="javascript:dupli('<?php  echo $iso ?>-no')"><img src="ui/img/bigt.png" /></a></td>
+										<td style="padding-left:50px"><a href="javascript:dupli('<?php echo $iso ?>-co')"><img src="ui/img/bigt.png" /></a></td>
+									</tr>
+								</tfoot>
+							</table>
+							<?php } ?>
+
+						</div>
+					</li>
+				<?php }
+
 					foreach($fields as $f){
 						$app->apiLoad('field')->fieldTrace($data, $f);
 					}
@@ -372,7 +456,47 @@
 		}
 	}
 
-</script>	
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+	function toggleLine(id, trigger){
+		var list = $('#line-'+id).find('.is-toggle');
+		var v    = (trigger[0].checked) ? false : true;
+
+		list.each(function(i, e){
+			if($(e).hasClass('is-toggle')){
+				$(e).prop('disabled', v);
+			}
+		})
+	}
+
+	function dupli(id){
+		var lst = $('.fl-'+id);
+		lst.each(function(me, i){
+			if($(this).val() == '') $(this).val(lst[0].value);
+		});
+	}
+
+	function chk(iso, id, state, doFnc){
+		$('.cb-'+iso+'-'+id).each(function(i, me){
+			$(me).prop('checked', ((state) ? 'checked' : ''));
+			toggleLine(iso+'-'+me.accept, $(me));
+		});
+	}
+
+	function empty(id){
+		$('.'+id).each(function(i, me){
+			me.value = '';
+		});
+	}
+
+	function permu(iso, id){
+		$('.cb-'+iso+'-'+id).each(function(i, me){
+			me.checked = (me.checked) ? false : true;
+			toggleLine(iso+'-'+me.accept, $(me));
+		});
+	}
+
+</script>
 <?php } ?>
 
 
