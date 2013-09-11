@@ -26,9 +26,8 @@
 			'id_type' => $_GET['id_type']
 		));
 
-		$rez = $api->contentGet(array(
+		$opt = array(
 			'id_type'    => $type['id_type'],
-			'is_album'   => ($type['is_gallery'] == 1),
 			'raw'        => true,
 			'debug'      => false,
 			'limit'      => $limit,
@@ -36,7 +35,11 @@
 			'search'     => array(
 				array('searchField' => 'contentName', 'searchValue' => $_GET['q'], 'searchMode' => 'CT')
 			)
-		));
+		);
+
+		if($type['is_gallery'] == '1') $opt['is_album'] = true;
+
+		$rez = $api->contentGet($opt);
 
 		$total = $api->total;
 
