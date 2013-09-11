@@ -88,8 +88,8 @@ function __clone(){}
 
 		# Detecter si je suis en mode IS_ITEM ou IS_ALBUM
 		#
-		$is_item	= isset($opt['is_item'])  ? true : (($data['is_item']  === '1') ? true : false);
-		$is_album	= isset($opt['is_album']) ? true : (($data['is_album'] === '1') ? true : false);
+		$is_item	= is_bool($opt['is_item'])  ? $opt['is_item']  : (($data['is_item']  === '1') ? true : false);
+		$is_album	= is_bool($opt['is_album']) ? $opt['is_album'] : (($data['is_album'] === '1') ? true : false);
 		if($is_item && $is_album){
 			if($opt['debug']) $this->pre("Fatal Error : IS_ITEM=TRUE + IS_ALBUM=TRUE !");
 			return array();
