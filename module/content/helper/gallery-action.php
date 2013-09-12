@@ -66,12 +66,12 @@
 		);
 
 		$opt = array(
-			'id_type'		=> $src['id_type'],
-			'language'		=> $src['language'],
-			'debug'			=> false,
-			'def'			=> $def,
-			'data'			=> $dat,
-			'album'			=> $album,
+			'id_type'  => $src['id_type'],
+			'language' => $src['language'],
+			'debug'    => false,
+			'def'      => $def,
+			'data'     => $dat,
+			'album'    => $album
 		);
 
 		$result = $api->contentSet($opt);
@@ -81,14 +81,14 @@
 
 		$data['success'] = true;
 		$data['new']     = array(
-			'is_album'      => true,
-			'is_alias'      => true,
-			'id_alias'      => intval($new['id_alias']),
-			'id_album'      => intval($new['id_album']),
-			'id_content'    => intval($new['id_content']),
-			'contentName'   => $new['contentName'],
-			'contentSee'    => $new['contentSee'],
-			'hasPoster'     => false
+			'is_album'    => true,
+			'is_alias'    => true,
+			'id_alias'    => intval($new['id_alias']),
+			'id_album'    => intval($new['id_album']),
+			'id_content'  => intval($new['id_content']),
+			'contentName' => $new['contentName'],
+			'contentSee'  => $new['contentSee'],
+			'hasPoster'   => false
 		);
 
 	}else

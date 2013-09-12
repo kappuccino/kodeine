@@ -37,7 +37,10 @@ gallery.collections.media    = Backbone.Collection.extend({
 
 	model: gallery.models.media,
 
-	url: 'helper/gallery-view'
+	url: 'helper/gallery-view',
+
+	comparator: function(){
+	}
 
 });
 
@@ -645,7 +648,9 @@ gallery.views.app            = Backbone.View.extend({
 		'click #buttonUpload':      'uploadShow',
 		'click #buttonCloseUpload': 'clearModal',
 		'click #distantDownload':   'distantDownload',
-		'click #removeAllItems':    'removeAllItems'
+		'click #removeAllItems':    'removeAllItems',
+		'click #sortAZ':            'sortAZ',
+		'click #sortZA':            'sortZA'
 	},
 
 	addAlbum: function(){
@@ -1034,6 +1039,52 @@ gallery.views.app            = Backbone.View.extend({
 		}
 
 	},
+
+	sort: function(){
+		var albums=[], items=[];
+
+		// Re-Render
+		gallery.collections.myMedia.sort();
+		gallery.views.myView.fill();
+
+		// Save
+		gallery.collections.myMedia.each(function(e){
+			if(e.get('is_album')){
+				albums.push(e.get('id_content'));
+			}else{
+				items.push(e.get('id_content'));
+			}
+		});
+
+		gallery.views.myApp.saveOrder(albums, items);
+	},
+
+	sortAZ: function(){
+		if(confirm('Voulez-vous classer la liste des items par ordre croissant ? cela effacera l\'ordre actuel')){
+
+			gallery.collections.myMedia.comparator = function(m){
+				return m.get('contentName');
+			}
+
+			this.sort();
+		}
+	},
+
+	sortZA: function(){
+		if(confirm('Voulez-vous classer la liste des items par ordre décroissant ? cela effacera l\'ordre actuel')){
+
+			gallery.collections.myMedia.comparator = function(a, b) {
+				if (a.get('contentName') > b.get('contentName')) return -1; // before
+				if (b.get('contentName') > a.get('contentName')) return 1; // after
+				return 0; // equal
+			};
+
+			this.sort();
+		}
+
+	},
+
+
 
 	createAlias: function(id_content){
 		this.action({

@@ -35,7 +35,6 @@
 			}
 		}
 
-
 		$album = $app->apiLoad('content')->contentGet(array(
 			'id_content' => $_POST['id_album'],
 			'raw'		 => true
