@@ -1057,6 +1057,8 @@ gallery.views.app            = Backbone.View.extend({
 		});
 
 		gallery.views.myApp.saveOrder(albums, items);
+
+		delete gallery.collections.myMedia.comparator;
 	},
 
 	sortAZ: function(){
