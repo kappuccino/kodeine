@@ -134,7 +134,7 @@
         PRIMARY KEY  (`id_group`,`id_content`,`country`),
         KEY `id_group` (`id_group`),
         KEY `id_content` (`id_content`),
-        KEY `language` (`country`)
+        KEY `country` (`country`)
         ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 ]]></job>
 

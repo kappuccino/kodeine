@@ -11,24 +11,7 @@
 		) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 	]]></job>
 
-    <job action="sql"><![CDATA[
-        CREATE TABLE IF NOT EXISTS `k_i18n` (
-          `language` char(2) collate utf8_unicode_ci NOT NULL,
-          `key` varchar(255) collate utf8_unicode_ci NOT NULL,
-          `module` varchar(255) collate utf8_unicode_ci NOT NULL,
-          `flag` varchar(255) collate utf8_unicode_ci NOT NULL,
-          `value` mediumtext collate utf8_unicode_ci NOT NULL
-        ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
-	]]></job>
-
-    <job action="sql"><![CDATA[
-        INSERT INTO `k_i18n` (`language`, `key`, `module`, `flag`, `value`) VALUES
-        ('fr', 'PARAMETERS', '', '', 'Paramètres'),
-        ('fr', 'VALUE', '', '', 'Valeur'),
-        ('fr', 'CONFIG_EXPLANATION', 'config', '', 'Précisions complémentaires'),
-        ('fr', 'VALIDATE', '', '', 'Valider');
-	]]></job>
-
     <job action = "createField" table = "k_cache" 			field = "cacheFlagRemovable"	type = "TINYINT(1)"		first = "YES" />
+    <job action = "createField" table = "k_country" 		field = "is_priced"             type = "TINYINT(1)"		after = "is_delivered" />
 
 </patch>
