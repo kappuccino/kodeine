@@ -106,6 +106,11 @@ public function businessCartGet($opt=array()){
 			$create = true;
 		}*/
 
+		if(!empty($my)){
+			$opt['id_cart'] = $my['id_cart'];
+			$create = false;
+		}
+
 		# Si le CART existe PAS/PLUS alors on en GENERE un nouveau
 		if($create){
 			$opt['id_cart'] = $this->businessCartNew(array('id_user' => $id_user, 'debug' => $opt['debug']));
