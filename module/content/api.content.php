@@ -123,13 +123,21 @@ function __clone(){}
 		));
 
 		foreach($field as $f){
-			$fieldKey[$f['fieldKey']]= $f;
-			if($f['is_search'])												$fieldSearch[]		= $f;
-			if($f['fieldType'] == 'content' && $f['fieldContentType'] > 0) 	$fieldAssoContent[] = $f;
-			if($f['fieldType'] == 'user')									$fieldAssoUser[] 	= $f;
-			if($f['fieldType'] == 'dbtable')								$fieldAssoDb[]		= $f;
-		}
+			$param = json_decode($f['fieldParam'], true);
 
+			$fieldKey[$f['fieldKey']]= $f;
+			if($f['is_search'])					$fieldSearch[]	 = $f;
+			if($f['fieldType'] == 'user')		$fieldAssoUser[] = $f;
+			if($f['fieldType'] == 'dbtable')	$fieldAssoDb[]	 = $f;
+
+			if($f['fieldType'] == 'content' && $f['fieldContentType'] > 0 && $param['type'] == 'solo'){
+				$fieldAssoContentSingle[] = $f;
+			}
+			if($f['fieldType'] == 'content' && $f['fieldContentType'] > 0 && $param['type'] != 'solo'){
+				$fieldAssoContentMulti[] = $f;
+			}
+		}
+		unset($param);
 
 
 
@@ -557,12 +565,23 @@ function __clone(){}
 		# Gerer les ASSOCIATIONS
 		#
 		// CONTENT relies a ce CONTENT
-		if(sizeof($fieldAssoContent) > 0){
+		if(sizeof($fieldAssoContentMulti) > 0){
 			foreach($content as $idx => $c){
-				foreach($fieldAssoContent as $f){
-					$content[$idx]['field'.$f['id_field']] = $this->contentAssoGet($content[$idx]['id_content'], $content[$idx]['id_type'], $f['id_field'], $f['fieldContentType']);
+				foreach($fieldAssoContentMulti as $f){
+					#$content[$idx]['field'.$f['id_field']] = $this->contentAssoGet($content[$idx]['id_content'], $content[$idx]['id_type'], $f['id_field'], $f['fieldContentType']);
 				}
 			}
+
+		}
+		if(sizeof($fieldAssoContentSingle) > 0){
+			foreach($content as $idx => $c){
+				foreach($fieldAssoContentSingle as $f){
+					if(!empty($content[$idx]['field'.$f['id_field']])){
+						$content[$idx]['field'.$f['id_field']] = array($content[$idx]['field'.$f['id_field']]);
+					}
+				}
+			}
+
 		}
 
 		// USER relies a ce CONTENT
