@@ -64,7 +64,8 @@ public function businessCartNew($opt=array()){
 
 	$this->dbQuery($q);
 	$id_cart = ($o['id_cart'] != NULL) ? $o['id_cart'] : $this->db_insert_id;
-	
+
+	$this->hookAction('businessCartNew', $id_cart);
 
 	return $id_cart;
 }
@@ -794,14 +795,15 @@ public function businessCartCarriageSet($opt){
         // TVA
         $cartCarriageTax            = ($opt['carriageTax'] > 0) ? $opt['carriageTax'] : '19.60';
         $cartCarriageTotalTax       = $carriage;
-        $cartCarriage               = number_format(($cartCarriageTotalTax / (1 + ($cartCarriageTax / 100))), 2, '.', '');
+        $cartCarriage               = $cartCarriageTotalTax / (1 + ($cartCarriageTax / 100));
 
         $def = array();
         $def['k_businesscart'] = array(
-            'cartCarriageTax'           => array('value' => $cartCarriageTax),
-            'cartCarriage'              => array('value' => $cartCarriage),
-            'cartCarriageTotalTax'      => array('value' => $cartCarriageTotalTax)
+            'cartCarriageTax'           => array('value' => number_format($cartCarriageTax,      2, '.', '')),
+            'cartCarriage'              => array('value' => number_format($cartCarriage,         2, '.', '')),
+            'cartCarriageTotalTax'      => array('value' => number_format($cartCarriageTotalTax, 2, '.', ''))
         );
+
         $this->dbQuery($this->dbUpdate($def)." WHERE id_cart='".$opt['id_cart']."'");
 
         //$this->pre($this->db_query);
@@ -928,7 +930,7 @@ public function businessCmdNew($opt){
 //-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -
 	public function businessCmdMail($opt){
 
-		require_once(KROOT.'/app/plugin/phpmailer/class.phpmailer.php');
+		require_once(KROOT . '/app-/plugin/phpmailer/class.phpmailer.php');
 
 		# Cmmand
 		#
