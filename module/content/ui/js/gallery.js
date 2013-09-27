@@ -37,10 +37,7 @@ gallery.collections.media    = Backbone.Collection.extend({
 
 	model: gallery.models.media,
 
-	url: 'helper/gallery-view',
-
-	comparator: function(){
-	}
+	url: 'helper/gallery-view'
 
 });
 
@@ -849,14 +846,15 @@ gallery.views.app            = Backbone.View.extend({
 
 	/////////
 
-	action: function(data, back){
+	action: function(data, back, type){
 
 	//	console.log("[XHR ACTION]", 'data', data, 'back', back);
 
 		var xhr = $.ajax({
 			url:        'helper/gallery-action',
 			dataType:   'json',
-			data:       data
+			data:       data,
+			type:       (type || 'get')
 		});
 
 		xhr.done(function(js){
@@ -874,7 +872,7 @@ gallery.views.app            = Backbone.View.extend({
 			id_album:   id_album,
 			items:      items.join('.'),
 			albums:     albums.join('.')
-		})
+		}, null, 'post')
 	},
 
 	moveItem: function(cid, me, to){

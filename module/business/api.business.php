@@ -64,7 +64,8 @@ public function businessCartNew($opt=array()){
 
 	$this->dbQuery($q);
 	$id_cart = ($o['id_cart'] != NULL) ? $o['id_cart'] : $this->db_insert_id;
-	
+
+	$this->hookAction('businessCartNew', $id_cart);
 
 	return $id_cart;
 }
@@ -79,7 +80,7 @@ public function businessCartGet($opt=array()){
 	# Si on a un ID , on verifie si l'ID qu'on nous donne est encore existant
 	if(intval($opt['id_cart']) > 0){
 		$my = $this->dbOne("SELECT * FROM k_businesscart WHERE is_cart=1 AND id_cart='".$opt['id_cart']."'");
-		if($opt['debug']) $this->pre($this->db_query, $this->db_error);		
+		if($opt['debug']) $this->pre($this->db_query, $this->db_error);
 	}
 
     $id_user    = ($opt['id_user'] > 0) ? $opt['id_user'] : $this->user['id_user'];
@@ -88,17 +89,31 @@ public function businessCartGet($opt=array()){
 	# On cherche a recupere un CART pas tous les moyens
 	#
 	if($opt['create']){
-		# Si je suis connecté, verifié si j'ai pas un panier existant
+		# par défaut, on considere qu'on doit créer un panier...
+		$create = true;
+
+		# ... Si je suis connecté, verifié si j'ai pas un panier existant (et l'utiliser)
 		if($id_user > 0 && $userCheck){
 			$check = $this->dbOne("SELECT id_cart FROM k_businesscart WHERE is_cart=1 AND id_user='".$id_user."'");
-			if(!empty($check)) $opt['id_cart'] = $check['id_cart'];
-		} else
+			if(!empty($check)){
+				$opt['id_cart'] = $check['id_cart'];
+				$create = false;
+			}
+		}
+		/*else
 		# Si le id_cart n'est pas renseigne
 		if(intval($opt['id_cart']) == 0){
-			$opt['id_cart'] = $this->businessCartNew(array('id_user' => $id_user, 'debug' => $opt['debug']));
-		}else
+		#	$opt['id_cart'] = $this->businessCartNew(array('id_user' => $id_user, 'debug' => $opt['debug']));
+			$create = true;
+		}*/
+
+		if(!empty($my)){
+			$opt['id_cart'] = $my['id_cart'];
+			$create = false;
+		}
+
 		# Si le CART existe PAS/PLUS alors on en GENERE un nouveau
-		if($my['id_cart'] == NULL){
+		if($create){
 			$opt['id_cart'] = $this->businessCartNew(array('id_user' => $id_user, 'debug' => $opt['debug']));
 		}
 
@@ -780,14 +795,15 @@ public function businessCartCarriageSet($opt){
         // TVA
         $cartCarriageTax            = ($opt['carriageTax'] > 0) ? $opt['carriageTax'] : '19.60';
         $cartCarriageTotalTax       = $carriage;
-        $cartCarriage               = number_format(($cartCarriageTotalTax / (1 + ($cartCarriageTax / 100))), 2, '.', '');
+        $cartCarriage               = $cartCarriageTotalTax / (1 + ($cartCarriageTax / 100));
 
         $def = array();
         $def['k_businesscart'] = array(
-            'cartCarriageTax'           => array('value' => $cartCarriageTax),
-            'cartCarriage'              => array('value' => $cartCarriage),
-            'cartCarriageTotalTax'      => array('value' => $cartCarriageTotalTax)
+            'cartCarriageTax'           => array('value' => number_format($cartCarriageTax,      2, '.', '')),
+            'cartCarriage'              => array('value' => number_format($cartCarriage,         2, '.', '')),
+            'cartCarriageTotalTax'      => array('value' => number_format($cartCarriageTotalTax, 2, '.', ''))
         );
+
         $this->dbQuery($this->dbUpdate($def)." WHERE id_cart='".$opt['id_cart']."'");
 
         //$this->pre($this->db_query);
@@ -914,7 +930,7 @@ public function businessCmdNew($opt){
 //-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -
 	public function businessCmdMail($opt){
 
-		require_once(KROOT.'/app/plugin/phpmailer/class.phpmailer.php');
+		require_once(KROOT . '/app-/plugin/phpmailer/class.phpmailer.php');
 
 		# Cmmand
 		#
@@ -1194,7 +1210,6 @@ public function businessConfigSet($configField, $configKey, $def){
 //-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -
 //-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -
 	public  function businessCartDeliveryStatus(){
-
 	    $data   = array('WAIT', 'INPROGRESS', 'SENT');
 		$custom = $this->hookAction('businessCartDeliveryStatus', $data);
 

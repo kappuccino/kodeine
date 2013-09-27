@@ -12,12 +12,12 @@
 	foreach($group_ as $e){
 		$group['G'.$e['id_group']] = 'Groupe '.$e['groupName'];
 	}
-	
+
 	$search = $app->searchGet(array('debug' => false, 'searchType' => 'user'));
 	foreach($search as $e){
 		$group['S'.$e['id_search']] = 'Groupe intelligent '.$e['searchName'];
 	}
-		
+
 	# Export
 	#
 	if(isset($_GET['group'])){
@@ -43,7 +43,7 @@
 				'noLimit'	=> true
 			));
 		}
-		
+
 		if(sizeof($user) > 0){
 			$colonnes = array_keys($user[0]);
 			foreach($colonnes as $e){
@@ -54,9 +54,9 @@
 					$tmp[] = $e;
 				}
 			}
-			
+
 			$line[] = implode("\t", $tmp);
-			
+
 			foreach($user as $e){
 				$row = array();
 				foreach($e as $e_){
@@ -66,7 +66,7 @@
 			}
 
 			$out = implode("\n", $line);
-		
+
 			header("Expires: Mon, 26 Jul 1997 05:00:00 GMT");
 			header("Last-Modified: ".gmdate("D,d M YH:i:s")." GMT");
 			header("Cache-Control: no-cache, must-revalidate");

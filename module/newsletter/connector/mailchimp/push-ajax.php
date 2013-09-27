@@ -110,7 +110,7 @@
         die(json_encode($out));
     }
     else {			
-        //$app->dbQuery("UPDATE k_newsletter SET newsletterSendDate=NOW(), newsletterConnector='mailchimp', newsletterConnectorId='".$result."' WHERE id_newsletter=".$_REQUEST['id_newsletter']);
+        $app->dbQuery("UPDATE k_newsletter SET newsletterSendDate=NOW(), newsletterConnector='mailchimp', newsletterConnectorId='".$result."' WHERE id_newsletter=".$_REQUEST['id_newsletter']);
         $out['done'] = 1;
         die(json_encode($out));
     }

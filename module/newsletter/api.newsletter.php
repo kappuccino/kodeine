@@ -176,9 +176,9 @@ public function newsletterDuplicate($id_newsletter){
 	# Originale
 	$from = $this->dbOne("SELECT * FROM k_newsletter WHERE id_newsletter=".$id_newsletter);
 
-	foreach($this->dbMulti("SHOW COLUMNS FROM k_newsletter WHERE Field NOT IN('id_newsletter', 'newsletterSendDate')") as $e){
-		$fields[] = $e['Field'];
-	}
+    foreach($this->dbMulti("SHOW COLUMNS FROM k_newsletter WHERE Field NOT IN('id_newsletter', 'newsletterSendDate', 'newsletterConnectorValue', 'newsletterConnectorId')") as $e){
+        $fields[] = $e['Field'];
+    }
 
 	foreach($fields as $df){
 		$tmp[] = "'".addslashes($from[$df])."'";
@@ -346,12 +346,28 @@ public function newsletterPrepareBody($id_newsletter, $data=NULL){
 		    	foreach($props as $prop){
 		    		$myprop[strtolower($prop[1])] = $prop[2];
 		    	}
-		    	
 		    	// Si je n'ai pas la taille de definit
 		    	if(intval($myprop['height']) == 0 && intval($myprop['width']) == 0 && is_file(KROOT.$myprop['src'])){
 		    		$size = getimagesize(KROOT.$myprop['src']);
 		    		$data = str_replace($imgTag[1], ' '.$imgTag[1].' '.$size[3].' ', $data);
-		    	}
+		    	}else {
+
+                    $urllocal = str_replace("http://".$_SERVER['HTTP_HOST'], "", $myprop['src']);
+                    
+                    if(intval($myprop['height']) > 0 && intval($myprop['width']) > 0 && is_file(KROOT.$urllocal) && strpos($urllocal, '.cache') === false){
+                        $size = getimagesize(KROOT.$urllocal);
+
+                        $img = $this->mediaUrlData(array(
+                            'url'       => $urllocal,
+                            'mode'      => 'crop',
+                            'value'     => $myprop['width'],
+                            'second'    => $myprop['height']
+                        ));
+                        $data = str_replace("src=\"".$myprop['src']."\"", "src=\"".$img['img']."\"", $data);
+                        $myprop['src'] = $img['img'];
+                    }
+                }
+                //$this->pre($myprop, $size);
 
 		    	// Mettre le http:// devant les URL des images
 				if(!preg_match("#^http#", $myprop['src'])){
@@ -435,7 +451,7 @@ public function newsletterPoolPopulation($id_newsletter){
 	# Liste tous les user qui match les criteres de recherche
 	if(sizeof($data['newsletterSearch']) > 0){
 		foreach($data['newsletterSearch'] as $e){
-			$grp = $this->apiLoad('user')->userSearch(array('id_search' => $e));
+			$grp = $this->apiLoad('user')->userSearch(array('id_search' => $e, 'limit' => 9999999));
 			if(sizeof($grp) > 0){
 				foreach($grp as $e){
 					$id[] = $e['id_user'];
