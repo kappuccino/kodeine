@@ -664,7 +664,10 @@ function __clone(){}
 
 						unset($tmp);
 						foreach($v as $bContent){
-							$tmp[] = $this->dbOne("SELECT * FROM k_contentdata WHERE id_content=".$bContent." AND language='".$language."'");
+							$tmp[] = $this->dbOne("
+								SELECT * FROM k_contentdata
+								INNER JOIN k_content ON k_contentdata.id_content = k_content.id_content
+								WHERE k_contentdata.id_content=".$bContent." AND language='".$language."'");
 						}
 						$content[$idx]['field'.$f['id_field']] = (($param['type'] == 'solo' && sizeof($v) == 1) ? $tmp[0] : $tmp);
 					}else
