@@ -568,10 +568,9 @@ function __clone(){}
 		if(sizeof($fieldAssoContentMulti) > 0){
 			foreach($content as $idx => $c){
 				foreach($fieldAssoContentMulti as $f){
-					#$content[$idx]['field'.$f['id_field']] = $this->contentAssoGet($content[$idx]['id_content'], $content[$idx]['id_type'], $f['id_field'], $f['fieldContentType']);
+					$content[$idx]['field'.$f['id_field']] = $this->contentAssoGet($content[$idx]['id_content'], $content[$idx]['id_type'], $f['id_field'], $f['fieldContentType']);
 				}
 			}
-
 		}
 		if(sizeof($fieldAssoContentSingle) > 0){
 			foreach($content as $idx => $c){
@@ -581,7 +580,6 @@ function __clone(){}
 					}
 				}
 			}
-
 		}
 
 		// USER relies a ce CONTENT
