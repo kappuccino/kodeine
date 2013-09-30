@@ -64,7 +64,7 @@
 					}
 
 					if($isEmbeded){
-						$og		= $app->apiLoad('openGraph')->openGraphVideo($e);
+						$og		= $app->apiLoad('coreOpengraph')->openGraphVideo($e);
 						$weight = 0;
 
 						$opt['data']['k_contentdata']['contentName']['value'] = $og[0]['og:title'];
