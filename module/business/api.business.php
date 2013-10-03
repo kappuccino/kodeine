@@ -930,7 +930,7 @@ public function businessCmdNew($opt){
 //-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -
 	public function businessCmdMail($opt){
 
-		require_once(KROOT . '/app-/plugin/phpmailer/class.phpmailer.php');
+		require_once(KROOT . '/app/plugin/phpmailer/class.phpmailer.php');
 
 		# Cmmand
 		#
@@ -979,8 +979,10 @@ public function businessCmdNew($opt){
 		#
 		$mail = new PHPMailer();
 	    $mail->CharSet = "UTF-8";
-	    if($opt['mailFrom'] != '') $mail->SetFrom($opt['mailFrom']);
-		else $mail->SetFrom('noreply@'.$_SERVER['HTTP_HOST']);
+        $fromName = '';
+        if($opt['mailFromName'] != '') $fromName = $opt['mailFromName'];
+	    if($opt['mailFrom'] != '') $mail->SetFrom($opt['mailFrom'], $fromName);
+		else $mail->SetFrom('noreply@'.$_SERVER['HTTP_HOST'], $fromName);
 
 		// TO
 		foreach($mailTo as $e){

@@ -77,7 +77,7 @@
 
 	// Champs de k_businesscart autorises
 	$contentField = array(
-        'cartEmail', 'cartDeliveryName', 'cartBillingName', 'cartDeliveryStatus', 'cartSerial', 'cartWeight',
+        'cartEmail', 'cartDeliveryName', 'cartBillingName', 'cartDeliveryStatus', 'cartSerial', 'cartWeight', 'cartCmdNumber',
         'DELIVERYaddressbookPhone1', 'DELIVERYaddressbookPhone2', 'BILLINGaddressbookPhone1', 'BILLINGaddressbookPhone2'
     );
 
