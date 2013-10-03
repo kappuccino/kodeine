@@ -797,8 +797,8 @@ if($nFound){ ?>
 				</thead>
 				<tbody>
 					<?php
-					$prompt = 'group['.$id_group.']';
 					foreach($groups as $id_group => $e){
+                        $prompt = 'group['.$id_group.']';
 						$disabled = ($e['is_view']) ? NULL : "disabled=\"disabled\""; ?>
 						<tr id="line-<?php echo $id_group ?>">
 							<td>
