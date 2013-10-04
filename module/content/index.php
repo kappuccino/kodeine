@@ -5,7 +5,7 @@
 	if($_REQUEST['id_type'] == NULL){
 		$type = $app->apiLoad('type')->typeGet(array('profile' => true));
 		
-		if(sizeof($type) == 0) header("Location: type?noData");
+		if(sizeof($type) == 0) header("Location: ../type/?noData");
 	}
 
 	if(isset($_REQUEST['duplicate'])){
