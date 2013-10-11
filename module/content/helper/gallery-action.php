@@ -17,7 +17,7 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	$api        = $app->apiLoad('content');
 
-	$id_album   = $_REQUEST['id_album'] ?: -5000;
+	$id_album   = !isset($_REQUEST['id_album']) ? -5000 : intval($_REQUEST['id_album']);
 	$id_content = $_REQUEST['id_content'];
 	$pref       = $app->configGet('content');
 	$is_alias   = false;
