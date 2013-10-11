@@ -936,6 +936,7 @@ public function fieldForm($id_field, $value, $opt=array()){
 				$selectData = $this->dbMulti(
 					"SELECT ".$field['fieldParam']['field'].",".$field['fieldParam']['id']."\n".
 					"FROM ".$field['fieldParam']['table']."\n".
+                    " ".$field['fieldParam']['where']."\n".
 					"ORDER BY ".$field['fieldParam']['field']." ASC"
 				);
 			}
