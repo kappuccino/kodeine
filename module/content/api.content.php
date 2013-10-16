@@ -1477,6 +1477,8 @@ public function contentRemove($id_type, $id_content, $language=''){
 
 		$this->dbQuery("DELETE FROM k_userasso				WHERE id_content=".$id_content);
 		$this->dbQuery("DELETE FROM k_contentasso			WHERE bContent=".$id_content." OR aContent=".$id_content);
+
+		$this->hookAction('contentRemove', $this->id_content, $id_type, $id_content, $language);
 	}
 
 	if($type['is_gallery']) $this->contentAlbumFamily();
