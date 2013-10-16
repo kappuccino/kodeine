@@ -173,9 +173,9 @@
                 }
                 ?>
 
-				<td><a href="edit?id_cart=<?php echo $r['id_cart'] ?>"><?php echo $r['cartStatus'] ?></a></td>
-				<td><?php echo $r['cartPayment'] ?></td>
-				<td align="right"><?php echo $r['cartTotalFinal'] ?></td>
+				<td><a href="edit?id_cart=<?php echo $r['id_cart'] ?>"><?php echo $e['cartStatus'] ?></a></td>
+				<td><?php echo $e['cartPayment'] ?></td>
+				<td align="right"><?php echo $e['cartTotalFinal'] ?></td>
 			</tr>
 			<?php }
 		}else{ ?>
