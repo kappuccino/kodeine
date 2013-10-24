@@ -17,9 +17,10 @@ function openGraphVideo($view){
 			if($url['host'] == 'www.youtube.com'){
 				parse_str($url['query'], $arr);
 				if($arr['v'] != ''){
-					$myurl	= 'http://gdata.youtube.com/feeds/api/videos/'.$arr['v'].'?alt=json';
-					$yturl	= 'http://www.youtube.com/?v='.$arr['v'];
-					$embed	= 'http://www.youtube.com/embed/'.$arr['v'].'?autoplay=1&rel=0';
+					$ytid   = $arr['v'];
+					$myurl	= 'http://gdata.youtube.com/feeds/api/videos/'.$ytid.'?alt=json';
+					$yturl	= 'http://www.youtube.com/?v='.$ytid;
+					$embed	= 'http://www.youtube.com/embed/'.$ytid.'?autoplay=1&rel=0';
 				}else{
 					unset($myurl); // avoiding useless curl action
 				}
@@ -61,6 +62,7 @@ function openGraphVideo($view){
 				            'og:video:type'		=> 'application/x-shockwave-flash',
 							'og:video:width'	=> $json['entry']["media\$group"]["media\$thumbnail"][0]['width'],
 							'og:video:height'	=> $json['entry']["media\$group"]["media\$thumbnail"][0]['height'],
+							'yt:id'             => $ytid
 						);
 
 					}else
@@ -98,15 +100,21 @@ function openGraphVideo($view){
 							foreach($metas as $meta){
 								$og[$meta->getAttribute('property')] = $meta->getAttribute('content');
 							}
+
+					        // VIMEO
+						    if($url['host'] == 'www.vimeo.com' OR $url['host'] == 'vimeo.com'){
+							    if(preg_match("#/([0-9]*)$#", $og['og:url'], $m)) $og['vimeo:id'] = $m[1];
+							}
+
 							$opengraph[] = $og;
 							unset($og);
 						}
 
-					}
-				}
+				    }
 
 
 				curl_close($curlHandle);
+			}
 			}
 		}
 	}else{
@@ -116,4 +124,4 @@ function openGraphVideo($view){
 	return $opengraph;
 }
 
-} ?>
+}

@@ -35,9 +35,14 @@
 		'debug'		=> false
 	));
 
-	
+    $res  = $app->hookFilter('businessCartEditMail', array('mailSent' => $mailSent, 'id_cart' => $_REQUEST['id_cart'], 'mailTemplate' => $_POST['mailTemplate']));
+
+    $mailSent = $res['mailSent'];
+
 	if($_POST['mailTemplate'] != '' && !$mailSent){
-		
+
+
+
 		$message 	= file_get_contents(KROOT.'/user/mail/business/'.$_POST['mailTemplate']);
 		$message	= $app->helperReplace($message, $myCmd);
 
