@@ -600,13 +600,16 @@ public  function userSearch($opt){
 	}else{
 		$sqlOrder = "\nORDER BY k_user.id_user ASC";
 	}
+
+	if(!$opt['noLimit']) $sqlLimit = " LIMIT ".$offset.",".$limit;
+
 	$c = array();
 	$this->total = 0;
 	if(is_array($search['searchParam']) && sizeof($search['searchParam']) > 0){
 		$q = "SELECT SQL_CALC_FOUND_ROWS * FROM k_user \n".
 			 "INNER JOIN k_userdata ON k_user.id_user = k_userdata.id_user\n".
 			 "WHERE \n".$this->userSearchSQL($search)."\n".
-			 $sqlOrder . " LIMIT ".$offset.",".$limit;
+			 $sqlOrder . $sqlLimit;
 	
 		$c = $this->dbMulti($q);
 		$this->total = $this->db_num_total;

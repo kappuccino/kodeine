@@ -265,7 +265,7 @@ public function categoryGet($opt=array()){
 			foreach($categories as $idx => $c){
 				foreach($fields as $f){
 					$categories[$idx]['field'][$f['fieldKey']] = $c['field'.$f['id_field']];
-					unset($categories[$idx]['field'.$f['id_field']]);
+				#	unset($categories[$idx]['field'.$f['id_field']]);
 				}	
 			}
 		}

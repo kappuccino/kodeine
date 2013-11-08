@@ -14,10 +14,8 @@
 #	die($url);
 #	if($trace) $app->pre("url", $url, "get", $get, "server", $_SERVER);
 
-#	- + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + 
 
-	# IMAGE
-	#
+	// IMAGE ///////////////////////////////////////////////////////////////////////////////////////////////////////////
 	if(substr($url, 2, 1) == ':'){
 		preg_match("#^/([w|h|s|c]):([0-9,]{1,})(,([0-9]{1,}))?(.*)#", $url, $r);
 
@@ -33,8 +31,7 @@
 		exit();
 	}else
 
-	# AD
-	# 
+	// AD //////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	if(preg_match("#^/ad([0-9]{1,})#", $url, $r)){
 		$_GET['id_ad'] = $r[1];
 		if($trace) $app->pre("AD", $r);
@@ -43,16 +40,14 @@
 		exit();
 	}else
 
-	# PREVIEW NEWSLETTER
-	# 
+	// PREVIEW NEWSLETTER //////////////////////////////////////////////////////////////////////////////////////////////
 	if($_GET['preview-newsletter'] != ''){
 		include(APP.'/module/newsletter/helper/preview.php');
 		exit();
 	}else
 
-	# ROBOTS.TXT
-	#
-	if($url_['path'] == '/robots.txt'){	
+	// ROBOTS.TXT //////////////////////////////////////////////////////////////////////////////////////////////////////
+	if($url_['path'] == '/robots.txt'){
 		header("Content-Type: text/plain");
 		$config = $app->configGet('robots.txt');
 
@@ -60,38 +55,38 @@
 		exit();
 	}else
 
-	# ADMIN
-	#
+	// ADMIN ///////////////////////////////////////////////////////////////////////////////////////////////////////////
 	if(substr($url, 0, 7) == '/admin/'){
 		include(APP.'/module/core/admin.php');
 		exit();
 	}else
 
-	# vFS
-	#	
+	// vFS /////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	/*if(preg_match("#v/([0-9]{1,})/(.*)#", $url, $r)){
 		include(dirname(__FILE__).'/vfs.php');
 		exit();
 	}else*/
 
-	# AUTH
-	#
+	// AUTH ////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	/*if(preg_match("#^/externalauth#", $url, $r)){
 		include(dirname(__FILE__).'/externalauth.php');
 		exit();
 	}else*/
 
-	# MAIN
-	#
-	if(preg_match("#^/(([a-zA-Z]{2})/)?(.*)?$#", $url, $r)){
-		$_GET['urlLanguage']	= $r[2];
+	// MAIN ////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	if(preg_match("#^/(([a-zA-Z-]{2,6})/)?(.*)?$#", $url, $r)){
+
+		if(strlen($r[2]) > 2){
+			$_GET['urlLanguage']	= substr($r[2], 0, 2);
+			$_GET['urlCountry']	    = substr($r[2], 3, 2);
+		}else{
+			$_GET['urlLanguage']	= $r[2];
+			$_GET['urlCountry']	    = $r[2];
+		}
+
 		$_GET['urlRequest']		= $r[3];
 		
 		if($trace) $app->pre("MAIN", $r);
 	}
 
-
-#	- + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + 
-
 	unset($url, $url_, $r);
-?>

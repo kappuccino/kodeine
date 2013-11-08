@@ -112,7 +112,7 @@
 							case 'needHeaders' :
 								echo "<div class=\"step\">"._('Step 2 : Match each columns to kodeine custom user fields')."</div>";
 								if(sizeof($data['lignes']) > 6){
-									echo "<p>".sptrintf(_('The file contains %s lines, only the six first lines are displayed'), sizeof($data['lignes']))."</p>";
+									echo "<p>".sprintf(_('The file contains %s lines, only the six first lines are displayed'), sizeof($data['lignes']))."</p>";
 								}
 			
 								echo "<table cellspacing=\"0\" class=\"listing\" border=\"0\"><thead><tr>";
@@ -130,7 +130,7 @@
 							case 'needID' : 
 								echo "<div class=\"step\">"._('Step 3 : You must check this options to complete the import')."</div>";
 								if(sizeof($data['lignes']) > 6){
-									echo "<p>".sptrintf(_('The file contains %s lines, only the six first lines are displayed'), sizeof($data['lignes']))."</p>";
+									echo "<p>".sprintf(_('The file contains %s lines, only the six first lines are displayed'), sizeof($data['lignes']))."</p>";
 								}
 		
 								echo

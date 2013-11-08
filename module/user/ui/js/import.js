@@ -30,7 +30,7 @@ function importer(offset, length, loop){
 			}
 		});
 
-		$$=('#formulaire select').each(function(me){
+		$('#formulaire select').each(function(i, me){
 			url += '&'+me.name+'='+ me.options[me.selectedIndex].value;
 		});
 

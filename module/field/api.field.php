@@ -738,8 +738,8 @@ public function fieldForm($id_field, $value, $opt=array()){
 
 	# Traiter les OPTIONS
 	#
-	$name 		= isset($opt['name']) ? $opt['name'] : 'field['.$id_field.']';
-	$id			= isset($opt['name']) ? $opt['id']	 : 'form-field-'.$id_field;
+	$name 		= !empty($opt['name']) ? $opt['name'] : 'field['.$id_field.']';
+	$id			= !empty($opt['name']) ? $opt['id']	  : 'form-field-'.$id_field;
 	$key		= (preg_match("#([0-9]){1,}#", $id_field)) ? '' : $id_field;
 	$disabled	= ($opt['disabled']) ? "disabled=\"disabled\"" : NULL;
 
@@ -936,6 +936,7 @@ public function fieldForm($id_field, $value, $opt=array()){
 				$selectData = $this->dbMulti(
 					"SELECT ".$field['fieldParam']['field'].",".$field['fieldParam']['id']."\n".
 					"FROM ".$field['fieldParam']['table']."\n".
+                    " ".$field['fieldParam']['where']."\n".
 					"ORDER BY ".$field['fieldParam']['field']." ASC"
 				);
 			}
@@ -1200,20 +1201,26 @@ public function fieldForm($id_field, $value, $opt=array()){
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 public function fieldTrace($data, $e, $f=array()){
 
+#	$this->pre(func_get_args());
+
 	$field	= $this->fieldForm(
 		$e['id_field'],
 		$this->formValue($data['field'.$e['id_field']], $_POST['field'][$e['id_field']]),
 		array(
-			'class'	=> 'field ',
-			'style' => 'width:99%; '.$e['fieldStyle']
+			'name'  => $f['name'] ? : '',
+			'class' => 'field ',
+			'style' => 'width:99%; ' . $e['fieldStyle']
 		)
 	);
 
-	if(preg_match("#richtext#", 	$field)) $GLOBALS['textarea'][]		= 'form-field-'.$e['id_field'];
-	if(preg_match("#media\-list#", 	$field)) $GLOBALS['mediaList'][]	= "'form-field-".$e['id_field']."'";
-	if(preg_match("#datePicker#", 	$field)) $GLOBALS['datePick'][]		= "'form-field-".$e['id_field']."'";
+	if(preg_match("#richtext#", 	$field)) $GLOBALS['textarea'][]	 = 'form-field-'.$e['id_field'];
+	if(preg_match("#media-list#", 	$field)) $GLOBALS['mediaList'][] = "'form-field-".$e['id_field']."'";
+	if(preg_match("#datePicker#", 	$field)) $GLOBALS['datePick'][]	 = "'form-field-".$e['id_field']."'";
 
-	echo "<li class=\"clearfix ".($f['close'] ? 'closed' : '')." ".$this->formError('field'.$e['id_field'], 'needToBeFilled')." form-item\" id=\"field".$e['id_field']."\">";
+	$close = '';
+	if(!empty($f['close'])) $close = 'closed';
+
+	echo "<li class=\"clearfix ".$close." ".$this->formError('field'.$e['id_field'], 'needToBeFilled')." form-item\" id=\"field".$e['id_field']."\">";
 
 		echo "<div class=\"hand\">&nbsp;</div>";
 		echo "<div class=\"toggle\">&nbsp;</div>";

@@ -116,6 +116,7 @@ gallery.views.view           = Backbone.View.extend({
 	},
 
 	nav: function(id){
+		console.log('nav ID='+id);
 		this.id_album = id;
 		this.load();
 
@@ -644,7 +645,9 @@ gallery.views.app            = Backbone.View.extend({
 		'click #buttonUpload':      'uploadShow',
 		'click #buttonCloseUpload': 'clearModal',
 		'click #distantDownload':   'distantDownload',
-		'click #removeAllItems':    'removeAllItems'
+		'click #removeAllItems':    'removeAllItems',
+		'click #sortAZ':            'sortAZ',
+		'click #sortZA':            'sortZA'
 	},
 
 	addAlbum: function(){
@@ -719,6 +722,11 @@ gallery.views.app            = Backbone.View.extend({
 				'queueID':          'upqueue',
 				'uploadScript':     'helper/gallery-upload',
 
+				'onUpload':         function(){
+					this.data('uploadifive').settings.formData = {
+						'id_album': gallery.views.myView.id_album
+					};
+				},
 				'onUploadComplete': function(file, data){
 					var data = $.parseJSON(data);
 					if(data.model) gallery.collections.myMedia.add(data.model);
@@ -744,8 +752,11 @@ gallery.views.app            = Backbone.View.extend({
 				'queueID':          'ipqueue',
 				'uploader':         'helper/upload',
 				'swf':              '../../../media/ui/_uploadify/uploadify.swf',
+
 				'onUploadStart':    function(){
-				//	$('#file_upload').data('uploadify').settings.formData = {'f' : media.views.myView.folder};
+					$('#file_upload').data('uploadify').settings.formData = {
+						'id_album' : gallery.views.myView.id_album
+					};
 				},
 				'onQueueComplete':  function() {
 					$('#queue').empty();
@@ -835,14 +846,15 @@ gallery.views.app            = Backbone.View.extend({
 
 	/////////
 
-	action: function(data, back){
+	action: function(data, back, type){
 
 	//	console.log("[XHR ACTION]", 'data', data, 'back', back);
 
 		var xhr = $.ajax({
 			url:        'helper/gallery-action',
 			dataType:   'json',
-			data:       data
+			data:       data,
+			type:       (type || 'get')
 		});
 
 		xhr.done(function(js){
@@ -860,7 +872,7 @@ gallery.views.app            = Backbone.View.extend({
 			id_album:   id_album,
 			items:      items.join('.'),
 			albums:     albums.join('.')
-		})
+		}, null, 'post')
 	},
 
 	moveItem: function(cid, me, to){
@@ -1025,6 +1037,54 @@ gallery.views.app            = Backbone.View.extend({
 		}
 
 	},
+
+	sort: function(){
+		var albums=[], items=[];
+
+		// Re-Render
+		gallery.collections.myMedia.sort();
+		gallery.views.myView.fill();
+
+		// Save
+		gallery.collections.myMedia.each(function(e){
+			if(e.get('is_album')){
+				albums.push(e.get('id_content'));
+			}else{
+				items.push(e.get('id_content'));
+			}
+		});
+
+		gallery.views.myApp.saveOrder(albums, items);
+
+		delete gallery.collections.myMedia.comparator;
+	},
+
+	sortAZ: function(){
+		if(confirm('Voulez-vous classer la liste des items par ordre croissant ? cela effacera l\'ordre actuel')){
+
+			gallery.collections.myMedia.comparator = function(m){
+				return m.get('contentName');
+			}
+
+			this.sort();
+		}
+	},
+
+	sortZA: function(){
+		if(confirm('Voulez-vous classer la liste des items par ordre décroissant ? cela effacera l\'ordre actuel')){
+
+			gallery.collections.myMedia.comparator = function(a, b) {
+				if (a.get('contentName') > b.get('contentName')) return -1; // before
+				if (b.get('contentName') > a.get('contentName')) return 1; // after
+				return 0; // equal
+			};
+
+			this.sort();
+		}
+
+	},
+
+
 
 	createAlias: function(id_content){
 		this.action({
