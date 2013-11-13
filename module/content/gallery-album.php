@@ -35,8 +35,11 @@
 
 		// DATA ////////////////////////////////////////////////////////////////////////////////////////////////////////
 		$dat['k_contentdata'] = array(
-			'contentUrl'  => array('value' => $_POST['contentUrl'],  'check' => '.'),
-			'contentName' => array('value' => $_POST['contentName'], 'check' => '.')
+			'contentUrl'                => array('value' => $_POST['contentUrl'],               'check' => '.'),
+			'contentName'               => array('value' => $_POST['contentName'],              'check' => '.'),
+			'contentHeadTitle' 			=> array('value' => $_POST['contentHeadTitle'], 		'null' => true),
+			'contentMetaKeywords' 		=> array('value' => $_POST['contentMetaKeywords'], 		'null' => true),
+			'contentMetaDescription'	=> array('value' => $_POST['contentMetaDescription'],	'null' => true),
 		);
 		if(!$app->formValidation($dat)) $do = false;
 
@@ -254,7 +257,33 @@
 							</div>
 						</span>
 					</li>
-	
+
+					<li id="contentHeadMeta" class="clearfix form-item">
+						<div class="hand"></div>
+						<div class="toggle"></div>
+
+						<span class="">
+							<label><?php echo _('Title (seo)'); ?></label>
+							<div class="form"><input type="text" class="field" name="contentHeadTitle" value="<?php echo $app->formValue($data['contentHeadTitle'], $_POST['contentHeadTitle']); ?>" size="100" style="width:99%;" /></div>
+						</span>
+
+						<br style="clear:both" />
+						<div class="spacer"></div>
+
+						<span>
+							<label class="off"><?php echo _('Key words (seo)'); ?></label>
+							<div class="form"><input type="text" name="contentMetaKeywords" class="field" value="<?php echo $app->formValue($data['contentMetaKeywords'], $_POST['contentMetaKeywords']); ?>" size="100" style="width:99%;" /></div>
+						</span>
+
+						<br style="clear:both" />
+						<div class="spacer"></div>
+
+						<span>
+							<label class="off"><?php echo _('Description (seo)'); ?></label>
+							<div class="form"><input type="text" name="contentMetaDescription" class="field" value="<?php echo $app->formValue($data['contentMetaDescription'], $_POST['contentMetaDescription']); ?>" size="100" style="width:99%;" /></div>
+						</span>
+					</li>
+
 					<li class="clearfix form-item">
 						<div class="hand">&nbsp;</div>
 						<div class="toggle toggle-hidden">&nbsp;</div>
