@@ -227,7 +227,15 @@ function setRichEditor(){
 	$( '#'+textarea ).ckeditor({
 		contentsCss: '../core/helper/ckeditor',
 		allowedContent: true
-	})
+	});
+
+
+	// charger une ressource externe (plugin) et l'initialiser dans l'instance de notre ckeditor
+	var editor = CKEDITOR.instances[textarea];
+	CKEDITOR.plugins.addExternal('kodeineimg', '/admin/core/vendor/ckeditor-plugins/kodeineimg/', 'plugin.js');
+	CKEDITOR.plugins.load('kodeineimg', function(plugins) {
+		plugins['kodeineimg'].init(editor)
+	});
 
 	/*tinyMCE.init({
 		mode		: 'exact',
