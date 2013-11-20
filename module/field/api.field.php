@@ -1069,7 +1069,7 @@ public function fieldForm($id_field, $value, $opt=array()){
 	### Date
 	#
 	if($field['fieldType'] == 'date'){
-		$form = "<input type=\"text\" name=\"".$name."\" id=\"".$id."\" value=\"".$value."\" class=\"".$opt['class']." datePicker\" size=\"10\" ".$disabled." />";
+		$form = "<input type=\"text\" name=\"".$name."\" id=\"".$id."\" value=\"".(($value == '0000-00-00') ? '' : $value)."\" class=\"".$opt['class']." datePicker\" size=\"10\" ".$disabled." />";
 	}else
 
 	### Nombre entier
