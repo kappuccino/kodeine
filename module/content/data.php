@@ -942,8 +942,12 @@ if($nFound){ ?>
 <?php include(COREINC.'/end.php'); ?>
 <script src="../core/vendor/datatables/jquery.dataTables.js"></script>
 <script src="../core/vendor/bootstrap/js/bootstrap-dropdown.js"></script>
-<script src="../core/vendor/tinymce/jscripts/tiny_mce/jquery.tinymce.js"></script>
-<script src="../core/vendor/tinymce/jscripts/tiny_mce/tiny_mce.js"></script>
+
+<script src="../core/vendor/ckeditor/ckeditor.js"></script>
+<script src="../core/vendor/ckeditor/adapters/jquery.js"></script>
+<!--<script src="../core/vendor/tinymce/jscripts/tiny_mce/jquery.tinymce.js"></script>
+<script src="../core/vendor/tinymce/jscripts/tiny_mce/tiny_mce.js"></script>-->
+
 <script src="../core/vendor/datepicker/js/bootstrap-datepicker.js" charset="UTF-8"></script>
 <script src="../core/vendor/codemirror/lib/codemirror.js"></script>
 <script src="../core/vendor/codemirror/mode/javascript/javascript.js"></script>

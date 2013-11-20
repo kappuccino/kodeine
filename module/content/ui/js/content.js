@@ -220,8 +220,16 @@ function mediaView(view, raw){
 	RICH TEXT EDITOR
 + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - */
 function setRichEditor(){
+
 	if(!useEditor) return false
-	tinyMCE.init({
+	//console.log('RICH !', textarea)
+
+	$( '#'+textarea ).ckeditor({
+		contentsCss: '../core/helper/ckeditor',
+		allowedContent: true
+	})
+
+	/*tinyMCE.init({
 		mode		: 'exact',
 		elements	: textarea,
 		theme		: 'advanced',
@@ -261,7 +269,7 @@ function setRichEditor(){
 		    });
 		}
 	
-	});
+	});*/
 
 }
 
