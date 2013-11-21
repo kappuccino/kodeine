@@ -6,219 +6,234 @@ function __clone(){}
 
 //-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -
 //-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -
-function socialCircleGet($opt=array()){
+	public  function socialCircleGet($opt=array()){
 
-	if(BENCHME) @$GLOBALS['bench']->benchmarkMarker($bmStep='socialCircleGet() @='.json_encode($opt));
+		if(BENCHME) @$GLOBALS['bench']->benchmarkMarker($bmStep='socialCircleGet() @='.json_encode($opt));
 
-	if($opt['debug']) $this->pre("[OPT]", $opt);
+		if($opt['debug']) $this->pre("[OPT]", $opt);
 
-	# Gerer les OPTIONS
-	#
-	$dbMode		= 'dbMulti';
-	$cond[]     = 'k_socialcircle.socialCircleHide=0';
-	$searchLink	= ($opt['searchLink'] != '') ? $opt['searchLink'] : 'OR';
+		# Gerer les OPTIONS
+		#
+		$dbMode		= 'dbMulti';
+		$cond[]     = 'k_socialcircle.socialCircleHide=0';
+		$searchLink	= ($opt['searchLink'] != '') ? $opt['searchLink'] : 'OR';
 
-	// GET id_socialcircle
-	if(array_key_exists('id_socialcircle', $opt)){
-		
-		if(is_array($opt['id_socialcircle']) && sizeof($opt['id_socialcircle']) > 0){
-			$cond[] = "k_socialcircle.id_socialcircle IN(".implode(',', $opt['id_socialcircle']).")";
-		}else
-		if(intval($opt['id_socialcircle']) > 0){
-			$cond[] = "k_socialcircle.id_socialcircle=".$opt['id_socialcircle'];
-			$dbMode = 'dbOne';
-		}else{
-			if($opt['debug']) $this->pre("ERROR: ID_SOCIALCIRCLE (NUMERIC,ARRAY)", "GIVEN", var_export($opt['id_socialcircle'], true));
-			return array();
-		}
-	}
+		// GET id_socialcircle
+		if(array_key_exists('id_socialcircle', $opt)){
 
-	// GET id_user
-	if(array_key_exists('id_user', $opt)){
-
-		if(intval($opt['id_user']) > 0){
-			if($opt['is_into']){
-				$cond[] = "(k_socialcircleuser.id_user=".$opt['id_user']." OR k_socialcircle.id_user=".$opt['id_user'].")";
-
-				$join[] = "INNER JOIN k_socialcircleuser ON k_socialcircle.id_socialcircle = k_socialcircleuser.id_socialcircle";
+			if(is_array($opt['id_socialcircle']) && sizeof($opt['id_socialcircle']) > 0){
+				$cond[] = "k_socialcircle.id_socialcircle IN(".implode(',', $opt['id_socialcircle']).")";
 			}else
-			if($opt['public']){
-				$cond[] = "(k_socialcircle.id_user IS NULL OR k_socialcircle.id_user=".$opt['id_user'].")";
-				$public = true;
+			if(intval($opt['id_socialcircle']) > 0){
+				$cond[] = "k_socialcircle.id_socialcircle=".$opt['id_socialcircle'];
+				$dbMode = 'dbOne';
 			}else{
-				$cond[] = "k_socialcircle.id_user=".$opt['id_user'];
-			}
-		}else{
-			if($opt['debug']) $this->pre("ERROR: ID_USER (NUMERIC)", "GIVEN", var_export($opt['id_user'], true));
-			return array();
-		}
-	}
-	
-	// GET withAutor
-	if($opt['withOwner'] == true){
-		$join[] = "INNER JOIN k_user ON k_socialcircle.id_user = k_user.id_user";
-		$join[] = "INNER JOIN k_userdata ON k_user.id_user = k_userdata.id_user";
-		$mapp	= true;
-	}
-
-
-	# FIELD
-	#
-	$fields = $this->apiLoad('field')->fieldGet(array('socialCircle' => true));
-	foreach($fields as $f){
-		$fieldKey[$f['fieldKey']] = $f;
-		if($f['is_search'])												$fieldSearch[]		= $f;
-		if($f['fieldType'] == 'content' && $f['fieldContentType'] > 0)	$fieldAssoContent[] = $f;
-		if($f['fieldType'] == 'user')									$fieldAssoUser[]	= $f;
-	}
-
-
-	# RECHECHE
-	#
-	if(is_array($opt['search'])){
-		unset($tmp);
-
-		foreach($opt['search'] as $e){
-			if($e['searchField'] > 0){
-				$tmp[] = $this->dbMatch("k_socialcircle.field".$e['searchField'], $e['searchValue'], $e['searchMode']);
-			}else
-			if($fieldKey[$e['searchField']]['id_field'] != NULL){
-				$tmp[] = $this->dbMatch("k_socialcircle.field".$fieldKey[$e['searchField']]['id_field'], $e['searchValue'], $e['searchMode']);
-			}else
-			if($field[$e['searchField']]['id_field'] != NULL){
-				$tmp[] = $this->dbMatch("k_socialcircle.field".$field[$e['searchField']]['id_field'], $e['searchValue'], $e['searchMode']);
-			}else{
-				$tmp[] = $this->dbMatch("k_socialcircle.".$e['searchField'], $e['searchValue'], $e['searchMode']);
+				if($opt['debug']) $this->pre("ERROR: ID_SOCIALCIRCLE (NUMERIC,ARRAY)", "GIVEN", var_export($opt['id_socialcircle'], true));
+				return array();
 			}
 		}
 
-		if(sizeof($tmp) > 0) $cond[] = "(".implode(' '.$searchLink.' ', $tmp).")";
-	}else
-	if($opt['search'] != ''){
-		$cond[] = $this->dbMatch("socialCircleName", $opt['search'], 'CT');
-	}
+		// GET id_user
+		if(array_key_exists('id_user', $opt)){
+
+			if(intval($opt['id_user']) > 0){
+				if($opt['is_into']){
+					$cond[] = "(k_socialcircleuser.id_user=".$opt['id_user']." OR k_socialcircle.id_user=".$opt['id_user'].")";
+
+					$join[] = "INNER JOIN k_socialcircleuser ON k_socialcircle.id_socialcircle = k_socialcircleuser.id_socialcircle";
+				}else
+				if($opt['public']){
+					$cond[] = "(k_socialcircle.id_user IS NULL OR k_socialcircle.id_user=".$opt['id_user'].")";
+					$public = true;
+				}else{
+					$cond[] = "k_socialcircle.id_user=".$opt['id_user'];
+				}
+			}else{
+				if($opt['debug']) $this->pre("ERROR: ID_USER (NUMERIC)", "GIVEN", var_export($opt['id_user'], true));
+				return array();
+			}
+		}
+
+		// GET withAutor
+		if($opt['withOwner'] == true){
+			$join[] = "INNER JOIN k_user ON k_socialcircle.id_user = k_user.id_user";
+			$join[] = "INNER JOIN k_userdata ON k_user.id_user = k_userdata.id_user";
+			$mapp	= true;
+		}
 
 
-	# Former les CONDITIONS
-	#		
-	if(sizeof($cond) > 0) $where = "WHERE ".implode(" AND ", $cond);
-	if(sizeof($join) > 0) $join	 = "\n".implode("\n", $join)."\n";
-
-
-	# Former les LIMITATIONS et ORDRE
-	#
-	if($dbMode == 'dbMulti'){
-		$order = "\nORDER BY ".(($opt['order'] != '' && $opt['direction'] != '')
-			? $opt['order']." ".$opt['direction']
-			: "k_socialcircle.id_socialcircle ASC");
-
-		if($opt['offset'] >= 0 && $opt['limit'] > 0) $limit = "\nLIMIT ".$opt['offset'].",".$opt['limit'];
-	}else{
-		$flip = true;
-	}
-
-
-	# CIRCLES
-	#
-	$circles 		= $this->$dbMode("SELECT SQL_CALC_FOUND_ROWS * FROM k_socialcircle\n" . $join . $where . $order . $limit);
-	$this->total	= $this->db_num_total;
-	if($opt['debug']) $this->pre("[QUERY]", $this->db_query, "[ERROR]", $this->db_error, "[DATA]", $circles);
-
-
-	# FORMAT
-	#
-	if(sizeof($circles) > 0){
-
-		if($flip) $circles = array($circles);
-		
-		$circles = $this->socialCircleMapping(array(
-			'circles'	=> $circles,
-			'fields'	=> $this->apiLoad('field')->fieldGet(array('socialCircle' => true)),
-			'withOwner'	=> $opt['withOwner'],
-			'withMedia'	=> $opt['withMedia']
-		));
-
-		if($flip) $circles = $circles[0];
-	}
-
-	if($opt['debug']) $this->pre("[FORMAT]", $circles);
-
-	if(BENCHME) @$GLOBALS['bench']->benchmarkMarker($bmStep);
-
-	return $circles;
-}
-
-/* + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - 
-+ - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - */
-function socialCircleSet($opt){
-
-	# NEW !
-	#
-	if($opt['id_socialcircle'] == NULL){
-		$this->dbQuery("INSERT INTO k_socialcircle (socialCircleDateCreation, socialCircleDateUpdate) VALUES (NOW(), NOW())");
-		if($opt['debug']) $this->pre($this->db_query, $this->db_error);
-		$id_socialcircle = $this->db_insert_id;
-		
-		$opt['core']['id_socialcircle'] = array('value' => $id_socialcircle);
-
-		unset($opt['core']['id_socialcircle']);
-	}else{
-		$opt['core']['socialCircleDateUpdate'] = array('function' => 'NOW()');
-		$id_socialcircle = $opt['id_socialcircle'];
-	}
-
-	$this->id_socialcircle = $id_socialcircle;
-
-	# CORE
-	#
-	$query = $this->dbUpdate(array('k_socialcircle' => $opt['core']))." WHERE id_socialcircle=".$id_socialcircle;
-	$this->dbQuery($query);
-	if($opt['debug']) $this->pre($this->db_query, $this->db_error);
-
-	# FIELD
-	#
-	if(sizeof($opt['field']) > 0){
-
-		# Si on utilise le KEY au lieu des ID
+		# FIELD
+		#
 		$fields = $this->apiLoad('field')->fieldGet(array('socialCircle' => true));
-		foreach($fields as $e){
-			$fieldsKey[$e['fieldKey']] = $e;
-		} $fields = $fieldsKey;
-
-		unset($def);
-		$apiField = $this->apiLoad('field');
-
-		foreach($opt['field'] as $id_field => $value){
-			if(!is_integer($id_field)) $id_field = $fields[$id_field]['id_field'];
-			$value = $apiField->fieldSaveValue($id_field, $value);
-			$def['k_socialcircle']['field'.$id_field] = array('value' => $value); 
+		foreach($fields as $f){
+			$fieldKey[$f['fieldKey']] = $f;
+			if($f['is_search'])												$fieldSearch[]		= $f;
+			if($f['fieldType'] == 'content' && $f['fieldContentType'] > 0)	$fieldAssoContent[] = $f;
+			if($f['fieldType'] == 'user')									$fieldAssoUser[]	= $f;
 		}
 
-		$this->dbQuery($this->dbUpdate($def)." WHERE id_socialcircle=".$id_socialcircle);
+
+		# RECHECHE
+		#
+		if(is_array($opt['search'])){
+			unset($tmp);
+
+			foreach($opt['search'] as $e){
+				if($e['searchField'] > 0){
+					$tmp[] = $this->dbMatch("k_socialcircle.field".$e['searchField'], $e['searchValue'], $e['searchMode']);
+				}else
+				if($fieldKey[$e['searchField']]['id_field'] != NULL){
+					$tmp[] = $this->dbMatch("k_socialcircle.field".$fieldKey[$e['searchField']]['id_field'], $e['searchValue'], $e['searchMode']);
+				}else
+				if($field[$e['searchField']]['id_field'] != NULL){
+					$tmp[] = $this->dbMatch("k_socialcircle.field".$field[$e['searchField']]['id_field'], $e['searchValue'], $e['searchMode']);
+				}else{
+					$tmp[] = $this->dbMatch("k_socialcircle.".$e['searchField'], $e['searchValue'], $e['searchMode']);
+				}
+			}
+
+			if(sizeof($tmp) > 0) $cond[] = "(".implode(' '.$searchLink.' ', $tmp).")";
+		}else
+		if($opt['search'] != ''){
+			$cond[] = $this->dbMatch("socialCircleName", $opt['search'], 'CT');
+		}
+
+
+		# Former les CONDITIONS
+		#
+		if(sizeof($cond) > 0) $where = "WHERE ".implode(" AND ", $cond);
+		if(sizeof($join) > 0) $join	 = "\n".implode("\n", $join)."\n";
+
+
+		# Former les LIMITATIONS et ORDRE
+		#
+		if($dbMode == 'dbMulti'){
+			$order = "\nORDER BY ".(($opt['order'] != '' && $opt['direction'] != '')
+				? $opt['order']." ".$opt['direction']
+				: "k_socialcircle.id_socialcircle ASC");
+
+			if($opt['offset'] >= 0 && $opt['limit'] > 0) $limit = "\nLIMIT ".$opt['offset'].",".$opt['limit'];
+		}else{
+			$flip = true;
+		}
+
+
+		# CIRCLES
+		#
+		$circles 		= $this->$dbMode("SELECT SQL_CALC_FOUND_ROWS * FROM k_socialcircle\n" . $join . $where . $order . $limit);
+		$this->total	= $this->db_num_total;
+		if($opt['debug']) $this->pre("[QUERY]", $this->db_query, "[ERROR]", $this->db_error, "[DATA]", $circles);
+
+
+		# FORMAT
+		#
+		if(sizeof($circles) > 0){
+
+			if($flip) $circles = array($circles);
+
+			$circles = $this->socialCircleMapping(array(
+				'circles'	=> $circles,
+				'fields'	=> $this->apiLoad('field')->fieldGet(array('socialCircle' => true)),
+				'withOwner'	=> $opt['withOwner'],
+				'withMedia'	=> $opt['withMedia']
+			));
+
+			if($flip) $circles = $circles[0];
+		}
+
+		if($opt['debug']) $this->pre("[FORMAT]", $circles);
+
+		if(BENCHME) @$GLOBALS['bench']->benchmarkMarker($bmStep);
+
+		return $circles;
+	}
+
+//-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -
+//-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -
+	public  function socialCircleSet($opt){
+
+		# NEW !
+		#
+		if($opt['id_socialcircle'] == NULL){
+			$this->dbQuery("INSERT INTO k_socialcircle (socialCircleDateCreation, socialCircleDateUpdate) VALUES (NOW(), NOW())");
+			if($opt['debug']) $this->pre($this->db_query, $this->db_error);
+			$id_socialcircle = $this->db_insert_id;
+
+			$opt['core']['id_socialcircle'] = array('value' => $id_socialcircle);
+
+			unset($opt['core']['id_socialcircle']);
+		}else{
+			$opt['core']['socialCircleDateUpdate'] = array('function' => 'NOW()');
+			$id_socialcircle = $opt['id_socialcircle'];
+		}
+
+		$this->id_socialcircle = $id_socialcircle;
+
+		# CORE
+		#
+		$query = $this->dbUpdate(array('k_socialcircle' => $opt['core']))." WHERE id_socialcircle=".$id_socialcircle;
+		$this->dbQuery($query);
 		if($opt['debug']) $this->pre($this->db_query, $this->db_error);
+
+		# FIELD
+		#
+		if(sizeof($opt['field']) > 0){
+
+			# Si on utilise le KEY au lieu des ID
+			$fields = $this->apiLoad('field')->fieldGet(array('socialCircle' => true));
+			foreach($fields as $e){
+				$fieldsKey[$e['fieldKey']] = $e;
+			} $fields = $fieldsKey;
+
+			unset($def);
+			$apiField = $this->apiLoad('field');
+
+			foreach($opt['field'] as $id_field => $value){
+				if(!is_integer($id_field)) $id_field = $fields[$id_field]['id_field'];
+				$value = $apiField->fieldSaveValue($id_field, $value);
+				$def['k_socialcircle']['field'.$id_field] = array('value' => $value);
+			}
+
+			$this->dbQuery($this->dbUpdate($def)." WHERE id_socialcircle=".$id_socialcircle);
+			if($opt['debug']) $this->pre($this->db_query, $this->db_error);
+		}
+
+		# ... NEW => Member
+		#
+		if($opt['id_socialcircle'] == NULL && intval($opt['core']['id_user']['value']) > 0){
+			$this->socialCircleMemberAdd(array(
+				'debug'				=> $opt['debug'],
+				'id_socialcircle'	=> $id_socialcircle,
+				'user'				=> $opt['core']['id_user']['value'],
+				'force'				=> true
+			));
+		}
+
+		# SANDBOXING
+		#
+		/*$this->apiLoad('socialSandbox')->socialSandboxPush(array(
+			'debug'				=> false,
+			'socialSandboxType'	=> 'id_socialcircle',
+			'socialSandboxId'	=> $id_socialcircle
+		));*/
+
+		# NOTIFICATION
+		#
+		if($opt['notification']){
+
+			$this->apiLoad('socialActivity')->socialActivitySet(array(
+				'debug'					=> $opt['debug'],
+				'id_user'				=> $opt['core']['id_user']['value'],
+				'notification'			=> true,
+
+				'socialActivityKey'		=> 'id_socialcircle',
+				'socialActivityId'		=> $id_socialcircle,
+				'socialActivityFlag'	=> 'UPDATE'
+			));
+		}
+
+		return true;
 	}
-
-	# ... NEW => Member
-	#
-	if($opt['id_socialcircle'] == NULL && intval($opt['core']['id_user']['value']) > 0){
-		$this->socialCircleMemberAdd(array(
-			'debug'				=> $opt['debug'],
-			'id_socialcircle'	=> $id_socialcircle,
-			'user'				=> $opt['core']['id_user']['value'],
-			'force'				=> true
-		));
-	}
-
-	# SANDBOXING
-	#
-	/*$this->apiLoad('socialSandbox')->socialSandboxPush(array(
-		'debug'				=> false,
-		'socialSandboxType'	=> 'id_socialcircle',
-		'socialSandboxId'	=> $id_socialcircle
-	));*/
-
-	return true;
-}
 
 /* + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - 
 + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - */
@@ -340,36 +355,36 @@ function socialCircleRemove($id_socialcircle){
 
 //-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -
 //-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -
-function socialCircleHide($opt){
+	public  function socialCircleHide($opt){
 
-	$id_socialcircle = $opt['id_socialcircle'];
-	if(intval($id_socialcircle) == 0) return false;
+		$id_socialcircle = $opt['id_socialcircle'];
+		if(intval($id_socialcircle) == 0) return false;
 
-	// Cache cleaning
-	$users = $this->dbMulti("SELECT id_user FROM k_socialcircleuser WHERE id_socialcircle=".$id_socialcircle);
-	foreach($users as $e){
-		$this->socialUserCacheClean($e['id_user']);
-	}
+		// Cache cleaning
+		$users = $this->dbMulti("SELECT id_user FROM k_socialcircleuser WHERE id_socialcircle=".$id_socialcircle);
+		foreach($users as $e){
+			$this->socialUserCacheClean($e['id_user']);
+		}
 
-	// Suppression des data CIRCLE/USER
-	$this->dbQuery("DELETE FROM k_socialcirclepending 	WHERE id_socialcircle=".$id_socialcircle);
-	$this->dbQuery("DELETE FROM k_socialcircleuser 		WHERE id_socialcircle=".$id_socialcircle);
+		// Suppression des data CIRCLE/USER
+		$this->dbQuery("DELETE FROM k_socialcirclepending 	WHERE id_socialcircle=".$id_socialcircle);
+		$this->dbQuery("DELETE FROM k_socialcircleuser 		WHERE id_socialcircle=".$id_socialcircle);
 
-	// Masquer le CIRCLE
-	$this->dbQuery("UPDATE k_socialcircle SET socialCircleHide=1 WHERE id_socialcircle=".$id_socialcircle);
+		// Masquer le CIRCLE
+		$this->dbQuery("UPDATE k_socialcircle SET socialCircleHide=1 WHERE id_socialcircle=".$id_socialcircle);
 
-	// Supprime les POST relier a ce CIRCLE
-	$posts = $this->apiLoad('socialPost')->socialPostGet(array(
-		'id_socialcircle'	=> $id_socialcircle,
-		'noLimit'			=> true
-	));
-
-	foreach($posts as $p){
-		$this->apiLoad('socialPost')->socialPostHide(array(
-			'id_socialpost' => $p['id_socialpost']
+		// Supprime les POST relier a ce CIRCLE
+		$posts = $this->apiLoad('socialPost')->socialPostGet(array(
+			'id_socialcircle'	=> $id_socialcircle,
+			'noLimit'			=> true
 		));
+
+		foreach($posts as $p){
+			$this->apiLoad('socialPost')->socialPostHide(array(
+				'id_socialpost' => $p['id_socialpost']
+			));
+		}
 	}
-}
 
 /* + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + -
 + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - */
@@ -668,11 +683,10 @@ if($opt['debug']) $this->pre($opt);
 	));
 	
 	$table	= ($circle['is_private'] == '1') ? 'k_socialcirclepending' : 'k_socialcircleuser';
-	$user	= is_array($user) ? $user : array($user);	
-	
+	$flag   = ($table == 'k_socialcirclepending') ? 'PENDING' : 'ENTER';
+	$user	= is_array($user) ? $user : array($user);
+
 	if($opt['force']) $table = 'k_socialcircleuser';
-	
-	$flag = ($table == 'k_socialcirclepending') ? 'PENDING' : 'ENTER';
 
 	foreach($user as $id_user){
 		if(intval($id_user) > 0) $tmp[] = "(".$id_socialcircle.", ".$id_user.", ".time().")";
@@ -706,9 +720,9 @@ if($opt['debug']) $this->pre($opt);
 	foreach($user as $id_user){
 		$this->apiLoad('socialActivity')->socialActivitySet(array(
 			'debug'					=> false,
-			'id_user'				=> $id_user,			// ACTIVITY au nom de l'ABONNE
+			'id_user'				=> $id_user,
 			'notification'			=> true,
-			'notificationUser'		=> $circle['id_user'], 	// Notifier le OWNER du circle
+		#	'notificationUser'		=> $circle['id_user'], 	// Notifier le OWNER du circle
 	
 			'socialActivityKey'		=> 'id_socialcircle',
 			'socialActivityId'		=> $id_socialcircle,
@@ -833,4 +847,4 @@ function socialCircleMemberFix($opt){
 	return true;
 }
 
-} ?>
+}
