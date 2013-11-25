@@ -100,7 +100,7 @@
 					<td><a href="<?php echo $list ?>?id_type=<?php echo $e['id_type'] ?>" class="btn btn-mini">Voir la liste</a></td>
 					<td><?php
 						if($e['is_gallery'] != '1'){
-							echo '<a href="data.php?id_type='.$e['id_type'].'" class="btn btn-mini btn-success" style="color: #FFF;">Ajouter un nouveau</a>';
+							echo '<a href="data?id_type='.$e['id_type'].'" class="btn btn-mini btn-success" style="color: #FFF;">Ajouter un nouveau</a>';
 						}
 					?></td>
 				</tr>
