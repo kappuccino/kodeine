@@ -173,7 +173,7 @@
                 }
                 ?>
 
-				<td><a href="edit?id_cart=<?php echo $r['id_cart'] ?>"><?php echo $e['cartStatus'] ?></a></td>
+				<td><a href="edit?id_cart=<?php echo $e['id_cart'] ?>"><?php echo $e['cartStatus'] ?></a></td>
 				<td><?php echo $e['cartPayment'] ?></td>
 				<td align="right"><?php echo $e['cartTotalFinal'] ?></td>
 			</tr>

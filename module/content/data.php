@@ -7,8 +7,8 @@
 	if($_POST['action']){
 		$do = true;
 
-		if(!$_POST['contentDateStartDo'])	$_POST['contentDateStart'] == NULL;
-		if(!$_POST['contentDateEndDo']) 	$_POST['contentDateEnd'] == NULL;
+		if(empty($_POST['contentDateStartDo'])) $_POST['contentDateStart'] = NULL;
+		if(empty($_POST['contentDateEndDo'])) 	$_POST['contentDateEnd'] = NULL;
 
 		$_POST['contentDateCreation']	= implode(' ', $_POST['contentDateCreation']);
 		$_POST['contentDateUpdate']		= implode(' ', $_POST['contentDateUpdate']);

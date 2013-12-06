@@ -66,12 +66,12 @@
 		<div class="clearfix">
 			<div style="float:left; width:49%; margin-right:5px;">	
 				<b>Titre</b><br />
-				<textarea name="mediaTitle" rows="3"><?php echo $data['mediaTitle'] ?></textarea>
+				<textarea name="mediaTitle" rows="2"><?php echo $data['mediaTitle'] ?></textarea>
 			</div>
 	
 			<div style="float:left; width:49%;">
 				<b>Description</b><br />
-				<textarea name="mediaCaption" rows="3"><?php echo $data['mediaCaption'] ?></textarea>
+				<textarea name="mediaCaption" rows="2"><?php echo $data['mediaCaption'] ?></textarea>
 			</div>
 		</div>
 
