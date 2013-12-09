@@ -3,8 +3,8 @@
 
 	<data>
 		<key>business</key>
-		<version>5.2.0</version>
-        <lastMod>2013-02-27</lastMod>
+		<version>5.2.1</version>
+        <lastMod>2013-07-02</lastMod>
 		<install>YES</install>
 		<name><![CDATA[eBusiness]]></name>
 	</data>
@@ -18,13 +18,11 @@
 	</dependencies>
 
     <i18n>
-    </i18n>
-
-    <todo>
         <file>account.php</file>
-        <file>carraige.php</file>
+        <file>carriage.php</file>
         <file>config.php</file>
         <file>coupon.php</file>
+        <file>data.php</file>
         <file>data-index.php</file>
         <file>detail.php</file>
         <file>edit.php</file>
@@ -34,7 +32,8 @@
         <file>product.picker.php</file>
         <file>shop.php</file>
         <file>tax.php</file>
-    </todo>
+        <file>ui/menu.php</file>
+    </i18n>
 
 	<profile>
 		<item code="index"		type="ALLOW_DENY" name="Accessible" />

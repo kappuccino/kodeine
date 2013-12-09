@@ -220,8 +220,24 @@ function mediaView(view, raw){
 	RICH TEXT EDITOR
 + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - */
 function setRichEditor(){
+
 	if(!useEditor) return false
-	tinyMCE.init({
+	//console.log('RICH !', textarea)
+
+	$( '#'+textarea ).ckeditor({
+		contentsCss: '../core/helper/ckeditor',
+		allowedContent: true
+	});
+
+
+	// charger une ressource externe (plugin) et l'initialiser dans l'instance de notre ckeditor
+	var editor = CKEDITOR.instances[textarea];
+	CKEDITOR.plugins.addExternal('kodeineimg', '/admin/core/vendor/ckeditor-plugins/kodeineimg/', 'plugin.js');
+	CKEDITOR.plugins.load('kodeineimg', function(plugins) {
+		plugins['kodeineimg'].init(editor)
+	});
+
+	/*tinyMCE.init({
 		mode		: 'exact',
 		elements	: textarea,
 		theme		: 'advanced',
@@ -237,7 +253,7 @@ function setRichEditor(){
 		theme_advanced_toolbar_location		: 'top',
 		theme_advanced_toolbar_align		: 'left',
 		theme_advanced_statusbar_location	: 'bottom',
-		theme_advanced_resizing				: false,
+		theme_advanced_resizing				: true,
 	
 		// Example content CSS (should be your site CSS)
 		content_css		: '../core/helper/tinymce',
@@ -261,7 +277,7 @@ function setRichEditor(){
 		    });
 		}
 	
-	});
+	});*/
 
 }
 
@@ -611,7 +627,7 @@ function tabAction(){
 						: $(this).html(newName);
 					
 					var view	= parent.parent().parent().parent().parent().children('.view').eq(i);
-					console.log(parent.parent().parent().parent().parent().children('.view').eq(i))
+				//	console.log(parent.parent().parent().parent().parent().children('.view').eq(i))
 					var label	= view.find('.view-label span');
 
 					if(label) label.html(newName);						
@@ -782,19 +798,24 @@ function setUrlBehaviour(){
 
 function urlCheck(){
 
-	url = liveUrlTitle($('#contentNameField').val());
+	var url = liveUrlTitle($('#contentNameField').val());
 	$('#urlField').val(url); 
 
-	language = ($('#language')[0].tagName.toLowerCase() == 'select')
-		? $('#language option:selected').val()
-		: $('#language').val()
 
-	 var get = $.ajax({
-		url: '../content/helper/url?id_content='+$('#id_content').val()+'&url='+url+'&language='+language,
+	var language = ($('#language')[0].tagName.toLowerCase() == 'select')
+		? $('#language option:selected').val()
+		: $('#language').val();
+
+	$.ajax({
+		url: '../content/helper/url',
+		data: {
+			id_content: $('#id_content').val(),
+			url: url,
+			language: language
+		},
+		type: 'get',
 		dataType: 'json'
-	});
-	
-	get.done(function(data) {
+	}).done(function(data) {
 		if($('#urlField').val() != data.url) $('#urlField').val(data.url);
 	});
 }	
@@ -842,7 +863,7 @@ function tagInsert(zone, fieldName, id_field, id_type, id, contentName, method){
 	if(id_type == 'user'){
 		var prompt = '#us';
 	}else{
-		var prompt = '#ct';
+		var prompt = 'ct';
 	}
 
 	var area = $('#'+zone).find('.keyword');
@@ -883,11 +904,13 @@ function tagOpen(id_type, id){
 }
 
 function tagRemove(prompt, id_field, id){
-	prompt = '#'+prompt;
-	
-		
-	if(!$(prompt+'-'+id_field+'-'+id).length > 0) return false;
-	$(prompt+'-'+id_field+'-'+id).remove();
+
+
+//	prompt = '#'+prompt;
+//	prompt = prompt;
+
+//	if(!$(prompt+'-'+id_field+'-'+id).length > 0) return false;
+	$('#'+prompt+'-'+id_field+'-'+id).remove();
 }
 
 function tagSearch(id_field, id_type, fieldName, method){
@@ -896,6 +919,7 @@ function tagSearch(id_field, id_type, fieldName, method){
 	var g = {
 		'id_field'	: id_field,
 		'id_type'	: id_type,
+		'offset'    : 0,
 		'q'			: q
 	};
 	
@@ -974,8 +998,6 @@ function tagSearchRequest(id_field, id_type, fieldName, clean, getVar, method){
 	if($('#morexqr-'+id_field)) $('#morexqr-'+id_field).remove();
 
 	// Est-ce que j'utiliser deja ce XQR ?
-	
-
 	var xqr = $.ajax({
 		'url'			: '../field/helper/field-multitag',
 		'dataType'		: "json",
@@ -984,35 +1006,49 @@ function tagSearchRequest(id_field, id_type, fieldName, clean, getVar, method){
 	
 	xqr.done(function(r) {
 		var a = r.result;
+
 		// On supprime les lignes actuelles
-		/*if(tagSearchStorageGet(id_field, 'clean')){
-			t.find('tr').remove();
-		}*/
 		t.find('tr').remove();
+
 		// le lien MORE en dessous
 		if($('#morexqr-'+id_field)) $('#morexqr-'+id_field).remove();
 
 		if(a.length > 0){
 			$.each(a, function(i, e){
-				var line = $('<tr />').appendTo(t);
 
+				var line = $('<tr />').appendTo(t);
 				var push = $('<td />').css('width', 25).appendTo(line);
-				
 				var anch = $('<a style="cursor:pointer;"><img src=\"../core/ui/img/_img/picto-add.png\" /></a>').appendTo(push).bind('click', function() {
 					tagInsert('contenttable-'+id_field, fieldName, id_field, id_type, eval('e.'+tagId), eval('e.'+tagView), method);
 				});
-				
+				var name = e[tagView];
+
+				if(e.path) name = name + ' ('+ e.path +')';
+
 				$('<td>'+e[tagId]+'</td>').appendTo(line).css('width', 25);
-				$('<td>'+e[tagView]+'</td>').appendTo(line);					
-				
-				
+				$('<td class="@">'+name+'</td>').appendTo(line);
+
 				if(typeof e.more != 'undefined'){
 					e.more.each(function(i, more){
-						var name = $('<td>'+more+'</td>').appendTo(line).css('width', '20%');
+						$('<td>'+more+'</td>').appendTo(line).css('width', '20%');
 					});
 				}
-
 			});
+
+			if(r.more){
+				var line = $('<tr id="#morexqr-'+id_field+'" />').appendTo(t);
+				var more = $('<td colspan="4" width="25" />').appendTo(line);
+
+				more.click(function(){
+					getVar_ = getVar;
+					getVar_.offset = getVar.offset + 1;
+
+					console.log(id_field, id_type, fieldName, false, getVar_, method);
+					tagSearchRequest(id_field, id_type, fieldName, false, getVar_, method);
+				});
+
+				more.html('Plus');
+			}
 		}
 		else{
 			$('<tr><td colspan="2" class="tagListingSearch">Aucun r&eacute;sultat</td></tr>').appendTo(t);

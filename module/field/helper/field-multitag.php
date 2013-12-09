@@ -2,7 +2,7 @@
 
 	header('Content-type: application/json');
 
-	$limit		= 7;
+	$limit		= 50;
 	$offset		= ($_GET['offset'] == NULL) ? 0 : $_GET['offset'] * $limit;
 	$field		= $app->apiLoad('field')->fieldGet(array('id_field' => $_GET['id_field']));
 	$param		= json_decode($field['fieldParam'], true);	
@@ -21,27 +21,63 @@
 	# CONTENT
 	#
 	if($is_content){
-		$api = $app->apiLoad('content');
-	
-		$rez = $api->contentGet(array(
-			'id_type' 	=> $_GET['id_type'],
-			'raw'		=> true,
-			'debug'		=> false,
-			'limit'		=> $limit,
-			'offset'	=> $offset,
-			'search'	=> array(
+		$api  = $app->apiLoad('content');
+		$type = $app->apiLoad('type')->typeGet(array(
+			'id_type' => $_GET['id_type']
+		));
+
+		$opt = array(
+			'id_type'    => $type['id_type'],
+			'raw'        => true,
+			'debug'      => false,
+			'limit'      => $limit,
+			'offset'     => $offset,
+			'search'     => array(
 				array('searchField' => 'contentName', 'searchValue' => $_GET['q'], 'searchMode' => 'CT')
 			)
-	
-		));
+		);
+
+		if($type['is_gallery'] == '1') $opt['is_album'] = true;
+
+		$rez = $api->contentGet($opt);
 
 		$total = $api->total;
 
 		foreach($rez as $e){
-			$m[] = array(
+			$tmp = array(
 				'id_content' 	=> $e['id_content'],
 				'contentName'	=> $e['contentName']
 			);
+
+			if($type['is_gallery'] == 1 && !empty($e['contentAlbumParent'])){
+
+				$albums  = explode(',', $e['contentAlbumParent']);
+				$parents = $api->contentGet(array(
+					'id_type'    => $type['id_type'],
+					'id_content' => $albums,
+					'is_album'   => true,
+					'limit'      => 15
+				));
+
+				$p = $p_ = array();
+				foreach($parents as $ps){
+					$p_[$ps['id_content']] = trim($ps['contentName']);
+				}
+
+				foreach($albums as $a){
+					$p[] = $p_[$a];
+				}
+
+				#echo $e['contentAlbumParent'];
+				#$app->pre($p);
+
+
+				$tmp['path'] = implode(' > ', $p);
+				unset($p);
+			}
+
+
+			$m[] = $tmp;
 		}
 	}else
 
@@ -125,8 +161,7 @@
 
 
 	if(isset($_GET['pre'])){
-		$app->pre($m);
+		$app->pre(var_export($m));
 	}else{
 		echo json_encode($m);
 	}
-?>

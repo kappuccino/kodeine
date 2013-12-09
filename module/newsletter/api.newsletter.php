@@ -176,9 +176,9 @@ public function newsletterDuplicate($id_newsletter){
 	# Originale
 	$from = $this->dbOne("SELECT * FROM k_newsletter WHERE id_newsletter=".$id_newsletter);
 
-	foreach($this->dbMulti("SHOW COLUMNS FROM k_newsletter WHERE Field NOT IN('id_newsletter', 'newsletterSendDate')") as $e){
-		$fields[] = $e['Field'];
-	}
+    foreach($this->dbMulti("SHOW COLUMNS FROM k_newsletter WHERE Field NOT IN('id_newsletter', 'newsletterSendDate', 'newsletterConnectorValue', 'newsletterConnectorId')") as $e){
+        $fields[] = $e['Field'];
+    }
 
 	foreach($fields as $df){
 		$tmp[] = "'".addslashes($from[$df])."'";
@@ -340,18 +340,58 @@ public function newsletterPrepareBody($id_newsletter, $data=NULL){
 	#
 	if(preg_match_all("#<img(.*)?/>#msU", $data, $imgsTag, PREG_SET_ORDER)){
 		foreach($imgsTag as $imgTag){
+            $props = array();
 		    if(preg_match_all('#(alt|title|src|height|width)=\"([^"]*)\"#msU', $imgTag[1], $props, PREG_SET_ORDER)){
 
+                $myprop = array();
 		    	// Recuperer simplement les properties
 		    	foreach($props as $prop){
 		    		$myprop[strtolower($prop[1])] = $prop[2];
 		    	}
-		    	
 		    	// Si je n'ai pas la taille de definit
 		    	if(intval($myprop['height']) == 0 && intval($myprop['width']) == 0 && is_file(KROOT.$myprop['src'])){
 		    		$size = getimagesize(KROOT.$myprop['src']);
 		    		$data = str_replace($imgTag[1], ' '.$imgTag[1].' '.$size[3].' ', $data);
-		    	}
+		    	}else {
+
+                    $urllocal = str_replace("http://".$_SERVER['HTTP_HOST'], "", $myprop['src']);
+                    $urllocal = str_replace("http://".str_replace('www.', '', $_SERVER['HTTP_HOST']), "", $myprop['src']);
+
+
+                    //$this->pre(str_replace('www.', '', $_SERVER['HTTP_HOST'])$myprop,$urllocal, is_file(KROOT.$urllocal), strpos($urllocal, '.cache') );
+
+                    //if(intval($myprop['height']) > 0 && intval($myprop['width']) > 0) echo $urllocal.' ok--';
+                    //if(is_file(KROOT.$urllocal) && strpos($urllocal, '.cache') === false) echo KROOT.$urllocal.' ok2--';
+                    //echo '<br>';
+                    if(is_file(KROOT.$urllocal)) {
+                        $size = getimagesize(KROOT.$urllocal);
+                        $ratio = $size[0] / $size[1];
+                        if($ratio != 0) {
+                            if(intval($myprop['width']) > 0 && intval($myprop['height']) == 0) {
+                                $myprop['height'] = round($myprop['width'] / $ratio);
+                            }
+                            if(intval($myprop['height']) > 0 && intval($myprop['width']) == 0) {
+                                $myprop['width'] = round($myprop['height'] * $ratio);
+                            }
+                        }
+                    }
+                    //$this->pre($myprop);
+
+                    if(intval($myprop['height']) > 0 && intval($myprop['width']) > 0 && is_file(KROOT.$urllocal) && strpos($urllocal, '.cache') === false){
+
+                        $size = getimagesize(KROOT.$urllocal);
+
+                        $img = $this->mediaUrlData(array(
+                            'url'       => $urllocal,
+                            'mode'      => 'crop',
+                            'value'     => $myprop['width'],
+                            'second'    => $myprop['height']
+                        ));
+                        $data = str_replace("src=\"".$myprop['src']."\"", "src=\"".$img['img']."\"", $data);
+                        $myprop['src'] = $img['img'];
+                    }
+                }
+                //$this->pre($myprop, $size);
 
 		    	// Mettre le http:// devant les URL des images
 				if(!preg_match("#^http#", $myprop['src'])){
@@ -435,7 +475,7 @@ public function newsletterPoolPopulation($id_newsletter){
 	# Liste tous les user qui match les criteres de recherche
 	if(sizeof($data['newsletterSearch']) > 0){
 		foreach($data['newsletterSearch'] as $e){
-			$grp = $this->apiLoad('user')->userSearch(array('id_search' => $e));
+			$grp = $this->apiLoad('user')->userSearch(array('id_search' => $e, 'limit' => 9999999));
 			if(sizeof($grp) > 0){
 				foreach($grp as $e){
 					$id[] = $e['id_user'];
@@ -463,7 +503,7 @@ public function newsletterPoolPopulation($id_newsletter){
 	# Final, demande tous les user
 	#
 	if(sizeof($id) > 0){
-		$protect	= ($data['newsletterAllUser']) ? NULL : "userNewsletter=1 AND ";
+		//$protect	= ($data['newsletterAllUser']) ? NULL : "userNewsletter=1 AND ";
 		$population = $this->dbMulti("
 			SELECT * FROM k_user
 			INNER JOIN k_userdata ON k_user.id_user = k_userdata.id_user

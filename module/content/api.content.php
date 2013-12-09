@@ -4,1014 +4,1111 @@ class content extends coreApp {
 
 function __clone(){}
 
-/* + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - 
-+ - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - */
-public function contentGet($opt=array()){
+//-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -
+//-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -
+	public function contentGet($opt=array()){
 
-	if(BENCHME) @$GLOBALS['bench']->benchmarkMarker($bmStep='contentGet() @='.json_encode($opt));
+		if(BENCHME) @$GLOBALS['bench']->benchmarkMarker($bmStep='contentGet() @='.json_encode($opt));
 
-	if($opt['debug']) $this->pre("[OPTION]", $opt);
+		if($opt['debug']) $this->pre("[OPTION]", $opt);
 
-	# Shortcourt
-	#
-	if($opt['raw']){
-		if(!isset($opt['useField']))		$opt['useField']		= false;
-		if(!isset($opt['human'])) 			$opt['human']			= false;
-		if(!isset($opt['useChapter'])) 		$opt['useChapter']		= false;
-		if(!isset($opt['useGroup'])) 		$opt['useGroup']		= false;
-		if(!isset($opt['assoChapter'])) 	$opt['assoChapter']		= true;
-		if(!isset($opt['assoCategory']))	$opt['assoCategory']	= true;
-		if(!isset($opt['assoGroup']))		$opt['assoGroup']		= true;
-		if(!isset($opt['assoSearch']))		$opt['assoSearch']		= true;
-		if(!isset($opt['assoShop']))		$opt['assoShop']		= true;
-		if(!isset($opt['assoSocialForum']))	$opt['assoSocialForum']	= true;
-		if(!isset($opt['contentSee']))		$opt['contentSee']		= 'ALL';
-	}
-
-	# Gerer les OPTIONS :: valeurs par defaut
-	#
-	$id_group			= isset($opt['id_group']) 			? $opt['id_group'] 			: $this->kodeine['id_group'];
-	$id_chapter			= isset($opt['id_chapter']) 		? $opt['id_chapter'] 		: $this->kodeine['id_chapter'];
-	$language			= isset($opt['language']) 			? $opt['language'] 			: $this->kodeine['language'];
-	$useField			= isset($opt['useField']) 			? $opt['useField']			: true;
-	$useGroup			= isset($opt['useGroup']) 			? $opt['useGroup']			: 'checkType';
-	$useChapter			= isset($opt['useChapter']) 		? $opt['useChapter']		: 'checkType';
-	$useSocialForum		= isset($opt['useSocialForum'])		? $opt['useSocialForum']	: 'checkType';
-	$useShop			= isset($opt['id_shop'])			? $opt['id_shop']			: false;
-	$chapterThrough		= isset($opt['chapterThrough'])		? $opt['chapterThrough']	: false;
-	$categoryThrough	= isset($opt['categoryThrough'])	? $opt['categoryThrough']	: false;
-	$albumThrough		= isset($opt['albumThrough'])		? $opt['albumThrough']		: false;
-	$groupThrough		= isset($opt['groupThrough'])		? $opt['groupThrough']		: false;
-	$human				= isset($opt['human'])				? $opt['human']				: true;
-	$searchLink			= isset($opt['searchLink']) 		? $opt['searchLink']		: 'OR';
-	$noLimit			= isset($opt['noLimit'])			? $opt['noLimit']			: false;
-	$limit				= ($opt['limit'] != '') 			? $opt['limit']				: 30;
-	$offset				= ($opt['offset'] != '')			? $opt['offset']			: 0;
-	$opt['searchMode']	= ($opt['searchMode'] != NULL) 		? $opt['searchMode'] 		: 'OR'; 
-
-	# Security
-	#
-	if(strlen($language) != 2) $language = 'fr';
-
-	# Trouver le CONTENT d'apres l'URL ou ID
-	#
-	$get = "SELECT * FROM k_contentdata INNER JOIN k_content ON k_contentdata.id_content = k_content.id_content";
-	if($opt['contentUrl'] != NULL){
-		$data = $this->dbOne($get." WHERE contentUrl='".$opt['contentUrl']."' AND language='".$language."'");
-	}else
-	if($opt['id_content'] != NULL && !is_array($opt['id_content'])){
-		$data = $this->dbOne($get." WHERE k_contentdata.id_content=".$opt['id_content']." AND language='".$language."'");
-	} unset($get);
-
-	if(isset($data)){
-		if($data['id_content'] == NULL){
-			if($opt['debug']) $this->pre("contentGet IS NULL", $opt);
-			return array();
-		}else
-		if($data['is_album']){
-			$opt['is_album'] = true;
-		}else
-		if($data['is_item']){
-			$opt['is_item'] = true;
+		# Shortcourt
+		#
+		if($opt['raw']){
+			if(!isset($opt['useField']))		$opt['useField']		= false;
+			if(!isset($opt['human'])) 			$opt['human']			= false;
+			if(!isset($opt['useChapter'])) 		$opt['useChapter']		= false;
+			if(!isset($opt['useGroup'])) 		$opt['useGroup']		= false;
+			if(!isset($opt['assoChapter'])) 	$opt['assoChapter']		= true;
+			if(!isset($opt['assoCategory']))	$opt['assoCategory']	= true;
+			if(!isset($opt['assoGroup']))		$opt['assoGroup']		= true;
+			if(!isset($opt['assoSearch']))		$opt['assoSearch']		= true;
+			if(!isset($opt['assoShop']))		$opt['assoShop']		= true;
+			if(!isset($opt['assoSocialForum']))	$opt['assoSocialForum']	= true;
+			if(!isset($opt['contentSee']))		$opt['contentSee']		= 'ALL';
 		}
 
-		$opt['id_type'] 	= $data['id_type'];
-		$opt['id_content']	= $data['id_content'];
+		# Gerer les OPTIONS :: valeurs par defaut
+		#
+		$id_group			= isset($opt['id_group']) 			? $opt['id_group'] 			: $this->kodeine['id_group'];
+		$id_chapter			= isset($opt['id_chapter']) 		? $opt['id_chapter'] 		: $this->kodeine['id_chapter'];
+		$language			= isset($opt['language']) 			? $opt['language'] 			: $this->kodeine['language'];
+		$country            = isset($opt['country']) 			? $opt['country'] 			: $this->kodeine['country'];
+		$useField			= isset($opt['useField']) 			? $opt['useField']			: true;
+		$useGroup			= isset($opt['useGroup']) 			? $opt['useGroup']			: 'checkType';
+		$useChapter			= isset($opt['useChapter']) 		? $opt['useChapter']		: 'checkType';
+		$useSocialForum		= isset($opt['useSocialForum'])		? $opt['useSocialForum']	: 'checkType';
+		$useShop			= isset($opt['id_shop'])			? $opt['id_shop']			: false;
+		$chapterThrough		= isset($opt['chapterThrough'])		? $opt['chapterThrough']	: false;
+		$categoryThrough	= isset($opt['categoryThrough'])	? $opt['categoryThrough']	: false;
+		$albumThrough		= isset($opt['albumThrough'])		? $opt['albumThrough']		: false;
+		$groupThrough		= isset($opt['groupThrough'])		? $opt['groupThrough']		: false;
+		$human				= isset($opt['human'])				? $opt['human']				: true;
+		$searchLink			= isset($opt['searchLink']) 		? $opt['searchLink']		: 'OR';
+		$noLimit			= isset($opt['noLimit'])			? $opt['noLimit']			: false;
+		$limit				= ($opt['limit'] != '') 			? $opt['limit']				: 30;
+		$offset				= ($opt['offset'] != '')			? $opt['offset']			: 0;
+		$opt['searchMode']	= ($opt['searchMode'] != NULL) 		? $opt['searchMode'] 		: 'OR';
 
-		$cond[]	= "k_content.id_content=".$data['id_content'];
-		$dbMode	= 'dbOne';
-	}else{	
-		$dbMode	= 'dbMulti';
-	}
+		# Security
+		#
+		if(strlen($language) != 2) $language = 'fr';
+		if(strlen($country)  != 2) $country  = 'fr';
 
-	# Detecter si je suis en mode IS_ITEM ou IS_ALBUM
-	#
-	$is_item	= isset($opt['is_item'])  ? true : (($data['is_item']  === '1') ? true : false);
-	$is_album	= isset($opt['is_album']) ? true : (($data['is_album'] === '1') ? true : false);
-	if($is_item && $is_album){
-		if($opt['debug']) $this->pre("Fatal Error : IS_ITEM=TRUE + IS_ALBUM=TRUE !");
-		return array();
-	}
+		# Trouver le CONTENT d'apres l'URL ou ID
+		#
+		$get = "SELECT * FROM k_contentdata INNER JOIN k_content ON k_contentdata.id_content = k_content.id_content";
+		if($opt['contentUrl'] != NULL){
+			$data = $this->dbOne($get." WHERE contentUrl='".$opt['contentUrl']."' AND language='".$language."'");
+		}else
+		if($opt['id_content'] != NULL && !is_array($opt['id_content'])){
+			$data = $this->dbOne($get." WHERE k_contentdata.id_content=".$opt['id_content']." AND language='".$language."'");
+		} unset($get);
 
-	# Trouver le TYPE
-	#
-	$type = $this->apiLoad('type')->typeGet(array(
-		'id_type'	=> $opt['id_type'],
-		'typeKey'	=> $opt['typeKey']
-	));
-
-	// Check
-	if($type['id_type'] == NULL){
-		if($opt['debug']) $this->pre("Fatal Error : TYPE NOT DEFINED, OR UNKNOWN");
-		return array();
-	}
-
-	// Affecter les bon type de maniere automatique
-	if($useGroup 		=== 'checkType') $useGroup			= ($type['use_group']		=== '1');
-	if($useChapter 		=== 'checkType') $useChapter		= ($type['use_chapter']		=== '1');
-	if($useSocialForum 	=== 'checkType') $useSocialForum	= ($type['use_socialforum'] === '1');
-
-
-	# Demander les FIELDS pour ce CONTENT
-	#
-	$field = $this->apiLoad('field')->fieldGet(array(
-		'id_type'		=> $type['id_type'],
-		'albumField'	=> $is_album,
-		'itemField'		=> $is_item
-	));
-
-	foreach($field as $f){
-		$fieldKey[$f['fieldKey']]= $f;
-		if($f['is_search'])												$fieldSearch[]		= $f;
-		if($f['fieldType'] == 'content' && $f['fieldContentType'] > 0) 	$fieldAssoContent[] = $f;
-		if($f['fieldType'] == 'user')									$fieldAssoUser[] 	= $f;
-		if($f['fieldType'] == 'dbtable')								$fieldAssoDb[]		= $f;
-	}
-
-
-	# Gerer les CATEGORY lie a ce CONTENT
-	#
-	if($opt['categoryUrl'] != ''){
-		$monoCat = $this->apiLoad('category')->categoryGet(array(
-			'categoryUrl'	=> $opt['categoryUrl'],
-			'language' 		=> $language,
-			'debug'			=> $opt['debug']
-		));
-		if(sizeof($monoCat) == 0){
-			if($opt['debug']) $this->pre("No CATEGORY found by URL : ".$opt['categoryUrl']);
-			return array();
-		}
-	}else
-	if($opt['id_category'] != NULL){
-		if(is_array($opt['id_category'])){
-			$multiCat = $this->apiLoad('category')->categoryGet(array(
-				'id_category'	=> $opt['id_category'],
-				'language'		=> $language,
-				'debug'			=> $opt['debug']
-			));
-			if(sizeof($multiCat) == 0){
-				if($opt['debug']) $this->pre("NO MULTI-CATEGORY found by IDs : ", $opt['id_category']);
+		if(isset($data)){
+			if($data['id_content'] == NULL){
+				if($opt['debug']) $this->pre("contentGet IS NULL", $opt);
 				return array();
+			}else
+			if($data['is_album']){
+				$opt['is_album'] = true;
+			}else
+			if($data['is_item']){
+				$opt['is_item'] = true;
+			}
+
+			$opt['id_type'] 	= $data['id_type'];
+			$opt['id_content']	= $data['id_content'];
+
+			$cond[]	= "k_content.id_content=".$data['id_content'];
+			$dbMode	= 'dbOne';
+		}else{
+			$dbMode	= 'dbMulti';
+		}
+
+		# Detecter si je suis en mode IS_ITEM ou IS_ALBUM
+		#
+		$is_item	= is_bool($opt['is_item'])  ? $opt['is_item']  : (($data['is_item']  === '1') ? true : false);
+		$is_album	= is_bool($opt['is_album']) ? $opt['is_album'] : (($data['is_album'] === '1') ? true : false);
+		if($is_item && $is_album){
+			if($opt['debug']) $this->pre("Fatal Error : IS_ITEM=TRUE + IS_ALBUM=TRUE !");
+			return array();
+		}
+
+		# Trouver le TYPE
+		#
+		$type = $this->apiLoad('type')->typeGet(array(
+			'id_type'	=> $opt['id_type'],
+			'typeKey'	=> $opt['typeKey']
+		));
+
+		// Check
+		if($type['id_type'] == NULL){
+			if($opt['debug']) $this->pre("Fatal Error : TYPE NOT DEFINED, OR UNKNOWN");
+			return array();
+		}
+
+		// Affecter les bon type de maniere automatique
+		if($useGroup 		=== 'checkType') $useGroup			= ($type['use_group']		=== '1');
+		if($useChapter 		=== 'checkType') $useChapter		= ($type['use_chapter']		=== '1');
+		if($useSocialForum 	=== 'checkType') $useSocialForum	= ($type['use_socialforum'] === '1');
+
+
+		# Demander les FIELDS pour ce CONTENT
+		#
+		$field = $this->apiLoad('field')->fieldGet(array(
+			'id_type'		=> $type['id_type'],
+			'albumField'	=> $is_album,
+			'itemField'		=> $is_item
+		));
+
+		foreach($field as $f){
+			$param = json_decode($f['fieldParam'], true);
+
+			$fieldKey[$f['fieldKey']]= $f;
+			if($f['is_search'])					$fieldSearch[]	 = $f;
+			if($f['fieldType'] == 'user')		$fieldAssoUser[] = $f;
+			if($f['fieldType'] == 'dbtable')	$fieldAssoDb[]	 = $f;
+
+			if($f['fieldType'] == 'content' && $f['fieldContentType'] > 0 && $param['type'] == 'solo'){
+				$fieldAssoContentSingle[] = $f;
+			}
+			if($f['fieldType'] == 'content' && $f['fieldContentType'] > 0 && $param['type'] != 'solo'){
+				$fieldAssoContentMulti[] = $f;
+			}
+		}
+		unset($param);
+
+
+
+		# Gerer le CHAPTER lie a ce CONTENT
+		#
+		if($id_chapter > 0){
+			if(array_key_exists($id_chapter, $this->kodeine['chaptersIds'])){
+				$chapter = $this->kodeine['chaptersIds'][$id_chapter];
 			}else{
-				foreach($multiCat as $e){
-					$multiCatItem[] = $e['id_category'];
-				}
+				$chapter = $this->apiLoad('chapter')->chapterGet(array(
+					'id_chapter'	=> $id_chapter,
+					'language'		=> $language
+				));
+			}
+
+			if($chapter['id_chapter'] != $id_chapter){
+				if($opt['debug']) $this->pre("No CHAPTER found by ID : ".$id_chapter);
+				return array();
+			}
+		}
+		if(is_array($chapter)) $id_chapter = ($chapterThrough) ? " IN(".$chapter['chapterChildren'].")" : "=".$chapter['id_chapter'];
+
+
+		# Gerer le SOCIAL FORUM lie a ce CONTENT
+		#
+		if(array_key_exists('id_socialforum', $opt)){
+			if(is_array($opt['id_socialforum']) && sizeof($opt['id_socialforum']) > 0){
+				$cond[] = "k_contentsocialforum.id_socialforum IN(".implode(', ', $opt['id_socialforum']).")";
+			}else
+			if(intval($opt['id_socialforum']) > 0){
+				$cond[] = "k_contentsocialforum.id_socialforum=".$opt['id_socialforum'];
+			}else{
+				if($opt['debug']) $this->pre("ERROR: ID_SOCIALFORUM (ARRAY, NUMERIC > 0)", "GIVEN", var_export($opt['id_socialforum'], true));
+				return array();
 			}
 		}else{
+			$useSocialForum = false;
+		}
+
+		# Former la JOINTURE d'apres le TYPE
+		#
+		if($is_item){
+			$jTable	= "k_contentitem".$type['id_type'];
+			$join[] = "INNER JOIN k_content			ON ".$jTable.".id_content = k_content.id_content";
+			$join[] = "INNER JOIN k_contentdata		ON ".$jTable.".id_content = k_contentdata.id_content";
+			$join[] = "INNER JOIN k_contentitem		ON ".$jTable.".id_content = k_contentitem.id_content";
+
+			if(isset($opt['proxyKey'])){
+				$key 	= is_array($opt['proxyKey']) ? json_encode($opt['proxyKey']) : $opt['proxyKey'];
+				$cond[] = "contentItemProxyKey='".addslashes($key)."'";
+			}
+		}else
+		if($is_album){
+			$jTable	= "k_contentalbum".$type['id_type'];
+			$join[] = "INNER JOIN k_content			ON ".$jTable.".id_content = k_content.id_content";
+			$join[] = "INNER JOIN k_contentdata		ON ".$jTable.".id_content = k_contentdata.id_content";
+			$join[] = "INNER JOIN k_contentalbum 	ON ".$jTable.".id_content = k_contentalbum.id_content";
+		}else{
+			$jTable	= "k_content".$type['id_type'];
+			$join[] = "INNER JOIN k_content 		ON ".$jTable.".id_content = k_content.id_content";
+			$join[] = "INNER JOIN k_contentdata		ON ".$jTable.".id_content = k_contentdata.id_content";
+		}
+
+		if($useChapter){
+			$join[] = "INNER JOIN k_contentchapter 	ON ".$jTable.".id_content = k_contentchapter.id_content";
+		}
+
+		if($type['is_businessloc'] == '1' && $useGroup){
+			$join[] = "INNER JOIN k_contentgroupbusinessloc ON ".$jTable.".id_content = k_contentgroupbusinessloc.id_content";
+			$cond[] = "k_contentgroupbusinessloc.country='".$country."'";
+			$cond[] = "k_contentgroupbusinessloc.id_group=".$id_group;
+		}else
+		if($type['is_business'] == '1' && $useGroup){
+			$join[] = "INNER JOIN k_contentgroupbusiness ON ".$jTable.".id_content = k_contentgroupbusiness.id_content";
+		}else
+		if($useGroup){
+			$join[] = "INNER JOIN k_contentgroup ON ".$jTable.".id_content = k_contentgroup.id_content";
+		}
+
+		if($useShop){
+			$join[] = "INNER JOIN k_contentshop ON k_content.id_content = k_contentshop.id_content";
+		}
+
+
+		if($useSocialForum){
+			$join[] = "INNER JOIN k_contentsocialforum ON k_content.id_content = k_contentsocialforum.id_content";
+		}
+
+		if($type['is_ad']){
+			$join[] = "INNER JOIN k_contentad ON ".$jTable.".id_content = k_contentad.id_content";
+			$cond[] = "k_contentad.language='".$language."'";
+		}
+
+		if($opt['assoUser'] == true){
+			$join[] = "INNER JOIN k_user     ON k_content.id_user = k_user.id_user";
+			$join[] = "INNER JOIN k_userdata ON k_user.id_user = k_userdata.id_user";
+		}
+
+		# Gerer les CATEGORY lie a ce CONTENT
+		#
+		if($opt['categoryUrl'] != ''){
 			$monoCat = $this->apiLoad('category')->categoryGet(array(
-				'id_category'	=> $opt['id_category'],
-				'language'		=> $language,
+				'categoryUrl'	=> $opt['categoryUrl'],
+				'language' 		=> $language,
 				'debug'			=> $opt['debug']
 			));
 			if(sizeof($monoCat) == 0){
-				if($opt['debug']) $this->pre("NO CATEGORY found by ID : ".$opt['id_category']);
+				if($opt['debug']) $this->pre("No CATEGORY found by URL : ".$opt['categoryUrl']);
 				return array();
-			}		
-		}
-	}
-	if(is_array($multiCat)){
-		$useCategory = true;
-		$id_category = " IN(".implode(',', $multiCatItem).")";
-	}else
-	if(is_array($monoCat)){
-		$useCategory = true;
-		$id_category = ($categoryThrough)
-			? " IN(".$monoCat['id_category'].(($monoCat['categoryChildren'] != NULL) ? ',' : '').$monoCat['categoryChildren'].")"
-			: " =".$monoCat['id_category'];
-	}
-
-
-	# Gerer le CHAPTER lie a ce CONTENT
-	#
-	if($id_chapter > 0){
-		if(array_key_exists($id_chapter, $this->kodeine['chaptersIds'])){
-			$chapter = $this->kodeine['chaptersIds'][$id_chapter];
-		}else{
-			$chapter = $this->apiLoad('chapter')->chapterGet(array(
-				'id_chapter'	=> $id_chapter,
-				'language'		=> $language
-			));
-		}
-
-		if($chapter['id_chapter'] != $id_chapter){
-			if($opt['debug']) $this->pre("No CHAPTER found by ID : ".$id_chapter);
-			return array();
-		}
-	}
-	if(is_array($chapter)) $id_chapter = ($chapterThrough) ? " IN(".$chapter['chapterChildren'].")" : "=".$chapter['id_chapter'];
-
-
-	# Gerer le SOCIAL FORUM lie a ce CONTENT
-	#
-	if(array_key_exists('id_socialforum', $opt)){
-		if(is_array($opt['id_socialforum']) && sizeof($opt['id_socialforum']) > 0){
-			$cond[] = "k_contentsocialforum.id_socialforum IN(".implode(', ', $opt['id_socialforum']).")";
+			}
 		}else
-		if(intval($opt['id_socialforum']) > 0){
-			$cond[] = "k_contentsocialforum.id_socialforum=".$opt['id_socialforum'];
-		}else{
-			if($opt['debug']) $this->pre("ERROR: ID_SOCIALFORUM (ARRAY, NUMERIC > 0)", "GIVEN", var_export($opt['id_socialforum'], true));
-			return array();
-		}
-	}else{
-		$useSocialForum = false;
-	}
-
-	# Former la JOINTURE d'apres le TYPE
-	#
-	if($is_item){
-		$jTable	= "k_contentitem".$type['id_type'];
-		$join[] = "INNER JOIN k_content			ON ".$jTable.".id_content = k_content.id_content";
-		$join[] = "INNER JOIN k_contentdata		ON ".$jTable.".id_content = k_contentdata.id_content";
-		$join[] = "INNER JOIN k_contentitem		ON ".$jTable.".id_content = k_contentitem.id_content";
-
-		if(isset($opt['proxyKey'])){
-			$key 	= is_array($opt['proxyKey']) ? json_encode($opt['proxyKey']) : $opt['proxyKey'];
-			$cond[] = "contentItemProxyKey='".addslashes($key)."'";
-		}
-	}else
-	if($is_album){
-		$jTable	= "k_contentalbum".$type['id_type'];
-		$join[] = "INNER JOIN k_content			ON ".$jTable.".id_content = k_content.id_content";
-		$join[] = "INNER JOIN k_contentdata		ON ".$jTable.".id_content = k_contentdata.id_content";
-		$join[] = "INNER JOIN k_contentalbum 	ON ".$jTable.".id_content = k_contentalbum.id_content";
-	}else{
-		$jTable	= "k_content".$type['id_type'];
-		$join[] = "INNER JOIN k_content 		ON ".$jTable.".id_content = k_content.id_content";
-		$join[] = "INNER JOIN k_contentdata		ON ".$jTable.".id_content = k_contentdata.id_content";
-	}
-	
-	if($useChapter){
-		$join[] = "INNER JOIN k_contentchapter 	ON ".$jTable.".id_content = k_contentchapter.id_content";
-	}
-
-	if($type['is_business'] && $useGroup){
-		$join[] = "INNER JOIN k_contentgroupbusiness ON ".$jTable.".id_content = k_contentgroupbusiness.id_content";
-	}else
-	if($useGroup){
-		$join[] = "INNER JOIN k_contentgroup ON ".$jTable.".id_content = k_contentgroup.id_content";
-	}
-
-	if($useShop){
-		$join[] = "INNER JOIN k_contentshop ON k_content.id_content = k_contentshop.id_content";
-	}
-
-
-	if($useSocialForum){
-		$join[] = "INNER JOIN k_contentsocialforum ON k_content.id_content = k_contentsocialforum.id_content";
-	}
-
-	if($id_category != ''){
-		$join[] = "INNER JOIN k_contentcategory ON ".$jTable.".id_content = k_contentcategory.id_content";
-	}
-
-	if($type['is_ad']){
-		$join[] = "INNER JOIN k_contentad ON ".$jTable.".id_content = k_contentad.id_content";
-		$cond[] = "k_contentad.language='".$language."'";
-	}
-
-	if($opt['assoUser'] == true){
-		$join[] = "INNER JOIN k_user     ON k_content.id_user = k_user.id_user";
-		$join[] = "INNER JOIN k_userdata ON k_user.id_user = k_userdata.id_user";
-	}
-
-	# Search
-	#
-	if($opt['id_search'] > 0){
-		$searchData = $this->dbMulti("SELECT * FROM k_searchparam WHERE id_search=".$opt['id_search']);
-		if(sizeof($searchData)) $opt['search'] = $searchData;
-	}
-	if(is_array($opt['search'])){
-		foreach($opt['search'] as $e){
-			if($e['searchField'] > 0){
-				$tmp[] = $this->dbMatch("field".$e['searchField'], $e['searchValue'], $e['searchMode']);
-			}else
-			if($fieldKey[$e['searchField']]['id_field'] != NULL){
-				$f = $fieldKey[$e['searchField']]; $f['fieldParam'] = json_decode($f['fieldParam'], true);
-				
-				// Keyword
-				if($f['fieldType'] == 'keyword'){
-					$needToGroup = true;
-					if($e['strict']){
-						foreach($e['searchValue'] as $n => $z){
-							$t = ($n == 0) ? 'k_content'.$type['id_type'] : 'k'.($n-1);
-							$z = array(
-								"k".$n.".keyword='".$z."'",
-								"k".$n.".language='".$language."'",
-								"k".$n.".id_field=".$f['id_field']
-							);
-
-							$join[] = "RIGHT JOIN k_contentkeyword AS k".$n." ON ".$t.".id_content = k".$n.".id_content AND ".implode(' AND ', $z);
-							unset($t, $z);
-						}
-					}else{
-						$join[] = "INNER JOIN k_contentkeyword ON k_content".$type['id_type'].".id_content = k_contentkeyword.id_content";
-						$cond[] = "k_contentkeyword.language = k_contentdata.language";
-						$cond[] = "k_contentkeyword.keyword IN(".implode(', ', $this->helperArrayWrapp($e['searchValue'], "'")).")";
+		if($opt['id_category'] != NULL){
+			if(is_array($opt['id_category'])){
+				$multiCat = $this->apiLoad('category')->categoryGet(array(
+					'id_category'	=> $opt['id_category'],
+					'language'		=> $language,
+					'debug'			=> $opt['debug']
+				));
+				if(sizeof($multiCat) == 0){
+					if($opt['debug']) $this->pre("NO MULTI-CATEGORY found by IDs : ", $opt['id_category']);
+					return array();
+				}else{
+					foreach($multiCat as $e){
+						$multiCatItem[] = $e['id_category'];
 					}
+				}
+			}else{
+				$monoCat = $this->apiLoad('category')->categoryGet(array(
+					'id_category'	=> $opt['id_category'],
+					'language'		=> $language,
+					'debug'			=> $opt['debug']
+				));
+				if(sizeof($monoCat) == 0){
+					if($opt['debug']) $this->pre("NO CATEGORY found by ID : ".$opt['id_category']);
+					return array();
+				}
+			}
+		}
+
+		if(is_array($multiCat)){
+			$useCategory = true;
+
+			if($opt['categoryAll']){
+				foreach($multiCatItem as $e){
+					$join[] = "RIGHT JOIN k_contentcategory AS cat".$e." ON ".$jTable.".id_content = cat".$e.".id_content AND cat".$e.".id_category=".$e;
+				}
+			}else{
+				$id_category = " IN(".implode(',', $multiCatItem).")";
+			}
+		}else
+		if(is_array($monoCat)){
+			$useCategory = true;
+			$id_category = ($categoryThrough)
+					? " IN(".$monoCat['id_category'].(($monoCat['categoryChildren'] != NULL) ? ',' : '').$monoCat['categoryChildren'].")"
+					: " =".$monoCat['id_category'];
+		}
+
+		if($id_category != '' && !$opt['categoryAll']){
+			$join[] = "INNER JOIN k_contentcategory ON ".$jTable.".id_content = k_contentcategory.id_content";
+		}
+
+		# Search
+		#
+		if($opt['id_search'] > 0){
+			$searchData = $this->dbMulti("SELECT * FROM k_searchparam WHERE id_search=".$opt['id_search']);
+			if(sizeof($searchData)) $opt['search'] = $searchData;
+		}
+		if(is_array($opt['search'])){
+			foreach($opt['search'] as $e){
+				if($e['searchField'] > 0){
+					$tmp[] = $this->dbMatch("field".$e['searchField'], $e['searchValue'], $e['searchMode']);
 				}else
+				if($fieldKey[$e['searchField']]['id_field'] != NULL){
+					$f = $fieldKey[$e['searchField']]; $f['fieldParam'] = json_decode($f['fieldParam'], true);
 
-				// Content
-				if($f['fieldType'] == 'content'){
-					#if($f['fieldParam']['type'] == 'multi'){
-					#	$tmp[] = "k_content.id_content IN(".
-					#				"SELECT aContent AS id_content FROM k_contentasso ".
-					#				"INNER JOIN k_contentdata ON k_contentasso.bContent = k_contentdata.id_content ".
-					#				"WHERE aType=".$type['id_type']." AND bType=".$f['fieldContentType']." AND ".$this->dbMatch("contentName", $e['searchValue'], $e['searchMode']).
-					#			 ")";
-					#}else{
-						$tmp[] = $this->dbMatch("field".$f['id_field'], $e['searchValue'], $e['searchMode']);
-					#}
-				}else{
-					$tmp[] = $this->dbMatch("field".$f['id_field'], $e['searchValue'], $e['searchMode']);
-				}
-			}else{
-				$tmp[] = $this->dbMatch($e['searchField'], $e['searchValue'], $e['searchMode']);
-			}
-		}
-		if(sizeof($tmp) > 0) $cond[] = "(".implode(' '.$searchLink.' ', $tmp).")";
-	}else
-	if($opt['search'] != ''){
-		unset($tmp);
-		$tmp[] = $this->dbMatch('contentName', $opt['search'], 'CT');
-		if(sizeof($fieldSearch) > 0){
-			foreach($fieldSearch as $e){
-				$tmp[] = $this->dbMatch("field".$e['id_field'], $opt['search'], 'CT');
-			}
-		}
+					// Keyword
+					if($f['fieldType'] == 'keyword'){
+						$needToGroup = true;
+						if($e['strict']){
+							foreach($e['searchValue'] as $n => $z){
+								$t = ($n == 0) ? 'k_content'.$type['id_type'] : 'k'.($n-1);
+								$z = array(
+									"k".$n.".keyword='".$z."'",
+									"k".$n.".language='".$language."'",
+									"k".$n.".id_field=".$f['id_field']
+								);
 
-		$cond[] = "(".implode($opt['searchMode'], $tmp).")";
+								$join[] = "RIGHT JOIN k_contentkeyword AS k".$n." ON ".$t.".id_content = k".$n.".id_content AND ".implode(' AND ', $z);
+								unset($t, $z);
+							}
+						}else{
+							$join[] = "INNER JOIN k_contentkeyword ON k_content".$type['id_type'].".id_content = k_contentkeyword.id_content";
+							$cond[] = "k_contentkeyword.language = k_contentdata.language";
+							$cond[] = "k_contentkeyword.keyword IN(".implode(', ', $this->helperArrayWrapp($e['searchValue'], "'")).")";
+						}
+					}else
 
-		if(sizeof($asso_) > 0){
-			$cond[] = "k_content.id_content IN(".implode(',', $asso_).")";
-		}
-
-		// verifier le cas suivant qui resulte vide
-		if(sizeof($fieldSearch) ==  0 && sizeof($asso_) == 0){
-		#	$cond[] = "0";
-		}
-	}
-
-	# Asso
-	#
-	if(isset($opt['asso'])){
-		foreach($opt['asso'] as $ass){	
-			$linked = $this->dbMulti("
-				SELECT k_content.id_content FROM k_content
-				INNER JOIN k_contentasso ON k_content.id_content = k_contentasso.aContent
-				WHERE aType='".$type['id_type']."' AND aField='".$ass['id_field']."' AND bType = ".$ass['id_type']."  AND bContent = ".$ass['id_content']
-			);
-			if(sizeof($linked) > 0){
-				foreach($linked as $tmp_){
-					$asso_[] = $tmp_['id_content'];
-				}
-			}
-		}
-
-		if(sizeof($asso_)) $cond[] = "k_content.id_content IN(".implode(',', $asso_).")";
-	}
-
-	# Former les CONDITIONS
-	#
-	if($is_item OR $is_album){
-		if(is_array($opt['id_album'])){
-			$albumCond = "IN(".implode(',', $opt['id_album']).")";
-		}else{
-			if($albumThrough){
-				// Demander albumThrough depuis la racine = de pas preciser le id_album
-				if($opt['id_album'] == '0'){
-					unset($opt['id_album']);
-				}else{
-					$alb = $this->dbOne("SELECT * FROM k_contentalbum WHERE id_content='".$opt['id_album']."'");
-					if($alb['contentAlbumChildren'] != NULL){
-						$albumCond = " IN(".implode(',', array_merge(array($opt['id_album']), explode(',', $alb['contentAlbumChildren']))).")";
+					// Content
+					if($f['fieldType'] == 'content'){
+						#if($f['fieldParam']['type'] == 'multi'){
+						#	$tmp[] = "k_content.id_content IN(".
+						#				"SELECT aContent AS id_content FROM k_contentasso ".
+						#				"INNER JOIN k_contentdata ON k_contentasso.bContent = k_contentdata.id_content ".
+						#				"WHERE aType=".$type['id_type']." AND bType=".$f['fieldContentType']." AND ".$this->dbMatch("contentName", $e['searchValue'], $e['searchMode']).
+						#			 ")";
+						#}else{
+							$tmp[] = $this->dbMatch("field".$f['id_field'], $e['searchValue'], $e['searchMode']);
+						#}
 					}else{
-						$albumCond = "=".$opt['id_album']; 
+						$tmp[] = $this->dbMatch("field".$f['id_field'], $e['searchValue'], $e['searchMode']);
+					}
+				}else{
+					$tmp[] = $this->dbMatch($e['searchField'], $e['searchValue'], $e['searchMode']);
+				}
+			}
+			if(sizeof($tmp) > 0) $cond[] = "(".implode(' '.$searchLink.' ', $tmp).")";
+		}else
+		if($opt['search'] != ''){
+			unset($tmp);
+			$tmp[] = $this->dbMatch('contentName', $opt['search'], 'CT');
+			if(sizeof($fieldSearch) > 0){
+				foreach($fieldSearch as $e){
+					$tmp[] = $this->dbMatch("field".$e['id_field'], $opt['search'], 'CT');
+				}
+			}
+
+			$cond[] = "(".implode($opt['searchMode'], $tmp).")";
+
+			if(sizeof($asso_) > 0){
+				$cond[] = "k_content.id_content IN(".implode(',', $asso_).")";
+			}
+
+			// verifier le cas suivant qui resulte vide
+			if(sizeof($fieldSearch) ==  0 && sizeof($asso_) == 0){
+			#	$cond[] = "0";
+			}
+		}
+
+		# Asso
+		#
+		if(isset($opt['asso'])){
+			foreach($opt['asso'] as $ass){
+				$linked = $this->dbMulti("
+					SELECT k_content.id_content FROM k_content
+					INNER JOIN k_contentasso ON k_content.id_content = k_contentasso.aContent
+					WHERE aType='".$type['id_type']."' AND aField='".$ass['id_field']."' AND bType = ".$ass['id_type']."  AND bContent = ".$ass['id_content']
+				);
+				if(sizeof($linked) > 0){
+					foreach($linked as $tmp_){
+						$asso_[] = $tmp_['id_content'];
 					}
 				}
+			}
+
+			if(sizeof($asso_)) $cond[] = "k_content.id_content IN(".implode(',', $asso_).")";
+		}
+
+		# Former les CONDITIONS
+		#
+		if($is_item OR $is_album){
+			if(is_array($opt['id_album'])){
+				$albumCond = "IN(".implode(',', $opt['id_album']).")";
 			}else{
-				$albumCond = "=".$opt['id_album']; 
+				if($albumThrough){
+					// Demander albumThrough depuis la racine = de pas preciser le id_album
+					if($opt['id_album'] == '0'){
+						unset($opt['id_album']);
+					}else{
+						$alb = $this->dbOne("SELECT * FROM k_contentalbum WHERE id_content='".$opt['id_album']."'");
+						if($alb['contentAlbumChildren'] != NULL){
+							$albumCond = " IN(".implode(',', array_merge(array($opt['id_album']), explode(',', $alb['contentAlbumChildren']))).")";
+						}else{
+							$albumCond = "=".$opt['id_album'];
+						}
+					}
+				}else{
+					$albumCond = "=".$opt['id_album'];
+				}
 			}
 		}
-	}
 
-	if($is_item){
-		$from = 'k_contentitem'.$type['id_type'];
-		if(isset($opt['id_album'])) $cond[] = "k_contentitem.id_album ".$albumCond;
+		if($is_item){
+			$from = 'k_contentitem'.$type['id_type'];
+			if(isset($opt['id_album'])) $cond[] = "k_contentitem.id_album ".$albumCond;
 
-	}else
-	if($is_album){
-		$from = 'k_contentalbum'.$type['id_type'];
-		if(isset($opt['id_album'])) $cond[] = "k_contentalbum.id_album ".$albumCond;
+		}else
+		if($is_album){
+			$from = 'k_contentalbum'.$type['id_type'];
+			if(isset($opt['id_album'])) $cond[] = "k_contentalbum.id_album ".$albumCond;
 
-	}else{
-		$from = 'k_content'.$type['id_type'];
-	}
-
-	$cond[] = "k_content.id_type=".$type['id_type'];
-	$cond[] = "k_contentdata.language='".$language."'";
-	$cond[] = $from.".language='".$language."'";
-
-	if(is_array($opt['id_content'])){
-		if(sizeof($opt['id_content']) == 0){
-			if($opt['debug']) $this->pre("Fatal Error : multiple id_content BUT id_content/array is empty");
-			return array();
+		}else{
+			$from = 'k_content'.$type['id_type'];
 		}
 
-		$cond[] = "k_content.id_content IN(".implode(',', $opt['id_content']).")";
-	}
+		$cond[] = "k_content.id_type=".$type['id_type'];
+		$cond[] = "k_contentdata.language='".$language."'";
+		$cond[] = $from.".language='".$language."'";
 
-	if($dbMode == 'dbMulti' && $opt['id_parent'] != '*'){
-		$cond[] = "k_content.id_parent=".(isset($opt['id_parent']) ? $opt['id_parent'] : '0');
-	}
+		if(is_array($opt['id_content'])){
+			if(sizeof($opt['id_content']) == 0){
+				if($opt['debug']) $this->pre("Fatal Error : multiple id_content BUT id_content/array is empty");
+				return array();
+			}
 
-	if($useChapter){
-		$cond[] = "id_chapter".$id_chapter;
-		if(!$chapterThrough){
-			$cond[] = "k_contentchapter.is_selected=1";
-		}else{
+			$cond[] = "k_content.id_content IN(".implode(',', $opt['id_content']).")";
+		}
+
+		if($dbMode == 'dbMulti' && $opt['id_parent'] != '*'){
+			$cond[] = "k_content.id_parent=".(isset($opt['id_parent']) ? $opt['id_parent'] : '0');
+		}
+
+		if($useChapter){
+			$cond[] = "id_chapter".$id_chapter;
+			if(!$chapterThrough){
+				$cond[] = "k_contentchapter.is_selected=1";
+			}else{
+				$needToGroup = true;
+			}
+		}
+
+		if($useCategory != '' && !$opt['categoryAll']){
+			$cond[] = "id_category".$id_category;
+
+			if(!$categoryThrough){
+				$cond[] = "k_contentcategory.is_selected=1";
+			}
+
 			$needToGroup = true;
 		}
-	}
 
-	if($useCategory != ''){
-		$cond[] = "id_category".$id_category;
-		if(!$categoryThrough){
-			$cond[] = "k_contentcategory.is_selected=1";
+		if($useGroup){
+			$cond[] = "id_group=".$id_group;
+			if(!$type['is_business'] && $groupThrough) $needToGroup = true;
 		}
-		$needToGroup = true;
-	}
 
-	if($useGroup){
-		$cond[] = "id_group=".$id_group;
-		if(!$type['is_business'] && $groupThrough) $needToGroup = true;
-	}
-
-	if($useShop){
-		$cond[] = "k_contentshop.id_shop=".$opt['id_shop'];
-	}
-	
-	if(array_key_exists('adZone', $opt)){
-		if(intval($opt['adZone']) > 0){
-			$cond[] = "k_contentad.id_adzone=".$opt['adZone'];
-		}else
-		if(is_string($opt['adZone'])){
-			$zone	= $this->apiLoad('ad')->adZoneGet(array(
-				'zoneCode'	=> $opt['adZone']
-			));
-
-			$cond[] = "k_contentad.id_adzone='".$zone['id_adzone']."'";
-		}else{
-			if($opt['debug']) $this->pre("No ADZONE found for ID/KEY : ".$opt['adZone']);
-			return array();
+		if($useShop){
+			$cond[] = "k_contentshop.id_shop=".$opt['id_shop'];
 		}
-	}
 
-	if($opt['id_user'] != NULL)		$cond[] = "k_content.id_user=".$opt['id_user'];
-	if($opt['contentSee'] != 'ALL')	$cond[] = "contentSee=".(isset($opt['contentSee']) ? $opt['contentSee'] : '1');
-	if(isset($opt['is_buy']))		$cond[] = "is_buy=".(($opt['is_buy']) ? '1' : '0');
-	if(isset($opt['social']))		$cond[] = "k_content.is_social=".$opt['is_social'];
-	if(isset($opt['noId']))			$cond[] = "k_content.id_content".(is_array($opt['noId']) ? ' NOT IN('.implode(',', $opt['noId']).')' : '!='.$opt['noId']);
-	
-	if(sizeof($cond) > 0)			$where  = "\nWHERE\t".implode("\n\tAND ", $cond);
-
-	// JOINT tables + WHERE conditions set in OPTIONS
-	if($opt['sqlJoin'] != '') $join[] = $opt['sqlJoin'];
-	if($opt['sqlWhere'] != ''){
-		if(isset($where)){
-			$where .= ' '.$opt['sqlWhere'];
-		}else{
-			$where  = "\nWHERE ".$opt['sqlWhere'];
-		}
-	}
-	
-	
-	# Former les LIMITATIONS et ORDRE
-	#
-	if($dbMode == 'dbMulti'){
-		if(isset($opt['order']) && isset($opt['direction'])){
-			if($fieldKey[$opt['order']]['id_field'] != NULL && $opt['direction'] != NULL){
-				$sqlOrder = "\nORDER BY field".$fieldKey[$opt['order']]['id_field']." ".$opt['direction'];
-			}else{
-				$sqlOrder = "\nORDER BY ".$opt['order']." ".$opt['direction'];
-			}
-		}else{
-			if($is_item){
-				$sqlOrder = "\nORDER BY contentItemPos ASC";
+		if(array_key_exists('adZone', $opt)){
+			if(intval($opt['adZone']) > 0){
+				$cond[] = "k_contentad.id_adzone=".$opt['adZone'];
 			}else
-			if($is_album){
-				$sqlOrder = "\nORDER BY contentAlbumPos ASC";
+			if(is_string($opt['adZone'])){
+				$zone	= $this->apiLoad('ad')->adZoneGet(array(
+					'zoneCode'	=> $opt['adZone']
+				));
+
+				$cond[] = "k_contentad.id_adzone='".$zone['id_adzone']."'";
 			}else{
-				$sqlOrder = "\nORDER BY pos_content ASC";
+				if($opt['debug']) $this->pre("No ADZONE found for ID/KEY : ".$opt['adZone']);
+				return array();
 			}
 		}
 
-		if($opt['sqlOrder'] != '') $sqlOrder .= $opt['sqlOrder'];
+		if($opt['id_user'] != NULL)		$cond[] = "k_content.id_user=".$opt['id_user'];
+		if($opt['contentSee'] != 'ALL') {
+	        $cond[] = " ('".date('Y-m-d H:i:s')."' >= contentDateStart OR contentDateStart IS NULL)";
+	        $cond[] = " ('".date('Y-m-d H:i:s')."' <= contentDateEnd OR contentDateEnd IS NULL)";
+	        $cond[] = "contentSee=".(isset($opt['contentSee']) ? $opt['contentSee'] : '1');
+	    }
+		if(isset($opt['is_buy']))		$cond[] = "is_buy=".(($opt['is_buy']) ? '1' : '0');
+		if(isset($opt['social']))		$cond[] = "k_content.is_social=".$opt['is_social'];
+		if(isset($opt['noId']))			$cond[] = "k_content.id_content".(is_array($opt['noId']) ? ' NOT IN('.implode(',', $opt['noId']).')' : '!='.$opt['noId']);
 
-		if(!$noLimit) $sqlLimit = "\nLIMIT ".$offset.",".$limit;
-	}
-	
-	if($needToGroup) $sqlGroup = "\nGROUP BY k_content.id_content";
+		if(sizeof($cond) > 0)			$where  = "\nWHERE\t".implode("\n\tAND ", $cond);
 
-	# Demander le CONTENT
-	#
-	$content = $this->$dbMode(
-		"SELECT SQL_CALC_FOUND_ROWS * FROM ".$from."\n".
-		implode("\n", $join).
-		$where . $sqlGroup . $sqlOrder . $sqlLimit
-	);
-	if($opt['debug']) $this->pre($this->db_query, $this->db_error, "Query Output", $content);
-
-	if($dbMode == 'dbOne'){
-		$flip 		= true;
-		$content 	= (sizeof($content) > 0) ? array($content) : array();
-	}
-
-	$this->total = $this->db_num_total;
-	$this->limit = $limit;
-
-	# Gerer les ASSOCIATIONS
-	#
-	// CONTENT relies a ce CONTENT
-	if(sizeof($fieldAssoContent) > 0){
-		foreach($content as $idx => $c){
-			foreach($fieldAssoContent as $f){
-				$content[$idx]['field'.$f['id_field']] = $this->contentAssoGet($content[$idx]['id_content'], $content[$idx]['id_type'], $f['id_field'], $f['fieldContentType']);
+		// JOINT tables + WHERE conditions set in OPTIONS
+		if($opt['sqlJoin'] != '') $join[] = $opt['sqlJoin'];
+		if($opt['sqlWhere'] != ''){
+			if(isset($where)){
+				$where .= ' '.$opt['sqlWhere'];
+			}else{
+				$where  = "\nWHERE ".$opt['sqlWhere'];
 			}
 		}
-	}
 
-	// USER relies a ce CONTENT
-	if(sizeof($fieldAssoUser) > 0){
-		foreach($content as $idx => $c){				
-			foreach($fieldAssoUser as $f){
-				$content[$idx]['field'.$f['id_field']] = $this->contentAssoUserGet($content[$idx]['id_content'], $content[$idx]['id_type'], $f['id_field']);
-			}
-		}
-	}
 
-	// DBTABLE relies a ce CONTENT (on ne peut pas utiliser la fonction contentAssoGet() pour ce type de contenue car les valeur sont stockes dans la champs et pas dans content_asso
-	if(sizeof($fieldAssoDb) > 0){
-		foreach($content as $idx => $c){				
-			foreach($fieldAssoDb as $f){
-				$tmp = explode($this->splitter, $c['field'.$f['id_field']]);
-				foreach($tmp as $tmpidx => $tmp_){
-					if($tmp_ == NULL) unset($tmp[$tmpidx]);
+		# Former les LIMITATIONS et ORDRE
+		#
+		if($dbMode == 'dbMulti'){
+			if(isset($opt['order']) && isset($opt['direction'])){
+				if($fieldKey[$opt['order']]['id_field'] != NULL && $opt['direction'] != NULL){
+					$sqlOrder = "\nORDER BY field".$fieldKey[$opt['order']]['id_field']." ".$opt['direction'];
+				}else{
+					$sqlOrder = "\nORDER BY ".$opt['order']." ".$opt['direction'];
 				}
-				$content[$idx]['field'.$f['id_field']] = array_values($tmp);
+			}else{
+				if($is_item){
+					$sqlOrder = "\nORDER BY contentItemPos ASC";
+				}else
+				if($is_album){
+					$sqlOrder = "\nORDER BY contentAlbumPos ASC";
+				}else{
+					$sqlOrder = "\nORDER BY pos_content ASC";
+				}
+			}
+
+			if($opt['sqlOrder'] != '') $sqlOrder .= $opt['sqlOrder'];
+
+			if(!$noLimit) $sqlLimit = "\nLIMIT ".$offset.",".$limit;
+		}
+
+		if($needToGroup) $sqlGroup = "\nGROUP BY k_content.id_content";
+
+		if($opt['sqlGroup'] != '') $sqlGroup = "\nGROUP BY ".$opt['sqlGroup'];
+
+		# Demander le CONTENT
+		#
+		$content = $this->$dbMode(
+			"SELECT SQL_CALC_FOUND_ROWS * FROM ".$from."\n".
+			implode("\n", $join).
+			$where . $sqlGroup . $sqlOrder . $sqlLimit
+		);
+		if($opt['debug']) $this->pre($this->db_query, $this->db_error, "Query Output", $content);
+
+		if($dbMode == 'dbOne'){
+			$flip 		= true;
+			$content 	= (sizeof($content) > 0) ? array($content) : array();
+		}
+
+		$this->total = $this->db_num_total;
+		$this->limit = $limit;
+
+		# Gerer les ASSOCIATIONS
+		#
+		// CONTENT relies a ce CONTENT
+		if(sizeof($fieldAssoContentMulti) > 0){
+			foreach($content as $idx => $c){
+				foreach($fieldAssoContentMulti as $f){
+					$content[$idx]['field'.$f['id_field']] = $this->contentAssoGet($content[$idx]['id_content'], $content[$idx]['id_type'], $f['id_field'], $f['fieldContentType']);
+				}
 			}
 		}
-	}
-
-	# Gerer les VALEURS DE RETOUR
-	#
-	if($human){
-		foreach($content as $idx => $c){
-
-			// Media
-			if($c['contentMedia'] != ''){
-				$contentMedia = json_decode(stripslashes($c['contentMedia']), true);
-				if(sizeof($contentMedia) > 0){
-					unset($media);
-					foreach($contentMedia as $e){
-						$v = $this->mediaInfos($e['url']);
-						$v['caption'] = $e['caption'];
-						$media[$e['type']][] = $v;
+		if(sizeof($fieldAssoContentSingle) > 0){
+			foreach($content as $idx => $c){
+				foreach($fieldAssoContentSingle as $f){
+					if(!empty($content[$idx]['field'.$f['id_field']])){
+						$content[$idx]['field'.$f['id_field']] = array($content[$idx]['field'.$f['id_field']]);
 					}
-					$content[$idx]['contentMedia'] = $media;
+				}
+			}
+		}
+
+		// USER relies a ce CONTENT
+		if(sizeof($fieldAssoUser) > 0){
+			foreach($content as $idx => $c){
+				foreach($fieldAssoUser as $f){
+					$content[$idx]['field'.$f['id_field']] = $this->contentAssoUserGet($content[$idx]['id_content'], $content[$idx]['id_type'], $f['id_field']);
+				}
+			}
+		}
+
+		// DBTABLE relies a ce CONTENT (on ne peut pas utiliser la fonction contentAssoGet() pour ce type de contenue
+		// car les valeur sont stockes dans la champs et pas dans content_asso
+		if(sizeof($fieldAssoDb) > 0){
+			foreach($content as $idx => $c){
+				foreach($fieldAssoDb as $f){
+					$tmp = explode($this->splitter, $c['field'.$f['id_field']]);
+					foreach($tmp as $tmpidx => $tmp_){
+						if($tmp_ == NULL) unset($tmp[$tmpidx]);
+					}
+					$content[$idx]['field'.$f['id_field']] = array_values($tmp);
+				}
+			}
+		}
+
+		# Gerer les VALEURS DE RETOUR
+		#
+		if($human){
+			foreach($content as $idx => $c){
+
+				// Media
+				if($c['contentMedia'] != ''){
+					$contentMedia = json_decode(stripslashes($c['contentMedia']), true);
+					if(sizeof($contentMedia) > 0){
+						unset($media);
+						foreach($contentMedia as $e){
+							$v = $this->mediaInfos($e['url']);
+							$v['caption'] = $e['caption'];
+							$media[$e['type']][] = $v;
+						}
+						$content[$idx]['contentMedia'] = $media;
+					}else{
+						$content[$idx]['contentMedia'] = array();
+					}
 				}else{
 					$content[$idx]['contentMedia'] = array();
 				}
-			}else{
-				$content[$idx]['contentMedia'] = array();
-			}
 
-			// Fields
-			foreach($field as $f){
-				$v = $c['field'.$f['id_field']];
-				$p = json_decode($f['fieldParam'], true); 
+				// Fields
+				foreach($field as $f){
+					$v = $c['field'.$f['id_field']];
+					$p = json_decode($f['fieldParam'], true);
 
-				if($f['fieldType'] == 'media'){
-					$v = json_decode($v, true); unset($media);
+					if($f['fieldType'] == 'media'){
+						$v = json_decode($v, true); unset($media);
 
-					if(sizeof($v) > 0 && is_array($v)){
-						foreach($v as $e){
-							$e_ = $this->mediaInfos($e['url']);
-							$e_['caption'] = $e['caption'];
-							$media[$e['type']][] = $e_;
+						if(sizeof($v) > 0 && is_array($v)){
+							foreach($v as $e){
+								$e_ = $this->mediaInfos($e['url']);
+								$e_['caption'] = $e['caption'];
+								$media[$e['type']][] = $e_;
+							}
+							$content[$idx]['field'.$f['id_field']] = $media;
+						}else{
+							$content[$idx]['field'.$f['id_field']] = array();
 						}
-						$content[$idx]['field'.$f['id_field']] = $media;
-					}else{
-						$content[$idx]['field'.$f['id_field']] = array();
-					}
 
-				}else
-				if($f['fieldType'] == 'category'){
-					$tmp = array();
-
-					if($p['type'] == 'solo' && intval($v) > 0){
-						$tmp = $this->dbOne("SELECT id_category, categoryName FROM k_categorydata WHERE id_category=".intval($v));
 					}else
-					if($p['type'] == 'multi'){
-						$v = explode($this->splitter, $v);
-						unset($v[sizeof($v)-1], $v[0]);
+					if($f['fieldType'] == 'category'){
+						$tmp = array();
 
-						foreach($v as $vCat){
-							$tmp[] = $this->dbOne("SELECT id_category, categoryName FROM k_categorydata WHERE id_category=".intval($vCat));
+						if($p['type'] == 'solo' && intval($v) > 0){
+							$tmp = $this->dbOne("SELECT id_category, categoryName FROM k_categorydata WHERE id_category=".intval($v));
+						}else
+						if($p['type'] == 'multi'){
+							$v = explode($this->splitter, $v);
+							unset($v[sizeof($v)-1], $v[0]);
+
+							foreach($v as $vCat){
+								$tmp[] = $this->dbOne("SELECT id_category, categoryName FROM k_categorydata WHERE id_category=".intval($vCat));
+							}
 						}
+
+						$content[$idx]['field'.$f['id_field']] = $tmp;
+
+					}else
+
+					if(is_array($v) && $f['fieldType'] == 'user'){
+						unset($tmp);
+						foreach($v as $bUser){
+							$tmp[] = $this->dbOne("SELECT * FROM k_user WHERE k_user.id_user=".$bUser." AND is_deleted=0");
+						}
+						$content[$idx]['field'.$f['id_field']] = $tmp;
+					}else
+
+					if(is_array($v) && $f['fieldType'] == 'content'){
+						$param = json_decode($f['fieldParam'], true);
+						#$this->pre($f, $param, $v);
+
+						unset($tmp);
+						foreach($v as $bContent){
+							$tmp[] = $this->dbOne("
+								SELECT * FROM k_contentdata
+								INNER JOIN k_content ON k_contentdata.id_content = k_content.id_content
+								WHERE k_contentdata.id_content=".$bContent." AND language='".$language."'");
+						}
+						$content[$idx]['field'.$f['id_field']] = (($param['type'] == 'solo' && sizeof($v) == 1) ? $tmp[0] : $tmp);
+					}else
+
+					if(in_array($f['fieldType'], array('onechoice', 'multichoice')) && substr($v, 0, 2) == $this->splitter && substr($v, -2) == $this->splitter && $v != $this->splitter){
+
+						$part = explode($this->splitter, substr($v, 2, -2));
+						$content[$idx]['field'.$f['id_field']] = implode("<br />", $part);
+
+					}else{
+						$content[$idx]['field'.$f['id_field']] = $v;
 					}
+				}
 
-					$content[$idx]['field'.$f['id_field']] = $tmp;
+				// Cache
+				if($c['contentCache'] != '') $content[$idx]['contentCache'] = json_decode($c['contentCache'], true);
+			}
+		}
 
-				}else
-
-				if(is_array($v) && $f['fieldType'] == 'user'){
-					unset($tmp);
-					foreach($v as $bUser){
-						$tmp[] = $this->dbOne("SELECT * FROM k_user WHERE k_user.id_user=".$bUser." AND is_deleted=0");
-					}
-					$content[$idx]['field'.$f['id_field']] = $tmp;
-				}else
-
-				if(is_array($v) && $f['fieldType'] == 'content'){
-					$param = json_decode($f['fieldParam'], true); 
-					#$this->pre($f, $param, $v);
-
-					unset($tmp);
-					foreach($v as $bContent){
-						$tmp[] = $this->dbOne("SELECT * FROM k_contentdata WHERE id_content=".$bContent." AND language='".$language."'");
-					}
-					$content[$idx]['field'.$f['id_field']] = (($param['type'] == 'solo' && sizeof($v) == 1) ? $tmp[0] : $tmp);
-				}else
-
-				if(in_array($f['fieldType'], array('onechoice', 'multichoice')) && substr($v, 0, 2) == $this->splitter && substr($v, -2) == $this->splitter && $v != $this->splitter){
-					
-					$part = explode($this->splitter, substr($v, 2, -2));
-					$content[$idx]['field'.$f['id_field']] = implode("<br />", $part);
-
-				}else{
-					$content[$idx]['field'.$f['id_field']] = $v;
+		# Reformater le CONTENT avec les FIELDS
+		#
+		if($useField){
+			$this->contentField = $fieldKey;
+			foreach($content as $idx => $c){
+				foreach($field as $f){
+					$content[$idx]['field'][$f['fieldKey']] = $c['field'.$f['id_field']];
+					unset($content[$idx]['field'.$f['id_field']]);
 				}
 			}
-			
-			// Cache
-			if($c['contentCache'] != '') $content[$idx]['contentCache'] = json_decode($c['contentCache'], true);
 		}
-	}
 
-	# Reformater le CONTENT avec les FIELDS
-	#
-	if($useField){
-		$this->contentField = $fieldKey;
-		foreach($content as $idx => $c){				
-			foreach($field as $f){
-				$content[$idx]['field'][$f['fieldKey']] = $c['field'.$f['id_field']];
-				unset($content[$idx]['field'.$f['id_field']]);
+		# Les VARIABLES de la TEMPLATE
+		#
+		foreach($content as $idx => $e){
+			if($e['contentTemplateEnv'] != '') $content[$idx]['contentTemplateEnv'] = unserialize($e['contentTemplateEnv']);
+		}
+
+
+
+		# Obtenir les ASSO des CHAPITRES - admin
+		#
+		if($opt['assoChapter']){
+			foreach($content as $idx => $c){
+				$ids = $this->dbMulti("SELECT id_chapter FROM k_contentchapter WHERE id_content=".$c['id_content']." AND is_selected=1");
+				$content[$idx]['id_chapter'] = $this->dbKey($ids, 'id_chapter');
 			}
 		}
-	}
 
-	# Les VARIABLES de la TEMPLATE
-	#
-	foreach($content as $idx => $e){
-		if($e['contentTemplateEnv'] != '') $content[$idx]['contentTemplateEnv'] = unserialize($e['contentTemplateEnv']);
-	}
-
-	# Obtenir les ASSO des CHAPITRES - admin
-	#
-	if($opt['assoChapter']){
-		foreach($content as $idx => $c){
-			$ids = $this->dbMulti("SELECT id_chapter FROM k_contentchapter WHERE id_content=".$c['id_content']." AND is_selected=1");
-			$content[$idx]['id_chapter'] = $this->dbKey($ids, 'id_chapter');
+		# Obtenir les ASSO des GROUPS - admin
+		#
+		if($opt['assoGroup']){
+			foreach($content as $idx => $c){
+				$ids = $this->dbMulti("SELECT id_group FROM k_contentgroup WHERE id_content=".$c['id_content']." AND is_selected=1");
+				$content[$idx]['id_group'] = $this->dbKey($ids, 'id_group');
+			}
 		}
-	}
 
-	# Obtenir les ASSO des GROUPS - admin
-	#
-	if($opt['assoGroup']){
-		foreach($content as $idx => $c){
-			$ids = $this->dbMulti("SELECT id_group FROM k_contentgroup WHERE id_content=".$c['id_content']." AND is_selected=1");
-			$content[$idx]['id_group'] = $this->dbKey($ids, 'id_group');
+		# Obtenir les ASSO des CATEGORY - admin
+		#
+		if($opt['assoCategory']){
+			foreach($content as $idx => $c){
+				$ids = $this->dbMulti("SELECT id_category FROM k_contentcategory WHERE id_content=".$c['id_content']." AND is_selected=1");
+				$content[$idx]['id_category'] = $this->dbKey($ids, 'id_category');
+			}
 		}
-	}
 
-	# Obtenir les ASSO des GROUPS - admin
-	#
-	if($opt['assoCategory']){
-		foreach($content as $idx => $c){
-			$ids = $this->dbMulti("SELECT id_category FROM k_contentcategory WHERE id_content=".$c['id_content']." AND is_selected=1");
-			$content[$idx]['id_category'] = $this->dbKey($ids, 'id_category');
+		# Obtenir les ASSO des SEARCH - admin
+		#
+		if($opt['assoSearch']){
+			foreach($content as $idx => $c){
+				$ids = $this->dbMulti("SELECT id_search FROM k_contentsearch WHERE id_content=".$c['id_content']);
+				$content[$idx]['id_search'] = $this->dbKey($ids, 'id_search');
+			}
 		}
-	}
 
-	# Obtenir les ASSO des SEARCH - admin
-	#
-	if($opt['assoSearch']){
-		foreach($content as $idx => $c){
-			$ids = $this->dbMulti("SELECT id_search FROM k_contentsearch WHERE id_content=".$c['id_content']);
-			$content[$idx]['id_search'] = $this->dbKey($ids, 'id_search');
+		# Obtenir les ASSO des SHOP - admin
+		#
+		if($opt['assoShop']){
+			foreach($content as $idx => $c){
+				$ids = $this->dbMulti("SELECT id_shop FROM k_contentshop WHERE id_content=".$c['id_content']);
+				$content[$idx]['id_shop'] = $this->dbKey($ids, 'id_shop');
+			}
 		}
-	}
 
-	# Obtenir les ASSO des SHOP - admin
-	#
-	if($opt['assoShop']){
-		foreach($content as $idx => $c){
-			$ids = $this->dbMulti("SELECT id_shop FROM k_contentshop WHERE id_content=".$c['id_content']);
-			$content[$idx]['id_shop'] = $this->dbKey($ids, 'id_shop');
+		# Obtenir les ASSO des SOCIAL-FORUM - admin
+		#
+		if($opt['assoSocialForum']){
+			foreach($content as $idx => $c){
+				$ids = $this->dbMulti("SELECT id_socialforum FROM k_contentsocialforum WHERE id_content=".$c['id_content']);
+				$content[$idx]['id_socialforum'] = $this->dbKey($ids, 'id_socialforum');
+
+				if(!is_array($content[$idx]['id_socialforum'])) $content[$idx]['id_socialforum'] = array();
+			}
 		}
+
+		if($flip) $content = $content[0];
+
+
+
+		if($opt['debug']) $this->pre("OUTPUT", $content);
+
+		if(BENCHME) @$GLOBALS['bench']->benchmarkMarker($bmStep);
+
+	    $content  = $this->hookFilter('contentGet', $content);
+
+		return $content;
 	}
 
-	# Obtenir les ASSO des SOCIAL-FORUM - admin
-	#
-	if($opt['assoSocialForum']){
-		foreach($content as $idx => $c){
-			$ids = $this->dbMulti("SELECT id_socialforum FROM k_contentsocialforum WHERE id_content=".$c['id_content']);
-			$content[$idx]['id_socialforum'] = $this->dbKey($ids, 'id_socialforum');
+//-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -
+//-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -
+	public function contentSet($opt){
 
-			if(!is_array($content[$idx]['id_socialforum'])) $content[$idx]['id_socialforum'] = array();
+
+		$id_type       = $opt['id_type'];
+		$language      = $opt['language'];
+		$id_content    = $opt['id_content'];
+		$def           = $opt['def'];
+		$data          = $opt['data'];
+		$field         = $opt['field'];
+		$group         = $opt['group'];
+		$item          = $opt['item'];
+		$album         = $opt['album'];
+		$contentFamily = ($opt['contentFamily'] !== false) ? true : false;
+
+		# Get the TYPE
+		$type = $this->apiLoad('type')->typeGet(array('id_type' => $id_type));
+
+		# Core
+		if($id_content == NULL){
+			$this->dbQuery("INSERT INTO k_content (id_type, id_user) VALUES ('".$id_type."','".$this->user['id_user']."')");
+			$id_content = $this->db_insert_id;
+			if($opt['debug']) $this->pre($this->db_query, $this->db_error, 'ID_CONTENT >> '.$id_content);
 		}
-	}
-
-	if($flip) $content = $content[0];
-
-	if($opt['debug']) $this->pre("OUTPUT", $content);
-
-	if(BENCHME) @$GLOBALS['bench']->benchmarkMarker($bmStep);
-
-	return $content;
-}
-
-/* + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - 
-+ - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - */
-public function contentSet($opt){
-
-	$id_type	= $opt['id_type'];
-	$language	= $opt['language'];
-	$id_content	= $opt['id_content'];
-
-	$def		= $opt['def'];
-	$data		= $opt['data'];
-	$field		= $opt['field'];
-	$group		= $opt['group'];
-	$item		= $opt['item'];
-	$album		= $opt['album'];
-
-	$type 		= $this->apiLoad('type')->typeGet(array('id_type' => $id_type));
-
-	# Core
-	if($id_content == NULL){
-		$this->dbQuery("INSERT INTO k_content (id_type, id_user) VALUES ('".$id_type."','".$this->user['id_user']."')");
-		$id_content = $this->db_insert_id;
-		if($opt['debug']) $this->pre($this->db_query, $this->db_error, 'ID_CONTENT >> '.$id_content);
-	}
-	$this->id_content = $id_content;
+		$this->id_content = $id_content;
 
 
-	# Core.Type
-	#
-	if($id_type != ''){
-		// ITEM
-		if($opt['def']['k_content']['is_item']['value'] == 1){
-			$extType = $this->dbOne("SELECT 1 FROM k_contentitem".$id_type." WHERE id_content=".$this->id_content." AND language='".$language."'");
-	
-			if(!$extType[1]){
-				$this->dbQuery("INSERT INTO k_contentitem".$id_type." (id_content,language) VALUES (".$this->id_content.",'".$language."')");
+		# Core.Type
+		#
+		if($id_type != ''){
+			// ITEM
+			if($opt['def']['k_content']['is_item']['value'] == 1){
+				$extType = $this->dbOne("SELECT 1 FROM k_contentitem".$id_type." WHERE id_content=".$this->id_content." AND language='".$language."'");
+
+				if(!$extType[1]){
+					$this->dbQuery("INSERT INTO k_contentitem".$id_type." (id_content,language) VALUES (".$this->id_content.",'".$language."')");
+					if($opt['debug']) $this->pre($this->db_query, $this->db_error);
+				}
+			}else
+			// ALBUM
+			if($opt['def']['k_content']['is_album']['value'] == 1){
+				$extType = $this->dbOne("SELECT 1 FROM k_contentalbum".$id_type." WHERE id_content=".$this->id_content." AND language='".$language."'");
+
+				if(!$extType[1]){
+					$this->dbQuery("INSERT INTO k_contentalbum".$id_type." (id_content,language) VALUES (".$this->id_content.",'".$language."')");
+					if($opt['debug']) $this->pre($this->db_query, $this->db_error);
+				}
+			}
+			// CORE
+			else{
+				$extType = $this->dbOne("SELECT 1 FROM k_content".$id_type." WHERE id_content=".$this->id_content." AND language='".$language."'");
+
+				if(!$extType[1]){
+					$this->dbQuery("INSERT INTO k_content".$id_type." (id_content,language) VALUES (".$this->id_content.",'".$language."')");
+					if($opt['debug']) $this->pre($this->db_query, $this->db_error);
+				}
+			}
+		}
+
+
+		# Data
+		#
+		if(isset($opt['data'])){
+			$extData = $this->dbOne("SELECT 1 FROM k_contentdata WHERE id_content=".$this->id_content." AND language='".$language."'");
+			#if($opt['debug']) $this->pre($this->db_query, $this->db_error, $extData);
+
+			if(!$extData[1]){
+				$this->dbQuery("INSERT INTO k_contentdata (id_content, language) VALUES (".$this->id_content.",'".$language."')");
 				if($opt['debug']) $this->pre($this->db_query, $this->db_error);
 			}
-		}else
-		// ALBUM
-		if($opt['def']['k_content']['is_album']['value'] == 1){
-			$extType = $this->dbOne("SELECT 1 FROM k_contentalbum".$id_type." WHERE id_content=".$this->id_content." AND language='".$language."'");
-	
-			if(!$extType[1]){
-				$this->dbQuery("INSERT INTO k_contentalbum".$id_type." (id_content,language) VALUES (".$this->id_content.",'".$language."')");
-				if($opt['debug']) $this->pre($this->db_query, $this->db_error);
-			}
-		}
-		// CORE
-		else{
-			$extType = $this->dbOne("SELECT 1 FROM k_content".$id_type." WHERE id_content=".$this->id_content." AND language='".$language."'");
-	
-			if(!$extType[1]){
-				$this->dbQuery("INSERT INTO k_content".$id_type." (id_content,language) VALUES (".$this->id_content.",'".$language."')");
-				if($opt['debug']) $this->pre($this->db_query, $this->db_error);
-			}
-		}
-	}
 
-
-	# Data
-	#
-	if(isset($opt['data'])){
-		$extData = $this->dbOne("SELECT 1 FROM k_contentdata WHERE id_content=".$this->id_content." AND language='".$language."'");
-		#if($opt['debug']) $this->pre($this->db_query, $this->db_error, $extData);
-
-		if(!$extData[1]){
-			$this->dbQuery("INSERT INTO k_contentdata (id_content, language) VALUES (".$this->id_content.",'".$language."')");
+			$q = $this->dbUpdate($data)." WHERE language='".$language."' AND id_content=".$this->id_content;
+			@$this->dbQuery($q);
 			if($opt['debug']) $this->pre($this->db_query, $this->db_error);
 		}
 
-		$q = $this->dbUpdate($data)." WHERE language='".$language."' AND id_content=".$this->id_content;
-		@$this->dbQuery($q);
-		if($opt['debug']) $this->pre($this->db_query, $this->db_error);
-	}
 
-
-	# Item
-	#
-	if(isset($opt['item'])){
-		$isItem	 = true;
-		$extItem = $this->dbOne("SELECT 1 FROM k_contentitem WHERE id_content=".$this->id_content);
-		#if($opt['debug']) $this->pre($this->db_query, $this->db_error, $extItem);
-
-		if(!$extItem[1]){
-			$this->dbQuery("INSERT INTO k_contentitem (id_content) VALUES (".$this->id_content.")");
-			if($opt['debug']) $this->pre($this->db_query, $this->db_error);
-		}
-
-		if(sizeof($item) > 0){
-			@$this->dbQuery($this->dbUpdate($item)." WHERE id_content=".$this->id_content);
-			if($opt['debug']) $this->pre($this->db_query, $this->db_error);
-		}
-
-		$id_album = $item['k_contentitem']['id_album']['value'];
-		if($id_album > 0 && $def['k_content']['id_content']['value'] == ''){
-			$last = $this->dbOne("SELECT MAX(contentItemPos) AS la FROM k_contentitem WHERE id_album=".$id_album);
-			$this->dbQuery("UPDATE k_contentitem SET contentItemPos=".($last['la'] + 1)." WHERE id_content=".$this->id_content." AND id_album=".$item['k_contentitem']['id_album']['value']);
-			if($opt['debug']) $this->pre($this->db_query, $this->db_error);
-		}
-	}
-
-	# Album
-	#
-	else if($opt['def']['k_content']['is_album']['value'] == 1){
-		$isAlbum = true;
-		$extAlb  = $this->dbOne("SELECT 1 FROM k_contentalbum WHERE id_content=".$this->id_content);
-		if($opt['debug']) $this->pre($this->db_query, $this->db_error, $extAlb);
-
-		if(!$extAlb[1]){
-			$this->dbQuery("INSERT INTO k_contentalbum (id_content) VALUES (".$this->id_content.")");
-			if($opt['debug']) $this->pre($this->db_query, $this->db_error);
-		}
-
-		if(isset($opt['album'])){
-			$this->dbQuery($this->dbUpdate($album)." WHERE id_content=".$this->id_content);
-		}
-	}
-
-
-	# Core
-	#
-	if(isset($opt['def'])){
-		$q = $this->dbUpdate($def)." WHERE id_content=".$this->id_content;
-		@$this->dbQuery($q);
-		if($opt['debug']) $this->pre($this->db_query, $this->db_error);
-		if($this->db_error != NULL) return false;
-	}
-
-
-	# FIELD
-	#
-	if(sizeof($field) > 0){
-
-		# Si on utilise le KEY au lieu des ID
-		$opt_	= array('debug' => false, 'id_type' => $id_type);
-		if($isItem) 	$opt_['itemField']	= true;
-		if($isAlbum) 	$opt_['albumField']	= true;
-		$fields = $this->apiLoad('field')->fieldGet($opt_);
-
-		foreach($fields as $e){
-			$fieldsKey[$e['fieldKey']] = $e;
-			$fieldsIds[] = $e['id_field'];
-		} $fields = $fieldsKey;
-
-		unset($def);
-
+		# Item
+		#
 		if(isset($opt['item'])){
-			$table = 'k_contentitem'.$id_type;
-		}else
-		if($opt['def']['k_content']['is_album']['value'] == 1){
-			$table = 'k_contentalbum'.$id_type;
-		}else{
-			$table = 'k_content'.$id_type;
+			$isItem	 = true;
+			$extItem = $this->dbOne("SELECT 1 FROM k_contentitem WHERE id_content=".$this->id_content);
+			#if($opt['debug']) $this->pre($this->db_query, $this->db_error, $extItem);
+
+			if(!$extItem[1]){
+				$this->dbQuery("INSERT INTO k_contentitem (id_content) VALUES (".$this->id_content.")");
+				if($opt['debug']) $this->pre($this->db_query, $this->db_error);
+			}
+
+			if(sizeof($item) > 0){
+				@$this->dbQuery($this->dbUpdate($item)." WHERE id_content=".$this->id_content);
+				if($opt['debug']) $this->pre($this->db_query, $this->db_error);
+			}
+
+			$id_album = $item['k_contentitem']['id_album']['value'];
+			if($id_album > 0 && $def['k_content']['id_content']['value'] == ''){
+				$last = $this->dbOne("SELECT MAX(contentItemPos) AS la FROM k_contentitem WHERE id_album=".$id_album);
+				$this->dbQuery("UPDATE k_contentitem SET contentItemPos=".($last['la'] + 1)." WHERE id_content=".$this->id_content." AND id_album=".$item['k_contentitem']['id_album']['value']);
+				if($opt['debug']) $this->pre($this->db_query, $this->db_error);
+			}
 		}
 
-		foreach($field as $id_field => $value){
-			if(!is_integer($id_field)) $id_field = $fields[$id_field]['id_field'];
+		# Album
+		#
+		else if($opt['def']['k_content']['is_album']['value'] == 1){
+			$isAlbum = true;
+			$extAlb  = $this->dbOne("SELECT 1 FROM k_contentalbum WHERE id_content=".$this->id_content);
+			if($opt['debug']) $this->pre($this->db_query, $this->db_error, $extAlb);
 
-			if(in_array($id_field, $fieldsIds)){
-				$value = $this->apiLoad('field')->fieldSaveValue($id_field, $value, array(
-					'id_content'	=> $this->id_content,
-					'language'		=> $language
+			if(!$extAlb[1]){
+				$this->dbQuery("INSERT INTO k_contentalbum (id_content) VALUES (".$this->id_content.")");
+				if($opt['debug']) $this->pre($this->db_query, $this->db_error);
+			}
+
+			if(isset($opt['album'])){
+				$this->dbQuery($this->dbUpdate($album)." WHERE id_content=".$this->id_content);
+			}
+		}
+
+
+		# Core
+		#
+		if(isset($opt['def'])){
+			$q = $this->dbUpdate($def)." WHERE id_content=".$this->id_content;
+			@$this->dbQuery($q);
+			if($opt['debug']) $this->pre($this->db_query, $this->db_error);
+			if($this->db_error != NULL) return false;
+		}
+
+
+		# FIELD
+		#
+		if(sizeof($field) > 0){
+
+			# Si on utilise le KEY au lieu des ID
+			$opt_	= array('debug' => false, 'id_type' => $id_type);
+			if($isItem) 	$opt_['itemField']	= true;
+			if($isAlbum) 	$opt_['albumField']	= true;
+			$fields = $this->apiLoad('field')->fieldGet($opt_);
+
+			foreach($fields as $e){
+				$fieldsKey[$e['fieldKey']] = $e;
+				$fieldsIds[] = $e['id_field'];
+			} $fields = $fieldsKey;
+
+			unset($def);
+
+			if(isset($opt['item'])){
+				$table = 'k_contentitem'.$id_type;
+			}else
+			if($opt['def']['k_content']['is_album']['value'] == 1){
+				$table = 'k_contentalbum'.$id_type;
+			}else{
+				$table = 'k_content'.$id_type;
+			}
+
+			foreach($field as $id_field => $value){
+				if(!is_integer($id_field)) $id_field = $fields[$id_field]['id_field'];
+
+				if(in_array($id_field, $fieldsIds)){
+					$value = $this->apiLoad('field')->fieldSaveValue($id_field, $value, array(
+						'id_content'	=> $this->id_content,
+						'language'		=> $language
+					));
+
+					$def[$table]['field'.$id_field] = array('value' => $value);
+				}
+			}
+
+			if(sizeof($def) > 0){
+				$this->dbQuery($this->dbUpdate($def)." WHERE language='".$language."' AND id_content=".$this->id_content);
+				if($opt['debug']) $this->pre($this->db_query, $this->db_error);
+			}
+		}
+
+		# ASSOCIATION : Chapter
+		if(array_key_exists('id_chapter', $opt)){
+			$chapterParent = $this->apiLoad('chapter')->chapterGet(array('distinctParent' => true, 'id_chapter' => $opt['id_chapter'], 'language' => 'fr'));
+			$this->dbAssoSet('k_contentchapter', 'id_content', 'id_chapter', $this->id_content, $opt['id_chapter'], 'PROFILE', $this->profile['id_profile'], 'chapterChildren', $chapterParent);
+		}
+
+		# ASSOCIATION : Category
+		if(array_key_exists('id_category', $opt)){
+			$opt['id_category'] = $this->contentCheckCategory($opt['id_category']);
+			$categoryParent = $this->apiLoad('category')->categoryGet(array('distinctParent' => true, 'id_category' => $opt['id_category'], 'language' => 'fr'));
+			$this->dbAssoSet('k_contentcategory', 'id_content', 'id_category', $this->id_content, $opt['id_category'], 'PROFILE', $this->profile['id_profile'], 'categoryChildren', $categoryParent);
+		}
+
+		# ASSOCIATION : Social Forum
+		if(array_key_exists('id_socialforum', $opt)){
+			$opt['id_socialforum'] = $this->apiLoad('socialForum')->socialForumCheck($opt['id_socialforum']);
+			$this->dbAssoSet('k_contentsocialforum', 'id_content', 'id_socialforum', $this->id_content, $opt['id_socialforum'], 'ALL');
+		}
+
+		# ASSOCIATION : Search
+		if(array_key_exists('id_search', $opt)){
+			$this->dbAssoSet('k_contentsearch', 'id_content', 'id_search', $this->id_content, $opt['id_search'], 'ALL');
+		}
+
+		# ASSOCIATION : Shop
+		if(array_key_exists('id_shop', $opt)){
+			$this->dbAssoSet('k_contentshop', 'id_content', 'id_shop', $this->id_content, $opt['id_shop'], 'ALL');
+		}
+
+		# ASSOCIATION : Group (NOT business)
+		if(array_key_exists('id_group', $opt)){
+			$groupParent = $this->apiLoad('user')->userGroupGet(array('distinctParent' => true, 'id_group' => $opt['id_group']));
+			$this->dbAssoSet('k_contentgroup', 'id_content', 'id_group', $this->id_content, $opt['id_group'], 'PROFILE', $this->profile['id_profile'], 'groupChildren', $groupParent);
+		}
+
+		# ASSOCIATION : Group (business)
+		#
+		if(sizeof($group) > 0 && $type['is_businessloc'] == '0'){
+			$table = 'k_contentgroupbusiness';
+
+			foreach($group as $id_group => $e){
+
+				$exists = $this->dbOne("SELECT 1 FROM ".$table." WHERE id_content=".$this->id_content." AND id_group=".$id_group);
+
+				if(!$exists['1'] && $e['is_view']){
+					$this->dbQuery("INSERT INTO ".$table." (id_content, id_group) VALUES (".$this->id_content.", ".$id_group.")");
+				}else
+				if($exists['1'] && !$e['is_view']){
+					$this->dbQuery("DELETE FROM ".$table." WHERE id_content=".$this->id_content." AND id_group=".$id_group);
+				}
+
+				$def = array($table => array(
+					'is_view'				=> array('value' => $e['is_view'], 										'zero' => true),
+					'is_buy'				=> array('value' => $e['is_buy'], 										'zero' => true),
+					'contentPrice'			=> array('value' => str_replace(',', '.', $e['contentPrice']),			'null' => true),
+					'contentPriceTax'		=> array('value' => str_replace(',', '.', $e['contentPriceTax']),		'null' => true),
+					'contentPriceNormal'	=> array('value' => str_replace(',', '.', $e['contentPriceNormal']),	'null' => true),
+					'contentPriceComment'	=> array('value' => $e['contentPriceComment'],							'null' => true)
 				));
 
-				$def[$table]['field'.$id_field] = array('value' => $value);
+				$this->dbQuery($this->dbUpdate($def)." WHERE id_content=".$this->id_content." AND id_group=".$id_group);
+				if($opt['debug']) $this->pre($this->db_query, $this->db_error);
+			}
+		}else
+
+		# ASSOCIATION : Group (business + LOC)
+		#
+		if(sizeof($group) > 0 && $type['is_businessloc'] == '1'){
+		#	$opt['debug'] = true;
+		#	$this->pre($group);
+			$table = 'k_contentgroupbusinessloc';
+
+			foreach($group as $loc => $g){
+				foreach($g as $id_group => $e){
+
+					$upd    = true;
+					$exists = $this->dbOne("SELECT 1 FROM ".$table." WHERE country='".$loc."' AND id_content=".$this->id_content." AND id_group=".$id_group);
+
+					if(!$exists['1'] && $e['is_view']){
+						$this->dbQuery("INSERT INTO ".$table." (country, id_content, id_group) VALUES ('".$loc."', ".$this->id_content.", ".$id_group.")");
+						if($opt['debug']) $this->pre($this->db_query, $this->db_error);
+					}else
+					if($exists['1'] && !$e['is_view']){
+						$upd = false;
+						$this->dbQuery("DELETE FROM ".$table." WHERE country='".$loc."' AND id_content=".$this->id_content." AND id_group=".$id_group);
+						if($opt['debug']) $this->pre($this->db_query, $this->db_error);
+					}
+
+					if($upd){
+						$def = array($table => array(
+							'is_view'				=> array('value' => $e['is_view'], 										'zero' => true),
+							'is_buy'				=> array('value' => $e['is_buy'], 										'zero' => true),
+							'contentPrice'			=> array('value' => str_replace(',', '.', $e['contentPrice']),			'null' => true),
+							'contentPriceTax'		=> array('value' => str_replace(',', '.', $e['contentPriceTax']),		'null' => true),
+							'contentPriceNormal'	=> array('value' => str_replace(',', '.', $e['contentPriceNormal']),	'null' => true),
+							'contentPriceComment'	=> array('value' => $e['contentPriceComment'],							'null' => true)
+						));
+
+						$this->dbQuery($this->dbUpdate($def)." WHERE country='".$loc."' AND id_content=".$this->id_content." AND id_group=".$id_group);
+						if($opt['debug']) $this->pre($this->db_query, $this->db_error);
+					}
+				}
 			}
 		}
 
-		if(sizeof($def) > 0){
-			$this->dbQuery($this->dbUpdate($def)." WHERE language='".$language."' AND id_content=".$this->id_content);
+	#	die('008');
+
+
+
+		# AD
+		#
+		if(is_array($opt['ad'])){
+			$opt['ad']['id_content'] = array('value' => $this->id_content);
+
+			$cond	= " WHERE id_content=".$this->id_content." AND language='".$language."'";
+			$exists = $this->dbOne("SELECT 1 FROM k_contentad".$cond);
+			$query	= ($exists[1])
+				? $this->dbUpdate(array('k_contentad' => $opt['ad'])).$cond
+				: $this->dbInsert(array('k_contentad' => $opt['ad']));
+
+			$this->dbQuery($query);
 			if($opt['debug']) $this->pre($this->db_query, $this->db_error);
 		}
+
+
+		# Sauver en static les infos relative au content
+		#
+		$this->contentCacheBuild($this->id_content);
+	#	$this->contentCacheTable($this->id_content);
+
+
+		# Generer la famille si je suis un ALBUM
+		#
+		$isAlbum = $this->dbOne("SELECT id_content FROM k_contentalbum WHERE id_content=".$this->id_content);
+		if($isAlbum['id_content'] > 0 && $contentFamily) $this->contentAlbumFamily($this->id_content);
+
+		if(!$opt['noHook']) $this->hookAction('contentSet', $this->id_content, $opt);
+
+		return true;
 	}
-
-	# ASSOCIATION : Chapter
-	if(array_key_exists('id_chapter', $opt)){
-		$chapterParent = $this->apiLoad('chapter')->chapterGet(array('distinctParent' => true, 'id_chapter' => $opt['id_chapter'], 'language' => 'fr'));
-		$this->dbAssoSet('k_contentchapter', 'id_content', 'id_chapter', $this->id_content, $opt['id_chapter'], 'PROFILE', $this->profile['id_profile'], 'chapterChildren', $chapterParent);
-	}
-
-	# ASSOCIATION : Category
-	if(array_key_exists('id_category', $opt)){
-		$opt['id_category'] = $this->contentCheckCategory($opt['id_category']);
-		$categoryParent = $this->apiLoad('category')->categoryGet(array('distinctParent' => true, 'id_category' => $opt['id_category'], 'language' => 'fr'));
-		$this->dbAssoSet('k_contentcategory', 'id_content', 'id_category', $this->id_content, $opt['id_category'], 'PROFILE', $this->profile['id_profile'], 'categoryChildren', $categoryParent);
-	}
-
-	# ASSOCIATION : Social Forum
-	if(array_key_exists('id_socialforum', $opt)){
-		$opt['id_socialforum'] = $this->apiLoad('socialForum')->socialForumCheck($opt['id_socialforum']);
-		$this->dbAssoSet('k_contentsocialforum', 'id_content', 'id_socialforum', $this->id_content, $opt['id_socialforum'], 'ALL');
-	}
-
-	# ASSOCIATION : Search
-	if(array_key_exists('id_search', $opt)){
-		$this->dbAssoSet('k_contentsearch', 'id_content', 'id_search', $this->id_content, $opt['id_search'], 'ALL');
-	}
-
-	# ASSOCIATION : Shop
-	if(array_key_exists('id_shop', $opt)){
-		$this->dbAssoSet('k_contentshop', 'id_content', 'id_shop', $this->id_content, $opt['id_shop'], 'ALL');
-	}
-
-	# ASSOCIATION : Group (NOT business)
-	if(array_key_exists('id_group', $opt)){
-		$groupParent = $this->apiLoad('user')->userGroupGet(array('distinctParent' => true, 'id_group' => $opt['id_group']));
-		$this->dbAssoSet('k_contentgroup', 'id_content', 'id_group', $this->id_content, $opt['id_group'], 'PROFILE', $this->profile['id_profile'], 'groupChildren', $groupParent);
-	}
-
-	# ASSOCIATION : Group (business)
-	#
-	if(sizeof($group) > 0){
-		foreach($group as $id_group => $e){
-
-			$exists = $this->dbOne("SELECT 1 FROM k_contentgroupbusiness WHERE id_content=".$this->id_content." AND id_group=".$id_group);
-
-			if(!$exists['1'] && $e['is_view']){
-				$this->dbQuery("INSERT INTO k_contentgroupbusiness (id_content, id_group) VALUES (".$this->id_content.", ".$id_group.")");
-			}else
-			if($exists['1'] && !$e['is_view']){
-				$this->dbQuery("DELETE FROM k_contentgroupbusiness WHERE id_content=".$this->id_content." AND id_group=".$id_group);
-			}
-
-			$def = array('k_contentgroupbusiness' => array(
-				'is_view'				=> array('value' => $e['is_view'], 										'zero' => true),
-				'is_buy'				=> array('value' => $e['is_buy'], 										'zero' => true),
-				'contentPrice'			=> array('value' => str_replace(',', '.', $e['contentPrice']),			'null' => true),
-				'contentPriceTax'		=> array('value' => str_replace(',', '.', $e['contentPriceTax']),		'null' => true),
-				'contentPriceNormal'	=> array('value' => str_replace(',', '.', $e['contentPriceNormal']),	'null' => true),
-				'contentPriceComment'	=> array('value' => $e['contentPriceComment'],							'null' => true)
-			));
-			
-			$this->dbQuery($this->dbUpdate($def)." WHERE id_content=".$this->id_content." AND id_group=".$id_group);
-			if($opt['debug']) $this->pre($this->db_query, $this->db_error);
-		}
-	}
-
-
-
-	# AD
-	#
-	if(is_array($opt['ad'])){
-		$opt['ad']['id_content'] = array('value' => $this->id_content);
-
-		$cond	= " WHERE id_content=".$this->id_content." AND language='".$language."'";
-		$exists = $this->dbOne("SELECT 1 FROM k_contentad".$cond);
-		$query	= ($exists[1])
-			? $this->dbUpdate(array('k_contentad' => $opt['ad'])).$cond
-			: $this->dbInsert(array('k_contentad' => $opt['ad']));
-
-		$this->dbQuery($query);
-		if($opt['debug']) $this->pre($this->db_query, $this->db_error);
-	}
-
-
-	# Sauver en static les infos relative au content
-	#
-	$this->contentCacheBuild($this->id_content);
-#	$this->contentCacheTable($this->id_content);
-
-
-	# Generer la famille si je suis un ALBUM
-	#
-	$isAlbum = $this->dbOne("SELECT id_content FROM k_contentalbum WHERE id_content=".$this->id_content);
-	if($isAlbum['id_content'] > 0) $this->contentAlbumFamily();
-
-	$this->hookAction('contentSet', $this->id_content, $opt);
-
-	return true;
-}
 
 /* + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - 
 + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - */
@@ -1380,6 +1477,8 @@ public function contentRemove($id_type, $id_content, $language=''){
 
 		$this->dbQuery("DELETE FROM k_userasso				WHERE id_content=".$id_content);
 		$this->dbQuery("DELETE FROM k_contentasso			WHERE bContent=".$id_content." OR aContent=".$id_content);
+
+		$this->hookAction('contentRemove', $this->id_content, $id_type, $id_content, $language);
 	}
 
 	if($type['is_gallery']) $this->contentAlbumFamily();
@@ -1534,34 +1633,45 @@ public function contentTypeSet($id_type, $def){ // DEPRECATED
 	return $this->apiLoad('type')->typeSet($id_type, $def);
 }
 
-/* + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - 
-+ - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - */
-public function contentGroupGet($id_content){
+//-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -
+//-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -
+	public function contentGroupGet($id_content, $id_type, $language=NULL){
 
-	$groups = $this->dbMulti("SELECT * FROM k_group");
-	
-	$groups = $this->apiLoad('user')->userGroupGet(array(
-		'profile'		=> true,
-		'threadFlat'	=> true
-	));
+		$data   = array();
+		$type   = $this->apiLoad('type')->typeGet(array(
+			'id_type' => $id_type
+		));
+		$groups = $this->apiLoad('user')->userGroupGet(array(
+			'profile'		=> true,
+			'threadFlat'	=> true
+		));
 
-	foreach($groups as $e){
-		$data[$e['id_group']] = $e;
-	}
-	
-	if($id_content == NULL) return $data;
-
-	$group = $this->dbMulti("SELECT * FROM k_contentgroupbusiness WHERE id_content=".$id_content);
-	foreach($group as $e){
-		if(is_array($data[$e['id_group']])){
-			$data[$e['id_group']] = array_merge($data[$e['id_group']], $e);
-		}else{
+		foreach($groups as $e){
 			$data[$e['id_group']] = $e;
 		}
-	}
 
-	return $data;
-}
+		if($id_content == NULL) return $data;
+
+		if($type['is_businessloc'] == '1'){
+			$table = 'k_contentgroupbusinessloc';
+			$lan   = empty($language) ? NULL : " AND country='".$language."'";
+		}else{
+			$table = 'k_contentgroupbusiness';
+			$lan   = empty($language) ? NULL : " AND language='".$language."'";
+		}
+
+		$group = $this->dbMulti("SELECT * FROM ".$table." WHERE id_content=".$id_content.$lan);
+
+		foreach($group as $e){
+			if(is_array($data[$e['id_group']])){
+				$data[$e['id_group']] = array_merge($data[$e['id_group']], $e);
+			}else{
+				$data[$e['id_group']] = $e;
+			}
+		}
+
+		return $data;
+	}
 
 /* + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + -
 + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - */
@@ -1636,30 +1746,37 @@ public function contentMediaLink($opt){
 	return false;
 }
 
-/* + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + -
-	Mettre a jour les PARENT et CHILDREN et les sauver en base
-+ - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - */
-public function contentAlbumFamily(){
+//-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -
+// Mettre a jour les PARENT et CHILDREN et les sauver en base
+//-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -
+	public function contentAlbumFamily($id_content=0){
 
-	$albums = $this->dbMulti("SELECT id_content, id_album FROM k_contentalbum");
-	if(sizeof($albums) == 0) return true;
+	    $q = "SELECT id_content, id_album FROM k_contentalbum";
 
-	foreach($albums as $e){
-		$tree = $this->contentAlbumFamilyParent($e);
-		$tree = sizeof($tree) > 0 ? implode(',', array_reverse($tree)) : '';
+	    if($id_content > 0) $q .= " WHERE id_content = ".$id_content;
 
-		$this->dbQuery("UPDATE k_contentalbum SET contentAlbumParent='".$tree."' WHERE id_content=".$e['id_content']);
+	    $albums = $this->dbMulti($q);
+	    if(sizeof($albums) == 0) return true;
+
+		foreach($albums as $e){
+			$tree = $this->contentAlbumFamilyParent($e);
+			$tree = (sizeof($tree) > 0) ? implode(',', array_reverse($tree)) : '';
+
+			$this->dbQuery("UPDATE k_contentalbum SET contentAlbumParent='".$tree."' WHERE id_content=".$e['id_content']);
+		#	$this->pre($this->db_query);
+		}
+
+
+		foreach($albums as $e){
+			$tree = $this->contentAlbumFamilyChildren($e);
+			$tree = (sizeof($tree) > 0) ? implode(',', $tree) : '';
+
+			$this->dbQuery("UPDATE k_contentalbum SET contentAlbumChildren='".$tree."' WHERE id_content=".$e['id_content']);
+		#	$this->pre($this->db_query);
+		}
+
+		return true;
 	}
-	
-	foreach($albums as $e){
-		$tree = $this->contentAlbumFamilyChildren($e);
-		$tree = (sizeof($tree) > 0) ? implode(',', $tree) : '';
-
-		$this->dbQuery("UPDATE k_contentalbum SET contentAlbumChildren='".$tree."' WHERE id_content=".$e['id_content']);
-	}
-
-	return true;
-}
 
 /* + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + -
 	Trouver tous les PARENTS pour un ALBUM
@@ -1872,4 +1989,4 @@ public function contentAssoTag($id_content, $id_field, $language, $value){
 }
 
 
-} ?>
+}

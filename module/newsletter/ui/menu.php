@@ -7,11 +7,11 @@
 			<a href="../newsletter/"><span>Liste</span></a>
 		</li>
 
-        <?php if($pref['connector'] == 'cloudApp') { ?>
+        <?php //if($pref['connector'] == 'cloudApp') { ?>
 		<li class="<?php echo isMe('/newsletter/list') ? 'me':'' ?>">
 			<a href="../newsletter/list"><span>Listes</span></a>
 		</li>
-        <?php } ?>
+        <?php //} ?>
 
 		<li class="<?php echo isMe('/newsletter/template') ? 'me':'' ?>">
 			<a href="../newsletter/template"><span>Gabarits</span></a>

@@ -10,7 +10,7 @@
 	        <?php } ?>
 
 	        <?php if($app->userCan('media.upload')) { ?>
-			<li><a id="button-upload"><?php echo _('Upload'); ?></a></li>
+			<li><a id="button-upload"><?php echo _('Upload files'); ?></a></li>
 	        <?php } ?>
 
 			<li class="clearfix<?php echo isMe('/media/pref') ? ' me':'' ?>">

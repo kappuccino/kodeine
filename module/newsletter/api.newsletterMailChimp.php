@@ -43,7 +43,7 @@ private function send($data = array(), $method) {
 	$payload = json_encode($data);
 	
 	$submit_url = "http://".$this->apiUrl.".api.mailchimp.com/1.3/?method=".$method;
-	 
+	//echo $submit_url;
 	$ch = curl_init();
 	curl_setopt($ch, CURLOPT_URL, $submit_url);
 	curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
@@ -69,6 +69,45 @@ public function listGet($opt = array()) {
 public function listInterestGroupings($opt = array()) {
 	return $this->send($opt, 'listInterestGroupings');
 }
+/* + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + -
++ - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - */
+
+public function listInterestGroupingAdd($opt = array()) {
+    return $this->send($opt, 'listInterestGroupingAdd');
+}
+
+    /* + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + -
+    + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - */
+
+    public function listStaticSegments($opt = array()) {
+        return $this->send($opt, 'listStaticSegments');
+    }
+    /* + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + -
+    + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - */
+
+    public function listStaticSegmentAdd($opt = array()) {
+        return $this->send($opt, 'listStaticSegmentAdd');
+    }
+
+    /* + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + -
+    + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - */
+
+    public function listBatchSubscribe($opt = array()) {
+        return $this->send($opt, 'listBatchSubscribe');
+    }
+    /* + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + -
+    + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - */
+
+    public function listStaticSegmentMembersAdd ($opt = array()) {
+        return $this->send($opt, 'listStaticSegmentMembersAdd ');
+    }
+/* + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + -
++ - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - */
+
+public function listInterestGroupAdd($opt = array()) {
+    return $this->send($opt, 'listInterestGroupAdd');
+}
+
 /* + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - 
 + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - */
 

@@ -129,6 +129,7 @@ media.views.viewItem        = Backbone.View.extend({
 		'click .playVideo':     'playVideo',
 		'click .poster':        'videoPoster',
 		'click .meta':          'meta',
+		'click .uri':           'uri',
 		'click .select':        'select'
 	},
 
@@ -237,6 +238,11 @@ media.views.viewItem        = Backbone.View.extend({
 
 	},
 
+	uri: function(e){
+		e.stopPropagation();
+		alert(media.views.myView.folder+'/'+this.model.get('url'));
+	},
+
 	select: function(e){
 		if(this.model.get('is_folder')){
 			media.views.myApp.select(this.helperUrl(), 'folder');
@@ -295,7 +301,7 @@ media.views.viewItem        = Backbone.View.extend({
 	makeDraggable: function(){
 		var self = this;
 
-		this.$el.disableSelection();
+		this.$el.find().not('input').disableSelection();
 
 		this.$el.draggable({
 			distance: 30,
@@ -736,7 +742,7 @@ media.views.app             = Backbone.View.extend({
 
 		$('.item').css('width', value+20);
 
-		$('.item .media').css({
+		$('.item .media, .item .icone').css({
 			'height':  value,
 			'width':   value
 		});

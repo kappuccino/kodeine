@@ -31,11 +31,12 @@
 		'order'		=> $filter['order'],
 		'direction'	=> $filter['direction']
 	));
+
 ?><!DOCTYPE html>
 <html lang="fr">
 <head>
-	<link rel="stylesheet" type="text/css" media="all" href="ressource/css/group.css" />
 	<?php include(COREINC.'/head.php'); ?>
+	<link rel="stylesheet" type="text/css" media="all" href="ressource/css/group.css" />
 </head>
 <body>
 	
@@ -49,7 +50,7 @@
 	<div class="quickForm clearfix">
 	
 		<div class="upper clearfix">
-			<div class="btn btn-mini"><a href="javascript:filterToggle('user');">Options</a></div>
+			<div class="btn btn-mini"><a href="javascript:filterToggle('user');"><?php echo _('Options') ?></a></div>
 		</div>
 		
 		<div class="span5">
@@ -60,21 +61,21 @@
 				<input type="hidden" name="id_group"		value="<?php echo $group['id_group'] ?>" />
 		
 				<div class="control-group nomargin">
-					<label class="control-label" for="prependedInput">Recherche</label>
+					<label class="control-label" for="prependedInput"><?php echo _('Search') ?></label>
 					<div class="controls">
 						<input type="text" name="filter[q]" value="<?php echo $filter['q'] ?>" />
 					</div>
 				</div>
 		
 				<div class="control-group nomargin">
-					<label class="control-label" for="prependedInput">Combien</label>
+					<label class="control-label" for="prependedInput"><?php echo _('How many') ?></label>
 					<div class="controls">
 						<input type="text" name="filter[limit]" value="<?php echo $filter['limit'] ?>" size="3" />
 					</div>
 				</div>
 				
 				<div class="form-actions nomargin">
-					<button class="btn btn-mini" type="submit">Filter les résultats</button>
+					<button class="btn btn-mini" type="submit"><?php echo _('Filter results') ?></button>
 				</div>
 			</form>
 		</div>
@@ -84,9 +85,9 @@
 		<thead>
 			<tr>
 				<th width="80"  class="order <?php if($filter['order'] == 'k_user.id_user')		echo 'order'.$dir; ?>"><span>#</span></th>
-				<th width="110" class="order <?php if($filter['order'] == 'k_user.userDateCreate')	echo 'order'.$dir; ?>"><span>Création</span></th>
-				<th width="110" class="order <?php if($filter['order'] == 'k_user.userDateUpdate')	echo 'order'.$dir; ?>"><span>Mise à jour</span></th>
-				<th			    class="order <?php if($filter['order'] == 'k_user.userMail')		echo 'order'.$dir; ?>"><span>Nom</span></th>
+				<th width="110" class="order <?php if($filter['order'] == 'k_user.userDateCreate')	echo 'order'.$dir; ?>"><span><?php echo _('Creation') ?></span></th>
+				<th width="110" class="order <?php if($filter['order'] == 'k_user.userDateUpdate')	echo 'order'.$dir; ?>"><span><?php echo _('Update') ?></span></th>
+				<th			    class="order <?php if($filter['order'] == 'k_user.userMail')		echo 'order'.$dir; ?>"><span><?php echo _('Name') ?></span></th>
 			</tr>
 		</thead>
 		<tbody><?php
@@ -108,15 +109,15 @@
 		}else{ ?>
 			<tr>
 				<td colspan="4" style="text-align:center; font-weight:bold; padding:30px 0px 30px 0px;">
-					Aucun résultat avec cette recherche
+					<?php echo _('No result') ?>
 				</td>
-			</tr><?php
-		} ?>
+			</tr>
+		<?php } ?>
 		</tbody>
 		<tfoot>
 			<?php if(sizeof($users) > 0){ ?>
 			<tr>
-				<td colspan="3"><!--<a href="#" onClick="applyRemove();" class="btn btn-mini">Supprimer</a>--></td>
+				<td colspan="3"></td>
 				<td class="pagination"><?php
 					$app->pagination($app->apiLoad('user')->total, $app->apiLoad('user')->limit, $filter['offset'], 'group-view?id_group='.$group['id_group'].'&cf&offset=%s');
 				?></td>
@@ -133,11 +134,5 @@
 </div>
 <?php include(COREINC.'/end.php'); ?>
 <script src="/app/module/core/vendor/datatables/jquery.dataTables.js"></script>
-<script>
-    function applyRemove(){
-        if(confirm("SUPPRIMER ?")){
-            $('#listing').submit();
-        }
-    }
-</script>
+
 </body></html>

@@ -2,28 +2,37 @@
 
 class business extends coreApp {
 
-//-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -
-//-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -
-	public  function businessCartTTL(){
+/* + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + -
++ - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - */
+public function __loaded(){
+    $this->businessCartTTL();
+}
 
-		$ttl  = $this->hookAction('businessCartTTL');
-		$ttl  = (intval($ttl) > 0) ? $ttl : 86400;
-		$cart = $this->dbMulti("SELECT id_cart, cartTTL FROM k_businesscart WHERE is_cart=1 AND is_locked=0 AND cartTTL<=" . (time() - $ttl));
+/* + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + -
++ - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - */
+function businessCartTTL(){
 
-		if(sizeof($cart) > 0){
-			foreach($cart as $c){
-				$this->businessCartRemove($c['id_cart'], true);
-			}
-		}
+    if($GLOBALS['jobTTL'] !== true) {
 
-		if($_SESSION['id_cart'] > 0){
-			$this->dbQuery("UPDATE k_businesscart SET cartTTL=".time().", cartDateUpdate=NOW() WHERE id_cart=".$_SESSION['id_cart']);
-			#$this->pre($this->db_query, $this->db_error);
-		}
+        $ttl  = $this->hookFilter('businessCartTTL', 86400);
 
-		$GLOBALS['jobTTL'] = true;
-	}
+        $cart = $this->dbMulti("SELECT id_cart, cartTTL FROM k_businesscart WHERE is_cart=1 AND is_locked=0 AND cartTTL<=" . (time() - $ttl));
 
+
+	    if(sizeof($cart) > 0){
+            foreach($cart as $c){
+                $this->businessCartRemove($c['id_cart'], true);
+            }
+        }
+
+        if($_SESSION['id_cart'] > 0){
+            $this->dbQuery("UPDATE k_businesscart SET cartTTL=".time().", cartDateUpdate=NOW() WHERE id_cart=".$_SESSION['id_cart']);
+            #$this->pre($this->db_query, $this->db_error);
+        }
+
+        $GLOBALS['jobTTL'] = true;
+    }
+}
 /* + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + -
 + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - */
 public function businessCartNew($opt=array()){
@@ -55,7 +64,8 @@ public function businessCartNew($opt=array()){
 
 	$this->dbQuery($q);
 	$id_cart = ($o['id_cart'] != NULL) ? $o['id_cart'] : $this->db_insert_id;
-	
+
+	$this->hookAction('businessCartNew', $id_cart);
 
 	return $id_cart;
 }
@@ -64,26 +74,46 @@ public function businessCartNew($opt=array()){
 /* + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + -
 + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - */
 public function businessCartGet($opt=array()){
-	
+
 	$userAffect = array_key_exists('userAffect', $opt) ? $opt['userAffect'] : true;
 
-	# Si on a un ID , on verifit si l'ID qu'on nous donne est encore existant
-	if(intval($opt['is_cart']) > 0){
+	# Si on a un ID , on verifie si l'ID qu'on nous donne est encore existant
+	if(intval($opt['id_cart']) > 0){
 		$my = $this->dbOne("SELECT * FROM k_businesscart WHERE is_cart=1 AND id_cart='".$opt['id_cart']."'");
-		if($opt['debug']) $this->pre($this->db_query, $this->db_error);		
+		if($opt['debug']) $this->pre($this->db_query, $this->db_error);
 	}
-	
-	$id_user = ($opt['id_user'] > 0) ? $opt['id_user'] : $this->user['id_user'];
+
+    $id_user    = ($opt['id_user'] > 0) ? $opt['id_user'] : $this->user['id_user'];
+    $userCheck = ($opt['userCheck'] === false) ? false : true;
 	
 	# On cherche a recupere un CART pas tous les moyens
 	#
 	if($opt['create']){
+		# par défaut, on considere qu'on doit créer un panier...
+		$create = true;
+
+		# ... Si je suis connecté, verifié si j'ai pas un panier existant (et l'utiliser)
+		if($id_user > 0 && $userCheck){
+			$check = $this->dbOne("SELECT id_cart FROM k_businesscart WHERE is_cart=1 AND id_user='".$id_user."'");
+			if(!empty($check)){
+				$opt['id_cart'] = $check['id_cart'];
+				$create = false;
+			}
+		}
+		/*else
 		# Si le id_cart n'est pas renseigne
 		if(intval($opt['id_cart']) == 0){
-			$opt['id_cart'] = $this->businessCartNew(array('id_user' => $id_user, 'debug' => $opt['debug']));
-		}else
+		#	$opt['id_cart'] = $this->businessCartNew(array('id_user' => $id_user, 'debug' => $opt['debug']));
+			$create = true;
+		}*/
+
+		if(!empty($my)){
+			$opt['id_cart'] = $my['id_cart'];
+			$create = false;
+		}
+
 		# Si le CART existe PAS/PLUS alors on en GENERE un nouveau
-		if($my['id_cart'] == NULL){
+		if($create){
 			$opt['id_cart'] = $this->businessCartNew(array('id_user' => $id_user, 'debug' => $opt['debug']));
 		}
 
@@ -93,7 +123,7 @@ public function businessCartGet($opt=array()){
 	
 	# On force le CART a son USER si les 2 sont definit
 	#	
-	if($affect && $id_user > 0 && $opt['id_cart'] > 0 && $my['id_user'] == 0){
+	if($userAffect && $id_user > 0 && $opt['id_cart'] > 0 && $my['id_user'] == 0){
 		$this->dbQuery("UPDATE k_businesscart SET id_user=".$id_user." WHERE is_cart=1 AND id_cart=".$opt['id_cart']);		
 	 	if($opt['debug']) $this->pre($this->db_query, $this->db_error);		
 	}
@@ -101,8 +131,9 @@ public function businessCartGet($opt=array()){
 
 	# On fige les valeur de ID_CART en SESSION
 	#
-	if($opt['is_cart']) $_SESSION['id_cart'] = $opt['id_cart'];
-
+    if($opt['is_cart'] === true) {
+        if(intval($opt['id_cart']) > 0) $_SESSION['id_cart'] = $opt['id_cart'];
+    }
 
 	#
 	# A ce stade on doit avoir un panier identifier par ID_CART
@@ -198,21 +229,9 @@ public function businessCartGet($opt=array()){
 	        $adBilling  = $this->apiLoad('user')->userAddressBookFormat($billing);
 	        $adDelivery = $this->apiLoad('user')->userAddressBookFormat($delivery);
 
-		    $adBilling_  = $this->hookAction('userAddressBookFormat', $billing);
-		    $adDelivery_ = $this->hookAction('userAddressBookFormat', $delivery);
-
-		    if($adBilling_ != NULL) $adBilling = $adBilling_;
-			if($adDelivery_ != NULL) $adDelivery = $adDelivery_;
-
 	        // Noms
-			$billingName  = $billing['addressbookCivility'].' '.$billing['addressbookFirstName'].' '.$billing['addressbookLastName'];
-			$deliveryName = $delivery['addressbookCivility'].' '.$delivery['addressbookFirstName'].' '.$delivery['addressbookLastName'];
-
-		    $billingName_  = $this->hookAction('userAddressBookFormat', $billing,  array('name' => true));
-	        $deliveryName_ = $this->hookAction('userAddressBookFormat', $delivery, array('name' => true));
-
-			if($billingName_  != NULL) $billingName  = $billingName_;
-			if($deliveryName_ != NULL) $deliveryName = $deliveryName_;
+            $billingName  = $this->apiLoad('user')->userAddressBookFormat($billing, array('name' => true));
+            $deliveryName = $this->apiLoad('user')->userAddressBookFormat($delivery, array('name' => true));
 
 	        $def['k_businesscart'] = array(
 	            'id_user'               => array('value' => $id_user),
@@ -260,7 +279,21 @@ public function businessCartPrice($id_cart, $opt=array()){
 		}
 		
 		$cartCouponName	= $coupon['couponName'];
-	}else{
+	}elseif($opt['couponMode'] != '' && $opt['couponName'] != '') {
+
+        if($opt['couponMode'] == 'FIXE'){
+            $cartCoupon	= $opt['couponAmount'];
+        }else
+        if($opt['couponMode'] == 'PERCENT'){
+            $cartCoupon	= $cartTotalFinal * ($opt['couponAmount'] / 100);
+        }else
+        if($opt['couponMode'] == 'CARRIAGE'){
+            $cartCoupon	= $cart['cartCarriage'];
+        }
+
+        $cartCouponName	= $opt['couponName'];
+    }else
+    {
 		$cartCoupon 	= 0;
 		$cartCouponName	= '';
 	}
@@ -402,19 +435,17 @@ public function businessCartAddRaw($opt=array()){
 + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - */
 function businessCartRemove($id_cart, $reset=false){
 
-	$cart = $this->businessCartGet(array('id_cart' => $id_cart));
+    $cart = $this->businessCartGet(array('id_cart' => $id_cart));
 
-	if(sizeof($cart['line']) > 0){
-		foreach($cart['line'] as $line){
-			$this->businessCartLineRemove($line['id_cartline'], $reset);
-		}
-	}
+    if(sizeof($cart['line']) > 0){
+        foreach($cart['line'] as $line){
+            $this->businessCartLineRemove($line['id_cartline'], $reset);
+        }
+    }
 
-	$this->dbQuery("DELETE FROM k_businesscart WHERE id_cart = ".$id_cart);
+    $this->dbQuery("DELETE FROM k_businesscart WHERE id_cart = ".$id_cart);
 
-	unset($_SESSION['id_cart']);
-
-	return true;
+    return true;
 }
 
 /* + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + -
@@ -752,7 +783,7 @@ public function businessCartCarriageGet($id_cart, $opt=array()){
 /* + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + -
 + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - */
 public function businessCartCarriageSet($opt){
-	
+
 	if($opt['id_cart'] == NULL) die("FATAL ERROR : NO ID_CART GIVEN TO App:Business:businessCartCarriageSet()");
 
 	$carriage = ($opt['carriage'])
@@ -761,7 +792,21 @@ public function businessCartCarriageSet($opt){
 
 	if(is_float($carriage)){
 
-		$this->dbQuery("UPDATE k_businesscart SET cartCarriage='".$carriage."' WHERE id_cart=".$opt['id_cart']);
+        // TVA
+        $cartCarriageTax            = ($opt['carriageTax'] > 0) ? $opt['carriageTax'] : '19.60';
+        $cartCarriageTotalTax       = $carriage;
+        $cartCarriage               = $cartCarriageTotalTax / (1 + ($cartCarriageTax / 100));
+
+        $def = array();
+        $def['k_businesscart'] = array(
+            'cartCarriageTax'           => array('value' => number_format($cartCarriageTax,      2, '.', '')),
+            'cartCarriage'              => array('value' => number_format($cartCarriage,         2, '.', '')),
+            'cartCarriageTotalTax'      => array('value' => number_format($cartCarriageTotalTax, 2, '.', ''))
+        );
+
+        $this->dbQuery($this->dbUpdate($def)." WHERE id_cart='".$opt['id_cart']."'");
+
+        //$this->pre($this->db_query);
 		if($opt['debug']) $this->pre($this->db_query, $this->db_error);
 	
 		$this->businessCartPrice($opt['id_cart'], array('debug' => $opt['debug']));
@@ -861,7 +906,7 @@ public function businessCmdNew($opt){
 		$id_cart = $opt['id_cart']; if(intval($id_cart) == 0) return false;
 
 	    # HOOK
-		$this->hookAction('businessCmdIncrement', $opt['id_cart']);
+		$this->hookAction('businessCmdIncrement', $id_cart);
 
 		# GET
 		$cart = $this->dbOne("SELECT * FROM k_businesscart WHERE id_cart=".$id_cart);
@@ -885,7 +930,7 @@ public function businessCmdNew($opt){
 //-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -
 	public function businessCmdMail($opt){
 
-		require_once(KROOT.'/app/plugin/phpmailer/class.phpmailer.php');
+		require_once(KROOT . '/app/plugin/phpmailer/class.phpmailer.php');
 
 		# Cmmand
 		#
@@ -934,8 +979,10 @@ public function businessCmdNew($opt){
 		#
 		$mail = new PHPMailer();
 	    $mail->CharSet = "UTF-8";
-	    if($opt['mailFrom'] != '') $mail->SetFrom($opt['mailFrom']);
-		else $mail->SetFrom('noreply@'.$_SERVER['HTTP_HOST']);
+        $fromName = '';
+        if($opt['mailFromName'] != '') $fromName = $opt['mailFromName'];
+	    if($opt['mailFrom'] != '') $mail->SetFrom($opt['mailFrom'], $fromName);
+		else $mail->SetFrom('noreply@'.$_SERVER['HTTP_HOST'], $fromName);
 
 		// TO
 		foreach($mailTo as $e){
@@ -989,7 +1036,7 @@ public function businessCmdNew($opt){
 
 		$mail->Subject	= $this->helperReplace($mailTitle, $cmd);
 		$mail->AltBody	= strip_tags($message);
-		$mail->MsgHTML(preg_replace("[\]", '', $message));
+		$mail->MsgHTML(preg_replace("[\\\]",'',$message));;
 
 		if($opt['debug']){
 			$this->pre("mailto", $mailTo, 'mailCc', $mailCc, 'mailBcc', $mailBcc, 'mailTitle', $mailTitle, 'message', $message, 'cmd', $cmd, 'mail', $mail);
@@ -1004,7 +1051,7 @@ public function businessCmdNew($opt){
 			}
 			if($custom['mailBody'] != ''){
 				$mail->AltBody = strip_tags($custom['mailBody']);
-				$mail->MsgHTML(preg_replace("#[\]#", '', $custom['mailBody']));
+				$mail->MsgHTML(preg_replace("[\\\]",'',$custom['mailBody']));
 			}
 		}
 
@@ -1058,7 +1105,7 @@ public function businessCouponUserSet($opt=array()){
 	);
 
 	$this->dbQuery($this->dbInsert($def));
-	if($opt['debug']) $this->pre($this->db_query, $this->db_error, $coupon);
+	if($opt['debug']) $this->pre($this->db_query, $this->db_error, $opt);
 
 	$this->id_coupon = ($opt['id_coupon'] > 0) ? $opt['id_coupon'] : $this->db_insert_id;
 
@@ -1165,7 +1212,6 @@ public function businessConfigSet($configField, $configKey, $def){
 //-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -
 //-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -
 	public  function businessCartDeliveryStatus(){
-
 	    $data   = array('WAIT', 'INPROGRESS', 'SENT');
 		$custom = $this->hookAction('businessCartDeliveryStatus', $data);
 
@@ -1190,7 +1236,7 @@ public function businessCarriageGet($opt=array()){
 	# Carraige
 	#
 	$carriage = $this->$dbMode("SELECT * FROM  k_businesscarriage ".$where);
-	if($opt['debug']) $this->pre($opt, $this->db_query, $this->db_error, $theme);
+	if($opt['debug']) $this->pre($opt, $this->db_query, $this->db_error, $carriage);
 
 	return $carriage;
 }
@@ -1233,7 +1279,7 @@ public function businessAccountGet($opt=array()){
     # Account
     #
     $account = $this->$dbMode("SELECT * FROM  k_businessaccount ".$where);
-    if($opt['debug']) $this->pre($opt, $this->db_query, $this->db_error, $theme);
+    if($opt['debug']) $this->pre($opt, $this->db_query, $this->db_error, $account);
 
     return $account;
 }
@@ -1306,7 +1352,7 @@ public function businessTaxGet($opt=array()){
     # Tax
     #
     $tax = $this->$dbMode("SELECT * FROM  k_businesstax ".$where." ORDER BY tax");
-    if($opt['debug']) $this->pre($opt, $this->db_query, $this->db_error, $theme);
+    if($opt['debug']) $this->pre($opt, $this->db_query, $this->db_error, $tax);
 
     return $tax;
 }

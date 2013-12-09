@@ -74,6 +74,10 @@
 	include(dirname(__DIR__) . '/content/ui/menu.php')
 ?></header>
 
+<div class="inject-subnav-right hide">
+	<li><a href="../field/" class="nomargin btn btn-mini"><?php echo _('Manage fields'); ?></a></li>
+</div>
+
 <div id="app"><div class="wrapper"><div class="row-fluid">
 
 	<?php if(sizeof($_POST['remove']) > 0 ){ ?>
@@ -114,8 +118,8 @@
 			if(sizeof($types) > 0){
 				foreach($types as $e){
 
-					$color = ($_REQUEST['id_type'] == $e['id_type']) ? ' selected' : ''; 
-					$lien  = ($e['is_gallery']) ? 'item=1' : 'sort=1';
+					$color   = ($_REQUEST['id_type'] == $e['id_type']) ? ' selected' : '';
+					$content = ($e['is_gallery']) ? 'gallery' : 'index';
 
 					echo '<li id="'.$e['id_type'].'" class="clearfix '.$color.'"><div class="holder">';
 						echo '<div class="check"><input type="checkbox" name="killme[]" value="'.$e['id_type'].'" /></div>';
@@ -125,10 +129,13 @@
 						echo '<a href="./?id_type='.$e['id_type'].'">'.$e['typeName'].'</a>';
 						echo '</div>';
 
-						echo '<div class="content">';
-						echo '<a href="../content/?id_type='.$e['id_type'].'">'._('View').'</a> &nbsp; &nbsp; ';
-                        echo '<a href="../field/asso?id_type='.$e['id_type'].'">'._('Manage fields').'</a> &nbsp; &nbsp; ';
-                        echo '<a href="row?id_type='.$e['id_type'].'">'._('Columns').'</a>';
+						echo '<div class="content clearfix">';
+						echo '<a href="../content/'.$content.'.php?id_type='.$e['id_type'].'" class="view">'._('View').'</a> ';
+                        echo '<a href="../field/asso?id_type='.$e['id_type'].'" class="fields">'._('Manage fields').'</a>';
+
+						if($e['is_gallery'] != 1){
+                            echo '<a href="row?id_type='.$e['id_type'].'" class="columns">'._('Columns').'</a>';
+						}
 						echo '</div>';
 
 					echo '</div></li>';
@@ -142,15 +149,10 @@
 		?></ul>
 	
 		<div class="clearfix">
-			<div class="left">
-				<?php if(sizeof($types) > 0){ ?>
-				<a onclick="apply();" class="btn btn-mini"><?php echo _('Remove selection'); ?></a>
-				<a href="type" class="btn btn-mini"><?php echo _('Cancel'); ?></a>
-				<?php } ?>
-			</div>
-			<div class="right">
-                <a href="../field/" class="nomargin btn btn-mini"><?php echo _('Manage fields'); ?></a>
-			</div>
+			<?php if(sizeof($types) > 0){ ?>
+			<a onclick="apply();" class="btn btn-mini"><?php echo _('Remove selection'); ?></a>
+			<a href="./" class="btn btn-mini"><?php echo _('Cancel'); ?></a>
+			<?php } ?>
 		</div>
 	</form>
 
@@ -159,7 +161,7 @@
 		<input type="hidden" name="id_type" value="<?php echo $data['id_type'] ?>" />
 		
 		<?php if($data['id_type'] == NULL){ ?>
-			<div class="alert message messageWarning"><?php echo _('Once a type crated, you will not be able to change business, ad, or gallery settings'); ?></div>
+			<div class="alert message messageWarning"><?php echo _('Once a type is created, you will not be able to change business, ad, or gallery settings'); ?></div>
 		<?php } ?>
 	
 		<table cellpadding="0" cellspacing="0" border="0" class="form">
@@ -176,18 +178,25 @@
 				<td><?php echo _('Ad'); ?></td>
 				<td><input type="checkbox" name="is_ad" value="1" <?php if($app->formValue($data['is_ad'], $_POST['is_ad'])) echo " checked" ?> /></td>
 			</tr>
-			<?php }else{ ?>
+			<?php }else{
+
+				$on  = '<i class="icon icon-ok"></i>';
+				$off = '<i class="icon icon-ban-circle"></i>';
+			?>
 			<tr valign="top">
 				<td width="100"><?php echo _('Business'); ?></td>
-				<td><?php echo ($data['is_business']) ? "Oui" : "Non" ?>	<input type="hidden" name="is_business" value="<?php echo $data['is_business'] ?>" /></td>
+				<td><?php echo ($data['is_business']) ? $on : $off; ?>
+					<input type="hidden" name="is_business" value="<?php echo $data['is_business'] ?>" /></td>
 			</tr>
 			<tr valign="top">
                 <td><?php echo _('Gallery'); ?></td>
-				<td><?php echo ($data['is_gallery']) ? "Oui" : "Non" ?>		<input type="hidden" name="is_gallery" value="<?php echo $data['is_gallery'] ?>" /></td>
+				<td><?php echo ($data['is_gallery']) ? $on : $off; ?>
+					<input type="hidden" name="is_gallery" value="<?php echo $data['is_gallery'] ?>" /></td>
 			</tr>
 			<tr valign="top">
                 <td><?php echo _('Ad'); ?></td>
-				<td><?php echo ($data['is_ad']) 	 ? "Oui" : "Non" ?>		<input type="hidden" name="is_ad" value="<?php echo $data['is_ad'] ?>" /></td>
+				<td><?php echo ($data['is_ad']) ? $on : $off; ?>
+					<input type="hidden" name="is_ad" value="<?php echo $data['is_ad'] ?>" /></td>
 			</tr>
 			<?php } ?>
 			<tr valign="top">
@@ -197,11 +206,11 @@
 			<tr valign="top">
 				<td><?php echo _('Relationships'); ?></td>
 				<td>
-					<input type="checkbox" name="use_group"			value="1" <?php if($app->formValue($data['use_group'], 			$_POST['use_group'])) 			echo "checked" ?> /> Les groupes<br />
-					<input type="checkbox" name="use_search"		value="1" <?php if($app->formValue($data['use_search'],			$_POST['use_search'])) 			echo "checked" ?> /> Les groupes intelligents<br />
-					<input type="checkbox" name="use_chapter"		value="1" <?php if($app->formValue($data['use_chapter'],		$_POST['use_chapter'])) 		echo "checked" ?> /> L'arborescence<br />
-					<input type="checkbox" name="use_category"		value="1" <?php if($app->formValue($data['use_category'],		$_POST['use_category'])) 		echo "checked" ?> /> Les catégories<br />
-					<input type="checkbox" name="use_socialforum"	value="1" <?php if($app->formValue($data['use_socialforum'],	$_POST['use_socialforum'])) 	echo "checked" ?> /> Les Forums sociaux
+					<input type="checkbox" name="use_group"			value="1" <?php if($app->formValue($data['use_group'], 			$_POST['use_group'])) 			echo "checked" ?> /> <?php echo _('Groups') ?><br />
+					<input type="checkbox" name="use_search"		value="1" <?php if($app->formValue($data['use_search'],			$_POST['use_search'])) 			echo "checked" ?> /> <?php echo _('Smart groups') ?><br />
+					<input type="checkbox" name="use_chapter"		value="1" <?php if($app->formValue($data['use_chapter'],		$_POST['use_chapter'])) 		echo "checked" ?> /> <?php echo _('Chapters') ?><br />
+					<input type="checkbox" name="use_category"		value="1" <?php if($app->formValue($data['use_category'],		$_POST['use_category'])) 		echo "checked" ?> /> <?php echo _('Categories') ?><br />
+					<input type="checkbox" name="use_socialforum"	value="1" <?php if($app->formValue($data['use_socialforum'],	$_POST['use_socialforum'])) 	echo "checked" ?> /> <?php echo _('Social forums') ?>
 				</td>
 			</tr>
 			<tr>
@@ -234,7 +243,7 @@
 </div></div></div>
 
 <?php include(COREINC.'/end.php'); ?>
-<script src="../content/ui/js/type.js" type="text/javascript"></script>
+<script src="ui/js/type.js" type="text/javascript"></script>
 <script>
 
     function apply(){

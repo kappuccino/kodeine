@@ -3,8 +3,8 @@
 
 	<data>
 		<key>content</key>
-		<version>5.2.1</version>
-        <lastMod>2013-03-15</lastMod>
+		<version>5.2.3</version>
+        <lastMod>2013-07-23</lastMod>
 		<install>YES</install>
 		<name><![CDATA[Contents]]></name>
 	</data>
@@ -26,16 +26,18 @@
 	</dependencies>
 
     <i18n>
-        <file>ui/menu.php</file>
         <file>browse.php</file>
-        <file>data-language.php</file>
         <file>data.php</file>
+        <file>data-language.php</file>
+        <file>gallery.php</file>
         <file>gallery-album.php</file>
         <file>gallery-item.php</file>
         <file>gallery-import.php</file>
-        <file>gallery.php</file>
         <file>index.php</file>
         <file>parent.php</file>
+        <file>safe.php</file>
+        <file>search.php</file>
+        <file>ui/menu.php</file>
     </i18n>
 
 	<profile>
@@ -44,6 +46,7 @@
 		<item code="type"		type="ALLOW_DENY" name="Type" />
 		<item code="field"		type="ALLOW_DENY" name="Champs" />
 		<item code="search"		type="ALLOW_DENY" name="Recherche" />
+		<item code="pref"		type="ALLOW_DENY" name="Preference" />
 	</profile>
 	
 </element>

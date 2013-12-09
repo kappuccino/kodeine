@@ -315,16 +315,9 @@ public function userLogout(){
 	//-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -
 	public function apiLoad($api, $name=NULL, $new=false){
 
-		$class = autoloader::file($api);
 		$cst   = ($name == NULL) ? $api : $name;
 
-		if(file_exists($class)){
-
-			# Si on demande une class (.php) alors la laoder a la main
-			# si non la fonction autoload() ne pourra pas la trouver
-			#
-			if(strpos($api, ".php") !== false) require_once($class);
-
+		try{
 			# REFERENCE	:: Utiliser l'objet deja existant
 			if(get_class($this->api[$cst]) == $cst && !$new){
 				$new = &$this->api[$cst];
@@ -347,14 +340,19 @@ public function userLogout(){
 				$new->kodeine 		= &$this->kodeine;
 				$new->user			= &$this->user;
 				$new->profile		= &$this->profile;
+				$new->cache         = &$this->cache;
 				$new->apisConfig	= &$this->apisConfig;
 
 				if(@array_key_exists($cst, $new->apisConfig)) $new->apiConfig = &$this->apisConfig[$cst];
+
+                if(method_exists($new, '__loaded')) {
+                    $new->__loaded();
+                }
 			}
 
 			return $new;
 
-		}else{
+		} catch (Exception $e) {
 			throw new Exception('API could not be loaded : '.$api.'('.$cst.')');
 		}
 	}
@@ -976,222 +974,218 @@ public function fsFile($folder, $mask=NULL, $options=NULL, $recursive=false){
 	return $myFiles;
 }
 
-/* + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + -
-	A utiliser au tout debut pour initialiser les valeurs (pour le site uniquement)
-+ - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - */
-public function kodeineInit($get){
+//-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -
+// A utiliser au tout debut pour initialiser les valeurs (pour le site uniquement)
+//-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -
+	public function kodeineInit($get){
 
-	# CONFIG
-	# Charge les parametre de CONFIG BOOT + CUSTOM et memorise les autres APIsCONFIG
-	#
-	if(BENCHME) $GLOBALS['bench']->benchmarkMarker($bmStep='kodeineInit(k_config)');
-	$config = $this->dbMulti("SELECT * FROM k_config");
-	foreach($config as $e){
-		if($e['configModule'] == 'boot' OR $e['configModule'] == 'custom'){
-			if(substr($e['configName'], 0, 7) == 'domain:' && empty($domainConfig)){
-				$v = json_decode($e['configValue'], true);
-				if(preg_match("#".$v['domain']."#", $_SERVER['HTTP_HOST'])) $domainConfig = $v;
-			}else
-			if(substr($e['configName'], 0, 9) == 'jsonCache'){
-				$this->apisConfig[$e['configModule']][$e['configName']] = json_decode($e['configValue'], true);
+		// CONFIG //////////////////////////////////////////////////////////////////////////////////////////////////////
+		// Charge les parametre de CONFIG BOOT + CUSTOM et memorise les autres APIsCONFIG
+		if(BENCHME) $GLOBALS['bench']->benchmarkMarker($bmStep='kodeineInit(k_config)');
+		$config = $this->dbMulti("SELECT * FROM k_config");
+		foreach($config as $e){
+			if($e['configModule'] == 'boot' OR $e['configModule'] == 'custom'){
+				if(substr($e['configName'], 0, 7) == 'domain:' && empty($domainConfig)){
+					$v = json_decode($e['configValue'], true);
+					if(preg_match("#".$v['domain']."#", $_SERVER['HTTP_HOST'])) $domainConfig = $v;
+				}else
+				if(substr($e['configName'], 0, 9) == 'jsonCache'){
+					$this->apisConfig[$e['configModule']][$e['configName']] = json_decode($e['configValue'], true);
+				}else{
+					$this->kodeine[$e['configName']] = $e['configValue'];
+				}
 			}else{
-				$this->kodeine[$e['configName']] = $e['configValue'];
-			}
-		}else{
-			if(substr($e['configName'], 0, 9) == 'jsonCache'){
-				$e['configValue'] = json_decode($e['configValue'], true);
-			}
-			$this->apisConfig[$e['configModule']][$e['configName']] = $e['configValue'];
-		}
-	}
-	unset($config, $e, $v);
-	#die($this->pre("*", $this->apisConfig));
-	if(BENCHME) $GLOBALS['bench']->benchmarkMarker($bmStep);
-
-				
-	# LANGUAGE
-	# Determine si on utilise la langue de l'URL GET ou celui par DEFAUT (FR)
-	#
-	if(BENCHME) $GLOBALS['bench']->benchmarkMarker($bmStep='kodeineInit(languages)');
-	$language = ($get['urlLanguage'] == NULL) ? $this->kodeine['defaultLanguage'] : $get['urlLanguage'];
-	if(empty($this->apisConfig['boot']['jsonCacheCountry'])){
-		$language = $this->countryGet(array('iso' => $language));
-	}else{
-		foreach($this->apisConfig['boot']['jsonCacheCountry'] as $tmp){
-			if($tmp['iso'] == $language){ $language = $tmp; break; }
-		}
-	}
-	$locale   = ($language['countryLocale'] == NULL) ? 'fr_FR' : $language['countryLocale'];
-	$language = $language['iso_ref'];
-	$this->kodeine['language']	= $language;
-	$this->kodeine['locale'] 	= $locale;
-	setlocale(LC_ALL, $locale.'.UTF8');
-	unset($locale, $language, $tmp);
-	if(BENCHME) $GLOBALS['bench']->benchmarkMarker($bmStep);
-
-
-	# CHAPTERS
-	# La liste de tous les CHAPTER utilise
-	#
-	if(BENCHME) $GLOBALS['bench']->benchmarkMarker($bmStep='kodeineInit(chapter)');
-	$chapters = $this->apiLoad('chapter')->chapterGet(array('language' => $this->kodeine['language']));
-	foreach($chapters as $e){
-		$chaptersDbUi[$e['chapterUrl']] = $e['id_chapter'];
-		$chaptersDbId[$e['id_chapter']] = $e;
-	} unset($chapters, $e);
-	if(BENCHME) $GLOBALS['bench']->benchmarkMarker($bmStep);
-
-
-	# URL
-	# Decortique l'URL pour determiner le CHAPTER, MODULE, FICHIER
-	#
-	if(BENCHME) $GLOBALS['bench']->benchmarkMarker($bmStep='kodeineInit(url_parser)');
-	$query = $get['urlRequest'];
-	$parts = explode('/', $get['urlRequest']);
-	if(sizeof($parts) > 0){
-		$file = $parts[sizeof($parts)-1];
-		if($file != NULL){
-			$split = explode('.', $file);
-			if(sizeof($split) > 1){
-				$get['urlExtension']	= $split[sizeof($split)-1];
-				$get['urlFile'] 		= substr($file, 0, strlen($file)-strlen($get['urlExtension'])-1);
-			}else{
-				$get['urlFile'] 		= $file;
+				if(substr($e['configName'], 0, 9) == 'jsonCache'){
+					$e['configValue'] = json_decode($e['configValue'], true);
+				}
+				$this->apisConfig[$e['configModule']][$e['configName']] = $e['configValue'];
 			}
 		}
-		
-		$get['urlChapter']	= $parts[sizeof($parts)-2];
-		$get['urlModule'] 	= '';
-		if(!@array_key_exists($get['urlChapter'], $chaptersDbUi)){
-			$get['urlChapter'] = $parts[sizeof($parts)-3];
-			$get['urlModule']  = $parts[sizeof($parts)-2];
-		}
-	}
-	if(BENCHME) $GLOBALS['bench']->benchmarkMarker($bmStep);
-
-
-	# CHECK DOMAIN
-	# Verifit les regles en fonction du domaine
-	#
-	if(!empty($domainConfig)){
-		if($domainConfig['id_chapter'] != NULL)	$this->kodeine['defaultIdChapter']	= $domainConfig['id_chapter'];
-		if($domainConfig['id_theme']   != NULL)	$this->kodeine['defaultIdTheme']	= $domainConfig['id_theme'];
-		if($domainConfig['language']   != NULL)	$this->kodeine['defaultLanguage']	= $domainConfig['language'];
-	}
-
-	# CHAPTER
-	# Recupere le CHAPTER en fonction de l'URL GET ou celui par DEFAUT
-	#
-	$chapter = @array_key_exists($get['urlChapter'], $chaptersDbUi)
-		? $chaptersDbUi[$get['urlChapter']]
-		: $chaptersDbId[$this->kodeine['defaultIdChapter']];
-
-	$this->kodeine['id_chapter']		= $chapter['id_chapter'];
-	$this->kodeine['chapterName']		= $chapter['chapterName'];
-	$this->kodeine['chapterUrl']		= $chapter['chapterUrl'];
-	$this->kodeine['chapterModule']		= $chapter['chapterModule'];
-	$this->kodeine['chapterIdTheme']	= $chapter['id_theme'];
-#	$this->kodeine['chaptersUrl']		= $chaptersDbUi;
-	$this->kodeine['chaptersIds']		= $chaptersDbId;
-	unset($chapter, $chaptersDbUi, $chaptersDbId);
-
-
-	# MODULE
-	# Determine si on utilise le module/file de l'URL ou la valeur du CHAPTER/INDEX
-	# Si le chapitre n'a pas de module de configure, utiliser content
-	#
-	$this->kodeine['chapterModule'] = ($this->kodeine['chapterModule'] != NULL) ? $this->kodeine['chapterModule'] : 'content';
-	$this->kodeine['moduleFolder']	= ($get['urlModule'] != NULL) ? $get['urlModule'] : $this->kodeine['chapterModule'];
-	$this->kodeine['moduleFile']	= ($get['urlFile']   != NULL) ? $get['urlFile']   : 'index';
-
-
-	# THEME
-	# Determine si on utilise le theme par DEFAUT ou le theme du CHAPTER
-	#
-	$id_theme	= ($this->kodeine['chapterIdTheme'] != NULL) ? $this->kodeine['chapterIdTheme'] : $this->kodeine['defaultIdTheme'];
-	if(empty($this->apisConfig['boot']['jsonCacheTheme'])){
-		$theme = $this->dbOne("SELECT * FROM k_theme WHERE id_theme=".$id_theme);
-	}else{
-		foreach($this->apisConfig['boot']['jsonCacheTheme'] as $e){
-			if($e['id_theme'] == $id_theme){
-				$theme = $e;
-				break;
-			}
-		}
-	}
-	$this->kodeine['id_theme'] 		= $theme['id_theme'];
-	$this->kodeine['themeName']		= $theme['themeName'];
-	$this->kodeine['themeFolder']	= $theme['themeFolder'];
-	unset($theme, $id_theme, $e);
-
-
-	# GROUP
-	# Memorise le groupe du USER ou bien celui par DEFAUT (-1)
-	#
-	$this->kodeine['id_group'] = $this->user['id_group'] ?: -1;
-
-
-	# SAVE GET
-	# Memorise les parametres GET modifies de l'URL
-	#
-	$this->kodeine['get'] = $get;
-
-
-	# LOCALISATION
-	# Definit en global les traductions
-	# 
-	if(!isset($_GET['noLabel'])){
-		if(BENCHME) $GLOBALS['bench']->benchmarkMarker($bmStep='kodeineInit(localisation)');
-
-		foreach($this->dbMulti("SELECT * FROM k_localisation WHERE language = '".$this->kodeine['language']."'") as $e){
-			define($e['label'], $e['translation']);
-		}
-
+		unset($config, $e, $v);
+		#die($this->pre("*", $this->apisConfig));
 		if(BENCHME) $GLOBALS['bench']->benchmarkMarker($bmStep);
+
+
+		// LANGUAGE ////////////////////////////////////////////////////////////////////////////////////////////////////
+		// Determine si on utilise la langue de l'URL GET ou celui par DEFAUT (FR)
+		if(BENCHME) $GLOBALS['bench']->benchmarkMarker($bmStep='kodeineInit(languages)');
+		$language = ($get['urlLanguage'] == NULL) ? $this->kodeine['defaultLanguage'] : $get['urlLanguage'];
+		$country  = ($get['urlCountry']  == NULL) ? $this->kodeine['defaultLanguage'] : $get['urlCountry'];
+		if(empty($this->apisConfig['boot']['jsonCacheCountry'])){
+			$language = $this->countryGet(array('iso' => $language));
+		}else{
+			foreach($this->apisConfig['boot']['jsonCacheCountry'] as $tmp){
+				if($tmp['iso'] == $language){ $language = $tmp; break; }
+			}
+		}
+		$locale   = ($language['countryLocale'] == NULL) ? 'fr_FR' : $language['countryLocale'];
+		$language = $language['iso_ref'];
+		$this->kodeine['language']	= $language;
+		$this->kodeine['country']	= $country;
+		$this->kodeine['locale'] 	= $locale;
+		setlocale(LC_ALL, $locale.'.UTF8');
+		unset($locale, $language, $tmp);
+		if(BENCHME) $GLOBALS['bench']->benchmarkMarker($bmStep);
+
+		// CHAPTERS ////////////////////////////////////////////////////////////////////////////////////////////////////
+		// La liste de tous les CHAPTER utilise
+		if(BENCHME) $GLOBALS['bench']->benchmarkMarker($bmStep='kodeineInit(chapter)');
+		$chapters = $this->apiLoad('chapter')->chapterGet(array('language' => $this->kodeine['language']));
+		foreach($chapters as $e){
+			$chaptersDbUi[$e['chapterUrl']] = $e['id_chapter'];
+			$chaptersDbId[$e['id_chapter']] = $e;
+		} unset($chapters, $e);
+		if(BENCHME) $GLOBALS['bench']->benchmarkMarker($bmStep);
+
+
+		// URL /////////////////////////////////////////////////////////////////////////////////////////////////////////
+		// Decortique l'URL pour determiner le CHAPTER, MODULE, FICHIER
+		if(BENCHME) $GLOBALS['bench']->benchmarkMarker($bmStep='kodeineInit(url_parser)');
+		$query = $get['urlRequest'];
+		$parts = explode('/', $get['urlRequest']);
+		if(sizeof($parts) > 0){
+			$file = $parts[sizeof($parts)-1];
+			if($file != NULL){
+				$split = explode('.', $file);
+				if(sizeof($split) > 1){
+					$get['urlExtension']	= $split[sizeof($split)-1];
+					$get['urlFile'] 		= substr($file, 0, strlen($file)-strlen($get['urlExtension'])-1);
+				}else{
+					$get['urlFile'] 		= $file;
+				}
+			}
+
+			$get['urlChapter']	= $parts[sizeof($parts)-2];
+			$get['urlModule'] 	= '';
+			if(!@array_key_exists($get['urlChapter'], $chaptersDbUi)){
+				$get['urlChapter'] = $parts[sizeof($parts)-3];
+				$get['urlModule']  = $parts[sizeof($parts)-2];
+			}
+		}
+		if(BENCHME) $GLOBALS['bench']->benchmarkMarker($bmStep);
+
+
+		// CHECK DOMAIN ////////////////////////////////////////////////////////////////////////////////////////////////
+		// Verifit les regles en fonction du domaine
+		if(!empty($domainConfig)){
+			if($domainConfig['id_chapter'] != NULL)	$this->kodeine['defaultIdChapter']	= $domainConfig['id_chapter'];
+			if($domainConfig['id_theme']   != NULL)	$this->kodeine['defaultIdTheme']	= $domainConfig['id_theme'];
+			if($domainConfig['language']   != NULL)	$this->kodeine['defaultLanguage']	= $domainConfig['language'];
+		}
+
+		// CHAPTER /////////////////////////////////////////////////////////////////////////////////////////////////////
+		// Recupere le CHAPTER en fonction de l'URL GET ou celui par DEFAUT
+		$chapter = @array_key_exists($get['urlChapter'], $chaptersDbUi)
+			? $chaptersDbUi[$get['urlChapter']]
+			: $chaptersDbId[$this->kodeine['defaultIdChapter']];
+
+		$this->kodeine['id_chapter']		= $chapter['id_chapter'];
+		$this->kodeine['chapterName']		= $chapter['chapterName'];
+		$this->kodeine['chapterUrl']		= $chapter['chapterUrl'];
+		$this->kodeine['chapterModule']		= $chapter['chapterModule'];
+		$this->kodeine['chapterIdTheme']	= $chapter['id_theme'];
+	#	$this->kodeine['chaptersUrl']		= $chaptersDbUi;
+		$this->kodeine['chaptersIds']		= $chaptersDbId;
+		unset($chapter, $chaptersDbUi, $chaptersDbId);
+
+
+		# MODULE
+		# Determine si on utilise le module/file de l'URL ou la valeur du CHAPTER/INDEX
+		# Si le chapitre n'a pas de module de configure, utiliser content
+		#
+		$this->kodeine['chapterModule'] = ($this->kodeine['chapterModule'] != NULL) ? $this->kodeine['chapterModule'] : 'content';
+		$this->kodeine['moduleFolder']	= ($get['urlModule'] != NULL) ? $get['urlModule'] : $this->kodeine['chapterModule'];
+		$this->kodeine['moduleFile']	= ($get['urlFile']   != NULL) ? $get['urlFile']   : 'index';
+
+
+		# THEME
+		# Determine si on utilise le theme par DEFAUT ou le theme du CHAPTER
+		#
+		$id_theme	= ($this->kodeine['chapterIdTheme'] != NULL) ? $this->kodeine['chapterIdTheme'] : $this->kodeine['defaultIdTheme'];
+		if(empty($this->apisConfig['boot']['jsonCacheTheme'])){
+			$theme = $this->dbOne("SELECT * FROM k_theme WHERE id_theme=".$id_theme);
+		}else{
+			foreach($this->apisConfig['boot']['jsonCacheTheme'] as $e){
+				if($e['id_theme'] == $id_theme){
+					$theme = $e;
+					break;
+				}
+			}
+		}
+		$this->kodeine['id_theme'] 		= $theme['id_theme'];
+		$this->kodeine['themeName']		= $theme['themeName'];
+		$this->kodeine['themeFolder']	= $theme['themeFolder'];
+		unset($theme, $id_theme, $e);
+
+
+		# GROUP
+		# Memorise le groupe du USER ou bien celui par DEFAUT (-1)
+		#
+		$this->kodeine['id_group'] = $this->user['id_group'] ?: -1;
+
+
+		# SAVE GET
+		# Memorise les parametres GET modifies de l'URL
+		#
+		$this->kodeine['get'] = $get;
+
+
+		# LOCALISATION
+		# Definit en global les traductions
+		#
+		if(!isset($_GET['noLabel'])){
+			if(BENCHME) $GLOBALS['bench']->benchmarkMarker($bmStep='kodeineInit(localisation)');
+
+			foreach($this->dbMulti("SELECT * FROM k_localisation WHERE language = '".$this->kodeine['language']."'") as $e){
+				define($e['label'], $e['translation']);
+			}
+
+			if(BENCHME) $GLOBALS['bench']->benchmarkMarker($bmStep);
+		}
+
+		# TYPE
+		#
+		#if(BENCHME) $GLOBALS['bench']->benchmarkMarker($bmStep='kodeineInit(type)');
+		#foreach($this->dbMulti("SELECT * FROM k_type") as $e){
+		#	unset($e['typeFormLayout']);
+		#	$this->kodeine['typesIds'][$e['id_type']] = $e;
+		#}
+		#if(BENCHME) $GLOBALS['bench']->benchmarkMarker($bmStep);
+
+		$this->kodeine = $this->hookFilter('kodeineInit', $this->kodeine);
+
+		# DEBUG
+		# Construit la zone de debugage par l'URL url?debug
+		#
+		if(constant('DEBUGME') === true){
+			unset($this->user['groupFormLayout'], $this->user['userPasswd']);
+			echo "<pre style=\"background-color:#333333; color:#FFFFFF; width:800px; padding:5px; margin:5px; font-family:courier; font-size:12px;\"> <h1>Debug Data</h1>";
+				echo "[GET] ";		print_r($_GET);
+				echo "[URL] ";		print_r($get);
+				echo "[KODEINE] ";	print_r($this->kodeine);
+				echo "[USER] ";		print_r($this->user);
+				echo "[SERVER] "; 	print_r($_SERVER);
+			echo "</pre>";
+		}
+
+
+		# FATAL Error
+		# Verifier un certain nombre de point qui prend du temps a verifier a la main
+		#
+		$fatal = array();
+		if($this->kodeine['language'] == ''){
+			$fatal[] = "Language is not defined";
+		}
+		if(!file_exists(USER.'/theme/'.$this->kodeine['themeFolder'])){
+			$fatal[] = "Theme folder \"".$this->kodeine['themeFolder']."\" is missing";
+		}
+
+		if(count($fatal) > 0){
+			$this->pre(implode("\n", $fatal));
+			exit();
+		}
+
 	}
-
-	# TYPE
-	#
-	#if(BENCHME) $GLOBALS['bench']->benchmarkMarker($bmStep='kodeineInit(type)');
-	#foreach($this->dbMulti("SELECT * FROM k_type") as $e){
-	#	unset($e['typeFormLayout']);
-	#	$this->kodeine['typesIds'][$e['id_type']] = $e;
-	#}
-	#if(BENCHME) $GLOBALS['bench']->benchmarkMarker($bmStep);
-
-	# DEBUG
-	# Construit la zone de debugage par l'URL url?debug
-	#
-	if(constant('DEBUGME') === true){
-		unset($this->user['groupFormLayout'], $this->user['userPasswd']);
-		echo "<pre style=\"background-color:#333333; color:#FFFFFF; width:800px; padding:5px; margin:5px; font-family:courier; font-size:12px;\"> <h1>Debug Data</h1>";
-			echo "[GET] ";		print_r($_GET);
-			echo "[URL] ";		print_r($get);
-			echo "[KODEINE] ";	print_r($this->kodeine);
-			echo "[USER] ";		print_r($this->user);
-			echo "[SERVER] "; 	print_r($_SERVER);
-		echo "</pre>";
-	}
-
-
-	# FATAL Error
-	# Verifier un certain nombre de point qui prend du temps a verifier a la main 
-	#
-	$fatal = array();
-	if($this->kodeine['language'] == ''){
-		$fatal[] = "Language is not defined";
-	}
-	if(!file_exists(USER.'/theme/'.$this->kodeine['themeFolder'])){
-		$fatal[] = "Theme folder \"".$this->kodeine['themeFolder']."\" is missing";
-	}
-
-	if(count($fatal) > 0){
-		$this->pre(implode("\n", $fatal));
-		exit();
-	}
-
-	$this->hookAction('kodeineInit');
-}
 
 /* + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - 
 + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - */
@@ -1229,42 +1223,61 @@ public function themeInclude($file, $options=NULL){
 	}
 }
 
-/* + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - 
-+ - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - */
-public function countryGet($opt=array()){
+	//-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -
+	//-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -
+	public function countryGet($opt=array()){
 
-	if(isset($opt['is_used'])) $cond[] = "is_used='".$opt['is_used']."'";
+		if(isset($opt['is_used'])) $cond[] = "is_used='".$opt['is_used']."'";
 
-	if($opt['iso'] != ''){
-		$dbMode = 'dbOne';
-		$cond[] = "iso='".$opt['iso']."'";
-	}else{
 		$dbMode	= 'dbMulti';
-	}
 
-	# Gerer les ORDRES
-	if($opt['order'] != NULL && $opt['direction'] != NULL){
-		$order = " ORDER BY ".$opt['order']." ".$opt['direction'];
-	}
-
-	if(sizeof($cond) > 0) $where = " WHERE ".implode(" AND ", $cond);
-
-	if($dbMode == 'dbOne') unset($order);
-
-	$country = $this->$dbMode("SELECT * FROM k_country ".$where.$order);
-	if($opt['debug']) $this->pre($this->db_query, $this->db_error, $country);
-
-	if($opt['byZone'] && $dbMode == 'dbMulti'){
-		foreach($country as $e){
-			$out[$e['countryZone']][] = $e;
+		if($opt['ref'] != ''){
+			$cond[] = "iso_ref='".$opt['ref']."'";
+		}else
+		if($opt['iso'] != ''){
+			$dbMode = 'dbOne';
+			$cond[] = "iso='".$opt['iso']."'";
 		}
-		$country = $out;
+
+		if($opt['priced'] != '') $cond[] = "is_priced=".$opt['priced'];
+
+
+		# Gerer les ORDRES
+		if($opt['order'] != NULL && $opt['direction'] != NULL){
+			$order = " ORDER BY ".$opt['order']." ".$opt['direction'];
+		}
+
+		if(sizeof($cond) > 0) $where = " WHERE ".implode(" AND ", $cond);
+
+		if($dbMode == 'dbOne') unset($order);
+
+		$country = $this->$dbMode("SELECT * FROM k_country ".$where.$order);
+		if($opt['debug']) $this->pre($this->db_query, $this->db_error, $country);
+
+
+
+		if($opt['debug']) $this->pre($this->db_query, $this->db_error, $country);
+
+		return $country;
 	}
 
-	if($opt['debug']) $this->pre($this->db_query, $this->db_error, $country);
+	//-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -
+	//-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -
+	public function countryGetByZone($iso=NULL, $l=0){
 
-	return $country;
-}
+		if($l > 5) die('loop');
+
+		$w = ($iso == NULL) ? 'iso' : "'".$iso."' AND iso!=iso_ref";
+		$data = $this->dbMulti("SELECT * FROM k_country WHERE iso_ref=".$w." ORDER BY countryName ASC");
+
+	#	$this->pre('('.$iso.')', $this->db_query, $data_);
+
+		foreach($data as $n => $e){
+			$data[$n]['sub'] = $this->countryGetByZone($e['iso'], $l+1);
+		}
+
+		return $data;
+	}
 
 /* + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - 
 + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - */
@@ -1379,8 +1392,13 @@ public function kTalkCheck($str){
 		$hooks->ksort();
 		$hooks = iterator_to_array($this->hook['action'][$name]);
 
+
 		foreach($hooks as $priorities){
 			foreach($priorities as $hook){
+
+				if(is_array($hook['hook'])){
+					$hook['hook'] = array($this->apiLoad($hook['hook'][0]), $hook['hook'][1]);
+				}
 
 				if(is_callable($hook['hook'])){
 					$args = func_get_args(); array_shift($args);
@@ -1408,12 +1426,17 @@ public function kTalkCheck($str){
 
 		if(count($this->hook['filter']) == 0) return $data;
 		if(!is_a($this->hook['filter'][$name], 'ArrayIterator')) return $data;
+
 		$hooks = $this->hook['filter'][$name];
 		$hooks->ksort();
 		$hooks = iterator_to_array($this->hook['filter'][$name]);
 
 		foreach($hooks as $priorities){
 			foreach($priorities as $hook){
+
+				if(is_array($hook['hook'])){
+					$hook['hook'] = array($this->apiLoad($hook['hook'][0]), $hook['hook'][1]);
+				}
 
 				if(is_callable($hook['hook'])){
 					$args = func_get_args(); array_shift($args);
@@ -1443,6 +1466,8 @@ public function kTalkCheck($str){
 	public  function hookRegister($name, $hook, $type='action', $priority=10, $args=1){
 		if(!isset($this->hook[$type][$name])) $this->hook[$type][$name] = new ArrayIterator();
 		$this->hook[$type][$name][$priority][] = array('hook' => $hook, 'args' => $args);
+
+	#	$this->pre($this->hook);
 	}
 
 }

@@ -70,6 +70,7 @@
 					'create'		=> false,
 					'debug'			=> false,
 					'is_cmd' 		=> 'true',
+                    'noLimit'   => true,
 					'cartStatus'	=> $e,
 					'id_shop'		=> $filter['id_shop'],
 					'range'			=> array($_GET['rangeStart'], $_GET['rangeEnd'])
@@ -96,6 +97,7 @@
 		$cmd = $app->apiLoad('business')->businessCartGet(array(
 			'is_cmd'	=> true,
 			'debug'		=> false,
+            'noLimit'   => true,
 			'range'		=> array($_GET['rangeStart'], $_GET['rangeEnd']),
 			'id_shop'	=> $filter['id_shop'],
 			'order'		=> 'k_businesscart.id_cart',
@@ -108,7 +110,7 @@
 	<br />
 	<h3>Détail des commandes sur la période</h3>
 
-	<table width="100%" border="0" cellpadding="0" cellspacing="0" class="listing sortable">
+	<table width="100%" border="0" cellpadding="0" cellspacing="0" class="listing">
 		<thead>
 			<tr>
 				<th width="50">#</th>

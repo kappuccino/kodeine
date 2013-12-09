@@ -128,9 +128,9 @@
 ?></header>
 
 <div class="inject-subnav-right hide">
-	<li><a href="data" class="btn btn-small">Nouvel utilisateur</a></li>
-    <li><a href="../user/" class="btn btn-small"><i class="icon-list"></i> Utilisateurs</a></li>
-	<li><a href="#" onclick="$('#data').submit();" class="btn btn-small btn-success">Enregistrer</a></li>
+	<li><a href="data" class="btn btn-small"><?php echo _('New user') ?></a></li>
+    <li><a href="../user/" class="btn btn-small"><i class="icon-list"></i> <?php echo _('Users') ?></a></li>
+	<li><a href="#" onclick="$('#data').submit();" class="btn btn-small btn-success"><?php echo _('Save') ?></a></li>
 </div>
 
 <div id="app" class="data">
@@ -319,8 +319,11 @@
 </div>
 
 <?php include(COREINC.'/end.php'); ?>
-<script src="../core/vendor/tinymce/jscripts/tiny_mce/jquery.tinymce.js"></script>
-<script src="../core/vendor/tinymce/jscripts/tiny_mce/tiny_mce.js"></script>
+<!--<script src="../core/vendor/tinymce/jscripts/tiny_mce/jquery.tinymce.js"></script>
+<script src="../core/vendor/tinymce/jscripts/tiny_mce/tiny_mce.js"></script>-->
+<script src="../core/vendor/ckeditor/ckeditor.js"></script>
+<script src="../core/vendor/ckeditor/adapters/jquery.js"></script>
+
 <script src="../content/ui/js/content.js"></script>
 <script type="text/javascript" src="../core/vendor/datepicker/js/bootstrap-datepicker.js" charset="UTF-8"></script>
 <script type="text/javascript">

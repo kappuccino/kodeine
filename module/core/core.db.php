@@ -297,7 +297,7 @@ class coreDb{
 		if(is_array($values) && sizeof($values) > 0){
 
 			foreach($values as $value){
-				if($child == NULL){
+				if($child == ''){
 					$added[] = '('.$id.','.$value.')';
 				}else{
 					$added[] = '('.$id.','.$value.',1)';
@@ -341,7 +341,7 @@ class coreDb{
 
 		if(!file_exists($conf['dump'])) mkdir($conf['dump'], 0755, true);
 
-		$dst  = $conf['dump'].'/'. $opt['file'] ?: 'export-'.time().'.sql';
+		$dst  = $conf['dump'].'/'. (isset($opt['file']) ? $opt['file'] : 'export-'.time()).'.sql';
 		$bin  = $config['mysqldump'] ?: 'mysqldump';
 
 		$cmd  = sprintf($bin.' --host=%s --user=%s --password=%s --comments=0 %s > %s',

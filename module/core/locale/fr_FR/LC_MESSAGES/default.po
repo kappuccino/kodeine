@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Kodeine\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2013-03-17 12:23+0100\n"
+"PO-Revision-Date: 2013-07-08 15:13+0100\n"
 "Last-Translator: Benjamin Mosnier <bm@kappuccino.org>\n"
 "Language-Team: Kappuccino <bm@kappuccino.org>\n"
 "Language: Français\n"
@@ -30,7 +30,15 @@ msgstr "(Album)"
 msgid "(eBusiness)"
 msgstr "(eCommerce)"
 
-#: ../../field/index.php:88
+#: ../../type/index.php:85
+msgid ""
+"<b>WARNING</b> you are about to remove data, this action is not cancelable "
+"(Database table destruction)"
+msgstr ""
+"<b>ATTENTION</b> vous êtes sur le point de supprimer des champs, vous ne "
+"pourrez pas revenir en arrière (Suppression en base de données)"
+
+#: ../../field/index.php:92
 msgid ""
 "<b>WARNING</b> you are about to remove some fields, you will not be able to "
 "cancel this operation"
@@ -50,13 +58,17 @@ msgstr ""
 "champs seront perdues.\n"
 "<b>Vous ne pourrez pas revenir en arrière</b>"
 
-#: ../../content/data.php:734
+#: ../../content/data.php:738
 msgid "A percentage to give more weight to this banner"
 msgstr "Un pourcentage donne plus de poids à une publicité"
 
 #: ../../user/data.php:277
 msgid "Accept to receive newsletter"
 msgstr "Accepte de recevoir la newsletter"
+
+#: ../../business/ui/menu.php:29
+msgid "Accounts"
+msgstr "Comptes"
 
 #: ../../content/data-language.php:187 ../../content/data.php:224
 msgid "Actions"
@@ -70,15 +82,20 @@ msgstr "Activé"
 msgid "Active"
 msgstr "Actif"
 
-#: ../../content/data.php:702
+#: ../../type/index.php:178 ../../type/index.php:197
+msgid "Ad"
+msgstr "Pub"
+
+#: ../../content/data.php:706
 msgid "Ad URL"
 msgstr "URL de la publicité"
 
-#: ../../content/data.php:757
+#: ../../content/data.php:762
 msgid "Ad code"
 msgstr "Code de la publicité"
 
-#: ../../content/parent.php:168 ../../type/row.php:195 ../../type/row.php:202
+#: ../../content/index.php:91 ../../content/parent.php:168
+#: ../../type/row.php:196 ../../type/row.php:203
 msgid "Add"
 msgstr "Ajouter"
 
@@ -86,17 +103,25 @@ msgstr "Ajouter"
 msgid "Add %s"
 msgstr "Ajouter %s"
 
-#: ../../content/index.php:79
+#: ../../content/index.php:78
 msgid "Add a %s"
 msgstr "Ajouter un %s"
 
-#: ../../field/index.php:267
+#: ../../field/index.php:271
 msgid "Add a choice"
 msgstr "Ajouter un choix"
 
 #: ../../localisation/index.php:122
 msgid "Add a label"
 msgstr "Ajouter un label"
+
+#: ../../media/index.php:106
+msgid "Add a legend"
+msgstr "Ajouter une légende"
+
+#: ../../content/index.php:99
+msgid "Add a new"
+msgstr "Ajouter un nouveau"
 
 #: ../../content/data.php:292 ../../user/data.php:159
 msgid "Add a tab"
@@ -126,6 +151,10 @@ msgstr "Adresse 2"
 msgid "Adress title"
 msgstr "Titre de l'adresse"
 
+#: ../../content/ui/menu.php:50
+msgid "Ads"
+msgstr "Pubs"
+
 #: ../../field/asso.php:13 ../../field/asso.php:18
 msgid "Album"
 msgstr "Album"
@@ -134,9 +163,13 @@ msgstr "Album"
 msgid "Album URL"
 msgstr "URL de l'album"
 
-#: ../../content/index.php:127
+#: ../../content/index.php:149
 msgid "All"
 msgstr "Tous"
+
+#: ../../content/data.php:480
+msgid "Allow negative stock"
+msgstr "Autoriser le stock négatif"
 
 #: ../../user/data.php:267
 msgid "Allow this user to log in"
@@ -145,6 +178,10 @@ msgstr "Permettre à l'utilisateur de se connecter"
 #: ../../content/data.php:357 ../../user/data.php:189
 msgid "Always visible"
 msgstr "Toujours visible"
+
+#: ../../content/index.php:435
+msgid "Apply changes"
+msgstr "Appliquer les changements"
 
 #: ../../config/offline.php:66
 msgid "Apply to those groups"
@@ -158,7 +195,7 @@ msgstr "Zone"
 msgid "Auto generate"
 msgstr "Auto généré"
 
-#: ../../config/export.php:112
+#: ../../config/export.php:106
 msgid "Automatic backup (patch)"
 msgstr "Sauvegarde automatique (patch)"
 
@@ -178,6 +215,10 @@ msgstr "Administration"
 msgid "Back office access"
 msgstr "Accès à l'administration"
 
+#: ../../type/index.php:203
+msgid "Back office view"
+msgstr "Visible dans le backoffice"
+
 #: ../../content/gallery-import.php:137
 msgid "Back to album"
 msgstr "Revenir à l'album"
@@ -194,9 +235,13 @@ msgstr "Retour au formulaire complet"
 msgid "Back to the list"
 msgstr "Revenir à la liste"
 
-#: ../../config/export.php:144
+#: ../../config/export.php:138
 msgid "Backup the database now"
 msgstr "Sauvergarder la base de données maintenant"
+
+#: ../../user/import.php:251
+msgid "Be texte files (.TXT, .CSV)"
+msgstr "Etre un fichier texte (.TXT, .CSV)"
 
 #: ../../config/index.php:113
 msgid "Blind copy"
@@ -210,6 +255,10 @@ msgstr "Marque blanche"
 msgid "Browse"
 msgstr "Parcourir"
 
+#: ../../type/index.php:170 ../../type/index.php:187
+msgid "Business"
+msgstr "E-commerce"
+
 #: ../../field/asso.php:92
 msgid "Business cart"
 msgstr "Panier"
@@ -218,11 +267,11 @@ msgstr "Panier"
 msgid "Business cart (ligne)"
 msgstr "Panier (ligne)"
 
-#: ../../content/data.php:781
+#: ../../content/data.php:786
 msgid "Buyable"
 msgstr "Achetable"
 
-#: ../../content/data.php:773
+#: ../../content/data.php:778
 msgid "Buyers"
 msgstr "Acheter"
 
@@ -231,10 +280,11 @@ msgstr "Acheter"
 #: ../../config/admin.php:30 ../../config/field.php:55
 #: ../../config/index.php:81 ../../config/language.php:71
 #: ../../config/offline.php:52 ../../config/robots.php:45
-#: ../../content/index.php:134 ../../content/parent.php:186
-#: ../../field/asso.php:199 ../../media/index.php:65
-#: ../../social/forum.php:166 ../../theme/index.php:62 ../../type/row.php:226
-#: ../../user/group.php:121 ../../user/group.php:71
+#: ../../content/index.php:156 ../../content/parent.php:186
+#: ../../field/asso.php:199 ../../media/index.php:66
+#: ../../social/forum.php:166 ../../theme/index.php:62
+#: ../../type/index.php:154 ../../type/row.php:227 ../../user/group.php:121
+#: ../../user/group.php:71
 msgid "Cancel"
 msgstr "Annuler"
 
@@ -242,16 +292,16 @@ msgstr "Annuler"
 msgid "Cancel remove"
 msgstr "Annuler la suppression"
 
-#: ../../content/data.php:460
+#: ../../content/data.php:463
 msgid "Carriage"
 msgstr "Livraison"
 
-#: ../../field/asso.php:85
+#: ../../field/asso.php:85 ../../type/index.php:212
 msgid "Categories"
 msgstr "Catégories"
 
-#: ../../content/data.php:611 ../../content/gallery-album.php:298
-#: ../../content/index.php:98 ../../content/ui/menu.php:14
+#: ../../content/data.php:615 ../../content/gallery-album.php:298
+#: ../../content/index.php:120 ../../content/ui/menu.php:14
 #: ../../user/profile.php:128
 msgid "Category"
 msgstr "Catégorie"
@@ -260,7 +310,7 @@ msgstr "Catégorie"
 msgid "Change language"
 msgstr "Changer de langue"
 
-#: ../../field/index.php:240
+#: ../../field/index.php:244
 msgid ""
 "Change the type, change database field definition and could lost some data"
 msgstr ""
@@ -276,10 +326,14 @@ msgstr "Changer le format de l'heure"
 msgid "Chapter"
 msgstr "Arborescence"
 
-#: ../../content/data.php:591 ../../content/gallery-album.php:283
-#: ../../field/asso.php:86
+#: ../../content/data.php:595 ../../content/gallery-album.php:283
+#: ../../field/asso.php:86 ../../type/index.php:211
 msgid "Chapters"
 msgstr "Chapitres"
+
+#: ../../user/import.php:171
+msgid "Check if the user already exists"
+msgstr "Vérifier si l'utilisateur existe déjà"
 
 #: ../../core/module.php:24
 msgid "Check update"
@@ -299,11 +353,15 @@ msgstr "Ville"
 msgid "Civility"
 msgstr "Civilité"
 
-#: ../../content/data.php:721
+#: ../../content/data.php:725
 msgid "Click Limit"
-msgstr "Limite de clic"
+msgstr "Limite de click"
 
-#: ../../field/index.php:108 ../../field/index.php:168
+#: ../../media/index.php:157
+msgid "Close"
+msgstr "Fermer"
+
+#: ../../field/index.php:112 ../../field/index.php:172
 msgid "Code"
 msgstr "Code"
 
@@ -315,12 +373,16 @@ msgstr "Colonne 1"
 msgid "Column 2"
 msgstr "Colonne 2"
 
-#: ../../type/row.php:223
+#: ../../business/ui/menu.php:44 ../../type/index.php:137
+msgid "Columns"
+msgstr "Colonnes"
+
+#: ../../type/row.php:224
 msgid "Columns for type"
 msgstr "Colonnes pour le type"
 
-#: ../../comment/index.php:93 ../../content/data.php:521
-#: ../../content/data.php:785
+#: ../../comment/index.php:93 ../../content/data.php:525
+#: ../../content/data.php:790
 msgid "Comment"
 msgstr "Commentaire"
 
@@ -331,6 +393,14 @@ msgstr "Commentaires"
 #: ../../user/import-book.php:40
 msgid "Company"
 msgstr "Entreprise"
+
+#: ../../user/picker.php:90
+msgid "Company name"
+msgstr "Raison social"
+
+#: ../../business/ui/menu.php:41
+msgid "Config"
+msgstr "Config"
 
 #: ../../config/ui/menu.php:6
 msgid "Configuration"
@@ -343,6 +413,14 @@ msgstr "Mise à jour de la configuration"
 #: ../../theme/index.php:88
 msgid "Configure"
 msgstr "Configurer"
+
+#: ../../user/import.php:252
+msgid "Containing one user a line"
+msgstr "Contenir un utilisateur par ligne"
+
+#: ../../user/import.php:253
+msgid "Containning user properties in distinct columnes"
+msgstr "Contenir les paramètres utilisateur dans des colonnes individuelles"
 
 #: ../../comment/index.php:91
 msgid "Content"
@@ -360,7 +438,11 @@ msgstr "Copie"
 msgid "Country"
 msgstr "Pays"
 
-#: ../../content/index.php:392
+#: ../../business/ui/menu.php:15
+msgid "Coupon"
+msgstr "Coupon"
+
+#: ../../content/index.php:417
 msgid "Create a new %s"
 msgstr "Créer un nouveau"
 
@@ -368,7 +450,7 @@ msgstr "Créer un nouveau"
 msgid "Create a new ablum  into this album"
 msgstr "Créer un nouvel album dans cet ablum"
 
-#: ../../media/index.php:62
+#: ../../media/index.php:63
 msgid "Create a new folder"
 msgstr "Créer un nouveau dossier"
 
@@ -376,10 +458,14 @@ msgstr "Créer un nouveau dossier"
 msgid "Create folder and sub folders"
 msgstr "Créer les dossiers et sous dossiers"
 
-#: ../../content/browse.php:100 ../../content/data.php:547
-#: ../../content/gallery-album.php:354 ../../content/index.php:357
-#: ../../user/data.php:232 ../../user/index.php:97
+#: ../../content/browse.php:100 ../../content/data.php:551
+#: ../../content/gallery-album.php:354 ../../content/index.php:382
+#: ../../user/data.php:232 ../../user/index.php:97 ../../user/picker.php:88
 msgid "Created"
+msgstr "Création"
+
+#: ../../user/group-view.php:88
+msgid "Creation"
 msgstr "Création"
 
 #: ../../content/gallery-import.php:152
@@ -390,16 +476,20 @@ msgstr "Album courant: <i>%s</i>"
 msgid "Current album: %s"
 msgstr "Album courant: %s"
 
-#: ../../content/gallery-item.php:271
+#: ../../content/gallery-item.php:273
 msgid "Current item"
 msgstr "Element courant"
 
 #. ($data['contentRateAvg'])
-#: ../../content/data.php:535
+#: ../../content/data.php:539
 msgid "Current note: "
 msgstr "Note actuelle: "
 
-#: ../../config/export.php:98
+#: ../../user/import.php:97
+msgid "Custom fields"
+msgstr "Champs pesonnalisés"
+
+#: ../../config/export.php:92
 msgid "Date"
 msgstr "Date"
 
@@ -407,7 +497,7 @@ msgstr "Date"
 msgid "Date format"
 msgstr "Format de la date"
 
-#: ../../content/data.php:543 ../../content/gallery-album.php:350
+#: ../../content/data.php:547 ../../content/gallery-album.php:350
 #: ../../user/data.php:228
 msgid "Dates"
 msgstr "Dates"
@@ -424,12 +514,16 @@ msgstr "Langue par défaut (si non précisé dans l'URL)"
 msgid "Default theme — Could be changed by chapters and/or modules"
 msgstr "Thème par défaut — Peut être changé par chapitres et/ou modules"
 
+#: ../../media/index.php:103 ../../media/index.php:77
+msgid "Delete"
+msgstr "Supprimer"
+
 #: ../../config/language.php:189
 msgid "Delivery"
 msgstr "Livraison"
 
 #: ../../category/index.php:225 ../../chapter/index.php:289
-#: ../../content/data-language.php:290
+#: ../../content/data-language.php:290 ../../media/index.php:151
 msgid "Description"
 msgstr "Description"
 
@@ -441,7 +535,8 @@ msgstr "Description (seo)"
 msgid "Disable cache may cause slowness for large images."
 msgstr "Désactiver la cache pourrait ralentir l'affichage de grandes images"
 
-#: ../../content/index.php:65 ../../user/index.php:54
+#: ../../business/index.php:58 ../../content/index.php:64
+#: ../../user/index.php:54
 msgid "Display settings"
 msgstr "Afficher les réglages"
 
@@ -449,17 +544,29 @@ msgstr "Afficher les réglages"
 msgid "Do not forget to save this page, before duplicate it"
 msgstr "N'oubliez pas de sauvegarder cette page avant de la dupliquer"
 
+#: ../../business/edit.php:130
+msgid "Do not send email"
+msgstr "Ne pas envoyer d'email"
+
+#: ../../user/import.php:91
+msgid "Do not use"
+msgstr "Ne pas prendre en compte"
+
 #: ../../config/index.php:207
 msgid "Domain name"
 msgstr "Nom de domaine"
 
-#: ../../media/index.php:56
+#: ../../media/index.php:57
 msgid "Download"
 msgstr "Téléchargement"
 
 #: ../../media/index.php:45
 msgid "Drag & drop files here to upload them."
 msgstr "Glisser et déposer des fichiers ici pour les envoyer."
+
+#: ../../media/index.php:104 ../../user/import.php:52
+msgid "Duplicate"
+msgstr "Doublon"
 
 #: ../../category/index.php:215 ../../chapter/index.php:275
 msgid "Duplicate - change name"
@@ -468,6 +575,10 @@ msgstr "Doublon - changer de nom"
 #: ../../content/data-language.php:171
 msgid "Duplicate data to this language"
 msgstr "Doublon pour cette langue"
+
+#: ../../user/import.php:211
+msgid "Duplicates accounts detected during the import"
+msgstr "Comptes dupliqués, détectés pendant l'import"
 
 #: ../../content/gallery-import.php:139 ../../content/gallery.php:45
 #: ../../content/parent.php:205
@@ -478,9 +589,13 @@ msgstr "Editer"
 msgid "Edit tabs"
 msgstr "Editer les onglets"
 
-#: ../../user/import-book.php:39
+#: ../../user/import-book.php:39 ../../user/picker.php:93
 msgid "Email"
 msgstr "Email"
+
+#: ../../user/import.php:93
+msgid "Email (login)"
+msgstr "Email (login)"
 
 #: ../../config/language.php:185
 msgid "Enable data to be translated in the language in the back office"
@@ -491,7 +606,7 @@ msgstr ""
 msgid "Enable the country for delivery (eBusiness)"
 msgstr "Activer ce pays pour la livraions (eCommerce)"
 
-#: ../../content/data.php:570 ../../content/gallery-album.php:377
+#: ../../content/data.php:574 ../../content/gallery-album.php:377
 msgid "Ends"
 msgstr "Se termine"
 
@@ -503,7 +618,15 @@ msgstr "Priviléges insuffisants"
 msgid "Enter your"
 msgstr "Entrez votre"
 
-#: ../../content/data.php:524 ../../content/data.php:531
+#: ../../user/import.php:51
+msgid "Error"
+msgstr "Erreur"
+
+#: ../../user/import.php:220
+msgid "Errors occured during this import. Can not import :"
+msgstr "Des erreurs sont survenues pendant l'import. Comptes non importés :"
+
+#: ../../content/data.php:528 ../../content/data.php:535
 msgid "Every body"
 msgstr "Tout le monde"
 
@@ -519,19 +642,24 @@ msgstr "Expliquation"
 msgid "Export"
 msgstr "Export"
 
-#: ../../config/ui/menu.php:23 ../../type/row.php:181
+#: ../../config/ui/menu.php:23 ../../type/row.php:182
 msgid "Field"
 msgstr "Champ"
 
-#: ../../content/ui/menu.php:31 ../../field/index.php:329
+#: ../../content/ui/menu.php:31 ../../field/index.php:333
 #: ../../theme/index.php:80
 msgid "Fields"
 msgstr "Champs"
 
-#: ../../chapter/index.php:143 ../../content/index.php:133
-#: ../../field/index.php:109 ../../user/index.php:87
+#: ../../business/index.php:82 ../../chapter/index.php:143
+#: ../../content/index.php:155 ../../field/index.php:113
+#: ../../user/index.php:87
 msgid "Filter"
 msgstr "Filtrer"
+
+#: ../../user/group-view.php:78
+msgid "Filter results"
+msgstr "Filtrer les résultats"
 
 #: ../../localisation/index.php:212
 msgid "Find this label in theme folder"
@@ -541,11 +669,11 @@ msgstr "Trouver ces label dans le dossier du thême"
 msgid "Folder"
 msgstr "Dossier"
 
-#: ../../config/export.php:89
+#: ../../config/export.php:83
 msgid "Folder /user/dump is used to backup database exoprt files."
 msgstr "Le dossier /user/dump est utilisé pour sauvegarder la base de données"
 
-#: ../../media/index.php:63
+#: ../../media/index.php:64
 msgid "Folder name..."
 msgstr "Nom du dossier..."
 
@@ -557,7 +685,7 @@ msgstr "Fonction"
 msgid "Force a theme"
 msgstr "Forcer un thême"
 
-#: ../../content/data.php:672
+#: ../../content/data.php:676
 msgid "Forum (Social)"
 msgstr "Forum (Social)"
 
@@ -577,6 +705,18 @@ msgstr "Ouvrir le site"
 msgid "Front office view"
 msgstr "Visible sur le site"
 
+#: ../../media/index.php:105
+msgid "Fullscreen"
+msgstr "Plein écran"
+
+#: ../../type/index.php:174 ../../type/index.php:192
+msgid "Gallery"
+msgstr "Gallerie"
+
+#: ../../media/index.php:109 ../../media/index.php:112
+msgid "Generate thumbnail"
+msgstr "Générer la vignette"
+
 #: ../../config/language.php:210
 msgid "Give this zone a name"
 msgstr "Donnez à cette zone un nom"
@@ -593,13 +733,38 @@ msgstr "Google Analytics ID (UA-YYYYYYY-XX)"
 msgid "Group"
 msgstr "Groupe"
 
-#: ../../content/data.php:632 ../../content/gallery-album.php:315
+#: ../../content/data.php:636 ../../content/gallery-album.php:315
+#: ../../type/index.php:209
 msgid "Groups"
 msgstr "Groupes"
 
-#: ../../field/index.php:94
+#: ../../business/ui/menu.php:20
+msgid "History"
+msgstr "Historique"
+
+#: ../../user/group-view.php:71 ../../user/picker.php:72
+msgid "How many"
+msgstr "Combien"
+
+#: ../../field/index.php:98
 msgid "I really want to remove thoses fields"
 msgstr "Je souhaite réellement supprimer ces champs"
+
+#: ../../user/import.php:182
+msgid "If not defined, activate the user"
+msgstr "Si non défini, rendrer les utilisateurs actifs"
+
+#: ../../user/import.php:175
+msgid "If not defined, import the user in the group"
+msgstr "Si non défini, intégrer les utilsiateur au groupe"
+
+#: ../../user/import.php:256
+msgid ""
+"If the file uses a protect caracter to wrapp data, it (ie: \"value\",\"value"
+"\",\"value\"...), it will be removed."
+msgstr ""
+"Si le fichier contient un caractère pour protéger les colonnes (Exemple: "
+"\"valeur\", \"valeur\", \"valeur\"...) il sera supprimé"
 
 #: ../../media/index.php:46
 msgid "If your browser do not support this features, click \"Browse\" button."
@@ -611,6 +776,14 @@ msgstr ""
 msgid "Import"
 msgstr "Importer"
 
+#: ../../user/import.php:249
+msgid "Import files must: "
+msgstr "Le fichier à importé doit:"
+
+#: ../../user/import.php:207
+msgid "Import finished: %s users imported in your database"
+msgstr "Import terminé: %s utilisateur importés dans la base de données"
+
 #: ../../content/gallery-import.php:162
 msgid "Import item from /media folder"
 msgstr "Importer depuis le dossier /media"
@@ -619,15 +792,15 @@ msgstr "Importer depuis le dossier /media"
 msgid "Import more languages"
 msgstr "Importer plus de langage"
 
-#: ../../config/export.php:100
+#: ../../config/export.php:94
 msgid "Infos"
 msgstr "Info"
 
-#: ../../content/index.php:129
+#: ../../content/index.php:151
 msgid "Inheritance"
 msgstr "Héritage"
 
-#: ../../field/index.php:184
+#: ../../field/index.php:188
 msgid "Inline CSS applieds to form field"
 msgstr "Style CSS en ligne appliqués au champ"
 
@@ -643,13 +816,17 @@ msgstr "Installer"
 msgid "Installed"
 msgstr "Installé"
 
-#: ../../field/index.php:177
+#: ../../field/index.php:181
 msgid "Instruction"
 msgstr "Instruction"
 
 #: ../../field/asso.php:13 ../../field/asso.php:18
 msgid "Item"
 msgstr "Element"
+
+#: ../../type/index.php:221
+msgid "Key"
+msgstr "Clé"
 
 #: ../../content/data-language.php:284
 msgid "Key words"
@@ -659,13 +836,17 @@ msgstr "Mot clé"
 msgid "Key words (seo)"
 msgstr "Mot clé (SEO)"
 
+#: ../../user/import.php:255
+msgid "Kodeine detect automaticaly, the new line caracter."
+msgstr "Kodeine détecte automatiquement le caractère de fin de ligne"
+
 #: ../../config/index.php:140 ../../config/index.php:210
 #: ../../config/language.php:146 ../../config/language.php:88
-#: ../../content/index.php:119
+#: ../../content/index.php:141
 msgid "Language"
 msgstr "Langues"
 
-#: ../../field/index.php:398
+#: ../../field/index.php:402
 msgid "Language (JS, JSON, XML...)"
 msgstr "Langage (JS, JSON, XML...)"
 
@@ -681,7 +862,7 @@ msgstr "Langues"
 msgid "Last"
 msgstr "Version en ligne"
 
-#: ../../user/import-book.php:38
+#: ../../user/import-book.php:38 ../../user/picker.php:92
 msgid "Last name"
 msgstr "Prénom"
 
@@ -689,19 +870,25 @@ msgstr "Prénom"
 msgid "Let both fields empty to keep the current password"
 msgstr "Laissez les deux champs vides pour ne pas modifier le mot de passe"
 
-#: ../../content/index.php:95 ../../user/index.php:68
+#: ../../business/index.php:69 ../../content/index.php:117
+#: ../../user/index.php:68
 msgid "Limit"
 msgstr "Limite"
 
-#: ../../content/ui/menu.php:6 ../../field/asso.php:159
+#: ../../content/index.php:90 ../../content/ui/menu.php:6
+#: ../../field/asso.php:159
 msgid "List"
+msgstr "Liste"
+
+#: ../../user/picker.php:48
+msgid "Listing"
 msgstr "Liste"
 
 #: ../../config/language.php:152
 msgid "Locale"
 msgstr "Locale"
 
-#: ../../content/data.php:741
+#: ../../content/data.php:745
 msgid "Location"
 msgstr "Emplacement"
 
@@ -717,12 +904,17 @@ msgstr "Se déconnecter"
 msgid "Mail recipient"
 msgstr "Destinataire des mails"
 
-#: ../../content/index.php:135
+#: ../../business/edit.php:129
+msgid "Mail template"
+msgstr "Modèle de mail"
+
+#: ../../content/index.php:157
 msgid "Manage columns"
 msgstr "Gérer les colonnes"
 
 #: ../../category/index.php:121 ../../chapter/index.php:176
-#: ../../field/asso.php:122 ../../social/forum.php:97
+#: ../../field/asso.php:122 ../../social/forum.php:97 ../../type/index.php:134
+#: ../../type/index.php:78
 msgid "Manage fields"
 msgstr "Gérer les champs"
 
@@ -730,27 +922,35 @@ msgstr "Gérer les champs"
 msgid "Manage types"
 msgstr "Gérer les types"
 
-#: ../../field/index.php:156
+#: ../../field/index.php:160
 msgid "Mandatory"
 msgstr "Obligatoire"
 
-#: ../../field/index.php:233 ../../field/index.php:253
-#: ../../field/index.php:294 ../../field/index.php:317
+#: ../../user/import.php:92
+msgid "Mandatory fields"
+msgstr "Champs obligatoires"
+
+#: ../../field/index.php:237 ../../field/index.php:257
+#: ../../field/index.php:298 ../../field/index.php:321
 msgid "Many choices avalaibles"
 msgstr "Plusieurs choix disponibles"
 
-#: ../../field/index.php:131
+#: ../../field/index.php:84
 msgid "Match fields & types"
 msgstr "Associer les champs aux types"
 
 #: ../../category/index.php:218 ../../chapter/index.php:282
-#: ../../content/data.php:852 ../../user/data.php:299
+#: ../../content/data.php:857 ../../user/data.php:299
 msgid "Media"
 msgstr "Media"
 
-#: ../../content/data.php:524 ../../content/data.php:531
+#: ../../content/data.php:528 ../../content/data.php:535
 msgid "Members only"
 msgstr "Membres seulement"
+
+#: ../../business/index.php:124
+msgid "Mode"
+msgstr "Mode"
 
 #: ../../chapter/index.php:278
 msgid "Module"
@@ -760,27 +960,33 @@ msgstr "Module"
 msgid "Module manager"
 msgstr "Gestionnaire de modules"
 
+#: ../../user/import.php:162
+msgid "More informations"
+msgstr "Informations complémentaires"
+
 #: ../../category/index.php:232 ../../config/index.php:271
 #: ../../social/forum.php:148
 msgid "More parameters"
 msgstr "Paramètres supplémentaires"
 
-#: ../../category/index.php:107 ../../category/index.php:203
-#: ../../chapter/index.php:142 ../../chapter/index.php:263
-#: ../../config/language.php:140 ../../content/browse.php:102
-#: ../../content/data-language.php:261 ../../content/data.php:389
-#: ../../content/gallery-album.php:221 ../../content/gallery-item.php:214
-#: ../../content/index.php:364 ../../content/parent.php:153
-#: ../../field/index.php:106 ../../field/index.php:164
-#: ../../social/forum.php:133 ../../theme/index.php:116
-#: ../../theme/index.php:79 ../../user/group.php:143 ../../user/group.php:88
+#: ../../business/index.php:95 ../../category/index.php:107
+#: ../../category/index.php:203 ../../chapter/index.php:142
+#: ../../chapter/index.php:263 ../../config/language.php:140
+#: ../../content/browse.php:102 ../../content/data-language.php:261
+#: ../../content/data.php:389 ../../content/gallery-album.php:221
+#: ../../content/gallery-item.php:216 ../../content/index.php:389
+#: ../../content/parent.php:153 ../../field/index.php:110
+#: ../../field/index.php:168 ../../social/forum.php:133
+#: ../../theme/index.php:116 ../../theme/index.php:79 ../../type/index.php:106
+#: ../../type/index.php:217 ../../user/group-view.php:90
+#: ../../user/group.php:143 ../../user/group.php:88
 #: ../../user/import-book.php:37 ../../user/index.php:99
-#: ../../user/profile.php:74
+#: ../../user/picker.php:91 ../../user/profile.php:74
 msgid "Name"
 msgstr "Nom"
 
-#: ../../content/gallery.php:46 ../../field/index.php:409
-#: ../../user/group.php:74 ../../user/profile.php:62
+#: ../../content/gallery.php:46 ../../field/index.php:413
+#: ../../type/index.php:237 ../../user/group.php:74 ../../user/profile.php:62
 msgid "New"
 msgstr "Nouveau"
 
@@ -792,7 +998,7 @@ msgstr "Nouveau document"
 msgid "New folder"
 msgstr "Nouveau dossier"
 
-#: ../../user/index.php:55
+#: ../../user/data.php:131 ../../user/index.php:55 ../../user/picker.php:51
 msgid "New user"
 msgstr "Nouvel utilisateur"
 
@@ -804,11 +1010,11 @@ msgstr "Newsletter"
 msgid "Next album"
 msgstr "Album suivant"
 
-#: ../../content/gallery-item.php:272
+#: ../../content/gallery-item.php:274
 msgid "Next item"
 msgstr "Element suivant"
 
-#: ../../config/export.php:125
+#: ../../config/export.php:119
 msgid "No backup"
 msgstr "Aucune sauvegarde"
 
@@ -820,7 +1026,7 @@ msgstr "Aucun commentaire"
 msgid "No content"
 msgstr "Aucun contenu"
 
-#: ../../content/data.php:315 ../../content/index.php:391
+#: ../../content/data.php:315 ../../content/index.php:416
 msgid "No data"
 msgstr "Aucune donnée"
 
@@ -837,7 +1043,7 @@ msgid "No document found in this language, other available languages: "
 msgstr ""
 "Aucun document trouvé dans cette langue, voici les autres langues disponibles"
 
-#: ../../field/index.php:122
+#: ../../field/index.php:126
 msgid "No field"
 msgstr "Pas de champ"
 
@@ -845,25 +1051,37 @@ msgstr "Pas de champ"
 msgid "No more album"
 msgstr "Pas d'album supplémentaire"
 
-#: ../../content/gallery-item.php:287
+#: ../../content/gallery-item.php:289
 msgid "No more item"
 msgstr "Pas d'élement supplémentaire"
 
-#: ../../field/index.php:202 ../../field/index.php:207
-#: ../../field/index.php:212 ../../field/index.php:217
-#: ../../field/index.php:222
+#: ../../field/index.php:206 ../../field/index.php:211
+#: ../../field/index.php:216 ../../field/index.php:221
+#: ../../field/index.php:226
 msgid "No options available"
 msgstr "Aucune option disponible"
+
+#: ../../business/index.php:181
+msgid "No order"
+msgstr "Aucune commande"
 
 #: ../../content/gallery-album.php:190
 msgid "No previous album"
 msgstr "Aucun album précédent"
 
-#: ../../content/gallery-item.php:279
+#: ../../content/gallery-item.php:281
 msgid "No previous item"
 msgstr "Aucun élément précédent"
 
-#: ../../content/data.php:784
+#: ../../user/group-view.php:112 ../../user/picker.php:141
+msgid "No result"
+msgstr "Aucun résultat"
+
+#: ../../user/import.php:208
+msgid "No user imported"
+msgstr "Aucun utilisateur importé"
+
+#: ../../content/data.php:789
 msgid "Normal price"
 msgstr "Prix normal"
 
@@ -888,23 +1106,43 @@ msgstr ""
 msgid "Off-line"
 msgstr "Hors ligne"
 
-#: ../../media/index.php:53
+#: ../../type/index.php:164
+msgid ""
+"Once a type is created, you will not be able to change business, ad, or "
+"gallery settings"
+msgstr ""
+"Une fois le type créé, vous ne pourrez plus changer les paramètres business, "
+"ad et gallery"
+
+#: ../../media/index.php:54
 msgid "One URL a line"
 msgstr "Une URL par ligne"
 
-#: ../../field/index.php:232 ../../field/index.php:252
-#: ../../field/index.php:293 ../../field/index.php:316
+#: ../../field/index.php:236 ../../field/index.php:256
+#: ../../field/index.php:297 ../../field/index.php:320
 msgid "One choice available"
 msgstr "Un choix disponible"
 
-#: ../../field/index.php:254 ../../field/index.php:295
-#: ../../field/index.php:318
+#: ../../field/index.php:258 ../../field/index.php:299
+#: ../../field/index.php:322
 msgid "One choice available, (dropdown menu)"
 msgstr "Un choix disponible (menu déroulant)"
 
-#: ../../content/index.php:128
+#: ../../user/group-view.php:53 ../../user/picker.php:62
+msgid "Options"
+msgstr "Options"
+
+#: ../../business/edit.php:109
+msgid "Order edit"
+msgstr "Edition de la commande"
+
+#: ../../content/index.php:150
 msgid "Ordered"
 msgstr "Ordonné"
+
+#: ../../business/ui/menu.php:6
+msgid "Orders"
+msgstr "Commandes"
 
 #: ../../user/group.php:201
 msgid "Other fields"
@@ -942,6 +1180,10 @@ msgstr "Mot de passe"
 msgid "Patch"
 msgstr "Patch"
 
+#: ../../business/edit.php:113
+msgid "Payment status"
+msgstr "Statut paiement"
+
 #: ../../user/import-book.php:49
 msgid "Phone 1"
 msgstr "Téléphone 1"
@@ -951,10 +1193,14 @@ msgid "Phone 2"
 msgstr "Téléphone 2"
 
 #: ../../category/index.php:221 ../../content/gallery-import.php:166
-#: ../../content/gallery-import.php:210 ../../content/gallery-item.php:230
+#: ../../content/gallery-import.php:210 ../../content/gallery-item.php:232
 #: ../../social/forum.php:140
 msgid "Pick"
 msgstr "Choisir"
+
+#: ../../media/index.php:113 ../../media/index.php:116
+msgid "Play"
+msgstr "Lire"
 
 #: ../../user/data.php:50
 msgid "Please, fill the form correctly"
@@ -964,19 +1210,19 @@ msgstr "Merci de remplir le "
 msgid "Previous album"
 msgstr "Album précédent"
 
-#: ../../content/gallery-item.php:270
+#: ../../content/gallery-item.php:272
 msgid "Previous item"
 msgstr "Album suivant"
 
-#: ../../content/data.php:782
+#: ../../content/data.php:787
 msgid "Price"
 msgstr "Prix HT"
 
-#: ../../content/data.php:783
+#: ../../content/data.php:788
 msgid "Price with taxes"
 msgstr "Prix TTC"
 
-#: ../../field/index.php:355
+#: ../../field/index.php:359
 msgid "Primary Key/ID"
 msgstr "Clé/ID primaire"
 
@@ -989,7 +1235,7 @@ msgid "Profile name"
 msgstr "Nom du profil"
 
 #: ../../config/language.php:158 ../../content/data.php:446
-#: ../../content/index.php:361
+#: ../../content/index.php:386
 msgid "Reference"
 msgstr "Référence"
 
@@ -997,7 +1243,8 @@ msgstr "Référence"
 msgid "Refresh"
 msgstr "Rafraichir"
 
-#: ../../content/data.php:585 ../../content/gallery-album.php:279
+#: ../../content/data.php:589 ../../content/gallery-album.php:279
+#: ../../type/index.php:207
 msgid "Relationships"
 msgstr "Relations"
 
@@ -1013,17 +1260,17 @@ msgstr "Recharger"
 msgid "Reload the page"
 msgstr "Recharger la page"
 
-#: ../../media/index.php:51
+#: ../../media/index.php:52
 msgid "Remote URL"
 msgstr "URL distante"
 
 #: ../../content/data-language.php:196 ../../content/data.php:236
-#: ../../content/parent.php:204 ../../field/index.php:130
-#: ../../type/row.php:246
+#: ../../content/parent.php:204 ../../field/index.php:134
+#: ../../type/row.php:247
 msgid "Remove"
 msgstr "Supprimer"
 
-#: ../../config/export.php:134
+#: ../../config/export.php:128
 msgid "Remove selected files"
 msgstr "Supprimer les fichiers selecitonnés"
 
@@ -1034,9 +1281,17 @@ msgstr "Supprimer les fichiers selecitonnés"
 msgid "Remove selected items"
 msgstr "Supprimer les élements selecitonnés"
 
-#: ../../content/browse.php:116 ../../content/index.php:410
+#: ../../content/browse.php:116
 msgid "Remove selected lines"
 msgstr "Supprimer les lignes selecitonnées"
+
+#: ../../business/index.php:190
+msgid "Remove selected orders"
+msgstr "Supprimer les commandes sélectionnées"
+
+#: ../../type/index.php:153
+msgid "Remove selection"
+msgstr "Supprimer les lignes selectionnées"
 
 #: ../../media/pref.php:54
 msgid ""
@@ -1054,7 +1309,7 @@ msgstr "Supprimer cette langue"
 msgid "Remove/Change selected items"
 msgstr "Supprimer/Changer les lignes sélectionnées."
 
-#: ../../content/data.php:536
+#: ../../content/data.php:540
 msgid "Reset notes"
 msgstr "Remettre à zéro la note"
 
@@ -1063,13 +1318,17 @@ msgid "Robots.txt"
 msgstr "Robotx.txt"
 
 #: ../../content/gallery-album.php:179 ../../content/gallery-import.php:120
-#: ../../content/gallery-item.php:264
+#: ../../content/gallery-item.php:266
 msgid "Root"
 msgstr "Racine"
 
-#: ../../field/index.php:380
+#: ../../field/index.php:384
 msgid "SQL \"WHERE\" statements"
 msgstr "Condition SQL \"WHERE\""
+
+#: ../../type/index.php:250
+msgid "SUPPRIMER ?"
+msgstr "SUPPRIMER ?"
 
 #: ../../category/index.php:198 ../../chapter/index.php:257
 msgid "Same as reference"
@@ -1079,10 +1338,11 @@ msgstr "Identique à la référence"
 #: ../../config/field.php:56 ../../config/index.php:82
 #: ../../config/language.php:72 ../../config/offline.php:53
 #: ../../config/robots.php:46 ../../content/data.php:237
-#: ../../content/gallery-album.php:156 ../../content/gallery-item.php:186
-#: ../../field/asso.php:198 ../../media/pref.php:60 ../../social/forum.php:165
-#: ../../theme/index.php:65 ../../theme/index.php:67 ../../user/group.php:72
-#: ../../user/group.php:75
+#: ../../content/gallery-album.php:156 ../../content/gallery-item.php:188
+#: ../../field/asso.php:198 ../../media/index.php:156 ../../media/pref.php:60
+#: ../../social/forum.php:165 ../../theme/index.php:65
+#: ../../theme/index.php:67 ../../type/index.php:236 ../../user/data.php:133
+#: ../../user/group.php:72 ../../user/group.php:75
 msgid "Save"
 msgstr "Sauver"
 
@@ -1094,7 +1354,7 @@ msgstr "Sauver les changements"
 msgid "Save tabs"
 msgstr "Sauver les onglets"
 
-#: ../../content/parent.php:185 ../../type/row.php:225
+#: ../../content/parent.php:185 ../../type/row.php:226
 msgid "Save this order"
 msgstr "Sauver cet ordre"
 
@@ -1102,12 +1362,13 @@ msgstr "Sauver cet ordre"
 msgid "Saved"
 msgstr "Sauvé"
 
-#: ../../content/index.php:92 ../../content/ui/menu.php:41
-#: ../../user/index.php:65
+#: ../../content/index.php:114 ../../content/ui/menu.php:41
+#: ../../user/group-view.php:64 ../../user/index.php:65
+#: ../../user/picker.php:69
 msgid "Search"
 msgstr "Rechecher"
 
-#: ../../field/index.php:152
+#: ../../field/index.php:156
 msgid "Searchable"
 msgstr "Recherchable"
 
@@ -1115,19 +1376,36 @@ msgstr "Recherchable"
 msgid "See all"
 msgstr "Tout voir"
 
+#: ../../content/index.php:98
+msgid "See the list"
+msgstr "Voir la liste"
+
+#: ../../media/index.php:119 ../../media/index.php:79
+msgid "Select"
+msgstr "Sélectionner"
+
 #: ../../media/ui/menu.php:17
 msgid "Settings"
 msgstr "Préférences"
 
-#: ../../content/data.php:829 ../../content/index.php:109
+#: ../../business/edit.php:120
+msgid "Shipment status"
+msgstr "Etat livraison"
+
+#: ../../business/ui/menu.php:10
+msgid "Shipping"
+msgstr "Livraison"
+
+#: ../../content/data.php:834 ../../content/index.php:131
 msgid "Shop"
 msgstr "Magasin"
 
-#: ../../config/export.php:99
+#: ../../config/export.php:93
 msgid "Size"
 msgstr "Taille"
 
-#: ../../content/data.php:652 ../../content/gallery-album.php:331
+#: ../../content/data.php:656 ../../content/gallery-album.php:331
+#: ../../type/index.php:210
 msgid "Smart groups"
 msgstr "Groupes intélligents"
 
@@ -1155,7 +1433,11 @@ msgstr "Social évenement (utilisateur)"
 msgid "Social Forum"
 msgstr "Social Forum"
 
-#: ../../content/data.php:555 ../../content/gallery-album.php:362
+#: ../../type/index.php:213
+msgid "Social forums"
+msgstr "Social forums"
+
+#: ../../content/data.php:559 ../../content/gallery-album.php:362
 msgid "Starts"
 msgstr "Commence"
 
@@ -1163,7 +1445,23 @@ msgstr "Commence"
 msgid "State"
 msgstr "Etat"
 
-#: ../../field/index.php:181
+#: ../../business/index.php:123
+msgid "Status"
+msgstr "Etat"
+
+#: ../../user/import.php:240
+msgid "Step 1: Choose your import file on your computer"
+msgstr "Etape 1: Sélectionner un fichier à importer sur votre ordinateur"
+
+#: ../../user/import.php:113
+msgid "Step 2 : Match each columns to kodeine custom user fields"
+msgstr "Etape 2: Faites correspondre les colonnes avec les champs utilisateur"
+
+#: ../../user/import.php:131
+msgid "Step 3 : You must check this options to complete the import"
+msgstr "Etape 3: Vous devez compléter ces options pour terminer l'import"
+
+#: ../../field/index.php:185
 msgid "Style"
 msgstr "Style"
 
@@ -1187,14 +1485,26 @@ msgstr "Elements système"
 msgid "TVA Intra"
 msgstr "TVA Intra"
 
-#: ../../field/index.php:351
+#: ../../field/index.php:355
 msgid "Table"
 msgstr "Table"
 
-#: ../../category/index.php:162 ../../content/data.php:483
-#: ../../content/gallery-album.php:263
+#: ../../business/ui/menu.php:35
+msgid "Tax"
+msgstr "TVA"
+
+#: ../../category/index.php:162 ../../content/data.php:487
+#: ../../content/gallery-album.php:263 ../../type/index.php:225
 msgid "Template"
 msgstr "Gabarit"
+
+#: ../../user/import.php:115 ../../user/import.php:133
+msgid "The file contains %s lines, only the six first lines are displayed"
+msgstr "Le fichier contient %s lignes, seules les 6 première sont affichées"
+
+#: ../../user/import.php:167
+msgid "The first line does not contain user data"
+msgstr "La première ligne ne contient pas de donnée"
 
 #: ../../config/index.php:118 ../../config/index.php:209
 #: ../../config/ui/menu.php:17
@@ -1221,7 +1531,7 @@ msgstr "Afficher en image"
 msgid "Time format"
 msgstr "Format de l'heure"
 
-#: ../../content/data-language.php:279
+#: ../../content/data-language.php:279 ../../media/index.php:148
 msgid "Title"
 msgstr "Titre"
 
@@ -1237,6 +1547,14 @@ msgstr "Activer/Désactiver l'éditeur de texte"
 msgid "Top left name, default Kodeine"
 msgstr "Nom en haut à gauche, par défaut: Kodeine"
 
+#: ../../business/index.php:126
+msgid "Total"
+msgstr "Total"
+
+#: ../../business/edit.php:127
+msgid "Tracking code"
+msgstr "Code de suivi"
+
 #: ../../config/language.php:183 ../../content/ui/menu.php:46
 msgid "Translate"
 msgstr "Traduction"
@@ -1245,21 +1563,33 @@ msgstr "Traduction"
 msgid "Translation"
 msgstr "Traduction"
 
-#: ../../content/ui/menu.php:25 ../../field/index.php:191
-#: ../../field/index.php:227 ../../field/index.php:247
+#: ../../content/ui/menu.php:25 ../../field/index.php:195
+#: ../../field/index.php:231 ../../field/index.php:251
 #: ../../user/profile.php:151
 msgid "Type"
 msgstr "Type"
 
-#: ../../content/browse.php:101 ../../content/data.php:563
-#: ../../content/gallery-album.php:370 ../../content/index.php:358
-#: ../../user/data.php:234 ../../user/index.php:98
+#: ../../content/index.php:89
+msgid "Type list"
+msgstr "Liste des types"
+
+#: ../../user/group-view.php:89
+msgid "Update"
+msgstr "Mise à jour"
+
+#: ../../content/browse.php:101 ../../content/data.php:567
+#: ../../content/gallery-album.php:370 ../../content/index.php:383
+#: ../../user/data.php:234 ../../user/index.php:98 ../../user/picker.php:89
 msgid "Updated"
 msgstr "Mise à jour"
 
 #: ../../media/ui/menu.php:13
-msgid "Upload"
-msgstr "Envoyer"
+msgid "Upload files"
+msgstr "Envoyer des fichiers"
+
+#: ../../user/import.php:245
+msgid "Upload this file"
+msgstr "Envoyer ce fichier"
 
 #: ../../content/gallery-import.php:176
 msgid "Upload to this album"
@@ -1267,7 +1597,7 @@ msgstr "Envoyer dans cet album"
 
 #: ../../category/index.php:210 ../../chapter/index.php:270
 #: ../../content/data-language.php:268 ../../content/data.php:397
-#: ../../content/gallery-item.php:226
+#: ../../content/gallery-item.php:228
 msgid "Url"
 msgstr "Url"
 
@@ -1275,7 +1605,7 @@ msgstr "Url"
 msgid "Use cache"
 msgstr "Utiliser la cache"
 
-#: ../../content/data.php:490 ../../content/gallery-album.php:266
+#: ../../content/data.php:494 ../../content/gallery-album.php:266
 msgid "Use default template"
 msgstr "Utiliser le gabarit par défaut"
 
@@ -1288,11 +1618,11 @@ msgstr "Champs utilisé"
 msgid "Used in the URL /fr/"
 msgstr "Utilisé dans l'URL /fr/"
 
-#: ../../field/index.php:186
+#: ../../field/index.php:190
 msgid "Used rich text editor"
 msgstr "Utilisé un éditeur de texte enrichi"
 
-#: ../../field/index.php:173
+#: ../../field/index.php:177
 msgid ""
 "Used to name a field in PHP code. Used only letters, no space or special "
 "caracters.\n"
@@ -1303,21 +1633,29 @@ msgstr ""
 "\t\t\tChanger cette valeur pourrait provoqué des erreurs sur le site. Faites "
 "attention."
 
-#: ../../config/export.php:112
+#: ../../user/import.php:93
+msgid "User ID (uniq)"
+msgstr "ID Utilisareur (unique)"
+
+#: ../../config/export.php:106
 msgid "User export"
 msgstr "Sauvegarde manuelle"
 
-#: ../../field/asso.php:87
+#: ../../field/asso.php:87 ../../user/data.php:132
 msgid "Users"
 msgstr "Utilisateurs"
 
 #: ../../category/index.php:254 ../../chapter/index.php:312
 #: ../../content/data-language.php:177 ../../content/data-language.php:199
 #: ../../content/gallery-import.php:167 ../../content/gallery-import.php:211
-#: ../../field/index.php:408 ../../localisation/index.php:211
-#: ../../media/index.php:64 ../../user/profile.php:63
+#: ../../field/index.php:412 ../../localisation/index.php:211
+#: ../../media/index.php:65 ../../user/profile.php:63
 msgid "Validate"
-msgstr "Validé"
+msgstr "Valider"
+
+#: ../../type/index.php:45
+msgid "Validation failed"
+msgstr "Erreur de validation"
 
 #: ../../config/admin.php:47 ../../config/index.php:97 ../../media/pref.php:35
 msgid "Value"
@@ -1327,20 +1665,24 @@ msgstr "Valeur"
 msgid "Versioning"
 msgstr "Archive"
 
-#: ../../content/data.php:711
+#: ../../type/index.php:133
+msgid "View"
+msgstr "Voir"
+
+#: ../../content/data.php:715
 msgid "View limit"
-msgstr "Limite de vie"
+msgstr "Limite de vue"
 
 #: ../../content/data.php:436 ../../content/gallery-album.php:240
-#: ../../content/gallery-item.php:241
+#: ../../content/gallery-item.php:243
 msgid "Visibility"
 msgstr "Visibilité"
 
-#: ../../content/data.php:780 ../../field/index.php:160
+#: ../../content/data.php:785 ../../field/index.php:164
 msgid "Visible"
 msgstr "Visible"
 
-#: ../../field/index.php:359
+#: ../../field/index.php:363
 msgid "Visible field"
 msgstr "Champ visible"
 
@@ -1360,7 +1702,7 @@ msgstr "Destinataire des mails envoyé depuis le site"
 msgid "Weight"
 msgstr "Poids"
 
-#: ../../content/data.php:731
+#: ../../content/data.php:735
 msgid "Weighting"
 msgstr "Pondération"
 
@@ -1368,7 +1710,11 @@ msgstr "Pondération"
 msgid "Welcome,<br />login-in"
 msgstr "Bienvenue,<br />identifiez-vous"
 
-#: ../../config/export.php:154
+#: ../../user/export.php:96
+msgid "Which users would you like to export ?"
+msgstr "Quels utilisateurs voulez-vous exporter ?"
+
+#: ../../config/export.php:148
 msgid ""
 "Would you really reload this backup ?\\n\\nThis will empty your current "
 "database then load data from the selected file.\\n\\nUSE AT YOUR OWN RISK"
@@ -1381,22 +1727,33 @@ msgstr ""
 msgid "Would you really want to remove this language ?"
 msgstr "Voulez-vous vraiment supprimer cette langue ?"
 
-#: ../../config/export.php:160
+#: ../../config/export.php:154
 msgid "Would you really want to remove those backup?"
 msgstr "Voulez-vous vraiment supprimer ces sauvegardes ?"
 
 #: ../../core/login.php:28
 msgid ""
 "You are logged in, but you do not have enought privileges to use the back "
-"office. <a href=\\\"?logout=1\\\">Logout</a>"
+"office. <a href=\"?logout=1\">Logout</a>"
 msgstr ""
 "Vous êtes identifié, mais vous n'avez pas les droits suffisant pour accéder "
-"à l'administration. <a href=\\\"?logout=1\\\">Se déconnecter</a>"
+"à l'administration. <a href=\"?logout=1\">Se déconnecter</a>"
 
 #: ../../config/index.php:199
 msgid "You can change default values for a specific domain name."
 msgstr ""
-"Vous pouvez changer les valeurs par défaut pour un nom de domaine spécific"
+"Vous pouvez changer les valeurs par défaut pour un nom de domaine "
+"spécifique.3"
+
+#: ../../type/index.php:96
+msgid "You can not add, see, browse data while there is no type defined"
+msgstr ""
+"Vous ne pouvez pas ajouter ou parcourir des contenus tant qu'aucun type "
+"n'est défini"
+
+#: ../../type/index.php:146
+msgid "You need to create a type to create new contents"
+msgstr "Vous devez créer un type pour ajout de nouveaux contenus"
 
 #: ../../user/import-book.php:45
 msgid "Zip Code"
@@ -1430,6 +1787,10 @@ msgstr "entrer votre nouveau"
 msgid "fr_FR, en_EN, de_DE"
 msgstr "fr_FR, en_EN, de_DE"
 
+#: ../../content/data.php:456
+msgid "grams"
+msgstr "en grammes"
+
 #: ../../core/login.php:60
 msgid "login"
 msgstr "identifiant"
@@ -1449,3 +1810,9 @@ msgstr "réinitialiser votre mot de passe"
 #: ../../core/login.php:84
 msgid "save it"
 msgstr "et sauver le"
+
+#~ msgid "Rename"
+#~ msgstr "Renommer"
+
+#~ msgid "Upload"
+#~ msgstr "Envoyer"

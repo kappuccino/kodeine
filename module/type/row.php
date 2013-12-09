@@ -2,7 +2,8 @@
 
 	if(!defined('COREINC')) die('Direct access not allowed');
 
-	$limit = 3;
+	$limit = 10;
+
 	if($_REQUEST['id_type'] != NULL){
 	    $data	= $app->apiLoad('type')->typeGet(array(
 	        'id_type' => $_REQUEST['id_type']

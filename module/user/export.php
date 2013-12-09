@@ -12,35 +12,38 @@
 	foreach($group_ as $e){
 		$group['G'.$e['id_group']] = 'Groupe '.$e['groupName'];
 	}
-	
+
 	$search = $app->searchGet(array('debug' => false, 'searchType' => 'user'));
 	foreach($search as $e){
 		$group['S'.$e['id_search']] = 'Groupe intelligent '.$e['searchName'];
 	}
-		
+
 	# Export
 	#
 	if(isset($_GET['group'])){
 		if(preg_match("#S(.*)#", $_GET['group'], $e)){
 			$user = $app->apiLoad('user')->userSearch(array(
 				'debug' 	=> false,
-				'id_search'	=> $e[1]
+				'id_search'	=> $e[1],
+				'noLimit'	=> true
 			));
 		}else
 		if(preg_match("#G(.*)#", $_GET['group'], $e)){
 			$user = $app->apiLoad('user')->userGet(array(
 				'debug' 	=> false,
 				'useField'	=> false,
-				'id_group'	=> $e[1]
+				'id_group'	=> $e[1],
+				'noLimit'	=> true
 			));
 		}else
 		if($_GET['group'] == 'ALL'){
 			$user = $app->apiLoad('user')->userGet(array(
 				'debug'		=> false,
-				'useField'	=> false
+				'useField'	=> false,
+				'noLimit'	=> true
 			));
 		}
-		
+
 		if(sizeof($user) > 0){
 			$colonnes = array_keys($user[0]);
 			foreach($colonnes as $e){
@@ -51,9 +54,9 @@
 					$tmp[] = $e;
 				}
 			}
-			
+
 			$line[] = implode("\t", $tmp);
-			
+
 			foreach($user as $e){
 				$row = array();
 				foreach($e as $e_){
@@ -63,7 +66,7 @@
 			}
 
 			$out = implode("\n", $line);
-		
+
 			header("Expires: Mon, 26 Jul 1997 05:00:00 GMT");
 			header("Last-Modified: ".gmdate("D,d M YH:i:s")." GMT");
 			header("Cache-Control: no-cache, must-revalidate");
@@ -93,7 +96,7 @@
 	<table width="100%" border="0" cellpadding="0" cellspacing="0" class="listing">
 		<thead>
 			<tr>
-				<th>Quels utilisateurs voulez vous exporter ?</th>
+				<th><?php echo _('Which users would you like to export ?') ?></th>
 			</tr>
 		</thead>
 		<tbody>

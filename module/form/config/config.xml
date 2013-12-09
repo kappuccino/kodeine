@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<element>
+
+	<data>
+		<key>form</key>
+		<version>5.2.0</version>
+        <lastMod>2013-05-16</lastMod>
+        <install>YES</install>
+		<name><![CDATA[Form]]></name>
+	</data>
+
+    <locale language="fr_FR">
+        <name><![CDATA[Formulaires]]></name>
+    </locale>
+
+    <profile>
+        <item code="index"		type="ALLOW_DENY" name="Accessible" />
+    </profile>
+
+</element>

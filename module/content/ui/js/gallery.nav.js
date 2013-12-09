@@ -17,19 +17,31 @@ $(function(){
 
 		if(e.keyCode == 38){ // up
 			var link = $('#goToAlbum').attr('href');
-			console.log('up', link);
 		}else
 		if(e.keyCode == 37){ // left
 			var link = $('#goToLeft').attr('href');
-			console.log('left', link);
 		}else
 		if(e.keyCode == 39){ // right
 			var link = $('#goToRight').attr('href');
-			console.log('right', link);
 		}
 
 		if(link != '') document.location = link;
+	});
 
+	$('#saveAndGoToLeft').click(function(){
+		var goto = $('#goToLeft').attr('href');
+		if(goto == '#') goto = document.location.href;
+
+		$('input[name="goto"]').val(goto);
+		$('#data').submit();
+	});
+
+	$('#saveAndGoToRight').click(function(){
+		var goto = $('#goToRight').attr('href');
+		if(goto == '#') goto = document.location.href;
+
+		$('input[name="goto"]').val(goto);
+		$('#data').submit();
 	});
 
 });

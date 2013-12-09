@@ -217,6 +217,7 @@
 		  `iso_ref` varchar(2) collate utf8_unicode_ci NOT NULL,
 		  `is_used` tinyint(1) NOT NULL default '0',
 		  `is_delivered` tinyint(1) NOT NULL default '0',
+		  `is_priced` tinyint(1) NOT NULL default '0',
 		  `countryZone` varchar(255) collate utf8_unicode_ci NOT NULL,
 		  `countryName` varchar(255) collate utf8_unicode_ci NOT NULL,
 		  `countryLanguage` varchar(255) collate utf8_unicode_ci NOT NULL,

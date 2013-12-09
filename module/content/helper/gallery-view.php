@@ -4,25 +4,37 @@
 
 	$data = array();
 
-	// Album
+	// ALBUM ///////////////////////////////////////////////////////////////////////////////////////////////////////////
 	if($_GET['id_album'] > 0){
 		$album = $app->apiLoad('content')->contentGet(array(
-			'raw'			=> true,
-			'id_content'	=> $_GET['id_album'],
+			'raw'        => true,
+			'id_content' => $_GET['id_album'],
 		));
 
-		$id_poster = $album['id_poster'];
-	}else{
-		$id_poster = NULL;
+		if($album['id_alias'] > 0){
+			$original = $app->apiLoad('content')->contentGet(array(
+				'raw'        => true,
+				'id_content' => $album['id_alias'],
+			));
+		}
 
+		$id_poster = empty($original) ? $album['id_poster']  : $original['id_poster'];
+		$id_album  = empty($original) ? $album['id_content'] : $original['id_content'];
+
+	}else{
+		$id_album  = 0;
+		$id_poster = NULL;
 	}
 
-	// Albums
+
+
+
+	// ALBUMS //////////////////////////////////////////////////////////////////////////////////////////////////////////
 	$albums = $app->apiLoad('content')->contentGet(array(
 		'language'	=> 'fr',
 		'raw'		=> true,
 		'id_type'	=> $_GET['id_type'],
-		'id_album'	=> $_GET['id_album'],
+		'id_album'	=> $id_album,
 		'is_album'	=> true,
 		'order'		=> 'contentAlbumPos',
 		'direction'	=> 'ASC',
@@ -34,20 +46,37 @@
 
 		$tmp = array(
 			'is_album'      => true,
-			'id_content'    => $e['id_content'],
+			'is_alias'      => (intval($e['id_alias']) != 0),
+			'id_alias'      => intval($e['id_alias']),
+			'id_album'      => intval($e['id_album']),
+			'id_content'    => intval($e['id_content']),
 			'contentName'   => $e['contentName'],
 			'contentSee'    => $e['contentSee'],
+			'hasPoster'     => false
 		);
 
+		$id_poster = $e['id_poster'];
+
+		// ALIAS ?
+		if($e['id_alias'] > 0){
+			$org = $app->apiLoad('content')->contentGet(array(
+				'raw'        => true,
+				'id_content' => $e['id_alias']
+			));
+
+			$id_poster = $org['id_poster'];
+		}
+
 		// Verifier le poster du dossier
-		if($e['id_poster'] > 0){
+		if($id_poster > 0){
 
 			$poster = $app->apiLoad('content')->contentGet(array(
-				'id_content'=> $e['id_poster'],
+				'id_content'=> $id_poster,
 				'raw'		=> true
 			));
 
 			if(file_exists(KROOT.$poster['contentItemUrl']) && is_file(KROOT.$poster['contentItemUrl'])){
+				$tmp['hasPoster'] = true;
 
 				$opt = array(
 					'url'	=> $poster['contentItemUrl'],
@@ -73,28 +102,21 @@
 					'width'     => intval($preview['width']),
 					'height'    => intval($preview['height']),
 				);
-
-				/*$tmp['preview'] = array(
-					'url'	    => $poster['contentItemUrl'],
-					'width'	    => intval($poster['contentItemWidth']),
-					'height'	=> intval($poster['contentItemHeight']),
-				);*/
-
-			}else{
-				$albums[$idx]['id_poster'] = 0;
 			}
 		}
 
 		$data[] = $tmp;
-
 	}
 
-	// Items
+
+
+
+	// ITEMS ///////////////////////////////////////////////////////////////////////////////////////////////////////////
 	$items = $app->apiLoad('content')->contentGet(array(
 		'language'	=> 'fr',
 		'raw'		=> true,
 		'id_type'	=> $_GET['id_type'],
-		'id_album'	=> $_GET['id_album'],
+		'id_album'	=> $id_album,
 		'is_item'	=> true,
 		'order'		=> 'contentItemPos',
 		'direction'	=> 'ASC',
@@ -106,7 +128,8 @@
 		$tmp = array(
 			'is_item'           => true,
 			'is_poster'         => ($id_poster == $e['id_content']),
-			'id_content'        => $e['id_content'],
+			'id_content'        => intval($e['id_content']),
+			'id_album'          => intval($e['id_album']),
 			'contentName'       => $e['contentName'],
 			'contentSee'        => $e['contentSee'],
 			'contentItemType'   => $e['contentItemType'],
@@ -147,45 +170,9 @@
 		$data[] = $tmp;
 	}
 
-	//$content = array_merge($albums, $items);
 
-	// Subs
-	/*foreach($content as $idx => $e){
-		$content[$idx]['is_album']	= ($e['is_album']) ? true : false;
-		$content[$idx]['is_item']	= ($e['is_item'])  ? true : false;
-		$content[$idx]['is_poster']	= ($album['id_poster'] == $e['id_content']) ? true : false;
-	}*/
 
-	// Path
-	/*function parents($app, $id_content, &$path){
-		$p = $app->dbOne("
-			SELECT * FROM k_contentalbum
-			INNER JOIN k_contentdata ON k_contentalbum.id_content = k_contentdata.id_content
-			WHERE language='fr' AND k_contentalbum.id_content=".$id_content
-		);
 
-		$path[] = array('id_content' => $p['id_content'], 'contentName' => $p['contentName']);
-		if($p['id_album'] != '0') parents($app, $p['id_album'], $path);
-	
-	#	$app->pre($app->db_query, $path);
-	}
-	
-	$path = array();#$_GET['id_album']);
-	if($_GET['id_album'] != 0) parents($app, $_GET['id_album'], $path);
-
-	$data['path']	= array_reverse($path);*/
-#	$data['items']	= $content;
-
-/*
-	foreach($data['path'] as $idx => $e){
-		$data['path'][$idx]['contentName'] = $e['contentName'];
-	}
-	
-	foreach($data['items'] as $idx => $e){
-		$data['items'][$idx]['contentName'] = $e['contentName'];
-	}
-*/
-
-	// Sortie
+	// SORTIE //////////////////////////////////////////////////////////////////////////////////////////////////////////
 	$json = $app->helperJsonEncode($data);
 	echo $app->helperJsonBeautifier($json);

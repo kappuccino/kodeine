@@ -699,7 +699,7 @@
         <div class="toggle">&nbsp;</div>
         <label>Cibles</label>
         <div class="form">
-            <?php $groups = $app->apiLoad('content')->contentGroupGet($data['id_content']); ?>
+            <?php $groups = $app->apiLoad('content')->contentGroupGet($data['id_content'], $type['id_type']); ?>
             <table border="0" cellpadding="0" cellspacing="0" width="100%" class="listing">
                 <thead>
                     <tr>

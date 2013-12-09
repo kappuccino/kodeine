@@ -1,6 +1,5 @@
 <?php
-	require(dirname(dirname(__FILE__)).'/api/core.admin.php');
-	$app = new coreAdmin();
+if(!defined('COREINC')) die('Direct access not allowed');
 
 	if(!$app->userIsAdmin) header("Location: ./");
 
@@ -44,18 +43,15 @@
 ?><!DOCTYPE html>
 <html lang="fr">
 <head>
-	<?php include(ADMINUI.'/head.php'); ?>
+    <?php include(COREINC.'/head.php'); ?>
 </head>
 <body>
-<div id="pathway">
-	<a href="core.panel.php">Admin</a> &raquo;
-	<a href="ad.index.php">Publicité</a> &raquo;
-	<a href="ad.zone.php">Zone</a>
-</div>
+<header><?php
+    include(COREINC.'/top.php');
+    include(__DIR__.'/ui/menu.php')
+    ?></header>
 
-<?php include('ressource/ui/menu.ad.php'); ?>
-
-<div class="app">
+<div id="app">
 
 <div style="float:left; width:35%; margin-right:20px;">
 <div class="searchBox clearfix">
@@ -131,6 +127,7 @@
 
 
 
+    <?php include(COREINC.'/end.php'); ?>
 <script>
 
 	function apply(){
@@ -151,4 +148,6 @@
 
 </script>
 
-</div></body></html>
+
+
+</body></html>

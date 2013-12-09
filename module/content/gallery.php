@@ -10,6 +10,7 @@
 
 	$id_type = $_REQUEST['id_type'];
 	$type    = $app->apiLoad('type')->typeGet(array('id_type' => $id_type));
+	$filter  = $app->filterGet('content'.$id_type);
 
 ?><!DOCTYPE html>
 <html lang="fr">
@@ -17,10 +18,14 @@
 	<?php include(COREINC.'/head.php'); ?>
     <link rel="stylesheet" type="text/css" href="ui/css/gallery.css" />
 </head>
-<body data-id_type="<?php echo $id_type ?>">
+<body data-id_type="<?php echo $id_type ?>"
+      data-model="<?php echo $_GET['model'] ?>"
+      data-album="<?php echo $_GET['album'] ?>"
+      data-pick="<?php echo isset($_GET['pick']) ? 'true' : 'false' ?>"
+      data-display="<?php echo $filter['display'] ?: 'grid' ?>">
 
 <header><?php
-	include(COREINC.'/top.php');
+	if(!isset($_GET['pick'])) include(COREINC.'/top.php');
 	include(__DIR__.'/ui/menu.php');
 ?></header>
 
@@ -44,9 +49,18 @@
     <li><a id="buttonImport" class="btn btn-small"><?php echo _('Import'); ?></a></li>
     <li><a id="buttonEdit" class="btn btn-small"><?php echo _('Edit'); ?></a></li>
     <li><a id="buttonAdd" class="btn btn-small"><?php echo _('New'); ?></a></li>
+    <li><a id="buttonUpload" class="btn btn-small"><?php echo _('Upload'); ?></a></li>
 </div>
 
 <div id="gallery">
+
+	<div id="galleryAction">
+		<a id="toggleGrid"><i class="icon icon-th"></i> <?php echo _('Grid') ?></a>
+		<a id="toggleList"><i class="icon icon-list"></i> <?php echo _('List') ?></a>
+		<a id="sortAZ"><i class="icon icon-arrow-down"></i> <?php echo _('A-Z') ?></a>
+		<a id="sortZA"><i class="icon icon-arrow-up"></i> <?php echo _('Z-A') ?></a>
+		<a id="removeAllItems"><i class="icon icon-remove"></i> <?php echo _('Remove all items') ?></a>
+	</div>
 
 	<ul id="galleryPath" class="clearfix"></ul>
 
@@ -56,68 +70,18 @@
 
 </div>
 
-<!-- ///   ///   ///   ///   ///   ///   ///   ///   ///   ///   ///   ///   ///   ///   ///   ///   ///   ///  ///  -->
 
-<script type="text/template" id="view-album">
-
-    <div class="media">
-	    <div class="icone"><img src="ui/img/gallery-folder.png" /></div>
-    </div>
-
-    <div class="action">
-        <img class="delete" src="../media/ui/img/media-delete.png" />
-        <a href="gallery-album?id_content=<%- id_content %>"><img src="../media/ui/img/media-edit.png"></a>
-        <img class="visibility <% if(contentSee == '0') { %>off<% } %>" src="../media/ui/img/media-eye.png" />
-    </div>
-
-    <div class="title"><%- contentName %></div>
-
-</script>
-
-<script type="text/template" id="view-item">
-
-	<div class="media">
-	    <div class="icone"></div>
-    </div>
-
-    <div class="action">
-        <img class="delete" src="../media/ui/img/media-delete.png" />
-        <a href="gallery-item?id_content=<%- id_content %>"><img src="../media/ui/img/media-edit.png"></a>
-        <img class="visibility <% if(contentSee == '0') { %>off<% } %>" src="../media/ui/img/media-eye.png" />
-	    <% if(contentItemType == 'image') { %>
-	        <img class="poster <% if(!is_poster) { %>off<% } %>" src="../media/ui/img/media-star.png" />
-	    <% } %>
-    </div>
-
-    <div class="title"><%- contentName %></div>
-
-</script>
-
-<script type="text/template" id="tree-item">
-
-	<div class="item clearfix">
-		<span class="toggle"></span>
-		<span class="name"><%- contentName %></span>
-	</div>
-	<ul></ul>
-
-</script>
-
-<script type="text/template" id="path-item">
-	<span class="name"><%- contentName %></span>
-</script>
-
-<script type="text/template" id="path-sep">
-    <span class="name">/</span>
-</script>
-
-<!-- ///   ///   ///   ///   ///   ///   ///   ///   ///   ///   ///   ///   ///   ///   ///   ///   ///   ///  ///  -->
-
-<?php include(COREINC.'/end.php'); ?>
+<?php
+	include(__DIR__.'/ui/tpl/gallery.tpl');
+	include(COREINC.'/end.php');
+?>
 <script src="../core/vendor/jqueryui/jqui.dragdrop.js"></script>
 <script src="../core/vendor/bootstrap/js/bootstrap-dropdown.js"></script>
 <script src="../core/vendor/underscore/underscore-min.js"></script>
 <script src="../core/vendor/backbone/backbone-min.js"></script>
+<script src="../core/vendor/lazyload/jquery.lazyload.min.js"></script>
+<script src="../media/ui/_uploadifive/jquery.uploadifive-v1.0.js"></script>
+<script src="../media/ui/_uploadify/jquery.uploadify.js"></script>
 <script src="ui/js/gallery.js"></script>
 
 </body></html>
