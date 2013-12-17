@@ -159,10 +159,7 @@
 	<?php include(COREINC.'/head.php'); ?>
 	<link rel="stylesheet" type="text/css" href="ui/css/gallery.css">
 	<link rel="stylesheet" type="text/css" href="../media/ui/css/media.css">
-    <link rel="stylesheet" type="text/css" href="../content/ui/css/data.css" />
-	<link rel="stylesheet" type="text/css" href="../core/vendor/datepicker/css/datepicker.css" />
-	<link rel="stylesheet" type="text/css" href="../core/vendor/codemirror/lib/codemirror.css" />
-	<link rel="stylesheet" type="text/css" href="../core/vendor/codemirror/theme/monokai.css" />
+    <link rel="stylesheet" type="text/css" href="../content/ui/css/data.css">
 </head>
 <body>
 	
@@ -491,13 +488,15 @@
 	
 </div>
 
-</body>
 
 <?php include(COREINC.'/end.php'); ?>
-<script src="../core/vendor/tinymce/jscripts/tiny_mce/jquery.tinymce.js"></script>
-<script src="../core/vendor/tinymce/jscripts/tiny_mce/tiny_mce.js"></script>
+
+<script src="../core/vendor/ckeditor/ckeditor.js"></script>
+<script src="../core/vendor/ckeditor/adapters/jquery.js"></script>
+
 <script src="ui/js/content.js"></script>
 <script src="ui/js/gallery.nav.js"></script>
+
 <script>
 
 	actionNav		= true;
@@ -506,13 +505,13 @@
 	useEditor		= true;
 	replace			= [];
 	textarea		= "<?php echo @implode(',', $GLOBALS['textarea']) ?>";
-	MceStyleFormats = [<?php echo @file_get_contents(USER.'/config/tinymceStyleFormats.php') ?>];
+//	MceStyleFormats = [<?php echo @file_get_contents(USER.'/config/tinymceStyleFormats.php') ?>];
 
 	$(function(){
 		boot();
-		checkNeedToBeFilled();
 	});
 
 </script>
 
+</body>
 </html>

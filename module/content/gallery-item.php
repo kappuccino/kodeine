@@ -326,8 +326,12 @@
 	if($pref['galleryItemRoll'] == '1') include(__DIR__.'/ui/tpl/gallery.tpl');
 	include(COREINC.'/end.php');
 ?>
-<script src="../core/vendor/tinymce/jscripts/tiny_mce/jquery.tinymce.js"></script>
-<script src="../core/vendor/tinymce/jscripts/tiny_mce/tiny_mce.js"></script>
+
+<script src="../core/vendor/ckeditor/ckeditor.js"></script>
+<script src="../core/vendor/ckeditor/adapters/jquery.js"></script>
+<!--<script src="../core/vendor/tinymce/jscripts/tiny_mce/jquery.tinymce.js"></script>
+<script src="../core/vendor/tinymce/jscripts/tiny_mce/tiny_mce.js"></script>-->
+
 <script src="ui/js/content.js"></script>
 <script src="ui/js/gallery.nav.js"></script>
 

@@ -219,73 +219,47 @@ function mediaView(view, raw){
 /* + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + -
 	RICH TEXT EDITOR
 + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - */
-function setRichEditor(){
+function setRichEditor(selector){
+	// si selector est fourni, init un CKEditor sur cet item
+	// plutot que le "textarea" global
 
-	if(!useEditor) return false
-	//console.log('RICH !', textarea)
+	var ck_selector = textarea;
 
-	$( '#'+textarea ).ckeditor({
-		contentsCss: '../core/helper/ckeditor',
-		allowedContent: true
-	});
+	if (!useEditor) return false
+	// si on fourni un selecteur custom, ne pas utiliser "textarea"
+	if (selector) ck_selector = selector;
 
+	var splitTest = ck_selector.split(',');
+	if (splitTest.length > 1) {
+		$.each(splitTest, function(i, elem) {
+			// recurser les textarea a CKEditoriser
+			setRichEditor(elem)
+		});
+
+		return;
+
+	} else {
+
+		$( '#'+ck_selector ).ckeditor({
+			contentsCss: '../core/helper/ckeditor',
+			allowedContent: true
+		});
+
+	}
 
 	// charger une ressource externe (plugin) et l'initialiser dans l'instance de notre ckeditor
-	var editor = CKEDITOR.instances[textarea];
+	var editor = CKEDITOR.instances[ck_selector];
 	CKEDITOR.plugins.addExternal('kodeineimg', '/admin/core/vendor/ckeditor-plugins/kodeineimg/', 'plugin.js');
 	CKEDITOR.plugins.load('kodeineimg', function(plugins) {
 		plugins['kodeineimg'].init(editor)
 	});
 
-	/*tinyMCE.init({
-		mode		: 'exact',
-		elements	: textarea,
-		theme		: 'advanced',
-		plugins		: 'safari,spellchecker,pagebreak,style,layer,table,save,advhr,advimage,advlink,emotions,iespell,inlinepopups,insertdatetime,preview,media,searchreplace,print,contextmenu,paste,directionality,fullscreen,noneditable,visualchars,nonbreaking,xhtmlxtras',
-
-        remove_script_host		: true,
-        convert_urls 			: false,
-		theme_advanced_buttons1 : 'mybutton,code,newdocument,|,bold,italic,underline,strikethrough,|,justifyleft,justifycenter,justifyright,justifyfull,|,styleselect,formatselect,fontselect,fontsizeselect',
-		theme_advanced_buttons2 : 'cut,copy,paste,pastetext,pasteword,|,search,replace,|,bullist,numlist,|,outdent,indent,blockquote,|,undo,redo,|,link,unlink,anchor,image,cleanup,help,|,insertdate,inserttime,preview,|,forecolor,backcolor',
-		theme_advanced_buttons3 : 'tablecontrols,|,hr,removeformat,visualaid,|,sub,sup,|,charmap,iespell,media,advhr,|,print,|,ltr,rtl,|,fullscreen',
-		theme_advanced_buttons4 : 'styleprops,spellchecker,|,cite,abbr,acronym,del,ins,attribs,|,visualchars,nonbreaking,template,blockquote,pagebreak',
-	
-		theme_advanced_toolbar_location		: 'top',
-		theme_advanced_toolbar_align		: 'left',
-		theme_advanced_statusbar_location	: 'bottom',
-		theme_advanced_resizing				: true,
-	
-		// Example content CSS (should be your site CSS)
-		content_css		: '../core/helper/tinymce',
-
-		// Custom FORMAT
-		style_formats 	: MceStyleFormats,
-
-		// Drop lists for link/image/media/template dialogs
-	//	template_external_list_url	: "js/template_list.js",
-	//	external_link_list_url 		: "js/link_list.js",
-	//	external_image_list_url 	: "js/image_list.js",
-	//	media_external_list_url 	: "js/media_list.js",
-		
-		setup : function(ed) {
-		    ed.addButton('mybutton', {
-		        title : 'Ins�rer des images',
-		        image : '../core/ui/img/_img/myb.gif',
-		        onclick : function() {
-					mediaPicker(ed.id, 'mce');
-		        }
-		    });
-		}
-	
-	});*/
-
 }
 
-
-function removeRichEditor(){
-	$.each($('textarea'), function(i, t){
-		tinyMCE.execCommand('mceRemoveControl', false, $(t).attr('id'));
-	});
+function removeRichEditor() {
+	for (var id in CKEDITOR.instances) {
+		CKEDITOR.instances[id].destroy();
+	}
 }
 
 
@@ -456,7 +430,8 @@ function enableMove(){
 //	mySortables.addLists($$('.field-list'));
 
 //	myTabSortables.removeLists($$('.do-viewer'));
-//	myTabSortables.addLists($$('.do-viewer'));	
+//	myTabSortables.removeLists($$('.do-viewer'));
+//	myTabSortables.addLists($$('.do-viewer'));
 
 	mySortables = $('.field-list');
 	myTabSortables = $('.do-viewer');
@@ -465,11 +440,11 @@ function enableMove(){
 
 	$.each(mySortables, function(k,v) {
 		
-		// r�activer les sort si disabled
+		// réactiver les sort si disabled
 		if (typeof $(v).data('sortable') !== 'undefined') {
 			 $(v).sortable({disabled : false});
 		} else {
-			// sinon les cr�er
+			// sinon les créer
 			
 			$(v).sortable({
 				handle: 'div.hand',
@@ -821,11 +796,16 @@ function urlCheck(){
 }	
 
 function toggleEditor(id) {
-	if (!tinyMCE.getInstanceById(id)){
-		tinyMCE.execCommand('mceAddControl', false, id);
-	}else{
-		tinyMCE.execCommand('mceRemoveControl', false, id);
+	var textarea = $('#'+id);
+
+	if(textarea.length){
+		if(textarea.css('display') == 'none'){
+			CKEDITOR.instances[id].destroy()
+		}else{
+			CKEDITOR.replace(id)
+		}
 	}
+
 }
 
 
