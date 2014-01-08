@@ -193,8 +193,11 @@ public function userProfile($id_profile){
 			$category 		= $this->dbMulti("SELECT * FROM k_category WHERE id_category IN(".implode(',', $p['profileRule']['id_category']).")");
 
 			foreach($category as $e){
-				$id_category 	= array_merge($id_category,   explode(',', $e['categoryChildren']));
-				$id_category_p 	= array_merge($id_category_p, explode(',', $e['categoryParent']));
+				$child  = $e['categoryChildren'];  if(empty($child))  $child  = $e['id_category'];
+				$parent = $e['categoryParent'];    if(empty($parent)) $parent = $e['id_category'];
+
+				$id_category 	= array_merge($id_category,   explode(',', $child));
+				$id_category_p 	= array_merge($id_category_p, explode(',', $parent));
 			}
 
 			foreach($id_category as $idx => $e){
