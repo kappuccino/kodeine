@@ -445,6 +445,19 @@ function socialPostHide($opt){
 		if($opt['debug']) $this->pre($this->db_query, $this->db_error);
 	}
 
+	// Supprimer les ACTIVITY y faisant référence
+	$activities = $this->apiLoad('socialActivity')->socialActivityGet(array(
+		'socialActivityKey' => 'id_socialpost',
+		'socialActivityId'  => $opt['id_socialpost']
+	));
+	if(count($activities) > 0){
+		foreach($activities as $e){
+			$this->apiLoad('socialActivity')->socialActivityRemove(array(
+				'id_socialactivity' => $e['id_socialactivity']
+			));
+		}
+	}
+
 	// Killer les ENFANTS
 	if($post['socialPostFlat'] != '' && $opt['delete']){
 		$del = array_merge($del, $post['socialPostFlat']);

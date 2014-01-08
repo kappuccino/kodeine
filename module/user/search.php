@@ -127,7 +127,7 @@
 			</table>
 		</form>
 		</div>
-	
+
 		<div class="ee span7"><?php
 		if(isset($_REQUEST['param'])){
 			
@@ -137,12 +137,24 @@
 					'user'		=> true,
 					'debug'		=> false
 				));
-				
-				$field = array_merge(array(array(
-					'id_field' 	=> 'userMail',
-					'fieldType'	=> 'texte',
-					'fieldName'	=> 'Mail'
-				)), $field);
+
+                $field = array_merge(array(array(
+                    'id_field' 	=> 'userMail',
+                    'fieldType'	=> 'texte',
+                    'fieldName'	=> 'Mail'
+                )), $field);
+
+                $field = array_merge(array(array(
+                    'id_field' 	=> 'is_deleted',
+                    'fieldType'	=> 'texte',
+                    'fieldName'	=> 'Supprimé'
+                )), $field);
+
+                $field = array_merge(array(array(
+                    'id_field' 	=> 'id_group',
+                    'fieldType'	=> 'texte',
+                    'fieldName'	=> 'ID Groupe'
+                )), $field);
 			}
 			
 			#$app->pre($data, $field);
@@ -176,7 +188,7 @@
 			
 				<?php
 					if($data['searchType'] == 'user'){
-						$f = $app->apiLoad('user')->userSearch(array('id_search' => $data['id_search'], 'debug' => 1));
+						$f = $app->apiLoad('user')->userSearch(array('id_search' => $data['id_search'], 'debug' => 0));
 						$t = $app->apiLoad('user')->total;
 					}else{
 						$f = $app->apiLoad('content')->contentSearch(array('id_search' => $data['id_search'], 'debug' => 0));

@@ -3,7 +3,7 @@
 	#
 	//$app->pre($_GET);
 	if(isset($_GET['group'])){
-		$list = $app->dbOne("SELECT COUNT(*) as H FROM k_user WHERE id_group IN(".$_GET['group'].")");
+		$list = $app->dbOne("SELECT COUNT(*) as H FROM k_user WHERE id_group IN(".$_GET['group'].") AND is_deleted=0");
 		$out['group'] = $list['H'];
 	}else{
 		$out['group'] = 0;

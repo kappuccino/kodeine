@@ -720,6 +720,18 @@ public function helperArrayWrapp($array, $glue){
 	return $array;
 }
 
+
+	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
+	// Retourne un float avec la precision identique a celle de la STRING (HACK ++)
+	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
+	public function helperFloat($string, $p=10){
+
+		list($a, $b) = explode('.', $string);
+		$f = $a.'.'.substr($b, 0, $p);
+
+		return floatval($f);
+	}
+
 //-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -
 //-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -
 	public  function benchmarkInit(){

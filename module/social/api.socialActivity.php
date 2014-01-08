@@ -34,6 +34,31 @@ function socialActivityGet($opt){
 
 	}
 
+	// GET: socialActivityKey
+	if(array_key_exists('socialActivityKey', $opt)){
+		if(is_string($opt['socialActivityKey'])){
+			$cond[] = "socialActivityKey = '".$opt['socialActivityKey']."'";
+		}else
+		if(is_array($opt['socialActivityKey'])){
+			$cond[] = "socialActivityKey IN ('".implode("', '", $opt['socialActivityKey'])."')";
+		}else{
+			if($opt['debug']) $this->pre("ERROR: socialActivityKey STRING, ARRAY", "GIVEN", var_export($opt['socialActivityKey'], true));
+			return array();
+		}
+	}
+
+	// GET: socialActivityKey
+	if(array_key_exists('socialActivityId', $opt)){
+		if(is_string($opt['socialActivityId'])){
+			$cond[] = "socialActivityId = '".$opt['socialActivityId']."'";
+		}else
+		if(is_array($opt['socialActivityId'])){
+			$cond[] = "socialActivityId IN ('".implode("', '", $opt['socialActivityId'])."')";
+		}else{
+			if($opt['debug']) $this->pre("ERROR: socialActivityId STRING, ARRAY", "GIVEN", var_export($opt['socialActivityId'], true));
+			return array();
+		}
+	}
 
 	if($dbMode == 'dbMulti'){
 
@@ -93,14 +118,12 @@ if($opt['debug']) $this->pre("OPTION", $opt);
 	else{
 
 		$query = $this->dbInsert(array('k_socialactivity' => array(
-			'id_user'				=> array('value'	=> $id_user),
-
-			'socialActivityKey'		=> array('value'	=> $key),
-			'socialActivityId'		=> array('value'	=> $id, 		'null' => true),
-			'socialActivityThread'	=> array('value'	=> $thread,		'null' => true),
-			'socialActivityFlag'	=> array('value'	=> strtoupper($flag)),
-
-			'socialActivityDate'	=> array('value'	=> date("Y-m-d H:i:s")),
+			'id_user'			   => array('value' => $id_user),
+			'socialActivityKey'	   => array('value' => $key),
+			'socialActivityId'	   => array('value' => $id, 	 'null' => true),
+			'socialActivityThread' => array('value' => $thread, 'null' => true),
+			'socialActivityFlag'   => array('value' => strtoupper($flag)),
+			'socialActivityDate'   => array('value' => date("Y-m-d H:i:s")),
 		)));
 
 		$this->dbQuery($query);
@@ -117,39 +140,50 @@ if($opt['debug']) $this->pre("OPTION", $opt);
 			// Je donne dans les OPT la liste des personne qui recoivent la notification
 			if(isset($opt['notificationUser'])){
 				$usrs = is_array($opt['notificationUser']) ? $opt['notificationUser'] : array($opt['notificationUser']);
-			}
-			
-			// Si non j'utilise les tables pour trouver les personne qui auront la notification
-			else{
+			}else
 
+			// Utiliser les player de l'EVENT pour trouver les personnes a notifier
+			if($opt['socialActivityKey'] == 'id_socialevent'){
+				$usrs = $this->dbMulti("SELECT id_user FROM k_socialeventuser WHERE id_socialevent='".$id."' AND id_user != '".$id_user."'");
+				$usrs = $this->dbKey($usrs, 'id_user');
+			}else
+
+			// Utiliser les player du CIRCLE pour trouver les personnes a notifier
+			if($opt['socialActivityKey'] == 'id_socialcircle'){
+				$usrs = $this->dbMulti("SELECT id_user FROM k_socialcircleuser WHERE id_socialcircle='".$id."' AND id_user != '".$id_user."'");
+				$usrs = $this->dbKey($usrs, 'id_user');
+			}else
+
+			// Si non j'utilise les tables pour trouver les personne qui auront la notification
+			{
 				if($opt['socialActivityKey'] == 'id_socialpost'){
-					$noti	= 'socialPostSubscribed';
-					$table	= 'k_socialpost';
-					$thrd	= 'id_socialpostthread';
+					$noti  = 'socialPostSubscribed';
+					$table = 'k_socialpost';
+					$thrd  = 'id_socialpostthread';
 				}else
 				if($opt['socialActivityKey'] == 'id_socialmessage'){
-					$noti	= 'socialMessageSubscribed';
-					$table	= 'k_socialmessage';
-					$thrd	= 'id_socialmessagethread';
+					$noti  = 'socialMessageSubscribed';
+					$table = 'k_socialmessage';
+					$thrd  = 'id_socialmessagethread';
 				}
 
 				// ?
 				$item = $this->dbOne("SELECT ".$noti." FROM ".$table." WHERE ".$thrd."=".$thread." AND ".$noti." != ''");
 				//$item = $this->dbOne("SELECT ".$noti." FROM ".$table." WHERE ".$thrd."=".$thread);
 				if($opt['debug']) $this->pre($this->db_query, $this->db_error);
-				
+
 				$usrs = json_decode($item[$noti], true);
-				$usrs = is_array($usrs) ? $usrs : array();
+				$usrs = is_array($usrs) ? $usrs : array(); // useless ?
 			}
-			
+
 			// secu
 			if(!is_array($usrs)) $usrs = array();
-			
+
 			// Lever une notification pour tous les SUBSCRIBED USER sauf MOI
 			foreach($usrs as $u){
 				if($id_user != $u) $tmp[] = "(".$id_act.",".$u.")";
 			}
-			
+
 			if(sizeof($tmp) > 0){
 				$this->dbQuery("INSERT INTO k_socialnotification (id_socialactivity, id_user) VALUES\n".implode(",\n", $tmp));
 				if($opt['debug']) $this->pre($this->db_query, $this->db_error);
@@ -159,46 +193,18 @@ if($opt['debug']) $this->pre("OPTION", $opt);
 
 }
 
+/* + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + -
++ - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - */
+function socialActivityRemove($opt){
+	if($opt['debug']) $this->pre("OPTION", $opt);
 
+	// Security
+	$idn = $opt['id_socialactivity']; if(intval($idn) <= 0) return false;
 
+	// Remove
+	$this->dbQuery("DELETE FROM k_socialactivity     WHERE id_socialactivity=".$idn);
+	$this->dbQuery("DELETE FROM k_socialnotification WHERE id_socialactivity=".$idn);
+	if($opt['debug']) $this->pre($this->db_query, $this->db_error);
+}
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-} ?>
+}

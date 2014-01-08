@@ -74,17 +74,19 @@
 	}else*/
 
 	// MAIN ////////////////////////////////////////////////////////////////////////////////////////////////////////////
-	if(preg_match("#^/(([a-zA-Z-]{2,6})/)?(.*)?$#", $url, $r)){
+	if(preg_match('#^/(([a-z]{2})(-([a-z]{2}))?/)?(.*)?$#', $url, $r)){
+
+		#print_r($r);
 
 		if(strlen($r[2]) > 2){
-			$_GET['urlLanguage']	= substr($r[2], 0, 2);
-			$_GET['urlCountry']	    = substr($r[2], 3, 2);
-		}else{
-			$_GET['urlLanguage']	= $r[2];
-			$_GET['urlCountry']	    = $r[2];
+			$_GET['urlLanguage'] = $r[2];
+			$_GET['urlCountry']  = $r[4];
+		} else {
+			$_GET['urlLanguage'] = $r[2];
+			$_GET['urlCountry']  = $r[2];
 		}
 
-		$_GET['urlRequest']		= $r[3];
+		$_GET['urlRequest']		= $r[5];
 		
 		if($trace) $app->pre("MAIN", $r);
 	}
