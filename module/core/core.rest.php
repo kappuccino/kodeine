@@ -194,6 +194,19 @@ public function request($opt=array()){
 		$out = @$this->requestSocket($opt_);
 	}
 
+	if($out['contentType'] == 'application/json'){
+
+		$body = json_decode($out['body'], true);
+
+		if(!is_array($body)){
+			$body = iconv("UTF-8", "ISO-8859-1//TRANSLIT", $out['body']);
+			$body = json_decode($body, true);
+		}
+
+		$out['raw']  = $out['body'];
+		$out['body'] = $body;
+	}
+
 	if(is_array($out)) $out['duration'] = microtime(true) - $a;
 	
 	return $out;
