@@ -17,7 +17,7 @@
 				//icon: this.path + 'kodeineimg.png',
 				command: 'kodeineimg'
 			});
-			console.log('INIT', this.path);
+		//	console.log('INIT', this.path);
 		}
 	});
 })();

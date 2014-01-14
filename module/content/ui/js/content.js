@@ -138,34 +138,36 @@ function mediaSerialize(e){
 Gere l'affichage d'une vignette pour la boite de selection
 + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - */
 function mediaView(view, raw){
+
 //	console.log([view, view.getParent(), raw]);
 	view.parent().attr('id', raw);
-	
-	var parts 	 = raw.split("@@");
-		var type = parts[0];
-		var url	 = parts[1];
 
-//	console.log([type, url]);
+	var parts = raw.split("@@")
+		, type = parts[0]
+		, url = parts[1]
+		, img;
 
 	if(type == "folder"){
-		var img = {'src':'ressource/img/media-folder.png', 				'height':128, 'width':128, 'myclass':''};
+		img = {'src':'../media/ui/img/media-folder.png', 'height':128, 'width':128, 'myclass':''};
 	}else
 	if(type == "pdf"){
-		var img = {'src':'ressource/img/media-file_pdf.png', 			'height':128, 'width':128, 'myclass':''};
+		img = {'src': '../media/ui/img/media-file_pdf.png', 'height': 128, 'width': 128, 'myclass': ''};
 	}else
 	if(type == "flash"){
-		var img = {'src':'ressource/img/media-file_flash.png', 			'height':128, 'width':128, 'myclass':''};
+		img = {'src': '../media/ui/img/media-file_flash.png', 'height': 128, 'width': 128, 'myclass': ''};
 	}else
 	if(type == "audio"){
-		var img = {'src':'ressource/img/media-file_audio.png', 			'height':128, 'width':128, 'myclass':''};
+		img = {'src': '../media/ui/img/media-file_audio.png', 'height': 128, 'width': 128, 'myclass': ''};
 	}else
 	if(type == "image"){
-		var img = (view.parent().hasClass('notFound'))
-			? {'src':'../content/ui/img/media-file_file.png', 		'height':128, 'width':128, 'myclass':''}
-			: {'src':url, 												'height':'',  'width':'',  'myClass':'shd'};
+		img = (view.parent().hasClass('notFound'))
+			? {'src': '../media/ui/img/media-file_file.png', 'height': 128, 'width': 128, 'myclass': ''}
+			: {'src': url, 'height': '', 'width': '', 'myClass': 'shd'};
 	}else{
-		var img = {'src':'../content/ui/img/media-file_file.png', 	'height':128, 'width':128, 'myclass':''};
+		img = {'src': '../media/ui/img/media-file_file.png', 'height': 128, 'width': 128, 'myclass': ''};
 	}
+
+//	console.log([type, url, img]);
 	
 	if(img.myClass != '') view.addClass(img.myClass);
 
