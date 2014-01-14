@@ -123,13 +123,21 @@ function __clone(){}
 		));
 
 		foreach($field as $f){
-			$fieldKey[$f['fieldKey']]= $f;
-			if($f['is_search'])												$fieldSearch[]		= $f;
-			if($f['fieldType'] == 'content' && $f['fieldContentType'] > 0) 	$fieldAssoContent[] = $f;
-			if($f['fieldType'] == 'user')									$fieldAssoUser[] 	= $f;
-			if($f['fieldType'] == 'dbtable')								$fieldAssoDb[]		= $f;
-		}
+			$param = json_decode($f['fieldParam'], true);
 
+			$fieldKey[$f['fieldKey']]= $f;
+			if($f['is_search'])					$fieldSearch[]	 = $f;
+			if($f['fieldType'] == 'user')		$fieldAssoUser[] = $f;
+			if($f['fieldType'] == 'dbtable')	$fieldAssoDb[]	 = $f;
+
+			if($f['fieldType'] == 'content' && $f['fieldContentType'] > 0 && $param['type'] == 'solo'){
+				$fieldAssoContentSingle[] = $f;
+			}
+			if($f['fieldType'] == 'content' && $f['fieldContentType'] > 0 && $param['type'] != 'solo'){
+				$fieldAssoContentMulti[] = $f;
+			}
+		}
+		unset($param);
 
 
 
@@ -557,10 +565,19 @@ function __clone(){}
 		# Gerer les ASSOCIATIONS
 		#
 		// CONTENT relies a ce CONTENT
-		if(sizeof($fieldAssoContent) > 0){
+		if(sizeof($fieldAssoContentMulti) > 0){
 			foreach($content as $idx => $c){
-				foreach($fieldAssoContent as $f){
+				foreach($fieldAssoContentMulti as $f){
 					$content[$idx]['field'.$f['id_field']] = $this->contentAssoGet($content[$idx]['id_content'], $content[$idx]['id_type'], $f['id_field'], $f['fieldContentType']);
+				}
+			}
+		}
+		if(sizeof($fieldAssoContentSingle) > 0){
+			foreach($content as $idx => $c){
+				foreach($fieldAssoContentSingle as $f){
+					if(!empty($content[$idx]['field'.$f['id_field']])){
+						$content[$idx]['field'.$f['id_field']] = array($content[$idx]['field'.$f['id_field']]);
+					}
 				}
 			}
 		}
@@ -664,7 +681,10 @@ function __clone(){}
 
 						unset($tmp);
 						foreach($v as $bContent){
-							$tmp[] = $this->dbOne("SELECT * FROM k_contentdata WHERE id_content=".$bContent." AND language='".$language."'");
+							$tmp[] = $this->dbOne("
+								SELECT * FROM k_contentdata
+								INNER JOIN k_content ON k_contentdata.id_content = k_content.id_content
+								WHERE k_contentdata.id_content=".$bContent." AND language='".$language."'");
 						}
 						$content[$idx]['field'.$f['id_field']] = (($param['type'] == 'solo' && sizeof($v) == 1) ? $tmp[0] : $tmp);
 					}else
@@ -1457,6 +1477,8 @@ public function contentRemove($id_type, $id_content, $language=''){
 
 		$this->dbQuery("DELETE FROM k_userasso				WHERE id_content=".$id_content);
 		$this->dbQuery("DELETE FROM k_contentasso			WHERE bContent=".$id_content." OR aContent=".$id_content);
+
+		$this->hookAction('contentRemove', $this->id_content, $id_type, $id_content, $language);
 	}
 
 	if($type['is_gallery']) $this->contentAlbumFamily();

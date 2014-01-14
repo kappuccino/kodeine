@@ -10,6 +10,7 @@ class socialClean extends social{
 		if(intval($id_user) <= 0) return false;
 
 		$me = $this->apiLoad('socialUser')->socialUserGet(array(
+			'raw'     => true,
 			'id_user' => $id_user
 		));
 

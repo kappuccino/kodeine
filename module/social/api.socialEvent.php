@@ -213,6 +213,19 @@ function socialEventSet($opt){
 		'socialSandboxId'	=> $id_socialevent
 	));*/
 
+	# NOTIFICATION
+	#
+	if($opt['notification']){
+		$this->apiLoad('socialActivity')->socialActivitySet(array(
+			'debug'					=> $opt['debug'],
+			'id_user'				=> $opt['core']['id_user']['value'],
+			'notification'			=> true,
+			'socialActivityKey'		=> 'id_socialevent',
+			'socialActivityId'		=> $id_socialevent,
+			'socialActivityFlag'	=> 'UPDATE'
+		));
+	}
+
 	return true;
 }
 
@@ -300,68 +313,68 @@ function socialEventMapping($opt){
 
 //-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -
 //-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -
-function socialEventRemove($id_socialevent){
+	public  function socialEventRemove($id_socialevent){
 
-	if(intval($id_socialevent) == 0) return false;
+			if(intval($id_socialevent) == 0) return false;
 
-	// USER
-	$users = $this->dbMulti("SELECT id_user FROM k_socialeventuser WHERE id_socialevent=".$id_socialevent);
-	$users = $this->dbKey($users, 'id_user');
-	foreach($users as $e){
-		$this->socialUserCacheClean($e);
-	}
+			// USER
+			$users = $this->dbMulti("SELECT id_user FROM k_socialeventuser WHERE id_socialevent=".$id_socialevent);
+			$users = $this->dbKey($users, 'id_user');
+			foreach($users as $e){
+				$this->socialUserCacheClean($e);
+			}
 
-	// POST
-	$posts = $this->apiLoad('socialPost')->socialPostGet(array(
-		'id_socialevent'	=> $id_socialevent,
-		'noLimit'			=> true
-	));
-	foreach($posts as $p){
-		$this->apiLoad('socialPost')->socialPostHide(array(
-			'id_socialpost' => $p['id_socialpost']
-		));
-	}
+			// POST
+			$posts = $this->apiLoad('socialPost')->socialPostGet(array(
+				'id_socialevent'	=> $id_socialevent,
+				'noLimit'			=> true
+			));
+			foreach($posts as $p){
+				$this->apiLoad('socialPost')->socialPostHide(array(
+					'id_socialpost' => $p['id_socialpost']
+				));
+			}
 
-	// REMOVE
-	$this->dbQuery("DELETE FROM k_socialeventpending 	WHERE id_socialevent=".$id_socialevent);
-	$this->dbQuery("DELETE FROM k_socialeventuser 		WHERE id_socialevent=".$id_socialevent);
-	$this->dbQuery("DELETE FROM k_socialeventuserdata	WHERE id_socialevent=".$id_socialevent);
-	$this->dbQuery("DELETE FROM k_socialevent 			WHERE id_socialevent=".$id_socialevent);
-	$this->dbQuery("DELETE FROM k_socialpostevent		WHERE id_socialevent=".$id_socialevent);
+			// REMOVE
+			$this->dbQuery("DELETE FROM k_socialeventpending 	WHERE id_socialevent=".$id_socialevent);
+			$this->dbQuery("DELETE FROM k_socialeventuser 		WHERE id_socialevent=".$id_socialevent);
+			$this->dbQuery("DELETE FROM k_socialeventuserdata	WHERE id_socialevent=".$id_socialevent);
+			$this->dbQuery("DELETE FROM k_socialevent 			WHERE id_socialevent=".$id_socialevent);
+			$this->dbQuery("DELETE FROM k_socialpostevent		WHERE id_socialevent=".$id_socialevent);
 
-	$this->dbQuery("DELETE FROM k_socialsandbox 		WHERE socialSandboxId=".$id_socialevent." AND socialSandboxType='id_socialevent'");
-}
+			$this->dbQuery("DELETE FROM k_socialsandbox 		WHERE socialSandboxId=".$id_socialevent." AND socialSandboxType='id_socialevent'");
+		}
 
 //-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -
 //-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -
-function socialEventHide($opt){
+	public  function socialEventHide($opt){
 
-	$id_socialevent = $opt['id_socialevent'];
-	if(intval($id_socialevent) == 0) return false;
+		$id_socialevent = $opt['id_socialevent'];
+		if(intval($id_socialevent) == 0) return false;
 
-	// USER
-	$users = $this->dbMulti("SELECT id_user FROM k_socialeventuser WHERE id_socialevent=".$id_socialevent);
-	foreach($users as $e){
-		$this->socialUserCacheClean($e['id_user']);
-	}
+		// USER
+		$users = $this->dbMulti("SELECT id_user FROM k_socialeventuser WHERE id_socialevent=".$id_socialevent);
+		foreach($users as $e){
+			$this->socialUserCacheClean($e['id_user']);
+		}
 
-	// POST -> HIDE
-	$posts = $this->apiLoad('socialPost')->socialPostGet(array(
-		'id_socialevent' => $id_socialevent,
-		'noLimit'        => true
-	));
-	foreach($posts as $p){
-		$this->apiLoad('socialPost')->socialPostHide(array(
-			'id_socialpost' => $p['id_socialpost']
+		// POST -> HIDE
+		$posts = $this->apiLoad('socialPost')->socialPostGet(array(
+			'id_socialevent' => $id_socialevent,
+			'noLimit'        => true
 		));
+		foreach($posts as $p){
+			$this->apiLoad('socialPost')->socialPostHide(array(
+				'id_socialpost' => $p['id_socialpost']
+			));
+		}
+
+		// HIDE
+		$this->dbQuery("UPDATE k_socialevent SET socialEventHide=1 WHERE id_socialevent=".$id_socialevent);
+
+		// REMOVE
+		$this->dbQuery("DELETE FROM k_socialsandbox WHERE socialSandboxId=".$id_socialevent." AND socialSandboxType='id_socialevent'");
 	}
-
-	// HIDE
-	$this->dbQuery("UPDATE k_socialevent SET socialEventHide=1 WHERE id_socialevent=".$id_socialevent);
-
-	// REMOVE
-	$this->dbQuery("DELETE FROM k_socialsandbox WHERE socialSandboxId=".$id_socialevent." AND socialSandboxType='id_socialevent'");
-}
 
 /* + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + -
 + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - */
@@ -632,49 +645,63 @@ function socialEventMemberGet($opt){
 	return $tmp;
 }
 
-/* + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - 
-+ - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - */
-function socialEventMemberAdd($opt){
+//-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -
+//-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -
+	public  function socialEventMemberAdd($opt){
 
-	$id_socialevent	= $opt['id_socialevent'];
-	$user			= $opt['user'];
+		$id_socialevent	= $opt['id_socialevent'];
+		$user			= $opt['user'];
 
-	$event	= $this->socialEventGet(array(
-		'id_socialevent' => $id_socialevent
-	));
-	
-	$table	= ($event['is_moderate'] == '1') ? 'k_socialeventpending' : 'k_socialeventuser';
-	$user	= is_array($user) ? $user : array($user);	
-	
-	if($opt['force']) $table = 'k_socialeventuser';
+		$event	= $this->socialEventGet(array(
+			'id_socialevent' => $id_socialevent
+		));
 
-	foreach($user as $id_user){
-		if(intval($id_user) > 0) $tmp[] = "(".$id_socialevent.", ".$id_user.", ".time().")";
+		$table	= ($event['is_moderate'] == '1') ? 'k_socialeventpending' : 'k_socialeventuser';
+		$flag   = ($table == 'k_socialeventpending') ? 'PENDING' : 'ENTER';
+		$user	= is_array($user) ? $user : array($user);
+
+		if($opt['force']) $table = 'k_socialeventuser';
+
+		foreach($user as $id_user){
+			if(intval($id_user) > 0) $tmp[] = "(".$id_socialevent.", ".$id_user.", ".time().")";
+		}
+
+		if(sizeof($tmp) > 0){
+			$this->dbQuery("INSERT IGNORE INTO ".$table." (id_socialevent, id_user, timeline) VALUES ".implode(', ', $tmp));
+			if($opt['debug']) $this->pre($this->db_query, $this->db_error);
+		}
+
+		$this->socialEventMemberCount(array(
+			'debug'          => $opt['debug'],
+			'id_socialevent' => $id_socialevent
+		));
+
+		$this->socialEventMemberFix(array(
+			'debug' => $opt['debug'],
+			'users' => $user
+		));
+
+		# SANDBOXING
+		#
+		$this->apiLoad('socialSandbox')->socialSandboxPush(array(
+			'debug'				=> false,
+			'socialSandboxType'	=> 'id_socialevent',
+			'socialSandboxId'	=> $id_socialevent
+		));
+
+		# ACTIVITY + NOTIFICATION
+		#
+		foreach($user as $e){
+			$this->apiLoad('socialActivity')->socialActivitySet(array(
+				'debug'              => $opt['debug'],
+				'id_user'            => $e,
+				'notification'       => true,
+				'socialActivityKey'  => 'id_socialevent',
+				'socialActivityId'   => $id_socialevent,
+				'socialActivityFlag' => $flag
+			));
+		}
 	}
-
-	if(sizeof($tmp) > 0){
-		$this->dbQuery("INSERT IGNORE INTO ".$table." (id_socialevent, id_user, timeline) VALUES ".implode(', ', $tmp));
-		if($opt['debug']) $this->pre($this->db_query, $this->db_error);
-	}
-
-	$this->socialEventMemberCount(array(
-		'debug'				=> $opt['debug'],
-		'id_socialevent'	=> $id_socialevent
-	));
-
-	$this->socialEventMemberFix(array(
-		'debug'				=> $opt['debug'],
-		'users'				=> $user
-	));
-
-	# SANDBOXING
-	#
-	$this->apiLoad('socialSandbox')->socialSandboxPush(array(
-		'debug'				=> false,
-		'socialSandboxType'	=> 'id_socialevent',
-		'socialSandboxId'	=> $id_socialevent
-	));
-}
 
 /* + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - 
 + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - */

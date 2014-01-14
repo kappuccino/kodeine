@@ -63,10 +63,13 @@
 
 	if($_REQUEST['id_category'] != NULL){
 		$data = $app->apiLoad('category')->categoryGet(array(
-			'language' 		=> 'fr',
-			'id_category' 	=> $_REQUEST['id_category'],
-			'debug'			=> false
+			'language'    => 'fr',
+			'id_category' => $_REQUEST['id_category'],
+			'debug'       => false
 		));
+
+	#	$app->pre($data);
+	#	die('00');
 		
 		// Ajouter les autres LANGUES (celle demandee est inclue)
 		foreach($languages as $e){
@@ -231,18 +234,20 @@
 					<tr>
 						<td colspan="2" class="view-split"><?php echo _('More parameters'); ?></td>
 					</tr>
-					<?php foreach($fields as $f){ ?>
+					<?php foreach($fields as $field){ ?>
 					<tr valign="top">
-						<td><?php echo $f['fieldName'] ?></td>
-						<td><div class="field-list"><?php
+						<td colspan="2"><?php
 	
-							$tmp = $app->formValue($data['lan'][$iso]['field'][$f['fieldKey']], $_POST['lan'][$iso]['field'][$f['id_field']]);
+						#	$tmp = $app->formValue($data['lan'][$iso]['field'][$f['fieldKey']], $_POST['lan'][$iso]['field'][$f['id_field']]);
 
                             #$app->apiLoad('field')->fieldTrace($iso, $f, $copy, $tmp);
-                            $app->apiLoad('field')->fieldTrace($data['lan'][$iso], $f, $tmp);
+
+                            $app->apiLoad('field')->fieldTrace($data['lan'][$iso], $field, array(
+	                            'name' => 'lan['.$iso.'][field]['.$field['id_field'].']'
+                            ));
 
 	
-						?></div></td>
+						?></td>
 					</tr>
 					<?php }} ?>
 				</table>
@@ -278,8 +283,10 @@
 	});
 </script>
 
-<script src="../core/vendor/tinymce/jscripts/tiny_mce/jquery.tinymce.js"></script>
-<script src="../core/vendor/tinymce/jscripts/tiny_mce/tiny_mce.js"></script>
+<!--<script src="../core/vendor/tinymce/jscripts/tiny_mce/jquery.tinymce.js"></script>
+<script src="../core/vendor/tinymce/jscripts/tiny_mce/tiny_mce.js"></script>-->
+<script src="../core/vendor/ckeditor/ckeditor.js"></script>
+<script src="../core/vendor/ckeditor/adapters/jquery.js"></script>
 <script src="../content/ui/js/content.js"></script>
 <script src="ui/js/category.js"></script>
 

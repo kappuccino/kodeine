@@ -140,7 +140,7 @@
                 <?php
                 if(is_array($rows)) {
                     foreach($rows as $r) {
-
+                        $value = '';
                         if(is_numeric($r['field'])) {
                             $field	    = $app->apiLoad('field')->fieldGet(array('id_field' => $r['field']));
                             $value      = $e['field'.$r['field']];
@@ -151,6 +151,8 @@
                             }
                             if($value >= 0) $value = round(($value / 1000), 3);
                             $value .= ' kg';
+                        }elseif($r['field'] == 'cartDeliveryStatus') {
+                            $value = '<a href="edit?id_cart='.$e['id_cart'].'">'.$e['cartDeliveryStatus'].'</a>';
                         } elseif(substr($r['field'], 0, 8) == 'DELIVERY') {
                             $address = $app->apiLoad('user')->userAddressBookGet(array( 'id_user' => $e['id_user'], 'id_addressbook' => $e['id_delivery'] ));
                             $value = $address[str_replace('DELIVERY', '', $r['field'])];
@@ -171,9 +173,9 @@
                 }
                 ?>
 
-				<td><a href="edit?id_cart=<?php echo $r['id_cart'] ?>"><?php echo $r['cartStatus'] ?></a></td>
-				<td><?php echo $r['cartPayment'] ?></td>
-				<td align="right"><?php echo $r['cartTotalFinal'] ?></td>
+				<td><a href="edit?id_cart=<?php echo $e['id_cart'] ?>"><?php echo $e['cartStatus'] ?></a></td>
+				<td><?php echo $e['cartPayment'] ?></td>
+				<td align="right"><?php echo $e['cartTotalFinal'] ?></td>
 			</tr>
 			<?php }
 		}else{ ?>

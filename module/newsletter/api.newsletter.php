@@ -340,8 +340,10 @@ public function newsletterPrepareBody($id_newsletter, $data=NULL){
 	#
 	if(preg_match_all("#<img(.*)?/>#msU", $data, $imgsTag, PREG_SET_ORDER)){
 		foreach($imgsTag as $imgTag){
+            $props = array();
 		    if(preg_match_all('#(alt|title|src|height|width)=\"([^"]*)\"#msU', $imgTag[1], $props, PREG_SET_ORDER)){
 
+                $myprop = array();
 		    	// Recuperer simplement les properties
 		    	foreach($props as $prop){
 		    		$myprop[strtolower($prop[1])] = $prop[2];
@@ -353,8 +355,30 @@ public function newsletterPrepareBody($id_newsletter, $data=NULL){
 		    	}else {
 
                     $urllocal = str_replace("http://".$_SERVER['HTTP_HOST'], "", $myprop['src']);
-                    
+                    $urllocal = str_replace("http://".str_replace('www.', '', $_SERVER['HTTP_HOST']), "", $myprop['src']);
+
+
+                    //$this->pre(str_replace('www.', '', $_SERVER['HTTP_HOST'])$myprop,$urllocal, is_file(KROOT.$urllocal), strpos($urllocal, '.cache') );
+
+                    //if(intval($myprop['height']) > 0 && intval($myprop['width']) > 0) echo $urllocal.' ok--';
+                    //if(is_file(KROOT.$urllocal) && strpos($urllocal, '.cache') === false) echo KROOT.$urllocal.' ok2--';
+                    //echo '<br>';
+                    if(is_file(KROOT.$urllocal)) {
+                        $size = getimagesize(KROOT.$urllocal);
+                        $ratio = $size[0] / $size[1];
+                        if($ratio != 0) {
+                            if(intval($myprop['width']) > 0 && intval($myprop['height']) == 0) {
+                                $myprop['height'] = round($myprop['width'] / $ratio);
+                            }
+                            if(intval($myprop['height']) > 0 && intval($myprop['width']) == 0) {
+                                $myprop['width'] = round($myprop['height'] * $ratio);
+                            }
+                        }
+                    }
+                    //$this->pre($myprop);
+
                     if(intval($myprop['height']) > 0 && intval($myprop['width']) > 0 && is_file(KROOT.$urllocal) && strpos($urllocal, '.cache') === false){
+
                         $size = getimagesize(KROOT.$urllocal);
 
                         $img = $this->mediaUrlData(array(

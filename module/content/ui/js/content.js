@@ -138,34 +138,36 @@ function mediaSerialize(e){
 Gere l'affichage d'une vignette pour la boite de selection
 + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - */
 function mediaView(view, raw){
+
 //	console.log([view, view.getParent(), raw]);
 	view.parent().attr('id', raw);
-	
-	var parts 	 = raw.split("@@");
-		var type = parts[0];
-		var url	 = parts[1];
 
-//	console.log([type, url]);
+	var parts = raw.split("@@")
+		, type = parts[0]
+		, url = parts[1]
+		, img;
 
 	if(type == "folder"){
-		var img = {'src':'ressource/img/media-folder.png', 				'height':128, 'width':128, 'myclass':''};
+		img = {'src':'../media/ui/img/media-folder.png', 'height':128, 'width':128, 'myclass':''};
 	}else
 	if(type == "pdf"){
-		var img = {'src':'ressource/img/media-file_pdf.png', 			'height':128, 'width':128, 'myclass':''};
+		img = {'src': '../media/ui/img/media-file_pdf.png', 'height': 128, 'width': 128, 'myclass': ''};
 	}else
 	if(type == "flash"){
-		var img = {'src':'ressource/img/media-file_flash.png', 			'height':128, 'width':128, 'myclass':''};
+		img = {'src': '../media/ui/img/media-file_flash.png', 'height': 128, 'width': 128, 'myclass': ''};
 	}else
 	if(type == "audio"){
-		var img = {'src':'ressource/img/media-file_audio.png', 			'height':128, 'width':128, 'myclass':''};
+		img = {'src': '../media/ui/img/media-file_audio.png', 'height': 128, 'width': 128, 'myclass': ''};
 	}else
 	if(type == "image"){
-		var img = (view.parent().hasClass('notFound'))
-			? {'src':'../content/ui/img/media-file_file.png', 		'height':128, 'width':128, 'myclass':''}
-			: {'src':url, 												'height':'',  'width':'',  'myClass':'shd'};
+		img = (view.parent().hasClass('notFound'))
+			? {'src': '../media/ui/img/media-file_file.png', 'height': 128, 'width': 128, 'myclass': ''}
+			: {'src': url, 'height': '', 'width': '', 'myClass': 'shd'};
 	}else{
-		var img = {'src':'../content/ui/img/media-file_file.png', 	'height':128, 'width':128, 'myclass':''};
+		img = {'src': '../media/ui/img/media-file_file.png', 'height': 128, 'width': 128, 'myclass': ''};
 	}
+
+//	console.log([type, url, img]);
 	
 	if(img.myClass != '') view.addClass(img.myClass);
 
@@ -219,57 +221,47 @@ function mediaView(view, raw){
 /* + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + -
 	RICH TEXT EDITOR
 + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - */
-function setRichEditor(){
-	if(!useEditor) return false
-	tinyMCE.init({
-		mode		: 'exact',
-		elements	: textarea,
-		theme		: 'advanced',
-		plugins		: 'safari,spellchecker,pagebreak,style,layer,table,save,advhr,advimage,advlink,emotions,iespell,inlinepopups,insertdatetime,preview,media,searchreplace,print,contextmenu,paste,directionality,fullscreen,noneditable,visualchars,nonbreaking,xhtmlxtras',
+function setRichEditor(selector){
+	// si selector est fourni, init un CKEditor sur cet item
+	// plutot que le "textarea" global
 
-        remove_script_host		: true,
-        convert_urls 			: false,
-		theme_advanced_buttons1 : 'mybutton,code,newdocument,|,bold,italic,underline,strikethrough,|,justifyleft,justifycenter,justifyright,justifyfull,|,styleselect,formatselect,fontselect,fontsizeselect',
-		theme_advanced_buttons2 : 'cut,copy,paste,pastetext,pasteword,|,search,replace,|,bullist,numlist,|,outdent,indent,blockquote,|,undo,redo,|,link,unlink,anchor,image,cleanup,help,|,insertdate,inserttime,preview,|,forecolor,backcolor',
-		theme_advanced_buttons3 : 'tablecontrols,|,hr,removeformat,visualaid,|,sub,sup,|,charmap,iespell,media,advhr,|,print,|,ltr,rtl,|,fullscreen',
-		theme_advanced_buttons4 : 'styleprops,spellchecker,|,cite,abbr,acronym,del,ins,attribs,|,visualchars,nonbreaking,template,blockquote,pagebreak',
-	
-		theme_advanced_toolbar_location		: 'top',
-		theme_advanced_toolbar_align		: 'left',
-		theme_advanced_statusbar_location	: 'bottom',
-		theme_advanced_resizing				: true,
-	
-		// Example content CSS (should be your site CSS)
-		content_css		: '../core/helper/tinymce',
+	var ck_selector = textarea;
 
-		// Custom FORMAT
-		style_formats 	: MceStyleFormats,
+	if (!useEditor) return false
+	// si on fourni un selecteur custom, ne pas utiliser "textarea"
+	if (selector) ck_selector = selector;
 
-		// Drop lists for link/image/media/template dialogs
-	//	template_external_list_url	: "js/template_list.js",
-	//	external_link_list_url 		: "js/link_list.js",
-	//	external_image_list_url 	: "js/image_list.js",
-	//	media_external_list_url 	: "js/media_list.js",
-		
-		setup : function(ed) {
-		    ed.addButton('mybutton', {
-		        title : 'Ins�rer des images',
-		        image : '../core/ui/img/_img/myb.gif',
-		        onclick : function() {
-					mediaPicker(ed.id, 'mce');
-		        }
-		    });
-		}
-	
+	var splitTest = ck_selector.split(',');
+	if (splitTest.length > 1) {
+		$.each(splitTest, function(i, elem) {
+			// recurser les textarea a CKEditoriser
+			setRichEditor(elem)
+		});
+
+		return;
+
+	} else {
+
+		$( '#'+ck_selector ).ckeditor({
+			contentsCss: '../core/helper/ckeditor',
+			allowedContent: true
+		});
+
+	}
+
+	// charger une ressource externe (plugin) et l'initialiser dans l'instance de notre ckeditor
+	var editor = CKEDITOR.instances[ck_selector];
+	CKEDITOR.plugins.addExternal('kodeineimg', '/admin/core/vendor/ckeditor-plugins/kodeineimg/', 'plugin.js');
+	CKEDITOR.plugins.load('kodeineimg', function(plugins) {
+		plugins['kodeineimg'].init(editor)
 	});
 
 }
 
-
-function removeRichEditor(){
-	$.each($('textarea'), function(i, t){
-		tinyMCE.execCommand('mceRemoveControl', false, $(t).attr('id'));
-	});
+function removeRichEditor() {
+	for (var id in CKEDITOR.instances) {
+		CKEDITOR.instances[id].destroy();
+	}
 }
 
 
@@ -440,7 +432,8 @@ function enableMove(){
 //	mySortables.addLists($$('.field-list'));
 
 //	myTabSortables.removeLists($$('.do-viewer'));
-//	myTabSortables.addLists($$('.do-viewer'));	
+//	myTabSortables.removeLists($$('.do-viewer'));
+//	myTabSortables.addLists($$('.do-viewer'));
 
 	mySortables = $('.field-list');
 	myTabSortables = $('.do-viewer');
@@ -449,11 +442,11 @@ function enableMove(){
 
 	$.each(mySortables, function(k,v) {
 		
-		// r�activer les sort si disabled
+		// réactiver les sort si disabled
 		if (typeof $(v).data('sortable') !== 'undefined') {
 			 $(v).sortable({disabled : false});
 		} else {
-			// sinon les cr�er
+			// sinon les créer
 			
 			$(v).sortable({
 				handle: 'div.hand',
@@ -805,11 +798,16 @@ function urlCheck(){
 }	
 
 function toggleEditor(id) {
-	if (!tinyMCE.getInstanceById(id)){
-		tinyMCE.execCommand('mceAddControl', false, id);
-	}else{
-		tinyMCE.execCommand('mceRemoveControl', false, id);
+	var textarea = $('#'+id);
+
+	if(textarea.length){
+		if(textarea.css('display') == 'none'){
+			CKEDITOR.instances[id].destroy()
+		}else{
+			CKEDITOR.replace(id)
+		}
 	}
+
 }
 
 
@@ -903,6 +901,7 @@ function tagSearch(id_field, id_type, fieldName, method){
 	var g = {
 		'id_field'	: id_field,
 		'id_type'	: id_type,
+		'offset'    : 0,
 		'q'			: q
 	};
 	
@@ -981,8 +980,6 @@ function tagSearchRequest(id_field, id_type, fieldName, clean, getVar, method){
 	if($('#morexqr-'+id_field)) $('#morexqr-'+id_field).remove();
 
 	// Est-ce que j'utiliser deja ce XQR ?
-	
-
 	var xqr = $.ajax({
 		'url'			: '../field/helper/field-multitag',
 		'dataType'		: "json",
@@ -991,38 +988,49 @@ function tagSearchRequest(id_field, id_type, fieldName, clean, getVar, method){
 	
 	xqr.done(function(r) {
 		var a = r.result;
+
 		// On supprime les lignes actuelles
-		/*if(tagSearchStorageGet(id_field, 'clean')){
-			t.find('tr').remove();
-		}*/
 		t.find('tr').remove();
+
 		// le lien MORE en dessous
 		if($('#morexqr-'+id_field)) $('#morexqr-'+id_field).remove();
 
 		if(a.length > 0){
 			$.each(a, function(i, e){
-				var line = $('<tr />').appendTo(t);
 
+				var line = $('<tr />').appendTo(t);
 				var push = $('<td />').css('width', 25).appendTo(line);
-				
 				var anch = $('<a style="cursor:pointer;"><img src=\"../core/ui/img/_img/picto-add.png\" /></a>').appendTo(push).bind('click', function() {
 					tagInsert('contenttable-'+id_field, fieldName, id_field, id_type, eval('e.'+tagId), eval('e.'+tagView), method);
 				});
-
 				var name = e[tagView];
+
 				if(e.path) name = name + ' ('+ e.path +')';
 
 				$('<td>'+e[tagId]+'</td>').appendTo(line).css('width', 25);
 				$('<td class="@">'+name+'</td>').appendTo(line);
-				
-				
+
 				if(typeof e.more != 'undefined'){
 					e.more.each(function(i, more){
-						var name = $('<td>'+more+'</td>').appendTo(line).css('width', '20%');
+						$('<td>'+more+'</td>').appendTo(line).css('width', '20%');
 					});
 				}
-
 			});
+
+			if(r.more){
+				var line = $('<tr id="#morexqr-'+id_field+'" />').appendTo(t);
+				var more = $('<td colspan="4" width="25" />').appendTo(line);
+
+				more.click(function(){
+					getVar_ = getVar;
+					getVar_.offset = getVar.offset + 1;
+
+					console.log(id_field, id_type, fieldName, false, getVar_, method);
+					tagSearchRequest(id_field, id_type, fieldName, false, getVar_, method);
+				});
+
+				more.html('Plus');
+			}
 		}
 		else{
 			$('<tr><td colspan="2" class="tagListingSearch">Aucun r&eacute;sultat</td></tr>').appendTo(t);

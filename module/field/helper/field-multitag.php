@@ -2,7 +2,7 @@
 
 	header('Content-type: application/json');
 
-	$limit		= 7;
+	$limit		= 50;
 	$offset		= ($_GET['offset'] == NULL) ? 0 : $_GET['offset'] * $limit;
 	$field		= $app->apiLoad('field')->fieldGet(array('id_field' => $_GET['id_field']));
 	$param		= json_decode($field['fieldParam'], true);	
@@ -161,7 +161,7 @@
 
 
 	if(isset($_GET['pre'])){
-		$app->pre($m);
+		$app->pre(var_export($m));
 	}else{
 		echo json_encode($m);
 	}

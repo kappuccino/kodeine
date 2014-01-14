@@ -35,8 +35,11 @@
 
 		// DATA ////////////////////////////////////////////////////////////////////////////////////////////////////////
 		$dat['k_contentdata'] = array(
-			'contentUrl'  => array('value' => $_POST['contentUrl'],  'check' => '.'),
-			'contentName' => array('value' => $_POST['contentName'], 'check' => '.')
+			'contentUrl'                => array('value' => $_POST['contentUrl'],               'check' => '.'),
+			'contentName'               => array('value' => $_POST['contentName'],              'check' => '.'),
+			'contentHeadTitle' 			=> array('value' => $_POST['contentHeadTitle'], 		'null' => true),
+			'contentMetaKeywords' 		=> array('value' => $_POST['contentMetaKeywords'], 		'null' => true),
+			'contentMetaDescription'	=> array('value' => $_POST['contentMetaDescription'],	'null' => true),
 		);
 		if(!$app->formValidation($dat)) $do = false;
 
@@ -156,10 +159,7 @@
 	<?php include(COREINC.'/head.php'); ?>
 	<link rel="stylesheet" type="text/css" href="ui/css/gallery.css">
 	<link rel="stylesheet" type="text/css" href="../media/ui/css/media.css">
-    <link rel="stylesheet" type="text/css" href="../content/ui/css/data.css" />
-	<link rel="stylesheet" type="text/css" href="../core/vendor/datepicker/css/datepicker.css" />
-	<link rel="stylesheet" type="text/css" href="../core/vendor/codemirror/lib/codemirror.css" />
-	<link rel="stylesheet" type="text/css" href="../core/vendor/codemirror/theme/monokai.css" />
+    <link rel="stylesheet" type="text/css" href="../content/ui/css/data.css">
 </head>
 <body>
 	
@@ -254,7 +254,33 @@
 							</div>
 						</span>
 					</li>
-	
+
+					<li id="contentHeadMeta" class="clearfix form-item">
+						<div class="hand"></div>
+						<div class="toggle"></div>
+
+						<span class="">
+							<label><?php echo _('Title (seo)'); ?></label>
+							<div class="form"><input type="text" class="field" name="contentHeadTitle" value="<?php echo $app->formValue($data['contentHeadTitle'], $_POST['contentHeadTitle']); ?>" size="100" style="width:99%;" /></div>
+						</span>
+
+						<br style="clear:both" />
+						<div class="spacer"></div>
+
+						<span>
+							<label class="off"><?php echo _('Key words (seo)'); ?></label>
+							<div class="form"><input type="text" name="contentMetaKeywords" class="field" value="<?php echo $app->formValue($data['contentMetaKeywords'], $_POST['contentMetaKeywords']); ?>" size="100" style="width:99%;" /></div>
+						</span>
+
+						<br style="clear:both" />
+						<div class="spacer"></div>
+
+						<span>
+							<label class="off"><?php echo _('Description (seo)'); ?></label>
+							<div class="form"><input type="text" name="contentMetaDescription" class="field" value="<?php echo $app->formValue($data['contentMetaDescription'], $_POST['contentMetaDescription']); ?>" size="100" style="width:99%;" /></div>
+						</span>
+					</li>
+
 					<li class="clearfix form-item">
 						<div class="hand">&nbsp;</div>
 						<div class="toggle toggle-hidden">&nbsp;</div>
@@ -462,13 +488,15 @@
 	
 </div>
 
-</body>
 
 <?php include(COREINC.'/end.php'); ?>
-<script src="../core/vendor/tinymce/jscripts/tiny_mce/jquery.tinymce.js"></script>
-<script src="../core/vendor/tinymce/jscripts/tiny_mce/tiny_mce.js"></script>
+
+<script src="../core/vendor/ckeditor/ckeditor.js"></script>
+<script src="../core/vendor/ckeditor/adapters/jquery.js"></script>
+
 <script src="ui/js/content.js"></script>
 <script src="ui/js/gallery.nav.js"></script>
+
 <script>
 
 	actionNav		= true;
@@ -477,13 +505,13 @@
 	useEditor		= true;
 	replace			= [];
 	textarea		= "<?php echo @implode(',', $GLOBALS['textarea']) ?>";
-	MceStyleFormats = [<?php echo @file_get_contents(USER.'/config/tinymceStyleFormats.php') ?>];
+//	MceStyleFormats = [<?php echo @file_get_contents(USER.'/config/tinymceStyleFormats.php') ?>];
 
 	$(function(){
 		boot();
-		checkNeedToBeFilled();
 	});
 
 </script>
 
+</body>
 </html>

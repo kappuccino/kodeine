@@ -17,8 +17,8 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	$api        = $app->apiLoad('content');
 
-	$id_album   = $_GET['id_album'] ?: -5000;
-	$id_content = $_GET['id_content'];
+	$id_album   = !isset($_REQUEST['id_album']) ? -5000 : intval($_REQUEST['id_album']);
+	$id_content = $_REQUEST['id_content'];
 	$pref       = $app->configGet('content');
 	$is_alias   = false;
 
@@ -66,12 +66,12 @@
 		);
 
 		$opt = array(
-			'id_type'		=> $src['id_type'],
-			'language'		=> $src['language'],
-			'debug'			=> false,
-			'def'			=> $def,
-			'data'			=> $dat,
-			'album'			=> $album,
+			'id_type'  => $src['id_type'],
+			'language' => $src['language'],
+			'debug'    => false,
+			'def'      => $def,
+			'data'     => $dat,
+			'album'    => $album
 		);
 
 		$result = $api->contentSet($opt);
@@ -81,14 +81,14 @@
 
 		$data['success'] = true;
 		$data['new']     = array(
-			'is_album'      => true,
-			'is_alias'      => true,
-			'id_alias'      => intval($new['id_alias']),
-			'id_album'      => intval($new['id_album']),
-			'id_content'    => intval($new['id_content']),
-			'contentName'   => $new['contentName'],
-			'contentSee'    => $new['contentSee'],
-			'hasPoster'     => false
+			'is_album'    => true,
+			'is_alias'    => true,
+			'id_alias'    => intval($new['id_alias']),
+			'id_album'    => intval($new['id_album']),
+			'id_content'  => intval($new['id_content']),
+			'contentName' => $new['contentName'],
+			'contentSee'  => $new['contentSee'],
+			'hasPoster'   => false
 		);
 
 	}else
@@ -176,11 +176,11 @@
 
 	# Gerer la positions des elements (ALBUM / ITEMS)
 	#
-	if($_GET['action'] == 'order'){
+	if($_POST['action'] == 'order'){
 
 
-		$albums = explode('.', $_GET['albums']);
-		$items  = explode('.', $_GET['items']);
+		$albums = explode('.', $_POST['albums']);
+		$items  = explode('.', $_POST['items']);
 
 		foreach($albums as $idx => $id_content){
 			if($id_content != NULL){
@@ -191,6 +191,7 @@
 		foreach($items as $idx => $id_content){
 			if($id_content != NULL){
 				$app->dbQuery("UPDATE k_contentitem SET contentItemPos=".$idx." WHERE id_content=".$id_content." AND id_album=".$id_album);
+				echo $app->db_query."\n";
 			}
 		}
 
