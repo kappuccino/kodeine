@@ -176,7 +176,39 @@ public function listSubscribe($opt = array()) {
     return $this->send($data, 'listSubscribe');
 }
 
-/* + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + -
-+ - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - */
 
-} ?>
+/* + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + -
+EXEMPLE
+	$opt = array(
+		'email'	=> $email,
+		'list'  => 'abcdef'
+	);
++ - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - */
+public function listUnsubscribe($opt = array()) {
+
+	$data = array(
+		'id'            => $opt['id_list'],
+		'email_address' => $opt['email']
+	);
+
+	return $this->send($data, 'listUnsubscribe');
+}
+
+/* + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + -
+EXEMPLE
+	$opt = array(
+		'email'	=> $email,
+		'list'  => 'abcdef'
+	);
++ - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - */
+public function listMemberInfo($opt = array()){
+
+	$data = array(
+		'id'            => $opt['id_list'],
+		'email_address' => $opt['email']
+	);
+
+	return $this->send($data, 'listMemberInfo');
+}
+
+}
