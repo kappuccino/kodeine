@@ -1,6 +1,57 @@
 <?php
 $api	= $app->apiLoad('newsletter');
 $pref	= $app->configGet('newsletter');
+$mailchimp = $app->apiLoad('newsletterMailChimp');
+
+if (!empty($_POST['testmail'])) {
+	$lists = $mailchimp->listGet();
+
+	## Si on a au moins une liste de renseignée
+	if (isset($lists['data'][0])) {
+
+		$nl = $app->apiLoad('newsletter')->newsletterGet(array(
+			'id_newsletter' => $_REQUEST['id_newsletter']
+		));
+
+		$campainOptions = array(
+			'list_id' => $lists['data'][0]['id'],
+			'subject' => '[email test] '.$nl['newsletterTitle'],
+			'from_email' => $lists['data'][0]['default_from_email'],
+			'from_name' => $lists['data'][0]['default_from_name'],
+			'to_name' => "*|FNAME|*"
+		);
+
+		$campainContents = array(
+			'html' => $nl['newsletterHtml'],
+			'text' => strip_tags($nl['newsletterHtml']),
+			'url' => 'http://'.$_SERVER['HTTP_HOST'].'/?preview-newsletter='.base64_encode($_REQUEST['id_newsletter'])
+		);
+
+		$campainParams = array(
+			'type' => 'regular',
+			'options' => $campainOptions,
+			'content' => $campainContents
+		);
+
+		## Renvoie le campaign id
+		$cid = $mailchimp->campaignCreate($campainParams);
+
+		$test = $mailchimp->campaignSendTest(array(
+			'cid' => $cid,
+			'test_emails' => array(
+				$_POST['testmail']
+			)
+		));
+
+		$delete = $mailchimp->campaignDelete(array(
+			'cid' => $cid
+		));
+
+		## 4138d1bdb8
+		#$app->pre($cid, $test, $delete);
+	}
+
+}
 
 if($_POST['action']){
     $do = true;
@@ -107,12 +158,13 @@ if(is_array($tps)) {
         }
     }
 }
-//$app->pre($templates);
 
 ?><!DOCTYPE html>
 <head>
     <?php include(COREINC.'/head.php'); ?>
-    <link rel="stylesheet" type="text/css" media="all" href="ui/css/newsletter.css" />
+	<link rel="stylesheet" type="text/css" media="all" href="ui/css/bootstrap3/css/bootstrap.min.css" />
+	<link rel="stylesheet" type="text/css" media="all" href="ui/css/flatui/css/flat-ui.css" />
+	<link rel="stylesheet" type="text/css" media="all" href="ui/css/dsnr-ui.css" />
 </head>
 
 <body>
@@ -124,18 +176,22 @@ if(is_array($tps)) {
 ?></header>
 
 <div class="inject-subnav-right hide">
+  <a href="javascript:save();" class="btn btn-mini btn-success">Enregistrer</a>
+</div>
+
+<!-- <div class="inject-subnav-right hide">
     <?php if($data['id_newsletter'] > 0) { ?>
     <?php if($_REQUEST['id_newsletter'] > 0){ ?>
         <li><a href="preview?id_newsletter=<?php echo $_REQUEST['id_newsletter'] ?>" class="btn btn-mini" target="_blank">Prévisualiser</a></li>
         <?php } ?>
     <?php if($data['newsletterSendDate'] == NULL){ ?>
-        <!--<li><a href="javascript:$('#do').val('test');save();" class="btn btn-mini">Envoyer un mail de test</a></li>-->
+        <li><a href="javascript:$('#do').val('test');save();" class="btn btn-mini">Envoyer un mail de test</a></li>
         <?php } ?>
     <?php } ?>
     <?php if($data['newsletterSendDate'] == NULL){ ?>
     <li><a href="javascript:save();" class="btn btn-mini btn-success">Enregistrer</a></li>
     <?php } ?>
-</div>
+</div> -->
 
 <div id="app">
 
@@ -147,33 +203,51 @@ if(is_array($tps)) {
     ?>
     <div class="wrapper clearfix">
 
-    <form action="data-options" method="post" id="data" enctype="multipart/form-data">
+	    <?php if (empty($data['newsletterHtml'])) { ?>
+	    <div class="alert alert-info">
+		    <h4>Vous n'avez pas encore <a href="data-editor?id_newsletter=<?php echo $data['id_newsletter'] ?>">ajouté de gabarit</a> à votre newsletter.</h4>
+		    <em>Les gabarits sont des <a href="template">assemblages de blocs</a>. <br/>Avant de pouvoir en
+			    <a href="data-editor?id_newsletter=<?php echo $data['id_newsletter'] ?>">lier à votre newsletter</a>, vous devez un générer un a partir de <a href="blocs">vos blocs de contenu</a>.</em>
+	    </div>
+        <?php } ?>
 
-        <input type="hidden" name="action" value="1" />
-        <input type="hidden" name="id_newsletter" value="<?php echo $data['id_newsletter'] ?>" />
-        <input type="hidden" name="do" id="do" value="" />
-        <input type="hidden" name="designer" value="<?php echo $_REQUEST['designer']; ?>" />
+	    <?php if (!empty($data['newsletterHtml'])) { ?>
+		    <div class="alert alert-success">
+			    <h4>Bravo ! cette newsletter <a href="data-list?id_newsletter=<?php echo $data['id_newsletter'] ?>">est prête à être envoyée !</a></h4>
+			    <em>Vous n'êtes pas sûr ? Envoyez un mail de test rapidement&nbsp;
+				    <form action="" method="post" style="display:inline">
+					    <input type="text" placeholder="adresse@email.com" name="testmail"/><button type="submit" id="testbtn" class="btn btn-block btn-lg btn-info" style="display: inline;font-size: 14px;color: white; padding: 2px 10px; border-radius: 0; vertical-align: 0px;width:auto;">Tester avec mailchimp</button></em>
+				    </form>
+		    </div>
+	    <?php } ?>
 
-        <table cellpadding="5" width="100%">
-            <tr>
-                <td width="100">Nom</td>
-                <td><input type="text" name="newsletterName" value="<?php echo $app->formValue($data['newsletterName'], $_POST['newsletterName']); ?>" style="width:300px" /></td>
-            </tr>
-            <tr>
-                <td>Titre du mail</td>
-                <td><input type="text" name="newsletterTitle" value="<?php echo $app->formValue($data['newsletterTitle'], $_POST['newsletterTitle']); ?>" style="width:500px" /></td>
-            </tr>
-            <tr>
-                <td>Archivage</td>
-                <td>
-                    <input type="checkbox" id="is_archive" name="is_archive" value="1" <?php if($app->formValue($data['is_archive'], $_POST['is_archive'])) echo "checked" ?> />
-                    <label for="is_archive">Si cette option est activée, la newsletter sera lisible par tout le monde depuis le site internet</label>
-                </td>
-            </tr>
-        </table>
-    </form>
+	    <form action="data-options" method="post" id="data" enctype="multipart/form-data">
 
-        </div>
+	        <input type="hidden" name="action" value="1" />
+	        <input type="hidden" name="id_newsletter" value="<?php echo $data['id_newsletter'] ?>" />
+	        <input type="hidden" name="do" id="do" value="" />
+	        <input type="hidden" name="designer" value="<?php echo $_REQUEST['designer']; ?>" />
+
+	        <table cellpadding="5" width="100%">
+	            <tr>
+	                <td width="100">Nom</td>
+	                <td><input type="text" name="newsletterName" value="<?php echo $app->formValue($data['newsletterName'], $_POST['newsletterName']); ?>" style="width:300px" /></td>
+	            </tr>
+	            <tr>
+	                <td>Titre du mail</td>
+	                <td><input type="text" name="newsletterTitle" value="<?php echo $app->formValue($data['newsletterTitle'], $_POST['newsletterTitle']); ?>" style="width:500px" /></td>
+	            </tr>
+	            <tr>
+	                <td>Archivage</td>
+	                <td>
+	                    <input type="checkbox" id="is_archive" name="is_archive" value="1" <?php if($app->formValue($data['is_archive'], $_POST['is_archive'])) echo "checked" ?> />
+	                    <label for="is_archive">Si cette option est activée, la newsletter sera lisible par tout le monde depuis le site internet</label>
+	                </td>
+	            </tr>
+	        </table>
+	    </form>
+
+    </div>
 
 
 </div>

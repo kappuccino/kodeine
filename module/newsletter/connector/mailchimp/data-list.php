@@ -134,11 +134,7 @@
 		
 	<?php } else { ?>
 
-			
-
-			
         <p>Sélectionner des emails Kodeine</p>
-
 
         <table cellpadding="5" width="100%">
             <tr valign="top">
@@ -204,12 +200,6 @@
     </form>
 	<?php } ?>
 
-
-
-
-
-
-
 </div>
 
 <?php include(COREINC.'/end.php'); ?>
@@ -237,33 +227,33 @@
             url : 'helper/total'+url,
             dataType : 'json'
         }).done(function(d) {
-                    $('#totalGroup').html(d.group);
-                    $('#totalSearch').html(d.search);
-                    $('#totalList').html(d.list);
+            $('#totalGroup').html(d.group);
+            $('#totalSearch').html(d.search);
+            $('#totalList').html(d.list);
 
-                    rawLength = $('#newsletterListRaw').val().split(/\n/g).length;
-                    if(rawLength == 1){
-                        var str = $.trim($('#newsletterListRaw').val());
-                        if(str == '') rawLength = 0;
-                    }
+            rawLength = $('#newsletterListRaw').val().split(/\n/g).length;
+            if(rawLength == 1){
+                var str = $.trim($('#newsletterListRaw').val());
+                if(str == '') rawLength = 0;
+            }
 
-                    if($('#newsletterListRaw').val().length == 0){
-                        $('#totalRaw').html('0');
-                    }else{
-                        $('#totalRaw').html(rawLength); // +' (validité des mails non vérifiée)');
-                    }
+            if($('#newsletterListRaw').val().length == 0){
+                $('#totalRaw').html('0');
+            }else{
+                $('#totalRaw').html(rawLength); // +' (validité des mails non vérifiée)');
+            }
 
-                    $('#totalView').html('('+ (d.total + rawLength) +')');
-                });
+            $('#totalView').html('('+ (d.total + rawLength) +')');
+        });
 
         var getget = $.ajax({
             url : 'helper/total'+url,
             dataType : 'json'
         }).done(function(d) {
-                    $('#totalGroup').html(d.group);
-                    $('#totalSearch').html(d.search);
-                    $('#totalList').html(d.list);
-                });
+            $('#totalGroup').html(d.group);
+            $('#totalSearch').html(d.search);
+            $('#totalList').html(d.list);
+        });
     }
 
     $(function() {

@@ -1,7 +1,7 @@
 <?php
 	$api	= $app->apiLoad('newsletter');
 	$pref	= $app->configGet('newsletter');
-	
+
 	$data = $app->apiLoad('newsletter')->newsletterGet(array(
 		'id_newsletter' 	=> $_REQUEST['id_newsletter']
 	));
@@ -20,7 +20,7 @@
 		die();
 	}
 	if($pref['connector'] == 'mailChimp') {
-		include('connector/mailchimp/data-list.php');
+		include('connector/mailchimp/push.php');
 		die();
 	}
 ?>

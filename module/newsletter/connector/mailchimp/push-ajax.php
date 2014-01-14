@@ -32,7 +32,7 @@
 
                 // Save id_segment en BDD
                 $def['k_newsletter'] = array(
-                    'newsletterConnectorValue'			=> array('value' => $id_segment)
+                    'newsletterConnectorValue' => array('value' => $id_segment)
                 );
                 $app->apiLoad('newsletter')->newsletterSet($data['id_newsletter'], $def);
             }
@@ -110,7 +110,7 @@
         die(json_encode($out));
     }
     else {			
-        //$app->dbQuery("UPDATE k_newsletter SET newsletterSendDate=NOW(), newsletterConnector='mailchimp', newsletterConnectorId='".$result."' WHERE id_newsletter=".$_REQUEST['id_newsletter']);
+        $app->dbQuery("UPDATE k_newsletter SET newsletterSendDate=NOW(), newsletterConnector='mailchimp', newsletterConnectorId='".$result."' WHERE id_newsletter=".$_REQUEST['id_newsletter']);
         $out['done'] = 1;
         die(json_encode($out));
     }

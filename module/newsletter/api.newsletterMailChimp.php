@@ -118,6 +118,22 @@ public function campaignCreate($opt = array()) {
 /* + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + -
 + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - */
 
+public function campaignSendTest($opt = array()) {
+	return $this->send($opt, 'campaignSendTest');
+}
+
+/* + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + -
++ - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - */
+
+public function campaignDelete($opt = array()) {
+	return $this->send($opt, 'campaignDelete');
+}
+
+
+
+/* + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + -
++ - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - */
+
 public function campaignStats($opt = array()) {
     return $this->send($opt, 'campaignStats');
 }
