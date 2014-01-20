@@ -39,7 +39,7 @@ function help(){
 private function send($data = array(), $method) {
 
 	$data['apikey'] = $this->apikey;
-	
+
 	$payload = json_encode($data);
 	
 	$submit_url = "http://".$this->apiUrl.".api.mailchimp.com/1.3/?method=".$method;
@@ -144,7 +144,7 @@ public function campaignStats($opt = array()) {
 
 public function listSubscribe($opt = array()) {
 
-    $double_optin		= true;
+    $double_optin		= isset($opt['double_optin']) ? $opt['double_optin'] : true;
     $update_existing	= false;
     $replace_interests	= true;
     $send_welcome		= false;
@@ -171,7 +171,6 @@ public function listSubscribe($opt = array()) {
         'send_welcome' 		=> $send_welcome,
         'email_type' 		=> $email_type
     );
-
 
     return $this->send($data, 'listSubscribe');
 }
