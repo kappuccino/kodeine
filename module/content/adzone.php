@@ -148,10 +148,10 @@ $types = array_merge($types);
                                <a href="data?id_content=<?php echo $campaign['id_content']; ?>">
                                <?php
                                    if($campaign['contentDateStart'] != NULL) {
-                                       echo _('From').' '.$app->helperDate($campaign['contentDateStart'], '%d %B %G'). '<br />';
+                                       echo _('From').' '.$app->helperDate($campaign['contentDateStart'], '%d %B %Y'). '<br />';
                                    }
                                    if($campaign['contentDateEnd'] != NULL) {
-                                       echo _('To').' '.$app->helperDate($campaign['contentDateEnd'], '%d %B %G').'';
+                                       echo _('To').' '.$app->helperDate($campaign['contentDateEnd'], '%d %B %Y').'';
                                    }
                                ?>
                                </a>
