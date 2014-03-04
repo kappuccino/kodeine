@@ -296,6 +296,7 @@ private function requestCurl($opt){
 		CURLOPT_HTTPAUTH        => CURLAUTH_BASIC,
 		CURLOPT_USERPWD         => $this->getCredentials(),
 		CURLOPT_POSTFIELDS		=> http_build_query($data, '', '&'),
+		CURLOPT_HTTPHEADER	    => array('Connection: close'),
 		CURLOPT_CUSTOMREQUEST	=> $verb
 	));
 	
@@ -304,6 +305,8 @@ private function requestCurl($opt){
 	$result = curl_exec($this->_handle);
 
 	if($result !== false){
+
+
 		$stats			= curl_getinfo($this->_handle);
     	$contentType	= curl_getinfo($this->_handle, CURLINFO_CONTENT_TYPE);
     	$size			= curl_getinfo($this->_handle, CURLINFO_HEADER_SIZE);
@@ -324,8 +327,4 @@ private function requestCurl($opt){
 	}
 }
 
-
-
-
-
-} ?>
+}
