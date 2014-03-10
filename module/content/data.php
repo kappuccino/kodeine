@@ -958,7 +958,7 @@ if($nFound){ ?>
 	useEditor		= true;
 	replace 		= <?php echo json_encode($replace); ?>;
 	textarea		= "<?php echo @implode(',', $GLOBALS['textarea']) ?>";
-//	MceStyleFormats = [<?php echo @file_get_contents(USER.'/config/tinymceStyleFormats.php') ?>];
+/*	MceStyleFormats = [<?php echo @file_get_contents(USER.'/config/tinymceStyleFormats.php') ?>];*/
 	isDrag          = false;
 
 	function sizer(e, min, add){
