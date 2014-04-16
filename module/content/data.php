@@ -309,7 +309,7 @@ if($nFound){ ?>
 						if(sizeof($versions) > 0){
 							foreach($versions as $vrs){
 								$sel = ($_REQUEST['reloadFromVersion'] == $vrs['id_version']) ? ' selected' : NULL;
-								echo "<option value=\"".$vrs['id_version']."\"".$sel.">Afficher la version du : ".$app->helperDate($vrs['versionDate'], '%e %b %G à %Hh %Mm %S')."</option>";
+								echo "<option value=\"".$vrs['id_version']."\"".$sel.">Afficher la version du : ".$app->helperDate($vrs['versionDate'], '%e %b %Y à %Hh %Mm %S')."</option>";
 							}
 						}
 					}else{
@@ -958,7 +958,7 @@ if($nFound){ ?>
 	useEditor		= true;
 	replace 		= <?php echo json_encode($replace); ?>;
 	textarea		= "<?php echo @implode(',', $GLOBALS['textarea']) ?>";
-//	MceStyleFormats = [<?php echo @file_get_contents(USER.'/config/tinymceStyleFormats.php') ?>];
+/*	MceStyleFormats = [<?php echo @file_get_contents(USER.'/config/tinymceStyleFormats.php') ?>];*/
 	isDrag          = false;
 
 	function sizer(e, min, add){

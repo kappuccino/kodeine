@@ -253,7 +253,7 @@ function setRichEditor(selector){
 	var editor = CKEDITOR.instances[ck_selector];
 	CKEDITOR.plugins.addExternal('kodeineimg', '/admin/core/vendor/ckeditor-plugins/kodeineimg/', 'plugin.js');
 	CKEDITOR.plugins.load('kodeineimg', function(plugins) {
-		plugins['kodeineimg'].init(editor)
+		if(editor) plugins['kodeineimg'].init(editor)
 	});
 
 }

@@ -793,9 +793,9 @@ public function businessCartCarriageSet($opt){
 	if(is_float($carriage)){
 
         // TVA
-        $cartCarriageTax            = ($opt['carriageTax'] > 0) ? $opt['carriageTax'] : '19.60';
-        $cartCarriageTotalTax       = $carriage;
-        $cartCarriage               = $cartCarriageTotalTax / (1 + ($cartCarriageTax / 100));
+        $cartCarriageTax        = ($opt['carriageTax'] > 0) ? $opt['carriageTax'] : '20.00';
+        $cartCarriageTotalTax   = $carriage;
+        $cartCarriage           = $cartCarriageTotalTax / (1 + ($cartCarriageTax / 100));
 
         $def = array();
         $def['k_businesscart'] = array(

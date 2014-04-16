@@ -58,8 +58,8 @@
 					$c['lan'][] = $l['language'];
 				}
 
-				$c['contentDateCreation']	= $app->helperDate($c['contentDateCreation'],	'%d.%m.%G');
-				$c['contentDateUpdate']		= $app->helperDate($c['contentDateUpdate'],		'%d.%m.%G');
+				$c['contentDateCreation']	= $app->helperDate($c['contentDateCreation'],	'%d.%m.%Y');
+				$c['contentDateUpdate']		= $app->helperDate($c['contentDateUpdate'],		'%d.%m.%Y');
 
 				$out['content'][] = $c;
 			}

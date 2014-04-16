@@ -94,7 +94,7 @@
 				<td><input type="checkbox" name="del[]" value="<?php echo $e['id_survey'] ?>" class="cb" /></td>
 				<td><?php echo $e['id_survey'] ?></td>
 				<td class="dateTime">
-					<span class="date"><?php echo $app->helperDate($e['surveyDateCreate'], '%d.%m.%G')?></span>
+					<span class="date"><?php echo $app->helperDate($e['surveyDateCreate'], '%d.%m.%Y')?></span>
 					<span class="time"><?php echo $app->helperDate($e['surveyDateCreate'], '%Hh%M') 	 ?></span>
 				</td>
 				<td><a href="data?id_survey=<?php echo $e['id_survey'] ?>"><?php echo $e['surveyName'] ?></a></td>

@@ -144,11 +144,11 @@
             "<td>".$languages."</td>".
             "<td>".$e['id_content']."</td>".
             "<td class=\"dateTime\">".
-                "<span class=\"date\">".$app->helperDate($e['contentDateCreation'], '%d.%m.%G')."</span> ".
+                "<span class=\"date\">".$app->helperDate($e['contentDateCreation'], '%d.%m.%Y')."</span> ".
                 "<span class=\"time\">".$app->helperDate($e['contentDateCreation'], '%Hh%M')."</span>".
             "</td>".
             "<td class=\"dateTime\">".
-                "<span class=\"date\">".$app->helperDate($e['contentDateUpdate'], '%d.%m.%G')."</span> ".
+                "<span class=\"date\">".$app->helperDate($e['contentDateUpdate'], '%d.%m.%Y')."</span> ".
                 "<span class=\"time\">".$app->helperDate($e['contentDateUpdate'], '%Hh%M')."</span>".
             "</td>".
             "<td style=\"padding-left:".($level * 15)."px;\"><a href=\"product.picker.data.php?id_content=".$e['id_content']."&language=".$e['language']."\">".$e['contentName']."</a></td>";
