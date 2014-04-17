@@ -145,6 +145,7 @@ function mediaView(view, raw){
 	var parts = raw.split("@@")
 		, type = parts[0]
 		, url = parts[1]
+		, cache = view.parent().attr('data-cache')
 		, img;
 
 	if(type == "folder"){
@@ -167,8 +168,6 @@ function mediaView(view, raw){
 		img = {'src': '../media/ui/img/media-file_file.png', 'height': 128, 'width': 128, 'myclass': ''};
 	}
 
-//	console.log([type, url, img]);
-	
 	if(img.myClass != '') view.addClass(img.myClass);
 
 	image = new Image(); 
@@ -211,7 +210,8 @@ function mediaView(view, raw){
 	}
 
 	if(img.myClass == 'shd'){
-		image.src = '/h:140'+img.src+'?&ttloff=45+minutes';
+	//image.src = '/h:140'+img.src+'?&ttloff=45+minutes';
+		image.src = cache;
 	}else{
 		image.src = img.src;
 	}
