@@ -311,6 +311,11 @@ function socialMessageMapping($opt){
 
 		# RECIPIENT
 		if($opt['withRecipient'] == true){
+
+			if(is_string($e['socialMessageRecipient'])){
+				$e['socialMessageRecipient'] = json_decode($e['socialMessageRecipient'], true);
+			}
+
 			if(sizeof($e['socialMessageRecipient']) > 0){
 				$users = $this->apiLoad('user')->userGet(array(
 					'debug'		=> false,
