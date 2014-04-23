@@ -1,9 +1,10 @@
 <?php
+
 	$api	= $app->apiLoad('newsletter');
 	$pref	= $app->configGet('newsletter');
-	
+
 	$apiConnector	= $app->apiLoad('newsletterCloudApp');
-		
+
 	if($_POST['action']){
 		$do = true;
 
@@ -32,7 +33,7 @@
 		}
 	
 		$def['k_newsletter'] = array(
-			'is_archive'				=> array('value' => $_POST['is_archive'],			'zero'  => true),
+		#	'is_archive'				=> array('value' => $_POST['is_archive'],			'zero'  => true),
 			'newsletterAllUser'			=> array('value' => $_POST['newsletterAllUser'],	'zero'  => true),
 			'newsletterSearch'			=> array('value' => $newsletterSearch),
 			'newsletterGroup'			=> array('value' => $newsletterGroup),

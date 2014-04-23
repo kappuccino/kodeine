@@ -262,15 +262,19 @@ private function requestClassic($opt){
 		)
 	);
 
+	if($verb == 'get' && !empty($data)) $url = $url.'?'.http_build_query($data);
+
+	if($debug) echo $url;
+
 	$context	= stream_context_create($opts);
 	$raw		= file_get_contents($url, false, $context);
 	$headers	= $this->headerToArray($http_response_header);
 	$result		= $raw; //utf8_decode($raw);
 
 	return array(
-		'contentType'	=> (($headers['Content-Type'] != '') ? $headers['Content-Type'] : '??'),
-		'headers'		=> $headers,
-		'body'			=> $result
+		'contentType' => $headers['Content-Type'] ? : '??',
+		'headers'     => $headers,
+		'body'        => $result
 	);
 }
 
@@ -296,6 +300,7 @@ private function requestCurl($opt){
 		CURLOPT_HTTPAUTH        => CURLAUTH_BASIC,
 		CURLOPT_USERPWD         => $this->getCredentials(),
 		CURLOPT_POSTFIELDS		=> http_build_query($data, '', '&'),
+		CURLOPT_HTTPHEADER	    => array('Connection: close'),
 		CURLOPT_CUSTOMREQUEST	=> $verb
 	));
 	
@@ -304,6 +309,8 @@ private function requestCurl($opt){
 	$result = curl_exec($this->_handle);
 
 	if($result !== false){
+
+
 		$stats			= curl_getinfo($this->_handle);
     	$contentType	= curl_getinfo($this->_handle, CURLINFO_CONTENT_TYPE);
     	$size			= curl_getinfo($this->_handle, CURLINFO_HEADER_SIZE);
@@ -324,8 +331,4 @@ private function requestCurl($opt){
 	}
 }
 
-
-
-
-
-} ?>
+}

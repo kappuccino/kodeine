@@ -108,7 +108,7 @@
 				<td><input type="hidden" 	name="moderate[<?php echo $e['id_comment'] ?>]" value="0" />
 					<input type="checkbox"  name="moderate[<?php echo $e['id_comment'] ?>]" value="1" <?php if($e['is_moderate']) echo " checked" ?> class="cs" />
 				</td>
-				<td><?php echo $app->helperDate($e['commentDate'], '%e %B %G %Hh%M') ?></td>
+				<td><?php echo $app->helperDate($e['commentDate'], '%e %B %Y %Hh%M') ?></td>
 				<td><?php echo $e['commentAvg'] ?></td>
 				<?php if($_REQUEST['id_content'] == NULL){ ?>
 				<td><?php echo "<a href=\"../content/data?id_content=".$e['id_content']."\">".$page['contentName']."</a>"; ?></td>

@@ -126,11 +126,11 @@
 				</td>
 				<td><?php echo $e['id_user'] ?></td>
 				<td class="dateTime">
-					<span class="date"><?php echo $app->helperDate($e['userDateCreate'], '%d.%m.%G')?></span>
+					<span class="date"><?php echo $app->helperDate($e['userDateCreate'], '%d.%m.%Y')?></span>
 					<span class="time"><?php echo $app->helperDate($e['userDateCreate'], '%Hh%M') 	 ?></span>
 				</td>
 				<td class="dateTime">
-					<span class="date"><?php echo $app->helperDate($e['userDateUpdate'], '%d.%m.%G')?></span>
+					<span class="date"><?php echo $app->helperDate($e['userDateUpdate'], '%d.%m.%Y')?></span>
 					<span class="time"><?php echo $app->helperDate($e['userDateUpdate'], '%Hh%M') 	 ?></span>
 				</td>
 				<td><a href="data?id_user=<?php echo $e['id_user'] ?>"><?php echo $e['userMail'] ?></a></td>

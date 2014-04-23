@@ -237,13 +237,13 @@
             "<td><a href=\"".$link."\">".$e['id_content']."</a></td>".
             "<td class=\"dateTime\">".
             "<a href=\"".$link."\">".
-            "<span class=\"date\">".$app->helperDate($e['contentDateCreation'], '%d.%m.%G')."</span> ".
+            "<span class=\"date\">".$app->helperDate($e['contentDateCreation'], '%d.%m.%Y')."</span> ".
             "<span class=\"time\">".$app->helperDate($e['contentDateCreation'], '%Hh%M')."</span>".
             "</a>".
             "</td>".
             "<td class=\"dateTime\">".
             "<a href=\"".$link."\">".
-            "<span class=\"date\">".$app->helperDate($e['contentDateUpdate'], '%d.%m.%G')."</span> ".
+            "<span class=\"date\">".$app->helperDate($e['contentDateUpdate'], '%d.%m.%Y')."</span> ".
             "<span class=\"time\">".$app->helperDate($e['contentDateUpdate'], '%Hh%M')."</span>".
             "</a>".
             "</td>";
@@ -292,7 +292,7 @@
                     if($f['field'] == 'contentMedia') $field['fieldType'] = 'media';
                     $aff    = $e[$f['field']];
                     if(in_array($f['field'], array('contentDateStart', 'contentDateEnd')) && $e[$f['field']] != NULL) {
-                        $aff =  "<span class=\"date\">".$app->helperDate($aff, '%d.%m.%G')."</span> ".
+                        $aff =  "<span class=\"date\">".$app->helperDate($aff, '%d.%m.%Y')."</span> ".
                                 "<span class=\"time\">".$app->helperDate($aff, '%Hh%M')."</span>";
                     }
                 }
@@ -300,7 +300,7 @@
                 $islink = true;
 
                 // Type date
-                if($field['fieldType'] == 'date') $aff      = $app->helperDate($aff, '%d.%m.%G');
+                if($field['fieldType'] == 'date') $aff      = $app->helperDate($aff, '%d.%m.%Y');
                 if($field['fieldType'] == 'boolean') $aff   = ($aff == '1') ? 'Oui' : 'Non';
 
                 // Type Array

@@ -81,7 +81,7 @@ $recipUnsubRate	= number_format((@($stat['campaign']['campaingUnsubscribed'] / $
         <h3 class="campaignName"><?php echo $stat['campaign']['campaignName'] ?></h3>
 
         <p class="campaignNameCaption">
-            Envoy&eacute; a <?php echo $total ?> destinataires le <?php echo $app->helperDate($data['newsletterSendDate'], '%e %B %G &agrave; %Hh%M') ?>
+            Envoy&eacute; a <?php echo $total ?> destinataires le <?php echo $app->helperDate($data['newsletterSendDate'], '%e %B %Y &agrave; %Hh%M') ?>
         </p>
 
         <?php if($stat['campaign']['campaingPool'] > 0){ ?>

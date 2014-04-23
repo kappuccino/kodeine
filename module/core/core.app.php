@@ -448,9 +448,16 @@ public function helperDate($date, $format=''){
 		list($a, $m, $j) 	= explode('-', $date);
 	}
 
-	return ($format == TIMESTAMP)
-		? mktime($h, $mn, $s, $m, $j, $a) 
-		: strftime($format, mktime($h, $mn, $s, $m, $j, $a));
+	$timestamp = mktime($h, $mn, $s, $m, $j, $a);
+#				 mktime($h, $mn, $s, $m, $j, $a)
+
+	$v = ($format == TIMESTAMP)
+		? $timestamp
+		: strftime($format, $timestamp);
+
+#	$this->pre($date, 'a='.$a, 'm='.$m, 'j='.$j, 'v='.$v, 'ts='.$timestamp);
+
+	return $v;
 }
 
 /* + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - 

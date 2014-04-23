@@ -34,7 +34,7 @@
         }
 
         $def['k_newsletter'] = array(
-            'is_archive'				=> array('value' => $_POST['is_archive'],			'zero'  => true),
+        #   'is_archive'				=> array('value' => $_POST['is_archive'],			'zero'  => true),
             'newsletterAllUser'			=> array('value' => $_POST['newsletterAllUser'],	'zero'  => true),
             'newsletterSearch'			=> array('value' => $newsletterSearch),
             'newsletterGroup'			=> array('value' => $newsletterGroup),
