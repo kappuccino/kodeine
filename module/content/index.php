@@ -300,7 +300,10 @@
                 $islink = true;
 
                 // Type date
-                if($field['fieldType'] == 'date') $aff      = $app->helperDate($aff, '%d.%m.%Y');
+                if($field['fieldType'] == 'date') {
+                    if($aff != '0000-00-00' && $aff != '') $aff      = $app->helperDate($aff, '%d/%m/%Y');
+                    else $aff = '';
+                }
                 if($field['fieldType'] == 'boolean') $aff   = ($aff == '1') ? 'Oui' : 'Non';
 
                 // Type Array
