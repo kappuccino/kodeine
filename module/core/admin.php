@@ -100,12 +100,12 @@
 		header('Expires: ' . gmdate('D, d M Y H:i:s', time()+$expires) . ' GMT');
 
 		$mime = $app->mediaMimeType($file);
-		
+
 
 		header("Content-Type:   ".$mime);
-		header("Content-Length: ".filesize($file));
+	#	header("Content-Length: ".filesize($file));
 		header('Etag: ' . $etag);
-	
+
 		if(isset($_SERVER['HTTP_IF_NONE_MATCH']) && $_SERVER['HTTP_IF_NONE_MATCH'] == $etag) {
 			header('HTTP/1.0 304 Not Modified');
 			exit();
