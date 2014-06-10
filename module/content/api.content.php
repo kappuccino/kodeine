@@ -1437,6 +1437,8 @@ public function contentRemove($id_type, $id_content, $language=''){
 
     if(intval($id_content) == 0) return false;
 
+	$me = $this->dbMulti("SELECT * FROM k_content WHERE id_content=".$id_content);
+
     if($id_type > 0) {
         $type = $this->apiLoad('type')->typeGet(array(
             'id_type' => $id_type
@@ -1481,7 +1483,7 @@ public function contentRemove($id_type, $id_content, $language=''){
 		$this->hookAction('contentRemove', $this->id_content, $id_type, $id_content, $language);
 	}
 
-	if($type['is_gallery']) $this->contentAlbumFamily();
+	if($type['is_gallery'] && $me['is_album']) $this->contentAlbumFamily($id_content);
 }
 
 /* + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - 
