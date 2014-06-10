@@ -59,7 +59,11 @@
 		<a id="toggleList"><i class="icon icon-list"></i> <?php echo _('List') ?></a>
 		<a id="sortAZ"><i class="icon icon-arrow-down"></i> <?php echo _('A-Z') ?></a>
 		<a id="sortZA"><i class="icon icon-arrow-up"></i> <?php echo _('Z-A') ?></a>
-		<a id="removeAllItems"><i class="icon icon-remove"></i> <?php echo _('Remove all items') ?></a>
+		<a id="removeAllItems">
+			<i class="icon icon-remove"></i>
+			<span class="wait"><?php echo _('Remove all items') ?></span>
+			<span class="work"><?php echo _('Removing all items...') ?></span>
+		</a>
 	</div>
 
 	<ul id="galleryPath" class="clearfix"></ul>
