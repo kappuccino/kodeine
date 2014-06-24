@@ -53,12 +53,13 @@ public function commentGet($opt=array()){
 + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - */
 public function commentSet($id_comment, $def){
 
-	## escape user inputs
-	if (isset($def["k_contentcomment"]['commentData'])) {
-		$def["k_contentcomment"]['commentData'] = addslashes($def["k_contentcomment"]['commentData']);
+	# Escape user inputs
+	if(isset($def["k_contentcomment"]['commentData']['value'])) {
+		$def["k_contentcomment"]['commentData']['value'] = addslashes($def["k_contentcomment"]['commentData']['value']);
 	}
-	if (isset($def["k_contentcomment"]['commentUsername'])) {
-		$def["k_contentcomment"]['commentUsername'] = addslashes($def["k_contentcomment"]['commentUsername']);
+
+	if(isset($def["k_contentcomment"]['commentUsername']['value'])) {
+		$def["k_contentcomment"]['commentUsername']['value'] = addslashes($def["k_contentcomment"]['commentUsername']['value']);
 	}
 
 	if($id_comment > 0){
@@ -73,9 +74,9 @@ public function commentSet($id_comment, $def){
 	$this->id_comment = ($id_comment > 0) ? $id_comment : $this->db_insert_id;
 
 	$id_content = $def['k_contentcomment']['id_content']['value'];
-	
+
 	if($id_content > 0 && $def['k_contentcomment']['is_moderate']['value'] == 1){
-		$this->commentUpdateCount($id_comment);
+		$this->commentUpdateCount($this->id_comment);
 	}
 
 	return true;
@@ -123,7 +124,7 @@ public function commentUpdateCount($id_comment){
 
 	$count = $this->dbOne("SELECT COUNT(id_comment) as H FROM k_contentcomment WHERE is_moderate=1 AND id_content=".$tmp['id_content']);
 	$this->dbQuery("UPDATE k_content SET contentCommentCount=".$count['H']." WHERE id_content=".$tmp['id_content']);
-#	echo $this->db_query."\n";	
+#	echo $this->db_query."\n";
 
 	return true;
 }
