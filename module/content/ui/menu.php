@@ -50,6 +50,10 @@
             <a href="../content/adzone"><span><?php echo _('Ads'); ?></span></a>
         </li>
 
+        <li class="<?php echo isMe('/content/adstat') ? 'me':'' ?>">
+            <a href="../content/adstat"><span><?php echo _('Ads stats'); ?></span></a>
+        </li>
+
 		<?php if($app->userCan('content.pref')){ ?>
         <li class="<?php echo isMe('/content/pref') ? 'me':'' ?>">
             <a href="../content/pref"><span><?php echo _('Preferences'); ?></span></a>
