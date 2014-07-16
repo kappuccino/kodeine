@@ -357,13 +357,19 @@ public function businessCartAdd($opt=array()){
 	$quantity	= isset($opt['quantity']) ? $opt['quantity'] : 1;
 
 	# Verifier que le stock permet d'ajouter cette quantity
-	$c = $this->apiLoad('content')->contentGet(array(
-		'id_content'	=> $id_content,
-		'debug'			=> false
-	));
+	$get = array(
+		'id_content' => $id_content,
+		'useChapter' => false,
+		'debug'		 => 0
+	);
+
+	// Forcer le group si on le demande
+	if($opt['id_group']) $get['id_group'] = $opt['id_group'];
+
+	$c = $this->apiLoad('content')->contentGet($get);
 
 	if($c['contentStockNeg']){
-		$quantity = $quantity;
+	//	$quantity = $quantity;
 	}else
 	if($c['contentStock'] - $quantity < 0){
 		$quantity = $c['contentStock'];
@@ -399,7 +405,7 @@ public function businessCartAdd($opt=array()){
 	
 
 	# Mettre a jour le STOCK pour le CONTENT
-	$this->dbQuery("UPDATE k_content SET contentStock = contentStock - ".$quantity." WHERE id_content=".$id_content);
+	$this->dbQuery("UPDATE k_content SET contentStock = contentStock - (".$quantity.") WHERE id_content=".$id_content);
 	if($opt['debug']) $this->pre($this->db_query, $this->db_error);
 
 	# Update CART
