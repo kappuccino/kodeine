@@ -140,14 +140,20 @@
 				<td><b>Total TTC</b></td>
 				<td align="right"><?php echo $myCmd['cartTotalTax'] ?></td>
 			</tr>
-            <tr >
+            <tr>
                 <td>Frais de port</td>
                 <td align="right"><?php echo $myCmd['cartCarriage'] ?></td>
             </tr>
-            <tr >
+            <tr>
                 <td>TVA <?php echo $myCmd['cartCarriageTax']; ?> %</td>
                 <td align="right"><?php echo number_format($myCmd['cartCarriageTotalTax']-$myCmd['cartCarriage'], 2, '.', ' '); ?></td>
             </tr>
+			<?php if($myCmd['cartCoupon'] > 0){ ?>
+            <tr>
+                <td>Réduction</td>
+                <td align="right"><?php echo '-'.$myCmd['cartCouponName'].' '.$myCmd['cartCoupon'] ?></td>
+            </tr>
+			<?php } ?>
 			<tr>
 				<td><b>Total commande</b></td>
 				<td align="right"><?php echo $myCmd['cartTotalFinal'] ?></td>
