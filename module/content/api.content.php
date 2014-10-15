@@ -282,8 +282,9 @@ function __clone(){}
 
 			if($opt['categoryAll']){
 				foreach($multiCatItem as $e){
-					$join[] = "RIGHT JOIN k_contentcategory AS cat".$e." ON ".$jTable.".id_content = cat".$e.".id_content AND cat".$e.".id_category=".$e;
-				}
+					// http://blog.sqlauthority.com/2009/04/13/sql-server-introduction-to-joins-basic-of-joins/
+					$join[] = "RIGHT OUTER JOIN k_contentcategory AS cat".$e." ON ".$jTable.".id_content = cat".$e.".id_content AND cat".$e.".id_category=".$e;
+			}
 			}else{
 				$id_category = " IN(".implode(',', $multiCatItem).")";
 			}
