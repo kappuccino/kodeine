@@ -22,7 +22,7 @@ class coreSendMail extends coreApp{
 
 		$domain = $opt['domain'] ?: $_SERVER['HTTP_HOST'];
 
-		$mail->SetFrom('ne-pas-repondre@'.$domain);
+		$mail->SetFrom($opt['from'] ?: 'ne-pas-repondre@'.$domain);
 
 
 		$reply = $opt['replyTo'] ?: 'contact@'.$domain;
