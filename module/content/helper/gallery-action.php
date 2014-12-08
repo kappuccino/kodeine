@@ -107,15 +107,18 @@
 
 		if(count($items) > 0){
 
+			$ids = array();
 			foreach($items as $e){
-				$api->contentRemove($e['id_type'], $e['id_content'], 'fr');
+				$ids[] = intval($e['id_content']);
+				/*$api->contentRemove($e['id_type'], $e['id_content'], 'fr');
 
 				// Remove linked fil
 				$file = KROOT.$e['contentItemUrl'];
-				if($pref['galleryItemRemove'] && file_exists($file) && is_file($file)) unlink($file);
+				if($pref['galleryItemRemove'] && file_exists($file) && is_file($file)) unlink($file);*/
 			}
 
 			$data['success'] = true;
+			$data['ids'] = $ids;
 		}else{
 			$data['success'] = false;
 		}

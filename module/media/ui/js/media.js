@@ -394,7 +394,7 @@ media.views.pathItem        = Backbone.View.extend({
 
 	initialize: function(options){
 		options     = options || {};
-		this.sep    = options.sep || false;
+		this.sep    = options.sep || false;
 	},
 
 	events: {
@@ -436,7 +436,7 @@ media.views.meta            = Backbone.View.extend({
 	className:  'floating-meta',
 
 	initialize:function(options){
-		options = options || {};
+		options = options || {};
 
 		this.url        = options.url;
 		this.item       = options.item;
@@ -756,7 +756,7 @@ media.views.app             = Backbone.View.extend({
 	/////////
 
 	select: function(file, prompt){
-		var prompt = prompt || this.detectType(file);
+		var prompt = prompt || this.detectType(file);
 		var file   = decodeURIComponent(file);
 
 		switch(method){

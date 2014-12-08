@@ -262,15 +262,19 @@ private function requestClassic($opt){
 		)
 	);
 
+	if($verb == 'get' && !empty($data)) $url = $url.'?'.http_build_query($data);
+
+	if($debug) echo $url;
+
 	$context	= stream_context_create($opts);
 	$raw		= file_get_contents($url, false, $context);
 	$headers	= $this->headerToArray($http_response_header);
 	$result		= $raw; //utf8_decode($raw);
 
 	return array(
-		'contentType'	=> (($headers['Content-Type'] != '') ? $headers['Content-Type'] : '??'),
-		'headers'		=> $headers,
-		'body'			=> $result
+		'contentType' => $headers['Content-Type'] ? : '??',
+		'headers'     => $headers,
+		'body'        => $result
 	);
 }
 

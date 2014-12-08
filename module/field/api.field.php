@@ -1025,7 +1025,13 @@ public function fieldForm($id_field, $value, $opt=array()){
 
 		if(sizeof($values) > 0){
 			foreach($values as $e){
-				$form .= "<li id=\"".implode('@@', $e)."\" class=\"".((!file_exists(KROOT.$e['url']) && $e['url'] != '') ? 'notFound' : '')."\">";
+				$c = @$this->mediaUrlData(array(
+					'url'   => $e['url'],
+					'mode'  => 'width',
+					'value' => 160
+				));
+
+				$form .= "<li id=\"".implode('@@', $e)."\" data-cache=\"".$c['img']."\" class=\"".((!file_exists(KROOT.$e['url']) && $e['url'] != '') ? 'notFound' : '')."\">";
 					$form .= "<div class=\"action clearfix\">";
 						$form .= "<span class=\"move\"></span>";
 						$form .= "<span class=\"info\"></span>";

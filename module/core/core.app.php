@@ -1027,7 +1027,11 @@ public function fsFile($folder, $mask=NULL, $options=NULL, $recursive=false){
 			foreach($this->apisConfig['boot']['jsonCacheCountry'] as $tmp){
 				if($tmp['iso'] == $language){ $language = $tmp; break; }
 			}
+
+			// Check nested language
+			if(!is_array($language)) $language = $this->countryGet(array('iso' => $language));
 		}
+
 		$locale   = ($language['countryLocale'] == NULL) ? 'fr_FR' : $language['countryLocale'];
 		$language = $language['iso_ref'];
 		$this->kodeine['language']	= $language;

@@ -282,8 +282,9 @@ function __clone(){}
 
 			if($opt['categoryAll']){
 				foreach($multiCatItem as $e){
-					$join[] = "RIGHT JOIN k_contentcategory AS cat".$e." ON ".$jTable.".id_content = cat".$e.".id_content AND cat".$e.".id_category=".$e;
-				}
+					// http://blog.sqlauthority.com/2009/04/13/sql-server-introduction-to-joins-basic-of-joins/
+					$join[] = "RIGHT OUTER JOIN k_contentcategory AS cat".$e." ON ".$jTable.".id_content = cat".$e.".id_content AND cat".$e.".id_category=".$e;
+			}
 			}else{
 				$id_category = " IN(".implode(',', $multiCatItem).")";
 			}
@@ -1437,6 +1438,8 @@ public function contentRemove($id_type, $id_content, $language=''){
 
     if(intval($id_content) == 0) return false;
 
+	$me = $this->dbMulti("SELECT * FROM k_content WHERE id_content=".$id_content);
+
     if($id_type > 0) {
         $type = $this->apiLoad('type')->typeGet(array(
             'id_type' => $id_type
@@ -1481,7 +1484,7 @@ public function contentRemove($id_type, $id_content, $language=''){
 		$this->hookAction('contentRemove', $this->id_content, $id_type, $id_content, $language);
 	}
 
-	if($type['is_gallery']) $this->contentAlbumFamily();
+	if($type['is_gallery'] && $me['is_album']) $this->contentAlbumFamily($id_content);
 }
 
 /* + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - 
