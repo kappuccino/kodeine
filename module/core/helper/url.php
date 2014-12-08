@@ -76,10 +76,11 @@
 	// MAIN ////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	if(preg_match("#^/(([a-zA-Z-]{2,6})/)?(.*)?$#", $url, $r)){
 
-		if(strlen($r[2]) > 2){
+		if(strlen($r[2]) > 2 && strpos($r[2], '-') != false){
 			$_GET['urlLanguage']	= substr($r[2], 0, 2);
 			$_GET['urlCountry']	    = substr($r[2], 3, 2);
-		}else{
+		}else
+		if(strlen($r[2]) == 2){
 			$_GET['urlLanguage']	= $r[2];
 			$_GET['urlCountry']	    = $r[2];
 		}
