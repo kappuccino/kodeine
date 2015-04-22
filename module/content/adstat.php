@@ -42,31 +42,31 @@ $types = array_merge($types);
 
 <div id="app">
 
-    <form action="adstat" method="post" class="form-horizontal">
+    <form action="adstat" method="get" class="form-horizontal">
 
-        <input type="hidden" name="filter[open]"	value="1" />
-        <input type="hidden" name="filter[offset]"	value="0" />
+        <!--<input type="hidden" name="filter[open]"	value="1" />
+        <input type="hidden" name="filter[offset]"	value="0" />-->
 
-        <label class="control-label">Période du</label>
+        <!--<label class="control-label">Période du</label>
         <input type="text" name="filter[dateStart]" class="datePicker" value="<?php echo $filter['dateStart']; ?>">
 
         <label class="control-label"> au</label>
-        <input type="text" name="filter[dateEnd]" class="datePicker" value="<?php echo $filter['dateEnd']; ?>">
+        <input type="text" name="filter[dateEnd]" class="datePicker" value="<?php echo $filter['dateEnd']; ?>">-->
 
 
         <?php
-            if($filter['dateStart'] != '' && $filter['dateEnd'] != '') {
+            //if($filter['dateStart'] != '' && $filter['dateEnd'] != '') {
 
                 $campaigns = array();
                 foreach($types as $type){
-                    $sqlWhere .= '
+                    /*$sqlWhere .= '
                                 AND (
                                  (contentDateStart IS NULL AND contentDateEnd IS NULL)
                                     OR
                                  ((contentDateStart BETWEEN "'.$filter['dateStart'].'" AND "'.$filter['dateEnd'].'")
                                   OR
                                   (contentDateEnd BETWEEN "'.$filter['dateStart'].'" AND "'.$filter['dateEnd'].'"))
-                                 ) ';
+                                 ) ';*/
                     $opt = array(
                         'id_type'           => $type['id_type'],
                         'useGroup'          => false,
@@ -86,70 +86,111 @@ $types = array_merge($types);
                 if(sizeof($campaigns) > 0) {
 
             ?>
-                    <label class="control-label"><?php echo _('Campagne'); ?></label>
-                    <select name="id_content">
-                        <option value=""></option>
+                    <!--<label class="control-label"><?php echo _('Campagne'); ?></label>-->
+                    <select name="id_content" style="padding: 5px 10px;">
+                        <option value="">Sélectionnez une campagne</option>
                         <?php
                             foreach($campaigns as $campaign) {
-                                $selected   = ($_POST['id_content'] == $campaign['id_content']) ? ' selected="selected" ' : '';
-                                if($_POST['id_content'] == $campaign['id_content']) $currentCampaign   = $campaign;
+                                $selected   = ($_REQUEST['id_content'] == $campaign['id_content']) ? ' selected="selected" ' : '';
+                                if($_REQUEST['id_content'] == $campaign['id_content']) $currentCampaign   = $campaign;
                         ?>
                             <option value="<?php echo $campaign['id_content']; ?>" <?php echo $selected; ?>>
                                 <?php echo $campaign['contentName']; ?>
                             </option>
                         <?php } ?>
                     </select>
-                    <button class="btn btn-mini" type="submit"><?php echo _('Afficher les statistiques'); ?></button>
+                    <button class="btn btn-medium" type="submit"><span class="icon-signal"></span> <?php echo _('Afficher les statistiques'); ?></button>
             <?php
 
                 }else {
                     echo 'Aucune campagne trouvée sur cette période';
                 }
-            }else {
+            //}else {
             ?>
-            <button class="btn btn-mini" type="submit"><?php echo _('Filter'); ?></button>
+            <!--<button class="btn btn-mini" type="submit"><?php echo _('OK'); ?></button>-->
             <?php
-            }
+            //}
             ?>
 
     </form>
 
     <div id="results">
         <?php
-            if($_POST['id_content'] > 0) {
+            $affstats   = array();
+            $start      = '';
+            $end        = '';
+
+            if($_REQUEST['id_content'] > 0) {
                 $results    = array();
                 $view       = 0;
                 $click      = 0;
 
-                $stats      = $app->dbMulti("SELECT * FROM k_contentadstats WHERE id_content='".$_POST['id_content']."'");
+                $stats      = $app->dbMulti("SELECT * FROM k_contentadstats WHERE id_content='".$_REQUEST['id_content']."'");
                 foreach($stats as $s) {
-                    $date = $s['year'].'-'.str_pad($s['month'], 2, "0", STR_PAD_LEFT).'-'.str_pad($s['day'], 2, "0", STR_PAD_LEFT);
+                    $date   = $s['year'].'-'.str_pad($s['month'], 2, "0", STR_PAD_LEFT).'-'.str_pad($s['day'], 2, "0", STR_PAD_LEFT);
 
-                    if($date >= $filter['dateStart'] && $date <= $filter['dateEnd']) {
-                        $results[$date] = array('view' => $s['view'], 'click' => $s['click']);
-                        $view      += $s['view'];
-                        $click     += $s['click'];
-                    }
+                    if($start == '')$start  = $date;
+                    if($end == '')  $end    = $date;
+
+                    if($start > $date)  $start  = $date;
+                    if($end < $date)    $end    = $date;
+
+                    $key    = $s['year'].'-'.str_pad($s['month'], 2, "0", STR_PAD_LEFT);
+                    $affstats[$key]['view'] += $s['view'];
+                    $affstats[$key]['click'] += $s['click'];
+                    //if($date >= $filter['dateStart'] && $date <= $filter['dateEnd']) {
+                    //$results[$date] = array('view' => $s['view'], 'click' => $s['click']);
+                    $view      += $s['view'];
+                    $click     += $s['click'];
+                    //}
                 }
                 //$app->pre($currentCampaign);
         ?>
-            <h2>
-                Nombre d'affichages : <?php echo $view; ?><br />
-                Nombre de clics : <?php echo $click; ?>
-            </h2>
-            <p>
-                <?php
-                    if($currentCampaign['adCode'] == NULL && sizeof($currentCampaign['contentMedia']['image']) > 0){
-                        echo "<a href=\"/ad".$currentCampaign['id_content']."\" target=\"_blank\"><img src=\"".$currentCampaign['contentMedia']['image'][0]['url']."\"  /></a>";
-                    }
-                ?>
-            </p>
+                <h1><?php echo $currentCampaign['contentName']; ?></h1>
+                <div class="clearfix"></div>
+                <table border="0" cellpadding="0">
+                    <tr>
+                        <td valign="top" style="width: 350px;">
+                            <h3 style="line-height: 1.5em;">
+                                <span class="icon-calendar"></span> Du <?php echo $app->helperDate($start, "%d %B %Y"); ?> au <?php echo $app->helperDate($end, "%d %B %Y"); ?><br />
+                                <span class="icon-eye-open"></span> Total affichages : <?php echo $view; ?><br />
+                                <span class="icon-share-alt"></span> Total clics : <?php echo $click; ?>
+                            </h3>
+                            <?php if(sizeof($affstats) > 0) { ?>
+                                <table class="listing" cellpadding="3" border="0" cellspacing="0">
+                                    <thead>
+                                    <tr>
+                                        <th><span class="icon-white icon-calendar"></span> Mois</th>
+                                        <th><span class="icon-white icon-eye-open"></span> Affichages</th>
+                                        <th><span class="icon-white icon-share-alt"></span> Clics</th>
+                                    </tr>
+                                    </thead>
+                                    <?php foreach($affstats as $month => $s) { ?>
+                                        <tr>
+                                            <td><?php echo ucfirst($app->helperDate($month.'-01', "%B %Y")); ?></td>
+                                            <td><?php echo $s['view']; ?></td>
+                                            <td><?php echo $s['click']; ?></td>
+                                        </tr>
+                                    <?php } ?>
+                                </table>
+                            <?php } ?>
+                        </td>
+                        <td valign="top" style="padding-left: 30px;">
+                            <em>Aperçu de la campagne</em><br />
+                            <?php
+                            if($currentCampaign['adCode'] == NULL && sizeof($currentCampaign['contentMedia']['image']) > 0){
+                                echo "<a href=\"/ad".$currentCampaign['id_content']."\" target=\"_blank\"><img src=\"".$currentCampaign['contentMedia']['image'][0]['url']."\"  /></a>";
+                            }
+                            ?>
+                        </td>
+                    </tr>
+                </table>
         <?php
 
             }
         ?>
     </div>
-
+ 
 
 </div>
 

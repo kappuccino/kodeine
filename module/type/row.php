@@ -82,7 +82,7 @@
 	$tmp    = array();
 
 	// Champs de k_content autorises
-	$contentField = array('contentMedia', 'contentDateStart', 'contentDateEnd');
+	$contentField = array('contentMedia', 'contentDateStart', 'contentDateEnd', 'contentRateAvg', 'contentRateCount');
 	if($data['is_business']) array_push($contentField, 'contentRef', 'contentWeight', 'contentStock');
 
 	// Champs utilises
