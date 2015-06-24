@@ -2,6 +2,12 @@
 
 	if(!defined('COREINC')) die('Direct access not allowed');
 
+	$file = USER.'/config/admin-business-detail.php';
+	if(file_exists($file)){
+		include $file;
+		exit();
+	}
+
 	# Data
 	$myCmd = $app->apiLoad('business')->businessCartGet(array(
 		'is_cmd'	=> true,
