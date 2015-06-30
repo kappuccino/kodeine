@@ -128,6 +128,7 @@
 ?></header>
 
 <div class="inject-subnav-right hide">
+	<li><a href="addressbook?id_user=<?php echo $data['id_user'] ?>" class="btn btn-small">Adresse</a></li>
 	<li><a href="data" class="btn btn-small"><?php echo _('New user') ?></a></li>
     <li><a href="../user/" class="btn btn-small"><i class="icon-list"></i> <?php echo _('Users') ?></a></li>
 	<li><a href="#" onclick="$('#data').submit();" class="btn btn-small btn-success"><?php echo _('Save') ?></a></li>
