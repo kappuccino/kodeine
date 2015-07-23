@@ -112,6 +112,8 @@
 						$colspan++;
 					}
 				?>
+        <th width="200" class="order"><span>Carnet d'adresse</span></th>
+
 			</tr>
 		</thead>
 		<tbody><?php
@@ -126,11 +128,11 @@
 				</td>
 				<td><?php echo $e['id_user'] ?></td>
 				<td class="dateTime">
-					<span class="date"><?php echo $app->helperDate($e['userDateCreate'], '%d.%m.%Y')?></span>
+					<span class="date"><?php echo $app->helperDate($e['userDateCreate'], '%d.%m.%G')?></span>
 					<span class="time"><?php echo $app->helperDate($e['userDateCreate'], '%Hh%M') 	 ?></span>
 				</td>
 				<td class="dateTime">
-					<span class="date"><?php echo $app->helperDate($e['userDateUpdate'], '%d.%m.%Y')?></span>
+					<span class="date"><?php echo $app->helperDate($e['userDateUpdate'], '%d.%m.%G')?></span>
 					<span class="time"><?php echo $app->helperDate($e['userDateUpdate'], '%Hh%M') 	 ?></span>
 				</td>
 				<td><a href="data?id_user=<?php echo $e['id_user'] ?>"><?php echo $e['userMail'] ?></a></td>
@@ -138,6 +140,7 @@
 					if($filter['cola'] != '') echo "<td>".$e['field'.$filter['cola']]."</td>";
 					if($filter['colb'] != '') echo "<td>".$e['field'.$filter['colb']]."</td>";
 				?>
+        <td><a target="_blank" href="addressbook?id_user=<?php echo $e['id_user'] ?>">Voir le carnet d'adresse</a></td>
 			</tr>
 			<?php }
 			}else{ ?>
