@@ -161,6 +161,8 @@ $types = array_merge($types);
         ?>
                 <h1><?php echo $currentCampaign['contentName']; ?></h1>
                 <div class="clearfix"></div>
+                <h3>URL de la campagne : <a href="<?php echo $currentCampaign['contentAdUrl']; ?>" target="_blank"><?php echo $currentCampaign['contentAdUrl']; ?></a></h3>
+                <div class="clearfix"></div>
                 <table border="0" cellpadding="0">
                     <tr>
                         <td valign="top" style="width: 350px;">
