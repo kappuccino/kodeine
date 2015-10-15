@@ -28,7 +28,7 @@
 				: '/'.$e['key'].'/';
 
 			$class = isMe($class) ? 'me' : NULL;
-			echo '<li class="'.$class.'"><a href="../'.$e['key'].'/">'.$e['name'].'</a></li>';
+			echo '<li class="'.$class.'"><a href="'.KPROMPT.'/admin/'.$e['key'].'/">'.$e['name'].'</a></li>';
 		}
 	}
 

@@ -3,29 +3,33 @@
 <div id="sub_steps"><div class="wrapper clearfix">
 
     <a href="data-options?id_newsletter=<?php echo $_REQUEST['id_newsletter']; ?>" class="btn <?php echo isMe('/newsletter/data-options') ? 'active':'' ?>">
-        Etape 1 : Infos générales
+        Options de ma newsletter
     </a>
 
     <?php if($data['is_designer'] != 1) { ?>
 
-    <a href="data-editor?id_newsletter=<?php echo $_REQUEST['id_newsletter']; ?>" class="btn <?php echo isMe('/newsletter/data-editor') ? 'active':'' ?>">
+    <!--<a href="data-editor?id_newsletter=<?php /*echo $_REQUEST['id_newsletter']; */?>" class="btn <?php /*echo isMe('/newsletter/data-editor') ? 'active':'' */?>">
         Etape 2 : Editeur
-    </a>
+    </a>-->
 
     <?php } else { ?>
 
-    <a href="data-designer?id_newsletter=<?php echo $_REQUEST['id_newsletter']; ?>" class="btn <?php echo isMe('/newsletter/data-designer') ? 'active':'' ?>">
+    <!--<a href="data-designer?id_newsletter=<?php /*echo $_REQUEST['id_newsletter']; */?>" class="btn <?php /*echo isMe('/newsletter/data-designer') ? 'active':'' */?>">
         Etape 2 : Designer
-    </a>
+    </a>-->
 
     <?php } ?>
 
-    <a href="data-list?id_newsletter=<?php echo $_REQUEST['id_newsletter']; ?>" class="btn <?php echo isMe('/newsletter/data-list') ? 'active':'' ?>">
-        Etape 3 : Listes abonnés
-    </a>
+	<a href="data-editor?id_newsletter=<?php echo $_REQUEST['id_newsletter']; ?>" class="btn <?php echo isMe('/newsletter/data-editor') ? 'active':'' ?>">
+		Selectionner un gabarit
+	</a>
 
-    <a href="#" class="btn <?php echo ($step == 'send') ? 'active':'' ?>">
-        Etape 4 : Confirmation
+	<a target="_blank" href="preview?id_newsletter=<?php echo $_REQUEST['id_newsletter']; ?>" class="btn">
+		Prévisualiser ma newsletter
+	</a>
+
+    <a href="data-list?id_newsletter=<?php echo $_REQUEST['id_newsletter']; ?>" class="btn <?php echo isMe('/newsletter/data-list') ? 'active':'' ?>">
+        Envoyer avec Mailchimp
     </a>
 
 

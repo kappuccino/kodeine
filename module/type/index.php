@@ -130,7 +130,7 @@
 						echo '</div>';
 
 						echo '<div class="content clearfix">';
-						echo '<a href="../content/'.$content.'.php?id_type='.$e['id_type'].'" class="view">'._('View').'</a> ';
+						echo '<a href="../content/'.$content.'?id_type='.$e['id_type'].'" class="view">'._('View').'</a> ';
                         echo '<a href="../field/asso?id_type='.$e['id_type'].'" class="fields">'._('Manage fields').'</a>';
 
 						if($e['is_gallery'] != 1){

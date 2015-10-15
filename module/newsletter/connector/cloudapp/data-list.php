@@ -1,9 +1,10 @@
 <?php
+
 	$api	= $app->apiLoad('newsletter');
 	$pref	= $app->configGet('newsletter');
-	
+
 	$apiConnector	= $app->apiLoad('newsletterCloudApp');
-		
+
 	if($_POST['action']){
 		$do = true;
 
@@ -32,7 +33,7 @@
 		}
 	
 		$def['k_newsletter'] = array(
-			'is_archive'				=> array('value' => $_POST['is_archive'],			'zero'  => true),
+		#	'is_archive'				=> array('value' => $_POST['is_archive'],			'zero'  => true),
 			'newsletterAllUser'			=> array('value' => $_POST['newsletterAllUser'],	'zero'  => true),
 			'newsletterSearch'			=> array('value' => $newsletterSearch),
 			'newsletterGroup'			=> array('value' => $newsletterGroup),
@@ -84,7 +85,9 @@
 ?><!DOCTYPE html>
 <head>
 	<?php include(COREINC.'/head.php'); ?>
-	<link rel="stylesheet" type="text/css" media="all" href="ui/css/newsletter.css" /> 
+	<link rel="stylesheet" type="text/css" media="all" href="ui/css/bootstrap3/css/bootstrap.min.css" />
+	<link rel="stylesheet" type="text/css" media="all" href="ui/css/flatui/css/flat-ui.css" />
+	<link rel="stylesheet" type="text/css" media="all" href="ui/css/dsnr-ui.css" />
 </head>
 
 <body>
@@ -92,23 +95,23 @@
 <header><?php
 	include(COREINC.'/top.php');
 	include(dirname(dirname(__DIR__)).'/ui/menu.php');
-    include(dirname(dirname(__DIR__)).'/ui/steps.php');
+    #include(dirname(dirname(__DIR__)).'/ui/steps.php');
 ?></header>
 
 <div class="inject-subnav-right hide">
 
-	<?php if($_REQUEST['id_newsletter'] > 0){ ?>
-	<li><a href="preview?id_newsletter=<?php echo $_REQUEST['id_newsletter'] ?>" class="btn btn-small" target="_blank">Prévisualiser</a></li>
+	<?php /*if($_REQUEST['id_newsletter'] > 0){ */?><!--
+	<li><a href="preview?id_newsletter=<?php /*echo $_REQUEST['id_newsletter'] */?>" class="btn btn-small" target="_blank">Prévisualiser</a></li>
     <li><a href="javascript:$('#do').val('test');$('#data').submit();" class="btn btn-small">Envoyer un mail de test</a></li>
-	<?php } ?>	
-	<?php if($data['newsletterSendDate'] == NULL){ ?>
+	<?php /*} */?>
+	<?php /*if($data['newsletterSendDate'] == NULL){ */?>
 	<li><a href="javascript:$('#do').val('send');$('#data').submit();" class="btn btn-small btn-danger">Envoyer aux abonnés</a></li>
-	<?php } ?>
-	<?php if($data['newsletterSendDate'] != NULL){ ?>
-	<li><a href="analytic?id_newsletter=<?php echo $_REQUEST['id_newsletter'] ?>" class="btn btn-small">Consulter les statistiques</a></li>
+	<?php /*} */?>
+	<?php /*if($data['newsletterSendDate'] != NULL){ */?>
+	<li><a href="analytic?id_newsletter=<?php /*echo $_REQUEST['id_newsletter'] */?>" class="btn btn-small">Consulter les statistiques</a></li>
 	<li><a href="data" class="btn btn-small">Nouveau</a></li>
-	<?php } ?>
-	<li><a href="javascript:$('#data').submit();" class="btn btn-small btn-success">Enregistrer</a></li>
+	<?php /*} */?>
+	<li><a href="javascript:$('#data').submit();" class="btn btn-small btn-success">Enregistrer</a></li>-->
 				
 </div>
 
@@ -127,7 +130,7 @@
 	<input type="hidden" name="id_newsletter" value="<?php echo $data['id_newsletter'] ?>" />
 	<input type="hidden" name="do" id="do" value="" />
 
-	<table cellpadding="5" width="100%">
+	<table cellpadding="5" width="100%" class="tile">
 		<!--<tr>
 			<td>Archivage</td>
 			<td>
@@ -137,11 +140,18 @@
 		</tr>-->
 		<tr valign="top">
 			<td colspan="2">
-				<span class="heading">Destinataires <i id="totalView"></i></span>
+
+				<div style="float: left;margin-left: 30px; width:300px;margin-bottom: 20px;">
+					<h5>Destinataires <i id="totalView"></i></h5>
+					<a href="javascript:$('#data').submit();" class="btn btn-small btn-success" style="color:white">Enregistrer la liste d'abonnés</a>
+				</div>
 
 				<span style="float:right;margin-bottom: 5px;">
-					<i><label for="newsletterAllUser">Si cette option est activée, cette newsletter sera envoyée à tous les utilisateurs, même ceux qui n'acceptent pas de recevoir de newsletter.</label></i>
-					<input type="checkbox" name="newsletterAllUser" id="newsletterAllUser" value="1" <?php if($app->formValue($data['newsletterAllUser'], $_POST['newsletterAllUser'])) echo "checked" ?> />
+					<div class="alert alert-info">
+						<input type="checkbox" name="newsletterAllUser" id="newsletterAllUser" value="1" <?php if($app->formValue($data['newsletterAllUser'], $_POST['newsletterAllUser'])) echo "checked" ?> />
+						<label for="newsletterAllUser">&nbsp;Si cette option est activée, cette newsletter sera envoyée à tous les utilisateurs, même ceux qui n'acceptent pas de recevoir de newsletter.</label>
+					</div>
+
 				</span>
 				<table border="0" width="100%" class="dest desttab">
 					<tr>

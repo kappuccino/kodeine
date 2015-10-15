@@ -20,9 +20,22 @@ if($opt['debug']) $this->pre("OPTION", $opt);
 		if(is_array($opt['socialActivityKey'])){
 			$cond[] = "socialActivityKey IN ('".implode("', '", $opt['socialActivityKey'])."')";
 		}else{
-			if($opt['debug']) $this->pre("ERROR: socialActivityKey (ARRAY(from,to)", "GIVEN", var_export($opt['period'], true));
+			if($opt['debug']) $this->pre("ERROR: socialActivityKey STRING, ARRAY", "GIVEN", var_export($opt['socialActivityKey'], true));
 			return array();
 		}	
+	}
+
+	// GET: socialActivityKey
+	if(array_key_exists('socialActivityId', $opt)){
+		if(is_string($opt['socialActivityId'])){
+			$cond[] = "socialActivityId = '".$opt['socialActivityId']."'";
+		}else
+		if(is_array($opt['socialActivityId'])){
+			$cond[] = "socialActivityId IN ('".implode("', '", $opt['socialActivityId'])."')";
+		}else{
+			if($opt['debug']) $this->pre("ERROR: socialActivityId STRING, ARRAY", "GIVEN", var_export($opt['socialActivityId'], true));
+			return array();
+		}
 	}
 
 	// GET: Period
@@ -84,7 +97,8 @@ if($opt['debug']) $this->pre("OPTION", $opt);
 			? $opt['offset'].",".$opt['limit']
 			: "0,50")."\n";
 
-		if($opt['noLimit'] == true) unset($limit);
+		if($opt['noLimit']) unset($limit);
+		if($opt['noOrder']) unset($order);
 	}else{
 		$flip = true;
 	}
@@ -146,9 +160,8 @@ if($opt['debug']) $this->pre("OPTION", $opt);
 		if(sizeof($id_socialpost) > 0){
 			$posts = $this->apiLoad('socialPost')->socialPostGet(array(
 				'id_socialpost' => array_unique($id_socialpost),
-				'debug'			=> false,
-				'withUser'		=> $opt['withUser'],
-				'noLimit'		=> true
+				'withUser'      => $opt['withUser'],
+				'noLimit'       => true
 			));
 			foreach($posts as $p){
 				$spids[$p['id_socialpost']] = $p;
@@ -171,8 +184,7 @@ if($opt['debug']) $this->pre("OPTION", $opt);
 
 		if(sizeof($id_socialcircle) > 0){
 			$circles = $this->apiLoad('socialCircle')->socialCircleGet(array(
-				'id_socialcircle'	=> $id_socialcircle,
-			#	'withUser'			=> $opt['withUser']
+				'id_socialcircle' => $id_socialcircle
 			));
 			foreach($circles as $c){
 				$scids[$c['id_socialcircle']] = $c;
@@ -182,6 +194,30 @@ if($opt['debug']) $this->pre("OPTION", $opt);
 			}
 		}
 	}
+
+	# WITH CIRCLE
+	#
+	if($opt['withEvent']){
+		foreach($data as $n => $e){
+			if($e['socialActivityKey'] == 'id_socialevent' && intval($e['socialActivityId']) > 0){
+				$id_socialevent[] = $e['socialActivityId'];
+				$data[$n]['socialEvent'] = NULL;
+			}
+		}
+
+		if(sizeof($id_socialevent) > 0){
+			$events = $this->apiLoad('socialEvent')->socialEventGet(array(
+				'id_socialcircle' => $id_socialevent
+			));
+			foreach($events as $c){
+				$seids[$c['id_socialevent']] = $c;
+			}
+			foreach($data as $n => $e){
+				$data[$n]['socialEvent'] = $seids[$e['socialActivityId']];
+			}
+		}
+	}
+
 	return $data;
 }
 
@@ -198,7 +234,6 @@ if($opt['debug']) $this->pre("OPTION", $opt);
 	$this->dbQuery("DELETE FROM k_socialnotification WHERE id_socialactivity=".$idn." AND id_user=".$idu);
 	if($opt['debug']) $this->pre($this->db_query, $this->db_error);
 }
-
 
 /* + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - 
 + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - */
@@ -260,39 +295,4 @@ if($opt['debug']) $this->pre("OPTION", $opt);
 	if($opt['debug']) $this->pre($this->db_query, $this->db_error);
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-} ?>
+}

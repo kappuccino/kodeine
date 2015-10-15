@@ -54,36 +54,36 @@ if(!defined('COREINC')) die('Direct access not allowed');
 <div id="app">
 
 <div style="float:left; width:35%; margin-right:20px;">
-<div class="searchBox clearfix">
-	<div class="label">Zone</div>
-	<input type="text" class="field roundTextInput roundSearchInput" onkeyup="recherche(this)" onkeydown="recherche(this)" size="15" />
-</div>
+    <div class="searchBox clearfix">
+        <div class="label">Zone</div>
+        <input type="text" class="field roundTextInput roundSearchInput" onkeyup="recherche(this)" onkeydown="recherche(this)" size="15" />
+    </div>
 
-<form action="ad.zone.php" method="post" id="listing">
-<table width="100%" border="0" cellpadding="0" cellspacing="0" class="listing">
-	<thead>
-		<tr>
-			<th width="30" class="icone"><img src="ressource/img/ico-delete-th.png" height="20" width="20" /></th>
-			<th>Nom</th>
-		</tr>
-	</thead>
-	<tbody>
-	<?php foreach($zone as $e){ ?>
-		<tr class="<?php if($e['id_adzone'] == $_REQUEST['id_adzone']) echo "selected" ?>">
-			<td><input type="checkbox" name="remove[]" value="<?php echo $e['id_adzone'] ?>" class="cb" /></td>
-			<td class="sniff"><a href="ad.zone.php?id_adzone=<?php echo $e['id_adzone'] ?>"><?php echo $e['zoneName'] ?></a></td>
-		</tr>
-		<?php } ?>
-	</tbody>
-	<tfoot>
-		<tr>
-			<td width="30" height="25"><input type="checkbox" onchange="$$('.cb').set('checked', this.checked);" /></td>
-			<td><a href="#" onClick="apply();" class="button rButton">Supprimer la selection</a></td>
-		</tr>
-	</tfoot>
-</table>
+    <form action="ad.zone.php" method="post" id="listing">
+    <table width="100%" border="0" cellpadding="0" cellspacing="0" class="listing">
+        <thead>
+            <tr>
+                <th width="30" class="icone"><img src="ressource/img/ico-delete-th.png" height="20" width="20" /></th>
+                <th>Nom</th>
+            </tr>
+        </thead>
+        <tbody>
+        <?php foreach($zone as $e){ ?>
+            <tr class="<?php if($e['id_adzone'] == $_REQUEST['id_adzone']) echo "selected" ?>">
+                <td><input type="checkbox" name="remove[]" value="<?php echo $e['id_adzone'] ?>" class="cb" /></td>
+                <td class="sniff"><a href="ad.zone.php?id_adzone=<?php echo $e['id_adzone'] ?>"><?php echo $e['zoneName'] ?></a></td>
+            </tr>
+            <?php } ?>
+        </tbody>
+        <tfoot>
+            <tr>
+                <td width="30" height="25"><input type="checkbox" onchange="$$('.cb').set('checked', this.checked);" /></td>
+                <td><a href="#" onClick="apply();" class="button rButton">Supprimer la selection</a></td>
+            </tr>
+        </tfoot>
+    </table>
+    </form>
 </div>
-</form>
 
 <div style="float:right; width:63%;">
 	<?php

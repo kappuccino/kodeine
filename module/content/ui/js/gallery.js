@@ -68,7 +68,7 @@ gallery.views.view           = Backbone.View.extend({
 		this.listenTo(gallery.collections.myMedia, 'reset',  this.fill);
 		this.listenTo(gallery.collections.myMedia, 'add',    this.fillItem);
 
-		this.id_album = this.$el.data('id_album') || 0;
+		this.id_album = this.$el.data('id_album') || 0;
 		this.order = [];
 		this.isSortable = false;
 
@@ -318,15 +318,15 @@ gallery.views.tree           = Backbone.View.extend({
 
 	initialize:function(options){
 
-		options         = options || {};
-		this.level      = options.level || 1;
-		this.el         = options.el  || $('#galleryTree');
+		options         = options || {};
+		this.level      = options.level || 1;
+		this.el         = options.el || $('#galleryTree');
 		this.$el        = $(this.el);
-		this.collection = options.collection || gallery.collections.myTree;
+		this.collection = options.collection || gallery.collections.myTree;
 
 		this.listenTo(this.collection, 'reset',  this.fill);
 
-		this.id_album   = this.$el.data('id_album') || 0;
+		this.id_album   = this.$el.data('id_album') || 0;
 	},
 
 	dynEl: function(){
@@ -353,7 +353,7 @@ gallery.views.tree           = Backbone.View.extend({
 	//////////////
 
 	load: function(root){
-		root = root || false;
+		root = root || false;
 
 		gallery.collections.myTree.fetch({data: {
 			root:     root,
@@ -370,7 +370,7 @@ gallery.views.treeItem       = Backbone.View.extend({
 
 	initialize: function(options){
 		options     = options || {};
-		this.level  = options.level || 0;
+		this.level  = options.level || 0;
 	},
 
 	events: {
@@ -507,7 +507,7 @@ gallery.views.pathItem       = Backbone.View.extend({
 
 	initialize: function(options){
 		options     = options || {};
-		this.sep    = options.sep || false;
+		this.sep    = options.sep || false;
 	},
 
 	events: {
@@ -549,7 +549,7 @@ gallery.views.action         = Backbone.View.extend({
 	el: $('#galleryAction'),
 
 	initialize:function(){
-		gallery.display = $('body').data('display') || 'list';
+		gallery.display = $('body').data('display') || 'list';
 
 		if(gallery.display == 'list') this.viewList();
 		if(gallery.display == 'grid') this.viewGrid();

@@ -28,11 +28,11 @@ public function rateSet($id_rate, $def){
 	$this->id_rate = ($id_rate > 0) ? $id_rate : $this->db_insert_id;
 
 	if($def['k_contentrate']['id_content']['value'] > 0){
-		$rate = $this->rateCalcultate($def['k_contentrate']['id_content']['value']);
+		list($rate, $total) = $this->rateCalcultate($def['k_contentrate']['id_content']['value']);
 
 		$this->dbQuery(
 			"UPDATE k_content ".
-			"SET contentRateAvg=".$rate.", contentRateCount=contentRateCount+1 ".
+			"SET contentRateAvg=".$rate.", contentRateCount=".$total." ".
 			"WHERE id_content=".$def['k_contentrate']['id_content']['value']
 		);
 	}
@@ -53,7 +53,7 @@ public function rateCalcultate($id_content){
 	
 	$rate = @round($total / sizeof($raw));
 	
-	return $rate;
+	return [$rate, count($raw)];
 }
 
 /* + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - 

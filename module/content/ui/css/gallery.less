@@ -384,6 +384,7 @@ body.itemed{
 
 // ACTION //////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+
 #galleryAction{
 	position: absolute;
 	top: 5px; right: 10px;
@@ -396,6 +397,17 @@ body.itemed{
 
 	#toggleGrid, #toggleList{
 		display: none;
+	}
+
+
+	#removeAllItems{
+		.wait{ display: inline; }
+		.work{ display: none; }
+
+		&.doing{
+			.wait{ display: none; }
+			.work{ display: inline; }
+		}
 	}
 }
 

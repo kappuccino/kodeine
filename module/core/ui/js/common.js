@@ -163,7 +163,12 @@ function mediaOpen(method,field){
 	window.open('../media/index?field='+field+'&method='+method, 'filemanager', 'scrollbars=yes,status=yes,resizable=yes,width=950,height=800');
 }
 function insertRichEditor(editor_id, code){
-	tinyMCE.execInstanceCommand(editor_id, "mceInsertContent", false, code, true);
+
+	if (CKEDITOR) {
+		CKEDITOR.instances[editor_id].insertHtml(code);
+	} else {
+		tinyMCE.execInstanceCommand(editor_id, "mceInsertContent", false, code, true);
+	}
 }
 /* + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - 
 + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - */

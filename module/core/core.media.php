@@ -261,11 +261,14 @@ function mediaDataSet($url, $def){
 		$q = $this->dbInsert($def);
 	}
 
+	if(!file_exists(DBLOG)) mkdir(DBLOG, 755, true);
+
 	$file = DBLOG.'/A.'.date("Y-m-d-H").'h.log';
 	$fo   = fopen($file, 'a+');
 	$raw  = date("Y-m-d H:i:s").' ip:'.$_SERVER['REMOTE_ADDR'].' id_user:'.$this->user['id_user'].' '.str_replace("\n", ' ', $q)."\n";
-	$fw   = fwrite($fo, $raw, strlen($raw));
-	$fc   = fclose($fo);
+
+	fwrite($fo, $raw, strlen($raw));
+	fclose($fo);
 
 	@$this->dbQuery($q);
 	if($this->db_error != NULL) return false;

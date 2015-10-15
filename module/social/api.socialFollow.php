@@ -2,8 +2,6 @@
 
 class socialFollow extends social{
 
-function __clone(){}
-function socialFollow(){}
 
 /* + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + -
 + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - */

@@ -97,17 +97,18 @@ $types = array_merge($types);
                 $campaigns = array();
                 foreach($types as $type){
                     $opt = array(
-                        'id_type'   => $type['id_type'],
-                        'useGroup'  => false,
-                        'sqlWhere'  => ' AND k_contentad.id_adzone = "'.$z['id_adzone'].'" ',
-                        'assoCategory'     => true,
-                        'id_category'      => $filter['id_category'],
-                        'categoryThrough'  => true,
-                        'debug'     => false
+                        'id_type'           => $type['id_type'],
+                        'useGroup'          => false,
+                        'sqlWhere'          => ' AND k_contentad.id_adzone = "'.$z['id_adzone'].'" ',
+                        'assoCategory'      => true,
+                        'id_category'       => $filter['id_category'],
+                        'categoryThrough'   => true,
+                        'debug'             => 0
                     );
                     if($filter['date'] == '1' && $filter['dateStart'] != '' && $filter['dateEnd'] != '') {
+                        $opt['contentSee'] = 'ALL';
                         $opt['sqlWhere'] .= '
-                        AND (
+                        AND k_content.contentSee=1 AND (
                          (contentDateStart IS NULL AND contentDateEnd IS NULL)
                             OR
                          ((contentDateStart BETWEEN "'.$filter['dateStart'].'" AND "'.$filter['dateEnd'].'")
@@ -137,6 +138,7 @@ $types = array_merge($types);
                        </tr>
                    <?php
                         foreach($campaigns as $campaign) {
+//                            $app->pre($campaign);
                    ?>
                        <tr>
                            <td style="border-bottom: 1px solid #ccc;">
@@ -148,10 +150,10 @@ $types = array_merge($types);
                                <a href="data?id_content=<?php echo $campaign['id_content']; ?>">
                                <?php
                                    if($campaign['contentDateStart'] != NULL) {
-                                       echo _('From').' '.$app->helperDate($campaign['contentDateStart'], '%d %B %G'). '<br />';
+                                       echo _('From').' '.$app->helperDate($campaign['contentDateStart'], '%d %B %Y'). '<br />';
                                    }
                                    if($campaign['contentDateEnd'] != NULL) {
-                                       echo _('To').' '.$app->helperDate($campaign['contentDateEnd'], '%d %B %G').'';
+                                       echo _('To').' '.$app->helperDate($campaign['contentDateEnd'], '%d %B %Y').'';
                                    }
                                ?>
                                </a>

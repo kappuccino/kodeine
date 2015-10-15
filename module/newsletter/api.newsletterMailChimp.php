@@ -39,7 +39,7 @@ function help(){
 private function send($data = array(), $method) {
 
 	$data['apikey'] = $this->apikey;
-	
+
 	$payload = json_encode($data);
 	
 	$submit_url = "http://".$this->apiUrl.".api.mailchimp.com/1.3/?method=".$method;
@@ -118,6 +118,22 @@ public function campaignCreate($opt = array()) {
 /* + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + -
 + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - */
 
+public function campaignSendTest($opt = array()) {
+	return $this->send($opt, 'campaignSendTest');
+}
+
+/* + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + -
++ - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - */
+
+public function campaignDelete($opt = array()) {
+	return $this->send($opt, 'campaignDelete');
+}
+
+
+
+/* + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + -
++ - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - */
+
 public function campaignStats($opt = array()) {
     return $this->send($opt, 'campaignStats');
 }
@@ -128,7 +144,7 @@ public function campaignStats($opt = array()) {
 
 public function listSubscribe($opt = array()) {
 
-    $double_optin		= true;
+    $double_optin		= isset($opt['double_optin']) ? $opt['double_optin'] : true;
     $update_existing	= false;
     $replace_interests	= true;
     $send_welcome		= false;
@@ -156,11 +172,42 @@ public function listSubscribe($opt = array()) {
         'email_type' 		=> $email_type
     );
 
-
     return $this->send($data, 'listSubscribe');
 }
 
-/* + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + -
-+ - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - */
 
-} ?>
+/* + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + -
+EXEMPLE
+	$opt = array(
+		'email'	=> $email,
+		'list'  => 'abcdef'
+	);
++ - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - */
+public function listUnsubscribe($opt = array()) {
+
+	$data = array(
+		'id'            => $opt['id_list'],
+		'email_address' => $opt['email']
+	);
+
+	return $this->send($data, 'listUnsubscribe');
+}
+
+/* + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + -
+EXEMPLE
+	$opt = array(
+		'email'	=> $email,
+		'list'  => 'abcdef'
+	);
++ - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - */
+public function listMemberInfo($opt = array()){
+
+	$data = array(
+		'id'            => $opt['id_list'],
+		'email_address' => $opt['email']
+	);
+
+	return $this->send($data, 'listMemberInfo');
+}
+
+}

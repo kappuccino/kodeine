@@ -112,6 +112,8 @@
 						$colspan++;
 					}
 				?>
+        <th width="200" class="order"><span>Carnet d'adresse</span></th>
+
 			</tr>
 		</thead>
 		<tbody><?php
@@ -138,6 +140,7 @@
 					if($filter['cola'] != '') echo "<td>".$e['field'.$filter['cola']]."</td>";
 					if($filter['colb'] != '') echo "<td>".$e['field'.$filter['colb']]."</td>";
 				?>
+        <td><a target="_blank" href="addressbook?id_user=<?php echo $e['id_user'] ?>">Voir le carnet d'adresse</a></td>
 			</tr>
 			<?php }
 			}else{ ?>

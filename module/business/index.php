@@ -133,9 +133,9 @@
 			?>
 			<tr>
 				<td><input type="checkbox" name="del[]" class="chk" id="chk-del<?php echo $chkdel ?>" value="<?php echo $e['id_cart'] ?>" <?php echo $disabled ?> /></td>
-				<td><a href="detail?id_cart=<?php echo $e['id_cart'] ?>"><?php echo $e['id_cart'] ?></a></td>
-				<td><a href="detail?id_cart=<?php echo $e['id_cart'] ?>"><?php echo $app->helperDate($e['cartDateCmd'], '%d %B %G %Hh%M'); ?></a></td>
-				<td><?php echo $e['cartDeliveryName'] ?></td>
+				<td><a href="detail?id_cartdev=<?php echo $e['id_cart'] ?>"><?php echo $e['id_cart'] ?></a></td>
+				<td><a href="detail?id_cart=<?php echo $e['id_cart'] ?>"><?php echo $app->helperDate($e['cartDateCmd'], '%d %B %Y %Hh%M'); ?></a></td>
+				<td><a href="/admin/user/data?id_user=<?php echo $e['id_user'] ?>"><?php echo $e['cartDeliveryName'] ?></a></td>
 				<td></td>
                 <?php
                 if(is_array($rows)) {
@@ -173,7 +173,7 @@
                 }
                 ?>
 
-				<td><a href="edit?id_cart=<?php echo $r['id_cart'] ?>"><?php echo $e['cartStatus'] ?></a></td>
+				<td><a href="edit?id_cart=<?php echo $e['id_cart'] ?>"><?php echo $e['cartStatus'] ?></a></td>
 				<td><?php echo $e['cartPayment'] ?></td>
 				<td align="right"><?php echo $e['cartTotalFinal'] ?></td>
 			</tr>

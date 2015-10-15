@@ -1,88 +1,83 @@
 <?php
 
-if(!defined('COREINC')) die('Direct access not allowed');
+	if(!defined('COREINC')) die('Direct access not allowed');
 
-if(sizeof($_POST['removeMaster']) > 0){
-    foreach($_POST['removeMaster'] as $e){
-        $app->dbQuery("DELETE FROM k_localisation WHERE label LIKE '".$e."_%'");
-    }
-    $goto = "./";
-}else
+	if(sizeof($_POST['removeMaster']) > 0){
+	    foreach($_POST['removeMaster'] as $e){
+	        $app->dbQuery("DELETE FROM k_localisation WHERE label LIKE '".$e."_%'");
+	    }
+	    $goto = "./";
+	}else
     if(sizeof($_POST['removeSlave']) > 0){
         foreach($_POST['removeSlave'] as $e){
             $app->dbQuery("DELETE FROM k_localisation WHERE label = '".$_POST['master']."_".$e."'");
         }
         $goto = "./";
     }else
-        if($_REQUEST['addLabel'] != NULL && substr_count($_REQUEST['addLabel'], '_') > 0){
-            $app->dbQuery("INSERT INTO k_localisation (language, label) VALUES ('fr', '".$_REQUEST['addLabel']."')");
-            list($master, $slave) = explode('_', $_REQUEST['addLabel'], 2);
-            $goto = "./?master=".$master."&slave=".$slave;
-        }else
-            if($_POST['action'] && $_POST['label'] != NULL){
-                if(sizeof($_POST['data']) > 0){
-                    foreach($_POST['data'] as $language => $value){
-                        $value = addslashes($value);
-                        $exists = $app->dbOne("SELECT 1 FROM k_localisation WHERE language='".$language."' AND label='".$_POST['label']."'");
-                        $query	= ($exists[1])
-                            ? "UPDATE k_localisation SET translation='".$value."' WHERE language='".$language."' AND label='".$_POST['label']."'"
-                            : "INSERT INTO k_localisation (language, label, translation) VALUES ('".$language."', '".$_POST['label']."', '".$value."')";
+    if($_REQUEST['addLabel'] != NULL && substr_count($_REQUEST['addLabel'], '_') > 0){
+        $app->dbQuery("INSERT INTO k_localisation (language, label) VALUES ('fr', '".$_REQUEST['addLabel']."')");
+        list($master, $slave) = explode('_', $_REQUEST['addLabel'], 2);
+        $goto = "./?master=".$master."&slave=".$slave;
+    }else
+    if($_POST['action'] && $_POST['label'] != NULL){
+        if(sizeof($_POST['data']) > 0){
+            foreach($_POST['data'] as $language => $value){
+                $value = addslashes($value);
+                $exists = $app->dbOne("SELECT 1 FROM k_localisation WHERE language='".$language."' AND label='".$_POST['label']."'");
+                $query	= ($exists[1])
+                    ? "UPDATE k_localisation SET translation='".$value."' WHERE language='".$language."' AND label='".$_POST['label']."'"
+                    : "INSERT INTO k_localisation (language, label, translation) VALUES ('".$language."', '".$_POST['label']."', '".$value."')";
 
-                        $app->dbQuery($query);
-                    }
-                }
-
-                if(sizeof($_POST['kill']) > 0){
-                    foreach($_POST['kill'] as $e){
-                        $app->dbQuery("DELETE FROM k_localisation WHERE language='".$e."' AND label='".$_POST['label']."'");
-                    }
-                }
-
-                $goto = "./?master=".$_POST['master']."&slave=".$_POST['slave'];
+                $app->dbQuery($query);
             }
+        }
 
-if(!empty($goto)){
+        if(sizeof($_POST['kill']) > 0){
+            foreach($_POST['kill'] as $e){
+                $app->dbQuery("DELETE FROM k_localisation WHERE language='".$e."' AND label='".$_POST['label']."'");
+            }
+        }
 
-    # Cache Localisation
-    $raw = $app->dbMulti("SELECT * FROM k_localisation");
-    foreach($raw as $e){
-        $all[$e['language']][$e['label']] = base64_encode($e['translation']);
+        $goto = "./?master=".$_POST['master']."&slave=".$_POST['slave'];
     }
 
-    $app->configSet('boot', 'jsonCacheLocalisation', json_encode($all));
-    $app->go($goto);
-}
+	if(!empty($goto)){
 
+	    # Cache Localisation
+	    $raw = $app->dbMulti("SELECT * FROM k_localisation");
+	    foreach($raw as $e){
+	        $all[$e['language']][$e['label']] = base64_encode($e['translation']);
+	    }
 
+	    $app->configSet('boot', 'jsonCacheLocalisation', json_encode($all));
+	    $app->go($goto);
+	}
 
+	$master = $app->apiLoad('localisation')->localisationGet(array(
+	    'getMaster'	=> true,
+	    'debug' 	=> false
+	));
 
+	if($_REQUEST['master'] == NULL && sizeof($master) > 0){
+	    $app->go("./?master=".$master[0]);
+	}
 
+	if($_REQUEST['master'] != NULL){
+	    $slave = $app->apiLoad('localisation')->localisationGet(array(
+	        'getSlave'	=> true,
+	        'master'	=> $_REQUEST['master'],
+	        'debug' 	=> false
+	    ));
 
-$master = $app->apiLoad('localisation')->localisationGet(array(
-    'getMaster'	=> true,
-    'debug' 	=> false
-));
+	    if($_REQUEST['slave'] == NULL){
+	        $app->go("./?master=".$_REQUEST['master']."&slave=".$slave[0]);
+	    }
+	}
 
-if($_REQUEST['master'] == NULL && sizeof($master) > 0){
-    $app->go("./?master=".$master[0]);
-}
-
-if($_REQUEST['master'] != NULL){
-    $slave = $app->apiLoad('localisation')->localisationGet(array(
-        'getSlave'	=> true,
-        'master'	=> $_REQUEST['master'],
-        'debug' 	=> false
-    ));
-
-    if($_REQUEST['slave'] == NULL){
-        $app->go("./?master=".$_REQUEST['master']."&slave=".$slave[0]);
-    }
-}
-
-$country = $app->countryGet(array('is_used' => true));
-foreach($country as $e){
-    $languages[$e['iso']] = $e['countryLanguage'];
-}
+	$country = $app->countryGet(array('is_used' => true));
+	foreach($country as $e){
+	    $languages[$e['iso']] = $e['countryLanguage'];
+	}
 
 ?><!DOCTYPE html>
 <html lang="fr">
@@ -95,7 +90,7 @@ foreach($country as $e){
 <header><?php
     include(COREINC.'/top.php');
     include(dirname(__DIR__).'/content/ui/menu.php')
-    ?></header>
+?></header>
 
 <div id="app"><div class="wrapper"><div class="row-fluid">
 

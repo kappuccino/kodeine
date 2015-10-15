@@ -32,7 +32,7 @@
 
                 // Save id_segment en BDD
                 $def['k_newsletter'] = array(
-                    'newsletterConnectorValue'			=> array('value' => $id_segment)
+                    'newsletterConnectorValue' => array('value' => $id_segment)
                 );
                 $app->apiLoad('newsletter')->newsletterSet($data['id_newsletter'], $def);
             }

@@ -7,8 +7,8 @@
 	if($_POST['action']){
 		$do = true;
 
-		if(!$_POST['contentDateStartDo'])	$_POST['contentDateStart'] == NULL;
-		if(!$_POST['contentDateEndDo']) 	$_POST['contentDateEnd'] == NULL;
+		if(empty($_POST['contentDateStartDo'])) $_POST['contentDateStart'] = NULL;
+		if(empty($_POST['contentDateEndDo'])) 	$_POST['contentDateEnd'] = NULL;
 
 		$_POST['contentDateCreation']	= implode(' ', $_POST['contentDateCreation']);
 		$_POST['contentDateUpdate']		= implode(' ', $_POST['contentDateUpdate']);
@@ -309,7 +309,7 @@ if($nFound){ ?>
 						if(sizeof($versions) > 0){
 							foreach($versions as $vrs){
 								$sel = ($_REQUEST['reloadFromVersion'] == $vrs['id_version']) ? ' selected' : NULL;
-								echo "<option value=\"".$vrs['id_version']."\"".$sel.">Afficher la version du : ".$app->helperDate($vrs['versionDate'], '%e %b %G à %Hh %Mm %S')."</option>";
+								echo "<option value=\"".$vrs['id_version']."\"".$sel.">Afficher la version du : ".$app->helperDate($vrs['versionDate'], '%e %b %Y à %Hh %Mm %S')."</option>";
 							}
 						}
 					}else{
@@ -931,7 +931,7 @@ if($nFound){ ?>
 			)
 		);
 
-		?></div>
+	?></div>
 </li>
 
 </ul>
@@ -940,26 +940,26 @@ if($nFound){ ?>
 </div></div>
 
 <?php include(COREINC.'/end.php'); ?>
+
 <script src="../core/vendor/datatables/jquery.dataTables.js"></script>
 <script src="../core/vendor/bootstrap/js/bootstrap-dropdown.js"></script>
-<script src="../core/vendor/tinymce/jscripts/tiny_mce/jquery.tinymce.js"></script>
-<script src="../core/vendor/tinymce/jscripts/tiny_mce/tiny_mce.js"></script>
+<script src="../core/vendor/ckeditor/ckeditor.js"></script>
+<script src="../core/vendor/ckeditor/adapters/jquery.js"></script>
 <script src="../core/vendor/datepicker/js/bootstrap-datepicker.js" charset="UTF-8"></script>
 <script src="../core/vendor/codemirror/lib/codemirror.js"></script>
 <script src="../core/vendor/codemirror/mode/javascript/javascript.js"></script>
-
 <script src="../media/ui/_uploadifive/jquery.uploadifive-v1.0.js"></script>
 
 <script src="ui/js/content.js"></script>
 
-<script type="text/javascript">
+<script>
 
 	doMove  		= false;
 	useEditor		= true;
 	replace 		= <?php echo json_encode($replace); ?>;
 	textarea		= "<?php echo @implode(',', $GLOBALS['textarea']) ?>";
-	MceStyleFormats = [<?php echo @file_get_contents(USER.'/config/tinymceStyleFormats.php') ?>];
-	isDrag = false;
+/*	MceStyleFormats = [<?php echo @file_get_contents(USER.'/config/tinymceStyleFormats.php') ?>];*/
+	isDrag          = false;
 
 	function sizer(e, min, add){
 		if($(e).length > 0){
@@ -967,6 +967,7 @@ if($nFound){ ?>
 			if(hauteur + add >= min) $(e).css('height', hauteur+add);
 		}
 	}
+
 	function removeThis(id_content){
 		if(confirm('SUPPRIMER CE CONTENU ?')){
 			document.location = 'data?id_content='+id_content+'&remove=1';
@@ -1009,6 +1010,23 @@ if($nFound){ ?>
 		});
 	}
 
+	function version(sel){
+		var next = '';
+		var id   = sel.options[sel.selectedIndex].value;
+
+		if(id > 0) next = '&reloadFromVersion='+id;
+
+		if(next != ''){
+			if(confirm("LOADER L'ARCHIVE ?")){
+				document.location = 'data?id_content=<?php echo $_REQUEST['id_content'] ?>'+next;
+			}
+		}else{
+			if(confirm("LOADER LA DERNIERE VERSION ?")){
+				document.location = 'data?id_content=<?php echo $_REQUEST['id_content'] ?>';
+			}
+		}
+	}
+
 	$(function(){
 
 		$('textarea.codemirror').each(function(i, e){
@@ -1030,11 +1048,13 @@ if($nFound){ ?>
 		$('#fade-wall').on('click', function() {
 			modalHideUpload();
 		});
+
 		$(document).keyup(function (e) {
 			if (e.keyCode == 27 && $('#modal-upload').css('display') == 'block') {
 				modalHideUpload();
 			}
 		});
+
 		document.addEventListener('dragleave', function(e) {
 			// Stop FireFox from opening the dropped file(s)
 
@@ -1046,6 +1066,7 @@ if($nFound){ ?>
 			e.preventDefault();
 			e.stopPropagation();
 		}, false);
+
 		document.addEventListener('dragenter', function(e) {
 			// Stop FireFox from opening the dropped file(s)
 			if (!$(e.srcElement).is('img')) {
@@ -1059,28 +1080,33 @@ if($nFound){ ?>
 				e.stopPropagation();
 			}
 		}, false);
+
 		document.addEventListener('dragover', function(e) {
 			// Stop FireFox from opening the dropped file(s)
 			e.preventDefault();
 			e.stopPropagation();
 		}, false);
-		/* -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --*/
-		/* -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --*/
 
+		/* -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --*/
+		/* -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --*/
 
 		//	DATE PICKERS
 		$('#contentDateCreation').datepicker({
 			format: 'yyyy-mm-dd'
 		});
+
 		$('#contentDateUpdate').datepicker({
 			format: 'yyyy-mm-dd'
 		});
+
 		$('#contentDateStart').datepicker({
 			format: 'yyyy-mm-dd'
 		});
+
 		$('#contentDateEnd').datepicker({
 			format: 'yyyy-mm-dd'
 		});
+
 		$('.datePicker').datepicker({
 			format: 'yyyy-mm-dd'
 		});
@@ -1090,27 +1116,6 @@ if($nFound){ ?>
 		if ($('#contentDateCreation').val() == '') $('#contentDateCreation').val(d.getFullYear()+'-'+(d.getUTCMonth()+1)+'-'+day);
 		if ($('#contentDateUpdate').val() == '') $('#contentDateUpdate').val(d.getFullYear()+'-'+(d.getUTCMonth()+1)+'-'+day);
 	});
-
-
-	/* + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + -*/
-
-	function version(sel){
-		var next = '';
-		var id   = sel.options[sel.selectedIndex].value;
-
-		if(id > 0) next = '&reloadFromVersion='+id;
-
-		if(next != ''){
-			if(confirm("LOADER L'ARCHIVE ?")){
-				document.location = 'data?id_content=<?php echo $_REQUEST['id_content'] ?>'+next;
-			}
-		}else{
-			if(confirm("LOADER LA DERNIERE VERSION ?")){
-				document.location = 'data?id_content=<?php echo $_REQUEST['id_content'] ?>';
-			}
-		}
-	}
-
 
 </script>
 

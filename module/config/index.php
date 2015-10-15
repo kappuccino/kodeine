@@ -159,18 +159,18 @@
 					<td><?php echo _('Date format') ?></td>
 					<td><select name="dateFormat"><?php
 						$dates = array(
-							'%A %e %B %G',		// jeudi 13 fevrier 2008
-							'%a. %d %b. %g',	// jeu. 9 fev. 2008
-							'%e %B %G',			// 13 fevrier 2008
-							'%d %B %G',			// 9 Fevrier 2008
-							'%d %b %g',			// 9 fev 2008
-							'%e/%m/%g',			// 9/2/06
-							'%e/%m/%G',			// 09/02/2006
+							'%A %e %B %Y',		// jeudi 13 fevrier 2008
+							'%a. %d %b. %Y',	// jeu. 9 fev. 2008
+							'%e %B %Y',			// 13 fevrier 2008
+							'%d %B %Y',			// 9 Fevrier 2008
+							'%d %b %Y',			// 9 fev 2008
+							'%e/%m/%y',			// 9/2/06
+							'%e/%m/%Y',			// 09/02/2006
 							'%d/%m', 			// 9/2
-							'%d-%b-%G', 		// 9-FEV-2006
-							'%d-%b-%g', 		// 9-FEV-06
-							'%b %G', 			// FEV.-06
-							'%e %b %G'  		// 9 Fev 2006
+							'%d-%b-%Y', 		// 9-FEV-2006
+							'%d-%b-%y', 		// 9-FEV-06
+							'%b %y', 			// FEV.-06
+							'%e %b %Y'  		// 9 Fev 2006
 						);
 
 						foreach($dates as $e){

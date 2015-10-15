@@ -193,8 +193,11 @@ public function userProfile($id_profile){
 			$category 		= $this->dbMulti("SELECT * FROM k_category WHERE id_category IN(".implode(',', $p['profileRule']['id_category']).")");
 
 			foreach($category as $e){
-				$id_category 	= array_merge($id_category,   explode(',', $e['categoryChildren']));
-				$id_category_p 	= array_merge($id_category_p, explode(',', $e['categoryParent']));
+				$child  = $e['categoryChildren'];  if(empty($child))  $child  = $e['id_category'];
+				$parent = $e['categoryParent'];    if(empty($parent)) $parent = $e['id_category'];
+
+				$id_category 	= array_merge($id_category,   explode(',', $child));
+				$id_category_p 	= array_merge($id_category_p, explode(',', $parent));
 			}
 
 			foreach($id_category as $idx => $e){
@@ -445,9 +448,16 @@ public function helperDate($date, $format=''){
 		list($a, $m, $j) 	= explode('-', $date);
 	}
 
-	return ($format == TIMESTAMP)
-		? mktime($h, $mn, $s, $m, $j, $a) 
-		: strftime($format, mktime($h, $mn, $s, $m, $j, $a));
+	$timestamp = mktime($h, $mn, $s, $m, $j, $a);
+#				 mktime($h, $mn, $s, $m, $j, $a)
+
+	$v = ($format == TIMESTAMP)
+		? $timestamp
+		: strftime($format, $timestamp);
+
+#	$this->pre($date, 'a='.$a, 'm='.$m, 'j='.$j, 'v='.$v, 'ts='.$timestamp);
+
+	return $v;
 }
 
 /* + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - 
@@ -716,6 +726,18 @@ public function helperArrayWrapp($array, $glue){
 	
 	return $array;
 }
+
+
+	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
+	// Retourne un float avec la precision identique a celle de la STRING (HACK ++)
+	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
+	public function helperFloat($string, $p=10){
+
+		list($a, $b) = explode('.', $string);
+		$f = $a.'.'.substr($b, 0, $p);
+
+		return floatval($f);
+	}
 
 //-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -
 //-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -
@@ -1005,7 +1027,11 @@ public function fsFile($folder, $mask=NULL, $options=NULL, $recursive=false){
 			foreach($this->apisConfig['boot']['jsonCacheCountry'] as $tmp){
 				if($tmp['iso'] == $language){ $language = $tmp; break; }
 			}
+
+			// Check nested language
+			if(!is_array($language)) $language = $this->countryGet(array('iso' => $language));
 		}
+
 		$locale   = ($language['countryLocale'] == NULL) ? 'fr_FR' : $language['countryLocale'];
 		$language = $language['iso_ref'];
 		$this->kodeine['language']	= $language;

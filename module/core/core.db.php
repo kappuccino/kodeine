@@ -235,11 +235,22 @@ class coreDb{
 					if($data['null'] && $data['value'] == NULL) $data['function'] 	= 'NULL';
 					if($data['zero'] && $data['value'] == NULL) $data['value'] 		= '0';
 
-					$f[] = '`'.$field.'`';
-					$v[] = ($data['function'] == NULL) ? "'".$this->dbEscape($data['value'])."'" : $data['function'];
+					$f_ = '`'.$field.'`';
+					$v_ = ($data['function'] == NULL) ? "'".$this->dbEscape($data['value'])."'" : $data['function'];
+
+					if($o['upsert']) $dupli[] = $f_.'='.$v_;
+
+					$f[] = $f_;
+					$v[] = $v_;
 				}
 			}
-			return "INSERT ".$ignore." INTO `".$table."` (".implode(', ', $f).") VALUES (".implode(', ', $v).")";
+
+			$t = str_replace('.', '`.`', $table);
+			$q = "INSERT ".$ignore." INTO `".$t."` (".implode(', ', $f).") VALUES (".implode(', ', $v).")";
+
+			if($o['upsert']) $q .= " ON DUPLICATE KEY UPDATE ".implode(',', $dupli);
+
+			return $q;
 		}
 
 		return false;
@@ -264,7 +275,9 @@ class coreDb{
 				}
 			}
 
-			return "UPDATE `".$table."` SET ".implode(', ', $f);
+			$t = str_replace('.', '`.`', $table);
+
+			return "UPDATE `".$t."` SET ".implode(', ', $f);
 		}
 
 		return false;
@@ -341,7 +354,7 @@ class coreDb{
 
 		if(!file_exists($conf['dump'])) mkdir($conf['dump'], 0755, true);
 
-		$dst  = $conf['dump'].'/'. $opt['file'] ?: 'export-'.time().'.sql';
+		$dst  = $conf['dump'].'/'. (isset($opt['file']) ? $opt['file'] : 'export-'.time()).'.sql';
 		$bin  = $config['mysqldump'] ?: 'mysqldump';
 
 		$cmd  = sprintf($bin.' --host=%s --user=%s --password=%s --comments=0 %s > %s',

@@ -89,7 +89,7 @@
             "<td><input type=\"checkbox\" name=\"remove[]\" value=\"".$e['id_form']."\" class=\"chk cb\" id=\"chk_remove_".$count."\" /></td>".
             "<td class=\"dateTime\">".
                 "<a href=\"".$link."\" ".$onclick.">".
-                "<span class=\"date\">".$app->helperDate($e['formDate'], '%d.%m.%G %Hh%M')."</span> ".
+                "<span class=\"date\">".$app->helperDate($e['formDate'], '%d.%m.%Y %Hh%M')."</span> ".
                 "</a>".
             "</td>".
             "<td>".
