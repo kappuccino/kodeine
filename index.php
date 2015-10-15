@@ -14,6 +14,9 @@
 	// URL (Common URL Rewriting rules)
 	require(__DIR__.'/module/core/helper/url.php');
 
+	// Custom URL
+	if(file_exists(CONFIG.'/url.php')) include(CONFIG.'/url.php');
+
 // INIT KODEINE ////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	// Logout or Auto Login
