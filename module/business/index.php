@@ -71,16 +71,15 @@
 
 		<label for="shop-select">Shop</label><?php
 			echo $app->apiLoad('shop')->shopSelector(array(
-			   'name'		=> 'filter[id_shop]',
-			   'value'		=> $filter['id_shop'],
-			   'language'	=> 'fr',
-			   'one'		=> true,
-			   'id'			=> 'shop-select',
-			   'empty'		=> true
+				'name'     => 'filter[id_shop]',
+				'value'    => $filter['id_shop'],
+				'language' => 'fr',
+				'one'      => true,
+				'id'       => 'shop-select',
+				'empty'    => true
 			));
 		?>
 		<button type="submit" class="btn btn-mini"><?php echo _('Filter'); ?></button>
-			
 	</form>
 	</div>
 	
@@ -89,7 +88,6 @@
 		<thead>
 			<tr>
 				<th width="30" class="icone"><i class="icon-remove icon-white"></i></th>
-
 				<th width="50" class="order <?php if($filter['order'] == 'k_businesscart.id_cart') 		echo 'order'.$dir; ?>" onClick="document.location='index?cf&order=k_businesscart.id_cart&direction=<?php echo $dir ?>'"><span>#</span></th>
                 <th width="150" class="order <?php if($filter['order'] == 'k_businesscart.cartDateCmd') 		echo 'order'.$dir; ?>" onClick="document.location='index?cf&order=k_businesscart.cartDateCmd&direction=<?php echo $dir ?>'"><span>Date</span></th>
                 <th width="200" class="order <?php if($filter['order'] == 'k_businesscart.cartDeliveryName') 		echo 'order'.$dir; ?>" onClick="document.location='index?cf&order=k_businesscart.cartDeliveryName&direction=<?php echo $dir ?>'"><span><?php echo _('Name'); ?></span></th>
@@ -118,12 +116,10 @@
                     }
                 }
                 ?>
-
-
                 <th width="100" class="order <?php if($filter['order'] == 'k_businesscart.cartDeliveryStatus') 		echo 'order'.$dir; ?>" onClick="document.location='index?cf&order=k_businesscart.cartDeliveryStatus&direction=<?php echo $dir ?>'"><span><?php echo _('Status'); ?></span></th>
                 <th width="100" class="order <?php if($filter['order'] == 'k_businesscart.cartPayment') 		echo 'order'.$dir; ?>" onClick="document.location='index?cf&order=k_businesscart.cartPayment&direction=<?php echo $dir ?>'"><span><?php echo _('Mode'); ?></span></th>
-
 				<th width="100" style="text-align:right;"><?php echo _('Total'); ?></th>
+				<th width="100" style="text-align:right;"><?php echo _('Pays Fact.'); ?></th>
 			</tr>
 		</thead>
 		<tbody><?php
@@ -172,10 +168,19 @@
                     }
                 }
                 ?>
-
 				<td><a href="edit?id_cart=<?php echo $e['id_cart'] ?>"><?php echo $e['cartStatus'] ?></a></td>
 				<td><?php echo $e['cartPayment'] ?></td>
 				<td align="right"><?php echo $e['cartTotalFinal'] ?></td>
+				<td align="right"><?php
+
+					$address = $app->apiLoad('user')->userAddressBookGet(array(
+						'id_user' => $e['id_user'],
+						'id_addressbook' => $e['id_billing']
+					));
+
+					echo strtoupper($address['addressbookCountryCode']);
+
+				?></td>
 			</tr>
 			<?php }
 		}else{ ?>
@@ -197,8 +202,6 @@
 			</tr>
 		</tfoot>
 	</table>
-	
-	
 	</form>
 
 </div>
