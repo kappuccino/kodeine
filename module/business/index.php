@@ -129,7 +129,7 @@
 			?>
 			<tr>
 				<td><input type="checkbox" name="del[]" class="chk" id="chk-del<?php echo $chkdel ?>" value="<?php echo $e['id_cart'] ?>" <?php echo $disabled ?> /></td>
-				<td><a href="detail?id_cartdev=<?php echo $e['id_cart'] ?>"><?php echo $e['id_cart'] ?></a></td>
+				<td><a href="detail?id_cart=<?php echo $e['id_cart'] ?>"><?php echo $e['id_cart'] ?></a></td>
 				<td><a href="detail?id_cart=<?php echo $e['id_cart'] ?>"><?php echo $app->helperDate($e['cartDateCmd'], '%d %B %Y %Hh%M'); ?></a></td>
 				<td><a href="/admin/user/data?id_user=<?php echo $e['id_user'] ?>"><?php echo $e['cartDeliveryName'] ?></a></td>
 				<td></td>

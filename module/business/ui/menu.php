@@ -10,6 +10,10 @@
 			<a href="../business/carriage"><span><?php echo _('Shipping'); ?></span></a>
 		</li>
 
+		<li class="<?php echo isMe('/business/carrier') ? 'me':'' ?>">
+			<a href="../business/carrier"><span><?php echo _('Carrier'); ?></span></a>
+		</li>
+
 		<?php if($app->userCan('business.coupon')){ ?>
 		<li class="<?php echo isMe('/business/coupon') ? 'me':'' ?>">
 			<a href="../business/coupon"><span><?php echo _('Coupon'); ?></span></a>

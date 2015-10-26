@@ -411,6 +411,9 @@ public function businessCartAdd($opt=array()){
 	# Update CART
 	$this->businessCartPrice($line['id_cart']);
 
+	# HOOK
+	$this->hookAction('businessCartAdd', $opt);
+
 	return true;
 }
 
@@ -947,7 +950,6 @@ public function businessCmdNew($opt){
 		));
 		if(!is_numeric($cmd['id_cart'])) return false;
 
-
 		# Shop
 		#
 		if($cmd['id_shop'] > 0){
@@ -1019,13 +1021,23 @@ public function businessCmdNew($opt){
 			if(preg_match_all("#{lines}(.*){lines}#s", $message, $m, PREG_SET_ORDER)){
 				$tLine	= $m[0][1];
 
+				$tmp = '';
 				foreach($cmd['line'] as $e){
+				#	print_r($e);
+				#	echo $tLine.PHP_EOL.PHP_EOL.PHP_EOL.PHP_EOL.PHP_EOL;
+				#	die();
+
 					$tmp .= $this->helperReplace($tLine, $e);
 				}
 
-				$message = str_replace($m[0][0], $tmp, $message);
-			}
+		#		echo $tmp;
 
+				$message = str_replace($m[0][0], $tmp, $message);
+			#	echo $message;
+			#	die();
+			}
+			echo $message;
+			die();
 			if(preg_match_all("#{ifCoupon}(.*){ifCoupon}#s", $message, $m, PREG_SET_ORDER)){
 				$message = (floatval($cmd['cartCoupon']) == 0)
 					? str_replace($m[0][0], NULL, $message)
@@ -1048,6 +1060,9 @@ public function businessCmdNew($opt){
 			$this->pre("mailto", $mailTo, 'mailCc', $mailCc, 'mailBcc', $mailBcc, 'mailTitle', $mailTitle, 'message', $message, 'cmd', $cmd, 'mail', $mail);
 		}
 
+		echo $message;
+
+		die();
 		# HOOK
 		$custom = $this->hookAction('businessCmdMail', $opt['id_cart'], $mailTo, $mail->Subject, $message);
 
@@ -1414,6 +1429,47 @@ public function businessTaxSelector($opt){
 }
 
 
+	/* + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + -
++ - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - */
+	public function businessCarrierGet($opt=array()){
+
+		if($opt['id_carrier'] > 0){
+			$dbMode = 'dbOne';
+			$cond[] = "id_carrier=".$opt['id_carrier'];
+		}else{
+			$dbMode = 'dbMulti';
+		}
+
+		# Former les conditions
+		#
+		if(sizeof($cond) > 0) $where = "WHERE ".implode(" AND ", $cond);
+
+		# Carraige
+		#
+		$carrier = $this->$dbMode("SELECT * FROM  k_businesscarrier ".$where);
+		if($opt['debug']) $this->pre($opt, $this->db_query, $this->db_error, $carrier);
+
+		return $carrier;
+	}
+
+
+	/* + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + -
+	+ - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - */
+	public function businessCarrierSet($id_carrier, $def){
+
+		if($id_carrier > 0){
+			$q = $this->dbUpdate($def)." WHERE id_carrier=".$id_carrier;
+		}else{
+			$q = $this->dbInsert($def);
+		}
+
+		@$this->dbQuery($q);
+		if($this->db_error != NULL) return false;
+
+		$this->id_carrier = ($id_carrier> 0) ? $id_carrier: $this->db_insert_id;
+
+		return true;
+	}
 
 
 }
