@@ -787,6 +787,7 @@ public function businessCartCarriageGet($id_cart, $opt=array()){
 	}else{
 		return false;
 	}
+
 }
 
 /* + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + -
@@ -1036,8 +1037,8 @@ public function businessCmdNew($opt){
 			#	echo $message;
 			#	die();
 			}
-			echo $message;
-			die();
+		#	echo $message;
+		#	die();
 			if(preg_match_all("#{ifCoupon}(.*){ifCoupon}#s", $message, $m, PREG_SET_ORDER)){
 				$message = (floatval($cmd['cartCoupon']) == 0)
 					? str_replace($m[0][0], NULL, $message)
@@ -1060,9 +1061,9 @@ public function businessCmdNew($opt){
 			$this->pre("mailto", $mailTo, 'mailCc', $mailCc, 'mailBcc', $mailBcc, 'mailTitle', $mailTitle, 'message', $message, 'cmd', $cmd, 'mail', $mail);
 		}
 
-		echo $message;
+	#	echo $message;
 
-		die();
+	#	die();
 		# HOOK
 		$custom = $this->hookAction('businessCmdMail', $opt['id_cart'], $mailTo, $mail->Subject, $message);
 
