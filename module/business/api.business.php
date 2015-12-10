@@ -298,7 +298,14 @@ public function businessCartPrice($id_cart, $opt=array()){
 		$cartCouponName	= '';
 	}
 
-	$cartTotalFinal = $cartTotalFinal - $cartCoupon;
+
+	$cartTotalFinalDiff = $cartTotalFinal - $cartCoupon;
+	if($cartTotalFinalDiff < 0) {
+		$cartCoupon 	= $cartTotalFinal;
+		$cartTotalFinal = 0;
+	}else {
+		$cartTotalFinal = $cartTotalFinalDiff;
+	}
 
 	# Mettre a jour les TOTAUX du CART
 	$def['k_businesscart'] = array(
@@ -481,7 +488,7 @@ public function businessCartLineSet($opt=array()){
             if(!$exists[1])$query = "INSERT INTO k_businesscartline (id_cart, id_content) VALUES (".$id_cart.", ".$id_content.")";
             else {
                 //die($this->pre($exists));
-                return 'Le produit a dÈja ÈtÈ ajoutÈ ‡ la commande';
+                return 'Le produit a déjà été ajouté à la commande';
                 die();
             }                    
         }else {
@@ -1036,8 +1043,8 @@ public function businessCmdNew($opt){
 			#	echo $message;
 			#	die();
 			}
-			echo $message;
-			die();
+			//echo $message;
+			//die();
 			if(preg_match_all("#{ifCoupon}(.*){ifCoupon}#s", $message, $m, PREG_SET_ORDER)){
 				$message = (floatval($cmd['cartCoupon']) == 0)
 					? str_replace($m[0][0], NULL, $message)
@@ -1060,9 +1067,9 @@ public function businessCmdNew($opt){
 			$this->pre("mailto", $mailTo, 'mailCc', $mailCc, 'mailBcc', $mailBcc, 'mailTitle', $mailTitle, 'message', $message, 'cmd', $cmd, 'mail', $mail);
 		}
 
-		echo $message;
+		//echo $message;
 
-		die();
+		//die();
 		# HOOK
 		$custom = $this->hookAction('businessCmdMail', $opt['id_cart'], $mailTo, $mail->Subject, $message);
 
