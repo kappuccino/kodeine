@@ -151,10 +151,10 @@ public function businessCartGet($opt=array()){
 	
 	if(is_array($opt['range'])){
 		if($opt['range'][0] != ''){
-			$cond[] = " cartDateCmd >= '".$opt['range'][0]."'";
+			$cond[] = " cartDateCmd >= '".$opt['range'][0]." 00:00:00'";
 		}
 		if($opt['range'][1] != ''){
-			$cond[] = " cartDateCmd <= '".$opt['range'][1]."'";
+			$cond[] = " cartDateCmd <= '".$opt['range'][1]." 23:59:59'";
 		}
 	}
 
