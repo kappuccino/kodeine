@@ -14,7 +14,8 @@ class coreDb{
 
 		if(isset($config)){
 			$conf = $config['mysql'] ?: $config['db'];
-			self::$_instance = new mysqli($conf['host'], $conf['login'], $conf['password'], $conf['database']);
+			$port = $conf['port'] ?: NULL;
+			self::$_instance = new mysqli($conf['host'], $conf['login'], $conf['password'], $conf['database'], $port);
 
 			if(self::$_instance->connect_errno){
 			    printf("Echec de la connexion : %s\n", mysqli_connect_error());
@@ -357,7 +358,10 @@ class coreDb{
 		$dst  = $conf['dump'].'/'. (isset($opt['file']) ? $opt['file'] : 'export-'.time()).'.sql';
 		$bin  = $config['mysqldump'] ?: 'mysqldump';
 
-		$cmd  = sprintf($bin.' --host=%s --user=%s --password=%s --comments=0 %s > %s',
+		$port = '';
+		if($conf['port']) $port = '--port='.$conf['port'];
+
+		$cmd  = sprintf($bin.' --host=%s --user=%s --password=%s '.$port.' --comments=0 %s > %s',
 				$conf['host'], $conf['login'], $conf['password'], $conf['database'], $dst);
 
 		system($cmd, $r);
