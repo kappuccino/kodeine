@@ -739,7 +739,7 @@ public function fieldForm($id_field, $value, $opt=array()){
 	# Traiter les OPTIONS
 	#
 	$name 		= !empty($opt['name']) ? $opt['name'] : 'field['.$id_field.']';
-	$id			= !empty($opt['name']) ? $opt['id']	  : 'form-field-'.$id_field;
+	$id			= !empty($opt['id'])   ? $opt['id']	  : 'form-field-'.$id_field;
 	$key		= (preg_match("#([0-9]){1,}#", $id_field)) ? '' : $id_field;
 	$disabled	= ($opt['disabled']) ? "disabled=\"disabled\"" : NULL;
 
