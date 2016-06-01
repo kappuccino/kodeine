@@ -151,7 +151,7 @@
                 <td align="right"><?php echo $myCmd['cartCarriage'] ?></td>
             </tr>
             <tr>
-                <td>TVA <?php echo $myCmd['cartCarriageTax']; ?> %</td>
+                <td>TVA <?php #echo $myCmd['cartCarriageTax']; ?> 20%</td>
                 <td align="right"><?php echo number_format($myCmd['cartCarriageTotalTax']-$myCmd['cartCarriage'], 2, '.', ' '); ?></td>
             </tr>
 			<?php if($myCmd['cartCoupon'] > 0){ ?>
