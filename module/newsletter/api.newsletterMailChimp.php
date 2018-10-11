@@ -42,7 +42,7 @@ private function send($data = array(), $method) {
 
 	$payload = json_encode($data);
 	
-	$submit_url = "http://".$this->apiUrl.".api.mailchimp.com/1.3/?method=".$method;
+	$submit_url = "https://".$this->apiUrl.".api.mailchimp.com/1.3/?method=".$method;
 	//echo $submit_url;
 	$ch = curl_init();
 	curl_setopt($ch, CURLOPT_URL, $submit_url);
